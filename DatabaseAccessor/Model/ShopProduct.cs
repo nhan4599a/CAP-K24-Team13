@@ -22,6 +22,7 @@
 
         public virtual ShopCategory Category { get; set; }
         
-        public virtual ProductImage ImageSet { get; set; }
+       
+    public virtual ProductImage ImageSet { get; set; }
     }
 }
