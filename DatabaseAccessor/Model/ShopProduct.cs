@@ -1,7 +1,9 @@
 ﻿namespace DatabaseAccessor.Model
 {
-    public class ShopProduct
+
+    public class ShopProduct 
     {
+        
         public string Id { get; set; }
 
         public int CategoryId { get; set; }
@@ -17,7 +19,8 @@
         public int Discount { get; set; }
 
         public virtual ShopCategory Category { get; set; }
-
-        public virtual ProductImage ImageSet { get; set; }
+        
+       
+    public virtual ProductImage ImageSet { get; set; }
     }
 }
