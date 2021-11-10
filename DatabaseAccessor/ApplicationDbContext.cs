@@ -1,9 +1,11 @@
 ﻿using DatabaseAccessor.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor
 {
+   
     public class ApplicationDbContext : DbContext
     {
         private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
@@ -20,6 +22,7 @@ namespace DatabaseAccessor
 
         public ApplicationDbContext() : base(GetOptions(_connectionString))
         {
+
         }
 
         private static DbContextOptions GetOptions(string connectionString)

@@ -6,7 +6,7 @@ namespace ShopProductService.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return Vi
         }
     }
 }
