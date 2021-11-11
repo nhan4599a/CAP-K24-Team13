@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Shopp
+
 
 namespace ShopBackend.Pages
 {
@@ -20,9 +20,6 @@ namespace ShopBackend.Pages
 
         }
 
-        public async Task<IActionResult> OnPost()
-        {
-            new Ad
-        }
+        
     }
 }
