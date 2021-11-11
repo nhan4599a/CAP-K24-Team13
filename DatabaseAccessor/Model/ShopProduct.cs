@@ -18,9 +18,10 @@
 
         public int Discount { get; set; }
 
+        public bool IsDisabled { get; set; }
+
         public virtual ShopCategory Category { get; set; }
         
-       
-    public virtual ProductImage ImageSet { get; set; }
+        public virtual ProductImage ImageSet { get; set; }
     }
 }

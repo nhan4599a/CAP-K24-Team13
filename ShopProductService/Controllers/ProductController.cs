@@ -1,6 +1,7 @@
 ﻿using DatabaseAccessor;
 using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -27,10 +28,21 @@ namespace ShopProductService.Controllers
                 Quantity = Quantity,
                 Price = Price,
                 Discount = Discount,
-
             });
 
             await _dbContext.SaveChangesAsync();
+        }
+
+        [ActionName("Delete")]
+        public async Task<ApiResult<bool>> DeleteProduct(int productId)
+        {
+            var product = await _dbContext.ShopProducts.FindAsync(productId);
+            if (product == null || product.IsDisabled)
+                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
+            product.IsDisabled = true;
+            _dbContext.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
     }
