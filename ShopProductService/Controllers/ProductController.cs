@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DatabaseAccessor;
+﻿using DatabaseAccessor;
 using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-namespace ShopApplication.Product
+namespace ShopProductService.Controllers
 {
     [ApiController]
+    [Route("/api/products")]
     public class ProductController : Controller
     {
         private ApplicationDbContext _dbContext;
@@ -19,6 +16,7 @@ namespace ShopApplication.Product
             _dbContext = dbcontext;
         }
 
+        [ActionName("Add")]
         public async Task AddProduct(int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
         {
             _dbContext.ShopProducts.Add(new ShopProduct
