@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace ShopProductService.Controllers
 {
     [ApiController]
+
     [Route("/api/products")]
+
     public class ProductController : Controller
     {
         private ApplicationDbContext _dbContext;
@@ -29,7 +31,7 @@ namespace ShopProductService.Controllers
                 Price = Price,
                 Discount = Discount,
             });
-
+            
             await _dbContext.SaveChangesAsync();
         }
 

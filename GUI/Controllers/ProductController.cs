@@ -7,6 +7,11 @@ namespace GUI.Controllers
         [ActionName("Add")]
         public IActionResult AddProduct()
         {
+<<<<<<< HEAD
+=======
+            
+
+>>>>>>> 5dc9564 (UpdateFormAddProduct)
             return View();
         }
 
