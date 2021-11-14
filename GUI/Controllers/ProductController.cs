@@ -9,5 +9,11 @@ namespace GUI.Controllers
         {
             return View();
         }
+
+        [ActionName("Index")]
+        public IActionResult ListProduct()
+        {
+            return View();
+        }
     }
 }
