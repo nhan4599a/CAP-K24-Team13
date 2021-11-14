@@ -7,11 +7,11 @@ namespace GUI.Controllers
         [ActionName("Add")]
         public IActionResult AddProduct()
         {
-<<<<<<< HEAD
-=======
-            
 
->>>>>>> 5dc9564 (UpdateFormAddProduct)
+            return View();
+        }
+        public IActionResult AddCategories()
+        {
             return View();
         }
 
@@ -21,4 +21,5 @@ namespace GUI.Controllers
             return View();
         }
     }
+
 }
