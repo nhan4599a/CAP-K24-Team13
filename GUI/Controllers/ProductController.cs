@@ -10,6 +10,7 @@ namespace GUI.Controllers
 
             return View();
         }
+<<<<<<< HEAD
         public IActionResult AddCategories()
         {
             return View();
@@ -20,6 +21,10 @@ namespace GUI.Controllers
         {
             return View();
         }
+=======
+     
+
+>>>>>>> 4ba5647 (update)
     }
 
 }
