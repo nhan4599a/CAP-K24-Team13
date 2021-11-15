@@ -2,14 +2,13 @@
 
 namespace GUI.Controllers
 {
-    public class ProductController : Controller
+    public class Category : Controller
     {
-        public IActionResult AddProduct()
+        public IActionResult AddCategories()
         {
 
             return View();
         }
-     
 
     }
 

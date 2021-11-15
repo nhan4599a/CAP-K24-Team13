@@ -271,7 +271,7 @@
         </nav>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
-            @RenderBody();
+            @RenderBody()
             <footer class="footer py-4  ">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-between">
@@ -424,6 +424,7 @@
     <script src="@Url.Content("/assets/js/plugins/perfect-scrollbar.min.js")"></script>
     <script src="@Url.Content("/assets/js/plugins/smooth-scrollbar.min.js")"></script>
     <script src="@Url.Content("/assets/js/plugins/chartjs.min.js")"></script>
+   
     <script>
         var ctx = document.getElementById("chart-bars").getContext("2d");
         new Chart(ctx, {
