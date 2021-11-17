@@ -7,7 +7,7 @@ namespace DatabaseAccessor.Model
     {
 
         public int Id { get; set; }
-        [Required]
+      
         public int? ShopId { get; set; } = null;
 
         public string CategoryName { get; set; }
@@ -15,5 +15,6 @@ namespace DatabaseAccessor.Model
         public int Special { get; set; }
 
         public virtual List<ShopProduct> ShopProducts { get; set; }
+        public string CatergoryName { get; set; }
     }
 }

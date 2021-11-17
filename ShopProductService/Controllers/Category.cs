@@ -44,7 +44,7 @@ namespace ShopProductService.Controllers
             [Route("GetAll")]
             public IEnumerable<ShopCategory> GetAllCategory()
             {
-                return CategoryList();
+                return ShopCategoryList();
             }
             public List<ShopCategory> ShopCategoryList()
             {
