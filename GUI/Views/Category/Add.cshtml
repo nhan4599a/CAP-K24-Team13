@@ -1,0 +1,90 @@
+﻿
+
+<h4 class="font-weight-bolder text-center">Add Categories</h4>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
+<form id="form-modal" role="form">
+
+    <body>
+        <div class="input-group input-group-outline mb-3">
+            <label class="form-label">Id</label>
+            <input type="text" class="form-control">
+        </div>
+        <div class="input-group input-group-outline mb-3">
+            <label class="form-label">ShopId</label>
+            <input type="text" class="form-control">
+        </div>
+        <div class="input-group input-group-outline mb-3">
+            <label class="form-label">CategoryName</label>
+            <input type="password" class="form-control">
+        </div>
+        <div class="input-group input-group-outline mb-3">
+            <label class="form-label">Special</label>
+            <input type="password" class="form-control">
+        </div>
+
+        <div class="text-left">
+            <button type='button' class="btn btn-primary" onclick="bootstrapAlert()">Submit</button>
+
+        </div>
+        @*<script>
+            function bootstrapAlert() {
+                $.bootstrapGrowl    ("This is message success!", {
+                    type: "success",
+                    offset: { from: "top",amount:30 },
+                    align: "left",
+                    deplay: 3000,
+                    allow_dismiss: true,
+                    stackup_spacing: 10
+                });
+            }
+        </script>*@
+        <script type="text/javascript">
+            const { error } = require("jquery")
+            $ function() {
+                $('btn btn-primary').click(function () {
+                    var category = { ShopID: '123' }
+
+                    $.ajax({
+                        type: 'POST',
+                        contentType: "application/json; charset=utf-8",
+                        data: "{category:" + JSON.stringify(category) + "}",
+                        url: "controllers/add",
+                        success: function (data) {
+                            alert("category name" + data);
+                        },
+                        error: function (result) {
+                            alert("Something when wrong");
+                        }
+                    })
+
+
+            }
+                )
+        </script>
+
+       
+        }
+        <script type="text/javascript">
+            $(document).ready(function () {
+            })
+            var Manager = {
+                GetAPI: function (serviceURL, successCallBack, errorCallback) {
+                    $.ajax({
+                        type: "Get",
+                        url: "/api/categories",
+                        data: "json",
+                        success: successCallBack,
+                        error: errorCallback
+                    });
+
+                },
+            }
+
+
+        </script>
+
+    </body>
+</form>

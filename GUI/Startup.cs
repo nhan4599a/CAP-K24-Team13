@@ -1,3 +1,5 @@
+using AspNetCoreHero.ToastNotification;
+using DatabaseAccessor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,15 +21,19 @@ namespace GUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-<<<<<<< HEAD
-=======
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext>();
-          
->>>>>>> 4ba5647 (update)
+            services.AddNotyf(config =>
+            {
+                config.DurationInSeconds = 10;
+                config.IsDismissable = true;
+                config.Position = NotyfPosition.TopLeft;
+
+            });
+           
+
         }
 
-            
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
