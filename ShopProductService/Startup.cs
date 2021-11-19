@@ -43,7 +43,7 @@ namespace ShopProductService
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            
             app.UseSwagger();
             app.UseSwaggerUI();
 

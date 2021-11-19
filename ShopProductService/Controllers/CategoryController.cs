@@ -61,5 +61,14 @@ namespace ShopProductService.Controllers
         {
             return ShopCategoryList().SingleOrDefault(c => c.Id == catID);
         }
+        
+        public ViewResult AddNewCategory(bool isSucess = false, int bookId = 0)
+        {
+            var model = new ShopCategory()
+            {
+
+            };
+            return View();
+        }
     }
 }

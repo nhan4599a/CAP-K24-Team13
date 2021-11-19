@@ -2,7 +2,6 @@
 using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -34,7 +33,7 @@ namespace ShopProductService.Controllers
             await _dbContext.SaveChangesAsync();
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
-        
+
         [HttpDelete]
         [ActionName("Delete")]
         public async Task<ApiResult<bool>> DeleteProduct(int productId)
@@ -48,6 +47,4 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
     }
-    
-
 }
