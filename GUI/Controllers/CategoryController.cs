@@ -3,22 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GUI.Controllers
 {
-    public class Category : Controller
+    public class CategoryController : Controller
     {
-
-
-
-    
-
         [ActionName("Add")]
         public IActionResult AddCategories()
-        {
-                
+        {       
             return View();
         }
-        
-       
-
     }
-
 }

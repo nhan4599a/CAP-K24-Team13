@@ -1,3 +1,4 @@
+using DatabaseAccessor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,9 @@ namespace ShopProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+            services.AddControllers();
+            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,9 +39,13 @@ namespace ShopProductService
             }
 
             app.UseHttpsRedirection();
+           
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseAuthorization();
 

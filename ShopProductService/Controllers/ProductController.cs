@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 namespace ShopProductService.Controllers
 {
     [ApiController]
-
     [Route("/api/products")]
-
     public class ProductController : Controller
     {
         private ApplicationDbContext _dbContext;
@@ -20,28 +18,24 @@ namespace ShopProductService.Controllers
             _dbContext = dbcontext;
         }
 
+        [HttpPost]
         [ActionName("Add")]
-
-
         public async Task<ApiResult<bool>> AddProduct(int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
         {
             _dbContext.ShopProducts.Add(new ShopProduct
             {
-
                 CategoryId = CategoryId,
                 ProductName = ProductName,
                 Description = Description,
                 Quantity = Quantity,
                 Price = Price,
                 Discount = Discount,
-
             });
             await _dbContext.SaveChangesAsync();
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
-
         }
-    
         
+        [HttpDelete]
         [ActionName("Delete")]
         public async Task<ApiResult<bool>> DeleteProduct(int productId)
         {
