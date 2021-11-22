@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseAccessor", "Databas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{84E8DC68-E9FD-4FCC-81E8-D292D93FE747}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{72AB87B6-E50B-48FA-A9C5-DA62419B3D1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{84E8DC68-E9FD-4FCC-81E8-D292D93FE747}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84E8DC68-E9FD-4FCC-81E8-D292D93FE747}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84E8DC68-E9FD-4FCC-81E8-D292D93FE747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72AB87B6-E50B-48FA-A9C5-DA62419B3D1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72AB87B6-E50B-48FA-A9C5-DA62419B3D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72AB87B6-E50B-48FA-A9C5-DA62419B3D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72AB87B6-E50B-48FA-A9C5-DA62419B3D1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
