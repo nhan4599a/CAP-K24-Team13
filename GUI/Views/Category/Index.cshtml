@@ -23,11 +23,11 @@
     </ul>
 </nav>
 @section Scripts {
-<script>
+    <script>
     $(document).ready(() => {
         loadProducts(1);
         let classNames = ['active', 'bg-gradient-primary'];
-        $('#nav-item-product').addClass(classNames);
+        $('#nav-item-category').addClass(classNames);
         $('a[name=btn-delete]').click(function () {
             let id = $(this).parent().parent().children('#prod-id').text();
             $.ajax('https://localhost:44302/api/products', {
@@ -116,5 +116,5 @@
             $('.table-responsive.p-0').html(html);
         });
     }
-</script>
+    </script>
 }
