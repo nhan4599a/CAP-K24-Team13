@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Shared.DTOs;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopProductService.Controllers
 {
@@ -36,7 +37,27 @@ namespace ShopProductService.Controllers
 
             await _dbContext.SaveChangesAsync();
         }
+        [HttpPut]
+        [ActionName("Edit")]
+        public async Task<ApiResult<bool>> EditProduct(string ProductId, int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        {
+            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == ProductId);
+            if (product == null || product.IsDisabled)
+                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
+            product.CategoryId = CategoryId;
+            product.ProductName = ProductName;
+            product.Description = Description;
+            product.Quantity = Quantity;
+            product.Price = Price;
+            product.Discount = Discount;
+            bool result = await _dbContext.SaveChangesAsync() > 0;
+            if (!result)
+            {
+                return new ApiResult<bool> { ResponseCode = 500, Data = false };
+            }
+            return new ApiResult<bool> { ResponseCode = 200, Data = true };
 
+        }
         [HttpDelete]
         [ActionName("Delete")]
         public async Task<ApiResult<bool>> DeleteProduct(int productId)
