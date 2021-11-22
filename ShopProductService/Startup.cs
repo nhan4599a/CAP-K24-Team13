@@ -1,3 +1,4 @@
+using DatabaseAccessor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ namespace ShopProductService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddScoped<ApplicationDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
