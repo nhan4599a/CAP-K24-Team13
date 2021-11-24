@@ -1,11 +1,12 @@
 ﻿using DatabaseAccessor.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DatabaseAccessor
 {
-   
+
     public class ApplicationDbContext : DbContext
     {
         private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
@@ -20,9 +21,16 @@ namespace DatabaseAccessor
 
         public DbSet<ShopProduct> ShopProducts;
 
+        public DbSet<ShopCategory> Category { get; set; }
+
         public ApplicationDbContext() : base(GetOptions(_connectionString))
         {
 
+        }
+
+        public Task<IEnumerable<ShopCategory>> ToListAsync()
+        {
+            throw new NotImplementedException();
         }
 
         private static DbContextOptions GetOptions(string connectionString)

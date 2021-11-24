@@ -3,6 +3,10 @@ using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using System.Threading.Tasks;
+using Shared.DTOs;
+using System.Linq;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopProductService.Controllers
 {
@@ -19,7 +23,7 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task<ApiResult<bool>> AddProduct(int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        public async Task AddProduct(int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
         {
             _dbContext.ShopProducts.Add(new ShopProduct
             {
@@ -30,21 +34,17 @@ namespace ShopProductService.Controllers
                 Price = Price,
                 Discount = Discount,
             });
-            await _dbContext.SaveChangesAsync();
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
-        }
 
-        [HttpDelete]
-        [ActionName("Delete")]
-        public async Task<ApiResult<bool>> DeleteProduct(int productId)
-        {
-            var product = await _dbContext.ShopProducts.FindAsync(productId);
-            if (product == null || product.IsDisabled)
-                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
-            product.IsDisabled = true;
-            _dbContext.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             await _dbContext.SaveChangesAsync();
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+        }
+        
+
+        [HttpGet]
+        public ApiResult<List<ProductDTO>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
+        {
+            var products = _dbContext.ShopProducts.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize).Select(product => ProductDTO.FromSource(product)).Cast<ProductDTO>().ToList();
+            return new ApiResult<List<ProductDTO>> { ResponseCode = 200, Data = products };
         }
     }
 }

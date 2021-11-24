@@ -1,22 +1,42 @@
-﻿
+﻿@model DatabaseAccessor.Model.ShopCategory
+@using ShopProductService.Controllers
+@*---------------------------------------------------------------------------*@
+@*anh Gấu muốn test giao diện add thì thêm trên cái localhost /category/add
+    còn cái giao diện đẻ load category ra là /category/index*@
+@*---------------------------------------------------------------------------*@
+
 <h4 class="font-weight-bolder text-center">Add Categories</h4>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
 <form id="form-modal" role="form">
+
+
     <div class="input-group input-group-outline mb-3">
         <label class="form-label">Name</label>
         <input type="text" class="form-control">
     </div>
+
+    <div class="input-group input-group-outline mb-3">
+        <label class="form-label">ShopId</label>
+        <input type="number" class="form-control">
+    </div>
     <div class="input-group input-group-outline mb-3">
         <label class="form-label">Special</label>
-        <input type="text" class="form-control">
+        <input class="form-control" />
+        @Html.DropDownListFor(model => model.CategoryName, new SelectList(ViewBag.list))
+        @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+
+
+        <select id="Select1" asp-items="@(new SelectList(ViewBag.list,"Id","CategoryName"))">
+            <option value="" selected disabled>------------Select---------</option>
+        </select>
+    </div>
+    <div class="text-left">
+        <button onclick="bootstrapAlert()" type='submit' class="btn btn-primary" id="btnSubmit">Add</button>
     </div>
 
-    <div class="text-left">
-        <button type='button' class="btn btn-primary" id="btnSubmit">Add</button>
-    </div>
 </form>
 
 @section Scripts {
@@ -30,7 +50,7 @@
                     type: 'POST',
                     contentType: "application/json; charset=utf-8",
                     data: "{category:" + JSON.stringify(category) + "}",
-                    url: "https://localhost:44302/category/add",
+                    url: "http://localhost:33162/api/categories",
                     success: function (data) {
                         alert("category name" + data);
                     },
@@ -41,19 +61,33 @@
             });
         });
 
-        //$(document).ready(function () {
-        //});
+        function bootstrapAlert() {
 
-        //var Manager = {
-        //    GetAPI: function (serviceURL, successCallBack, errorCallback) {
-        //        $.ajax({
-        //            type: "Get",
-        //            url: "/api/categories",
-        //            data: "json",
-        //            success: successCallBack,
-        //            error: errorCallback
-        //        });
-        //    }
-        //};
+            $.bootstrapGrowl("Submit Sucessfully !", {
+                type: "success",
+                offset: { from: "top", amount: 30 },
+                align: "center",
+                deplay: 3000,
+                allow_dismiss: true,
+                stackup_spacing: 10
+
+            });
+        }
+
+                //$(document).ready(function () {
+                //});
+
+                //var Manager = {
+                //    GetAPI: function (serviceURL, successCallBack, errorCallback) {
+                //        $.ajax({
+                //            type: "Get",
+                //            url: "/api/categories",
+                //            data: "json",
+                //            success: successCallBack,
+                //            error: errorCallback
+                //        });
+                //    }
+                //};
+
     </script>
 }

@@ -2,9 +2,11 @@
 using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
+using Shared.DTOs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace ShopProductService.Controllers
 {
@@ -29,10 +31,13 @@ namespace ShopProductService.Controllers
                 ShopId = ShopId,
                 CategoryName = CategoryName,
                 Special = Special,
-
             });
-
+            List<ShopCategory> li = new List<ShopCategory>();
+            li = _dbContext.ShopCategories.ToList();
+            ViewBag.listofitems = li;
             await _dbContext.SaveChangesAsync();
+           
+
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
@@ -52,6 +57,7 @@ namespace ShopProductService.Controllers
                     new ShopCategory() {Id=2,ShopId=1,CatergoryName="Laptop",Special=40000},
                     new ShopCategory() {Id=3,ShopId=1,CatergoryName="Phone",Special=30000},
                 };
+           
             return cat;
         }
 
@@ -61,14 +67,13 @@ namespace ShopProductService.Controllers
         {
             return ShopCategoryList().SingleOrDefault(c => c.Id == catID);
         }
-        
-        public ViewResult AddNewCategory(bool isSucess = false, int bookId = 0)
-        {
-            var model = new ShopCategory()
-            {
 
-            };
-            return View();
+        [HttpGet]
+        public async Task<ApiResult<List<CategoryDTO>>> Index()
+        {
+            var category = _dbContext.ShopCategories.Select(category => CategoryDTO.FromSource(category)).Cast<CategoryDTO>().ToList();
+            return new ApiResult<List<CategoryDTO>> { ResponseCode = 200, Data = category };
         }
+
     }
 }

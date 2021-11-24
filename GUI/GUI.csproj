@@ -386,8 +386,4 @@
     <ProjectReference Include="..\ShopProductService\ShopProductService.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Views\Product\AddProduct.cshtml" />
-  </ItemGroup>
-
 </Project>

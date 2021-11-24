@@ -10,6 +10,7 @@ namespace GUI.Controllers
     {
         public IActionResult Index()
         {
+            
             return View();
         }
     }

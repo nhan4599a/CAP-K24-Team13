@@ -1,6 +1,12 @@
-
+﻿@*-----------------------------------------------------------------------------*@
+@*Anh Gấu muốn test giao diện add thì thêm trên cái localhost /product/add
+    Còn cái giao diện đẻ load product ra là /product/index*@
+@*-----------------------------------------------------------------------------*@
 <h4 class="font-weight-bolder text-center">Add Product</h4>
-
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
 <form role="form">
 
 
@@ -34,8 +40,60 @@
     </div>
     </div>
 
-    <div class="text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="text-left">
+        <button onclick="bootstrapAlert()" type='button' class="btn btn-primary" id="btnSubmit">Add</button>
     </div>
-=
 </form>
+
+@section Scripts {
+    <script type="text/javascript">
+        const { error, type } = require("jquery");
+
+        $(function () {
+            $('#btnSubmit').click(function () {
+
+                $.ajax({
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    data: "{product:" + JSON.stringify(product) + "}",
+                    url: "http://localhost:33162/api/products",
+                    success: function (data) {
+                        alert("product name" + data);
+                    },
+                    error: function (result) {
+                        alert("Something when wrong");
+                    }
+                });
+            });
+        });
+
+        function bootstrapAlert() {
+            
+            $.bootstrapGrowl("Submit Sucessfully !", {
+                type: "success",
+                offset: { from: "top", amount: 30 },
+                align: "center",
+                deplay: 5000,
+                allow_dismiss: true,
+                stackup_spacing: 10
+
+            });
+        }
+
+                        //$(document).ready(function () {
+                        //});
+
+                        //var Manager = {
+                        //    GetAPI: function (serviceURL, successCallBack, errorCallback) {
+                        //        $.ajax({
+                        //            type: "Get",
+                        //            url: "/api/categories",
+                        //            data: "json",
+                        //            success: successCallBack,
+                        //            error: errorCallback
+                        //        });
+                        //    }
+                        //};
+
+    </script>
+}

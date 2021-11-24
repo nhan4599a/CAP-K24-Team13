@@ -24,5 +24,10 @@ namespace Shared.DTOs
         {
             return Mapper.GetInstance().MapToProductDTO(product);
         }
+
+        public static object FromSource(ShopProduct product)
+        {
+            return new ProductDTO().MapFromSource(product);
+        }
     }
 }

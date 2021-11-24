@@ -36,5 +36,6 @@ namespace Shared.Mapping
         }
 
         public ProductDTO MapToProductDTO(ShopProduct product) => _mapper.Map<ProductDTO>(product);
+        public CategoryDTO MapToCategoryDTO(ShopCategory category) => _mapper.Map<CategoryDTO>(category);
     }
 }
