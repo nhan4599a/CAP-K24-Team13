@@ -75,5 +75,10 @@ namespace ShopProductService.Controllers
             return new ApiResult<List<CategoryDTO>> { ResponseCode = 200, Data = category };
         }
 
+        public IEnumerable<ShopCategory> displaydata { get; set; }
+        public async Task onGet()
+        {
+            displaydata = await _dbContext.ToListAsync();
+        }
     }
 }

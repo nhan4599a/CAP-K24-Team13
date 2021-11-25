@@ -1,5 +1,8 @@
 ﻿@model DatabaseAccessor.Model.ShopCategory
-@using ShopProductService.Controllers
+@page
+@{ 
+    ViewData["Title"] = "ABC";
+}
 @*---------------------------------------------------------------------------*@
 @*anh Gấu muốn test giao diện add thì thêm trên cái localhost /category/add
     còn cái giao diện đẻ load category ra là /category/index*@
@@ -29,7 +32,8 @@
         @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
 
 
-        <select id="Select1" asp-items="@(new SelectList(ViewBag.list,"Id","CategoryName"))">
+        <select id="Select1" asp-items="@(new SelectList(Model.displaydata,"id","categoryName"))">
+            
             <option value="" selected disabled>------------Select---------</option>
         </select>
     </div>

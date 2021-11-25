@@ -27,6 +27,18 @@ namespace GUI.Controllers
         {
             return View();
         }
+        private ApplicationDbContext _dbContext;
+
+        public CategoryController(ApplicationDbContext dbcontext)
+        {
+            _dbContext = dbcontext;
+        }
+        public IEnumerable<ShopCategory> displaydata { get; set; }
+        public async Task onGet()
+        {
+            displaydata = await _dbContext.ToListAsync();
+            ViewBag.displaydata = displaydata;
+        }
 
         //@*@Html.DropDownListFor(model => Model.CategoryName, new SelectList(ViewBag.list))
         // @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })*@

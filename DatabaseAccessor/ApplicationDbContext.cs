@@ -9,7 +9,7 @@ namespace DatabaseAccessor
 
     public class ApplicationDbContext : DbContext
     {
-        private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
+        private static readonly string _connectionString = Environment.GetEnvironmentVariable("Data Source=DESKTOP-LABGN86;Initial Catalog=Team13-DB;Integrated Security=True");
 
         public DbSet<ProductImage> ProductImages;
 
@@ -37,5 +37,7 @@ namespace DatabaseAccessor
         {
             return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), connectionString).Options;
         }
+
+
     }
 }
