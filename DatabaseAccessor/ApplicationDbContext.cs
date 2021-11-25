@@ -9,28 +9,23 @@ namespace DatabaseAccessor
 
     public class ApplicationDbContext : DbContext
     {
-        private static readonly string _connectionString = Environment.GetEnvironmentVariable("Data Source=DESKTOP-LABGN86;Initial Catalog=Team13-DB;Integrated Security=True");
+        private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
-        public DbSet<ProductImage> ProductImages;
+        public DbSet<ProductImage> ProductImages { get; set; }
 
-        public DbSet<ShopCategory> ShopCategories;
+        public DbSet<ShopCategory> ShopCategories { get; set; }
 
-        public DbSet<ShopImage> ShopImages;
+        public DbSet<ShopImage> ShopImages { get; set; }
 
-        public DbSet<ShopInterface> ShopInterfaces;
+        public DbSet<ShopInterface> ShopInterfaces { get; set; }
 
-        public DbSet<ShopProduct> ShopProducts;
+        public DbSet<ShopProduct> ShopProducts { get; set; }
 
         public DbSet<ShopCategory> Category { get; set; }
 
         public ApplicationDbContext() : base(GetOptions(_connectionString))
         {
 
-        }
-
-        public Task<IEnumerable<ShopCategory>> ToListAsync()
-        {
-            throw new NotImplementedException();
         }
 
         private static DbContextOptions GetOptions(string connectionString)

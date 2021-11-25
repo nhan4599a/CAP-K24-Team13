@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
 {
-
     [ApiController]
     [Route("/api/categories")]
     public class CategoryController : Controller
@@ -32,40 +31,9 @@ namespace ShopProductService.Controllers
                 CategoryName = CategoryName,
                 Special = Special,
             });
-            List<ShopCategory> li = new List<ShopCategory>();
-            li = _dbContext.ShopCategories.ToList();
-            ViewBag.listofitems = li;
             await _dbContext.SaveChangesAsync();
-           
-
+            
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
-        }
-
-        [HttpGet]
-        [Route("GetAll")]
-        public IEnumerable<ShopCategory> GetAllCategory()
-        {
-            return ShopCategoryList();
-        }
-
-        [NonAction]
-        public List<ShopCategory> ShopCategoryList()
-        {
-            var cat = new List<ShopCategory>()
-                {
-                    new ShopCategory() {Id=1,ShopId=1,CatergoryName="Computer",Special=50000},
-                    new ShopCategory() {Id=2,ShopId=1,CatergoryName="Laptop",Special=40000},
-                    new ShopCategory() {Id=3,ShopId=1,CatergoryName="Phone",Special=30000},
-                };
-           
-            return cat;
-        }
-
-        [HttpGet]
-        [Route("GetByID/{catID}")]
-        public ShopCategory GetCategoryByID(int catID)
-        {
-            return ShopCategoryList().SingleOrDefault(c => c.Id == catID);
         }
 
         [HttpGet]
@@ -73,12 +41,6 @@ namespace ShopProductService.Controllers
         {
             var category = _dbContext.ShopCategories.Select(category => CategoryDTO.FromSource(category)).Cast<CategoryDTO>().ToList();
             return new ApiResult<List<CategoryDTO>> { ResponseCode = 200, Data = category };
-        }
-
-        public IEnumerable<ShopCategory> displaydata { get; set; }
-        public async Task onGet()
-        {
-            displaydata = await _dbContext.ToListAsync();
         }
     }
 }

@@ -8,19 +8,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
 <form role="form">
-
-
     <div class="input-group input-group-outline mb-3">
-        <label class="form-label">Id</label>
-        <input type="text" class="form-control">
-    </div>
-    <div class="input-group input-group-outline mb-3">
-        <label class="form-label">CategoryId</label>
-        <input type="email" class="form-control">
-    </div>
-    <div class="input-group input-group-outline mb-3">
-        <label class="form-label">ProductName</label>
+        <label class="form-label">Name</label>
         <input type="password" class="form-control">
+    </div>
+    <div class="input-group input-group-outline mb-3">
+        <select class="form-select" aria-label="Default select example">
+            <option selected="selected">Select category</option>
+        </select>
     </div>
     <div class="input-group input-group-outline mb-3">
         <label class="form-label">Description</label>
@@ -38,7 +33,6 @@
         <label class="form-label">Discount</label>
         <input type="password" class="form-control">
     </div>
-    </div>
 
     <div class="text-left">
         <button onclick="bootstrapAlert()" type='button' class="btn btn-primary" id="btnSubmit">Add</button>
@@ -47,8 +41,6 @@
 
 @section Scripts {
     <script type="text/javascript">
-        const { error, type } = require("jquery");
-
         $(function () {
             $('#btnSubmit').click(function () {
 
@@ -56,7 +48,7 @@
                     type: 'POST',
                     contentType: "application/json; charset=utf-8",
                     data: "{product:" + JSON.stringify(product) + "}",
-                    url: "http://localhost:33162/api/products",
+                    url: "http://localhost:44302/api/products",
                     success: function (data) {
                         alert("product name" + data);
                     },
@@ -64,6 +56,19 @@
                         alert("Something when wrong");
                     }
                 });
+            });
+
+            $.get('http://localhost:44302/api/categories', {
+                success: function (resp) {
+                    var categories = resp.data;
+                    var optionsHtml = '';
+                    categories.forEach(category => {
+                        optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
+                    });
+                    if (optionsHtml != '') {
+                        $('option[selected=selected]').after(optionsHtml);
+                    }
+                }
             });
         });
 
@@ -79,21 +84,6 @@
 
             });
         }
-
-                        //$(document).ready(function () {
-                        //});
-
-                        //var Manager = {
-                        //    GetAPI: function (serviceURL, successCallBack, errorCallback) {
-                        //        $.ajax({
-                        //            type: "Get",
-                        //            url: "/api/categories",
-                        //            data: "json",
-                        //            success: successCallBack,
-                        //            error: errorCallback
-                        //        });
-                        //    }
-                        //};
 
     </script>
 }

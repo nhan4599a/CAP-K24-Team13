@@ -1,4 +1,3 @@
-using AspNetCoreHero.ToastNotification;
 using DatabaseAccessor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,19 +24,6 @@ namespace GUI
             services.AddControllersWithViews();
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext>();
-            services.AddNotyf(config =>
-            {
-                config.DurationInSeconds = 10;
-                config.IsDismissable = true;
-                config.Position = NotyfPosition.TopLeft;
-
-            });
-            services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(
-                     Configuration.GetConnectionString("DefaultConnection")));
-         
-            
-           
         }
 
             

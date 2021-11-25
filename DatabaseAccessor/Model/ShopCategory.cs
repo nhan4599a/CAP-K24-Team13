@@ -16,23 +16,6 @@ namespace DatabaseAccessor.Model
         public int Special { get; set; }
 
         public virtual List<ShopProduct> ShopProducts { get; set; }
-        public string CatergoryName { get; set; }
-
-        private ApplicationDbContext _dbContext;
-
-        public ShopCategory(ApplicationDbContext dbcontext)
-        {
-            _dbContext = dbcontext;
-        }
-        public IEnumerable<ShopCategory> displaydata { get; set; }
-        public async Task onGet()
-        {
-            displaydata = await _dbContext.ToListAsync();
-            ViewBag.displaydata = displaydata;
-        }
-
-        //@*@
-
 
     }
 }
