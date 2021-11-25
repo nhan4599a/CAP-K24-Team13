@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Shared.DTOs;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopProductService.Controllers
 {
@@ -45,16 +46,16 @@ namespace ShopProductService.Controllers
             if (product == null || product.IsDisabled)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
             product.IsDisabled = true;
-            _dbContext.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
         [HttpGet]
-        public ApiResult<List<ProductDTO>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
+        public async Task<ApiResult<List<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
         {
-            var products = _dbContext.ShopProducts.Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).Select(product => ProductDTO.FromSource(product)).Cast<ProductDTO>().ToList();
+            var products = await _dbContext.ShopProducts.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize).Select(product => ProductDTO.FromSource(product)).Cast<ProductDTO>().ToListAsync();
             return new ApiResult<List<ProductDTO>> { ResponseCode = 200, Data = products };
         }
     }
