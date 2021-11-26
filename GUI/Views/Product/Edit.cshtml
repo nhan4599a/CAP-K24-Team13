@@ -1,0 +1,71 @@
+﻿@*-----------------------------------------------------------------------------*@
+@*Anh Gấu muốn test giao diện add thì thêm trên cái localhost /product/add
+    Còn cái giao diện đẻ load product ra là /product/index*@
+@*-----------------------------------------------------------------------------*@
+<h4 class="font-weight-bolder text-center">Add Product</h4>
+<form role="form">
+
+    <div class="row justify-content-center">
+        <div class="col-5 ">
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <select class="form-select" aria-label="Default select example">
+                    <option selected="selected">Select category</option>
+                </select>
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-control">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Price</label>
+                <input type="number" class="form-control">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Discount</label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="text-left">
+                <button onclick="bootstrapAlert()" type='button' class="btn btn-primary" id="btnSubmit">Add</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#btnSubmit').click(function () {
+
+                $.ajax({
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    data: "{product:" + JSON.stringify(product) + "}",
+                    url: "https://localhost:44349/api/products",
+                    success: function (data) {
+                        alert("product name" + data);
+                    }
+                });
+            });
+
+            $.get('https://localhost:44349/api/categories', null, (resp) => {
+                var categories = resp.data;
+                var optionsHtml = '';
+                categories.forEach(category => {
+                    optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
+                });
+                if (optionsHtml != '') {
+                    $('option[selected=selected]').after(optionsHtml);
+                }
+            });
+        });
+
+    </script>
+}

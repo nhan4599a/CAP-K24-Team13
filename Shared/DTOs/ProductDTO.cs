@@ -5,6 +5,7 @@ namespace Shared.DTOs
 {
     public class ProductDTO : DTO<ShopProduct>
     {
+        public string Id { get; set; }
 
         public string ProductName { get; set; }
 
@@ -23,6 +24,11 @@ namespace Shared.DTOs
         public object MapFromSource(ShopProduct product)
         {
             return Mapper.GetInstance().MapToProductDTO(product);
+        }
+
+        public static object FromSource(ShopProduct product)
+        {
+            return new ProductDTO().MapFromSource(product);
         }
     }
 }
