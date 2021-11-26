@@ -6,7 +6,7 @@ namespace Shared.DTOs
 {
     public class CategoryDTO : DTO<ShopCategory>
     {
-        public int Id { get; set; }
+        public int id { get; set; }
 
         public int ShopId { get; set; }
 
