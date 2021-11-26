@@ -58,17 +58,14 @@
                 });
             });
 
-            $.get('https://localhost:44302/api/categories', {
-                success: function (resp, statusText, xhr) {
-                    console.log(resp, statusText, xhr);
-                    var categories = resp.data;
-                    var optionsHtml = '';
-                    categories.forEach(category => {
-                        optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
-                    });
-                    if (optionsHtml != '') {
-                        $('option[selected=selected]').after(optionsHtml);
-                    }
+            $.get('https://localhost:44302/api/categories', null, (resp) => {
+                var categories = resp.data;
+                var optionsHtml = '';
+                categories.forEach(category => {
+                    optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
+                });
+                if (optionsHtml != '') {
+                    $('option[selected=selected]').after(optionsHtml);
                 }
             });
         });
