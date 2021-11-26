@@ -45,12 +45,17 @@
     });
     function loadProducts(pageNumber) {
         $.get('https://localhost:44302/api/products', { pageNumber: pageNumber }, (res) => {
-            var products = res.data;
-            var html = '';
+            var paginationResult = res.data;
+            var products = paginationResult.data;
+            var tableHtml = '';
+            var paginationHtml = '';
             if (products.length == 0) {
-                html = '<p style="text-align: center">There is no product to show!</p>'
+                tableHtml = '<p style="text-align: center">There is no product to show!</p>'
             } else {
                 var dataRowHtml = '';
+                for (var i = 1; i <= paginationResult.maxPageNumber; i++) {
+                    paginationHtml += `<li class="page-item ${i == pageNumber ? 'active bg-gradient-primary' : ''}"><a class="page-link" href="#" style="font-weight: bold">${i}</a></li>`
+                }
                 products.forEach((product, index) => {
                     dataRowHtml += `<tr>
                                         <td style="display: none" id="prod-id">${product.id}</td>
@@ -88,7 +93,7 @@
                                         </td>
                                     </tr>`;
                 });
-                html = `<table class="table align-items-center mb-0">
+                tableHtml = `<table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
@@ -113,7 +118,7 @@
                             </tbody>
                         </table>`;
             }
-            $('.table-responsive.p-0').html(html);
+            $('.table-responsive.p-0').html(tableHtml);
         });
     }
 </script>

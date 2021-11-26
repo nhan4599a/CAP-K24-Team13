@@ -1,12 +1,12 @@
 ﻿using DatabaseAccessor;
 using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
-using Shared;
-using System.Threading.Tasks;
-using Shared.DTOs;
-using System.Linq;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Shared;
+using Shared.DTOs;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
 {
@@ -52,11 +52,16 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<List<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
+        public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
         {
-            var products = await _dbContext.ShopProducts.Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).Select(product => ProductDTO.FromSource(product)).Cast<ProductDTO>().ToListAsync();
-            return new ApiResult<List<ProductDTO>> { ResponseCode = 200, Data = products };
+            var allProducts = await _dbContext.ShopProducts.ToListAsync();
+            var products = allProducts.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize).Select(product => ProductDTO.FromSource(product)).Cast<ProductDTO>().ToList();
+            int maxPageNumber = (int)System.Math.Ceiling((float)allProducts.Count / pageSize);
+            if (pageNumber > maxPageNumber)
+                return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 404, ErrorMessage = "Max page reached!" };
+            var paginationResult = new PaginatedDataList<ProductDTO>(products, maxPageNumber, pageNumber);
+            return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 200, Data = paginationResult };
         }
     }
 }
