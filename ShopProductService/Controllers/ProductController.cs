@@ -40,15 +40,11 @@ namespace ShopProductService.Controllers
         [HttpGet]
         public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
         {
-            var allProducts = await _dbContext.ShopProducts.ToListAsync();
-            var products = allProducts
-                            .Skip((pageNumber - 1) * pageSize)
-                            .Take(pageSize)
-                            .Select(product => ProductDTO.FromSource(product))
-                            .Cast<ProductDTO>().ToList();
-            var maxPageNumber = (int)System.Math.Ceiling((float)allProducts.Count / pageSize);
-            var paginationResult = new PaginatedDataList<ProductDTO>(products, maxPageNumber, pageNumber);
-            return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 200, Data = paginationResult };
+            var allProducts = await _dbContext.ShopProducts
+                                .Select(product => ProductDTO.FromSource(product))
+                                .Cast<ProductDTO>()
+                                .ToListAsync();
+            return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 200, Data = allProducts.Paginate(pageNumber, pageSize) };
         }
     }
 }
