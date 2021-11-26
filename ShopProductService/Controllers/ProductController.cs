@@ -37,6 +37,19 @@ namespace ShopProductService.Controllers
             await _dbContext.SaveChangesAsync();
         }
 
+        [HttpDelete]
+        [ActionName("Delete")]
+        public async Task<ApiResult<bool>> DeleteProduct([FromQuery] int productId)
+        {
+            var product = await _dbContext.ShopProducts.FindAsync(productId);
+            if (product == null || product.IsDisabled)
+                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
+            product.IsDisabled = true;
+            _dbContext.Entry(product).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+        }
+
         [HttpGet]
         public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
         {
