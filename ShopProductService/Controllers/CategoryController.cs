@@ -20,11 +20,14 @@ namespace ShopProductService.Controllers
             _dbContext = dbContext;
         }
 
-        public async Task<ApiResult<List<CategoryDTO>>> Index()
+        [HttpGet]
+        public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory(int pageNumber, int pageSize = 5)
         {
-            var categories = await _dbContext.ShopCategories.Select(category => CategoryDTO.FromSource(category))
-                .Cast<CategoryDTO>().ToListAsync();
-            return new ApiResult<List<CategoryDTO>> { ResponseCode = 200, Data = categories };
+            var categories = await _dbContext.ShopCategories
+                                    .Select(category => CategoryDTO.FromSource(category))
+                                    .Cast<CategoryDTO>()
+                                    .ToListAsync();
+            return new ApiResult<PaginatedDataList<CategoryDTO>> { ResponseCode = 200, Data = categories.Paginate(pageNumber, pageSize) };
         }
     }
 }

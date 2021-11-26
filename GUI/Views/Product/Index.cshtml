@@ -19,7 +19,7 @@
 @section Scripts {
 <script>
     $(document).ready(() => {
-        loadProducts(1);
+        loadProducts(getCurrentPage());
         let classNames = ['active', 'bg-gradient-primary'];
         $('#nav-item-product').addClass(classNames);
         $('a[name=btn-delete]').click(function () {
@@ -125,10 +125,15 @@
 
     function moveCurrentPage(isPrevious) {
         var jumpStep = isPrevious ? -1 : 1;
+        var currentPageNumber = getCurrentPage();
+        window.location.href = `https://localhost:44349/category?pageNumber=${currentPageNumber + jumpStep}`;
+    }
+
+    function getCurrentPage() {
         var url = new URL(window.location.href);
         var queryObj = url.searchParams;
-        var currentPageNumber = queryObj.get('pageNumber') ? queryObj.get('pageNumber') : 1;
-        window.location.href = `https://localhost:44349/product?pageNumber=${currentPageNumber + jumpStep}`;
+        var currentPageNumber = queryObj.get('pageNumber') ? parseInt(queryObj.get('pageNumber')) : 1;
+        return currentPageNumber;
     }
 </script>
 }
