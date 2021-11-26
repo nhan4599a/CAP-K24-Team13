@@ -48,7 +48,7 @@
                     type: 'POST',
                     contentType: "application/json; charset=utf-8",
                     data: "{product:" + JSON.stringify(product) + "}",
-                    url: "http://localhost:44302/api/products",
+                    url: "https://localhost:44302/api/products",
                     success: function (data) {
                         alert("product name" + data);
                     },
@@ -58,8 +58,9 @@
                 });
             });
 
-            $.get('http://localhost:44302/api/categories', {
-                success: function (resp) {
+            $.get('https://localhost:44302/api/categories', {
+                success: function (resp, statusText, xhr) {
+                    console.log(resp, statusText, xhr);
                     var categories = resp.data;
                     var optionsHtml = '';
                     categories.forEach(category => {

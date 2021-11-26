@@ -32,7 +32,43 @@ namespace DatabaseAccessor
         {
             return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), connectionString).Options;
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ShopProduct>()
+                    .HasOne(e => e.ImageSet)
+                    .WithOne(e => e.Product)
+                    .HasForeignKey<ProductImage>(e => e.ShopProductId);
+            modelBuilder.Entity<ShopProduct>()
+                    .HasOne(e => e.Category)
+                    .WithMany(e => e.ShopProducts)
+                    .IsRequired();
+            modelBuilder.Entity<ShopInterface>()
+                    .HasOne(e => e.ShopImage)
+                    .WithOne(e => e.ShopInterface)
+                    .HasForeignKey<ShopImage>(e => e.ShopInterfaceId);
+            modelBuilder.Entity<ShopCategory>(entity =>
+            {
+                entity.ToTable("ShopCategories");
+            });
+            modelBuilder.Entity<ShopProduct>(entity =>
+            {
+                entity.ToTable("ShopProducts");
+            });
+            modelBuilder.Entity<ProductImage>(entity =>
+            {
+                entity.ToTable("ProductImages");
+            });
+            modelBuilder.Entity<ShopImage>(entity =>
+            {
+                entity.ToTable("ShopImages");
+            });
+            modelBuilder.Entity<ShopInterface>(entity =>
+            {
+                entity.ToTable("ShopInterfaces");
+            });
+        }
 
     }
 }

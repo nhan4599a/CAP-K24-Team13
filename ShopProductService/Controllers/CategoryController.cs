@@ -6,7 +6,7 @@ using Shared.DTOs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopProductService.Controllers
 {
@@ -39,7 +39,8 @@ namespace ShopProductService.Controllers
         [HttpGet]
         public async Task<ApiResult<List<CategoryDTO>>> Index()
         {
-            var category = _dbContext.ShopCategories.Select(category => CategoryDTO.FromSource(category)).Cast<CategoryDTO>().ToList();
+            var category =
+                await _dbContext.ShopCategories.Select(category => CategoryDTO.FromSource(category)).Cast<CategoryDTO>().ToListAsync();
             return new ApiResult<List<CategoryDTO>> { ResponseCode = 200, Data = category };
         }
     }
