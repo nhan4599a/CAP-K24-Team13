@@ -26,6 +26,8 @@ namespace Shared.Mapping
                     .ForMember(target => target.Images,
                         options => options.MapFrom(source => source.ImageSet == null ? null :
                             new string[] { source.ImageSet.Image1, source.ImageSet.Image2, source.ImageSet.Image3, source.ImageSet.Image4, source.ImageSet.Image5 }));
+
+                cfg.CreateMap<ShopCategory, CategoryDTO>();
             });
             _mapper = config.CreateMapper();
         }
@@ -36,5 +38,8 @@ namespace Shared.Mapping
         }
 
         public ProductDTO MapToProductDTO(ShopProduct product) => _mapper.Map<ProductDTO>(product);
+
+        public CategoryDTO MapToCategoryDTO(ShopCategory category) => _mapper.Map<CategoryDTO>(category);
+
     }
 }

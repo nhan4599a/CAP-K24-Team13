@@ -1,12 +1,12 @@
-﻿using DatabaseAccessor;
+using DatabaseAccessor;
 using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared;
-using System.Threading.Tasks;
 using Shared.DTOs;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
 {
@@ -60,23 +60,25 @@ namespace ShopProductService.Controllers
         }
         [HttpDelete]
         [ActionName("Delete")]
-        public async Task<ApiResult<bool>> DeleteProduct(int productId)
+        public async Task<ApiResult<bool>> DeleteProduct([FromQuery] int productId)
         {
             var product = await _dbContext.ShopProducts.FindAsync(productId);
             if (product == null || product.IsDisabled)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
             product.IsDisabled = true;
-            _dbContext.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
         [HttpGet]
-        public ApiResult<List<ProductDTO>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
+        public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
         {
-            var products = _dbContext.ShopProducts.Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).Select(product => ProductDTO.FromSource(product)).Cast<ProductDTO>().ToList();
-            return new ApiResult<List<ProductDTO>> { ResponseCode = 200, Data = products };
+            var allProducts = await _dbContext.ShopProducts
+                                .Select(product => ProductDTO.FromSource(product))
+                                .Cast<ProductDTO>()
+                                .ToListAsync();
+            return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 200, Data = allProducts.Paginate(pageNumber, pageSize) };
         }
     }
 }
