@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Shared.DTOs;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 
 namespace ShopProductService.Controllers
 {
@@ -37,7 +36,8 @@ namespace ShopProductService.Controllers
 
             await _dbContext.SaveChangesAsync();
         }
-        
+
+       
 
         [HttpGet]
         public ApiResult<List<ProductDTO>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)

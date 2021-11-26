@@ -25,14 +25,9 @@
         <input type="number" class="form-control">
     </div>
     <div class="input-group input-group-outline mb-3">
-        <label class="form-label">Special</label>
-        <input class="form-control" />
-        @Html.DropDownListFor(model => model.CategoryName, new SelectList(ViewBag.list))
-        @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
-
-        @*<select id="Select1" asp-items="@(new SelectList(Model.displaydata,"id","categoryName"))">    
-            <option value="" selected disabled>------------Select---------</option>
-        </select>*@
+        <select class="form-select" aria-label="Default select example">
+            <option selected="selected">Select special</option>
+        </select>
     </div>
     <div class="text-left">
         <button onclick="bootstrapAlert()" type='submit' class="btn btn-primary" id="btnSubmit">Add</button>
@@ -46,12 +41,12 @@
 
         $(function () {
             $('#btnSubmit').click(function () {
-
+                
                 $.ajax({
                     type: 'POST',
                     contentType: "application/json; charset=utf-8",
                     data: "{category:" + JSON.stringify(category) + "}",
-                    url: "http://localhost:33162/api/categories",
+                    url: "http://localhost:44349/api/categories",
                     success: function (data) {
                         alert("category name" + data);
                     },
@@ -60,6 +55,17 @@
                     }
                 });
             });
+        });
+        $.get('https://localhost:44349/api/categories', null, (resp) => {
+            var categories = resp.data;
+            var optionsHtml = '';
+            categories.forEach(category => {
+                optionsHtml += `<option value="${category.Special}">${category.Special}</option>`;
+            });
+            if (optionsHtml != '') {
+                $('option[selected=selected]').after(optionsHtml);
+            }
+        });
         });
 
         function bootstrapAlert() {
