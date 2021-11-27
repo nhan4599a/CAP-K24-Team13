@@ -4,13 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Shared.DTOs;
-using System.Linq;
-using System.Collections.Generic;
 using ShopProductService.RequestModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
 {
@@ -39,6 +35,7 @@ namespace ShopProductService.Controllers
                 Discount = requestModel.Discount
             });
             _dbContext.SaveChangesAsync();
+            return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
         [HttpPut]

@@ -1,14 +1,12 @@
-AddProductAndCat
 using DatabaseAccessor;
 using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
-using System.Collections.Generic;
+using ShopProductService.RequestModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ShopProductService.RequestModel;
 
 namespace ShopProductService.Controllers
 {
