@@ -44,10 +44,15 @@ namespace DatabaseAccessor
                     .HasOne(e => e.Category)
                     .WithMany(e => e.ShopProducts)
                     .IsRequired();
+            modelBuilder.Entity<ShopProduct>()
+                    .Property(e => e.IsDisabled)
+                    .HasDefaultValue(false);
+
             modelBuilder.Entity<ShopInterface>()
                     .HasOne(e => e.ShopImage)
                     .WithOne(e => e.ShopInterface)
                     .HasForeignKey<ShopImage>(e => e.ShopInterfaceId);
+
             modelBuilder.Entity<ShopCategory>(entity =>
             {
                 entity.ToTable("ShopCategories");

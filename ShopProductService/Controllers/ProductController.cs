@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Shared.DTOs;
 using System.Linq;
 using System.Collections.Generic;
+using ShopProductService.RequestModel;
 
 namespace ShopProductService.Controllers
 {
@@ -22,9 +23,17 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task AddProduct([FromBody] ShopProduct product)
+        public async Task AddProduct(AddProductRequestModel requestModel)
         {
-            _dbContext.ShopProducts.Add(product);
+            _dbContext.ShopProducts.Add(new ShopProduct
+            {
+                ProductName = requestModel.ProductName,
+                CategoryId = requestModel.CategoryId,
+                Description = requestModel.Description,
+                Quantity = requestModel.Quantity,
+                Price = requestModel.Price,
+                Discount = requestModel.Discount
+            });
 
             await _dbContext.SaveChangesAsync();
         }

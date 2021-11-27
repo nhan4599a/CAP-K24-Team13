@@ -29,8 +29,8 @@ namespace ShopProductService.Controllers
             _dbContext.ShopCategories.Add(new ShopCategory
             {
                 ShopId = 1,
-                CategoryName = requestModel.categoryName,
-                Special = requestModel.special
+                CategoryName = requestModel.CategoryName,
+                Special = requestModel.Special
             });
             _dbContext.SaveChangesAsync();
             

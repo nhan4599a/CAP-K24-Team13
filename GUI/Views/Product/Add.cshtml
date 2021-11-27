@@ -1,40 +1,32 @@
-﻿@*-----------------------------------------------------------------------------*@
-@*Anh Gấu muốn test giao diện add thì thêm trên cái localhost /product/add
-    Còn cái giao diện đẻ load product ra là /product/index*@
-@*-----------------------------------------------------------------------------*@
-<h4 class="font-weight-bolder text-center">Add Product</h4>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
+﻿<h4 class="font-weight-bolder text-center">Add Product</h4>
 <form role="form">
 
     <div class="row justify-content-center">
         <div class="col-5 ">
             <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Name</label>
-                <input type="text" class="form-control" id="name">
+                <input type="text" class="form-control" id="input-name">
             </div>
             <div class="input-group input-group-outline mb-3">
-                <select class="form-select" aria-label="Default select example" id="categoryId">
+                <select class="form-select" aria-label="Default select example" id="input-category">
                     <option selected="selected">Select category</option>
                 </select>
             </div>
             <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Description</label>
-                <input type="text" class="form-control" id="description">
+                <input type="text" class="form-control" id="input-description">
             </div>
             <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Quantity</label>
-                <input type="number" class="form-control" id="quantity">
+                <input type="number" class="form-control" id="input-quantity">
             </div>
             <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Price</label>
-                <input type="number" class="form-control" id="price">
+                <input type="number" class="form-control" id="input-price">
             </div>
             <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Discount</label>
-                <input type="text" class="form-control" id="discount">
+                <input type="text" class="form-control" id="input-discount">
             </div>
             <div class="text-left">
                 <a class="btn btn-primary" id="btnSubmit">Add</a>
@@ -49,25 +41,27 @@
             
             $('#btnSubmit').click(function (e) {
                 e.preventDefault();
-                //get
-                var name = $("#name").val();
-                var description = $("#description").val();
-                var quantity = $("#quantity").val();
-                var price = $("#price").val();
-                var discount = $("#discount").val();
+                
+                var name = $("#iput-name").val();
+                var category = $('#input-category').val();
+                var description = $("#input-description").val();
+                var quantity = $("#input-quantity").val();
+                var price = $("#input-price").val();
+                var discount = $("#input-discount").val();
 
+                var requestModel = {
+                    productName: name,
+                    categoryId: category,
+                    description: description,
+                    quantity: quantity,
+                    price: price,
+                    discount: discount
+                };
 
                 $.ajax({
                     type: 'POST',
-                    data: {
-                        product: {
-                            name: name,
-                            description: description,
-                            quantity: quantity,
-                            price: price,
-                            discount: discount
-                        }
-                    },
+                    contentType: 'application/json',
+                    data: JSON.stringify(requestModel),
                     url: "https://localhost:44302/api/products",
                     success: function (data) {
                         alert("product name" + data);
