@@ -1,12 +1,14 @@
+AddProductAndCat
 using DatabaseAccessor;
-using Microsoft.AspNetCore.Http;
+using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Shared;
-using System.Threading.Tasks;
 using Shared.DTOs;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ShopProductService.RequestModel;
 
 namespace ShopProductService.Controllers
 {
@@ -16,9 +18,23 @@ namespace ShopProductService.Controllers
     {
         private ApplicationDbContext _dbContext;
 
-        public CategoryController(ApplicationDbContext dbContext)
+        public CategoryController(ApplicationDbContext dbcontext)
         {
-            _dbContext = dbContext;
+            _dbContext = dbcontext;
+        }
+
+        [HttpPost]
+        [ActionName("Add")]
+        public ApiResult<bool> AddCategory(AddCategoryRequestModel requestModel)
+        {
+            _dbContext.ShopCategories.Add(new ShopCategory
+            {
+                ShopId = 1,
+                CategoryName = requestModel.CategoryName,
+                Special = requestModel.Special
+            });
+            _dbContext.SaveChangesAsync();
+            return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
         [HttpPut]
@@ -39,8 +55,9 @@ namespace ShopProductService.Controllers
             }
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
-
+        
         [HttpGet]
+        [ActionName("Index")]
         public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] int pageNumber, int pageSize = 5)
         {
             var categories = await _dbContext.ShopCategories

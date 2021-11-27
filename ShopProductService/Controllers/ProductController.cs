@@ -7,6 +7,10 @@ using Shared.DTOs;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shared.DTOs;
+using System.Linq;
+using System.Collections.Generic;
+using ShopProductService.RequestModel;
 
 namespace ShopProductService.Controllers
 {
@@ -23,20 +27,20 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task AddProduct(int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        public ApiResult<bool> AddProduct(AddProductRequestModel requestModel)
         {
             _dbContext.ShopProducts.Add(new ShopProduct
             {
-                CategoryId = CategoryId,
-                ProductName = ProductName,
-                Description = Description,
-                Quantity = Quantity,
-                Price = Price,
-                Discount = Discount,
+                ProductName = requestModel.ProductName,
+                CategoryId = requestModel.CategoryId,
+                Description = requestModel.Description,
+                Quantity = requestModel.Quantity,
+                Price = requestModel.Price,
+                Discount = requestModel.Discount
             });
-
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChangesAsync();
         }
+        
         [HttpPut]
         [ActionName("Edit")]
         public async Task<ApiResult<bool>> EditProduct(string ProductId, int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
@@ -58,6 +62,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
 
         }
+        
         [HttpDelete]
         [ActionName("Delete")]
         public async Task<ApiResult<bool>> DeleteProduct([FromQuery] int productId)

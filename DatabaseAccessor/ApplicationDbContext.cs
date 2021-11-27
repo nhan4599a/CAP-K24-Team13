@@ -1,11 +1,12 @@
 ﻿using DatabaseAccessor.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DatabaseAccessor
 {
-   
+
     public class ApplicationDbContext : DbContext
     {
         private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
@@ -29,7 +30,7 @@ namespace DatabaseAccessor
         {
             return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), connectionString).Options;
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -42,10 +43,36 @@ namespace DatabaseAccessor
                     .HasOne(e => e.Category)
                     .WithMany(e => e.ShopProducts)
                     .IsRequired();
+                    
+            modelBuilder.Entity<ShopProduct>()
+                    .Property(e => e.IsDisabled)
+                    .HasDefaultValue(false);
+
             modelBuilder.Entity<ShopInterface>()
                     .HasOne(e => e.ShopImage)
                     .WithOne(e => e.ShopInterface)
                     .HasForeignKey<ShopImage>(e => e.ShopInterfaceId);
+
+            modelBuilder.Entity<ShopCategory>(entity =>
+            {
+                entity.ToTable("ShopCategories");
+            });
+            modelBuilder.Entity<ShopProduct>(entity =>
+            {
+                entity.ToTable("ShopProducts");
+            });
+            modelBuilder.Entity<ProductImage>(entity =>
+            {
+                entity.ToTable("ProductImages");
+            });
+            modelBuilder.Entity<ShopImage>(entity =>
+            {
+                entity.ToTable("ShopImages");
+            });
+            modelBuilder.Entity<ShopInterface>(entity =>
+            {
+                entity.ToTable("ShopInterfaces");
+            });
         }
     }
 }

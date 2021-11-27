@@ -2046,13 +2046,4 @@
     <None Include="wwwroot\assets\scss\material-dashboard\_variables.scss" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DatabaseAccessor\DatabaseAccessor.csproj" />
-    <ProjectReference Include="..\ShopProductService\ShopProductService.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Views\Product\AddProduct.cshtml" />
-  </ItemGroup>
-
 </Project>

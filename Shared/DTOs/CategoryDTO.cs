@@ -1,21 +1,27 @@
-﻿using DatabaseAccessor.Model;
+using DatabaseAccessor.Model;
+using Shared.Mapping;
+using System;
 
 namespace Shared.DTOs
 {
     public class CategoryDTO : DTO<ShopCategory>
     {
-        public int Id { get; set; }
+        public int id { get; set; }
+
+        public int ShopId { get; set; }
 
         public string CategoryName { get; set; }
 
-        public object MapFromSource(ShopCategory originalObject)
+        public int Special { get; set; }
+
+        public object MapFromSource(ShopCategory category)
         {
-            return Mapping.Mapper.GetInstance().MapToCategoryDTO(originalObject);
+            return Mapper.GetInstance().MapToCategoryDTO(category);
         }
 
-        public static object FromSource(ShopCategory originalObject)
+        public static object FromSource(ShopCategory category)
         {
-            return new CategoryDTO().MapFromSource(originalObject);
+            return new CategoryDTO().MapFromSource(category);
         }
     }
 }
