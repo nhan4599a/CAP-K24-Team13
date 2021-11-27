@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using Shared.Mapping;
 
 namespace ShopProductService.Controllers
 {
@@ -15,10 +16,36 @@ namespace ShopProductService.Controllers
     public class ProductController : Controller
     {
         private ApplicationDbContext _dbContext;
-
         public ProductController(ApplicationDbContext dbcontext)
         {
             _dbContext = dbcontext;
+            
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ApiResult<ProductDTO>> GetProduct(string id)
+        {
+            var result = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == id);
+            if (result == null) return new ApiResult<ProductDTO> { ResponseCode = 404, Data = null };
+            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(c => c.Id == result.CategoryId);
+
+            var imageSet = result.ImageSet != null ? new string[] { result.ImageSet.Image1, result.ImageSet.Image2, result.ImageSet.Image3, result.ImageSet.Image3, result.ImageSet.Image4, result.ImageSet.Image5 } : null;
+            var productDto = new ProductDTO()
+            {
+                CategoryName = category.CategoryName,
+                ProductName = result.ProductName,
+                Id = result.Id,
+                Description = result.Description,
+                Discount = result.Discount,
+                Images = imageSet,
+                Price = result.Price,
+                Quantity = result.Quantity
+            };
+            return new ApiResult<ProductDTO>
+            {
+                ResponseCode = 200,
+                Data = productDto
+            };
         }
 
         [HttpPost]
@@ -39,17 +66,18 @@ namespace ShopProductService.Controllers
         }
         [HttpPut]
         [ActionName("Edit")]
-        public async Task<ApiResult<bool>> EditProduct(string ProductId, int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        public async Task<ApiResult<bool>> EditProduct(ProductDTO productDTO)
         {
-            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == ProductId);
+            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == productDTO.Id);
             if (product == null || product.IsDisabled)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
-            product.CategoryId = CategoryId;
-            product.ProductName = ProductName;
-            product.Description = Description;
-            product.Quantity = Quantity;
-            product.Price = Price;
-            product.Discount = Discount;
+            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(c => c.CategoryName == productDTO.CategoryName);
+            product.CategoryId = category != null ? category.Id : 0;
+            product.ProductName = productDTO.ProductName;
+            product.Description = productDTO.Description;
+            product.Quantity = productDTO.Quantity;
+            product.Price = productDTO.Price;
+            product.Discount = productDTO.Discount;
             bool result = await _dbContext.SaveChangesAsync() > 0;
             if (!result)
             {

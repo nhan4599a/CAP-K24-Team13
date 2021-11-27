@@ -1,71 +1,61 @@
-﻿@*-----------------------------------------------------------------------------*@
-@*Anh Gấu muốn test giao diện add thì thêm trên cái localhost /product/add
-    Còn cái giao diện đẻ load product ra là /product/index*@
-@*-----------------------------------------------------------------------------*@
-<h4 class="font-weight-bolder text-center">Add Product</h4>
-<form role="form">
+﻿@model Shared.DTOs.ProductDTO
 
-    <div class="row justify-content-center">
-        <div class="col-5 ">
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Name</label>
-                <input type="text" class="form-control">
+@{
+    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+}
+<h3>Chỉnh sửa sản phẩm</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditProduct">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div  class="form-group">              
+                <input asp-for="Id"  type="hidden" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="input-group input-group-outline mb-3">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected="selected">Select category</option>
-                </select>
+            <div class="form-group">
+                <label asp-for="ProductName" class="control-label">Tên sản phẩm</label>
+                <input asp-for="ProductName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
             </div>
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Description</label>
-                <input type="text" class="form-control">
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Mô tả</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Quantity</label>
-                <input type="number" class="form-control">
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label">Số lượng</label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Price</label>
-                <input type="number" class="form-control">
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Giá sản phẩm</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Discount</label>
-                <input type="text" class="form-control">
+            <div class="form-group">
+                <label asp-for="Discount" class="control-label">Giá đã giảm</label>
+                <input asp-for="Discount" class="form-control" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
             </div>
-            <div class="text-left">
-                <button onclick="bootstrapAlert()" type='button' class="btn btn-primary" id="btnSubmit">Add</button>
+            <div class="form-group">
+                <label asp-for="CategoryName" class="control-label">Category</label>
+                <input asp-for="CategoryName" class="form-control" />
+                <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
-        </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
-</form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
 @section Scripts {
-    <script type="text/javascript">
-        $(function () {
-            $('#btnSubmit').click(function () {
-
-                $.ajax({
-                    type: 'POST',
-                    contentType: "application/json; charset=utf-8",
-                    data: "{product:" + JSON.stringify(product) + "}",
-                    url: "https://localhost:44349/api/products",
-                    success: function (data) {
-                        alert("product name" + data);
-                    }
-                });
-            });
-
-            $.get('https://localhost:44349/api/categories', null, (resp) => {
-                var categories = resp.data;
-                var optionsHtml = '';
-                categories.forEach(category => {
-                    optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
-                });
-                if (optionsHtml != '') {
-                    $('option[selected=selected]').after(optionsHtml);
-                }
-            });
-        });
-
-    </script>
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }
