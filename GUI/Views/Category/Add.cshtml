@@ -9,19 +9,29 @@
 
 <h4 class="font-weight-bolder text-center">Add Categories</h4>
 <form id="form-modal" role="form">
-    <div class="input-group input-group-outline mb-3">
-        <label class="form-label" rows="5">Name</label>
-        <input type="text" class="form-control" id="input-name">
-    </div>
-    <div class="input-group input-group-outline mb-3">
-        <select id="input-special">
-            <option value="0" selected>------------Select special---------</option>
-            <option value="1">Quần áo</option>
-            <option value="2">Thiết bị điện tử</option>
-        </select>
-    </div>
-    <div class="text-left">
-        <a class="btn btn-primary" id="btnSubmit">Add</a>
+    <div class="row justify-content-center">
+        <div class="col-5 ">
+
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">ShopId</label>
+                <input type="number" class="form-control" id="shopId">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <select class="form-select" aria-label="Default select example" id="special">
+                    <option selected="selected">Select special</option>
+                    <option value="1">Quần áo</option>
+                    <option value="2">Thiết bị điện tử</option>
+                </select>
+            </div>
+            <div class="text-left">
+                <a href="#" class="btn btn-primary" id="btnSubmit">Add</a>
+            </div>
+        </div>
     </div>
 
 </form>
@@ -30,13 +40,23 @@
     <script type="text/javascript">
 
         $(function () {
-            $('#btnSubmit').click(function () {
-                var name = $('#input-name').val();
-                var special = $('#input-special').val();
-                var category = { categoryName: name, special: special };
+            $('#btnSubmit').click(function (e) {
+                e.preventDefault();
+
+                var name = $('#name').val();
+                var shopId = $('#shopId').val();
+                var special = $('#special').val();
+
+                var category = new Object();
+                category.categoryName = name;
+                category.shopId = shopId;
+                category.special = special;
+
+                console.log(special);
+
                 $.ajax({
                     type: 'POST',
-                    contentType: "application/json; charset=utf-8",
+                    contentType: 'application/json',
                     data: JSON.stringify(category),
                     url: "https://localhost:44302/api/categories",
                     success: function (data) {
@@ -48,5 +68,6 @@
                 });
             });
         });
+
     </script>
 }

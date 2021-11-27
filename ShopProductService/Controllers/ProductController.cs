@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Shared.DTOs;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 
 namespace ShopProductService.Controllers
 {
@@ -23,21 +22,12 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task AddProduct(int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        public async Task AddProduct([FromBody] ShopProduct product)
         {
-            _dbContext.ShopProducts.Add(new ShopProduct
-            {
-                CategoryId = CategoryId,
-                ProductName = ProductName,
-                Description = Description,
-                Quantity = Quantity,
-                Price = Price,
-                Discount = Discount,
-            });
+            _dbContext.ShopProducts.Add(product);
 
             await _dbContext.SaveChangesAsync();
         }
-        
 
         [HttpGet]
         public ApiResult<List<ProductDTO>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)

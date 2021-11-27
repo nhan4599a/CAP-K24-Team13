@@ -27,11 +27,8 @@ namespace Shared.Mapping
                         options => options.MapFrom(source => source.ImageSet == null ? null :
                             new string[] { source.ImageSet.Image1, source.ImageSet.Image2, source.ImageSet.Image3, source.ImageSet.Image4, source.ImageSet.Image5 }));
 
-                cfg.CreateMap<ShopCategory, CategoryDTO>();
-                 
-
-
-        });
+                cfg.CreateMap<ShopProduct, CategoryDTO>();
+            });
             _mapper = config.CreateMapper();
         }
 
