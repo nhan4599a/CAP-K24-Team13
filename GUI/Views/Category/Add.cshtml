@@ -1,28 +1,14 @@
-﻿@model DatabaseAccessor.Model.ShopCategory
-@{ 
-    ViewData["Title"] = "ABC";
-}
-@*---------------------------------------------------------------------------*@
-@*anh Gấu muốn test giao diện add thì thêm trên cái localhost /category/add
-    còn cái giao diện đẻ load category ra là /category/index*@
-@*---------------------------------------------------------------------------*@
-
-<h4 class="font-weight-bolder text-center">Add Categories</h4>
+﻿<h4 class="font-weight-bolder text-center">Add Categories</h4>
 <form id="form-modal" role="form">
     <div class="row justify-content-center">
         <div class="col-5 ">
 
             <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Name</label>
-                <input type="text" class="form-control" id="name">
-            </div>
-
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">ShopId</label>
-                <input type="number" class="form-control" id="shopId">
+                <input type="text" class="form-control" id="input-name">
             </div>
             <div class="input-group input-group-outline mb-3">
-                <select class="form-select" aria-label="Default select example" id="special">
+                <select class="form-select" aria-label="Default select example" id="input-special">
                     <option selected="selected">Select special</option>
                     <option value="1">Quần áo</option>
                     <option value="2">Thiết bị điện tử</option>
@@ -43,21 +29,15 @@
             $('#btnSubmit').click(function (e) {
                 e.preventDefault();
 
-                var name = $('#name').val();
-                var shopId = $('#shopId').val();
-                var special = $('#special').val();
+                var name = $('#input-name').val();
+                var special = $('#input-special').val();
 
-                var category = new Object();
-                category.categoryName = name;
-                category.shopId = shopId;
-                category.special = special;
-
-                console.log(special);
+                var requestModel = { categoryName: name, special: special };
 
                 $.ajax({
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify(category),
+                    data: JSON.stringify(requestModel),
                     url: "https://localhost:44302/api/categories",
                     success: function (data) {
                         console.log(data);
