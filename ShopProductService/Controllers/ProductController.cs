@@ -23,7 +23,7 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task AddProduct(AddProductRequestModel requestModel)
+        public ApiResult<bool> AddProduct(AddProductRequestModel requestModel)
         {
             _dbContext.ShopProducts.Add(new ShopProduct
             {
@@ -35,7 +35,9 @@ namespace ShopProductService.Controllers
                 Discount = requestModel.Discount
             });
 
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChangesAsync();
+
+            return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
         [HttpGet]
