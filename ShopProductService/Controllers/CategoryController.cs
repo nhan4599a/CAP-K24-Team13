@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ShopProductService.RequestModel;
 
 namespace ShopProductService.Controllers
 {
@@ -23,15 +24,15 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task<ApiResult<bool>> AddCategory(int ShopId, string CategoryName, int Special)
+        public ApiResult<bool> AddCategory(AddCategoryRequestModel requestModel)
         {
             _dbContext.ShopCategories.Add(new ShopCategory
             {
-                ShopId = ShopId,
-                CategoryName = CategoryName,
-                Special = Special,
+                ShopId = 1,
+                CategoryName = requestModel.categoryName,
+                Special = requestModel.special
             });
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChangesAsync();
             
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }

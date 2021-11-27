@@ -8,52 +8,39 @@
 @*---------------------------------------------------------------------------*@
 
 <h4 class="font-weight-bolder text-center">Add Categories</h4>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
 <form id="form-modal" role="form">
-
-
     <div class="input-group input-group-outline mb-3">
         <label class="form-label" rows="5">Name</label>
-        <input type="text" class="form-control">
-    </div>
-
-    <div class="input-group input-group-outline mb-3">
-        <label class="form-label">ShopId</label>
-        <input type="number" class="form-control">
+        <input type="text" class="form-control" id="input-name">
     </div>
     <div class="input-group input-group-outline mb-3">
-        <label class="form-label">Special</label>
-        <input class="form-control" />
-        @Html.DropDownListFor(model => model.CategoryName, new SelectList(ViewBag.list))
-        @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
-
-        @*<select id="Select1" asp-items="@(new SelectList(Model.displaydata,"id","categoryName"))">    
-            <option value="" selected disabled>------------Select---------</option>
-        </select>*@
+        <select id="input-special">
+            <option value="0" selected>------------Select special---------</option>
+            <option value="1">Quần áo</option>
+            <option value="2">Thiết bị điện tử</option>
+        </select>
     </div>
     <div class="text-left">
-        <button onclick="bootstrapAlert()" type='submit' class="btn btn-primary" id="btnSubmit">Add</button>
+        <a class="btn btn-primary" id="btnSubmit">Add</a>
     </div>
 
 </form>
 
 @section Scripts {
     <script type="text/javascript">
-        const { error } = require("jquery");
 
         $(function () {
             $('#btnSubmit').click(function () {
-
+                var name = $('#input-name').val();
+                var special = $('#input-special').val();
+                var category = { categoryName: name, special: special };
                 $.ajax({
                     type: 'POST',
                     contentType: "application/json; charset=utf-8",
-                    data: "{category:" + JSON.stringify(category) + "}",
-                    url: "http://localhost:33162/api/categories",
+                    data: JSON.stringify(category),
+                    url: "https://localhost:44302/api/categories",
                     success: function (data) {
-                        alert("category name" + data);
+                        console.log(data);
                     },
                     error: function (result) {
                         alert("Something when wrong");
@@ -61,34 +48,5 @@
                 });
             });
         });
-
-        function bootstrapAlert() {
-
-            $.bootstrapGrowl("Submit Sucessfully !", {
-                type: "success",
-                offset: { from: "top", amount: 30 },
-                align: "center",
-                deplay: 3000,
-                allow_dismiss: true,
-                stackup_spacing: 10
-
-            });
-        }
-
-                //$(document).ready(function () {
-                //});
-
-                //var Manager = {
-                //    GetAPI: function (serviceURL, successCallBack, errorCallback) {
-                //        $.ajax({
-                //            type: "Get",
-                //            url: "/api/categories",
-                //            data: "json",
-                //            success: successCallBack,
-                //            error: errorCallback
-                //        });
-                //    }
-                //};
-
     </script>
 }
