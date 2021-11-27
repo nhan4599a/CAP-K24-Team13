@@ -1,8 +1,9 @@
-﻿using DatabaseAccessor;
+using DatabaseAccessor;
 using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GUI.Controllers
 {
@@ -18,8 +19,6 @@ namespace GUI.Controllers
         [ActionName("Add")]
         public IActionResult AddProduct()
         {
-            var list = new List<string>() { "Computer", "Laptop", "Phone" };
-            ViewBag.list = list;
             return View();
         } 
 

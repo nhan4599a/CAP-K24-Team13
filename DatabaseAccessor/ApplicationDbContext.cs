@@ -21,8 +21,6 @@ namespace DatabaseAccessor
 
         public DbSet<ShopProduct> ShopProducts { get; set; }
 
-        public DbSet<ShopCategory> Category { get; set; }
-
         public ApplicationDbContext() : base(GetOptions(_connectionString))
         {
 
@@ -32,6 +30,7 @@ namespace DatabaseAccessor
         {
             return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), connectionString).Options;
         }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -44,6 +43,7 @@ namespace DatabaseAccessor
                     .HasOne(e => e.Category)
                     .WithMany(e => e.ShopProducts)
                     .IsRequired();
+                    
             modelBuilder.Entity<ShopProduct>()
                     .Property(e => e.IsDisabled)
                     .HasDefaultValue(false);
@@ -74,6 +74,5 @@ namespace DatabaseAccessor
                 entity.ToTable("ShopInterfaces");
             });
         }
-
     }
 }

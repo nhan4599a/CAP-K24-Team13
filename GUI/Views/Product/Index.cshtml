@@ -1,6 +1,6 @@
 ﻿<div class="row">
     <div class="col-12">
-        <button type="button" class="btn btn-primary">Add</button>
+        <a class="btn btn-primary" href="add">Add</a>
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
@@ -14,11 +14,126 @@
     </div>
 </div>
 <nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#" style="font-weight: bold"><</a></li>
-        <li class="page-item"><a class="page-link" href="#" style="font-weight: bold">1</a></li>
-        <li class="page-item"><a class="page-link" href="#" style="font-weight: bold">2</a></li>
-        <li class="page-item"><a class="page-link" href="#" style="font-weight: bold">3</a></li>
-        <li class="page-item"><a class="page-link" href="#" style="font-weight: bold">></a></li>
-    </ul>
+    <ul class="pagination"></ul>
 </nav>
+@section Scripts {
+<script>
+    $(document).ready(() => {
+        loadProducts(getCurrentPage());
+        let classNames = ['active', 'bg-gradient-primary'];
+        $('#nav-item-product').addClass(classNames);
+        $('a[name=btn-delete]').click(function () {
+            let id = $(this).parent().parent().children('#prod-id').text();
+            $.ajax('https://localhost:44302/api/products', {
+                method: 'DELETE',
+                data: { productId: id },
+                success: (res) => {
+                    if (res.responseCode != 200) {
+                        toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error');
+                    } else {
+                        toastr.success(`Deleted product with id = ${id}`, 'Success');
+                    }
+                }
+            });
+        });
+        $('#previous-page').click(() => moveCurrentPage(true));
+        $('#next-page').click(() => moveCurrentPage());
+    });
+    function loadProducts(pageNumber) {
+        $.get('https://localhost:44302/api/products', { pageNumber: pageNumber }, (res) => {
+            var paginationResult = res.data;
+            var products = paginationResult.data;
+            var tableHtml = '';
+            var paginationHtml = '';
+            if (products.length == 0) {
+                tableHtml = '<p style="text-align: center">There is no product to show!</p>'
+            } else {
+                var dataRowHtml = '';
+                if (pageNumber != 1)
+                    paginationHtml += `<li class="page-item" id="previous-page"><a class="page-link" href="#" style="font-weight: bold"><</a></li>`;
+                for (var i = 1; i <= paginationResult.maxPageNumber; i++) {
+                    paginationHtml += `<li class="page-item ${i == pageNumber ? 'active bg-gradient-primary' : ''}"><a class="page-link" href="#" style="font-weight: bold">${i}</a></li>`;
+                }
+                if (pageNumber != paginationResult.maxPageNumber)
+                    paginationHtml += `<li class="page-item" id="next-page"><a class="page-link" href="#" style="font-weight: bold">></a></li>`;
+                products.forEach((product, index) => {
+                    dataRowHtml += `<tr>
+                                        <td style="display: none" id="prod-id">${product.id}</td>
+                                        <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                                        <td class="align-middle text-center">
+                                            <div class="d-flex px-2 py-1">
+                                                <div>
+                                                    <img src="../assets/img/team-2.jpg"
+                                                        class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">${product.productName}</h6>
+                                                    <p class="text-xs text-secondary mb-0">${product.description}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span class="text-secondary text-xs font-weight-bold">${product.price}đ</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="badge badge-sm bg-gradient-${!product.isDisabled ? 'success' : 'secondary'}">
+                                                ${!product.isDisabled ? 'Active' : 'Disabled'}
+                                            </span>
+                                        </td>
+                                        <td class="align-middle">
+                                            <a href="#" class="text-secondary font-weight-bold text-xs"
+                                                data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
+                                                <i class="far fa-edit"></i><span> Edit</span>
+                                            </a>
+
+                                            <a href="#" class="text-secondary font-weight-bold text-xs"
+                                                data-toggle="tooltip" data-original-title="Delete user" name="btn-delete">
+                                                <i class="far fa-trash-alt"></i><span> Delete</span>
+                                            </a>
+                                        </td>
+                                    </tr>`;
+                });
+                tableHtml = `<table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                        style="width: 50px; min-width: 50px !important;">
+                                        #
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                                        style="padding-left: 24px!important">
+                                        Name
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Price
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Status
+                                    </th>
+                                    <th class="text-secondary opacity-7">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${dataRowHtml}
+                            </tbody>
+                        </table>`;
+            }
+            $('.table-responsive.p-0').html(tableHtml);
+            $('.pagination').html(paginationHtml);
+        });
+    }
+
+    function moveCurrentPage(isPrevious) {
+        var jumpStep = isPrevious ? -1 : 1;
+        var currentPageNumber = getCurrentPage();
+        window.location.href = `https://localhost:44349/category?pageNumber=${currentPageNumber + jumpStep}`;
+    }
+
+    function getCurrentPage() {
+        var url = new URL(window.location.href);
+        var queryObj = url.searchParams;
+        var currentPageNumber = queryObj.get('pageNumber') ? parseInt(queryObj.get('pageNumber')) : 1;
+        return currentPageNumber;
+    }
+</script>
+}

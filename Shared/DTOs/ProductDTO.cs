@@ -5,6 +5,7 @@ namespace Shared.DTOs
 {
     public class ProductDTO : DTO<ShopProduct>
     {
+        public string Id { get; set; }
 
         public string ProductName { get; set; }
 
