@@ -13,40 +13,56 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
 <form id="form-modal" role="form">
+    <div class="row justify-content-center">
+        <div class="col-5 ">
 
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="name">
+            </div>
 
-    <div class="input-group input-group-outline mb-3">
-        <label class="form-label" rows="5">Name</label>
-        <input type="text" class="form-control">
-    </div>
-
-    <div class="input-group input-group-outline mb-3">
-        <label class="form-label">ShopId</label>
-        <input type="number" class="form-control">
-    </div>
-    <div class="input-group input-group-outline mb-3">
-        <select class="form-select" aria-label="Default select example">
-            <option selected="selected">Select special</option>
-        </select>
-    </div>
-    <div class="text-left">
-        <button onclick="bootstrapAlert()" type='submit' class="btn btn-primary" id="btnSubmit">Add</button>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">ShopId</label>
+                <input type="number" class="form-control" id="shopId">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <select class="form-select" aria-label="Default select example" id="special">
+                    <option selected="selected">Select special</option>
+                    <option value="1">Quần áo</option>
+                    <option value="2">Thiết bị điện tử</option>
+                </select>
+            </div>
+            <div class="text-left">
+                <a href="#" class="btn btn-primary" id="btnSubmit">Add</a>
+            </div>
+        </div>
     </div>
 
 </form>
 
 @section Scripts {
     <script type="text/javascript">
-        const { error } = require("jquery");
 
         $(function () {
-            $('#btnSubmit').click(function () {
-                
+            $('#btnSubmit').click(function (e) {
+                e.preventDefault();
+
+                var name = $('#name').val();
+                var shopId = $('#shopId').val();
+                var special = $('#special').val();
+
+                var category = new Object();
+                category.categoryName = name;
+                category.shopId = shopId;
+                category.special = special;
+
+                console.log(special);
+
                 $.ajax({
                     type: 'POST',
-                    contentType: "application/json; charset=utf-8",
-                    data: "{category:" + JSON.stringify(category) + "}",
-                    url: "http://localhost:44349/api/categories",
+                    contentType: 'application/json',
+                    data: JSON.stringify(category),
+                    url: "https://localhost:44302/api/categories",
                     success: function (data) {
                         alert("category name" + data);
                     },
@@ -56,45 +72,6 @@
                 });
             });
         });
-        $.get('https://localhost:44349/api/categories', null, (resp) => {
-            var categories = resp.data;
-            var optionsHtml = '';
-            categories.forEach(category => {
-                optionsHtml += `<option value="${category.Special}">${category.Special}</option>`;
-            });
-            if (optionsHtml != '') {
-                $('option[selected=selected]').after(optionsHtml);
-            }
-        });
-        });
-
-        function bootstrapAlert() {
-
-            $.bootstrapGrowl("Submit Sucessfully !", {
-                type: "success",
-                offset: { from: "top", amount: 30 },
-                align: "center",
-                deplay: 3000,
-                allow_dismiss: true,
-                stackup_spacing: 10
-
-            });
-        }
-
-                //$(document).ready(function () {
-                //});
-
-                //var Manager = {
-                //    GetAPI: function (serviceURL, successCallBack, errorCallback) {
-                //        $.ajax({
-                //            type: "Get",
-                //            url: "/api/categories",
-                //            data: "json",
-                //            success: successCallBack,
-                //            error: errorCallback
-                //        });
-                //    }
-                //};
 
     </script>
 }

@@ -23,17 +23,11 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task<ApiResult<bool>> AddCategory(int ShopId, string CategoryName, int Special)
+        public async Task AddCategory([FromBody] ShopCategory category)
         {
-            _dbContext.ShopCategories.Add(new ShopCategory
-            {
-                ShopId = ShopId,
-                CategoryName = CategoryName,
-                Special = Special,
-            });
+            _dbContext.ShopCategories.Add(category);
+
             await _dbContext.SaveChangesAsync();
-            
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
         [HttpGet]

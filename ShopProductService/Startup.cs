@@ -22,6 +22,13 @@ namespace ShopProductService
             services.AddControllers();
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
             services.AddSwaggerGen();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Default", builder =>
+                {
+                    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +50,8 @@ namespace ShopProductService
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors("Default");
             
             app.UseSwagger();
             app.UseSwaggerUI();

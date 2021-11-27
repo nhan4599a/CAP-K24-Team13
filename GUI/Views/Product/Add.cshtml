@@ -12,32 +12,32 @@
     <div class="row justify-content-center">
         <div class="col-5 ">
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" id="Name">Name</label>
-                <input type="text" class="form-control">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="name">
             </div>
             <div class="input-group input-group-outline mb-3">
-                <select class="form-select" aria-label="Default select example">
+                <select class="form-select" aria-label="Default select example" id="categoryId">
                     <option selected="selected">Select category</option>
                 </select>
             </div>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" id="Description">Description</label>
-                <input type="text" class="form-control">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control" id="description">
             </div>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" id="Quantity">Quantity</label>
-                <input type="number" class="form-control">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="quantity">
             </div>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" id="Price">Price</label>
-                <input type="number" class="form-control">
+                <label class="form-label">Price</label>
+                <input type="number" class="form-control" id="price">
             </div>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" id="Discount">Discount</label>
-                <input type="text" class="form-control">
+                <label class="form-label">Discount</label>
+                <input type="text" class="form-control" id="discount">
             </div>
             <div class="text-left">
-                <button onclick="bootstrapAlert()" type='submit' class="btn btn-primary" id="btnSubmit">Add</button>
+                <a class="btn btn-primary" id="btnSubmit">Add</a>
             </div>
         </div>
     </div>
@@ -47,18 +47,28 @@
     <script type="text/javascript">
         $(function () {
             
-            $('#btnSubmit').click(function () {
+            $('#btnSubmit').click(function (e) {
+                e.preventDefault();
+                //get
+                var name = $("#name").val();
+                var description = $("#description").val();
+                var quantity = $("#quantity").val();
+                var price = $("#price").val();
+                var discount = $("#discount").val();
 
-                var value1 = $("Name").val();
-                var value2 = $("Description").val();
-                var value3 = $("Quantity").val();
-                var value4 = $("Price").val();
-                var value5 = $("Discount").val(); 
-                $.ajax( {
+
+                $.ajax({
                     type: 'POST',
-                    contentType: "application/json; charset=utf-8",
-                    data: "{product:" + JSON.stringify(product) + "}",
-                    url: "https://localhost:44349/api/products",
+                    data: {
+                        product: {
+                            name: name,
+                            description: description,
+                            quantity: quantity,
+                            price: price,
+                            discount: discount
+                        }
+                    },
+                    url: "https://localhost:44302/api/products",
                     success: function (data) {
                         alert("product name" + data);
                     },
@@ -68,7 +78,7 @@
                 });
             });
 
-            $.get('https://localhost:44349/api/categories', null, (resp) => {
+            $.get('https://localhost:44302/api/categories', null, (resp) => {
                 var categories = resp.data;
                 var optionsHtml = '';
                 categories.forEach(category => {
@@ -79,19 +89,6 @@
                 }
             });
         });
-
-        function bootstrapAlert() {
-            
-            $.bootstrapGrowl("Submit Sucessfully !", {
-                type: "success",
-                offset: { from: "top", amount: 30 },
-                align: "center",
-                deplay: 5000,
-                allow_dismiss: true,
-                stackup_spacing: 10
-
-            });
-        }
 
     </script>
 }
