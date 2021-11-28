@@ -1,6 +1,6 @@
-﻿<div class="row">
+<div class="row">
     <div class="col-12">
-        <a class="btn btn-primary" href="add">Add</a>
+        <a href="/product/add" class="btn btn-primary">Add</a>
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
@@ -19,28 +19,28 @@
 @section Scripts {
 <script>
     $(document).ready(() => {
-        loadProducts(getCurrentPage());
+        var currentPageInfo = getCurrentPageInfo();
+        loadProducts(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
         let classNames = ['active', 'bg-gradient-primary'];
         $('#nav-item-product').addClass(classNames);
-        $('a[name=btn-delete]').click(function () {
-            let id = $(this).parent().parent().children('#prod-id').text();
-            $.ajax('https://localhost:44302/api/products', {
-                method: 'DELETE',
-                data: { productId: id },
-                success: (res) => {
-                    if (res.responseCode != 200) {
-                        toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error');
-                    } else {
-                        toastr.success(`Deleted product with id = ${id}`, 'Success');
-                    }
-                }
-            });
+        var searchTextField = $('#input-search');
+        if (currentPageInfo.keyword) {
+            searchTextField.parent().addClass('is-filled');
+            searchTextField.val(currentPageInfo.keyword);
+        }
+        searchTextField.keypress(function (e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                var keyword = $(this).val().trim();
+                var currentPageSize = getCurrentPageInfo().pageSize;
+                window.location.href =
+                    `https://localhost:44349/product?keyword=${encodeURIComponent(keyword)}&paginationInfo.pageNumber=1&paginationInfo.pageSize=${currentPageSize}`;
+            }
         });
-        $('#previous-page').click(() => moveCurrentPage(true));
-        $('#next-page').click(() => moveCurrentPage());
     });
-    function loadProducts(pageNumber) {
-        $.get('https://localhost:44302/api/products', { pageNumber: pageNumber }, (res) => {
+    function loadProducts(keyword, pageNumber, pageSize) {
+        $.get('https://localhost:44302/api/products',
+            { keyword: keyword, "paginationInfo.pageNumber": pageNumber, "paginationInfo.pageSize": pageSize || 5 }, (res) => {
             var paginationResult = res.data;
             var products = paginationResult.data;
             var tableHtml = '';
@@ -51,8 +51,9 @@
                 var dataRowHtml = '';
                 if (pageNumber != 1)
                     paginationHtml += `<li class="page-item" id="previous-page"><a class="page-link" href="#" style="font-weight: bold"><</a></li>`;
+                var currentPageInfo = getCurrentPageInfo();
                 for (var i = 1; i <= paginationResult.maxPageNumber; i++) {
-                    paginationHtml += `<li class="page-item ${i == pageNumber ? 'active bg-gradient-primary' : ''}"><a class="page-link" href="#" style="font-weight: bold">${i}</a></li>`;
+                    paginationHtml += `<li class="page-item"><a class="page-link ${i == pageNumber ? 'active bg-gradient-primary text-white' : ''}" href="https://localhost:44349/product?pageNumber=${i}&pageSize=${currentPageInfo.pageSize}" style="font-weight: bold">${i}</a></li>`;
                 }
                 if (pageNumber != paginationResult.maxPageNumber)
                     paginationHtml += `<li class="page-item" id="next-page"><a class="page-link" href="#" style="font-weight: bold">></a></li>`;
@@ -75,7 +76,7 @@
                                         <td class="align-middle text-center">
                                             <span class="text-secondary text-xs font-weight-bold">${product.price}đ</span>
                                         </td>
-                                        <td class="align-middle text-center text-sm">
+                                        <td class="align-middle text-center text-sm" name="state">
                                             <span class="badge badge-sm bg-gradient-${!product.isDisabled ? 'success' : 'secondary'}">
                                                 ${!product.isDisabled ? 'Active' : 'Disabled'}
                                             </span>
@@ -85,11 +86,11 @@
                                                 data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
                                                 <i class="far fa-edit"></i><span> Edit</span>
                                             </a>
-
-                                            <a href="#" class="text-secondary font-weight-bold text-xs"
-                                                data-toggle="tooltip" data-original-title="Delete user" name="btn-delete">
-                                                <i class="far fa-trash-alt"></i><span> Delete</span>
-                                            </a>
+                                            ${!product.isDisabled ?
+                                                `<a href="#" class="text-secondary font-weight-bold text-xs"
+                                                    data - toggle="tooltip" data - original - title="Delete user" name = "btn-delete">
+                                                        <i class="far fa-trash-alt"></i><span> Delete</span>
+                                                </a>` : ''}
                                         </td>
                                     </tr>`;
                 });
@@ -125,21 +126,47 @@
                 var productInfoStr = JSON.stringify(products[index]);
                 window.localStorage.setItem('editting-product', productInfoStr);
                 window.location.href = "/product/edit";
+            }
+            $('a[name=btn-delete]').click(function (e) {
+                e.preventDefault();
+                let id = $(this).parent().parent().children('#prod-id').text();
+                $.ajax('https://localhost:44302/api/products', {
+                    method: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(id),
+                    success: (res) => {
+                        if (res.responseCode != 200) {
+                            toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error');
+                        } else {
+                            toastr.success(`Deleted product with id = ${id}`, 'Success');
+                        }
+                    }
+                });
+            });
+            $('#previous-page').click(() => {
+                var currentPageInfo = getCurrentPageInfo();
+                moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
+            });
+            $('#next-page').click(() => {
+                var currentPageInfo = getCurrentPageInfo();
+                moveToPage(currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
             });
         });
     }
 
-    function moveCurrentPage(isPrevious) {
-        var jumpStep = isPrevious ? -1 : 1;
-        var currentPageNumber = getCurrentPage();
-        window.location.href = `https://localhost:44349/category?pageNumber=${currentPageNumber + jumpStep}`;
+    function moveToPage(pageNumber, pageSize) {
+        window.location.href = `https://localhost:44349/product?pageNumber=${pageNumber}&pageSize=${pageSize}`;
     }
 
-    function getCurrentPage() {
+    function getCurrentPageInfo() {
         var url = new URL(window.location.href);
         var queryObj = url.searchParams;
         var currentPageNumber = queryObj.get('pageNumber') ? parseInt(queryObj.get('pageNumber')) : 1;
-        return currentPageNumber;
+        var currentPageSize = queryObj.get('pageSize') ? parseInt(queryObj.get('pageSize')) : 5;
+        var currentKeyword = queryObj.get('keyword') ? queryObj.get('keyword') : '';
+        return {
+            pageNumber: currentPageNumber, pageSize: currentPageSize, keyword: currentKeyword
+        };
     }
 </script>
 }

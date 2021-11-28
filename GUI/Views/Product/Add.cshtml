@@ -1,16 +1,89 @@
-<form>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+﻿<h4 class="font-weight-bolder text-center">Add Product</h4>
+<form role="form">
+
+    <div class="row justify-content-center">
+        <div class="col-5 ">
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="input-name">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <select class="form-select" aria-label="Default select example" id="input-category">
+                    <option selected="selected">Select category</option>
+                </select>
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control" id="input-description">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="input-quantity">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Price</label>
+                <input type="number" class="form-control" id="input-price">
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Discount</label>
+                <input type="text" class="form-control" id="input-discount">
+            </div>
+            <div class="text-left">
+                <a class="btn btn-primary" id="btnSubmit">Add</a>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-    </div>
-    <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            let classNames = ['active', 'bg-gradient-primary'];
+            $('#nav-item-product').addClass(classNames);
+            $('#btnSubmit').click(function (e) {
+                e.preventDefault();
+                
+                var name = $("#input-name").val();
+                var category = $('#input-category').val();
+                var description = $("#input-description").val();
+                var quantity = $("#input-quantity").val();
+                var price = $("#input-price").val();
+                var discount = $("#input-discount").val();
+
+                var requestModel = {
+                    productName: name,
+                    categoryId: category,
+                    description: description,
+                    quantity: quantity,
+                    price: price,
+                    discount: discount
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(requestModel),
+                    url: "https://localhost:44302/api/products",
+                    success: function () {
+                        window.location.href = '/product';
+                    },
+                    error: function () {
+                        alert("Something when wrong");
+                    }
+                });
+            });
+
+            $.get('https://localhost:44302/api/categories', null, (resp) => {
+                var categories = resp.data.data;
+                var optionsHtml = '';
+                categories.forEach(category => {
+                    optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
+                });
+                if (optionsHtml != '') {
+                    $('option[selected=selected]').after(optionsHtml);
+                }
+            });
+        });
+
+    </script>
+}

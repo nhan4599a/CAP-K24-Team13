@@ -3,7 +3,6 @@
 
     public class ShopProduct 
     {
-        
         public string Id { get; set; }
 
         public int CategoryId { get; set; }
@@ -21,7 +20,9 @@
         public bool IsDisabled { get; set; }
 
         public virtual ShopCategory Category { get; set; }
-        
+       
         public virtual ProductImage ImageSet { get; set; }
+
+
     }
 }

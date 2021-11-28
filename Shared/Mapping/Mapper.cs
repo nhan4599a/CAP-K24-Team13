@@ -1,11 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DatabaseAccessor.Model;
 using Shared.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shared.Mapping
 {
@@ -40,6 +35,5 @@ namespace Shared.Mapping
         public ProductDTO MapToProductDTO(ShopProduct product) => _mapper.Map<ProductDTO>(product);
 
         public CategoryDTO MapToCategoryDTO(ShopCategory category) => _mapper.Map<CategoryDTO>(category);
-
     }
 }

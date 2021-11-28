@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
+using ShopProductService.RequestModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -21,48 +23,21 @@ namespace ShopProductService.Controllers
             _dbContext = dbcontext;
             
         }
-
-        [HttpGet("{id}")]
-        public async Task<ApiResult<ProductDTO>> GetProduct(string id)
-        {
-            var result = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == id);
-            if (result == null) return new ApiResult<ProductDTO> { ResponseCode = 404, Data = null };
-            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(c => c.Id == result.CategoryId);
-
-            var imageSet = result.ImageSet != null ? new string[] { result.ImageSet.Image1, result.ImageSet.Image2, result.ImageSet.Image3, result.ImageSet.Image3, result.ImageSet.Image4, result.ImageSet.Image5 } : null;
-            var productDto = new ProductDTO()
-            {
-                CategoryName = category.CategoryName,
-                ProductName = result.ProductName,
-                Id = result.Id,
-                Description = result.Description,
-                Discount = result.Discount,
-                Images = imageSet,
-                Price = result.Price,
-                Quantity = result.Quantity
-            };
-            return new ApiResult<ProductDTO>
-            {
-                ResponseCode = 200,
-                Data = productDto
-            };
-        }
-
+        
         [HttpPost]
-        [ActionName("Add")]
-        public async Task AddProduct(int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        public async Task<ApiResult<bool>> AddProduct(AddProductRequestModel requestModel)
         {
             _dbContext.ShopProducts.Add(new ShopProduct
             {
-                CategoryId = CategoryId,
-                ProductName = ProductName,
-                Description = Description,
-                Quantity = Quantity,
-                Price = Price,
-                Discount = Discount,
+                ProductName = requestModel.ProductName,
+                CategoryId = requestModel.CategoryId,
+                Description = requestModel.Description,
+                Quantity = requestModel.Quantity,
+                Price = requestModel.Price,
+                Discount = requestModel.Discount
             });
-
             await _dbContext.SaveChangesAsync();
+            return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
         [HttpPut]
@@ -85,12 +60,10 @@ namespace ShopProductService.Controllers
                 return new ApiResult<bool> { ResponseCode = 500, Data = false };
             }
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
-
         }
-
+        
         [HttpDelete]
-        [ActionName("Delete")]
-        public async Task<ApiResult<bool>> DeleteProduct([FromQuery] int productId)
+        public async Task<ApiResult<bool>> DeleteProduct([FromBody] string productId)
         {
             var product = await _dbContext.ShopProducts.FindAsync(productId);
             if (product == null || product.IsDisabled)
@@ -102,14 +75,31 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
+        public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
         {
-            var products = (await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
-                                .ToListAsync())
+            var keyword = requestModel.Keyword;
+            var productList = new List<ProductDTO>();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                productList = await _dbContext.ShopProducts.AsNoTracking()
+                                .Where(product => product.ProductName.Contains(keyword) ||
+                                        product.Category.CategoryName.Contains(keyword))
                                 .Select(product => ProductDTO.FromSource(product))
                                 .Cast<ProductDTO>()
-                                .ToList();
-            return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 200, Data = products.Paginate(pageNumber, pageSize) };
+                                .ToListAsync();
+            }
+            else
+            {
+                productList = await _dbContext.ShopProducts.AsNoTracking()
+                                .Select(product => ProductDTO.FromSource(product))
+                                .Cast<ProductDTO>()
+                                .ToListAsync();
+            }
+            return new ApiResult<PaginatedDataList<ProductDTO>>
+            {
+                ResponseCode = 200,
+                Data = productList.Paginate(requestModel.PaginationInfo.PageNumber, requestModel.PaginationInfo.PageSize)
+            };
         }
     }
 }

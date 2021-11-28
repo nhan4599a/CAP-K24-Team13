@@ -19,8 +19,16 @@ namespace ShopProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
-            services.AddScoped<ApplicationDbContext>();
+            services.AddControllers();
+            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
+            services.AddSwaggerGen();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Default", builder =>
+                {
+                    builder.WithOrigins("https://localhost:44349").AllowAnyMethod().AllowAnyHeader();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,9 +46,16 @@ namespace ShopProductService
             }
 
             app.UseHttpsRedirection();
+           
             app.UseStaticFiles();
 
+            app.UseCors("Default");
             app.UseRouting();
+
+            app.UseCors("Default");
+            
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseAuthorization();
 

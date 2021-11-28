@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GUI.Controllers
 {
     public class CategoryController : Controller
     {
-        public IActionResult Index()
+        [ActionName("Add")]
+        public IActionResult AddProduct()
+        {
+            return View();
+        } 
+
+        [ActionName("Index")]
+        public IActionResult ListProduct()
         {
             return View();
         }

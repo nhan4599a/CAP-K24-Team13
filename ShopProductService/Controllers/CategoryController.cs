@@ -1,12 +1,12 @@
 using DatabaseAccessor;
-using Microsoft.AspNetCore.Http;
+using DatabaseAccessor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared;
-using System.Threading.Tasks;
 using Shared.DTOs;
-using System.Collections.Generic;
+using ShopProductService.RequestModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
 {
@@ -16,9 +16,23 @@ namespace ShopProductService.Controllers
     {
         private ApplicationDbContext _dbContext;
 
-        public CategoryController(ApplicationDbContext dbContext)
+        public CategoryController(ApplicationDbContext dbcontext)
         {
-            _dbContext = dbContext;
+            _dbContext = dbcontext;
+        }
+
+        [HttpPost]
+        [ActionName("Add")]
+        public async Task<ApiResult<bool>> AddCategory(AddCategoryRequestModel requestModel)
+        {
+            _dbContext.ShopCategories.Add(new ShopCategory
+            {
+                ShopId = 1,
+                CategoryName = requestModel.CategoryName,
+                Special = requestModel.Special
+            });
+            await _dbContext.SaveChangesAsync();
+            return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
         [HttpGet("{id}")]
@@ -51,15 +65,20 @@ namespace ShopProductService.Controllers
             }
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
-
+        
         [HttpGet]
-        public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] int pageNumber, int pageSize = 5)
+        [ActionName("Index")]
+        public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
         {
-            var categories = await _dbContext.ShopCategories
+            var categories = await _dbContext.ShopCategories.AsNoTracking()
                                     .Select(category => CategoryDTO.FromSource(category))
                                     .Cast<CategoryDTO>()
                                     .ToListAsync();
-            return new ApiResult<PaginatedDataList<CategoryDTO>> { ResponseCode = 200, Data = categories.Paginate(pageNumber, pageSize) };
+            return new ApiResult<PaginatedDataList<CategoryDTO>> 
+            {
+                ResponseCode = 200,
+                Data = categories.Paginate(paginationInfo.PageNumber, paginationInfo.PageSize) 
+            };
         }
 
         [HttpDelete]
