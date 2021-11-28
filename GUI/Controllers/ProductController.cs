@@ -15,5 +15,11 @@ namespace GUI.Controllers
         {
             return View();
         }
+
+        [ActionName("Edit")]
+        public IActionResult EditProduct()
+        {
+            return View();
+        }
     }
 }

@@ -8,6 +8,8 @@ using ShopProductService.RequestModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Shared.Mapping;
 
 namespace ShopProductService.Controllers
 {
@@ -16,12 +18,12 @@ namespace ShopProductService.Controllers
     public class ProductController : Controller
     {
         private ApplicationDbContext _dbContext;
-
         public ProductController(ApplicationDbContext dbcontext)
         {
             _dbContext = dbcontext;
+            
         }
-
+        
         [HttpPost]
         public async Task<ApiResult<bool>> AddProduct(AddProductRequestModel requestModel)
         {
@@ -37,26 +39,27 @@ namespace ShopProductService.Controllers
             await _dbContext.SaveChangesAsync();
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
-        
+
         [HttpPut]
-        public async Task<ApiResult<bool>> EditProduct(string ProductId, int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        [ActionName("Edit")]
+        public async Task<ApiResult<bool>> EditProduct(ProductDTO productDTO)
         {
-            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == ProductId);
+            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == productDTO.Id);
             if (product == null || product.IsDisabled)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
-            product.CategoryId = CategoryId;
-            product.ProductName = ProductName;
-            product.Description = Description;
-            product.Quantity = Quantity;
-            product.Price = Price;
-            product.Discount = Discount;
+            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(c => c.CategoryName == productDTO.CategoryName);
+            product.CategoryId = category != null ? category.Id : 0;
+            product.ProductName = productDTO.ProductName;
+            product.Description = productDTO.Description;
+            product.Quantity = productDTO.Quantity;
+            product.Price = productDTO.Price;
+            product.Discount = productDTO.Discount;
             bool result = await _dbContext.SaveChangesAsync() > 0;
             if (!result)
             {
                 return new ApiResult<bool> { ResponseCode = 500, Data = false };
             }
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
-
         }
         
         [HttpDelete]

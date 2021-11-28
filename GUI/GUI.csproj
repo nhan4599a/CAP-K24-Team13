@@ -2045,5 +2045,4 @@
     <None Include="wwwroot\assets\scss\material-dashboard\_utilities.scss" />
     <None Include="wwwroot\assets\scss\material-dashboard\_variables.scss" />
   </ItemGroup>
-
 </Project>
