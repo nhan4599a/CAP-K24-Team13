@@ -18,7 +18,7 @@ namespace GUI.Controllers
         }
 
         [ActionName("Edit")]
-        public async Task<IActionResult> EditProduct()
+        public IActionResult EditProduct()
         {
             return View();
         }
