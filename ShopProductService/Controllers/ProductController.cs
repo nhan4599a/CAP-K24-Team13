@@ -15,7 +15,7 @@ namespace ShopProductService.Controllers
     [Route("/api/products")]
     public class ProductController : Controller
     {
-        private ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
         public ProductController(ApplicationDbContext dbcontext)
         {
@@ -23,7 +23,7 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResult<bool>> AddProduct(AddProductRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddProduct(AddOrEditProductRequestModel requestModel)
         {
             _dbContext.ShopProducts.Add(new ShopProduct
             {
@@ -38,25 +38,24 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
-        [HttpPut]
-        public async Task<ApiResult<bool>> EditProduct(string ProductId, int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        [HttpPut("id")]
+        public async Task<ApiResult<bool>> EditProduct(string id, AddOrEditProductRequestModel requestModel)
         {
-            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == ProductId);
+            var product = await _dbContext.ShopProducts.FindAsync(id);
             if (product == null || product.IsDisabled)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
-            product.CategoryId = CategoryId;
-            product.ProductName = ProductName;
-            product.Description = Description;
-            product.Quantity = Quantity;
-            product.Price = Price;
-            product.Discount = Discount;
+            product.CategoryId = requestModel.CategoryId;
+            product.ProductName = requestModel.ProductName;
+            product.Description = requestModel.Description;
+            product.Quantity = requestModel.Quantity;
+            product.Price = product.Price;
+            product.Discount = product.Discount;
             bool result = await _dbContext.SaveChangesAsync() > 0;
             if (!result)
             {
                 return new ApiResult<bool> { ResponseCode = 500, Data = false };
             }
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
-
         }
         
         [HttpDelete]
@@ -97,6 +96,15 @@ namespace ShopProductService.Controllers
                 ResponseCode = 200,
                 Data = productList.Paginate(requestModel.PaginationInfo.PageNumber, requestModel.PaginationInfo.PageSize)
             };
+        }
+
+        [HttpGet("id")]
+        public async Task<ApiResult<ProductDTO>> GetSingleProduct(string id)
+        {
+            var product = await _dbContext.ShopProducts.FindAsync(id);
+            if (product == null)
+                return new ApiResult<ProductDTO> { ResponseCode = 404, ErrorMessage = "Product not found" };
+            return new ApiResult<ProductDTO> { ResponseCode = 200, Data = (ProductDTO)ProductDTO.FromSource(product) };
         }
     }
 }

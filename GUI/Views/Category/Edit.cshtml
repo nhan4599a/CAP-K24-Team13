@@ -1,4 +1,4 @@
-﻿<h4 class="font-weight-bolder text-center">Edit Product</h4>
+﻿<h4 class="font-weight-bolder text-center">Edit Category</h4>
 <form role="form">
     <div class="row justify-content-center">
         <div class="col-5">
@@ -7,7 +7,12 @@
                 <label class="form-label">Product name</label>
                 <input class="form-control" type="text" id="input-name" />
             </div>
-            @await Component.InvokeAsync("CategoryDropdown")
+            <div class="form-group mb-3">
+                <label class="form-label">Category</label>
+                <select class="form-select" aria-label="Default select example" id="input-category">
+                    <option selected="selected">Select category</option>
+                </select>
+            </div>
             <div class="form-group mb-3">
                 <label class="form-label">Description</label>
                 <input class="form-control" type="text" id="input-description" />
@@ -32,33 +37,13 @@
 </form>
 
 @section Scripts {
-    <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript">
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
-            $('#nav-item-product').addClass(classNames);
-            $.get('https://localhost:44302/api/categories', null, (resp) => {
-                var categories = resp.data.data;
-                var optionsHtml = '';
-                categories.forEach(category => {
-                    optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
-                });
-                if (optionsHtml != '') {
-                    $('option[selected=selected]').after(optionsHtml);
-                }
-                tinymce.init({
-                    selector: '#input-description'
-                });
-                loadEdittingProduct();
-            });
+            $('#nav-item-category').addClass(classNames);
             $('#btn-submit').click(() => {
                 var id = $('#input-id').val()
                 var name = $('#input-name').val();
-                var category = $('#input-category').val();
-                var description = tinymce.activeEditor.getContent({ format: 'text' });
-                var quantity = $('#input-quantity').val();
-                var price = $('#input-price').val();
-                var discount = $('#input-discount').val();
                 var requestModel = {
                     productName: name,
                     categoryId: category,
@@ -79,21 +64,5 @@
                 })
             });
         });
-
-        function loadEdittingProduct() {
-            var edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
-            if (!edittingProduct) {
-                alert("Something went wrong!");
-                window.location.href = "/product";
-            }
-            $('#input-id').val(edittingProduct.id);
-            $('#input-name').val(edittingProduct.productName);
-            $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
-            $('#input-description').val(edittingProduct.description);
-            $('#input-quantity').val(edittingProduct.quantity);
-            $('#input-price').val(edittingProduct.price);
-            $('#input-discount').val(edittingProduct.discount);
-            $('.input-group-outline').addClass('is-filled');
-        }
     </script>
 }

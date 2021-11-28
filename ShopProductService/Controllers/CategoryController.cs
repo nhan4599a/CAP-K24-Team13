@@ -23,7 +23,7 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task<ApiResult<bool>> AddCategory(AddCategoryRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddCategory(AddOrEditCategoryRequestModel requestModel)
         {
             _dbContext.ShopCategories.Add(new ShopCategory
             {

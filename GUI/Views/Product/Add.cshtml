@@ -1,18 +1,14 @@
 ﻿<h4 class="font-weight-bolder text-center">Add Product</h4>
+<hr />
 <form role="form">
-
     <div class="row justify-content-center">
         <div class="col-5 ">
             <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Name</label>
                 <input type="text" class="form-control" id="input-name">
             </div>
-            <div class="input-group input-group-outline mb-3">
-                <select class="form-select" aria-label="Default select example" id="input-category">
-                    <option selected="selected">Select category</option>
-                </select>
-            </div>
-            <div class="input-group input-group-outline mb-3">
+            @await Component.InvokeAsync("CategoryDropdown")
+            <div class="form-group mb-3">
                 <label class="form-label">Description</label>
                 <input type="text" class="form-control" id="input-description">
             </div>
@@ -36,13 +32,17 @@
 </form>
 
 @section Scripts {
+    <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript">
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
             $('#nav-item-product').addClass(classNames);
+            tinymce.init({
+                selector: '#input-description'
+            });
             $('#btnSubmit').click(function (e) {
                 e.preventDefault();
-                
+
                 var name = $("#input-name").val();
                 var category = $('#input-category').val();
                 var description = $("#input-description").val();
@@ -61,7 +61,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    contentType: 'application/json',
+                    contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(requestModel),
                     url: "https://localhost:44302/api/products",
                     success: function () {

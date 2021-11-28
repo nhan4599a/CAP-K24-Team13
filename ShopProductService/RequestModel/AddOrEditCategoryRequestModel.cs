@@ -1,6 +1,6 @@
 ﻿namespace ShopProductService.RequestModel
 {
-    public class AddCategoryRequestModel
+    public class AddOrEditCategoryRequestModel
     {
         public string CategoryName { get; set; }
 

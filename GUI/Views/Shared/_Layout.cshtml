@@ -756,6 +756,10 @@
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="@Url.Content("/assets/js/material-dashboard.min.js?v=3.0.0")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        if (window.location.pathname != "/product")
+            $('#input-search').parent().remove();
+    </script>
     @RenderSection("Scripts", false)
 
 </body>
