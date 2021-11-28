@@ -64,6 +64,7 @@ namespace ShopProductService.Controllers
 
             await _dbContext.SaveChangesAsync();
         }
+
         [HttpPut]
         [ActionName("Edit")]
         public async Task<ApiResult<bool>> EditProduct(ProductDTO productDTO)
@@ -86,6 +87,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
 
         }
+
         [HttpDelete]
         [ActionName("Delete")]
         public async Task<ApiResult<bool>> DeleteProduct([FromQuery] int productId)
@@ -102,11 +104,12 @@ namespace ShopProductService.Controllers
         [HttpGet]
         public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
         {
-            var allProducts = await _dbContext.ShopProducts
+            var products = (await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
+                                .ToListAsync())
                                 .Select(product => ProductDTO.FromSource(product))
                                 .Cast<ProductDTO>()
-                                .ToListAsync();
-            return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 200, Data = allProducts.Paginate(pageNumber, pageSize) };
+                                .ToList();
+            return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 200, Data = products.Paginate(pageNumber, pageSize) };
         }
     }
 }

@@ -1,50 +1,37 @@
-﻿@model Shared.DTOs.ProductDTO
-
-@{
-    ViewData["Title"] = "Chỉnh sửa sản phẩm";
-}
-<h3>Chỉnh sửa sản phẩm</h3>
+﻿<h3 class="text-center">Edit product</h3>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditProduct">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div  class="form-group">              
-                <input asp-for="Id"  type="hidden" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-5">
+        <form>
+            <input style="display: none" id="input-id" />
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Product name</label>
+                <input class="form-control" type="text" id="input-name" />
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Category</label>
+                <select class="form-select" aria-label="Default select example" id="input-category">
+                    <option selected="selected">Select category</option>
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Description</label>
+                <input class="form-control" type="text" id="input-description" />
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Quantity</label>
+                <input class="form-control" type="number" id="input-quantity" />
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Price</label>
+                <input class="form-control" type="number" id="input-price" />
+            </div>
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Discount</label>
+                <input class="form-control" type="number" id="input-discount" />
             </div>
             <div class="form-group">
-                <label asp-for="ProductName" class="control-label">Tên sản phẩm</label>
-                <input asp-for="ProductName" class="form-control" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label">Mô tả</label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label">Số lượng</label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label">Giá sản phẩm</label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Discount" class="control-label">Giá đã giảm</label>
-                <input asp-for="Discount" class="form-control" />
-                <span asp-validation-for="Discount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryName" class="control-label">Category</label>
-                <input asp-for="CategoryName" class="form-control" />
-                <span asp-validation-for="CategoryName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-primary" href="#" id="btn-submit">Save</a>
             </div>
         </form>
     </div>
@@ -55,7 +42,58 @@
 </div>
 
 @section Scripts {
-    @{
-    await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
+    <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        $(function () {
+            let classNames = ['active', 'bg-gradient-primary'];
+            $('#nav-item-product').addClass(classNames);
+            $.get('https://localhost:44302/api/categories', null, (resp) => {
+                var categories = resp.data.data;
+                var optionsHtml = '';
+                categories.forEach(category => {
+                    optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
+                });
+                if (optionsHtml != '') {
+                    $('option[selected=selected]').after(optionsHtml);
+                }
+                tinymce.init({
+                    selector: '#input-description'
+                });
+                loadEdittingProduct();
+            });
+            $('#btn-submit').click(() => {
+                var name = $('#input-name').val();
+                var category = $('#input-category').val();
+                var description = tinymce.activeEditor.getContent({ format: 'text' });
+                var quantity = $('#input-quantity').val();
+                var price = $('#input-price').val();
+                var discount = $('#input-discount').val();
+                var product = {
+                    productName: name,
+                    categoryId: category,
+                    description: description,
+                    quantity: quantity,
+                    price: price,
+                    discount: discount
+                };
+            });
+        });
+
+        function loadEdittingProduct() {
+            var edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
+            if (!edittingProduct) {
+                alert("Something went wrong!");
+                window.location.href = "/product";
+            }
+            window.localStorage.removeItem('editting-product');
+            $('#input-id').val(edittingProduct.id);
+            $('#input-name').val(edittingProduct.productName);
+            $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
+            $('#input-description').val(edittingProduct.description);
+            $('#input-quantity').val(edittingProduct.quantity);
+            $('#input-price').val(edittingProduct.price);
+            $('#input-discount').val(edittingProduct.discount);
+            $('.input-group-outline').addClass('is-filled');
+        }
+    </script>
 }
