@@ -8,6 +8,8 @@ using ShopProductService.RequestModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Shared.Mapping;
 
 namespace ShopProductService.Controllers
 {
@@ -20,8 +22,9 @@ namespace ShopProductService.Controllers
         public ProductController(ApplicationDbContext dbcontext)
         {
             _dbContext = dbcontext;
+            
         }
-
+        
         [HttpPost]
         public async Task<ApiResult<bool>> AddProduct(AddOrEditProductRequestModel requestModel)
         {
@@ -38,18 +41,18 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
-        [HttpPut("id")]
-        public async Task<ApiResult<bool>> EditProduct(string id, AddOrEditProductRequestModel requestModel)
+        [HttpPut]
+        public async Task<ApiResult<bool>> EditProduct(string ProductId, int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
         {
-            var product = await _dbContext.ShopProducts.FindAsync(id);
+            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == ProductId);
             if (product == null || product.IsDisabled)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
-            product.CategoryId = requestModel.CategoryId;
-            product.ProductName = requestModel.ProductName;
-            product.Description = requestModel.Description;
-            product.Quantity = requestModel.Quantity;
-            product.Price = product.Price;
-            product.Discount = product.Discount;
+            product.CategoryId = CategoryId;
+            product.ProductName = ProductName;
+            product.Description = Description;
+            product.Quantity = Quantity;
+            product.Price = Price;
+            product.Discount = Discount;
             bool result = await _dbContext.SaveChangesAsync() > 0;
             if (!result)
             {

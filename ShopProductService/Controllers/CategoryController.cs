@@ -34,18 +34,30 @@ namespace ShopProductService.Controllers
             await _dbContext.SaveChangesAsync();
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
-        
+
+        [HttpGet("{id}")]
+        public async Task<ApiResult<CategoryDTO>> DetailCategory(int id)
+        {
+            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(c => c.Id == id);
+            if (category == null) return new ApiResult<CategoryDTO> { ResponseCode = 404, Data = null };
+            var categoryDto = new CategoryDTO
+            {
+                CategoryName = category.CategoryName,
+                Id = category.Id
+            };
+            return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = categoryDto };
+        }
+
         [HttpPut]
         [ActionName("Edit")]
-        public async Task<ApiResult<bool>> EditCategory(int id, string CategoryName, int Special)
+        public async Task<ApiResult<bool>> EditCategory(CategoryDTO categoryDTO)
         {
-            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(ct => ct.Id == id);
+            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(ct => ct.Id == categoryDTO.Id);
             if (category == null)
             {
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
             }
-            category.CategoryName = CategoryName;
-            category.Special = Special;
+            category.CategoryName = categoryDTO.CategoryName;
             var result = await _dbContext.SaveChangesAsync() > 0;
             if (!result)
             {

@@ -7,8 +7,12 @@
                 <label class="form-label">Product name</label>
                 <input class="form-control" type="text" id="input-name" />
             </div>
-            @await Component.InvokeAsync("CategoryDropdown")
-            <div class="form-group mb-3">
+            <div class="input-group input-group-outline mb-3">
+                <select class="form-select" aria-label="Default select example">
+                    <option selected="selected">Select category</option>
+                </select>
+            </div>
+            <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Description</label>
                 <input class="form-control" type="text" id="input-description" />
             </div>
@@ -27,12 +31,15 @@
             <div class="form-group">
                 <a class="btn btn-primary" href="#" id="btn-submit">Save</a>
             </div>
-        </div>
+        </form>
     </div>
-</form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
 @section Scripts {
-    <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript">
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
@@ -46,54 +53,8 @@
                 if (optionsHtml != '') {
                     $('option[selected=selected]').after(optionsHtml);
                 }
-                tinymce.init({
-                    selector: '#input-description'
-                });
-                loadEdittingProduct();
-            });
-            $('#btn-submit').click(() => {
-                var id = $('#input-id').val()
-                var name = $('#input-name').val();
-                var category = $('#input-category').val();
-                var description = tinymce.activeEditor.getContent({ format: 'text' });
-                var quantity = $('#input-quantity').val();
-                var price = $('#input-price').val();
-                var discount = $('#input-discount').val();
-                var requestModel = {
-                    productName: name,
-                    categoryId: category,
-                    description: description,
-                    quantity: quantity,
-                    price: price,
-                    discount: discount
-                };
-                $.ajax({
-                    type: 'PUT',
-                    url: `https://localhost:44302/api/products/${id}`,
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(requestModel),
-                    success: function () {
-                        window.localStorage.removeItem('editting-product');
-                        window.location.href = "/product";
-                    }
-                })
             });
         });
 
-        function loadEdittingProduct() {
-            var edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
-            if (!edittingProduct) {
-                alert("Something went wrong!");
-                window.location.href = "/product";
-            }
-            $('#input-id').val(edittingProduct.id);
-            $('#input-name').val(edittingProduct.productName);
-            $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
-            $('#input-description').val(edittingProduct.description);
-            $('#input-quantity').val(edittingProduct.quantity);
-            $('#input-price').val(edittingProduct.price);
-            $('#input-discount').val(edittingProduct.discount);
-            $('.input-group-outline').addClass('is-filled');
-        }
     </script>
 }
