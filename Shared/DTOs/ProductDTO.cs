@@ -21,6 +21,8 @@ namespace Shared.DTOs
 
         public string[] Images { get; set; }
 
+        public bool IsDisabled { get; set; }
+
         public object MapFromSource(ShopProduct product)
         {
             return Mapper.GetInstance().MapToProductDTO(product);

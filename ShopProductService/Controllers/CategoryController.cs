@@ -23,7 +23,7 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public ApiResult<bool> AddCategory(AddCategoryRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddCategory(AddCategoryRequestModel requestModel)
         {
             _dbContext.ShopCategories.Add(new ShopCategory
             {
@@ -31,7 +31,7 @@ namespace ShopProductService.Controllers
                 CategoryName = requestModel.CategoryName,
                 Special = requestModel.Special
             });
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
@@ -56,13 +56,17 @@ namespace ShopProductService.Controllers
         
         [HttpGet]
         [ActionName("Index")]
-        public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] int pageNumber, int pageSize = 5)
+        public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
         {
-            var categories = await _dbContext.ShopCategories
+            var categories = await _dbContext.ShopCategories.AsNoTracking()
                                     .Select(category => CategoryDTO.FromSource(category))
                                     .Cast<CategoryDTO>()
                                     .ToListAsync();
-            return new ApiResult<PaginatedDataList<CategoryDTO>> { ResponseCode = 200, Data = categories.Paginate(pageNumber, pageSize) };
+            return new ApiResult<PaginatedDataList<CategoryDTO>> 
+            {
+                ResponseCode = 200,
+                Data = categories.Paginate(paginationInfo.PageNumber, paginationInfo.PageSize) 
+            };
         }
 
         [HttpDelete]

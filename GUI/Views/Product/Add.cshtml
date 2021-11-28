@@ -38,11 +38,12 @@
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            
+            let classNames = ['active', 'bg-gradient-primary'];
+            $('#nav-item-product').addClass(classNames);
             $('#btnSubmit').click(function (e) {
                 e.preventDefault();
                 
-                var name = $("#iput-name").val();
+                var name = $("#input-name").val();
                 var category = $('#input-category').val();
                 var description = $("#input-description").val();
                 var quantity = $("#input-quantity").val();
@@ -63,17 +64,17 @@
                     contentType: 'application/json',
                     data: JSON.stringify(requestModel),
                     url: "https://localhost:44302/api/products",
-                    success: function (data) {
-                        alert("product name" + data);
+                    success: function () {
+                        window.location.href = '/product';
                     },
-                    error: function (result) {
+                    error: function () {
                         alert("Something when wrong");
                     }
                 });
             });
 
             $.get('https://localhost:44302/api/categories', null, (resp) => {
-                var categories = resp.data;
+                var categories = resp.data.data;
                 var optionsHtml = '';
                 categories.forEach(category => {
                     optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;

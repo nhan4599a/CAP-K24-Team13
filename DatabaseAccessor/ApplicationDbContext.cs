@@ -39,6 +39,11 @@ namespace DatabaseAccessor
                     .HasOne(e => e.ImageSet)
                     .WithOne(e => e.Product)
                     .HasForeignKey<ProductImage>(e => e.ShopProductId);
+
+            modelBuilder.Entity<ShopProduct>()
+                    .Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
             modelBuilder.Entity<ShopProduct>()
                     .HasOne(e => e.Category)
                     .WithMany(e => e.ShopProducts)
@@ -57,18 +62,22 @@ namespace DatabaseAccessor
             {
                 entity.ToTable("ShopCategories");
             });
+
             modelBuilder.Entity<ShopProduct>(entity =>
             {
                 entity.ToTable("ShopProducts");
             });
+
             modelBuilder.Entity<ProductImage>(entity =>
             {
                 entity.ToTable("ProductImages");
             });
+
             modelBuilder.Entity<ShopImage>(entity =>
             {
                 entity.ToTable("ShopImages");
             });
+
             modelBuilder.Entity<ShopInterface>(entity =>
             {
                 entity.ToTable("ShopInterfaces");

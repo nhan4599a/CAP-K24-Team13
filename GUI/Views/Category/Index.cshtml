@@ -1,6 +1,6 @@
 ﻿<div class="row">
     <div class="col-12">
-        <button type="button" class="btn btn-primary">Add</button>
+        <a href="/category/add" class="btn btn-primary">Add</a>
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
@@ -22,20 +22,6 @@
             loadCategories(getCurrentPage());
             let classNames = ['active', 'bg-gradient-primary'];
             $('#nav-item-category').addClass(classNames);
-            $('a[name=btn-delete]').click(function () {
-                let id = $(this).parent().parent().children('#cate-id').text();
-                $.ajax('https://localhost:44302/api/categories', {
-                    method: 'DELETE',
-                    data: { categoryId: id },
-                    success: (res) => {
-                        if (res.responseCode != 200) {
-                            toastr.error(`Failed to delete category with id = ${id}, ${res.errorMessage}!`, 'Error');
-                        } else {
-                            toastr.success(`Deleted category with id = ${id}`, 'Success');
-                        }
-                    }
-                });
-            });
         });
         function loadCategories(pageNumber) {
             $.get('https://localhost:44302/api/categories', { pageNumber: pageNumber }, (res) => {
@@ -50,7 +36,7 @@
                     if (pageNumber != 1)
                         paginationHtml += `<li class="page-item" id="previous-page"><a class="page-link" href="#" style="font-weight: bold"><</a></li>`;
                     for (var i = 1; i <= paginationResult.maxPageNumber; i++) {
-                        paginationHtml += `<li class="page-item ${i == pageNumber ? 'active bg-gradient-primary' : ''}"><a class="page-link" href="#" style="font-weight: bold">${i}</a></li>`;
+                        paginationHtml += `<li class="page-item"><a class="page-link ${i == pageNumber ? 'active bg-gradient-primary text-white' : ''}" href="https://localhost:44349/category?pageNumber=${i}" style="font-weight: bold">${i}</a></li>`;
                     }
                     if (pageNumber != paginationResult.maxPageNumber)
                         paginationHtml += `<li class="page-item" id="next-page"><a class="page-link" href="#" style="font-weight: bold">></a></li>`;
@@ -60,7 +46,7 @@
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div class="d-flex flex-column justify-content-center"">
-                                                        <p class="mb-0 text-sm">${index}</p>
+                                                        <p class="mb-0 text-sm">${index + 1}</p>
                                                     </div>
                                                 </div>
                                             </td>
@@ -75,13 +61,13 @@
                                                 <span class="checkmark"></span>
                                             </td>
                                             <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                                                    data-original-title="Edit">
-                                                    Edit &ensp;
+                                                <a href="#" class="text-secondary font-weight-bold text-xs"
+                                                    data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
+                                                        <i class="far fa-edit"></i><span> Edit</span>
                                                 </a>
-                                                <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                                                    data-original-title="Delete" name="btn-delete">
-                                                    Delete
+                                                <a href="#" class="text-secondary font-weight-bold text-xs"
+                                                    data - toggle="tooltip" data - original - title="Delete user" name = "btn-delete">
+                                                        <i class="far fa-trash-alt"></i><span> Delete</span>
                                                 </a>
                                             </td>
                                         </tr>`;
@@ -111,13 +97,28 @@
                 }
                 $('.table-responsive.p-0').html(tableHtml);
                 $('.pagination').html(paginationHtml);
+                $('a[name=btn-delete]').click(function () {
+                    let id = $(this).parent().parent().children('#cate-id').text();
+                    $.ajax('https://localhost:44302/api/categories', {
+                        method: 'DELETE',
+                        contentType: 'application/json',
+                        data: JSON.stringify(id),
+                        success: (res) => {
+                            if (res.responseCode != 200) {
+                                toastr.error(`Failed to delete category with id = ${id}, ${res.errorMessage}!`, 'Error');
+                            } else {
+                                toastr.success(`Deleted category with id = ${id}`, 'Success');
+                            }
+                        }
+                    });
+                });
+                $('#previous-page').click(() => moveToPage(getCurrentPage() - 1));
+                $('#next-page').click(() => moveToPage(getCurrentPage() + 1));
             });
         }
 
-        function moveCurrentPage(isPrevious) {
-            var jumpStep = isPrevious ? -1 : 1;
-            var currentPageNumber = getCurrentPage();
-            window.location.href = `https://localhost:44349/category?pageNumber=${currentPageNumber + jumpStep}`;
+        function moveToPage(pageNumber) {
+            window.location.href = `https://localhost:44349/category?pageNumber=${pageNumber}`;
         }
 
         function getCurrentPage() {

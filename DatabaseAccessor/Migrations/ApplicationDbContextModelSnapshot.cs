@@ -151,6 +151,7 @@ namespace DatabaseAccessor.Migrations
             modelBuilder.Entity("DatabaseAccessor.Model.ShopProduct", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CategoryId")
@@ -163,7 +164,9 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDisabled")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<double>("Price")
                         .HasColumnType("float");

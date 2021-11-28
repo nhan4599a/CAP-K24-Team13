@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
 using ShopProductService.RequestModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,8 +23,7 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPost]
-        [ActionName("Add")]
-        public ApiResult<bool> AddProduct(AddProductRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddProduct(AddProductRequestModel requestModel)
         {
             _dbContext.ShopProducts.Add(new ShopProduct
             {
@@ -34,12 +34,11 @@ namespace ShopProductService.Controllers
                 Price = requestModel.Price,
                 Discount = requestModel.Discount
             });
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
         [HttpPut]
-        [ActionName("Edit")]
         public async Task<ApiResult<bool>> EditProduct(string ProductId, int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
         {
             var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == ProductId);
@@ -61,8 +60,7 @@ namespace ShopProductService.Controllers
         }
         
         [HttpDelete]
-        [ActionName("Delete")]
-        public async Task<ApiResult<bool>> DeleteProduct([FromQuery] int productId)
+        public async Task<ApiResult<bool>> DeleteProduct([FromBody] string productId)
         {
             var product = await _dbContext.ShopProducts.FindAsync(productId);
             if (product == null || product.IsDisabled)
@@ -74,13 +72,31 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] int pageNumber, int pageSize = 5)
+        public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
         {
-            var allProducts = await _dbContext.ShopProducts
+            var keyword = requestModel.Keyword;
+            var productList = new List<ProductDTO>();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                productList = await _dbContext.ShopProducts.AsNoTracking()
+                                .Where(product => product.ProductName.Contains(keyword) ||
+                                        product.Category.CategoryName.Contains(keyword))
                                 .Select(product => ProductDTO.FromSource(product))
                                 .Cast<ProductDTO>()
                                 .ToListAsync();
-            return new ApiResult<PaginatedDataList<ProductDTO>> { ResponseCode = 200, Data = allProducts.Paginate(pageNumber, pageSize) };
+            }
+            else
+            {
+                productList = await _dbContext.ShopProducts.AsNoTracking()
+                                .Select(product => ProductDTO.FromSource(product))
+                                .Cast<ProductDTO>()
+                                .ToListAsync();
+            }
+            return new ApiResult<PaginatedDataList<ProductDTO>>
+            {
+                ResponseCode = 200,
+                Data = productList.Paginate(requestModel.PaginationInfo.PageNumber, requestModel.PaginationInfo.PageSize)
+            };
         }
     }
 }

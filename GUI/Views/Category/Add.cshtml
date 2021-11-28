@@ -26,6 +26,8 @@
     <script type="text/javascript">
 
         $(function () {
+            let classNames = ['active', 'bg-gradient-primary'];
+            $('#nav-item-category').addClass(classNames);
             $('#btnSubmit').click(function (e) {
                 e.preventDefault();
 
@@ -39,10 +41,10 @@
                     contentType: 'application/json',
                     data: JSON.stringify(requestModel),
                     url: "https://localhost:44302/api/categories",
-                    success: function (data) {
-                        console.log(data);
+                    success: function () {
+                        window.location.href = "/category";
                     },
-                    error: function (result) {
+                    error: function () {
                         alert("Something when wrong");
                     }
                 });
