@@ -1,8 +1,6 @@
 ﻿using DatabaseAccessor.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DatabaseAccessor
 {
@@ -17,51 +15,59 @@ namespace DatabaseAccessor
 
         public DbSet<ShopProduct> ShopProducts { get; set; }
 
-        public ApplicationDbContext() : base(GetOptions(_connectionString))
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer(_connectionString);
         }
 
-        private static DbContextOptions GetOptions(string connectionString)
-        {
-            return SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), connectionString).Options;
-        }
-        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ShopProduct>()
-                    .Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
+                .Property(e => e.Id)
+                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<ShopProduct>()
-                    .HasOne(e => e.Category)
-                    .WithMany(e => e.ShopProducts)
-                    .IsRequired();
-                    
-            modelBuilder.Entity<ShopProduct>()
-                    .Property(e => e.IsDisabled)
-                    .HasDefaultValue(false);
+                .HasOne(e => e.Category)
+                .WithMany(e => e.ShopProducts)
+                .IsRequired();
 
             modelBuilder.Entity<ShopProduct>()
-                    .Property(e => e.CreatedDate)
-                    .HasDefaultValue(DateTime.Now);
+                .Property(e => e.ProductName)
+                .IsRequired();
 
-            modelBuilder.Entity<ShopCategory>(entity =>
-            {
-                entity.ToTable("ShopCategories");
-            });
+            modelBuilder.Entity<ShopProduct>()
+                .Property(e => e.IsDisabled)
+                .HasDefaultValue(false);
 
-            modelBuilder.Entity<ShopProduct>(entity =>
-            {
-                entity.ToTable("ShopProducts");
-            });
+            modelBuilder.Entity<ShopProduct>()
+                .Property(e => e.CreatedDate)
+                .HasDefaultValueSql("getdate()");
 
-            modelBuilder.Entity<ShopInterface>(entity =>
-            {
-                entity.ToTable("ShopInterfaces");
-            });
+            modelBuilder.Entity<ShopProduct>()
+                .Property(e => e.Discount)
+                .HasDefaultValue(0);
+
+            modelBuilder.Entity<ShopProduct>()
+                .Property(e => e.Quantity)
+                .HasDefaultValue(1);
+
+            modelBuilder.Entity<ShopProduct>()
+                .HasIndex(e => e.ProductName);
+
+            modelBuilder.Entity<ShopProduct>()
+                .HasCheckConstraint("CK_ShopProducts_Price", "[Price] >= 0")
+                .HasCheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 1")
+                .HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100")
+                .ToTable("ShopProducts");
+
+            modelBuilder.Entity<ShopCategory>()
+                .ToTable("ShopCategories");
+
+            modelBuilder.Entity<ShopInterface>()
+                .ToTable("ShopInterfaces");
         }
     }
 }
