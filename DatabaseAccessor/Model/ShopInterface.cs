@@ -8,8 +8,8 @@
 
         public int Option { get; set; }
 
-        public string Description { get; set; }
+        public string Images { get; set; }
 
-        public virtual ShopImage ShopImage { get; set; }
+        public string Description { get; set; }
     }
 }

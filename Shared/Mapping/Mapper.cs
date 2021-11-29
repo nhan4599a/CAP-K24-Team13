@@ -1,6 +1,7 @@
 using AutoMapper;
 using DatabaseAccessor.Model;
 using Shared.DTOs;
+using Shared.Resolver;
 
 namespace Shared.Mapping
 {
@@ -19,8 +20,7 @@ namespace Shared.Mapping
                     .ForMember(target => target.CategoryName,
                         options => options.MapFrom(source => source.Category == null ? "" : source.Category.CategoryName))
                     .ForMember(target => target.Images,
-                        options => options.MapFrom(source => source.ImageSet == null ? null :
-                            new string[] { source.ImageSet.Image1, source.ImageSet.Image2, source.ImageSet.Image3, source.ImageSet.Image4, source.ImageSet.Image5 }));
+                        options => options.MapFrom<ProductImageValueResolver>());
 
                 cfg.CreateMap<ShopCategory, CategoryDTO>();
             });

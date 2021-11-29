@@ -16,7 +16,5 @@ namespace DatabaseAccessor.Model
         public int Special { get; set; }
 
         public virtual List<ShopProduct> ShopProducts { get; set; }
-     
-
     }
 }

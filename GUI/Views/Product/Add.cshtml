@@ -45,7 +45,7 @@
 
                 var name = $("#input-name").val();
                 var category = $('#input-category').val();
-                var description = $("#input-description").val();
+                var description = tinymce.activeEditor.getContent({ format: 'text' });
                 var quantity = $("#input-quantity").val();
                 var price = $("#input-price").val();
                 var discount = $("#input-discount").val();

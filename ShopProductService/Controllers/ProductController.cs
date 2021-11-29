@@ -41,18 +41,18 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
-        [HttpPut]
-        public async Task<ApiResult<bool>> EditProduct(string ProductId, int CategoryId, string ProductName, string Description, int Quantity, double Price, int Discount)
+        [HttpPut("id")]
+        public async Task<ApiResult<bool>> EditProduct(string id, AddOrEditProductRequestModel requestModel)
         {
-            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(p => p.Id == ProductId);
+            var product = await _dbContext.ShopProducts.FindAsync(id);
             if (product == null || product.IsDisabled)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
-            product.CategoryId = CategoryId;
-            product.ProductName = ProductName;
-            product.Description = Description;
-            product.Quantity = Quantity;
-            product.Price = Price;
-            product.Discount = Discount;
+            product.CategoryId = requestModel.CategoryId;
+            product.ProductName = requestModel.ProductName;
+            product.Description = requestModel.Description;
+            product.Quantity = requestModel.Quantity;
+            product.Price = requestModel.Price;
+            product.Discount = requestModel.Discount;
             bool result = await _dbContext.SaveChangesAsync() > 0;
             if (!result)
             {
@@ -80,16 +80,18 @@ namespace ShopProductService.Controllers
             var productList = new List<ProductDTO>();
             if (!string.IsNullOrEmpty(keyword))
             {
-                productList = await _dbContext.ShopProducts.AsNoTracking()
-                                .Where(product => product.ProductName.Contains(keyword) ||
-                                        product.Category.CategoryName.Contains(keyword))
+                productList = (await _dbContext.ShopProducts.AsNoTracking()
+                                .Include(e => e.Category)
+                                .Where(product => product.ProductName.Contains(keyword) || product.Category.CategoryName.Contains(keyword))
+                                .ToListAsync())
                                 .Select(product => ProductDTO.FromSource(product))
                                 .Cast<ProductDTO>()
-                                .ToListAsync();
+                                .ToList();
             }
             else
             {
                 productList = await _dbContext.ShopProducts.AsNoTracking()
+                                .Include(e => e.Category)
                                 .Select(product => ProductDTO.FromSource(product))
                                 .Cast<ProductDTO>()
                                 .ToListAsync();

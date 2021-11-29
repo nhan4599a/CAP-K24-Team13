@@ -11,11 +11,7 @@ namespace DatabaseAccessor
     {
         private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
-        public DbSet<ProductImage> ProductImages { get; set; }
-
         public DbSet<ShopCategory> ShopCategories { get; set; }
-
-        public DbSet<ShopImage> ShopImages { get; set; }
 
         public DbSet<ShopInterface> ShopInterfaces { get; set; }
 
@@ -36,11 +32,6 @@ namespace DatabaseAccessor
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ShopProduct>()
-                    .HasOne(e => e.ImageSet)
-                    .WithOne(e => e.Product)
-                    .HasForeignKey<ProductImage>(e => e.ShopProductId);
-
-            modelBuilder.Entity<ShopProduct>()
                     .Property(e => e.Id)
                     .ValueGeneratedOnAdd();
 
@@ -53,10 +44,9 @@ namespace DatabaseAccessor
                     .Property(e => e.IsDisabled)
                     .HasDefaultValue(false);
 
-            modelBuilder.Entity<ShopInterface>()
-                    .HasOne(e => e.ShopImage)
-                    .WithOne(e => e.ShopInterface)
-                    .HasForeignKey<ShopImage>(e => e.ShopInterfaceId);
+            modelBuilder.Entity<ShopProduct>()
+                    .Property(e => e.CreatedDate)
+                    .HasDefaultValue(DateTime.Now);
 
             modelBuilder.Entity<ShopCategory>(entity =>
             {
@@ -66,16 +56,6 @@ namespace DatabaseAccessor
             modelBuilder.Entity<ShopProduct>(entity =>
             {
                 entity.ToTable("ShopProducts");
-            });
-
-            modelBuilder.Entity<ProductImage>(entity =>
-            {
-                entity.ToTable("ProductImages");
-            });
-
-            modelBuilder.Entity<ShopImage>(entity =>
-            {
-                entity.ToTable("ShopImages");
             });
 
             modelBuilder.Entity<ShopInterface>(entity =>
