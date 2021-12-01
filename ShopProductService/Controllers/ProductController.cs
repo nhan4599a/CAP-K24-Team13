@@ -90,11 +90,12 @@ namespace ShopProductService.Controllers
             }
             else
             {
-                productList = await _dbContext.ShopProducts.AsNoTracking()
+                productList = (await _dbContext.ShopProducts.AsNoTracking()
                                 .Include(e => e.Category)
+                                .ToListAsync())
                                 .Select(product => ProductDTO.FromSource(product))
                                 .Cast<ProductDTO>()
-                                .ToListAsync();
+                                .ToList();
             }
             return new ApiResult<PaginatedDataList<ProductDTO>>
             {

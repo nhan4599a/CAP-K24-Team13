@@ -13,18 +13,17 @@
         </div>
     </div>
 </div>
-<nav aria-label="Page navigation example">
-    <ul class="pagination"></ul>
-</nav>
+<div class="pagination"></div>
 @section Scripts {
     <script>
         $(document).ready(() => {
-            loadCategories(getCurrentPage());
+            var currentPageInfo = getCurrentPageInfo();
+            loadCategories(currentPageInfo.pageNumber, currentPageInfo.pageSize);
             let classNames = ['active', 'bg-gradient-primary'];
             $('#nav-item-category').addClass(classNames);
         });
-        function loadCategories(pageNumber) {
-            $.get('https://localhost:44302/api/categories', { pageNumber: pageNumber }, (res) => {
+        function loadCategories(pageNumber, pageSize) {
+            $.get('https://localhost:44302/api/categories', { pageNumber: pageNumber, pageSize: pageSize || 5 }, (res) => {
                 var paginationResult = res.data;
                 var categories = paginationResult.data;
                 var tableHtml = '';
@@ -34,12 +33,15 @@
                 } else {
                     var dataRowHtml = '';
                     if (pageNumber != 1)
-                        paginationHtml += `<li class="page-item" id="previous-page"><a class="page-link" href="#" style="font-weight: bold"><</a></li>`;
+                        paginationHtml += '<a href="#" id="previous-page">«</a>';
                     for (var i = 1; i <= paginationResult.maxPageNumber; i++) {
-                        paginationHtml += `<li class="page-item"><a class="page-link ${i == pageNumber ? 'active bg-gradient-primary text-white' : ''}" href="https://localhost:44349/category?pageNumber=${i}" style="font-weight: bold">${i}</a></li>`;
+                        if (i == pageNumber)
+                            paginationHtml += `<a class="active">${i}</a>`;
+                        else
+                            paginationHtml += `<a class="pagination-item">${i}</a>`;
                     }
                     if (pageNumber != paginationResult.maxPageNumber)
-                        paginationHtml += `<li class="page-item" id="next-page"><a class="page-link" href="#" style="font-weight: bold">></a></li>`;
+                        paginationHtml += '<a href="#" id="next-page">»</a>';
                     categories.forEach((category, index) => {
                         dataRowHtml += `<tr>
                                             <td style="display: none" id="cate-id">${category.id}</td>
@@ -112,20 +114,28 @@
                         }
                     });
                 });
-                $('#previous-page').click(() => moveToPage(getCurrentPage() - 1));
-                $('#next-page').click(() => moveToPage(getCurrentPage() + 1));
+                
+                $('#previous-page').click(() => {
+                    var currentPageInfo = getCurrentPageInfo();
+                    moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
+                });
+                $('#next-page').click(() => {
+                    var currentPageInfo = getCurrentPageInfo();
+                    moveToPage(currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
+                });
             });
         }
 
-        function moveToPage(pageNumber) {
-            window.location.href = `https://localhost:44349/category?pageNumber=${pageNumber}`;
+        function moveToPage(pageNumber, pageSize) {
+            window.location.href = `https://localhost:44349/category?pageNumber=${pageNumber}&pageSize=${pageSize}`;
         }
 
-        function getCurrentPage() {
+        function getCurrentPageInfo() {
             var url = new URL(window.location.href);
             var queryObj = url.searchParams;
             var currentPageNumber = queryObj.get('pageNumber') ? parseInt(queryObj.get('pageNumber')) : 1;
-            return currentPageNumber;
+            var currentPageSize = queryObj.get('pageSize') ? parseInt(queryObj.get('pageSize')) : 5;
+            return { pageNumber: currentPageNumber, pageSize: currentPageSize };
         }
 
     </script>

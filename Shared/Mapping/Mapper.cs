@@ -20,7 +20,7 @@ namespace Shared.Mapping
                     .ForMember(target => target.CategoryName,
                         options => options.MapFrom(source => source.Category == null ? "" : source.Category.CategoryName))
                     .ForMember(target => target.Images,
-                        options => options.MapFrom<ProductImageValueResolver>());
+                        options => options.MapFrom<ImageValueResolver>());
 
                 cfg.CreateMap<ShopCategory, CategoryDTO>();
             });

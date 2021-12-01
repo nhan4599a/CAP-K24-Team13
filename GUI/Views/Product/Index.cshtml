@@ -13,9 +13,8 @@
         </div>
     </div>
 </div>
-<nav aria-label="Page navigation example">
-    <ul class="pagination"></ul>
-</nav>
+<div class="pagination">
+</div>
 @section Scripts {
     <script>
         $(document).ready(() => {
@@ -51,13 +50,15 @@
                     } else {
                         var dataRowHtml = '';
                         if (pageNumber != 1)
-                            paginationHtml += `<li class="page-item" id="previous-page"><a class="page-link" href="#" style="font-weight: bold"><</a></li>`;
-                        var currentPageInfo = getCurrentPageInfo();
+                            paginationHtml += '<a href="#" id="previous-page">«</a>';
                         for (var i = 1; i <= paginationResult.maxPageNumber; i++) {
-                            paginationHtml += `<li class="page-item"><a class="page-link ${i == pageNumber ? 'active bg-gradient-primary text-white' : ''}" href="https://localhost:44349/product?pageNumber=${i}&pageSize=${currentPageInfo.pageSize}" style="font-weight: bold">${i}</a></li>`;
+                            if (i == pageNumber)
+                                paginationHtml += `<a class="active">${i}</a>`;
+                            else
+                                paginationHtml += `<a class="pagination-item">${i}</a>`;
                         }
                         if (pageNumber != paginationResult.maxPageNumber)
-                            paginationHtml += `<li class="page-item" id="next-page"><a class="page-link" href="#" style="font-weight: bold">></a></li>`;
+                            paginationHtml += '<a href="#" id="next-page">»</a>';
                         products.forEach((product, index) => {
                             dataRowHtml += `<tr>
                                                 <td style="display: none" id="prod-id">${product.id}</td>
@@ -68,9 +69,9 @@
                                                             <img src="../assets/img/team-2.jpg"
                                                                 class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
                                                         </div>
-                                                        <div class="d-flex flex-column justify-content-center">
+                                                        <div class="d-flex flex-column">
                                                             <h6 class="mb-0 text-sm">${product.productName}</h6>
-                                                            <p class="text-xs text-secondary mb-0">${product.description}</p>
+                                                            <p class="text-xs text-secondary mb-0" style="text-align: left">${product.categoryName}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -159,6 +160,11 @@
                     $('#next-page').click(() => {
                         var currentPageInfo = getCurrentPageInfo();
                         moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
+                    });
+                    $('a.pagination-item').click(function () {
+                        var pageNumber = $(this).text();
+                        var currentPageInfo = getCurrentPageInfo();
+                        moveToPage(currentPageInfo.keyword, pageNumber, currentPageInfo.pageSize);
                     });
                 }
             );
