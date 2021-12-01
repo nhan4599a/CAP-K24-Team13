@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using ShopProductService.RequestModel;
+using ShopProductService.Validation;
 
 namespace ShopProductService
 {
@@ -19,8 +23,11 @@ namespace ShopProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
+            services.AddTransient<IValidator<AddOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
+            services.AddTransient<IValidator<AddOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
+            services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();
             services.AddSwaggerGen();
             services.AddCors(options =>
             {
