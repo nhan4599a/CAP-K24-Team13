@@ -123,6 +123,10 @@
                     var currentPageInfo = getCurrentPageInfo();
                     moveToPage(currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
                 });
+                $('a.pagination-item').click(function () {
+                    var pageNumber = $(this).text();
+                    moveToPage(pageNumber, getCurrentPageInfo().pageSize);
+                });
             });
         }
 
