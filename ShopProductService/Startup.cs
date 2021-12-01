@@ -58,8 +58,6 @@ namespace ShopProductService
 
             app.UseCors("Default");
             app.UseRouting();
-
-            app.UseCors("Default");
             
             app.UseSwagger();
             app.UseSwaggerUI();
