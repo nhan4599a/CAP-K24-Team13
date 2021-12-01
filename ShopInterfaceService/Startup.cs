@@ -1,15 +1,10 @@
-using DatabaseAccessor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using FluentValidation.AspNetCore;
-using FluentValidation;
-using ShopProductService.RequestModel;
-using ShopProductService.Validation;
 
-namespace ShopProductService
+namespace ShopInterfaceService
 {
     public class Startup
     {
@@ -23,17 +18,13 @@ namespace ShopProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation();
-            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
-            services.AddTransient<IValidator<AddOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
-            services.AddTransient<IValidator<AddOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
-            services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();
+            services.AddControllers();
             services.AddSwaggerGen();
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("https://localhost:44349").AllowAnyMethod().AllowAnyHeader();
+                    builder.WithOrigins("https://localhost:44349").AllowAnyHeader().AllowAnyMethod();
                 });
             });
         }
@@ -56,7 +47,7 @@ namespace ShopProductService
 
             app.UseCors("Default");
             app.UseRouting();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI();
 
@@ -65,7 +56,7 @@ namespace ShopProductService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                        name: "default",
+                        name: "Default",
                         pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
