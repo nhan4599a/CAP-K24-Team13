@@ -23,6 +23,8 @@ namespace Shared.Mapping
                         options => options.MapFrom<ImageValueResolver>());
 
                 cfg.CreateMap<ShopCategory, CategoryDTO>();
+
+                cfg.CreateMap<ShopInterfaceDTO, ShopInterface>().ReverseMap();
             });
             _mapper = config.CreateMapper();
         }

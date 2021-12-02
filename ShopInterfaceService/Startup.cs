@@ -1,8 +1,11 @@
+using DatabaseAccessor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShopInterfaceService.Service;
 
 namespace ShopInterfaceService
 {
@@ -20,6 +23,8 @@ namespace ShopInterfaceService
         {
             services.AddControllers();
             services.AddSwaggerGen();
+            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
+            services.AddTransient<IShopService, ShopService>();
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
