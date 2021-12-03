@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.DTOs;
+using ShopInterfaceService.RequestModel;
 using ShopInterfaceService.Service;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ShopInterfaceService.Controllers
 {
@@ -18,13 +17,18 @@ namespace ShopInterfaceService.Controllers
         {
             _shopService = shopService;
         }
-        // GET: api/<ShopController>
-        [HttpPut]
-        [Route("ShopInterface")]
-        public async Task<ApiResult<ShopInterfaceDTO>> EditShopInterface(ShopInterfaceDTO shopInterfaceDTO)
+
+        [HttpPost]
+        [Route("{shopId}")]
+        public async Task<ApiResult<ShopInterfaceDTO>> EditShopInterface(int shopId, AddOrEditShopInterfaceRequestModel requestModel)
         {
-            var result = await _shopService.EditShopInformation(shopInterfaceDTO);
-            if (result == null) return new ApiResult<ShopInterfaceDTO> { Data = null, ResponseCode = 405 };
+            var existedShopInterface = await _shopService.FindShopInterfaceAsync(shopId);
+            ShopInterfaceDTO result;
+            if (existedShopInterface == null)
+                result = await _shopService.AddShopInterfaceAsync(shopId, requestModel);
+            else
+                result = await _shopService.EditShopInterfaceAsync(shopId, requestModel);
+            if (result == null) return new ApiResult<ShopInterfaceDTO> { Data = null, ResponseCode = 404 };
             return new ApiResult<ShopInterfaceDTO> { Data = result, ResponseCode = 200 };
         }
     }

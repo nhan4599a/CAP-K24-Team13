@@ -1,21 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DatabaseAccessor.Model;
 
 namespace Shared.DTOs
 {
-    public class ShopInterfaceDTO
+    public class ShopInterfaceDTO : DTO<ShopInterface>
     {
         public int Id { get; set; }
 
         public int ShopId { get; set; }
 
-        public int Option { get; set; }
+        public string ShopAddress { get; set; }
 
-        public string Images { get; set; }
+        public string ShopPhoneNumber { get; set; }
 
-        public string Description { get; set; }
+        public string ShopDescription { get; set; }
+
+        public string[] Images { get; set; }
+
+        public object MapFromSource(ShopInterface originalObject)
+        {
+            return Mapping.Mapper.GetInstance().MapToShopInterfaceDTO(originalObject);
+        }
+
+        public static ShopInterfaceDTO FromSource(ShopInterface originalObject)
+        {
+            return (ShopInterfaceDTO) new ShopInterfaceDTO().MapFromSource(originalObject);
+        }
     }
 }
