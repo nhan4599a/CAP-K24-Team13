@@ -1,4 +1,20 @@
-﻿<div class="row">
+﻿<style>
+    .pagesize {
+        position: absolute;
+        display: inline-flex;
+        margin-top: -10px;
+        right: 25%
+    }
+</style>
+<div class="pagesize">
+    <p style="margin-bottom: 0; width:150px; margin-top: 20px">Page size:</p>
+    <select class="form-control" style="border: 1px solid #000; padding: 5px 0 5px 10px; margin-top: 15px;">
+        <option value="">5 items</option>
+        <option value="all">10 items</option>
+        <option value="selected">15 items</option>
+    </select>
+</div>
+<div class="row">
     <div class="col-12">
         <a href="/category/add" class="btn btn-primary">Add</a>
         <div class="card my-4">
@@ -44,58 +60,58 @@
                         paginationHtml += '<a href="#" id="next-page">»</a>';
                     categories.forEach((category, index) => {
                         dataRowHtml += `<tr>
-                                            <td style="display: none" id="cate-id">${category.id}</td>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div class="d-flex flex-column justify-content-center"">
-                                                        <p class="mb-0 text-sm">${index + 1}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="badge badge-sm bg-gradient-success">${category.id}</span>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0" style="font-size: 50px;">${category.categoryName}</p>
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                <input type="checkbox" checked="checked">
-                                                <span class="checkmark"></span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <a href="#" class="text-secondary font-weight-bold text-xs"
-                                                    data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
-                                                        <i class="far fa-edit"></i><span> Edit</span>
-                                                </a>
-                                                <a href="#" class="text-secondary font-weight-bold text-xs"
-                                                    data - toggle="tooltip" data - original - title="Delete user" name = "btn-delete">
-                                                        <i class="far fa-trash-alt"></i><span> Delete</span>
-                                                </a>
-                                            </td>
-                                        </tr>`;
+                                                    <td style="display: none" id="cate-id">${category.id}</td>
+                                                    <td>
+                                                        <div class="d-flex px-2 py-1">
+                                                            <div class="d-flex flex-column justify-content-center"">
+                                                                <p class="mb-0 text-sm">${index + 1}</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="align-middle text-center text-sm">
+                                                        <span class="badge badge-sm bg-gradient-success">${category.id}</span>
+                                                    </td>
+                                                    <td>
+                                                        <p class="text-xs font-weight-bold mb-0" style="font-size: 50px;">${category.categoryName}</p>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <a href="#" class="text-secondary font-weight-bold text-xs"
+                                                            data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
+                                                                <i class="far fa-edit"></i><span> Edit</span>
+                                                        </a>
+                                                        <a href="#" class="text-secondary font-weight-bold text-xs"
+                                                            data - toggle="tooltip" data - original - title="Delete user" name = "btn-delete">
+                                                                <i class="far fa-trash-alt"></i><span> Delete</span>
+                                                        </a>
+                                                    </td>
+                                                </tr>`;
                     });
                     tableHtml = `<table class="table align-items-center mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                                                style="width: 70px;">
-                                                #
-                                            </th>
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                Category name
-                                            </th>
-                                            <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Special
-                                            </th>
-                                            <th class="text-secondary opacity-7">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${dataRowHtml}
-                                    </tbody>
-                                </table>`;
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                                        style="width: 70px;">
+                                                        #
+                                                    </th>
+                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                        Category name
+                                                    </th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                            Special
+                                                    </th>
+                                                    <th class="text-secondary opacity-7">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${dataRowHtml}
+                                            </tbody>
+                                        </table>`;
                 }
                 $('.table-responsive.p-0').html(tableHtml);
                 $('.pagination').html(paginationHtml);
@@ -114,7 +130,7 @@
                         }
                     });
                 });
-                
+
                 $('#previous-page').click(() => {
                     var currentPageInfo = getCurrentPageInfo();
                     moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);

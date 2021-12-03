@@ -1,3 +1,20 @@
+<style>
+    .pagesize {
+        position: absolute;
+        display: inline-flex;
+        margin-top: -10px;
+        right: 25%
+    }
+</style>
+<div class="pagesize">
+    <p style="margin-bottom: 0; width:150px; margin-top: 20px">Page size:</p>
+    <select class="form-control" style="border: 1px solid #000; padding: 5px 0 5px 10px; margin-top: 15px;">
+        <option value="">5 items</option>
+        <option value="all">10 items</option>
+        <option value="selected">15 items</option>
+    </select>
+</div>  
+
 <div class="row">
     <div class="col-12">
         <a href="/product/add" class="btn btn-primary">Add</a>
@@ -37,9 +54,13 @@
                 }
             });
         });
+
         function loadProducts(keyword, pageNumber, pageSize) {
-            $.get('https://localhost:44302/api/products',
-                { keyword: keyword, "paginationInfo.pageNumber": pageNumber, "paginationInfo.pageSize": pageSize || 5 },
+            $.get('https://localhost:44302/api/products', {
+                keyword: keyword,
+                "paginationInfo.pageNumber": pageNumber,
+                "paginationInfo.pageSize": pageSize || 5
+            },
                 (res) => {
                     var paginationResult = res.data;
                     var products = paginationResult.data;
@@ -61,65 +82,65 @@
                             paginationHtml += '<a href="#" id="next-page">»</a>';
                         products.forEach((product, index) => {
                             dataRowHtml += `<tr>
-                                                <td style="display: none" id="prod-id">${product.id}</td>
-                                                <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
-                                                <td class="align-middle text-center">
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div>
-                                                            <img src="../assets/img/team-2.jpg"
-                                                                class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-                                                        </div>
-                                                        <div class="d-flex flex-column">
-                                                            <h6 class="mb-0 text-sm">${product.productName}</h6>
-                                                            <p class="text-xs text-secondary mb-0" style="text-align: left">${product.categoryName}</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span class="text-secondary text-xs font-weight-bold">${product.price}đ</span>
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <span class="badge badge-sm bg-gradient-${!product.isDisabled ? 'success' : 'secondary'}">
-                                                        ${!product.isDisabled ? 'Active' : 'Disabled'}
-                                                    </span>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <a href="#" class="text-secondary font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
-                                                            <i class="far fa-edit"></i><span> Edit</span>
-                                                    </a>
-                                                    ${!product.isDisabled ?
+                                                        <td style="display: none" id="prod-id">${product.id}</td>
+                                                        <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                                                        <td class="align-middle text-center">
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div>
+                                                                    <img src="../assets/img/team-2.jpg"
+                                                                        class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                                                                </div>
+                                                                <div class="d-flex flex-column">
+                                                                    <h6 class="mb-0 text-sm">${product.productName}</h6>
+                                                                    <p class="text-xs text-secondary mb-0" style="text-align: left">${product.categoryName}</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <span class="text-secondary text-xs font-weight-bold">${product.price}đ</span>
+                                                        </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <span class="badge badge-sm bg-gradient-${!product.isDisabled ? 'success' : 'secondary'}">
+                                                                ${!product.isDisabled ? 'Active' : 'Disabled'}
+                                                            </span>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <a href="#" class="text-secondary font-weight-bold text-xs"
+                                                                data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
+                                                                    <i class="far fa-edit"></i><span> Edit</span>
+                                                            </a>
+                                                            ${!product.isDisabled ?
                                     `       <a href="#" class="text-secondary font-weight-bold text-xs"
-                                                            data - toggle="tooltip" data - original - title="Delete user" name = "btn-delete">
-                                                                <i class="far fa-trash-alt"></i><span> Delete</span>
-                                                        </a>` : ''}
-                                                </td>
-                                            </tr>`;
+                                                                    data - toggle="tooltip" data - original - title="Delete user" name = "btn-delete">
+                                                                        <i class="far fa-trash-alt"></i><span> Delete</span>
+                                                                </a>` : ''}
+                                                        </td>
+                                                    </tr>`;
                         });
                         tableHtml = `<table class="table align-items-center mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                                                    style="width: 50px; min-width: 50px !important;">
-                                                        #
-                                                </th>
-                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
-                                                    style="padding-left: 24px!important">
-                                                        Name
-                                                </th>
-                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Price
-                                                </th>
-                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Status
-                                                </th>
-                                                <th class="text-secondary opacity-7">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${dataRowHtml}
-                                        </tbody>
-                                    </table>`;
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                                            style="width: 50px; min-width: 50px !important;">
+                                                                #
+                                                        </th>
+                                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                                                            style="padding-left: 24px!important">
+                                                                Name
+                                                        </th>
+                                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                            Price
+                                                        </th>
+                                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                            Status
+                                                        </th>
+                                                        <th class="text-secondary opacity-7">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    ${dataRowHtml}
+                                                </tbody>
+                                            </table>`;
                     }
                     $('.table-responsive.p-0').html(tableHtml);
                     $('.pagination').html(paginationHtml);
@@ -184,7 +205,9 @@
             var currentPageSize = queryObj.get('pageSize') ? parseInt(queryObj.get('pageSize')) : 5;
             var currentKeyword = queryObj.get('keyword') ? queryObj.get('keyword') : '';
             return {
-                pageNumber: currentPageNumber, pageSize: currentPageSize, keyword: currentKeyword
+                pageNumber: currentPageNumber,
+                pageSize: currentPageSize,
+                keyword: currentKeyword
             };
         }
     </script>
