@@ -1,4 +1,20 @@
-﻿<div class="row">
+﻿<style>
+    .pagesize {
+        position: absolute;
+        display: inline-flex;
+        margin-top: -10px;
+        right: 25%
+    }
+</style>
+<div class="pagesize">
+    <p style="margin-bottom: 0; width:150px; margin-top: 20px">Page size:</p>
+    <select class="form-control" style="border: 1px solid #000; padding: 5px 0 5px 10px; margin-top: 15px;">
+        <option value="">5 items</option>
+        <option value="all">10 items</option>
+        <option value="selected">15 items</option>
+    </select>
+</div>
+<div class="row">
     <div class="col-12">
         <a href="category/add" class="btn btn-primary">Add</a>
         <div class="card my-4">
@@ -64,8 +80,8 @@
                                             </td>
                                             <td class="align-middle">
                                                 <a href="#" class="text-secondary font-weight-bold text-xs"
-                                                    data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
-                                                        <i class="far fa-edit"></i><span> Edit</span>
+                                                    data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
+                                                    <i class="far fa-edit"></i><span> Edit</span>
                                                 </a>
                                                 <a href="#" class="text-secondary font-weight-bold text-xs"
                                                     data-toggle="tooltip" data-original-title="Delete user" name="btn-delete">
@@ -85,9 +101,8 @@
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                 Category name
                                             </th>
-                                            <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Special
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Special
                                             </th>
                                             <th class="text-secondary opacity-7">Action</th>
                                         </tr>
@@ -121,7 +136,7 @@
                         }
                     });
                 });
-                
+
                 $('#previous-page').click(() => {
                     var currentPageInfo = getCurrentPageInfo();
                     moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
