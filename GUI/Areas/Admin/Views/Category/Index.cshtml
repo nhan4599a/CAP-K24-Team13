@@ -1,6 +1,6 @@
 ﻿<div class="row">
     <div class="col-12">
-        <a href="/category/add" class="btn btn-primary">Add</a>
+        <a href="category/add" class="btn btn-primary">Add</a>
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
@@ -64,11 +64,11 @@
                                             </td>
                                             <td class="align-middle">
                                                 <a href="#" class="text-secondary font-weight-bold text-xs"
-                                                    data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
+                                                    data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
                                                         <i class="far fa-edit"></i><span> Edit</span>
                                                 </a>
                                                 <a href="#" class="text-secondary font-weight-bold text-xs"
-                                                    data - toggle="tooltip" data - original - title="Delete user" name = "btn-delete">
+                                                    data-toggle="tooltip" data-original-title="Delete user" name="btn-delete">
                                                         <i class="far fa-trash-alt"></i><span> Delete</span>
                                                 </a>
                                             </td>
@@ -99,6 +99,13 @@
                 }
                 $('.table-responsive.p-0').html(tableHtml);
                 $('.pagination').html(paginationHtml);
+                $('a[name=btn-edit]').click(function (e) {
+                    e.preventDefault();
+                    var index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+                    var categoryInfoStr = JSON.stringify(categories[index]);
+                    window.localStorage.setItem('editting-category', categoryInfoStr);
+                    window.location.href = "/admin/category/edit";
+                });
                 $('a[name=btn-delete]').click(function () {
                     let id = $(this).parent().parent().children('#cate-id').text();
                     $.ajax('https://localhost:44302/api/categories', {

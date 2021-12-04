@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace GUI.Areas.User.Controllers
+namespace GUI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class InterfaceController : Controller
     {
         public IActionResult Index()

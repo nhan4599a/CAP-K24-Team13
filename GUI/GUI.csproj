@@ -13,84 +13,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\assets\admin\css\material-dashboard.css" />
     <None Include="wwwroot\assets\admin\css\material-dashboard.css.map" />
-    <None Include="wwwroot\assets\admin\css\material-dashboard.min.css" />
-    <None Include="wwwroot\assets\admin\css\nucleo-icons.css" />
-    <None Include="wwwroot\assets\admin\css\nucleo-svg.css" />
-    <None Include="wwwroot\assets\admin\css\site.css" />
     <None Include="wwwroot\assets\admin\favicon.ico" />
-    <None Include="wwwroot\assets\admin\fonts\nucleo-icons.eot" />
     <None Include="wwwroot\assets\admin\fonts\nucleo-icons.svg" />
-    <None Include="wwwroot\assets\admin\fonts\nucleo-icons.ttf" />
-    <None Include="wwwroot\assets\admin\fonts\nucleo-icons.woff" />
     <None Include="wwwroot\assets\admin\fonts\nucleo-icons.woff2" />
-    <None Include="wwwroot\assets\admin\fonts\nucleo.eot" />
-    <None Include="wwwroot\assets\admin\fonts\nucleo.ttf" />
-    <None Include="wwwroot\assets\admin\fonts\nucleo.woff" />
     <None Include="wwwroot\assets\admin\fonts\nucleo.woff2" />
-    <None Include="wwwroot\assets\admin\img\apple-icon.png" />
-    <None Include="wwwroot\assets\admin\img\bg-pricing.jpg" />
-    <None Include="wwwroot\assets\admin\img\bg-smart-home-1.jpg" />
-    <None Include="wwwroot\assets\admin\img\bg-smart-home-2.jpg" />
-    <None Include="wwwroot\assets\admin\img\bruce-mars.jpg" />
+    <None Include="wwwroot\assets\admin\img\angle-down.svg" />
     <None Include="wwwroot\assets\admin\img\down-arrow-dark.svg" />
     <None Include="wwwroot\assets\admin\img\down-arrow-white.svg" />
     <None Include="wwwroot\assets\admin\img\down-arrow.svg" />
-    <None Include="wwwroot\assets\admin\img\drake.jpg" />
-    <None Include="wwwroot\assets\admin\img\favicon.png" />
-    <None Include="wwwroot\assets\admin\img\home-decor-1.jpg" />
-    <None Include="wwwroot\assets\admin\img\home-decor-2.jpg" />
-    <None Include="wwwroot\assets\admin\img\home-decor-3.jpg" />
-    <None Include="wwwroot\assets\admin\img\icons\flags\AU.png" />
-    <None Include="wwwroot\assets\admin\img\icons\flags\BR.png" />
-    <None Include="wwwroot\assets\admin\img\icons\flags\DE.png" />
-    <None Include="wwwroot\assets\admin\img\icons\flags\GB.png" />
-    <None Include="wwwroot\assets\admin\img\icons\flags\US.png" />
-    <None Include="wwwroot\assets\admin\img\illustrations\chat.png" />
-    <None Include="wwwroot\assets\admin\img\illustrations\danger-chat-ill.png" />
-    <None Include="wwwroot\assets\admin\img\illustrations\dark-lock-ill.png" />
-    <None Include="wwwroot\assets\admin\img\illustrations\error-404.png" />
-    <None Include="wwwroot\assets\admin\img\illustrations\error-500.png" />
-    <None Include="wwwroot\assets\admin\img\illustrations\illustration-lock.jpg" />
-    <None Include="wwwroot\assets\admin\img\illustrations\illustration-reset.jpg" />
-    <None Include="wwwroot\assets\admin\img\illustrations\illustration-signin.jpg" />
-    <None Include="wwwroot\assets\admin\img\illustrations\illustration-signup.jpg" />
-    <None Include="wwwroot\assets\admin\img\illustrations\illustration-verification.jpg" />
-    <None Include="wwwroot\assets\admin\img\illustrations\lock.png" />
+    <None Include="wwwroot\assets\admin\img\horse.webp" />
     <None Include="wwwroot\assets\admin\img\illustrations\pattern-tree.svg" />
-    <None Include="wwwroot\assets\admin\img\illustrations\rocket-white.png" />
-    <None Include="wwwroot\assets\admin\img\ivana-square.jpg" />
-    <None Include="wwwroot\assets\admin\img\ivana-squares.jpg" />
-    <None Include="wwwroot\assets\admin\img\ivancik.jpg" />
-    <None Include="wwwroot\assets\admin\img\kal-visuals-square.jpg" />
-    <None Include="wwwroot\assets\admin\img\logo-ct-dark.png" />
-    <None Include="wwwroot\assets\admin\img\logo-ct.png" />
     <None Include="wwwroot\assets\admin\img\logos\gray-logos\logo-coinbase.svg" />
     <None Include="wwwroot\assets\admin\img\logos\gray-logos\logo-nasa.svg" />
     <None Include="wwwroot\assets\admin\img\logos\gray-logos\logo-netflix.svg" />
     <None Include="wwwroot\assets\admin\img\logos\gray-logos\logo-pinterest.svg" />
     <None Include="wwwroot\assets\admin\img\logos\gray-logos\logo-spotify.svg" />
     <None Include="wwwroot\assets\admin\img\logos\gray-logos\logo-vodafone.svg" />
-    <None Include="wwwroot\assets\admin\img\logos\mastercard.png" />
-    <None Include="wwwroot\assets\admin\img\logos\visa.png" />
-    <None Include="wwwroot\assets\admin\img\marie.jpg" />
-    <None Include="wwwroot\assets\admin\img\meeting.jpg" />
-    <None Include="wwwroot\assets\admin\img\office-dark.jpg" />
-    <None Include="wwwroot\assets\admin\img\product-12.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-1-min.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-11.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-2-min.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-3-min.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-4-min.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-5-min.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-6-min.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-7-min.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-details-1.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-details-2.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-details-3.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-details-4.jpg" />
-    <None Include="wwwroot\assets\admin\img\products\product-details-5.jpg" />
     <None Include="wwwroot\assets\admin\img\shapes\pattern-lines.svg" />
     <None Include="wwwroot\assets\admin\img\shapes\waves-white.svg" />
     <None Include="wwwroot\assets\admin\img\small-logos\bootstrap.svg" />
@@ -99,7 +38,6 @@
     <None Include="wwwroot\assets\admin\img\small-logos\github.svg" />
     <None Include="wwwroot\assets\admin\img\small-logos\google-webdev.svg" />
     <None Include="wwwroot\assets\admin\img\small-logos\icon-bulb.svg" />
-    <None Include="wwwroot\assets\admin\img\small-logos\icon-sun-cloud.png" />
     <None Include="wwwroot\assets\admin\img\small-logos\logo-asana.svg" />
     <None Include="wwwroot\assets\admin\img\small-logos\logo-atlassian.svg" />
     <None Include="wwwroot\assets\admin\img\small-logos\logo-invision.svg" />
@@ -107,13 +45,6 @@
     <None Include="wwwroot\assets\admin\img\small-logos\logo-slack.svg" />
     <None Include="wwwroot\assets\admin\img\small-logos\logo-spotify.svg" />
     <None Include="wwwroot\assets\admin\img\small-logos\logo-xd.svg" />
-    <None Include="wwwroot\assets\admin\img\team-1.jpg" />
-    <None Include="wwwroot\assets\admin\img\team-2.jpg" />
-    <None Include="wwwroot\assets\admin\img\team-3.jpg" />
-    <None Include="wwwroot\assets\admin\img\team-4.jpg" />
-    <None Include="wwwroot\assets\admin\img\team-5.jpg" />
-    <None Include="wwwroot\assets\admin\img\tesla-model-s.png" />
-    <None Include="wwwroot\assets\admin\img\vr-bg.jpg" />
     <None Include="wwwroot\assets\admin\js\core\bootstrap.bundle.min.js" />
     <None Include="wwwroot\assets\admin\js\core\bootstrap.min.js" />
     <None Include="wwwroot\assets\admin\js\core\popper.min.js" />
@@ -126,7 +57,6 @@
     <None Include="wwwroot\assets\admin\js\plugins\perfect-scrollbar.min.js" />
     <None Include="wwwroot\assets\admin\js\plugins\smooth-scrollbar.min.js" />
     <None Include="wwwroot\assets\admin\js\plugins\world.js" />
-    <None Include="wwwroot\assets\admin\js\site.js" />
     <None Include="wwwroot\assets\admin\lib\bootstrap\dist\css\bootstrap-grid.css" />
     <None Include="wwwroot\assets\admin\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\assets\admin\lib\bootstrap\dist\css\bootstrap-grid.min.css" />
@@ -2051,6 +1981,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\User\Controllers\" />
     <Folder Include="Areas\User\Views\" />
     <Folder Include="wwwroot\assets\user\" />
   </ItemGroup>

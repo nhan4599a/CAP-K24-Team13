@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12">
-        <a href="/product/add" class="btn btn-primary">Add</a>
+        <a href="product/add" class="btn btn-primary">Add</a>
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
@@ -33,7 +33,7 @@
                     var keyword = $(this).val().trim();
                     var currentPageSize = getCurrentPageInfo().pageSize;
                     window.location.href =
-                        `https://localhost:44349/product?keyword=${encodeURIComponent(keyword)}&paginationInfo.pageNumber=1&paginationInfo.pageSize=${currentPageSize}`;
+                        `https://localhost:44349/admin/product?keyword=${encodeURIComponent(keyword)}&paginationInfo.pageNumber=1&paginationInfo.pageSize=${currentPageSize}`;
                 }
             });
         });
@@ -66,7 +66,7 @@
                                                 <td class="align-middle text-center">
                                                     <div class="d-flex px-2 py-1">
                                                         <div>
-                                                            <img src="../assets/img/team-2.jpg"
+                                                            <img src="/assets/admin/img/team-2.jpg"
                                                                 class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
                                                         </div>
                                                         <div class="d-flex flex-column">
@@ -128,7 +128,7 @@
                         var index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
                         var productInfoStr = JSON.stringify(products[index]);
                         window.localStorage.setItem('editting-product', productInfoStr);
-                        window.location.href = "/product/edit";
+                        window.location.href = "/admin/product/edit";
                     });
                     $('a[name=btn-delete]').click(function (e) {
                         let id = $(this).parent().parent().children('#prod-id').text();
@@ -172,9 +172,9 @@
 
         function moveToPage(keyword, pageNumber, pageSize) {
             if (keyword == '')
-                window.location.href = `https://localhost:44349/product?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+                window.location.href = `https://localhost:44349/admin/product?pageNumber=${pageNumber}&pageSize=${pageSize}`;
             else
-                window.location.href = `https://localhost:44349/product?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+                window.location.href = `https://localhost:44349/admin/product?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
         }
 
         function getCurrentPageInfo() {

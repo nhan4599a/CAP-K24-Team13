@@ -1,29 +1,13 @@
-﻿<h4 class="font-weight-bolder text-center">Edit Product</h4>
+﻿<h4 class="font-weight-bolder text-center">Edit Category</h4>
 <form role="form">
     <div class="row justify-content-center">
         <div class="col-5">
             <input type="hidden" id="input-id" />
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Product name</label>
+                <label class="form-label">Category name</label>
                 <input class="form-control" type="text" id="input-name" />
             </div>
-            @await Component.InvokeAsync("CategoryDropdown")
-            <div class="form-group mb-3">
-                <label class="form-label">Description</label>
-                <input class="form-control" type="text" id="input-description" />
-            </div>
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Quantity</label>
-                <input class="form-control" type="number" id="input-quantity" />
-            </div>
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Price</label>
-                <input class="form-control" type="number" id="input-price" />
-            </div>
-            <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Discount</label>
-                <input class="form-control" type="number" id="input-discount" />
-            </div>
+            @await Component.InvokeAsync("CategorySpecialDropdown")
             <div class="form-group">
                 <a class="btn btn-primary" href="#" id="btn-submit">Save</a>
             </div>
@@ -40,7 +24,7 @@
     <script>
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
-            $('#nav-item-product').addClass(classNames);
+            $('#nav-item-category').addClass(classNames);
             $.get('https://localhost:44302/api/categories', null, (resp) => {
                 var categories = resp.data.data;
                 var optionsHtml = '';
@@ -58,44 +42,33 @@
             $('#btn-submit').click(() => {
                 var id = $('#input-id').val();
                 var name = $('#input-name').val();
-                var category = $('#input-category').val();
-                var description = tinymce.activeEditor.getContent({ format: 'text' });
-                var quantity = $('#input-quantity').val();
-                var price = $('#input-price').val();
-                var discount = $('#input-discount').val();
-                var product = {
-                    productName: name,
-                    categoryId: category,
-                    description: description,
-                    quantity: quantity,
-                    price: price,
-                    discount: discount
+                var special = $('#input-special').val();
+                var category = {
+                    categoryName: name,
+                    special: category
                 };
                 $.ajax({
                     type: 'PUT',
-                    url: `https://localhost:44302/api/products/${id}`,
+                    url: `https://localhost:44302/api/categories/${id}`,
                     contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(product),
+                    data: JSON.stringify(category),
                     success: function () {
-                        window.location.href = '/product';
-                        window.localStorage.removeItem('editting-product');
+                        window.location.href = '/admin/category';
+                        window.localStorage.removeItem('editting-category');
                     }
                 })
             });
         });
         function loadEdittingProduct() {
-            var edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
-            if (!edittingProduct) {
+            var edittingCategory = JSON.parse(window.localStorage.getItem('editting-category'));
+            if (!edittingCategory) {
                 alert("Something went wrong!");
-                window.location.href = "/product";
+                window.location.href = "/admin/category";
             }
-            $('#input-id').val(edittingProduct.id);
-            $('#input-name').val(edittingProduct.productName);
-            $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
-            $('#input-description').val(edittingProduct.description);
-            $('#input-quantity').val(edittingProduct.quantity);
-            $('#input-price').val(edittingProduct.price);
-            $('#input-discount').val(edittingProduct.discount);
+            $('#input-id').val(edittingCategory.id);
+            $('#input-name').val(edittingCategory.categoryName);
+            console.log(edittingCategory.special);
+            //$(`#input-special option:nth-child(${edittingCategory.special + 1})`).attr('selected', true);
             $('.input-group-outline').addClass('is-filled');
         }
     </script>

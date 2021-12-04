@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace GUI.Controllers
+namespace GUI.Areas.Admin.Customers
 {
+    [Area("Admin")]
     public class ProductController : Controller
     {
         [ActionName("Add")]
