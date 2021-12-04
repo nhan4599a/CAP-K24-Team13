@@ -1,6 +1,5 @@
 using DatabaseAccessor.Model;
 using Shared.Mapping;
-using System;
 
 namespace Shared.DTOs
 {
@@ -13,6 +12,8 @@ namespace Shared.DTOs
         public string CategoryName { get; set; }
 
         public int Special { get; set; }
+
+        public bool IsDisabled { get; set; }
 
         public object MapFromSource(ShopCategory category)
         {
