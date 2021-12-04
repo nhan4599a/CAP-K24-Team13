@@ -7,15 +7,9 @@
                 <label class="form-label">Name</label>
                 <input type="text" class="form-control" id="input-name">
             </div>
-            <div class="input-group input-group-outline mb-3">
-                <select class="form-select" aria-label="Default select example" id="input-special">
-                    <option selected="selected">Select special</option>
-                    <option value="1">Quần áo</option>
-                    <option value="2">Thiết bị điện tử</option>
-                </select>
-            </div>
+            
             <div class="text-left">
-                <a href="#" class="btn btn-primary" id="btnSubmit">Add</a>
+                <a href="#" class="btn btn-primary" id="btn-submit">Add</a>
             </div>
         </div>
     </div>
@@ -42,7 +36,7 @@
                     data: JSON.stringify(requestModel),
                     url: "https://localhost:44302/api/categories",
                     success: function () {
-                        window.location.href = "/category";
+                        window.location.href = "/admin/category";
                     },
                     error: function () {
                         alert("Something when wrong");
