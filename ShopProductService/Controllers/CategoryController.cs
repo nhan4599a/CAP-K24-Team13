@@ -14,7 +14,7 @@ namespace ShopProductService.Controllers
     [Route("/api/categories")]
     public class CategoryController : Controller
     {
-        private ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
         public CategoryController(ApplicationDbContext dbcontext)
         {
@@ -35,7 +35,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("id")]
         public async Task<ApiResult<CategoryDTO>> DetailCategory(int id)
         {
             var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(c => c.Id == id);
@@ -48,16 +48,16 @@ namespace ShopProductService.Controllers
             return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = categoryDto };
         }
 
-        [HttpPut]
-        [ActionName("Edit")]
-        public async Task<ApiResult<bool>> EditCategory(CategoryDTO categoryDTO)
+        [HttpPut("id")]
+        public async Task<ApiResult<bool>> EditCategory(int id, AddOrEditCategoryRequestModel requestModel)
         {
-            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(ct => ct.Id == categoryDTO.Id);
+            var category = await _dbContext.ShopCategories.FindAsync(id);
             if (category == null)
             {
-                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
+                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Category not found", Data = false };
             }
-            category.CategoryName = categoryDTO.CategoryName;
+            category.CategoryName = requestModel.CategoryName;
+            category.Special = requestModel.Special;
             var result = await _dbContext.SaveChangesAsync() > 0;
             if (!result)
             {
