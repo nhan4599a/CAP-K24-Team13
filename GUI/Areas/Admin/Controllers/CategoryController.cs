@@ -1,23 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace GUI.Controllers
+namespace GUI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         [ActionName("Add")]
-        public IActionResult AddProduct()
+        public IActionResult AddCategory()
         {
             return View();
         } 
 
         [ActionName("Index")]
-        public IActionResult ListProduct()
+        public IActionResult ListCategory()
         {
             return View();
         }
 
         [ActionName("Edit")]
-        public IActionResult Edit()
+        public IActionResult EditCategory()
         {
             return View();
         }
