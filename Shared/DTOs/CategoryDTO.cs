@@ -20,9 +20,9 @@ namespace Shared.DTOs
             return Mapper.GetInstance().MapToCategoryDTO(category);
         }
 
-        public static object FromSource(ShopCategory category)
+        public static CategoryDTO FromSource(ShopCategory category)
         {
-            return new CategoryDTO().MapFromSource(category);
+            return (CategoryDTO) new CategoryDTO().MapFromSource(category);
         }
     }
 }

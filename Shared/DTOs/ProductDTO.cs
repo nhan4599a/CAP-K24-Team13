@@ -30,7 +30,7 @@ namespace Shared.DTOs
 
         public static object FromSource(ShopProduct product)
         {
-            return new ProductDTO().MapFromSource(product);
+            return (ProductDTO) new ProductDTO().MapFromSource(product);
         }
     }
 }

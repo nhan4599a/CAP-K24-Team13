@@ -71,6 +71,10 @@ namespace DatabaseAccessor
                 .ToTable("ShopCategories");
 
             modelBuilder.Entity<ShopInterface>()
+                .HasIndex(e => e.ShopId)
+                .IsUnique();
+
+            modelBuilder.Entity<ShopInterface>()
                 .ToTable("ShopInterfaces");
         }
     }
