@@ -64,6 +64,10 @@ namespace DatabaseAccessor
                 .ToTable("ShopProducts");
 
             modelBuilder.Entity<ShopCategory>()
+                .Property(e => e.IsDisabled)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ShopCategory>()
                 .ToTable("ShopCategories");
 
             modelBuilder.Entity<ShopInterface>()

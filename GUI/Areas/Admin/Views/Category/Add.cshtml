@@ -7,13 +7,12 @@
                 <label class="form-label">Name</label>
                 <input type="text" class="form-control" id="input-name">
             </div>
-            
+            @await Component.InvokeAsync("CategorySpecialDropdown")
             <div class="text-left">
                 <a href="#" class="btn btn-primary" id="btn-submit">Add</a>
             </div>
         </div>
     </div>
-
 </form>
 
 @section Scripts {
@@ -22,7 +21,7 @@
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
             $('#nav-item-category').addClass(classNames);
-            $('#btnSubmit').click(function (e) {
+            $('#btn-submit').click(function (e) {
                 e.preventDefault();
 
                 var name = $('#input-name').val();
