@@ -1,17 +1,8 @@
-@*<style>
-    .pagesize {
-    position: absolute;
-    display: inline-flex;
-    margin-top: -10px;
-    right: 25%
-    }
-    </style>
-*@
 <div class="row">
     <div class="col-12">
         <div class="row">
             <div class="col-md-3">
-                <a class="btn btn-primary">Add</a>
+                <a class="btn btn-primary" href="product/add">Add</a>
             </div>
             <div class="col-md-2 offset-md-5">
                 @await Component.InvokeAsync("PageSizeSelectDropdown")

@@ -1,22 +1,16 @@
-﻿<style>
-    .pagesize {
-        position: absolute;
-        display: inline-flex;
-        margin-top: -10px;
-        right: 25%
-    }
-</style>
-<div class="pagesize">
-    <p style="margin-bottom: 0; width:150px; margin-top: 20px">Page size:</p>
-    <select class="form-control" style="border: 1px solid #000; padding: 5px 0 5px 10px; margin-top: 15px;">
-        <option value="">5 items</option>
-        <option value="all">10 items</option>
-        <option value="selected">15 items</option>
-    </select>
-</div>
-<div class="row">
+﻿<div class="row">
     <div class="col-12">
-        <a href="category/add" class="btn btn-primary">Add</a>
+        <div class="row">
+            <div class="col-md-3">
+                <a class="btn btn-primary" href="category/add">Add</a>
+            </div>
+            <div class="col-md-2 offset-md-5">
+                @await Component.InvokeAsync("PageSizeSelectDropdown")
+            </div>
+            <div class="col-md-2">
+                @await Component.InvokeAsync("SortOrderSelectDropdown")
+            </div>
+        </div>
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
