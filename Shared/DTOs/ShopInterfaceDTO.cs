@@ -2,8 +2,13 @@
 
 namespace Shared.DTOs
 {
-    public class ShopInterfaceDTO : DTO<ShopInterface>
+    public class ShopInterfaceDTO : IDTO<ShopInterface>
     {
+        public ShopInterfaceDTO(ShopInterface shopInterface)
+        {
+            MapFromSource(shopInterface);
+        }
+
         public int Id { get; set; }
 
         public int ShopId { get; set; }
@@ -19,11 +24,6 @@ namespace Shared.DTOs
         public object MapFromSource(ShopInterface originalObject)
         {
             return Mapping.Mapper.GetInstance().MapToShopInterfaceDTO(originalObject);
-        }
-
-        public static ShopInterfaceDTO FromSource(ShopInterface originalObject)
-        {
-            return (ShopInterfaceDTO) new ShopInterfaceDTO().MapFromSource(originalObject);
         }
     }
 }

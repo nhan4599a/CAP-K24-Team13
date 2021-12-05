@@ -3,8 +3,13 @@ using Shared.Mapping;
 
 namespace Shared.DTOs
 {
-    public class CategoryDTO : DTO<ShopCategory>
+    public class CategoryDTO : IDTO<ShopCategory>
     {
+        public CategoryDTO(ShopCategory category)
+        {
+            MapFromSource(category);
+        }
+
         public int Id { get; set; }
 
         public int ShopId { get; set; }
@@ -18,11 +23,6 @@ namespace Shared.DTOs
         public object MapFromSource(ShopCategory category)
         {
             return Mapper.GetInstance().MapToCategoryDTO(category);
-        }
-
-        public static CategoryDTO FromSource(ShopCategory category)
-        {
-            return (CategoryDTO) new CategoryDTO().MapFromSource(category);
         }
     }
 }

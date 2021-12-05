@@ -38,14 +38,9 @@ namespace ShopProductService.Controllers
         [HttpGet("id")]
         public async Task<ApiResult<CategoryDTO>> DetailCategory(int id)
         {
-            var category = await _dbContext.ShopCategories.FirstOrDefaultAsync(c => c.Id == id);
+            var category = await _dbContext.ShopCategories.FindAsync(id);
             if (category == null) return new ApiResult<CategoryDTO> { ResponseCode = 404, Data = null };
-            var categoryDto = new CategoryDTO
-            {
-                CategoryName = category.CategoryName,
-                Id = category.Id
-            };
-            return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = categoryDto };
+            return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = new CategoryDTO(category) };
         }
 
         [HttpPut("id")]
@@ -71,8 +66,7 @@ namespace ShopProductService.Controllers
         public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
         {
             var categories = await _dbContext.ShopCategories.AsNoTracking()
-                                    .Select(category => CategoryDTO.FromSource(category))
-                                    .Cast<CategoryDTO>()
+                                    .Select(category => new CategoryDTO(category))
                                     .ToListAsync();
             return new ApiResult<PaginatedDataList<CategoryDTO>> 
             {
