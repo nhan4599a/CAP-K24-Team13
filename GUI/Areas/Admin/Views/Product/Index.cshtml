@@ -14,17 +14,10 @@
                 <a class="btn btn-primary">Add</a>
             </div>
             <div class="col-md-2 offset-md-5">
-                <select class="form-select">
-                    <option>Show 5 items</option>
-                    <option>Show 10 items</option>
-                    <option>Show 15 items</option>
-                </select>
+                @await Component.InvokeAsync("PageSizeSelectDropdown")
             </div>
             <div class="col-md-2">
-                <select class="form-select">
-                    <option>Sort A-Z</option>
-                    <option>Sort Z-A</option>
-                </select>
+                @await Component.InvokeAsync("SortOrderSelectDropdown")
             </div>
         </div>
         <div class="card my-4">
@@ -45,6 +38,7 @@
     $(document).ready(() => {
         var currentPageInfo = getCurrentPageInfo();
         loadProducts(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
+        $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
         let classNames = ['active', 'bg-gradient-primary'];
         $('#nav-item-product').addClass(classNames);
         var searchTextField = $('#input-search');
@@ -56,9 +50,10 @@
             if (e.which == 13) {
                 e.preventDefault();
                 var keyword = $(this).val().trim();
+                var urlEncodedKeyword = encodeURIComponent(keyword);
                 var currentPageSize = getCurrentPageInfo().pageSize;
                 window.location.href =
-                    `https://localhost:44349/admin/product?keyword=${encodeURIComponent(keyword)}&paginationInfo.pageNumber=1&paginationInfo.pageSize=${currentPageSize}`;
+                    `https://localhost:44349/admin/product?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=${currentPageSize}`;
             }
         });
     });
@@ -194,6 +189,12 @@
                     var pageNumber = $(this).text();
                     var currentPageInfo = getCurrentPageInfo();
                     moveToPage(currentPageInfo.keyword, pageNumber, currentPageInfo.pageSize);
+                });
+                $('#pagesize-select').change(function () {
+                    var checkedValue = $(this).val();
+                    var pageSize = parseInt(checkedValue);
+                    var pageInfo = getCurrentPageInfo();
+                    moveToPage(pageInfo.keyword, pageInfo.pageNumber, pageSize);
                 });
             }
         );
