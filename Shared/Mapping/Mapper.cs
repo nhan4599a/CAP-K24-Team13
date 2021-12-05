@@ -23,6 +23,10 @@ namespace Shared.Mapping
                         options => options.MapFrom<ImageValueResolver>());
 
                 cfg.CreateMap<ShopCategory, CategoryDTO>();
+
+                cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
+                    .ForMember(target => target.Images,
+                        options => options.MapFrom<ImageValueResolver>());
             });
             _mapper = config.CreateMapper();
         }
@@ -35,5 +39,7 @@ namespace Shared.Mapping
         public ProductDTO MapToProductDTO(ShopProduct product) => _mapper.Map<ProductDTO>(product);
 
         public CategoryDTO MapToCategoryDTO(ShopCategory category) => _mapper.Map<CategoryDTO>(category);
+
+        public ShopInterfaceDTO MapToShopInterfaceDTO(ShopInterface shopInterface) => _mapper.Map<ShopInterfaceDTO>(shopInterface);
     }
 }

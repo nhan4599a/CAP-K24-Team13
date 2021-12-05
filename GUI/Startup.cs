@@ -46,8 +46,12 @@ namespace GUI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                        name: "Admin",
+                        pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                        name: "User",
+                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

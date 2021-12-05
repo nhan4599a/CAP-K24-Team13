@@ -1,6 +1,6 @@
 ﻿namespace Shared.DTOs
 {
-    public interface DTO<TSource>
+    public interface IDTO<TSource>
     {
         object MapFromSource(TSource originalObject);
     }

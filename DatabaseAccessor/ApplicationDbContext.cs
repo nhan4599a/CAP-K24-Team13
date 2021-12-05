@@ -64,7 +64,18 @@ namespace DatabaseAccessor
                 .ToTable("ShopProducts");
 
             modelBuilder.Entity<ShopCategory>()
+                .Property(e => e.IsDisabled)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ShopCategory>()
+                .HasIndex(e => e.CategoryName);
+
+            modelBuilder.Entity<ShopCategory>()
                 .ToTable("ShopCategories");
+
+            modelBuilder.Entity<ShopInterface>()
+                .HasIndex(e => e.ShopId)
+                .IsUnique();
 
             modelBuilder.Entity<ShopInterface>()
                 .ToTable("ShopInterfaces");

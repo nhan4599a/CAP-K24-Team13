@@ -1,11 +1,15 @@
 using DatabaseAccessor.Model;
 using Shared.Mapping;
-using System;
 
 namespace Shared.DTOs
 {
-    public class CategoryDTO : DTO<ShopCategory>
+    public class CategoryDTO : IDTO<ShopCategory>
     {
+        public CategoryDTO(ShopCategory category)
+        {
+            MapFromSource(category);
+        }
+
         public int Id { get; set; }
 
         public int ShopId { get; set; }
@@ -14,14 +18,11 @@ namespace Shared.DTOs
 
         public int Special { get; set; }
 
+        public bool IsDisabled { get; set; }
+
         public object MapFromSource(ShopCategory category)
         {
             return Mapper.GetInstance().MapToCategoryDTO(category);
-        }
-
-        public static object FromSource(ShopCategory category)
-        {
-            return new CategoryDTO().MapFromSource(category);
         }
     }
 }

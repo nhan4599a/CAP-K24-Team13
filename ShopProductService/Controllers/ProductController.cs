@@ -8,8 +8,6 @@ using ShopProductService.RequestModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Shared.Mapping;
 
 namespace ShopProductService.Controllers
 {
@@ -22,7 +20,6 @@ namespace ShopProductService.Controllers
         public ProductController(ApplicationDbContext dbcontext)
         {
             _dbContext = dbcontext;
-            
         }
         
         [HttpPost]
@@ -84,8 +81,7 @@ namespace ShopProductService.Controllers
                                 .Include(e => e.Category)
                                 .Where(product => product.ProductName.Contains(keyword) || product.Category.CategoryName.Contains(keyword))
                                 .ToListAsync())
-                                .Select(product => ProductDTO.FromSource(product))
-                                .Cast<ProductDTO>()
+                                .Select(product => new ProductDTO(product))
                                 .ToList();
             }
             else
@@ -93,8 +89,7 @@ namespace ShopProductService.Controllers
                 productList = (await _dbContext.ShopProducts.AsNoTracking()
                                 .Include(e => e.Category)
                                 .ToListAsync())
-                                .Select(product => ProductDTO.FromSource(product))
-                                .Cast<ProductDTO>()
+                                .Select(product => new ProductDTO(product))
                                 .ToList();
             }
             return new ApiResult<PaginatedDataList<ProductDTO>>
@@ -110,7 +105,7 @@ namespace ShopProductService.Controllers
             var product = await _dbContext.ShopProducts.FindAsync(id);
             if (product == null)
                 return new ApiResult<ProductDTO> { ResponseCode = 404, ErrorMessage = "Product not found" };
-            return new ApiResult<ProductDTO> { ResponseCode = 200, Data = (ProductDTO)ProductDTO.FromSource(product) };
+            return new ApiResult<ProductDTO> { ResponseCode = 200, Data = new ProductDTO(product) };
         }
     }
 }
