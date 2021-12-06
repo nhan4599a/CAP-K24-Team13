@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
+using Shared.Mapping;
 using ShopProductService.RequestModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,10 +16,12 @@ namespace ShopProductService.Controllers
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly Mapper _mapper;
 
-        public CategoryController(ApplicationDbContext dbcontext)
+        public CategoryController(ApplicationDbContext dbcontext, Mapper mapper)
         {
             _dbContext = dbcontext;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -40,7 +43,7 @@ namespace ShopProductService.Controllers
         {
             var category = await _dbContext.ShopCategories.FindAsync(id);
             if (category == null) return new ApiResult<CategoryDTO> { ResponseCode = 404, Data = null };
-            return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = new CategoryDTO(category) };
+            return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = _mapper.MapToCategoryDTO(category) };
         }
 
         [HttpPut("id")]
@@ -66,7 +69,7 @@ namespace ShopProductService.Controllers
         public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
         {
             var categories = await _dbContext.ShopCategories.AsNoTracking()
-                                    .Select(category => new CategoryDTO(category))
+                                    .Select(category => _mapper.MapToCategoryDTO(category))
                                     .ToListAsync();
             return new ApiResult<PaginatedDataList<CategoryDTO>> 
             {

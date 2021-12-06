@@ -1,15 +1,7 @@
-﻿using DatabaseAccessor.Model;
-using Shared.Mapping;
-
-namespace Shared.DTOs
+﻿namespace Shared.DTOs
 {
-    public class ProductDTO : IDTO<ShopProduct>
+    public class ProductDTO
     {
-        public ProductDTO(ShopProduct product)
-        {
-            MapFromSource(product);
-        }
-
         public string Id { get; set; }
 
         public string ProductName { get; set; }
@@ -27,10 +19,5 @@ namespace Shared.DTOs
         public string[] Images { get; set; }
 
         public bool IsDisabled { get; set; }
-
-        public object MapFromSource(ShopProduct product)
-        {
-            return Mapper.GetInstance().MapToProductDTO(product);
-        }
     }
 }

@@ -1,14 +1,7 @@
-﻿using DatabaseAccessor.Model;
-
-namespace Shared.DTOs
+﻿namespace Shared.DTOs
 {
-    public class ShopInterfaceDTO : IDTO<ShopInterface>
+    public class ShopInterfaceDTO
     {
-        public ShopInterfaceDTO(ShopInterface shopInterface)
-        {
-            MapFromSource(shopInterface);
-        }
-
         public int Id { get; set; }
 
         public int ShopId { get; set; }
@@ -20,10 +13,5 @@ namespace Shared.DTOs
         public string ShopDescription { get; set; }
 
         public string[] Images { get; set; }
-
-        public object MapFromSource(ShopInterface originalObject)
-        {
-            return Mapping.Mapper.GetInstance().MapToShopInterfaceDTO(originalObject);
-        }
     }
 }

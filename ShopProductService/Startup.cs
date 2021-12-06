@@ -8,6 +8,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using ShopProductService.RequestModel;
 using ShopProductService.Validation;
+using Shared.Mapping;
 
 namespace ShopProductService
 {
@@ -24,6 +25,7 @@ namespace ShopProductService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddFluentValidation();
+            services.AddSingleton(Mapper.GetInstance());
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
             services.AddTransient<IValidator<AddOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
             services.AddTransient<IValidator<AddOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
