@@ -38,7 +38,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ApiResult<CategoryDTO>> DetailCategory(int id)
         {
             var category = await _dbContext.ShopCategories.FindAsync(id);
@@ -46,7 +46,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = _mapper.MapToCategoryDTO(category) };
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<ApiResult<bool>> EditCategory(int id, AddOrEditCategoryRequestModel requestModel)
         {
             var category = await _dbContext.ShopCategories.FindAsync(id);

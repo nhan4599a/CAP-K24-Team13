@@ -23,8 +23,9 @@
 
 function loadProducts(keyword, pageNumber, pageSize) {
     findProducts(keyword, pageNumber, pageSize, paginatedData => {
-        renderProductTable(paginatedData.data.data);
-        renderPagination(pageNumber, paginatedData.data.maxPageNumber);
+        var products = paginatedData.data;
+        renderProductTable(products);
+        renderPagination(pageNumber, paginatedData.maxPageNumber);
         $('a[name=btn-edit]').click(function (e) {
             e.preventDefault();
             var index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
@@ -37,23 +38,14 @@ function loadProducts(keyword, pageNumber, pageSize) {
             if (!confirm(`Are you sure to product with id = ${id}`))
                 return;
             e.preventDefault();
-            $.ajax('https://localhost:44302/api/products', {
-                method: 'DELETE',
-                contentType: 'application/json',
-                data: JSON.stringify(id),
-                success: (res) => {
-                    if (res.responseCode != 200) {
-                        toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error');
-                    } else {
-                        toastr.success(`Deleted product with id = ${id}`, 'Success');
-                        $(this).parent().parent().children('td:nth-child(5)').children()
-                            .removeClass('bg-gradient-success')
-                            .addClass('bg-gradient-secondary')
-                            .text('Disabled');
-                        $(this).remove();
-                    }
-                }
-            });
+            deleteProduct(id, () => {
+                toastr.success(`Deleted product with id = ${id}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(5)').children()
+                    .removeClass('bg-gradient-success')
+                    .addClass('bg-gradient-secondary')
+                    .text('Disabled');
+                $(this).remove();
+            }, () => toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error'));
         });
         $('#previous-page').click(() => {
             var currentPageInfo = getCurrentPageInfo();

@@ -6,6 +6,7 @@ using Shared;
 using Shared.DTOs;
 using Shared.Mapping;
 using ShopProductService.RequestModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<ApiResult<bool>> EditProduct(string id, AddOrEditProductRequestModel requestModel)
         {
             var product = await _dbContext.ShopProducts.FindAsync(id);
@@ -61,10 +62,10 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
         
-        [HttpDelete]
-        public async Task<ApiResult<bool>> DeleteProduct([FromBody] string productId)
+        [HttpDelete("{id}")]
+        public async Task<ApiResult<bool>> DeleteProduct(string id)
         {
-            var product = await _dbContext.ShopProducts.FindAsync(productId);
+            var product = await _dbContext.ShopProducts.FindAsync(new Guid(id));
             if (product == null || product.IsDisabled)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Product not found", Data = false };
             product.IsDisabled = true;
@@ -102,10 +103,10 @@ namespace ShopProductService.Controllers
             };
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ApiResult<ProductDTO>> GetSingleProduct(string id)
         {
-            var product = await _dbContext.ShopProducts.FindAsync(id);
+            var product = await _dbContext.ShopProducts.FindAsync(new Guid(id));
             if (product == null)
                 return new ApiResult<ProductDTO> { ResponseCode = 404, ErrorMessage = "Product not found" };
             return new ApiResult<ProductDTO> { ResponseCode = 200, Data = _mapper.MapToProductDTO(product) };

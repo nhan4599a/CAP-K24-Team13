@@ -55,7 +55,8 @@
                 });
                 loadEdittingProduct();
             });
-            $('#btn-submit').click(() => {
+            $('#btn-submit').click(e => {
+                e.preventDefault();
                 var id = $('#input-id').val();
                 var name = $('#input-name').val();
                 var category = $('#input-category').val();
@@ -77,7 +78,7 @@
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(product),
                     success: function () {
-                        window.location.href = '/product';
+                        //window.location.href = '/admin/product';
                         window.localStorage.removeItem('editting-product');
                     }
                 })
