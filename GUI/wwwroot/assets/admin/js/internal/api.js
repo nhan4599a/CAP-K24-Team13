@@ -54,3 +54,15 @@ function getCategories(pageNumber, pageSize, successCallback) {
 function deleteCategory(id, successCallback, errorCallback) {
     axios.delete(categoryEndpoint + `/${id}`).then(successCallback).catch(errorCallback);
 }
+
+function addCategory(category, successCallback, errorCallback) {
+    axios.post(categoryEndpoint, {
+        data: JSON.stringify(category)
+    }).then(successCallback).catch(errorCallback);
+}
+
+function editCategory(id, category, successCallback) {
+    axios.put(categoryEndpoint + `/${id}`, {
+        data: JSON.stringify(category)
+    }).then(successCallback);
+}

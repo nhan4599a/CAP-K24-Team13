@@ -16,7 +16,7 @@
 </form>
 
 @section Scripts {
-    <script type="text/javascript">
+    <script>
 
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
@@ -27,20 +27,10 @@
                 var name = $('#input-name').val();
                 var special = $('#input-special').val();
 
-                var requestModel = { categoryName: name, special: special };
-
-                $.ajax({
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(requestModel),
-                    url: "https://localhost:44302/api/categories",
-                    success: function () {
-                        window.location.href = "/admin/category";
-                    },
-                    error: function () {
-                        alert("Something when wrong");
-                    }
-                });
+                var category = { categoryName: name, special: special };
+                addCategory(category, () => {
+                    window.location.href = "/admin/category";
+                }, () => alert("Something when wrong"));
             });
         });
 
