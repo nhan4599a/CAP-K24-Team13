@@ -22,6 +22,22 @@ function findProducts(keyword, pageNumber, pageSize, callback) {
     }).then(callback);
 }
 
-function deleteProduct(id, callback) {
-    axios.delete(productEndpoint + `/${id}`).then(callback);
+function deleteProduct(id, successCallback, errorCallback) {
+    axios.delete(productEndpoint + `/${id}`).then(successCallback).catch(errorCallback);
+}
+
+function addProduct(product, successCallback, errorCallback) {
+    axios.post(productEndpoint, {
+        data: JSON.stringify(product)
+    }).then(successCallback).catch(errorCallback);
+}
+
+function editProduct(id, product, successCallback) {
+    axios.put(productEndpoint + `/${id}`, {
+        data: JSON.stringify(product)
+    }).then(successCallback);
+}
+
+function getAllCategories(successCallback) {
+    axios.get(categoryEndpoint).then(successCallback);
 }
