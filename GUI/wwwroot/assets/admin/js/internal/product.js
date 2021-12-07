@@ -19,6 +19,14 @@
                 `https://localhost:44349/admin/product?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=${currentPageSize}`;
         }
     });
+
+    $('#pagesize-select').change(function () {
+        let selectedValue = $(this).val();
+        let pageSize = parseInt(selectedValue);
+        let pageInfo = getCurrentPageInfo();
+        moveToPage(pageInfo.keyword, pageInfo.pageNumber, pageSize);
+    });
+
 });
 
 function loadProducts(keyword, pageNumber, pageSize) {
@@ -60,11 +68,10 @@ function loadProducts(keyword, pageNumber, pageSize) {
             let currentPageInfo = getCurrentPageInfo();
             moveToPage(currentPageInfo.keyword, pageNumber, currentPageInfo.pageSize);
         });
-        $('#pagesize-select').change(function () {
-            let checkedValue = $(this).val();
-            let pageSize = parseInt(checkedValue);
-            let pageInfo = getCurrentPageInfo();
-            moveToPage(pageInfo.keyword, pageInfo.pageNumber, pageSize);
+        $('#sort-select').change(function () {
+            let sortDirection = $(this).val();
+            clearTable();
+            renderProductTable(sortList('productName', sortDirection, products));
         });
     });
 }

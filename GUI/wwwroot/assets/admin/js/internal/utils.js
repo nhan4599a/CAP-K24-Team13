@@ -178,3 +178,46 @@ function buildCategoryTableRowHtml(category, index) {
                 </td>
             </tr>`;
 }
+
+function sortList(field, direction, dataList) {
+    if (!Array.isArray(dataList))
+        return dataList;
+    if (!dataList.every(element => element.hasOwnProperty(field)))
+        return dataList;
+    if (typeof (direction) !== 'string' || (direction !== 'ASC' && direction !== 'DESC'))
+        return dataList;
+
+    // sort
+    return [...dataList].sort((first, second) => {
+        let firstValue = first[field];
+        let secondValue = second[field];
+
+        if (firstValue === secondValue || typeof (firstValue) !== typeof (secondValue) || firstValue === null || secondValue === null)
+            return 0;
+
+        if (direction === 'ASC') {
+            if (typeof (firstValue) === 'number')
+                return firstValue - secondValue;
+            else if (typeof (firstValue) === 'string')
+                return firstValue.toLowerCase().localeCompare(secondValue.toLowerCase());
+            else if (typeof (firstValue) === 'boolean')
+                return firstValue ? 1 : -1;
+            else
+                return 0;
+
+        } else {
+            if (typeof (firstValue) === 'number')
+                return secondValue - firstValue;
+            else if (typeof (firstValue) === 'string')
+                return secondValue.toLowerCase().localeCompare(firstValue.toLowerCase());
+            else if (typeof (firstValue) === 'boolean')
+                return secondValue ? 1 : -1;
+            else
+                return 0;
+        }
+    });
+}
+
+function clearTable() {
+    $('.table-responsive.p-0').html('');
+}
