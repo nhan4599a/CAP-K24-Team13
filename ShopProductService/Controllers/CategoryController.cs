@@ -63,7 +63,7 @@ namespace ShopProductService.Controllers
             }
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
-        
+
         [HttpGet]
         [ActionName("Index")]
         public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
@@ -71,16 +71,16 @@ namespace ShopProductService.Controllers
             var categories = await _dbContext.ShopCategories.AsNoTracking()
                                     .Select(category => _mapper.MapToCategoryDTO(category))
                                     .ToListAsync();
-            return new ApiResult<PaginatedDataList<CategoryDTO>> 
+            return new ApiResult<PaginatedDataList<CategoryDTO>>
             {
                 ResponseCode = 200,
-                Data = categories.Paginate(paginationInfo.PageNumber, paginationInfo.PageSize) 
+                Data = categories.Paginate(paginationInfo.PageNumber, paginationInfo.PageSize)
             };
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [ActionName("Delete")]
-        public async Task<ApiResult<bool>> DeleteCategory([FromBody] int categoryId)
+        public async Task<ApiResult<bool>> DeleteCategory(int categoryId)
         {
             var category = await _dbContext.ShopCategories.FindAsync(categoryId);
             if (category == null)

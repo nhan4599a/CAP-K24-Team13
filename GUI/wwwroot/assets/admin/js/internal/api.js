@@ -12,14 +12,14 @@ axios.interceptors.response.use(axiosResp => {
 const productEndpoint = 'products';
 const categoryEndpoint = 'categories';
 
-function findProducts(keyword, pageNumber, pageSize, callback) {
+function findProducts(keyword, pageNumber, pageSize, successCallback) {
     axios.get(productEndpoint, {
         params: {
             keyword: encodeURIComponent(keyword),
             'paginationInfo.pageNumber': pageNumber,
             'paginationInfo.pageSize:': pageSize || 5
         }
-    }).then(callback);
+    }).then(successCallback);
 }
 
 function deleteProduct(id, successCallback, errorCallback) {
@@ -39,5 +39,18 @@ function editProduct(id, product, successCallback) {
 }
 
 function getAllCategories(successCallback) {
-    axios.get(categoryEndpoint).then(successCallback);
+    axios.get(categoryEndpoint).then(paginatedResponse => successCallback(paginatedResponse.data));
+}
+
+function getCategories(pageNumber, pageSize, successCallback) {
+    axios.get(categoryEndpoint, {
+        params: {
+            pageNumber: pageNumber,
+            pageSize: pageSize || 5
+        }
+    }).then(successCallback);
+}
+
+function deleteCategory(id, successCallback, errorCallback) {
+    axios.delete(categoryEndpoint + `/${id}`).then(successCallback).catch(errorCallback);
 }

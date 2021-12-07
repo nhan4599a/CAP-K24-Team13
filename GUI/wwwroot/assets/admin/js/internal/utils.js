@@ -7,9 +7,9 @@
 }
 
 function buildProductTableHtml(products) {
-    var tableRowHtml = '';
-    products.forEach((element, index) => {
-        tableRowHtml += buildProductTableRowHtml(element, index);
+    let tableRowHtml = '';
+    products.forEach((product, index) => {
+        tableRowHtml += buildProductTableRowHtml(product, index);
     });
     return `<table class="table align-items-center mb-0">
                 <thead>
@@ -86,7 +86,7 @@ function buildDeleteButtonHtmlForProduct(product) {
 }
 
 function renderPagination(currentPageNumber, maxPageNumber) {
-    var paginationHtml = '';
+    let paginationHtml = '';
     if (currentPageNumber != 1)
         paginationHtml += '<a href="#" id="previous-page">«</a>';
     for (var i = 1; i <= maxPageNumber; i++) {
@@ -101,11 +101,80 @@ function renderPagination(currentPageNumber, maxPageNumber) {
 }
 
 function renderCategoryDropdown(categories) {
-    var optionsHtml = '';
+    let optionsHtml = '';
     categories.forEach(category => {
         optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
     });
     if (optionsHtml != '') {
         $('option[selected=selected]').after(optionsHtml);
     }
+}
+
+function renderCategoryTable(categories) {
+    if (categories.length == 0) {
+        $('.table-responsive.p-0').html('<p style="text-align: center">There is no category to show!</p>');
+    } else {
+        $('.table-responsive.p-0').html(buildCategoryTableHtml(categories));
+    }
+}
+
+function buildCategoryTableHtml(categories) {
+    let tableRowHtml = '';
+    categories.forEach((category, index) => {
+        tableRowHtml += buildCategoryTableRowHtml(category, index);
+    });
+    return `<table class="table align-items-center mb-0">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                            style="width: 70px;">
+                            #
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            Category name
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Special
+                        </th>
+                        <th class="text-secondary opacity-7">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRowHtml}
+                </tbody>
+            </table>`;
+}
+
+function buildCategoryTableRowHtml(category, index) {
+    return `<tr>
+                <td style="display: none" id="cate-id">${category.id}</td>
+                <td>
+                    <div class="d-flex px-2 py-1">
+                        <div class="d-flex flex-column justify-content-center"">
+                            <p class="mb-0 text-sm">${index + 1}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="align-middle text-center text-sm">
+                    <span class="badge badge-sm bg-gradient-success">${category.id}</span>
+                </td>
+                <td>
+                    <p class="text-xs font-weight-bold mb-0" style="font-size: 50px;">${category.categoryName}</p>
+                </td>
+                <td class="align-middle text-center">
+                    <input type="checkbox" checked="checked">
+                    <span class="checkmark"></span>
+                </td>
+                <td class="align-middle">
+                    <a href="#" class="text-secondary font-weight-bold text-xs"
+                        data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
+                        <i class="far fa-edit"></i><span> Edit</span>
+                    </a>
+                    <a href="#" class="text-secondary font-weight-bold text-xs"
+                        data-toggle="tooltip" data-original-title="Delete user" name="btn-delete">
+                        <i class="far fa-trash-alt"></i><span> Delete</span>
+                    </a>
+                </td>
+            </tr>`;
 }

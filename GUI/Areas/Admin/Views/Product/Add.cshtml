@@ -37,41 +37,41 @@
 </form>
 
 @section Scripts {
-<script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-<script type="text/javascript">
-    $(function () {
-        let classNames = ['active', 'bg-gradient-primary'];
-        $('#nav-item-product').addClass(classNames);
-        tinymce.init({
-            selector: '#input-description'
-        });
-        $('#btn-submit').click(function (e) {
-            e.preventDefault();
-            addProduct(buildRequestModel(), () => {
-                window.location.href = '/admin/product';
-            }, () => {
-                alert("Something when wrong");
+    <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        $(function () {
+            let classNames = ['active', 'bg-gradient-primary'];
+            $('#nav-item-product').addClass(classNames);
+            tinymce.init({
+                selector: '#input-description'
             });
+            $('#btn-submit').click(function (e) {
+                e.preventDefault();
+                addProduct(buildRequestModel(), () => {
+                    window.location.href = '/admin/product';
+                }, () => {
+                    alert("Something when wrong");
+                });
+            });
+            getAllCategories(categoriesResp => renderCategoryDropdown(categoriesResp.data));
         });
-        getAllCategories(categoriesResp => renderCategoryDropdown(categoriesResp.data));
-    });
 
-    function buildRequestModel() {
-        var name = $("#input-name").val();
-        var category = $('#input-category').val();
-        var description = tinymce.activeEditor.getContent({ format: 'text' });
-        var quantity = $("#input-quantity").val();
-        var price = $("#input-price").val();
-        var discount = $("#input-discount").val();
+        function buildRequestModel() {
+            let name = $("#input-name").val();
+            let category = $('#input-category').val();
+            let description = tinymce.activeEditor.getContent({ format: 'text' });
+            let quantity = $("#input-quantity").val();
+            let price = $("#input-price").val();
+            let discount = $("#input-discount").val();
 
-        return {
-            productName: name,
-            categoryId: category,
-            description: description,
-            quantity: quantity,
-            price: price,
-            discount: discount
-        };
-    }
-</script>
+            return {
+                productName: name,
+                categoryId: category,
+                description: description,
+                quantity: quantity,
+                price: price,
+                discount: discount
+            };
+        }
+    </script>
 }
