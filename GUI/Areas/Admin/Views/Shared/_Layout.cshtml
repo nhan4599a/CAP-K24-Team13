@@ -40,6 +40,8 @@
     <link href="@Url.Content("~/assets/admin/lib/fontawesome/css/all.css")" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link href="@Url.Content("~/assets/admin/css/pagination.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/assets/admin/css/loading.css")" rel="stylesheet" />
+
     <style>
         .tablinks {
             border: none;
@@ -182,6 +184,8 @@
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
+    <div class="status"></div>
+    <div class="loader"></div>
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark"
            id="sidenav-main">
         <div class="sidenav-header">
