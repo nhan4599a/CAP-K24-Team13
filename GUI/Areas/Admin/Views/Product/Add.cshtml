@@ -27,6 +27,7 @@
             <div class="text-left">
                 <a class="btn btn-primary" id="btnSubmit">Add</a>
             </div>
+            <p id="demo"></p>
         </div>
     </div>
 </form>
@@ -84,6 +85,69 @@
                 }
             });
         });
+         $(document).ready(function() {
+        $(".input-group").validate({
+          rules: {
+            input-name: {
+              required: true,
+              minlength: 3,
+              maxlength: 100
+            },
+            input-description: {
+              required: true,
+              minlength: 3,
+              maxlength: 300
+            }
+            input-price:{
+              required: true,
+              minlength: 3,
+              maxlength: 12
+            }
+            input-quantity: {
+                if (isNaN(x) || x < 0 || x > 100) {
+                    text = "Input not valid";
+                } else {
+                    text = "Input OK";
+                }
+            }
 
+          },
+          messages: {   
+            input-name: {
+              required: "Please enter Product name",
+              minlength: "Product Name must be at least 3 characters",
+              maxlength: "Product Name can't exceed 50 characters"
+            },
+             input-description: {
+              required: "Please enter a description for Product",
+              minlength: "Product description must be at least 3 characters",
+              maxlength: "Product description should not exceed 300 characters"
+            },
+            input-price{
+              required: "Please enter a price for Product",
+              minlength: "Product price must be at least 3 characters",
+              maxlength: "Product price should not exceed 12 characters"
+            }
+
+          },
+          errorElement: "em",
+          errorPlacement: function(error, element) {
+            // Thêm class `invalid-feedback` cho field đang có lỗi
+            error.addClass("invalid-feedback");
+            if (element.prop("type") === "checkbox") {
+              error.insertAfter(element.parent("label"));
+            } else {
+              error.insertAfter(element);
+            }
+          },
+          success: function(label, element) {},
+          highlight: function(element, errorClass, validClass) {
+            $(element).addClass("is-invalid").removeClass("is-valid");
+          },
+          unhighlight: function(element, errorClass, validClass) {
+            $(element).addClass("is-valid").removeClass("is-invalid");
+          }
+        });
+      });
     </script>
 }
