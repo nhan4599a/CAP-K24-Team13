@@ -2,12 +2,13 @@
     constructor(animationContainer, animationJsonPath) {
         this.animationContainer = animationContainer;
         this.animationJsonPath = animationJsonPath;
+        $(this.animationContainer).html('<div id="animation-loading"></div>')
     }
 
     showAnimation() {
         $(this.animationContainer).css('display', 'block');
         this.animation = bodymovin.loadAnimation({
-            container: document.getElementById(this.animationContainer),
+            container: document.getElementById('animation-loading'),
             path: this.animationJsonPath,
             renderer: 'svg',
             loop: true,

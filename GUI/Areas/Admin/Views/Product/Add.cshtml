@@ -1,4 +1,4 @@
-﻿<h4 class="font-weight-bolder text-center">Add Product</h4>
+﻿﻿<h4 class="font-weight-bolder text-center">Add Product</h4>
 <hr />
 <form role="form">
     <div class="row justify-content-center">
@@ -38,93 +38,93 @@
 </form>
 
 @section Scripts {
-  <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-  <script>
-    $(function () {
-      let classNames = ['active', 'bg-gradient-primary'];
-      $('#nav-item-product').addClass(classNames);
-      tinymce.init({
-        selector: '#input-description'
-      });
-      $('#btn-submit').click(function (e) {
-        e.preventDefault();
-        addProduct(buildRequestModel(), () => {
-        window.location.href = '/admin/product';
-      }, () => {
-          alert("Something when wrong");
+    <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        $(function () {
+            let classNames = ['active', 'bg-gradient-primary'];
+            $('#nav-item-product').addClass(classNames);
+            tinymce.init({
+                selector: '#input-description'
+            });
+            $('#btn-submit').click(function (e) {
+                e.preventDefault();
+                addProduct(buildRequestModel(), () => {
+                    window.location.href = '/admin/product';
+                }, () => {
+                    alert("Something when wrong");
+                });
+            });
+            getAllCategories(categoriesResp => renderCategoryDropdown(categoriesResp));
+            $(".input-group").validate({
+                rules: {
+                    "input-name": {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 100
+                    },
+                    "input-description": {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 300
+                    },
+                    "input-price": {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 12
+                    }
+                },
+                messages: {
+                    "input-name": {
+                        required: "Please enter Product name",
+                        minlength: "Product Name must be at least 3 characters",
+                        maxlength: "Product Name can't exceed 50 characters"
+                    },
+                    "input-description": {
+                        required: "Please enter a description for Product",
+                        minlength: "Product description must be at least 3 characters",
+                        maxlength: "Product description should not exceed 300 characters"
+                    },
+                    "input-price": {
+                        required: "Please enter a price for Product",
+                        minlength: "Product price must be at least 3 characters",
+                        maxlength: "Product price should not exceed 12 characters"
+                    }
+                },
+                errorElement: "em",
+                errorPlacement: function(error, element) {
+                    // Thêm class `invalid-feedback` cho field đang có lỗi
+                    error.addClass("invalid-feedback");
+                    if (element.prop("type") === "checkbox") {
+                        error.insertAfter(element.parent("label"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                success: function(label, element) {},
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
         });
-      });
-      getAllCategories(categoriesResp => renderCategoryDropdown(categoriesResp.data));
-      $(".input-group").validate({
-        rules: {
-          "input-name": {
-            required: true,
-            minlength: 3,
-            maxlength: 100
-          },
-          "input-description": {
-            required: true,
-            minlength: 3,
-            maxlength: 300
-          },
-          "input-price": {
-            required: true,
-            minlength: 3,
-            maxlength: 12
-          }
-        },
-        messages: {   
-          "input-name": {
-            required: "Please enter Product name",
-            minlength: "Product Name must be at least 3 characters",
-            maxlength: "Product Name can't exceed 50 characters"
-          },
-          "input-description": {
-            required: "Please enter a description for Product",
-            minlength: "Product description must be at least 3 characters",
-            maxlength: "Product description should not exceed 300 characters"
-          },
-          "input-price": {
-            required: "Please enter a price for Product",
-            minlength: "Product price must be at least 3 characters",
-            maxlength: "Product price should not exceed 12 characters"
-          }
-        },
-        errorElement: "em",
-        errorPlacement: function(error, element) {
-          // Thêm class `invalid-feedback` cho field đang có lỗi
-          error.addClass("invalid-feedback");
-          if (element.prop("type") === "checkbox") {
-            error.insertAfter(element.parent("label"));
-          } else {
-            error.insertAfter(element);
-          }
-        },
-        success: function(label, element) {},
-        highlight: function(element, errorClass, validClass) {
-          $(element).addClass("is-invalid").removeClass("is-valid");
-        },
-        unhighlight: function(element, errorClass, validClass) {
-          $(element).addClass("is-valid").removeClass("is-invalid");
-        }
-      });
-    });
-    function buildRequestModel() {
-      let name = $("#input-name").val();
-      let category = $('#input-category').val();
-      let description = tinymce.activeEditor.getContent({ format: 'text' });
-      let quantity = $("#input-quantity").val();
-      let price = $("#input-price").val();
-      let discount = $("#input-discount").val();
+        function buildRequestModel() {
+            let name = $("#input-name").val();
+            let category = $('#input-category').val();
+            let description = tinymce.activeEditor.getContent({ format: 'text' });
+            let quantity = $("#input-quantity").val();
+            let price = $("#input-price").val();
+            let discount = $("#input-discount").val();
 
-      return {
-        productName: name,
-        categoryId: category,
-        description: description,
-        quantity: quantity,
-        price: price,
-        discount: discount
-      };
-    }
-  </script>
+            return {
+                productName: name,
+                categoryId: category,
+                description: description,
+                quantity: quantity,
+                price: price,
+                discount: discount
+            };
+        }
+    </script>
 }
