@@ -1,11 +1,11 @@
 using DatabaseAccessor;
-using DatabaseAccessor.Model;
+using DatabaseAccessor.Mapping;
+using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
-using Shared.Mapping;
-using ShopProductService.RequestModel;
+using Shared.RequestModels;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -13,6 +13,8 @@ namespace DatabaseAccessor.Repositories.Interfaces
 
         public Task<List<ProductDTO>> GetProductsAsync(string keyword);
 
+        public Task<List<ProductDTO>> GetAllProductAsync();
+
         public Task<CommandResponse<bool>> AddProductAsync(AddOrEditProductRequestModel requestModel);
 
         public Task<CommandResponse<bool>> DeleteProductAsync(Guid id);

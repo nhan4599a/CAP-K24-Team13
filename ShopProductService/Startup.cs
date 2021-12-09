@@ -6,10 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FluentValidation.AspNetCore;
 using FluentValidation;
-using ShopProductService.RequestModel;
 using ShopProductService.Validation;
 using MediatR;
 using Shared.RequestModels;
+using DatabaseAccessor.Repositories;
+using DatabaseAccessor.Repositories.Interfaces;
+using DatabaseAccessor.Mapping;
 
 namespace ShopProductService
 {
@@ -26,12 +28,14 @@ namespace ShopProductService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddFluentValidation();
+            services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddTransient<IValidator<AddOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
             services.AddTransient<IValidator<AddOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
             services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();
+            services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();
-            services.AddMediatR(typeof(Startup));
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>

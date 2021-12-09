@@ -1,28 +1,22 @@
-.status {
-  width: 200px;
-  height: 200px;
-  position: fixed;
-  left: 50%;
-  z-index: 100;
-  top: 50%;
-  background-image: url("~/assets/admin/img/77931-loading-bar-purple.json");
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: -100px 0 0 -100px;
-  z-index: 1001;
-  background-color: #fff;
-  box-shadow: 10px 10px 2px #ccc;
-  border-radius: 30px;
+#animation-loading {
+    height: 300px;
+    width: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    z-index: 5;
+    border-radius: 10px;
+    box-shadow: 10px 10px 2px #ccc
 }
 
-.loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
-  z-index: 1000;
-  opacity: 0.3;
+#loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(204, 204, 204, 0.5)
 }

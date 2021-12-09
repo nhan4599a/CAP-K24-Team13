@@ -30,13 +30,18 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<List<ProductDTO>> GetProductsAsync(string keyword)
         {
-            return (await _dbContext.ShopProducts.AsNoTracking()
-                                .Include(e => e.Category)
-                                .Where(product => product.ProductName.Contains(keyword)
-                                    || product.Category.CategoryName.Contains(keyword))
-                                .ToListAsync())
-                                .Select(product => _mapper.MapToProductDTO(product))
-                                .ToList();
+            return (await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
+                .Where(product => product.ProductName.Contains(keyword)
+                        || product.Category.CategoryName.Contains(keyword))
+                .ToListAsync())
+                .Select(product => _mapper.MapToProductDTO(product))
+                .ToList();
+        }
+        public async Task<List<ProductDTO>> GetAllProductAsync()
+        {
+            return (await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
+                .ToListAsync()).Select(product => _mapper.MapToProductDTO(product))
+                .ToList();
         }
 
         public async Task<CommandResponse<bool>> AddProductAsync(AddOrEditProductRequestModel requestModel)

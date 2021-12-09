@@ -5,6 +5,7 @@ using Shared.DTOs;
 using Shared.RequestModels;
 using ShopProductService.Commands;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -60,10 +61,12 @@ namespace ShopProductService.Controllers
         [HttpGet]
         public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
         {
-            var productList = await _mediator.Send(new FindProductsByKeywordQuery
-            {
-                Keyword = requestModel.Keyword
-            });
+            IRequest<List<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword) ? new FindAllProductQuery() :
+                new FindProductsByKeywordQuery
+                {
+                    Keyword = requestModel.Keyword
+                };
+            var productList = await _mediator.Send(request);
             return new ApiResult<PaginatedDataList<ProductDTO>>
             {
                 ResponseCode = 200,
