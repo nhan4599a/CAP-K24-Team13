@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DatabaseAccessor.Model
+namespace DatabaseAccessor.Models
 {
     public class ShopCategory
     {

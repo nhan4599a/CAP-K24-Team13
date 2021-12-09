@@ -1,6 +1,4 @@
-﻿using Shared;
-
-namespace ShopProductService.RequestModel
+﻿namespace Shared.RequestModels
 {
     public class SearchProductRequestModel
     {
