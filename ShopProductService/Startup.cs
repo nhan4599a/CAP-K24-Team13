@@ -9,6 +9,7 @@ using FluentValidation;
 using ShopProductService.RequestModel;
 using ShopProductService.Validation;
 using MediatR;
+using Shared.RequestModels;
 
 namespace ShopProductService
 {
