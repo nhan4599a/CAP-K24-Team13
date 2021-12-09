@@ -30,18 +30,19 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<List<ProductDTO>> GetProductsAsync(string keyword)
         {
-            return (await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
+            return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
                 .Where(product => product.ProductName.Contains(keyword)
                         || product.Category.CategoryName.Contains(keyword))
-                .ToListAsync())
                 .Select(product => _mapper.MapToProductDTO(product))
-                .ToList();
+                .ToListAsync();
         }
+
         public async Task<List<ProductDTO>> GetAllProductAsync()
         {
-            return (await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
-                .ToListAsync()).Select(product => _mapper.MapToProductDTO(product))
-                .ToList();
+            return await _dbContext.ShopProducts.AsNoTracking()
+                .Include(e => e.Category)
+                .Select(product => _mapper.MapToProductDTO(product))
+                .ToListAsync();
         }
 
         public async Task<CommandResponse<bool>> AddProductAsync(AddOrEditProductRequestModel requestModel)
@@ -61,24 +62,13 @@ namespace DatabaseAccessor.Repositories
             }
         }
 
-        public async Task<CommandResponse<bool>> DeleteProductAsync(Guid id)
+        public async Task<CommandResponse<bool>> ActiveProductAsync(Guid id, bool shouldDisable)
         {
             var product = await FindProductByIdAsync(id);
-            if (product == null || product.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is not found or already disabled" };
-            product.IsDisabled = true;
-            _dbContext.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
-            return new CommandResponse<bool> { Response = true };
-        }
-
-        public async Task<CommandResponse<bool>> ActiveProductAsync(Guid id)
-        {
-            var product = await FindProductByIdAsync(id);
-            if (product == null || !product.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is not found or already enabled" };
-            product.IsDisabled = false;
-            _dbContext.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            if (product == null || product.IsDisabled == shouldDisable)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is not found or already enabled/disabled" };
+            product.IsDisabled = shouldDisable;
+            _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return new CommandResponse<bool> { Response = true };
         }

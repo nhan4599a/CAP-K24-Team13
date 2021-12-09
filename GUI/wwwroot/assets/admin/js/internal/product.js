@@ -1,14 +1,6 @@
 ﻿$(document).ready(() => {
     let currentPageInfo = getCurrentPageInfo();
-    let animation = bodymovin.loadAnimation({
-        container: document.getElementById('animation-loading'),
-        path: '/assets/admin/img/illustrations/loading.json',
-        renderer: 'svg',
-        loop: true,
-        autoplay: true
-    });
-    loadProducts(currentPageInfo.keyword, { pageNumber: currentPageInfo.pageNumber, pageSize: currentPageInfo.pageSize },
-        () => animation.destroy());
+    loadProducts(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
     let classNames = ['active', 'bg-gradient-primary'];
     $('#nav-item-product').addClass(classNames);
@@ -36,11 +28,13 @@
     });
 });
 
-function loadProducts(keyword, paginationInfo, callback) {
-    findProducts(keyword, paginationInfo.pageNumber, paginationInfo.pageSize, paginatedData => {
+function loadProducts(keyword, pageNumber, pageSize) {
+    let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+    animationLoader.showAnimation();
+    findProducts(keyword, pageNumber, pageSize, paginatedData => {
         let products = paginatedData.data;
         renderProductTable(products);
-        renderPagination(paginationInfo.pageNumber, paginatedData.maxPageNumber);
+        renderPagination(pageNumber, paginatedData.maxPageNumber);
         $('a[name=btn-edit]').click(function (e) {
             e.preventDefault();
             let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
@@ -80,7 +74,7 @@ function loadProducts(keyword, paginationInfo, callback) {
             clearTable();
             renderProductTable(sortList('productName', sortDirection, products));
         });
-        callback();
+        animationLoader.hideAnimation();
     });
 }
 

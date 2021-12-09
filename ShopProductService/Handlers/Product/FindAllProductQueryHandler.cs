@@ -1,12 +1,12 @@
 ﻿using DatabaseAccessor.Repositories.Interfaces;
 using MediatR;
 using Shared.DTOs;
-using ShopProductService.Commands;
+using ShopProductService.Commands.Product;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ShopProductService.Handlers
+namespace ShopProductService.Handlers.Product
 {
     public class FindAllProductQueryHandler : IRequestHandler<FindAllProductQuery, List<ProductDTO>>
     {
@@ -19,7 +19,8 @@ namespace ShopProductService.Handlers
 
         public async Task<List<ProductDTO>> Handle(FindAllProductQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.GetAllProductAsync();
+            var products = await _repository.GetAllProductAsync();
+            return products;
         }
     }
 }

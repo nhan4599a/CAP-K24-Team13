@@ -1,11 +1,11 @@
 ﻿using DatabaseAccessor.Repositories.Interfaces;
 using MediatR;
 using Shared;
-using ShopProductService.Commands;
+using ShopProductService.Commands.Product;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ShopProductService.Handlers
+namespace ShopProductService.Handlers.Product
 {
     public class AddProductCommandHandler : IRequestHandler<AddProductCommand, CommandResponse<bool>>
     {

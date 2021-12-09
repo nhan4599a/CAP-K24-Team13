@@ -2,7 +2,7 @@
 using Shared;
 using Shared.RequestModels;
 
-namespace ShopProductService.Commands
+namespace ShopProductService.Commands.Product
 {
     public class AddProductCommand : IRequest<CommandResponse<bool>>
     {

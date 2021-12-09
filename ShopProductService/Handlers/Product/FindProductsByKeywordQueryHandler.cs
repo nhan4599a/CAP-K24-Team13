@@ -1,12 +1,12 @@
 ﻿using DatabaseAccessor.Repositories.Interfaces;
 using MediatR;
 using Shared.DTOs;
-using ShopProductService.Commands;
+using ShopProductService.Commands.Product;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ShopProductService.Handlers
+namespace ShopProductService.Handlers.Product
 {
     public class FindProductsByKeywordQueryHandler : IRequestHandler<FindProductsByKeywordQuery, List<ProductDTO>>
     {

@@ -2,7 +2,7 @@
 using Shared;
 using System;
 
-namespace ShopProductService.Commands
+namespace ShopProductService.Commands.Product
 {
     public class ActiveProductCommand : IRequest<CommandResponse<bool>>
     {

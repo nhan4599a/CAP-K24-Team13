@@ -2,7 +2,7 @@
 using Shared;
 using System;
 
-namespace ShopProductService.Commands
+namespace ShopProductService.Commands.Product
 {
     public class DeleteProductCommand : IRequest<CommandResponse<bool>>
     {

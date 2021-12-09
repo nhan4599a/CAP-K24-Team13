@@ -2,7 +2,7 @@
 using Shared.DTOs;
 using System;
 
-namespace ShopProductService.Commands
+namespace ShopProductService.Commands.Product
 {
     public class FindProductByIdQuery : IRequest<ProductDTO>
     {

@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ShopInterfaceService.RequestModel;
-using ShopInterfaceService.Service;
+using Shared.RequestModels;
 using ShopInterfaceService.Validation;
 
 namespace ShopInterfaceService
@@ -26,7 +25,6 @@ namespace ShopInterfaceService
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
-            services.AddTransient<IShopService, ShopService>();
             services.AddTransient<IValidator<AddOrEditShopInterfaceRequestModel>, AddOrEditShopInterfaceRequestModelValidator>();
             services.AddCors(options =>
             {

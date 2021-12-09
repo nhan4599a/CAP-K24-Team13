@@ -1,11 +1,11 @@
 ﻿using DatabaseAccessor.Repositories.Interfaces;
 using MediatR;
 using Shared;
-using ShopProductService.Commands;
+using ShopProductService.Commands.Product;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ShopProductService.Handlers
+namespace ShopProductService.Handlers.Product
 {
     public class ActiveProductCommandHandler : IRequestHandler<ActiveProductCommand, CommandResponse<bool>>
     {
@@ -18,7 +18,7 @@ namespace ShopProductService.Handlers
 
         public async Task<CommandResponse<bool>> Handle(ActiveProductCommand request, CancellationToken cancellationToken)
         {
-            return await _repository.ActiveProductAsync(request.Id);
+            return await _repository.ActiveProductAsync(request.Id, false);
         }
     }
 }

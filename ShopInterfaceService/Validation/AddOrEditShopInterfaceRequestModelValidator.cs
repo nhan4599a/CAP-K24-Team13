@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using ShopInterfaceService.RequestModel;
+using Shared.RequestModels;
 
 namespace ShopInterfaceService.Validation
 {

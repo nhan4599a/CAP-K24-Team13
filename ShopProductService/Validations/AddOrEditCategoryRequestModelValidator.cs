@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Shared.RequestModels;
 
-namespace ShopProductService.Validation
+namespace ShopProductService.Validations
 {
     public class AddOrEditCategoryRequestModelValidator : AbstractValidator<AddOrEditCategoryRequestModel>
     {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
-using ShopProductService.Commands;
+using ShopProductService.Commands.Product;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -82,7 +82,7 @@ namespace ShopProductService.Controllers
                 Id = new Guid(id)
             });
             if (product == null)
-                return new ApiResult<ProductDTO> { ResponseCode = 404 };
+                return new ApiResult<ProductDTO> { ResponseCode = 404, ErrorMessage = "Product is not found" };
             return new ApiResult<ProductDTO> { ResponseCode = 200, Data = product };
         }
     }

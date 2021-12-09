@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FluentValidation.AspNetCore;
 using FluentValidation;
-using ShopProductService.Validation;
+using ShopProductService.Validations;
 using MediatR;
 using Shared.RequestModels;
 using DatabaseAccessor.Repositories;
@@ -31,6 +31,7 @@ namespace ShopProductService
             services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IValidator<AddOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
             services.AddTransient<IValidator<AddOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
             services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();

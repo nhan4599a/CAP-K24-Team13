@@ -1,11 +1,9 @@
 ﻿function renderProductTable(products) {
-    showLoadingAnimation();
     if (products.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no product to show!</p>');
     } else {
         $('.table-responsive.p-0').html(buildProductTableHtml(products));
     }
-    hideLoadingAnimation();
 }
 
 function buildProductTableHtml(products) {
@@ -222,12 +220,4 @@ function sortList(field, direction, dataList) {
 
 function clearTable() {
     $('.table-responsive.p-0').html('');
-}
-
-function hideLoadingAnimation() {
-    $('#loading-container').css('display', 'none');
-}
-
-function showLoadingAnimation() {
-    $('#loading-container').css('display', 'block');
 }

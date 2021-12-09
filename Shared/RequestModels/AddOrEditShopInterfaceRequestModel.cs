@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-
-namespace ShopInterfaceService.RequestModel
+﻿namespace Shared.RequestModels
 {
     public class AddOrEditShopInterfaceRequestModel
     {
@@ -10,7 +7,5 @@ namespace ShopInterfaceService.RequestModel
         public string ShopPhoneNumber { get; set; }
 
         public string ShopDescription { get; set; }
-
-        public List<IFormFile> Images { get; set; }
     }
 }

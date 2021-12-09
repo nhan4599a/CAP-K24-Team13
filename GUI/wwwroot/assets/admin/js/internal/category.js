@@ -6,6 +6,8 @@
 });
 
 function loadCategories(pageNumber, pageSize) {
+    let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+    animationLoader.showAnimation();
     getCategories(pageNumber, pageSize, paginatedData => {
         let categories = paginatedData.data;
         renderCategoryTable(categories);
@@ -37,6 +39,7 @@ function loadCategories(pageNumber, pageSize) {
             let pageNumber = $(this).text();
             moveToPage(pageNumber, getCurrentPageInfo().pageSize);
         });
+        animationLoader.hideAnimation();
     });
 }
 

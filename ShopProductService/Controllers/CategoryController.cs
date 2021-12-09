@@ -1,12 +1,9 @@
-using DatabaseAccessor;
-using DatabaseAccessor.Mapping;
-using DatabaseAccessor.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
-using System.Linq;
+using ShopProductService.Commands.Category;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -15,52 +12,48 @@ namespace ShopProductService.Controllers
     [Route("/api/categories")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly Mapper _mapper;
+        private readonly IMediator _mediator;
 
-        public CategoryController(ApplicationDbContext dbcontext, Mapper mapper)
+        public CategoryController(IMediator mediator)
         {
-            _dbContext = dbcontext;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpPost]
         [ActionName("Add")]
         public async Task<ApiResult<bool>> AddCategory(AddOrEditCategoryRequestModel requestModel)
         {
-            _dbContext.ShopCategories.Add(new ShopCategory
+            var response = await _mediator.Send(new AddCategoryCommand
             {
-                ShopId = 1,
-                CategoryName = requestModel.CategoryName,
-                Special = requestModel.Special
+                RequestModel = requestModel
             });
-            await _dbContext.SaveChangesAsync();
+            if (!response.Response)
+                return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
         [HttpGet("{id}")]
-        public async Task<ApiResult<CategoryDTO>> DetailCategory(int id)
+        public async Task<ApiResult<CategoryDTO>> GetCategory(int id)
         {
-            var category = await _dbContext.ShopCategories.FindAsync(id);
-            if (category == null) return new ApiResult<CategoryDTO> { ResponseCode = 404, Data = null };
-            return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = _mapper.MapToCategoryDTO(category) };
+            var category = await _mediator.Send(new FindCategoryByIdQuery
+            {
+                Id = id
+            });
+            if (category == null)
+                return new ApiResult<CategoryDTO> { ResponseCode = 404, ErrorMessage = "Category is not found" };
+            return new ApiResult<CategoryDTO> { ResponseCode = 200, Data = category };
         }
 
         [HttpPut("{id}")]
         public async Task<ApiResult<bool>> EditCategory(int id, AddOrEditCategoryRequestModel requestModel)
         {
-            var category = await _dbContext.ShopCategories.FindAsync(id);
-            if (category == null)
+            var response = await _mediator.Send(new EditCategoryCommand
             {
-                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Category not found", Data = false };
-            }
-            category.CategoryName = requestModel.CategoryName;
-            category.Special = requestModel.Special;
-            var result = await _dbContext.SaveChangesAsync() > 0;
-            if (!result)
-            {
-                return new ApiResult<bool> { ResponseCode = 500, Data = false };
-            }
+                Id = id,
+                RequestModel = requestModel
+            });
+            if (!response.Response)
+                return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
@@ -68,9 +61,7 @@ namespace ShopProductService.Controllers
         [ActionName("Index")]
         public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
         {
-            var categories = await _dbContext.ShopCategories.AsNoTracking()
-                                    .Select(category => _mapper.MapToCategoryDTO(category))
-                                    .ToListAsync();
+            var categories = await _mediator.Send(new FindAllCategoryQuery());
             return new ApiResult<PaginatedDataList<CategoryDTO>>
             {
                 ResponseCode = 200,
@@ -80,13 +71,14 @@ namespace ShopProductService.Controllers
 
         [HttpDelete("{id}")]
         [ActionName("Delete")]
-        public async Task<ApiResult<bool>> DeleteCategory(int categoryId)
+        public async Task<ApiResult<bool>> DeleteCategory(int id)
         {
-            var category = await _dbContext.ShopCategories.FindAsync(categoryId);
-            if (category == null)
-                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = "Category not found", Data = false };
-            _dbContext.ShopCategories.Remove(category);
-            await _dbContext.SaveChangesAsync();
+            var response = await _mediator.Send(new DeleteCategoryCommand
+            {
+                Id = id
+            });
+            if (!response.Response)
+                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
     }

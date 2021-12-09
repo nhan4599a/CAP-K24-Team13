@@ -3,7 +3,7 @@ using Shared;
 using Shared.RequestModels;
 using System;
 
-namespace ShopProductService.Commands
+namespace ShopProductService.Commands.Product
 {
     public class EditProductCommand : IRequest<CommandResponse<bool>>
     {

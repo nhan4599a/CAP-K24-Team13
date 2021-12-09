@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Shared.RequestModels;
+using System.Collections.Generic;
 
 namespace DatabaseAccessor.Models
 {
@@ -15,5 +16,12 @@ namespace DatabaseAccessor.Models
         public bool IsDisabled { get; set; }
 
         public virtual List<ShopProduct> ShopProducts { get; set; }
+
+        public ShopCategory AssignByRequestModel(AddOrEditCategoryRequestModel requestModel)
+        {
+            CategoryName = requestModel.CategoryName;
+            Special = requestModel.Special;
+            return this;
+        }
     }
 }

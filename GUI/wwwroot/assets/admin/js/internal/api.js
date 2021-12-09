@@ -13,13 +13,21 @@ const productEndpoint = 'products';
 const categoryEndpoint = 'categories';
 
 function findProducts(keyword, pageNumber, pageSize, successCallback) {
-    axios.get(productEndpoint, {
-        params: {
-            keyword: encodeURIComponent(keyword),
-            'paginationInfo.pageNumber': pageNumber,
-            'paginationInfo.pageSize:': pageSize || 5
-        }
-    }).then(successCallback);
+    if (keyword === null || keyword === '')
+        axios.get(productEndpoint, {
+            params: {
+                'paginationInfo.pageNumber': pageNumber,
+                'paginationInfo.pageSize': pageSize
+            }
+        }).then(successCallback);
+    else
+        axios.get(productEndpoint, {
+            params: {
+                keyword: encodeURIComponent(keyword),
+                'paginationInfo.pageNumber': pageNumber,
+                'paginationInfo.pageSize:': pageSize || 5
+            }
+        }).then(successCallback);
 }
 
 function deleteProduct(id, successCallback, errorCallback) {
