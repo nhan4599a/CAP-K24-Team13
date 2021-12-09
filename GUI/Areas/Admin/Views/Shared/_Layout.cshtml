@@ -38,10 +38,152 @@
     <link href="@Url.Content("~/assets/admin/lib/fontawesome/css/all.css")" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link href="@Url.Content("~/assets/admin/css/pagination.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/assets/admin/css/loading.css")" rel="stylesheet" />
+
+    <style>
+        .tablinks {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        /* tab content */
+        .tabcontent {
+            display: none;
+        }
+
+            /* tab content active */
+        .tabcontent.active {
+            display: block;
+        }
+
+        .row-2 {
+            margin-top: 30px;
+        }
+    </style>
+
+    <style>
+        .body-slider {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slider {
+            width: 100%;
+            height: 800px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .slides {
+            width: 500%;
+            height: 100%;
+            display: flex;
+        }
+
+        .slides input {
+            display: none;
+        }
+
+        .slide {
+            width: 20%;
+            transition: 2s;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*css for manual slide navigation*/
+
+        .navigation-manual {
+            position: absolute;
+            width: 100%;
+            margin-top: -40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .manual-btn {
+            border: 2px solid #40D3DC;
+            padding: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 1s;
+        }
+
+        .manual-btn:not(:last-child) {
+            margin-right: 40px;
+        }
+
+        .manual-btn:hover {
+            background: #40D3DC;
+        }
+
+        #radio1:checked ~ .first {
+            margin-left: 0;
+        }
+
+        #radio2:checked ~ .first {
+            margin-left: -20%;
+        }
+
+        #radio3:checked ~ .first {
+            margin-left: -40%;
+        }
+
+        #radio4:checked ~ .first {
+            margin-left: -60%;
+        }
+
+        /*css for automatic navigation*/
+
+        .navigation-auto {
+            position: fixed;
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            margin-top: 460px;
+        }
+
+        .navigation-auto div {
+            border: 2px solid #40D3DC;
+            padding: 5px;
+            border-radius: 10px;
+            transition: 1s;
+        }
+
+        .navigation-auto div:not(:last-child) {
+            margin-right: 40px;
+        }
+
+        #radio1:checked ~ .navigation-auto .auto-btn1 {
+            background: #40D3DC;
+        }
+
+        #radio2:checked ~ .navigation-auto .auto-btn2 {
+            background: #40D3DC;
+        }
+
+        #radio3:checked ~ .navigation-auto .auto-btn3 {
+            background: #40D3DC;
+        }
+
+        #radio4:checked ~ .navigation-auto .auto-btn4 {
+            background: #40D3DC;
+        }
+    </style>
 
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
+    <div class="status"></div>
+    <div class="loader"></div>
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark"
            id="sidenav-main">
         <div class="sidenav-header">
