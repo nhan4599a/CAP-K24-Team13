@@ -7,7 +7,7 @@ namespace DatabaseAccessor
 
     public class ApplicationDbContext : DbContext
     {
-        private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
+        private static readonly string _connectionString = "Data Source=NDB;Initial Catalog=CapTeam13;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         public DbSet<ShopCategory> ShopCategories { get; set; }
 

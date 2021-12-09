@@ -1,11 +1,13 @@
 using DatabaseAccessor;
 using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.RequestModels;
+using ShopInterfaceService.Mediator;
 using ShopInterfaceService.Validation;
 
 namespace ShopInterfaceService
@@ -33,6 +35,7 @@ namespace ShopInterfaceService
                     builder.WithOrigins("https://localhost:44349").AllowAnyHeader().AllowAnyMethod();
                 });
             });
+            services.AddMediatR(typeof(FindShop).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
