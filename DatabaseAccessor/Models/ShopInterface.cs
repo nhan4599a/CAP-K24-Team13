@@ -1,4 +1,4 @@
-﻿namespace DatabaseAccessor.Model
+﻿namespace DatabaseAccessor.Models
 {
     public class ShopInterface
     {

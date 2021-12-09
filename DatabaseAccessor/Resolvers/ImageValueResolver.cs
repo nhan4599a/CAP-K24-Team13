@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using DatabaseAccessor.Model;
+using DatabaseAccessor.Models;
 using Shared.DTOs;
 using System;
 
-namespace Shared.Resolver
+namespace DatabaseAccessor.Resolvers
 {
     public class ImageValueResolver : IValueResolver<ShopProduct, ProductDTO, string[]>, IValueResolver<ShopInterface, ShopInterfaceDTO, string[]>
     {

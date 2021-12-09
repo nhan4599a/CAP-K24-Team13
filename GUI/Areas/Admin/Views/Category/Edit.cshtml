@@ -25,41 +25,28 @@
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
             $('#nav-item-category').addClass(classNames);
-            $.get('https://localhost:44302/api/categories', null, (resp) => {
-                var categories = resp.data.data;
-                var optionsHtml = '';
-                categories.forEach(category => {
-                    optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
-                });
-                if (optionsHtml != '') {
-                    $('option[selected=selected]').after(optionsHtml);
-                }
+            getAllCategories(categories => {
+                renderCategoryDropdown(categories);
                 tinymce.init({
                     selector: '#input-description'
                 });
-                loadEdittingProduct();
+                loadEdittingCategory();
             });
             $('#btn-submit').click(() => {
-                var id = $('#input-id').val();
-                var name = $('#input-name').val();
-                var special = $('#input-special').val();
-                var category = {
+                let id = $('#input-id').val();
+                let name = $('#input-name').val();
+                let special = $('#input-special').val();
+                let category = {
                     categoryName: name,
                     special: category
                 };
-                $.ajax({
-                    type: 'PUT',
-                    url: `https://localhost:44302/api/categories/${id}`,
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(category),
-                    success: function () {
-                        window.location.href = '/admin/category';
-                        window.localStorage.removeItem('editting-category');
-                    }
-                })
+                editCategory(id, category, () => { 
+                    window.location.href = '/admin/category';
+                    window.localStorage.removeItem('editting-category');
+                });
             });
         });
-        function loadEdittingProduct() {
+        function loadEdittingCategory() {
             var edittingCategory = JSON.parse(window.localStorage.getItem('editting-category'));
             if (!edittingCategory) {
                 alert("Something went wrong!");

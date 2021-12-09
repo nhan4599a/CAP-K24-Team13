@@ -1,20 +1,19 @@
 using AutoMapper;
-using DatabaseAccessor.Model;
+using DatabaseAccessor.Models;
+using DatabaseAccessor.Resolvers;
 using Shared.DTOs;
-using Shared.Resolver;
 
-namespace Shared.Mapping
+namespace DatabaseAccessor.Mapping
 {
     public class Mapper
     {
+        private static readonly Mapper _instance = null;
 
-        private static Mapper _instance = null;
-
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         private Mapper()
         {
-            MapperConfiguration config = new MapperConfiguration(cfg =>
+            MapperConfiguration config = new(cfg =>
             {
                 cfg.CreateMap<ShopProduct, ProductDTO>()
                     .ForMember(target => target.CategoryName,

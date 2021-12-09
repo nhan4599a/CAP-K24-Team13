@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace Shared
+﻿namespace Shared
 {
     public class ApiResult<T>
     {
-        public string ErrorMessage { get; set; }
+        public int ResponseCode { get; set; }
+
+        public string ErrorMessage { get; set; } = string.Empty;
 
         public T Data { get; set; }
-
-        public int ResponseCode { get; set; }
     }
 }

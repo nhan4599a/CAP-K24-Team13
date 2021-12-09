@@ -8,6 +8,8 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using ShopProductService.RequestModel;
 using ShopProductService.Validation;
+using MediatR;
+using Shared.RequestModels;
 
 namespace ShopProductService
 {
@@ -29,6 +31,7 @@ namespace ShopProductService
             services.AddTransient<IValidator<AddOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
             services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();
             services.AddSwaggerGen();
+            services.AddMediatR(typeof(Startup));
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
@@ -66,7 +69,7 @@ namespace ShopProductService
             {
                 endpoints.MapControllerRoute(
                         name: "default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                        pattern: "{controller=Product}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,4 +1,4 @@
-﻿using DatabaseAccessor.Model;
+﻿using DatabaseAccessor.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 

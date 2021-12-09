@@ -1,4 +1,5 @@
 ﻿<h4 class="font-weight-bolder text-center">Edit Product</h4>
+<hr />
 <form role="form">
     <div class="row justify-content-center">
         <div class="col-5">
@@ -7,7 +8,12 @@
                 <label class="form-label">Product name</label>
                 <input class="form-control" type="text" id="input-name" />
             </div>
-            @await Component.InvokeAsync("CategoryDropdown")
+            <div class="form-group mb-3">
+                <label class="form-label">Category</label>
+                <select class="form-select" aria-label="Default select example" id="input-category">
+                    <option selected="selected">Select category</option>
+                </select>
+            </div>
             <div class="form-group mb-3">
                 <label class="form-label">Description</label>
                 <input class="form-control" type="text" id="input-description" />
@@ -41,29 +47,23 @@
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
             $('#nav-item-product').addClass(classNames);
-            $.get('https://localhost:44302/api/categories', null, (resp) => {
-                var categories = resp.data.data;
-                var optionsHtml = '';
-                categories.forEach(category => {
-                    optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
-                });
-                if (optionsHtml != '') {
-                    $('option[selected=selected]').after(optionsHtml);
-                }
+            getAllCategories(categoryResp => {
+                renderCategoryDropdown(categoryResp.data);
                 tinymce.init({
                     selector: '#input-description'
                 });
                 loadEdittingProduct();
             });
-            $('#btn-submit').click(() => {
-                var id = $('#input-id').val();
-                var name = $('#input-name').val();
-                var category = $('#input-category').val();
-                var description = tinymce.activeEditor.getContent({ format: 'text' });
-                var quantity = $('#input-quantity').val();
-                var price = $('#input-price').val();
-                var discount = $('#input-discount').val();
-                var product = {
+            $('#btn-submit').click(e => {
+                e.preventDefault();
+                let id = $('#input-id').val();
+                let name = $('#input-name').val();
+                let category = $('#input-category').val();
+                let description = tinymce.activeEditor.getContent({ format: 'text' });
+                let quantity = $('#input-quantity').val();
+                let price = $('#input-price').val();
+                let discount = $('#input-discount').val();
+                let product = {
                     productName: name,
                     categoryId: category,
                     description: description,
@@ -71,23 +71,17 @@
                     price: price,
                     discount: discount
                 };
-                $.ajax({
-                    type: 'PUT',
-                    url: `https://localhost:44302/api/products/${id}`,
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(product),
-                    success: function () {
-                        window.location.href = '/product';
-                        window.localStorage.removeItem('editting-product');
-                    }
-                })
+                editProduct(id, product, () => { 
+                    window.location.href = '/admin/product';
+                    window.localStorage.removeItem('editting-product');
+                });
             });
         });
         function loadEdittingProduct() {
-            var edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
+            let edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
             if (!edittingProduct) {
                 alert("Something went wrong!");
-                window.location.href = "/product";
+                window.location.href = "/admin/product";
             }
             $('#input-id').val(edittingProduct.id);
             $('#input-name').val(edittingProduct.productName);

@@ -1,4 +1,4 @@
-﻿namespace ShopProductService.RequestModel
+﻿namespace Shared.RequestModels
 {
     public class AddOrEditProductRequestModel
     {

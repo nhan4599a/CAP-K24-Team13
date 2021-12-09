@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Shared.DTOs;
+using Shared.RequestModels;
+using System;
 
-namespace DatabaseAccessor.Model
+namespace DatabaseAccessor.Models
 {
     public class ShopProduct
     {
@@ -29,5 +27,16 @@ namespace DatabaseAccessor.Model
         public int CategoryId { get; set; }
 
         public virtual ShopCategory Category { get; set; }
+
+        public ShopProduct AssignByRequestModel(AddOrEditProductRequestModel requestModel)
+        {
+            ProductName = requestModel.ProductName;
+            CategoryId = requestModel.CategoryId;
+            Description = requestModel.Description;
+            Quantity = requestModel.Quantity;
+            Price = requestModel.Price;
+            Discount = requestModel.Discount;
+            return this;
+        }
     }
 }
