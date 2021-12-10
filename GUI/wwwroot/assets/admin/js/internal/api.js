@@ -66,9 +66,7 @@ function deleteCategory(id, successCallback, errorCallback) {
 }
 
 function addCategory(category, successCallback, errorCallback) {
-    axios.post(categoryEndpoint, {
-        data: JSON.stringify(category)
-    }).then(successCallback).catch(errorCallback);
+    axios.post(categoryEndpoint, category).then(successCallback).catch(errorCallback);
 }
 
 function editCategory(id, category, successCallback) {

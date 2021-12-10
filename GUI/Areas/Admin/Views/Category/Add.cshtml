@@ -24,10 +24,10 @@
             $('#btn-submit').click(function (e) {
                 e.preventDefault();
 
-                var name = $('#input-name').val();
-                var special = $('#input-special').val();
+                let name = $('#input-name').val();
+                let special = $('#input-special').val();
 
-                var category = { categoryName: name, special: special };
+                let category = { categoryName: name, special: special };
                 addCategory(category, () => {
                     window.location.href = "/admin/category";
                 }, () => alert("Something when wrong"));
