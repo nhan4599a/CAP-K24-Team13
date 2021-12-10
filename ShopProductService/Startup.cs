@@ -29,9 +29,10 @@ namespace ShopProductService
         {
             services.AddControllers().AddFluentValidation();
             services.AddMediatR(typeof(Startup));
-            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
+            services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ProductImageManager>();
             services.AddTransient<IValidator<AddOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
             services.AddTransient<IValidator<AddOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
             services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();

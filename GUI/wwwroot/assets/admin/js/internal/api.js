@@ -34,9 +34,11 @@ function deleteProduct(id, successCallback, errorCallback) {
     axios.delete(productEndpoint + `/${id}`).then(successCallback).catch(errorCallback);
 }
 
-function addProduct(product, successCallback, errorCallback) {
-    axios.post(productEndpoint, {
-        data: JSON.stringify(product)
+function addProduct(formData, successCallback, errorCallback) {
+    axios.post(productEndpoint, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
     }).then(successCallback).catch(errorCallback);
 }
 

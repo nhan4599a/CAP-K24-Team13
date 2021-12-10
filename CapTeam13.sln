@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31729.503
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopProductService", "ShopProductService\ShopProductService.csproj", "{A0809A7F-15BC-463D-8EEE-2063D4EAA5EC}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{8B63A090-F1DE-48B9-B7AD-A6DEC77B78A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopInterfaceService", "ShopInterfaceService\ShopInterfaceService.csproj", "{7003A5D4-3B82-4E4F-80D4-FF1F8AD787C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopInterfaceService", "ShopInterfaceService\ShopInterfaceService.csproj", "{7003A5D4-3B82-4E4F-80D4-FF1F8AD787C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

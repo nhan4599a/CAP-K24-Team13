@@ -44,7 +44,7 @@ function buildProductTableRowHtml(product, index) {
                 <td class="align-middle text-center">
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="/assets/admin/img/team-2.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                            <img src="https://localhost:44302/api/products/images/${product.images[0]}" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
                         </div>
                         <div class="d-flex flex-column">
                             <h6 class="mb-0 text-sm">${product.productName}</h6>
@@ -93,7 +93,7 @@ function renderPagination(currentPageNumber, maxPageNumber) {
         if (i == currentPageNumber)
             paginationHtml += `<a class="active">${i}</a>`;
         else
-            paginationHtml += `<a class="pagination-item">${i}</a>`;
+            paginationHtml += `<a href="#" class="pagination-item">${i}</a>`;
     }
     if (currentPageNumber != maxPageNumber)
         paginationHtml += '<a href="#" id="next-page">»</a>';

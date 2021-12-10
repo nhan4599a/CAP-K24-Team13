@@ -36,6 +36,7 @@ namespace DatabaseAccessor.Models
             Quantity = requestModel.Quantity;
             Price = requestModel.Price;
             Discount = requestModel.Discount;
+            Images = string.Join(';', requestModel.ImagePaths);
             return this;
         }
     }

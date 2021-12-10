@@ -1,4 +1,6 @@
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.DTOs;
@@ -12,18 +14,21 @@ namespace ShopProductService.Controllers
 {
     [ApiController]
     [Route("/api/products")]
-    public class ProductController : Controller
+    public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ProductImageManager _imageManager;
 
-        public ProductController(IMediator mediator)
+        public ProductController(IMediator mediator, ProductImageManager imageManager)
         {
             _mediator = mediator;
+            _imageManager = imageManager;
         }
 
         [HttpPost]
-        public async Task<ApiResult<bool>> AddProduct(AddOrEditProductRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddProduct([FromForm(Name = "requestModel")] AddOrEditProductRequestModel requestModel)
         {
+            requestModel.ImagePaths = await _imageManager.SaveFileAsync(Request.Form.Files);
             var response = await _mediator.Send(new AddProductCommand
             {
                 RequestModel = requestModel
@@ -84,6 +89,15 @@ namespace ShopProductService.Controllers
             if (product == null)
                 return new ApiResult<ProductDTO> { ResponseCode = 404, ErrorMessage = "Product is not found" };
             return new ApiResult<ProductDTO> { ResponseCode = 200, Data = product };
+        }
+
+        [HttpGet("images/{imageId}")]
+        public PhysicalFileResult Index(string imageId)
+        {
+            var fileResponse = _imageManager.GetImage(imageId);
+            if (!fileResponse.IsExisted)
+                return null;
+            return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
     }
 }
