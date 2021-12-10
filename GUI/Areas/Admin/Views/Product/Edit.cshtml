@@ -47,8 +47,8 @@
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
             $('#nav-item-product').addClass(classNames);
-            getAllCategories(categoryResp => {
-                renderCategoryDropdown(categoryResp.data);
+            getAllCategories(categories => {
+                renderCategoryDropdown(categories);
                 tinymce.init({
                     selector: '#input-description'
                 });
@@ -74,7 +74,7 @@
                 editProduct(id, product, () => { 
                     window.location.href = '/admin/product';
                     window.localStorage.removeItem('editting-product');
-                });
+                }, () => alert('something went wrong!'));
             });
         });
         function loadEdittingProduct() {

@@ -42,10 +42,8 @@ function addProduct(formData, successCallback, errorCallback) {
     }).then(successCallback).catch(errorCallback);
 }
 
-function editProduct(id, product, successCallback) {
-    axios.put(productEndpoint + `/${id}`, {
-        data: JSON.stringify(product)
-    }).then(successCallback);
+function editProduct(id, product, successCallback, errorCallback) {
+    axios.put(productEndpoint + `/${id}`, product).then(successCallback).catch(errorCallback);
 }
 
 function getAllCategories(successCallback) {
