@@ -2,8 +2,8 @@
     let currentPageInfo = getCurrentPageInfo();
     loadProducts(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
-    let classNames = ['active', 'bg-gradient-primary'];
-    $('#nav-item-product').addClass(classNames);
+    let classNames = ['active'];
+    $('#nav-item-product').addClass(classNames).css('background-color', '#2f9db6');
     let searchTextField = $('#input-search');
     if (currentPageInfo.keyword) {
         searchTextField.parent().addClass('is-filled');

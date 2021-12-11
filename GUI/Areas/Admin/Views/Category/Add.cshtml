@@ -14,13 +14,11 @@
         </div>
     </div>
 </form>
-
 @section Scripts {
     <script>
-
         $(function () {
-            let classNames = ['active', 'bg-gradient-primary'];
-            $('#nav-item-category').addClass(classNames);
+            let classNames = ['active'];
+            $('#nav-item-category').addClass(classNames).css('background-color','#2f9db6');
             $('#btn-submit').click(function (e) {
                 e.preventDefault();
 
@@ -33,6 +31,5 @@
                 }, () => alert("Something when wrong"));
             });
         });
-
     </script>
 }

@@ -56,8 +56,8 @@
         Dropzone.autoDiscover = false;
         toastr.options.closeButton = true;
         $(function () {
-            let classNames = ['active', 'bg-gradient-primary'];
-            $('#nav-item-product').addClass(classNames);
+            let classNames = ['active'];
+            $('#nav-item-product').addClass(classNames).css('background-color', '#2f9db6');
             tinymce.init({
                 selector: '#input-description'
             });
