@@ -76,6 +76,13 @@ function loadProducts(keyword, pageNumber, pageSize) {
                         .addClass('bg-gradient-success')
                         .text('Activated');
                     $(this).parent().prepend(getEditButton());
+                    $('a[name=btn-edit]').click(function (e) {
+                        e.preventDefault();
+                        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+                        let productInfoStr = JSON.stringify(products[index]);
+                        window.localStorage.setItem('editting-product', productInfoStr);
+                        window.location.href = "/admin/product/edit";
+                    });
                     $(this).children('span').text(' Deactivate');
                     $(this).children('i').removeClass().addClass('far fa-trash-alt');
                 }, (err) => toastr.error(`Failed to activate ${name}, ${err}!`, 'Error'));

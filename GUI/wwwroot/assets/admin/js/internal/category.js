@@ -56,6 +56,13 @@ function loadCategories(pageNumber, pageSize) {
                             .addClass('bg-gradient-success')
                             .text('Activated');
                         $(this).parent().prepend(getEditButton());
+                        $('a[name=btn-edit]').click(function (e) {
+                            e.preventDefault();
+                            let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+                            let categoryInfoStr = JSON.stringify(categories[index]);
+                            window.localStorage.setItem('editting-category', categoryInfoStr);
+                            window.location.href = "/admin/category/edit";
+                        });
                         $(this).children('span').text(' Deactivate');
                         $(this).children('i').removeClass().addClass('far fa-trash-alt');
                     },
