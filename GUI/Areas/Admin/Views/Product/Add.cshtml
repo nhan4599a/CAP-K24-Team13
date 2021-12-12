@@ -39,8 +39,9 @@
                     </div>
                 </div>
             </div>
-            <div class="text-left">
+            <div class="form-group">
                 <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Add</button>
+                <a class="btn bg-gradient-primary-dark my-shadow text-white" style="float: right" href="product">Cancel</a>
             </div>
             <p id="demo"></p>
         </div>
@@ -110,11 +111,13 @@
                     formData.append(`images[${i}]`, dropzone.files[i]);
                 addProduct(formData, () => {
                     window.location.href = '/admin/product';
-                }, () => {
-                    alert("Something when wrong");
+                }, (error) => {
+                    alert(error);
                 });
             });
-            getAllCategories(categories => renderCategoryDropdown(categories));
+            getAllCategories(
+                categories => renderCategoryDropdown(categories.filter(category => !category.isDisabled))
+            );
         });
         function buildRequestModel() {
             let name = $("#input-name").val();

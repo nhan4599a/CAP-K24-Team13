@@ -45,33 +45,41 @@ function loadProducts(keyword, pageNumber, pageSize) {
         $('a[name=btn-action]').click(function (e) {
             e.preventDefault();
             let action = $(this).text().trim().toLowerCase();
-            if (action != 'delete' && action != 'active') {
+            if (action != 'deactivate' && action != 'activate') {
                 alert('something went wrong!');
                 return;
             }
             let id = $(this).parent().parent().children('#prod-id').text();
-            if (!confirm(`Are you sure to product with id = ${id}`))
-                return;
-            if (action == 'delete')
+            let name = $(this).parent().parent().children('td:nth-child(3)')
+                .children().children('div:nth-child(2)').children('h6').text();
+            if (action == 'deactivate') {
+                if (!confirm(`Do you want to deactivate ${name}?`))
+                    return;
                 deleteProduct(id, () => {
-                    toastr.success(`Deleted product with id = ${id}`, 'Success');
+                    toastr.success(`Deactivated ${name}`, 'Success');
                     $(this).parent().parent().children('td:nth-child(5)').children()
                         .removeClass('bg-gradient-success')
                         .addClass('bg-gradient-secondary')
-                        .text('Disabled');
-                    $(this).children('span').text(' Active');
+                        .text('deactivated');
+                    $(this).parent().children('*[name="btn-edit"]').remove();
+                    $(this).children('span').text(' Activate');
                     $(this).children('i').removeClass().addClass('fas fa-check');
-                }, () => toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error'));
-            else
+                }, (err) => toastr.error(`Failed to deactivate ${name}, ${err}!`, 'Error'));
+            }
+            else {
+                if (!confirm(`Do you want to activate ${name}?`))
+                    return;
                 activeProduct(id, () => {
-                    toastr.success(`Activated product with id = ${id}`, 'Success');
+                    toastr.success(`Activated ${name}`, 'Success');
                     $(this).parent().parent().children('td:nth-child(5)').children()
                         .removeClass('bg-gradient-secondary')
                         .addClass('bg-gradient-success')
                         .text('Activated');
-                    $(this).children('span').text(' Delete');
+                    $(this).parent().prepend(getEditButton());
+                    $(this).children('span').text(' Deactivate');
                     $(this).children('i').removeClass().addClass('far fa-trash-alt');
-                }, () => toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error'));
+                }, (err) => toastr.error(`Failed to activate ${name}, ${err}!`, 'Error'));
+            }
         });
         $('#previous-page').click((e) => {
             e.preventDefault();

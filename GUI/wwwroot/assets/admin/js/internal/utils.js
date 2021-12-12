@@ -57,32 +57,37 @@ function buildProductTableRowHtml(product, index) {
                 </td>
                 <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-${!product.isDisabled ? 'success' : 'secondary'}">
-                        ${!product.isDisabled ? 'Activated' : 'Disabled'}
+                        ${!product.isDisabled ? 'Activated' : 'Deactivated'}
                     </span>
                 </td>
                 <td class="align-middle">
-                    <a href="#" class="text-secondary font-weight-bold text-xs"
-                        data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
-                        <i class="far fa-edit"></i><span> Edit</span>
-                    </a>
-                    ${buildDeleteButtonHtml(product.isDisabled)}
+                    ${buildActionButtonHtml(product.isDisabled)}
                 </td>
             </tr>`;
 }
 
-function buildDeleteButtonHtml(isDisabled) {
+function buildActionButtonHtml(isDisabled) {
     if (!isDisabled)
-        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete product"
+        return `
+                ${getEditButton()}
+                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                     name="btn-action">
                     <i class="far fa-trash-alt"></i>
-                    <span> Delete</span>
+                    <span> Deactivate</span>
                 </a>`;
     else
-        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Active product"
+        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                     name="btn-action">
                     <i class="fas fa-check"></i>
-                    <span> Active</span>
+                    <span> Activate</span>
                 </a>`;
+}
+
+function getEditButton() {
+    return `<a href="#" class="text-secondary font-weight-bold text-xs"
+                data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
+                <i class="far fa-edit"></i><span> Edit</span>
+            </a>`;
 }
 
 function renderPagination(currentPageNumber, maxPageNumber) {
@@ -172,15 +177,11 @@ function buildCategoryTableRowHtml(category, index) {
                 </td>
                 <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-${!category.isDisabled ? 'success' : 'secondary'}">
-                        ${!category.isDisabled ? 'Activated' : 'Disabled'}
+                        ${!category.isDisabled ? 'Activated' : 'Deactivated'}
                     </span>
                 </td>
                 <td class="align-middle">
-                    <a href="#" class="text-secondary font-weight-bold text-xs"
-                        data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
-                        <i class="far fa-edit"></i><span> Edit</span>
-                    </a>
-                    ${buildDeleteButtonHtml(category.isDisabled)}
+                    ${buildActionButtonHtml(category.isDisabled)}
                 </td>
             </tr>`;
 }

@@ -2,14 +2,14 @@
 <form id="form-modal" role="form">
     <div class="row justify-content-center">
         <div class="col-5 ">
-
             <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Name</label>
                 <input type="text" class="form-control" id="input-name">
             </div>
             @await Component.InvokeAsync("CategorySpecialDropdown")
-            <div class="text-left">
-                <a href="#" class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit">Add</a>
+            <div class="form-group">
+                <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Add</button>
+                <a class="btn bg-gradient-primary-dark my-shadow text-white" style="float: right" href="category">Cancel</a>
             </div>
         </div>
     </div>

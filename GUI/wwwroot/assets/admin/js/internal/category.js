@@ -22,39 +22,46 @@ function loadCategories(pageNumber, pageSize) {
         $('a[name=btn-action]').click(function (e) {
             e.preventDefault();
             let action = $(this).text().trim().toLowerCase();
-            if (action != 'delete' && action != 'active') {
+            if (action != 'deactivate' && action != 'activate') {
                 alert('something went wrong!');
                 return;
             }
             let id = $(this).parent().parent().children('#cate-id').text();
-            if (!confirm(`Are you sure to category with id = ${id}`))
-                return;
-            if (action == 'delete')
+            let name = $(this).parent().parent().children('td:nth-child(4)').children().text();
+            if (action == 'deactivate') {
+                if (!confirm(`Do you want to deactivate ${name}`))
+                    return;
                 deleteCategory(id,
                     () => {
-                        toastr.success(`Deleted category with id = ${id}`, 'Success');
+                        toastr.success(`Deactivated ${name}`, 'Success');
                         $(this).parent().parent().children('td:nth-child(6)').children()
                             .removeClass('bg-gradient-success')
                             .addClass('bg-gradient-secondary')
-                            .text('Disabled');
-                        $(this).children('span').text(' Active');
+                            .text('Deactivated');
+                        $(this).parent().children('*[name="btn-edit"]').remove();
+                        $(this).children('span').text(' Activate');
                         $(this).children('i').removeClass().addClass('fas fa-check');
                     },
-                    () => toastr.error(`Failed to delete category with id = ${id}!`, 'Error')
+                    () => toastr.error(`Failed to deactivate ${name}!`, 'Error')
                 );
-            else
+            }
+            else {
+                if (!confirm(`Do you want to activate ${name}`))
+                    return;
                 activeCategory(id,
                     () => {
-                        toastr.success(`Activated category with id = ${id}`, 'Success');
+                        toastr.success(`Activated ${name}`, 'Success');
                         $(this).parent().parent().children('td:nth-child(6)').children()
                             .removeClass('bg-gradient-secondary')
                             .addClass('bg-gradient-success')
                             .text('Activated');
-                        $(this).children('span').text(' Delete');
+                        $(this).parent().prepend(getEditButton());
+                        $(this).children('span').text(' Deactivate');
                         $(this).children('i').removeClass().addClass('far fa-trash-alt');
                     },
-                    () => toastr.error(`Failed to active category with id = ${id}!`, 'Error')
+                    () => toastr.error(`Failed to activate ${name}!`, 'Error')
                 );
+            }
         });
 
         $('#previous-page').click(() => {

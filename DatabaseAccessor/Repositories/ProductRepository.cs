@@ -47,6 +47,11 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<CommandResponse<bool>> AddProductAsync(AddOrEditProductRequestModel requestModel)
         {
+            var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
+            if (category == null)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is not found" };
+            if (category.IsDisabled)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is disabled" };
             _dbContext.ShopProducts.Add(new ShopProduct().AssignByRequestModel(requestModel));
             try
             {
