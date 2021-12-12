@@ -52,25 +52,59 @@ namespace ShopProductService
             return Validate(images, validationRules);
         }
 
-        public async Task<string[]> SaveFileAsync(IFormFileCollection images)
+        public async Task<string[]> SaveFilesAsync(IFormFileCollection images)
         {
             var validationResult = Validate(images);
             if (validationResult.IsError)
                 throw new ImageValidationException(validationResult);
-            List<string> saveFileNames = new(5);
-            for (int i = 0; i < images.Count; i++)
-            {
-                var image = images[i];
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-                var savePath = Path.Combine(_environment.WebRootPath, fileName);
-                using (var fileStream = File.Create(savePath))
-                {
-                    await image.CopyToAsync(fileStream);
-                }
-                saveFileNames.Add(fileName);
-            }
-            return saveFileNames.ToArray();
+            List<string> savedFileNames = new(5);
+            foreach (IFormFile image in images)
+                savedFileNames.Add(await SaveFileAsync(image));
+            return savedFileNames.ToArray();
         }
+
+        public async Task<string[]> EditFilesAsync(string[] oldImagesName, IFormFileCollection images)
+        {
+            var validationResult = Validate(images);
+            if (validationResult.IsError)
+                throw new ImageValidationException(validationResult);
+            var imageFilesName = images.Select(x => x.FileName).ToList();
+            List<string> savedFileNames = new(images.Count);
+            var shouldBeEdittedFileNames = oldImagesName.Intersect(imageFilesName).ToList();
+            var shouldBeDeletedFileNames = oldImagesName.Except(imageFilesName).ToList();
+            var shouldBeCreatedFileNames = imageFilesName.Except(oldImagesName).ToList();
+            foreach (var shouldBeEdittedFileName in shouldBeEdittedFileNames)
+            {
+                await EditFileAsync(
+                    GetSavePathForImage(shouldBeEdittedFileName),
+                    images.First(image => image.FileName == shouldBeEdittedFileName)
+                );
+                savedFileNames.Add(shouldBeEdittedFileName);
+            }
+            foreach (var shouldBeDeletedFileName in shouldBeDeletedFileNames)
+                File.Delete(GetSavePathForImage(shouldBeDeletedFileName));
+            foreach (var shouldBeCreatedFileName in shouldBeCreatedFileNames)
+                savedFileNames.Add(
+                    await SaveFileAsync(images.First(image => image.FileName == shouldBeCreatedFileName))
+                );
+            return savedFileNames.ToArray();
+        }
+
+        private async Task<string> SaveFileAsync(IFormFile image, string fileName = null)
+        {
+            fileName ??= Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+            using var fileStream = File.Create(GetSavePathForImage(fileName));
+            await image.CopyToAsync(fileStream);
+            return fileName;
+        }
+
+        private static async Task EditFileAsync(string filePath, IFormFile image)
+        {
+            using var fileStream = File.Open(filePath, FileMode.Truncate);
+            await image.CopyToAsync(fileStream);
+        }
+
+        private string GetSavePathForImage(string imageName) => Path.Combine(_environment.WebRootPath, imageName);
 
         public ImageValidationResult Validate(IFormFileCollection images, ImageValidationRuleSet validationRules)
         {
@@ -92,10 +126,9 @@ namespace ShopProductService
 
         public FileResponse GetImage(string imageName)
         {
-            var fullPath = Path.Combine(_environment.WebRootPath, imageName);
             return new FileResponse
             {
-                FullPath = fullPath,
+                FullPath = GetSavePathForImage(imageName),
                 MimeType = string.Concat("image/", Path.GetExtension(imageName).AsSpan(1))
             };
         }
@@ -104,8 +137,8 @@ namespace ShopProductService
         {
             if (rule.RuleName == ImageValidationRuleName.ImageExtension)
             {
-                var fileExtension = Path.GetExtension(file.FileName).Substring(1);
-                if (Array.Exists(ImageValidationRule.IMAGE_EXTENSIONS, extension => extension == fileExtension))
+                string fileExtension = Path.GetExtension(file.FileName)[1..];
+                if (ImageValidationRule.IMAGE_EXTENSIONS.Contains(fileExtension))
                     return true;
                 return false;
             }

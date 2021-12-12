@@ -1,6 +1,6 @@
 ﻿<h4 class="font-weight-bolder text-center">Edit Product</h4>
 <hr />
-<form role="form">
+<form id="product-form" enctype="multipart/form-data" method="post">
     <div class="row justify-content-center">
         <div class="col-5">
             <input type="hidden" id="input-id" />
@@ -30,8 +30,18 @@
                 <label class="form-label">Discount</label>
                 <input class="form-control" type="number" id="input-discount" />
             </div>
+            <input type="hidden" id="input-oldFilesName" />
+            <div class="form-group mb-3">
+                <label class="form-label">Images</label>
+                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px"
+                        action="https://localhost:44302/api/products">
+                    <div class="dz-default dz-message" data-dz-message="">
+                        <span>Drop images here to upload</span>
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
-                <a class="btn btn-primary" href="#" id="btn-submit">Save</a>
+                <a class="btn bg-gradient-primary-dark my-shadow text-white" href="#" id="btn-submit">Save</a>
             </div>
         </div>
     </div>
@@ -43,7 +53,10 @@
 
 @section Scripts {
     <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script>
+        Dropzone.autoDiscover = false;
+        const edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
         $(function () {
             let classNames = ['active', 'bg-gradient-primary'];
             $('#nav-item-product').addClass(classNames);
@@ -52,33 +65,64 @@
                 tinymce.init({
                     selector: '#input-description'
                 });
-                loadEdittingProduct();
-            });
-            $('#btn-submit').click(e => {
-                e.preventDefault();
-                let id = $('#input-id').val();
-                let name = $('#input-name').val();
-                let category = $('#input-category').val();
-                let description = tinymce.activeEditor.getContent({ format: 'text' });
-                let quantity = $('#input-quantity').val();
-                let price = $('#input-price').val();
-                let discount = $('#input-discount').val();
-                let product = {
-                    productName: name,
-                    categoryId: category,
-                    description: description,
-                    quantity: quantity,
-                    price: price,
-                    discount: discount
-                };
-                editProduct(id, product, () => { 
-                    window.location.href = '/admin/product';
-                    window.localStorage.removeItem('editting-product');
-                }, () => alert('something went wrong!'));
+                let acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                const acceptedMaxBytes = 4 * 1024 * 1024;
+                let remainingBytes = acceptedMaxBytes;
+                let dropzone = new Dropzone('div#file-section', {
+                    maxFilesize: 1,
+                    paramName: 'files',
+                    maxFiles: 5,
+                    filesizeBase: 1024,
+                    autoProcessQueue: false,
+                    uploadMultiple: true,
+                    acceptedFiles: 'image/jpeg,image/jpg,image/png',
+                    addRemoveLinks: true
+                });
+                dropzone.on('addedfile', function (file) {
+                    let maxFileNumber = this.options.maxFiles;
+                    let maxFileSize = this.options.maxFilesize;
+                    let uploadedFileSizeInMb = file.size / (1024 * 1024);
+                    if (this.files.length > this.options.maxFiles) {
+                        this.removeFile(file);
+                        toastr.error('Max file number exceeded!', 'File is rejected');
+                    } else if (!acceptedMimeTypes.includes(file.type)) {
+                        this.removeFile(file);
+                        toastr.error('You can\'t upload this type of file!', 'File is rejected');
+                    } else if (uploadedFileSizeInMb > maxFileSize) {
+                        this.removeFile(file);
+                        toastr.error(`${uploadedFileSizeInMb.toFixed(2)} MB file is too big to upload!`, 'File is rejected');
+                    } else if (file.size > remainingBytes) {
+                        this.removeFile(file);
+                        toastr.error('Maximum file size exceeded!', 'File is rejected');
+                    } else {
+                        remainingBytes -= file.size;
+                    }
+                });
+                loadEdittingProduct(edittingProduct, dropzone);
+                $('#btn-submit').click(e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (dropzone.files.length < 2) {
+                        toastr.error('You must upload at least 2 pictures!', 'Error');
+                        return;
+                    }
+                    let formData = new FormData();
+                    var requestModelObject = buildRequestModel();
+                    Object.keys(requestModelObject).forEach(key => {
+                        formData.append(`requestModel.${key}`, requestModelObject[key]);
+                    });
+                    for (let i = 0; i < edittingProduct.images.length; i++)
+                        formData.append(`requestModel.imagePaths[${i}]`, edittingProduct.images[i]);
+                    for (let i = 0; i < dropzone.files.length; i++)
+                        formData.append(`images[${i}]`, dropzone.files[i]);
+                    editProduct(edittingProduct.id, formData, () => { 
+                        window.location.href = '/admin/product';
+                        window.localStorage.removeItem('editting-product');
+                    }, () => alert('something went wrong!'));
+                });
             });
         });
-        function loadEdittingProduct() {
-            let edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
+        function loadEdittingProduct(edittingProduct, dropzone) {
             if (!edittingProduct) {
                 alert("Something went wrong!");
                 window.location.href = "/admin/product";
@@ -90,7 +134,28 @@
             $('#input-quantity').val(edittingProduct.quantity);
             $('#input-price').val(edittingProduct.price);
             $('#input-discount').val(edittingProduct.discount);
+            edittingProduct.images.forEach(imageUrl => getProductImage(imageUrl, blob => {
+                let file = new File([blob], blob.name, { type: blob.type });
+                dropzone.addFile(file);
+            }));
             $('.input-group-outline').addClass('is-filled');
+        }
+        function buildRequestModel() {
+            let id = $('#input-id').val();
+            let name = $('#input-name').val();
+            let category = $('#input-category').val();
+            let description = tinymce.activeEditor.getContent({ format: 'text' });
+            let quantity = $('#input-quantity').val();
+            let price = $('#input-price').val();
+            let discount = $('#input-discount').val();
+            return {
+                productName: name,
+                categoryId: category,
+                description: description,
+                quantity: quantity,
+                price: price,
+                discount: discount
+            };
         }
     </script>
 }

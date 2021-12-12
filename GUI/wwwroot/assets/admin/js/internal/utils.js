@@ -44,7 +44,7 @@ function buildProductTableRowHtml(product, index) {
                 <td class="align-middle text-center">
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="https://localhost:44302/api/products/images/${product.images[0]}" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                            <img src="${getProductImageUrl(product.images[0])}" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
                         </div>
                         <div class="d-flex flex-column">
                             <h6 class="mb-0 text-sm">${product.productName}</h6>
@@ -57,7 +57,7 @@ function buildProductTableRowHtml(product, index) {
                 </td>
                 <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-${!product.isDisabled ? 'success' : 'secondary'}">
-                        ${!product.isDisabled ? 'Active' : 'Disabled'}
+                        ${!product.isDisabled ? 'Activated' : 'Disabled'}
                     </span>
                 </td>
                 <td class="align-middle">
@@ -72,16 +72,16 @@ function buildProductTableRowHtml(product, index) {
 
 function buildDeleteButtonHtmlForProduct(product) {
     if (!product.isDisabled)
-        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user"
-                    name="btn-delete">
+        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete product"
+                    name="btn-action">
                     <i class="far fa-trash-alt"></i>
                     <span> Delete</span>
                 </a>`;
     else
-        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user"
-                    name="btn-delete">
+        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Active product"
+                    name="btn-action">
                     <i class="fas fa-check"></i>
-                    <span> Enable</span>
+                    <span> Active</span>
                 </a>`;
 }
 

@@ -1,8 +1,10 @@
-﻿namespace Shared.ImageValidations
+﻿using System.Collections.Generic;
+
+namespace Shared.ImageValidations
 {
     public class ImageValidationRule
     {
-        public static readonly string[] IMAGE_EXTENSIONS = { "jpg", "jpeg", "png" };
+        public static readonly List<string> IMAGE_EXTENSIONS = new () { "jpg", "jpeg", "png" };
         public ImageValidationRuleName RuleName { get; set; }
 
         public long Value { get; set; }

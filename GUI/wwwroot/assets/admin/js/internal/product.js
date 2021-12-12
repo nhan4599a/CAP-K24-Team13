@@ -2,8 +2,8 @@
     let currentPageInfo = getCurrentPageInfo();
     loadProducts(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
-    let classNames = ['active'];
-    $('#nav-item-product').addClass(classNames).css('background-color', '#2f9db6');
+    let classNames = ['active', 'bg-gradient-primary'];
+    $('#nav-item-product').addClass(classNames);
     let searchTextField = $('#input-search');
     if (currentPageInfo.keyword) {
         searchTextField.parent().addClass('is-filled');
@@ -42,29 +42,49 @@ function loadProducts(keyword, pageNumber, pageSize) {
             window.localStorage.setItem('editting-product', productInfoStr);
             window.location.href = "/admin/product/edit";
         });
-        $('a[name=btn-delete]').click(function (e) {
+        $('a[name=btn-action]').click(function (e) {
+            e.preventDefault();
+            let action = $(this).text().trim().toLowerCase();
+            if (action != 'delete' && action != 'active') {
+                alert('something went wrong!');
+                return;
+            }
             let id = $(this).parent().parent().children('#prod-id').text();
             if (!confirm(`Are you sure to product with id = ${id}`))
                 return;
-            e.preventDefault();
-            deleteProduct(id, () => {
-                toastr.success(`Deleted product with id = ${id}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(5)').children()
-                    .removeClass('bg-gradient-success')
-                    .addClass('bg-gradient-secondary')
-                    .text('Disabled');
-                $(this).remove();
-            }, () => toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error'));
+            if (action == 'delete')
+                deleteProduct(id, () => {
+                    toastr.success(`Deleted product with id = ${id}`, 'Success');
+                    $(this).parent().parent().children('td:nth-child(5)').children()
+                        .removeClass('bg-gradient-success')
+                        .addClass('bg-gradient-secondary')
+                        .text('Disabled');
+                    $(this).children('span').text(' Active');
+                    $(this).children('i').removeClass().addClass('fas fa-check');
+                }, () => toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error'));
+            else
+                activeProduct(id, () => {
+                    toastr.success(`Activated product with id = ${id}`, 'Success');
+                    $(this).parent().parent().children('td:nth-child(5)').children()
+                        .removeClass('bg-gradient-secondary')
+                        .addClass('bg-gradient-success')
+                        .text('Activated');
+                    $(this).children('span').text(' Delete');
+                    $(this).children('i').removeClass().addClass('far fa-trash-alt');
+                }, () => toastr.error(`Failed to delete product with id = ${id}, ${res.errorMessage}!`, 'Error'));
         });
-        $('#previous-page').click(() => {
+        $('#previous-page').click((e) => {
+            e.preventDefault();
             let currentPageInfo = getCurrentPageInfo();
             moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
         });
-        $('#next-page').click(() => {
+        $('#next-page').click((e) => {
+            e.preventDefault();
             let currentPageInfo = getCurrentPageInfo();
             moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
         });
-        $('a.pagination-item').click(function () {
+        $('a.pagination-item').click(function (e) {
+            e.preventDefault();
             let pageNumber = $(this).text();
             let currentPageInfo = getCurrentPageInfo();
             moveToPage(currentPageInfo.keyword, pageNumber, currentPageInfo.pageSize);

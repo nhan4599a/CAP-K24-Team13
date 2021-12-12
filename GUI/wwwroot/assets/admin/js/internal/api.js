@@ -2,6 +2,8 @@
 axios.defaults.timeout = 20000;
 
 axios.interceptors.response.use(axiosResp => {
+    if (axiosResp.data instanceof Blob)
+        return Promise.resolve(axiosResp.data);
     var resp = axiosResp.data;
     if (resp.responseCode != 200) {
         return Promise.reject(resp.errorMessage);
@@ -30,8 +32,25 @@ function findProducts(keyword, pageNumber, pageSize, successCallback) {
         }).then(successCallback);
 }
 
+function getProductImageUrl(imageFileName) {
+    return `${axios.defaults.baseURL}${productEndpoint}/images/${imageFileName}`;
+}
+
+function getProductImage(imageFileName, callback) {
+    axios.get(getProductImageUrl(imageFileName), {
+        responseType: 'blob'
+    }).then(blob => {
+        blob.name = imageFileName;
+        return blob;
+    }).then(callback);
+}
+
 function deleteProduct(id, successCallback, errorCallback) {
-    axios.delete(productEndpoint + `/${id}`).then(successCallback).catch(errorCallback);
+    axios.delete(productEndpoint + `/${id}?action=0`).then(successCallback).catch(errorCallback);
+}
+
+function activeProduct(id, successCallback, errorCallback) {
+    axios.delete(productEndpoint + `/${id}?action=1`).then(successCallback).catch(errorCallback);
 }
 
 function addProduct(formData, successCallback, errorCallback) {
@@ -42,8 +61,12 @@ function addProduct(formData, successCallback, errorCallback) {
     }).then(successCallback).catch(errorCallback);
 }
 
-function editProduct(id, product, successCallback, errorCallback) {
-    axios.put(productEndpoint + `/${id}`, product).then(successCallback).catch(errorCallback);
+function editProduct(id, formData, successCallback, errorCallback) {
+    axios.put(productEndpoint + `/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }).then(successCallback).catch(errorCallback);
 }
 
 function getAllCategories(successCallback) {

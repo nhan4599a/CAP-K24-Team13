@@ -1,8 +1,8 @@
 ﻿$(document).ready(() => {
     var currentPageInfo = getCurrentPageInfo();
     loadCategories(currentPageInfo.pageNumber, currentPageInfo.pageSize);
-    let classNames = ['active'];
-    $('#nav-item-category').addClass(classNames).css('background-color', '#2f9db6');
+    let classNames = ['active', 'bg-gradient-primary'];
+    $('#nav-item-category').addClass(classNames);
 });
 
 function loadCategories(pageNumber, pageSize) {

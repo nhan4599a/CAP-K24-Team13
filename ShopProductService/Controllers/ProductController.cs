@@ -1,6 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.DTOs;
@@ -28,7 +26,7 @@ namespace ShopProductService.Controllers
         [HttpPost]
         public async Task<ApiResult<bool>> AddProduct([FromForm(Name = "requestModel")] AddOrEditProductRequestModel requestModel)
         {
-            requestModel.ImagePaths = await _imageManager.SaveFileAsync(Request.Form.Files);
+            requestModel.ImagePaths = await _imageManager.SaveFilesAsync(Request.Form.Files);
             var response = await _mediator.Send(new AddProductCommand
             {
                 RequestModel = requestModel
@@ -39,8 +37,10 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ApiResult<bool>> EditProduct(string id, AddOrEditProductRequestModel requestModel)
+        public async Task<ApiResult<bool>> EditProduct(string id, [FromForm(Name = "requestModel")] AddOrEditProductRequestModel requestModel)
         {
+            var oldFilesName = requestModel.ImagePaths;
+            requestModel.ImagePaths = await _imageManager.EditFilesAsync(oldFilesName, Request.Form.Files);
             var response = await _mediator.Send(new EditProductCommand
             {
                 Id = new Guid(id),
@@ -52,12 +52,12 @@ namespace ShopProductService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ApiResult<bool>> DeleteProduct(string id)
+        public async Task<ApiResult<bool>> DeleteProduct(string id, [FromQuery] DeleteProductActions action)
         {
-            var response = await _mediator.Send(new DeleteProductCommand
-            {
-                Id = new Guid(id)
-            });
+            IRequest<CommandResponse<bool>> command = action == DeleteProductActions.Active ?
+                new ActiveProductCommand { Id = new Guid(id) } :
+                new DeleteProductCommand { Id = new Guid(id) };
+            var response = await _mediator.Send(command);
             if (!response.Response)
                 return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = response.ErrorMessage };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
@@ -99,5 +99,10 @@ namespace ShopProductService.Controllers
                 return null;
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
+    }
+
+    public enum DeleteProductActions
+    {
+        Delete, Active
     }
 }
