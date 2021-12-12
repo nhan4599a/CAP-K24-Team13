@@ -19,12 +19,42 @@ function loadCategories(pageNumber, pageSize) {
             window.localStorage.setItem('editting-category', categoryInfoStr);
             window.location.href = "/admin/category/edit";
         });
-        $('a[name=btn-delete]').click(function () {
+        $('a[name=btn-action]').click(function (e) {
+            e.preventDefault();
+            let action = $(this).text().trim().toLowerCase();
+            if (action != 'delete' && action != 'active') {
+                alert('something went wrong!');
+                return;
+            }
             let id = $(this).parent().parent().children('#cate-id').text();
-            deleteCategory(id,
-                () => toastr.error(`Failed to delete category with id = ${id}, ${res.errorMessage}!`, 'Error'),
-                () => toastr.success(`Deleted category with id = ${id}`, 'Success')
-            );
+            if (!confirm(`Are you sure to category with id = ${id}`))
+                return;
+            if (action == 'delete')
+                deleteCategory(id,
+                    () => {
+                        toastr.success(`Deleted category with id = ${id}`, 'Success');
+                        $(this).parent().parent().children('td:nth-child(6)').children()
+                            .removeClass('bg-gradient-success')
+                            .addClass('bg-gradient-secondary')
+                            .text('Disabled');
+                        $(this).children('span').text(' Active');
+                        $(this).children('i').removeClass().addClass('fas fa-check');
+                    },
+                    () => toastr.error(`Failed to delete category with id = ${id}!`, 'Error')
+                );
+            else
+                activeCategory(id,
+                    () => {
+                        toastr.success(`Activated category with id = ${id}`, 'Success');
+                        $(this).parent().parent().children('td:nth-child(6)').children()
+                            .removeClass('bg-gradient-secondary')
+                            .addClass('bg-gradient-success')
+                            .text('Activated');
+                        $(this).children('span').text(' Delete');
+                        $(this).children('i').removeClass().addClass('far fa-trash-alt');
+                    },
+                    () => toastr.error(`Failed to active category with id = ${id}!`, 'Error')
+                );
         });
 
         $('#previous-page').click(() => {

@@ -65,13 +65,13 @@ function buildProductTableRowHtml(product, index) {
                         data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
                         <i class="far fa-edit"></i><span> Edit</span>
                     </a>
-                    ${buildDeleteButtonHtmlForProduct(product)}
+                    ${buildDeleteButtonHtml(product.isDisabled)}
                 </td>
             </tr>`;
 }
 
-function buildDeleteButtonHtmlForProduct(product) {
-    if (!product.isDisabled)
+function buildDeleteButtonHtml(isDisabled) {
+    if (!isDisabled)
         return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete product"
                     name="btn-action">
                     <i class="far fa-trash-alt"></i>
@@ -137,6 +137,9 @@ function buildCategoryTableHtml(categories) {
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Special
                         </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Status
+                        </th>
                         <th class="text-secondary opacity-7">Action</th>
                     </tr>
                 </thead>
@@ -147,6 +150,7 @@ function buildCategoryTableHtml(categories) {
 }
 
 function buildCategoryTableRowHtml(category, index) {
+    console.log(category);
     return `<tr>
                 <td style="display: none" id="cate-id">${category.id}</td>
                 <td>
@@ -166,15 +170,17 @@ function buildCategoryTableRowHtml(category, index) {
                     <input type="checkbox" checked="checked">
                     <span class="checkmark"></span>
                 </td>
+                <td class="align-middle text-center text-sm">
+                    <span class="badge badge-sm bg-gradient-${!category.isDisabled ? 'success' : 'secondary'}">
+                        ${!category.isDisabled ? 'Activated' : 'Disabled'}
+                    </span>
+                </td>
                 <td class="align-middle">
                     <a href="#" class="text-secondary font-weight-bold text-xs"
                         data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px">
                         <i class="far fa-edit"></i><span> Edit</span>
                     </a>
-                    <a href="#" class="text-secondary font-weight-bold text-xs"
-                        data-toggle="tooltip" data-original-title="Delete user" name="btn-delete">
-                        <i class="far fa-trash-alt"></i><span> Delete</span>
-                    </a>
+                    ${buildDeleteButtonHtml(category.isDisabled)}
                 </td>
             </tr>`;
 }

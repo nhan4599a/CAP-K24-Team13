@@ -71,15 +71,20 @@ namespace ShopProductService.Controllers
 
         [HttpDelete("{id}")]
         [ActionName("Delete")]
-        public async Task<ApiResult<bool>> DeleteCategory(int id)
+        public async Task<ApiResult<bool>> DeleteCategory(int id, [FromQuery] DeleteCategoryActions action)
         {
-            var response = await _mediator.Send(new DeleteCategoryCommand
-            {
-                Id = id
-            });
+            IRequest<CommandResponse<bool>> command = action == DeleteCategoryActions.Active ?
+                new ActiveCategoryCommand { Id = id } :
+                new DeleteCategoryCommand { Id = id };
+            var response = await _mediator.Send(command);
             if (!response.Response)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
+    }
+
+    public enum DeleteCategoryActions
+    {
+        Delete, Active
     }
 }

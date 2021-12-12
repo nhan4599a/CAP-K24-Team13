@@ -83,7 +83,11 @@ function getCategories(pageNumber, pageSize, successCallback) {
 }
 
 function deleteCategory(id, successCallback, errorCallback) {
-    axios.delete(categoryEndpoint + `/${id}`).then(successCallback).catch(errorCallback);
+    axios.delete(categoryEndpoint + `/${id}?action=0`).then(successCallback).catch(errorCallback);
+}
+
+function activeCategory(id, successCallback, errorCallback) {
+    axios.delete(categoryEndpoint + `/${id}?action=1`).then(successCallback).catch(errorCallback);
 }
 
 function addCategory(category, successCallback, errorCallback) {
