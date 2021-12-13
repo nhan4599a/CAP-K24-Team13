@@ -72,6 +72,8 @@ namespace DatabaseAccessor.Repositories
             var product = await FindProductByIdAsync(id);
             if (product == null || product.IsDisabled == shouldDisable)
                 return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is not found or already enabled/disabled" };
+            if (!shouldDisable && product.Category.IsDisabled)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is belong to a deactivated category" };
             product.IsDisabled = shouldDisable;
             _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
