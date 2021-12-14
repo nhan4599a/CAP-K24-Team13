@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Interfaces
 {
-    public interface IProductRepository
+    public interface IProductRepository : IDisposable
     {
         Task<ProductDTO> GetProductAsync(Guid id);
 
@@ -17,7 +17,7 @@ namespace DatabaseAccessor.Repositories.Interfaces
 
         Task<CommandResponse<bool>> AddProductAsync(AddOrEditProductRequestModel requestModel);
 
-        Task<CommandResponse<bool>> ActiveProductAsync(Guid id, bool shouldDisable);
+        Task<CommandResponse<bool>> ActivateProductAsync(Guid id, bool isActivateCommand);
 
         Task<CommandResponse<bool>> EditProductAsync(Guid id, AddOrEditProductRequestModel requestModel);
     }

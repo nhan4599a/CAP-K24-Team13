@@ -23,6 +23,7 @@ namespace DatabaseAccessor
                 .UseSqlServer(_connectionString)
                 .UseTriggers(options =>
                 {
+                    options.UseTransactionTriggers();
                     options.AddTrigger<CategoryDeactivatedTrigger>();
                 });
         }

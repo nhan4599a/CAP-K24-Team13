@@ -1,13 +1,14 @@
 ﻿using DatabaseAccessor.Models;
 using EFCore.BulkExtensions;
 using EntityFrameworkCore.Triggered;
+using EntityFrameworkCore.Triggered.Transactions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor
 {
-    internal class CategoryDeactivatedTrigger : IAfterSaveTrigger<ShopCategory>
+    internal class CategoryDeactivatedTrigger : IAfterCommitTrigger<ShopCategory>
     {
         public readonly ApplicationDbContext _dbContext;
 
@@ -16,7 +17,7 @@ namespace DatabaseAccessor
             _dbContext = dbContext;
         }
 
-        public async Task AfterSave(ITriggerContext<ShopCategory> context, CancellationToken cancellationToken)
+        public async Task AfterCommit(ITriggerContext<ShopCategory> context, CancellationToken cancellationToken)
         {
             if (context.ChangeType == ChangeType.Modified && context.Entity.IsDisabled)
             {

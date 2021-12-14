@@ -1,7 +1,9 @@
 ﻿using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Interfaces;
+using EntityFrameworkCore.Triggered;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
@@ -59,20 +61,36 @@ namespace DatabaseAccessor.Repositories
             return new CommandResponse<bool> { Response = true };
         }
 
-        public async Task<CommandResponse<bool>> ActiveCategoryAsync(int id, bool shouldDisable)
+        public async Task<CommandResponse<bool>> ActivateCategoryAsync(int id,
+            bool isActivateCommand, bool shouldBeCascade)
         {
             var category = await FindCategoryByIdAsync(id);
-            if (category == null || category.IsDisabled == shouldDisable)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is not found or already enabled/disabled" };
-            category.IsDisabled = shouldDisable;
+            if (category == null)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is not found" };
+            if (isActivateCommand && !category.IsDisabled)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is already activated" };
+            if (!isActivateCommand && category.IsDisabled)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is already deactivated" };
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            using var triggerSession = _dbContext.GetService<ITriggerService>().CreateSession(_dbContext);
+            category.IsDisabled = !isActivateCommand;
             _dbContext.Entry(category).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
+            transaction.Commit();
+            if (shouldBeCascade)
+                await triggerSession.RaiseAfterCommitTriggers();
             return new CommandResponse<bool> { Response = true };
         }
 
         private async Task<ShopCategory> FindCategoryByIdAsync(int id)
         {
             return await _dbContext.ShopCategories.FindAsync(id);
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

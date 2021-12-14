@@ -52,12 +52,13 @@ namespace ShopProductService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ApiResult<bool>> DeleteProduct(string id, [FromQuery] DeleteProductActions action)
+        public async Task<ApiResult<bool>> DeleteProduct(string id, [FromQuery] DeleteAction action)
         {
-            IRequest<CommandResponse<bool>> command = action == DeleteProductActions.Active ?
-                new ActiveProductCommand { Id = new Guid(id) } :
-                new DeleteProductCommand { Id = new Guid(id) };
-            var response = await _mediator.Send(command);
+            var response = await _mediator.Send(new ActivateProductCommand
+            {
+                Id = new Guid(id),
+                IsActivateCommand = action == DeleteAction.Activate,
+            });
             if (!response.Response)
                 return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = response.ErrorMessage };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
@@ -99,10 +100,5 @@ namespace ShopProductService.Controllers
                 return null;
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
-    }
-
-    public enum DeleteProductActions
-    {
-        Delete, Active
     }
 }

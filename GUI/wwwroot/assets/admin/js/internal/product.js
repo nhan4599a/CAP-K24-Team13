@@ -52,41 +52,37 @@ function loadProducts(keyword, pageNumber, pageSize) {
             let id = $(this).parent().parent().children('#prod-id').text();
             let name = $(this).parent().parent().children('td:nth-child(3)')
                 .children().children('div:nth-child(2)').children('h6').text();
-            if (action == 'deactivate') {
-                if (!confirm(`Do you want to deactivate ${name}?`))
-                    return;
-                deleteProduct(id, () => {
-                    toastr.success(`Deactivated ${name}`, 'Success');
-                    $(this).parent().parent().children('td:nth-child(5)').children()
-                        .removeClass('bg-gradient-success')
-                        .addClass('bg-gradient-secondary')
-                        .text('deactivated');
-                    $(this).parent().children('*[name="btn-edit"]').remove();
-                    $(this).children('span').text(' Activate');
-                    $(this).children('i').removeClass().addClass('fas fa-check');
-                }, (err) => toastr.error(`Failed to deactivate ${name}, ${err}!`, 'Error'));
-            }
-            else {
-                if (!confirm(`Do you want to activate ${name}?`))
-                    return;
-                activeProduct(id, () => {
-                    toastr.success(`Activated ${name}`, 'Success');
-                    $(this).parent().parent().children('td:nth-child(5)').children()
-                        .removeClass('bg-gradient-secondary')
-                        .addClass('bg-gradient-success')
-                        .text('Activated');
-                    $(this).parent().prepend(getEditButton());
-                    $('a[name=btn-edit]').click(function (e) {
-                        e.preventDefault();
-                        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-                        let productInfoStr = JSON.stringify(products[index]);
-                        window.localStorage.setItem('editting-product', productInfoStr);
-                        window.location.href = "/admin/product/edit";
-                    });
-                    $(this).children('span').text(' Deactivate');
-                    $(this).children('i').removeClass().addClass('far fa-trash-alt');
-                }, (err) => toastr.error(`Failed to activate ${name}, ${err}!`, 'Error'));
-            }
+            if (!confirm(`Do you watn to ${action} ${name}`))
+                return;
+            let isActivateCommand = action == 'activate';
+            let successCallback = isActivateCommand ? () => {
+                toastr.success(`Activated ${name}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(5)').children()
+                    .removeClass('bg-gradient-secondary')
+                    .addClass('bg-gradient-success')
+                    .text('Activated');
+                $(this).parent().prepend(buildEditButtonHtml());
+                $('a[name=btn-edit]').click(function (e) {
+                    e.preventDefault();
+                    let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+                    let productInfoStr = JSON.stringify(products[index]);
+                    window.localStorage.setItem('editting-product', productInfoStr);
+                    window.location.href = "/admin/product/edit";
+                });
+                $(this).children('span').text(' Deactivate');
+                $(this).children('i').removeClass().addClass('far fa-trash-alt');
+            } : () => {
+                toastr.success(`Deactivated ${name}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(5)').children()
+                    .removeClass('bg-gradient-success')
+                    .addClass('bg-gradient-secondary')
+                    .text('deactivated');
+                $(this).parent().children('*[name="btn-edit"]').remove();
+                $(this).children('span').text(' Activate');
+                $(this).children('i').removeClass().addClass('fas fa-check');
+            };
+            activateProduct(id, isActivateCommand, successCallback,
+                (err) => toastr.error(`Failed to ${action} ${name}, ${err}`, 'Error'));
         });
         $('#previous-page').click((e) => {
             e.preventDefault();

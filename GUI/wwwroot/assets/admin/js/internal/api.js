@@ -45,12 +45,10 @@ function getProductImage(imageFileName, callback) {
     }).then(callback);
 }
 
-function deleteProduct(id, successCallback, errorCallback) {
-    axios.delete(productEndpoint + `/${id}?action=0`).then(successCallback).catch(errorCallback);
-}
-
-function activeProduct(id, successCallback, errorCallback) {
-    axios.delete(productEndpoint + `/${id}?action=1`).then(successCallback).catch(errorCallback);
+function activateProduct(id, isActivateCommand, successCallback, errorCallback) {
+    axios.delete(
+        `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`
+    ).then(successCallback).catch(errorCallback);
 }
 
 function addProduct(formData, successCallback, errorCallback) {
@@ -82,12 +80,18 @@ function getCategories(pageNumber, pageSize, successCallback) {
     }).then(successCallback);
 }
 
-function deleteCategory(id, successCallback, errorCallback) {
-    axios.delete(categoryEndpoint + `/${id}?action=0`).then(successCallback).catch(errorCallback);
-}
-
-function activeCategory(id, successCallback, errorCallback) {
-    axios.delete(categoryEndpoint + `/${id}?action=1`).then(successCallback).catch(errorCallback);
+function activateCategory(activateCommand, successCallback, errorCallback) {
+    if (!activateCommand)
+        throw new Error('activeCommand can not be null');
+    if (!activateCommand.id)
+        throw new Error('id can not be null');
+    if (activateCommand.isActivateCommand && activateCommand.shouldBeCascade)
+        throw new Error('Action does not supported');
+    var action = activateCommand.isActivateCommand ? 1 : 0;
+    var cascade = activateCommand.shouldBeCascade ? 1 : 0;
+    axios.delete(
+        `${categoryEndpoint}/${activateCommand.id}?action=${action}&cascade=${cascade}`
+    ).then(successCallback).catch(errorCallback);
 }
 
 function addCategory(category, successCallback, errorCallback) {

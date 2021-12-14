@@ -27,7 +27,10 @@ namespace ShopProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation();
+            services.AddControllers(options =>
+            {
+                options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
+            }).AddFluentValidation();
             services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();

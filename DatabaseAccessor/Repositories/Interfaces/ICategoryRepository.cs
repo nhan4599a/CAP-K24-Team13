@@ -1,12 +1,13 @@
 ﻿using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Interfaces
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository  : IDisposable
     {
         Task<CategoryDTO> GetCategoryAsync(int id);
 
@@ -16,6 +17,6 @@ namespace DatabaseAccessor.Repositories.Interfaces
 
         Task<CommandResponse<bool>> EditCategoryAsync(int id, AddOrEditCategoryRequestModel requestModel);
 
-        Task<CommandResponse<bool>> ActiveCategoryAsync(int id, bool shouldDisable);
+        Task<CommandResponse<bool>> ActivateCategoryAsync(int id, bool isActivateCommand, bool shouldBeCascade);
     }
 }

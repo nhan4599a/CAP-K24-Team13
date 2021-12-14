@@ -28,47 +28,42 @@ function loadCategories(pageNumber, pageSize) {
             }
             let id = $(this).parent().parent().children('#cate-id').text();
             let name = $(this).parent().parent().children('td:nth-child(4)').children().text();
-            if (action == 'deactivate') {
-                if (!confirm(`Do you want to deactivate ${name}`))
-                    return;
-                deleteCategory(id,
-                    () => {
-                        toastr.success(`Deactivated ${name}`, 'Success');
-                        $(this).parent().parent().children('td:nth-child(6)').children()
-                            .removeClass('bg-gradient-success')
-                            .addClass('bg-gradient-secondary')
-                            .text('Deactivated');
-                        $(this).parent().children('*[name="btn-edit"]').remove();
-                        $(this).children('span').text(' Activate');
-                        $(this).children('i').removeClass().addClass('fas fa-check');
-                    },
-                    () => toastr.error(`Failed to deactivate ${name}!`, 'Error')
-                );
-            }
-            else {
-                if (!confirm(`Do you want to activate ${name}`))
-                    return;
-                activeCategory(id,
-                    () => {
-                        toastr.success(`Activated ${name}`, 'Success');
-                        $(this).parent().parent().children('td:nth-child(6)').children()
-                            .removeClass('bg-gradient-secondary')
-                            .addClass('bg-gradient-success')
-                            .text('Activated');
-                        $(this).parent().prepend(getEditButton());
-                        $('a[name=btn-edit]').click(function (e) {
-                            e.preventDefault();
-                            let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-                            let categoryInfoStr = JSON.stringify(categories[index]);
-                            window.localStorage.setItem('editting-category', categoryInfoStr);
-                            window.location.href = "/admin/category/edit";
-                        });
-                        $(this).children('span').text(' Deactivate');
-                        $(this).children('i').removeClass().addClass('far fa-trash-alt');
-                    },
-                    () => toastr.error(`Failed to activate ${name}!`, 'Error')
-                );
-            }
+            if (!confirm(`Do you want to ${action} ${name}`))
+                return;
+            var shouldBeCascade = false;
+            if (action == 'deactivate')
+                shouldBeCascade = confirm('Do you want to cascade deactivate action');
+            var command = {
+                id: id,
+                isActivateCommand: action == 'activate',
+                shouldBeCascade: this.isActivateCommand ? false : shouldBeCascade
+            };
+            var successCallback = command.isActivateCommand ? () => {
+                toastr.success(`Activated ${name}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(6)').children()
+                    .removeClass('bg-gradient-secondary')
+                    .addClass('bg-gradient-success')
+                    .text('Activated');
+                $(this).parent().prepend(buildEditButtonHtml());
+                $(this).children('span').text(' Deactivate')
+                $('a[name=btn-edit]').click(function (e) {
+                    e.preventDefault();
+                    let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+                    let categoryInfoStr = JSON.stringify(categories[index]);
+                    window.localStorage.setItem('editting-category', categoryInfoStr);
+                    window.location.href = "/admin/category/edit";
+                });
+            } : () => {
+                toastr.success(`Deactivated ${name}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(6)').children()
+                    .removeClass('bg-gradient-success')
+                    .addClass('bg-gradient-secondary')
+                    .text('Deactivated');
+                $(this).parent().children('*[name="btn-edit"]').remove();
+                $(this).children('span').text(' Activate');
+                $(this).children('i').removeClass().addClass('fas fa-check');
+            };
+            activateCategory(command, successCallback, () => toastr.error(`Failed to ${action} ${name}`));
         });
 
         $('#previous-page').click(() => {

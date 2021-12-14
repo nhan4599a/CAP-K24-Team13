@@ -9,6 +9,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using EntityFrameworkCore.Triggered;
 
 namespace DatabaseAccessor.Repositories
 {
@@ -67,14 +69,18 @@ namespace DatabaseAccessor.Repositories
             }
         }
 
-        public async Task<CommandResponse<bool>> ActiveProductAsync(Guid id, bool shouldDisable)
+        public async Task<CommandResponse<bool>> ActivateProductAsync(Guid id, bool isActivateCommand)
         {
             var product = await FindProductByIdAsync(id);
-            if (product == null || product.IsDisabled == shouldDisable)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is not found or already enabled/disabled" };
-            if (!shouldDisable && product.Category.IsDisabled)
+            if (product == null)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is not found" };
+            if (isActivateCommand && !product.IsDisabled)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is already activated" };
+            if (!isActivateCommand && product.IsDisabled)
+                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is already deactivated" };
+            if (isActivateCommand && product.Category.IsDisabled)
                 return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is belong to a deactivated category" };
-            product.IsDisabled = shouldDisable;
+            product.IsDisabled = !isActivateCommand;
             _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return new CommandResponse<bool> { Response = true };
@@ -100,6 +106,12 @@ namespace DatabaseAccessor.Repositories
         private async Task<ShopProduct> FindProductByIdAsync(Guid id)
         {
             return await _dbContext.ShopProducts.FindAsync(id);
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

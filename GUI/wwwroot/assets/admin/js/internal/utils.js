@@ -69,7 +69,7 @@ function buildProductTableRowHtml(product, index) {
 function buildActionButtonHtml(isDisabled) {
     if (!isDisabled)
         return `
-                ${getEditButton()}
+                ${buildEditButtonHtml()}
                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                     name="btn-action">
                     <i class="far fa-trash-alt"></i>
@@ -83,9 +83,10 @@ function buildActionButtonHtml(isDisabled) {
                 </a>`;
 }
 
-function getEditButton() {
+function buildEditButtonHtml() {
     return `<a href="#" class="text-secondary font-weight-bold text-xs"
-                data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
+                data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit"
+                onclick="edit(e)">
                 <i class="far fa-edit"></i><span> Edit</span>
             </a>`;
 }
@@ -155,7 +156,6 @@ function buildCategoryTableHtml(categories) {
 }
 
 function buildCategoryTableRowHtml(category, index) {
-    console.log(category);
     return `<tr>
                 <td style="display: none" id="cate-id">${category.id}</td>
                 <td>
