@@ -228,3 +228,65 @@ function sortList(field, direction, dataList) {
 function clearTable() {
     $('.table-responsive.p-0').html('');
 }
+
+function displayCascadeQuestionDialog(question, buttonOption = {}, confirmedCallback) {
+    if (!buttonOption.cascadeButtonText)
+        buttonOption.cascadeButtonText = 'Yes and cascade';
+    if (!buttonOption.nonCascadeButtonText)
+        buttonOption.nonCascadeButtonText = "Non cascade";
+    if (!buttonOption.cancelButtonText)
+        buttonOption.cancelButtonText = 'Cancel';
+    if (buttonOption.shouldShowCascadeButton === null || buttonOption.shouldShowCascadeButton === undefined)
+        buttonOption.shouldShowCascadeButton = false;
+    console.log(buttonOption);
+    if (!question)
+        throw new Error('question must have a value');
+    if (!typeof confirmedCallback === 'function')
+        throw new Error('confirmedCallback must be a function');
+    var modalHtml = `<div class="modal fade" id="question-modal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Question</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        ${question}
+                                    </div>
+                                    <div class="modal-footer">
+                                        ${buttonOption.shouldShowCascadeButton ?
+                                            `<button type="button"
+                                                class="btn bg-gradient-primary-dark my-shadow text-white"
+                                                data-action="cascade">
+                                                ${buttonOption.cascadeButtonText}
+                                            </button>` : ''}
+                                        <button type="button" class="btn bg-gradient-primary-dark my-shadow text-white"
+                                            data-action="non-cascade">
+                                            ${buttonOption.nonCascadeButtonText}
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            data-action="cancel">
+                                            ${buttonOption.cancelButtonText}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+    $('body').append(modalHtml);
+    $('#question-modal').modal({
+        backdrop: 'static',
+        keyboard: false
+    }).modal('show');
+    $('#question-modal').on('question-answered', function (_, source) {
+        confirmedCallback(source.attr('data-action'));
+    });
+    $('#question-modal > .modal-dialog > .modal-content > .modal-footer > button:not(:last-child)')
+        .click(function () {
+            $('#question-modal').modal('hide');
+            $('#question-modal').trigger('question-answered', [$(this)]);
+        });
+    $('#question-modal').on('hidden.bs.modal', function() {
+        $(this).modal('dispose');
+        $(this).remove();
+    });
+}

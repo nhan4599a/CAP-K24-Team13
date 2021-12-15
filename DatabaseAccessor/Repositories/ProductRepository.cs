@@ -6,11 +6,9 @@ using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using EntityFrameworkCore.Triggered;
 
 namespace DatabaseAccessor.Repositories
 {

@@ -21,49 +21,47 @@ function loadCategories(pageNumber, pageSize) {
         });
         $('a[name=btn-action]').click(function (e) {
             e.preventDefault();
-            let action = $(this).text().trim().toLowerCase();
-            if (action != 'deactivate' && action != 'activate') {
-                alert('something went wrong!');
-                return;
-            }
             let id = $(this).parent().parent().children('#cate-id').text();
             let name = $(this).parent().parent().children('td:nth-child(4)').children().text();
-            if (!confirm(`Do you want to ${action} ${name}`))
+            let action = $(this).text().trim().toLowerCase();
+            if (action !== 'deactivate' && action !== 'activate')
                 return;
-            var shouldBeCascade = false;
-            if (action == 'deactivate')
-                shouldBeCascade = confirm('Do you want to cascade deactivate action');
-            var command = {
-                id: id,
-                isActivateCommand: action == 'activate',
-                shouldBeCascade: this.isActivateCommand ? false : shouldBeCascade
-            };
-            var successCallback = command.isActivateCommand ? () => {
-                toastr.success(`Activated ${name}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(6)').children()
-                    .removeClass('bg-gradient-secondary')
-                    .addClass('bg-gradient-success')
-                    .text('Activated');
-                $(this).parent().prepend(buildEditButtonHtml());
-                $(this).children('span').text(' Deactivate')
-                $('a[name=btn-edit]').click(function (e) {
-                    e.preventDefault();
-                    let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-                    let categoryInfoStr = JSON.stringify(categories[index]);
-                    window.localStorage.setItem('editting-category', categoryInfoStr);
-                    window.location.href = "/admin/category/edit";
-                });
-            } : () => {
-                toastr.success(`Deactivated ${name}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(6)').children()
-                    .removeClass('bg-gradient-success')
-                    .addClass('bg-gradient-secondary')
-                    .text('Deactivated');
-                $(this).parent().children('*[name="btn-edit"]').remove();
-                $(this).children('span').text(' Activate');
-                $(this).children('i').removeClass().addClass('fas fa-check');
-            };
-            activateCategory(command, successCallback, () => toastr.error(`Failed to ${action} ${name}`));
+            displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, {
+                shouldShowCascadeButton: action === 'activate'
+            }, option => {
+                var shouldBeCascade = option === 'cascade';
+                var command = {
+                    id: id,
+                    isActivateCommand: action == 'activate',
+                    shouldBeCascade: this.isActivateCommand ? false : shouldBeCascade
+                };
+                var successCallback = command.isActivateCommand ? () => {
+                    toastr.success(`Activated ${name}`, 'Success');
+                    $(this).parent().parent().children('td:nth-child(6)').children()
+                            .removeClass('bg-gradient-secondary')
+                            .addClass('bg-gradient-success')
+                            .text('Activated');
+                    $(this).parent().prepend(buildEditButtonHtml());
+                    $(this).children('span').text(' Deactivate')
+                    $('a[name=btn-edit]').click(function (e) {
+                        e.preventDefault();
+                        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+                        let categoryInfoStr = JSON.stringify(categories[index]);
+                        window.localStorage.setItem('editting-category', categoryInfoStr);
+                        window.location.href = "/admin/category/edit";
+                    });
+                } : () => {
+                    toastr.success(`Deactivated ${name}`, 'Success');
+                    $(this).parent().parent().children('td:nth-child(6)').children()
+                            .removeClass('bg-gradient-success')
+                            .addClass('bg-gradient-secondary')
+                            .text('Deactivated');
+                    $(this).parent().children('*[name="btn-edit"]').remove();
+                    $(this).children('span').text(' Activate');
+                    $(this).children('i').removeClass().addClass('fas fa-check');
+                };
+                activateCategory(command, successCallback, () => toastr.error(`Failed to ${action} ${name}`));
+            });
         });
 
         $('#previous-page').click(() => {

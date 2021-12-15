@@ -14,11 +14,11 @@ namespace ShopProductService.Commands.Category
 
         public bool ShouldBeCascade
         {
-            get => !IsActivateCommand && _shouldBeCascade;
+            get => IsActivateCommand && _shouldBeCascade;
             set
             {
-                if (IsActivateCommand && value)
-                    throw new NotSupportedException();
+                if (!IsActivateCommand && !value)
+                    throw new NotSupportedException("Cascade option for an deactivate request is always required");
                 _shouldBeCascade = value;
             }
         }

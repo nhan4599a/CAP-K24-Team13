@@ -4,6 +4,7 @@ using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
 using ShopProductService.Commands.Category;
+using System;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -79,7 +80,7 @@ namespace ShopProductService.Controllers
             {
                 Id = id,
                 IsActivateCommand = action == DeleteAction.Activate,
-                ShouldBeCascade = shouldBeCascade
+                ShouldBeCascade = action == DeleteAction.Deactivate || shouldBeCascade
             });
             if (!response.Response)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = response.ErrorMessage, Data = false };

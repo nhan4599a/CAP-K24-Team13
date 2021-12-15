@@ -77,7 +77,7 @@ namespace DatabaseAccessor.Repositories
             _dbContext.Entry(category).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             transaction.Commit();
-            if (shouldBeCascade)
+            if (isActivateCommand && shouldBeCascade)
                 await triggerSession.RaiseAfterCommitTriggers();
             return new CommandResponse<bool> { Response = true };
         }

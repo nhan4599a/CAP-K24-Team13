@@ -85,7 +85,7 @@ function activateCategory(activateCommand, successCallback, errorCallback) {
         throw new Error('activeCommand can not be null');
     if (!activateCommand.id)
         throw new Error('id can not be null');
-    if (activateCommand.isActivateCommand && activateCommand.shouldBeCascade)
+    if (!activateCommand.isActivateCommand && !activateCommand.shouldBeCascade)
         throw new Error('Action does not supported');
     var action = activateCommand.isActivateCommand ? 1 : 0;
     var cascade = activateCommand.shouldBeCascade ? 1 : 0;

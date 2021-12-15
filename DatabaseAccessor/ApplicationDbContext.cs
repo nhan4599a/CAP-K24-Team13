@@ -1,10 +1,10 @@
 ﻿using DatabaseAccessor.Models;
+using DatabaseAccessor.Triggers;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace DatabaseAccessor
 {
-
     public class ApplicationDbContext : DbContext
     {
         private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
@@ -24,6 +24,7 @@ namespace DatabaseAccessor
                 .UseTriggers(options =>
                 {
                     options.UseTransactionTriggers();
+                    options.AddTrigger<CategoryActivatedTrigger>();
                     options.AddTrigger<CategoryDeactivatedTrigger>();
                 });
         }
