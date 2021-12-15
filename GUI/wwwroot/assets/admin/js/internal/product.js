@@ -50,7 +50,9 @@ function loadProducts(keyword, pageNumber, pageSize) {
                 .children().children('div:nth-child(2)').children('h6').text();
             if (action !== 'deactivate' && action !== 'activate')
                 return;
-            displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, undefined, () => {
+            displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, {
+                shouldShowNonCascadeButton: true
+            }, () => {
                 let isActivateCommand = action === 'activate';
                 let successCallback = isActivateCommand ? () => {
                     toastr.success(`Activated ${name}`, 'Success');

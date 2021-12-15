@@ -238,7 +238,8 @@ function displayCascadeQuestionDialog(question, buttonOption = {}, confirmedCall
         buttonOption.cancelButtonText = 'Cancel';
     if (buttonOption.shouldShowCascadeButton === null || buttonOption.shouldShowCascadeButton === undefined)
         buttonOption.shouldShowCascadeButton = false;
-    console.log(buttonOption);
+    if (buttonOption.shouldShowNonCascadeButton === null || buttonOption.shouldShowNonCascadeButton === undefined)
+        buttonOption.shouldShowNonCascadeButton = false;
     if (!question)
         throw new Error('question must have a value');
     if (!typeof confirmedCallback === 'function')
@@ -260,10 +261,12 @@ function displayCascadeQuestionDialog(question, buttonOption = {}, confirmedCall
                                                 data-action="cascade">
                                                 ${buttonOption.cascadeButtonText}
                                             </button>` : ''}
-                                        <button type="button" class="btn bg-gradient-primary-dark my-shadow text-white"
-                                            data-action="non-cascade">
-                                            ${buttonOption.nonCascadeButtonText}
-                                        </button>
+                                        ${buttonOption.shouldShowNonCascadeButton ?
+                                            `<button type="button"
+                                                class="btn bg-gradient-primary-dark my-shadow text-white"
+                                                data-action="non-cascade">
+                                                ${buttonOption.nonCascadeButtonText}
+                                            </button>` : ''}
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                             data-action="cancel">
                                             ${buttonOption.cancelButtonText}

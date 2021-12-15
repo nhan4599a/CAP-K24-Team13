@@ -3,6 +3,7 @@ using EFCore.BulkExtensions;
 using EntityFrameworkCore.Triggered;
 using EntityFrameworkCore.Triggered.Transactions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +25,11 @@ namespace DatabaseAccessor.Triggers
             {
                 await _dbContext.ShopProducts
                     .Where(product => product.CategoryId == context.Entity.Id)
-                    .BatchUpdateAsync(new ShopProduct { IsDisabled = false }, cancellationToken: cancellationToken);
+                    .BatchUpdateAsync(
+                        new ShopProduct { IsDisabled = false },
+                        new List<string> { "IsDisabled" },
+                        cancellationToken
+                    );
             }
         }
 

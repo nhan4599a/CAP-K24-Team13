@@ -27,13 +27,14 @@ function loadCategories(pageNumber, pageSize) {
             if (action !== 'deactivate' && action !== 'activate')
                 return;
             displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, {
-                shouldShowCascadeButton: action === 'activate'
+                shouldShowCascadeButton: true,
+                shouldShowNonCascadeButton: action === 'activate'
             }, option => {
                 var shouldBeCascade = option === 'cascade';
                 var command = {
                     id: id,
-                    isActivateCommand: action == 'activate',
-                    shouldBeCascade: this.isActivateCommand ? false : shouldBeCascade
+                    isActivateCommand: action === 'activate',
+                    shouldBeCascade: action === 'activate' ? shouldBeCascade : true
                 };
                 var successCallback = command.isActivateCommand ? () => {
                     toastr.success(`Activated ${name}`, 'Success');
