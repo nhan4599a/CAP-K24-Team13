@@ -77,7 +77,7 @@ namespace DatabaseAccessor.Repositories
             if (!isActivateCommand && product.IsDisabled)
                 return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is already deactivated" };
             if (isActivateCommand && product.Category.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is belong to a deactivated category" };
+                return new CommandResponse<bool> { Response = false, ErrorMessage = $"Product is belong to {product.Category.CategoryName} which was deactivated" };
             product.IsDisabled = !isActivateCommand;
             _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
