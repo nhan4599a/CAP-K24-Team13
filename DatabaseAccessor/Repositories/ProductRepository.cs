@@ -20,7 +20,7 @@ namespace DatabaseAccessor.Repositories
         public ProductRepository(ApplicationDbContext context, Mapper mapper)
         {
             _dbContext = context;
-            _mapper = mapper;
+            _mapper = mapper ?? Mapper.GetInstance();
         }
 
         public async Task<ProductDTO> GetProductAsync(Guid id)

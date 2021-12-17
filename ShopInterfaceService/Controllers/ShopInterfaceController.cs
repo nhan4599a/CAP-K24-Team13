@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.DTOs;
+using Shared.RequestModels;
+using ShopInterfaceService.Commands;
 using ShopInterfaceService.Mediator;
 using System.Threading.Tasks;
 
@@ -46,9 +48,14 @@ namespace ShopInterfaceService.Controllers
         }
 
         [HttpPost]
-        public async Task<CommandResponse<ShopInterfaceDTO>> AddOrEditShop(ShopInterfaceDTO model)
+        public async Task<CommandResponse<int>> EditShopInterface(int shopId, 
+            CreateOrEditShopInterfaceRequestModel requestModel)
         {
-            var result = await _mediator.Send(new AddOrEditShop.Command { shopInterfaceDTO = model });
+            var result = await _mediator.Send(new CreateOrEditShopInterfaceCommand
+            {
+                ShopId = shopId,
+                RequestModel = requestModel
+            });
             return result;
         }
     }

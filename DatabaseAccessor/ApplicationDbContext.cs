@@ -7,7 +7,7 @@ namespace DatabaseAccessor
 {
     public class ApplicationDbContext : DbContext
     {
-        private static readonly string _connectionString = "Data Source=NDB;Initial Catalog=CapTeam13;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
         public DbSet<ShopCategory> ShopCategories { get; set; }
 
@@ -15,8 +15,14 @@ namespace DatabaseAccessor
 
         public DbSet<ShopProduct> ShopProducts { get; set; }
 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
+        public ApplicationDbContext() { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (optionsBuilder.IsConfigured)
+                return;
             base.OnConfiguring(optionsBuilder);
             optionsBuilder
                 .UseLazyLoadingProxies()

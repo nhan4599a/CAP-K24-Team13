@@ -4,8 +4,10 @@ using Shared.RequestModels;
 
 namespace ShopInterfaceService.Commands
 {
-    public class CreateShopInterfaceCommand : IRequest<CommandResponse<bool>>
+    public class CreateOrEditShopInterfaceCommand : IRequest<CommandResponse<int>>
     {
+        public int ShopId { get; set; }
+
         public CreateOrEditShopInterfaceRequestModel RequestModel { get; set; }
     }
 }

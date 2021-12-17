@@ -27,7 +27,7 @@ namespace ShopInterfaceService
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
-            services.AddTransient<IValidator<CreateOrEditShopInterfaceRequestModel>, AddOrEditShopInterfaceRequestModelValidator>();
+            services.AddTransient<IValidator<CreateOrEditShopInterfaceRequestModel>, CreateOrEditShopInterfaceRequestModelValidator>();
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
@@ -35,7 +35,7 @@ namespace ShopInterfaceService
                     builder.WithOrigins("https://localhost:44349").AllowAnyHeader().AllowAnyMethod();
                 });
             });
-            services.AddMediatR(typeof(FindShop).Assembly);
+            services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
