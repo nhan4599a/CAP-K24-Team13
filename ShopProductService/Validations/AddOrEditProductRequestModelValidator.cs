@@ -3,7 +3,7 @@ using Shared.RequestModels;
 
 namespace ShopProductService.Validations
 {
-    public class AddOrEditProductRequestModelValidator : AbstractValidator<AddOrEditProductRequestModel>
+    public class AddOrEditProductRequestModelValidator : AbstractValidator<CreateOrEditProductRequestModel>
     {
         public AddOrEditProductRequestModelValidator()
         {

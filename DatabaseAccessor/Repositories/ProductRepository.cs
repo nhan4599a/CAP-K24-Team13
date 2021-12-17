@@ -45,7 +45,7 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
         }
 
-        public async Task<CommandResponse<bool>> AddProductAsync(AddOrEditProductRequestModel requestModel)
+        public async Task<CommandResponse<bool>> AddProductAsync(CreateOrEditProductRequestModel requestModel)
         {
             var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
             if (category == null)
@@ -84,7 +84,7 @@ namespace DatabaseAccessor.Repositories
             return new CommandResponse<bool> { Response = true };
         }
 
-        public async Task<CommandResponse<bool>> EditProductAsync(Guid id, AddOrEditProductRequestModel requestModel)
+        public async Task<CommandResponse<bool>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel)
         {
             var product = await FindProductByIdAsync(id);
             if (product == null || product.IsDisabled)

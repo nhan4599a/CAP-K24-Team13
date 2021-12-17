@@ -24,10 +24,10 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResult<bool>> AddProduct([FromForm(Name = "requestModel")] AddOrEditProductRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
             requestModel.ImagePaths = await _imageManager.SaveFilesAsync(Request.Form.Files);
-            var response = await _mediator.Send(new AddProductCommand
+            var response = await _mediator.Send(new CreateProductCommand
             {
                 RequestModel = requestModel
             });
@@ -37,7 +37,7 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ApiResult<bool>> EditProduct(string id, [FromForm(Name = "requestModel")] AddOrEditProductRequestModel requestModel)
+        public async Task<ApiResult<bool>> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
             var oldFilesName = requestModel.ImagePaths;
             requestModel.ImagePaths = await _imageManager.EditFilesAsync(oldFilesName, Request.Form.Files);

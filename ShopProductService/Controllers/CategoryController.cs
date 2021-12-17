@@ -22,7 +22,7 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task<ApiResult<bool>> AddCategory(AddOrEditCategoryRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddCategory(CreateOrEditCategoryRequestModel requestModel)
         {
             var response = await _mediator.Send(new AddCategoryCommand
             {
@@ -46,7 +46,7 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ApiResult<bool>> EditCategory(int id, AddOrEditCategoryRequestModel requestModel)
+        public async Task<ApiResult<bool>> EditCategory(int id, CreateOrEditCategoryRequestModel requestModel)
         {
             var response = await _mediator.Send(new EditCategoryCommand
             {

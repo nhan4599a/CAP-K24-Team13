@@ -27,7 +27,7 @@ namespace ShopInterfaceService
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
-            services.AddTransient<IValidator<AddOrEditShopInterfaceRequestModel>, AddOrEditShopInterfaceRequestModelValidator>();
+            services.AddTransient<IValidator<CreateOrEditShopInterfaceRequestModel>, AddOrEditShopInterfaceRequestModelValidator>();
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>

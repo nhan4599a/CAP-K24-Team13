@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Product
 {
-    public class AddProductCommandHandler : IRequestHandler<AddProductCommand, CommandResponse<bool>>, IDisposable
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CommandResponse<bool>>, IDisposable
     {
         private readonly IProductRepository _repository;
 
-        public AddProductCommandHandler(IProductRepository repository)
+        public CreateProductCommandHandler(IProductRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<CommandResponse<bool>> Handle(AddProductCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResponse<bool>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             return await _repository.AddProductAsync(request.RequestModel);
         }

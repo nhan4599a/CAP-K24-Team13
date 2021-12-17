@@ -1,6 +1,6 @@
 ﻿namespace Shared.RequestModels
 {
-    public class AddOrEditProductRequestModel
+    public class CreateOrEditProductRequestModel
     {
         public string ProductName { get; set; }
 

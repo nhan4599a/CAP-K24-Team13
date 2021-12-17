@@ -3,7 +3,7 @@ using Shared.RequestModels;
 
 namespace ShopInterfaceService.Validation
 {
-    public class AddOrEditShopInterfaceRequestModelValidator : AbstractValidator<AddOrEditShopInterfaceRequestModel>
+    public class AddOrEditShopInterfaceRequestModelValidator : AbstractValidator<CreateOrEditShopInterfaceRequestModel>
     {
         public AddOrEditShopInterfaceRequestModelValidator()
         {

@@ -17,7 +17,7 @@ namespace DatabaseAccessor.Models
 
         public virtual List<ShopProduct> ShopProducts { get; set; }
 
-        public ShopCategory AssignByRequestModel(AddOrEditCategoryRequestModel requestModel)
+        public ShopCategory AssignByRequestModel(CreateOrEditCategoryRequestModel requestModel)
         {
             CategoryName = requestModel.CategoryName;
             Special = requestModel.Special;

@@ -13,9 +13,9 @@ namespace DatabaseAccessor.Repositories.Interfaces
 
         Task<List<CategoryDTO>> GetAllCategoryAsync();
 
-        Task<CommandResponse<bool>> AddCategoryAsync(AddOrEditCategoryRequestModel requestModel);
+        Task<CommandResponse<bool>> AddCategoryAsync(CreateOrEditCategoryRequestModel requestModel);
 
-        Task<CommandResponse<bool>> EditCategoryAsync(int id, AddOrEditCategoryRequestModel requestModel);
+        Task<CommandResponse<bool>> EditCategoryAsync(int id, CreateOrEditCategoryRequestModel requestModel);
 
         Task<CommandResponse<bool>> ActivateCategoryAsync(int id, bool isActivateCommand, bool shouldBeCascade);
     }

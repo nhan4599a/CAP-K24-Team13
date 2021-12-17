@@ -36,7 +36,7 @@ namespace DatabaseAccessor.Repositories
                 .Select(category => _mapper.MapToCategoryDTO(category)).ToListAsync();
         }
 
-        public async Task<CommandResponse<bool>> AddCategoryAsync(AddOrEditCategoryRequestModel requestModel)
+        public async Task<CommandResponse<bool>> AddCategoryAsync(CreateOrEditCategoryRequestModel requestModel)
         {
             _dbContext.ShopCategories.Add(new ShopCategory().AssignByRequestModel(requestModel));
             try
@@ -50,7 +50,7 @@ namespace DatabaseAccessor.Repositories
             }
         }
 
-        public async Task<CommandResponse<bool>> EditCategoryAsync(int id, AddOrEditCategoryRequestModel requestModel)
+        public async Task<CommandResponse<bool>> EditCategoryAsync(int id, CreateOrEditCategoryRequestModel requestModel)
         {
             var category = await FindCategoryByIdAsync(id);
             if (category == null || category.IsDisabled)

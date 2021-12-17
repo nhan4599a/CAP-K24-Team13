@@ -8,6 +8,6 @@ namespace ShopProductService.Commands.Category
     {
         public int Id { get; set; }
 
-        public AddOrEditCategoryRequestModel RequestModel { get; set; }
+        public CreateOrEditCategoryRequestModel RequestModel { get; set; }
     }
 }

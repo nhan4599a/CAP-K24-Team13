@@ -15,10 +15,10 @@ namespace DatabaseAccessor.Repositories.Interfaces
 
         Task<List<ProductDTO>> GetAllProductAsync();
 
-        Task<CommandResponse<bool>> AddProductAsync(AddOrEditProductRequestModel requestModel);
+        Task<CommandResponse<bool>> AddProductAsync(CreateOrEditProductRequestModel requestModel);
 
         Task<CommandResponse<bool>> ActivateProductAsync(Guid id, bool isActivateCommand);
 
-        Task<CommandResponse<bool>> EditProductAsync(Guid id, AddOrEditProductRequestModel requestModel);
+        Task<CommandResponse<bool>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel);
     }
 }

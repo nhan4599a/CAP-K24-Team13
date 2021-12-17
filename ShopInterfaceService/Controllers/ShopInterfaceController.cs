@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Shared;
 using Shared.DTOs;
 using ShopInterfaceService.Mediator;
@@ -32,21 +31,24 @@ namespace ShopInterfaceService.Controllers
         //    if (result == null) return new ApiResult<ShopInterfaceDTO> { Data = null, ResponseCode = 404 };
         //    return new ApiResult<ShopInterfaceDTO> { Data = result, ResponseCode = 200 };
         //}
-        protected IMediator _mediator;
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+        private readonly IMediator _mediator;
+
+        public ShopInterfaceController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
         [HttpGet]
-        [Route("/api/shop")]
         public async Task<CommandResponse<ShopInterfaceDTO>> Get(string searchString)
         {
-            var result = await Mediator.Send(new FindShop.Query { SearchString = searchString });
+            var result = await _mediator.Send(new FindShop.Query { SearchString = searchString });
             return result;
         }
+
         [HttpPost]
-        [Route("api/shop")]
         public async Task<CommandResponse<ShopInterfaceDTO>> AddOrEditShop(ShopInterfaceDTO model)
         {
-            var result = await Mediator.Send(new AddOrEditShop.Command { shopInterfaceDTO = model });
+            var result = await _mediator.Send(new AddOrEditShop.Command { shopInterfaceDTO = model });
             return result;
         }
     }

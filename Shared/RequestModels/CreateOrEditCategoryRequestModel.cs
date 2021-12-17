@@ -1,6 +1,6 @@
 ﻿namespace Shared.RequestModels
 {
-    public class AddOrEditCategoryRequestModel
+    public class CreateOrEditCategoryRequestModel
     {
         public string CategoryName { get; set; }
 

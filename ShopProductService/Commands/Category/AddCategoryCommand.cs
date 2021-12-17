@@ -6,6 +6,6 @@ namespace ShopProductService.Commands.Category
 {
     public class AddCategoryCommand : IRequest<CommandResponse<bool>>
     {
-        public AddOrEditCategoryRequestModel RequestModel { get; set; }
+        public CreateOrEditCategoryRequestModel RequestModel { get; set; }
     }
 }
