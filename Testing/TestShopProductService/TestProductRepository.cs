@@ -27,7 +27,7 @@ namespace TestShopProductService
                     Special = 0
                 });
                 dbContext.SaveChanges();
-            }    
+            }
             _repository = new ProductRepository(new FakeApplicationDbContext(), null);
         }
 
