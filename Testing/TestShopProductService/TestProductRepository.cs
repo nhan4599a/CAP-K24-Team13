@@ -1,11 +1,10 @@
+using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories;
 using DatabaseSharing;
 using Shared.RequestModels;
 using System;
-using Xunit;
-using DatabaseAccessor.Models;
 using UnitTestSupport;
-using System.Linq;
+using Xunit;
 
 namespace TestShopProductService
 {
@@ -139,6 +138,7 @@ namespace TestShopProductService
                 Description = product.Description,
                 Discount = product.Discount,
                 Price = product.Price,
+                CategoryId = 1,
                 Quantity = 2
             };
 
@@ -148,6 +148,65 @@ namespace TestShopProductService
             Assert.True(result.IsSuccess);
             Assert.Null(result.ErrorMessage);
             Assert.Null(result.Exception);
+        }
+        
+        [TestCasePriority(5)]
+        [Fact]
+        public async void TestEditProductFailBecauseProductNotFound()
+        {
+            var requestModel = new CreateOrEditProductRequestModel
+            {
+                ProductName = "Demo product",
+                CategoryId = 1,
+                Description = "Demo description",
+                Discount = 0,
+                ImagePaths = Array.Empty<string>(),
+                Price = 24000,
+                Quantity = 1
+            };
+
+            var result = await _repository.EditProductAsync(Guid.Empty, requestModel);
+
+            Assert.NotNull(result);
+            Assert.False(result.IsSuccess);
+            Assert.Throws<InvalidOperationException>(() => result.Response);
+            Assert.Equal("Product is not found", result.ErrorMessage);
+            Assert.Null(result.Exception);
+        }
+
+        [TestCasePriority(6)]
+        [Fact]
+        public async void TestDeactivateProductSuccess()
+        {
+            var product = (await _repository.GetAllProductAsync())[0];
+
+            var result = await _repository.ActivateProductAsync(Guid.Parse(product.Id), false);
+
+            Assert.NotNull(result);
+            Assert.True(result.IsSuccess);
+            Assert.False(result.Response);
+            Assert.Null(result.ErrorMessage);
+            Assert.Null(result.Exception);
+
+            var afterProduct = (await _repository.GetAllProductAsync())[0];
+            Assert.True(afterProduct.IsDisabled);
+        }
+
+        [TestCasePriority(7)]
+        [Fact]
+        public async void TestActivateProductSuccess()
+        {
+            var product = (await _repository.GetAllProductAsync())[0];
+            var result = await _repository.ActivateProductAsync(Guid.Parse(product.Id), true);
+
+            Assert.NotNull(result);
+            Assert.True(result.IsSuccess);
+            Assert.True(result.Response);
+            Assert.Null(result.ErrorMessage);
+            Assert.Null(result.Exception);
+
+            var afterProduct = (await _repository.GetAllProductAsync())[0];
+            Assert.False(afterProduct.IsDisabled);
         }
     }
 }
