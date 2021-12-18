@@ -36,7 +36,7 @@ namespace ShopInterfaceService.Mediator
                     ShopName = shop[0].ShopName,
                     ShopPhoneNumber = shop[0].ShopPhoneNumber
                 };
-                var result = new CommandResponse<ShopInterfaceDTO>() { Response = shopDto };
+                var result = CommandResponse<ShopInterfaceDTO>.Success(shopDto);
                 return Task.FromResult(result);
             }
         }

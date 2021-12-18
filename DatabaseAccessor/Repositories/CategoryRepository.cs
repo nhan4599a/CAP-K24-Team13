@@ -42,11 +42,11 @@ namespace DatabaseAccessor.Repositories
             try
             {
                 await _dbContext.SaveChangesAsync();
-                return new CommandResponse<bool> { Response = true };
+                return CommandResponse<bool>.Success(true);
             }
             catch (Exception e)
             {
-                return new CommandResponse<bool> { Response = false, ErrorMessage = e.Message, Exception = e };
+                return CommandResponse<bool>.Error(e.Message, e);
             }
         }
 
@@ -54,11 +54,11 @@ namespace DatabaseAccessor.Repositories
         {
             var category = await FindCategoryByIdAsync(id);
             if (category == null || category.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is not found or already disabled" };
+                return CommandResponse<bool>.Error("Category is not found or already disabled", null);
             category.AssignByRequestModel(requestModel);
             _dbContext.Entry(category).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
-            return new CommandResponse<bool> { Response = true };
+            return CommandResponse<bool>.Success(true);
         }
 
         public async Task<CommandResponse<bool>> ActivateCategoryAsync(int id,
@@ -66,11 +66,11 @@ namespace DatabaseAccessor.Repositories
         {
             var category = await FindCategoryByIdAsync(id);
             if (category == null)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is not found" };
+                return CommandResponse<bool>.Error("Category is not found", null);
             if (isActivateCommand && !category.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is already activated" };
+                return CommandResponse<bool>.Error("Category is already activated", null);
             if (!isActivateCommand && category.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is already deactivated" };
+                return CommandResponse<bool>.Error("Category is already deactivated", null);
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             using var triggerSession = _dbContext.GetService<ITriggerService>().CreateSession(_dbContext);
             category.IsDisabled = !isActivateCommand;
@@ -79,7 +79,7 @@ namespace DatabaseAccessor.Repositories
             transaction.Commit();
             if (isActivateCommand && shouldBeCascade)
                 await triggerSession.RaiseAfterCommitTriggers();
-            return new CommandResponse<bool> { Response = true };
+            return CommandResponse<bool>.Success(true);
         }
 
         private async Task<ShopCategory> FindCategoryByIdAsync(int id)

@@ -44,7 +44,7 @@ namespace DatabaseAccessor.Repositories
                 _dbContext.Entry(shopInterface).State = EntityState.Modified;
             }
             await _dbContext.SaveChangesAsync();
-            return new CommandResponse<int> { Response = shopInterface.Id };
+            return CommandResponse<int>.Success(1);
         }
 
         public void Dispose()

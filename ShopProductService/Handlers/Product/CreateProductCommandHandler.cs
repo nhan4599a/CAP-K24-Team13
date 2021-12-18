@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Product
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CommandResponse<bool>>, IDisposable
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CommandResponse<Guid>>,
+        IDisposable
     {
         private readonly IProductRepository _repository;
 
@@ -17,7 +18,7 @@ namespace ShopProductService.Handlers.Product
             _repository = repository;
         }
 
-        public async Task<CommandResponse<bool>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResponse<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             return await _repository.AddProductAsync(request.RequestModel);
         }

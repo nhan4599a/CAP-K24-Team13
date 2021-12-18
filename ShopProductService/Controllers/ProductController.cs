@@ -24,20 +24,20 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResult<bool>> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+        public async Task<ApiResult<Guid>> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
             requestModel.ImagePaths = await _imageManager.SaveFilesAsync(Request.Form.Files);
             var response = await _mediator.Send(new CreateProductCommand
             {
                 RequestModel = requestModel
             });
-            if (!response.Response)
-                return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = response.ErrorMessage };
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+            if (!response.IsSuccess)
+                return new ApiResult<Guid> { ResponseCode = 500, Data = Guid.Empty, ErrorMessage = response.ErrorMessage };
+            return new ApiResult<Guid> { ResponseCode = 200, Data = response.Response };
         }
 
         [HttpPut("{id}")]
-        public async Task<ApiResult<bool>> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+        public async Task<ApiResult<ProductDTO>> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
             var oldFilesName = requestModel.ImagePaths;
             requestModel.ImagePaths = await _imageManager.EditFilesAsync(oldFilesName, Request.Form.Files);
@@ -46,9 +46,9 @@ namespace ShopProductService.Controllers
                 Id = new Guid(id),
                 RequestModel = requestModel
             });
-            if (!response.Response)
-                return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = response.ErrorMessage };
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+            if (!response.IsSuccess)
+                return new ApiResult<ProductDTO> { ResponseCode = 500, Data = null, ErrorMessage = response.ErrorMessage };
+            return new ApiResult<ProductDTO> { ResponseCode = 200, Data = response.Response };
         }
 
         [HttpDelete("{id}")]

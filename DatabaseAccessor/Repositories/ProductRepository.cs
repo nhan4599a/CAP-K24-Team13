@@ -45,25 +45,23 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
         }
 
-        public async Task<CommandResponse<bool>> AddProductAsync(CreateOrEditProductRequestModel requestModel)
+        public async Task<CommandResponse<Guid>> AddProductAsync(CreateOrEditProductRequestModel requestModel)
         {
             var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
             if (category == null)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is not found" };
+                return CommandResponse<Guid>.Error("Category is not found", null);
             if (category.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Category is disabled" };
-            _dbContext.ShopProducts.Add(new ShopProduct().AssignByRequestModel(requestModel));
+                return CommandResponse<Guid>.Error("Category is disabled", null);
+            var shopProduct = new ShopProduct().AssignByRequestModel(requestModel);
+            _dbContext.ShopProducts.Add(shopProduct);
             try
             {
                 await _dbContext.SaveChangesAsync();
-                return new CommandResponse<bool>
-                {
-                    Response = true
-                };
+                return CommandResponse<Guid>.Success(shopProduct.Id);
             }
             catch (Exception e)
             {
-                return new CommandResponse<bool> { Response = false, Exception = e, ErrorMessage = e.Message };
+                return CommandResponse<Guid>.Error(e.Message, e);
             }
         }
 
@@ -71,33 +69,37 @@ namespace DatabaseAccessor.Repositories
         {
             var product = await FindProductByIdAsync(id);
             if (product == null)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is not found" };
+                return CommandResponse<bool>.Error("Product is not found", null);
             if (isActivateCommand && !product.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is already activated" };
+                return CommandResponse<bool>.Error("Product is already activated", null);
             if (!isActivateCommand && product.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is already deactivated" };
+                return CommandResponse<bool>.Error("Product is already deactivated", null);
             if (isActivateCommand && product.Category.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = $"Product is belong to {product.Category.CategoryName} which was deactivated" };
+                return CommandResponse<bool>.Error($"Product is belong to {product.Category.CategoryName} which was deactivated", null);
             product.IsDisabled = !isActivateCommand;
             _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
-            return new CommandResponse<bool> { Response = true };
+            return CommandResponse<bool>.Success(isActivateCommand);
         }
 
-        public async Task<CommandResponse<bool>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel)
+        public async Task<CommandResponse<ProductDTO>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel)
         {
             var product = await FindProductByIdAsync(id);
-            if (product == null || product.IsDisabled)
-                return new CommandResponse<bool> { Response = false, ErrorMessage = "Product is not found or already disabled" };
+            if (product == null)
+                return CommandResponse<ProductDTO>.Error("Product is not found", null);
+            if (product.IsDisabled)
+                return CommandResponse<ProductDTO>.Error("Product is disabled", null);
+            if (product.Category.IsDisabled)
+                return CommandResponse<ProductDTO>.Error($"Product is belong to {product.Category.CategoryName} which was deactivated", null);
             product.AssignByRequestModel(requestModel);
             try
             {
                 await _dbContext.SaveChangesAsync();
-                return new CommandResponse<bool> { Response = true };
+                return CommandResponse<ProductDTO>.Success(_mapper.MapToProductDTO(product)); 
             }
             catch (Exception e)
             {
-                return new CommandResponse<bool> { Response = false, ErrorMessage = e.Message, Exception = e };
+                return CommandResponse<ProductDTO>.Error(e.Message, e);
             }
         }
 
