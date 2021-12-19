@@ -189,6 +189,7 @@ namespace TestShopProductService
             Assert.Null(result.Exception);
 
             var afterProduct = (await _repository.GetAllProductAsync())[0];
+
             Assert.True(afterProduct.IsDisabled);
         }
 
@@ -206,7 +207,92 @@ namespace TestShopProductService
             Assert.Null(result.Exception);
 
             var afterProduct = (await _repository.GetAllProductAsync())[0];
+
             Assert.False(afterProduct.IsDisabled);
+        }
+
+        [TestCasePriority(8)]
+        [Fact]
+        public async void TestDeactivateProductFailedBecauseProductNotFound()
+        {
+            var result = await _repository.ActivateProductAsync(Guid.Empty, false);
+
+            Assert.NotNull(result);
+            Assert.False(result.IsSuccess);
+            Assert.Throws<InvalidOperationException>(() => result.Response);
+            Assert.Equal("Product is not found", result.ErrorMessage);
+            Assert.Null(result.Exception);
+        }
+
+        [TestCasePriority(9)]
+        [Fact]
+        public async void TestActivateProductFailedBecauseProductNotFound()
+        {
+            var result = await _repository.ActivateProductAsync(Guid.Empty, true);
+
+            Assert.NotNull(result);
+            Assert.False(result.IsSuccess);
+            Assert.Throws<InvalidOperationException>(() => result.Response);
+            Assert.Equal("Product is not found", result.ErrorMessage);
+            Assert.Null(result.Exception);
+        }
+
+        [TestCasePriority(10)]
+        [Fact]
+        public async void TestDeactivateProductFailedBecauseProductIsDeactivated()
+        {
+            var product = (await _repository.GetAllProductAsync())[0];
+
+            var result = await _repository.ActivateProductAsync(Guid.Parse(product.Id), false);
+
+            Assert.NotNull(result);
+            Assert.False(result.IsSuccess);
+            Assert.Throws<InvalidOperationException>(() => result.Response);
+            Assert.Equal("Product is already deactivated", result.ErrorMessage);
+            Assert.Null(result.Exception);
+
+            var afterProduct = (await _repository.GetAllProductAsync())[0];
+
+            Assert.Equal(product.IsDisabled, afterProduct.IsDisabled);
+        }
+
+        [TestCasePriority(11)]
+        [Fact]
+        public async void TestActivateProductFailedBecauseProductIsActivated()
+        {
+            var product = (await _repository.GetAllProductAsync())[0];
+
+            var result = await _repository.ActivateProductAsync(Guid.Parse(product.Id), true);
+
+            Assert.NotNull(result);
+            Assert.False(result.IsSuccess);
+            Assert.Throws<InvalidOperationException>(() => result.Response);
+            Assert.Equal("Product is already activated", result.ErrorMessage);
+            Assert.Null(result.Exception);
+
+            var afterProduct = (await _repository.GetAllProductAsync())[0];
+
+            Assert.Equal(product.IsDisabled, afterProduct.IsDisabled);
+        }
+
+        [TestCasePriority(12)]
+        [Fact]
+        public async void TestGetProduct()
+        {
+            var firstProductId = (await _repository.GetAllProductAsync())[0].Id;
+
+            var product = await _repository.GetProductAsync(Guid.Parse(firstProductId));
+
+            Assert.NotNull(product);
+        }
+
+        [TestCasePriority(13)]
+        [Fact]
+        public async void TestGetProductNull()
+        {
+            var product = await _repository.GetProductAsync(Guid.Empty);
+
+            Assert.Null(product);
         }
     }
 }
