@@ -3,7 +3,7 @@ using Xunit.Sdk;
 
 namespace UnitTestSupport
 {
-    internal class PriorityTestCaseOrderer : ITestCaseOrderer
+    public class PriorityTestCaseOrderer : ITestCaseOrderer
     {
         public IEnumerable<TTestCase> OrderTestCases<TTestCase>(IEnumerable<TTestCase> testCases) where TTestCase : ITestCase
         {
