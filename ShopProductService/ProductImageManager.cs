@@ -20,7 +20,7 @@ namespace ShopProductService
             _environment = environment;
         }
 
-        public ImageValidationResult Validate(IFormFileCollection images)
+        public virtual ImageValidationResult Validate(IFormFileCollection images)
         {
             var validationRules = new ImageValidationRuleSet
             {
@@ -52,7 +52,7 @@ namespace ShopProductService
             return Validate(images, validationRules);
         }
 
-        public async Task<string[]> SaveFilesAsync(IFormFileCollection images)
+        public virtual async Task<string[]> SaveFilesAsync(IFormFileCollection images)
         {
             var validationResult = Validate(images);
             if (validationResult.IsError)
@@ -63,7 +63,7 @@ namespace ShopProductService
             return savedFileNames.ToArray();
         }
 
-        public async Task<string[]> EditFilesAsync(string[] oldImagesName, IFormFileCollection images)
+        public virtual async Task<string[]> EditFilesAsync(string[] oldImagesName, IFormFileCollection images)
         {
             var validationResult = Validate(images);
             if (validationResult.IsError)
