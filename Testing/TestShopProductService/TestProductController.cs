@@ -22,8 +22,8 @@ namespace TestShopProductService
         [Fact]
         public async void TestAddProductSuccess()
         {
-            var mockWebHostEnvironment = new Mock<IWebHostEnvironment>();
-            var imageManagerMock = new Mock<ProductImageManager>(mockWebHostEnvironment.Object);
+            var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
+            var imageManagerMock = new Mock<ProductImageManager>(webHostEnvironmentMock.Object);
             imageManagerMock
                 .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>()))
                 .ReturnsAsync(Array.Empty<string>());
