@@ -9,5 +9,11 @@ namespace GUI.Areas.Admin.Controllers
         {
             return View();
         }
+
+        [ActionName("Edit")]
+        public IActionResult EditMode()
+        {
+            return View("EditMode");
+        }
     }
 }
