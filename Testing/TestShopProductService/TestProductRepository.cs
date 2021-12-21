@@ -1,28 +1,16 @@
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories;
-using DatabaseAccessor.Repositories.Interfaces;
 using DatabaseSharing;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
 using Shared.RequestModels;
-using ShopProductService.Controllers;
 using System;
 using UnitTestSupport;
 using Xunit;
 
-
-
-
 namespace TestShopProductService
 {
     [TestCaseOrderer("UnitTestSupport.PriorityTestCaseOrderer", "UnitTestSupport")]
-
-
     public class TestProductRepository
     {
-        ShopProduct service;
-        Mock<IProductRepository> repositoryMock;
-        Mock<ShopProduct> productMock;
         private readonly ProductRepository _repository;
 
         public TestProductRepository()
@@ -305,42 +293,6 @@ namespace TestShopProductService
             var product = await _repository.GetProductAsync(Guid.Empty);
 
             Assert.Null(product);
-        }
-        [TestCasePriority(14)]
-        [Fact]
-        public void TestNotSaveValidProduct()
-        {
-            productMock.SetupGet(p => p.IsValid).Returns(false);
-            bool result = service.save(productMock.Object);
-
-            Assert.False(result);
-            repositoryMock.Verify(r => r.Save(It.IsAny<Product>()), Times.Never());
-        }
-        [TestCasePriority(15)]
-        [Fact]
-        public void TestSaveValidProduct()
-        {
-            productMock.SetupGet(p => p.IsValid).Returns(true);
-            repositoryMock.Setup(r => r.Save(productMock.Object)).Returns(true);
-
-            bool result = service.save(productMock.Object);
-
-            Assert.True(result);
-            repositoryMock.VerifyAll();
-        }
-        [TestCasePriority(16)]
-        [Fact]]
-        public void Test_SaveCalledWhenCreateCalled()
-        {
-            
-            var mockRepository = new Mock<IProductRepository>();
-            ProductController controller = new ProductController(mockRepository);
-
-           
-            ActionResult actionResult = controller.Create(user);
-
-           
-            mockRepository.Verify(rep => rep.Save(), Times.AtLeastOnce());
         }
     }
 }

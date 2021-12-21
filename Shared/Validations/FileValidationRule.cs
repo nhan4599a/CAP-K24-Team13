@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Shared.ImageValidations
+namespace Shared.Validations
 {
-    public class ImageValidationRule
+    public class FileValidationRule
     {
         public static readonly List<string> IMAGE_EXTENSIONS = new () { "jpg", "jpeg", "png" };
-        public ImageValidationRuleName RuleName { get; set; }
+        public FileValidationRuleName RuleName { get; set; }
 
         public long Value { get; set; }
     }

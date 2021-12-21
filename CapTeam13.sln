@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestShopProductService", "T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseSharing", "Testing\DatabaseSharing\DatabaseSharing.csproj", "{CC042469-1115-4080-B62B-BC3816435EB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestSupport", "Testing\UnitTestSupport\UnitTestSupport.csproj", "{B083D523-CFD1-442F-A042-FAAE079E7475}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestSupport", "Testing\UnitTestSupport\UnitTestSupport.csproj", "{B083D523-CFD1-442F-A042-FAAE079E7475}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSharedComponent", "AspNetCoreSharedComponent\AspNetCoreSharedComponent.csproj", "{E2F458BE-50E4-47FD-92CB-E06514607A2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{B083D523-CFD1-442F-A042-FAAE079E7475}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B083D523-CFD1-442F-A042-FAAE079E7475}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B083D523-CFD1-442F-A042-FAAE079E7475}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2F458BE-50E4-47FD-92CB-E06514607A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2F458BE-50E4-47FD-92CB-E06514607A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2F458BE-50E4-47FD-92CB-E06514607A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2F458BE-50E4-47FD-92CB-E06514607A2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

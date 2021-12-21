@@ -1,3 +1,4 @@
+using AspNetCoreSharedComponent;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
@@ -15,9 +16,9 @@ namespace ShopProductService.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ProductImageManager _imageManager;
+        private readonly ImageManager _imageManager;
 
-        public ProductController(IMediator mediator, ProductImageManager imageManager)
+        public ProductController(IMediator mediator, ImageManager imageManager)
         {
             _mediator = mediator;
             _imageManager = imageManager;
@@ -43,7 +44,7 @@ namespace ShopProductService.Controllers
             requestModel.ImagePaths = await _imageManager.EditFilesAsync(oldFilesName, Request.Form.Files);
             var response = await _mediator.Send(new EditProductCommand
             {
-                Id = new Guid(id),
+                Id = Guid.Parse(id),
                 RequestModel = requestModel
             });
             if (!response.IsSuccess)
@@ -56,19 +57,20 @@ namespace ShopProductService.Controllers
         {
             var response = await _mediator.Send(new ActivateProductCommand
             {
-                Id = new Guid(id),
+                Id = Guid.Parse(id),
                 IsActivateCommand = action == DeleteAction.Activate,
             });
-            if (!response.Response)
+            if (!response.IsSuccess)
                 return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = response.ErrorMessage };
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+            return new ApiResult<bool> { ResponseCode = 200, Data = response.Response };
         }
 
         [HttpGet]
         public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
         {
-            IRequest<List<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword) ? new FindAllProductQuery() :
-                new FindProductsByKeywordQuery
+            IRequest<List<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
+                ? new FindAllProductQuery() 
+                : new FindProductsByKeywordQuery
                 {
                     Keyword = requestModel.Keyword
                 };
@@ -85,7 +87,7 @@ namespace ShopProductService.Controllers
         {
             var product = await _mediator.Send(new FindProductByIdQuery
             {
-                Id = new Guid(id)
+                Id = Guid.Parse(id)
             });
             if (product == null)
                 return new ApiResult<ProductDTO> { ResponseCode = 404, ErrorMessage = "Product is not found" };

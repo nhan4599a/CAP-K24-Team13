@@ -1,58 +1,51 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Shared;
+﻿using Shared;
 using Shared.Exceptions;
-using Shared.ImageValidations;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using Shared.Validations;
 
-namespace ShopProductService
+namespace AspNetCoreSharedComponent
 {
-    public class ProductImageManager
+    public class ImageManager : IFileValidator, IStorable
     {
         private readonly IWebHostEnvironment _environment;
 
-        public ProductImageManager(IWebHostEnvironment environment)
+        public ImageManager(IWebHostEnvironment environment)
         {
             _environment = environment;
         }
 
-        public virtual ImageValidationResult Validate(IFormFileCollection images)
+        public FileValidationResult Validate(IFormFileCollection images)
         {
-            var validationRules = new ImageValidationRuleSet
+            var validationRules = new FileValidationRuleSet
             {
-                new ImageValidationRule
+                new FileValidationRule
                 {
-                    RuleName = ImageValidationRuleName.ImageExtension,
+                    RuleName = FileValidationRuleName.ImageExtension,
                 },
-                new ImageValidationRule
+                new FileValidationRule
                 {
-                    RuleName = ImageValidationRuleName.MinFileCount,
+                    RuleName = FileValidationRuleName.MinFileCount,
                     Value = 2
                 },
-                new ImageValidationRule
+                new FileValidationRule
                 {
-                    RuleName = ImageValidationRuleName.MaxFileCount,
+                    RuleName = FileValidationRuleName.MaxFileCount,
                     Value = 5
                 },
-                new ImageValidationRule
+                new FileValidationRule
                 {
-                    RuleName = ImageValidationRuleName.SingleMaxFileSize,
+                    RuleName = FileValidationRuleName.SingleMaxFileSize,
                     Value = 1024 * 1024
                 },
-                new ImageValidationRule
+                new FileValidationRule
                 {
-                    RuleName = ImageValidationRuleName.AllMaxFileSize,
+                    RuleName = FileValidationRuleName.AllMaxFileSize,
                     Value = 4 * 1024 * 1024
                 }
             };
             return Validate(images, validationRules);
         }
 
-        public virtual async Task<string[]> SaveFilesAsync(IFormFileCollection images)
+        public async Task<string[]> SaveFilesAsync(IFormFileCollection images)
         {
             var validationResult = Validate(images);
             if (validationResult.IsError)
@@ -63,7 +56,7 @@ namespace ShopProductService
             return savedFileNames.ToArray();
         }
 
-        public virtual async Task<string[]> EditFilesAsync(string[] oldImagesName, IFormFileCollection images)
+        public async Task<string[]> EditFilesAsync(string[] oldImagesName, IFormFileCollection images)
         {
             var validationResult = Validate(images);
             if (validationResult.IsError)
@@ -90,7 +83,7 @@ namespace ShopProductService
             return savedFileNames.ToArray();
         }
 
-        private async Task<string> SaveFileAsync(IFormFile image, string fileName = null)
+        private async Task<string> SaveFileAsync(IFormFile image, string? fileName = null)
         {
             fileName ??= Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
             using var fileStream = File.Create(GetSavePathForImage(fileName));
@@ -106,22 +99,22 @@ namespace ShopProductService
 
         private string GetSavePathForImage(string imageName) => Path.Combine(_environment.WebRootPath, imageName);
 
-        public ImageValidationResult Validate(IFormFileCollection images, ImageValidationRuleSet validationRules)
+        public FileValidationResult Validate(IFormFileCollection files, FileValidationRuleSet rules)
         {
-            var passedRules = new List<ImageValidationRuleName>();
+            var passedRules = new List<FileValidationRuleName>();
             var suitableValidationRuleForMultiple =
-                validationRules.Where(validationRule => IsSuitableForValidateMultiple(validationRule.RuleName));
+                rules.Where(validationRule => IsSuitableForValidateMultiple(validationRule.RuleName));
 
-            foreach (ImageValidationRule rule in suitableValidationRuleForMultiple)
-                if (ValidateMultiple(images, rule))
+            foreach (FileValidationRule rule in suitableValidationRuleForMultiple)
+                if (ValidateMultiple(files, rule))
                     passedRules.Add(rule.RuleName);
 
-            foreach (ImageValidationRule rule in validationRules.Except(suitableValidationRuleForMultiple))
-                foreach (IFormFile image in images)
+            foreach (FileValidationRule rule in rules.Except(suitableValidationRuleForMultiple))
+                foreach (IFormFile image in files)
                     if (ValidateSingle(image, rule))
                         passedRules.Add(rule.RuleName);
 
-            return new ImageValidationResult(validationRules, passedRules);
+            return new FileValidationResult(rules, passedRules);
         }
 
         public FileResponse GetImage(string imageName)
@@ -133,16 +126,16 @@ namespace ShopProductService
             };
         }
 
-        private static bool ValidateSingle(IFormFile file, ImageValidationRule rule)
+        private static bool ValidateSingle(IFormFile file, FileValidationRule rule)
         {
-            if (rule.RuleName == ImageValidationRuleName.ImageExtension)
+            if (rule.RuleName == FileValidationRuleName.ImageExtension)
             {
                 string fileExtension = Path.GetExtension(file.FileName)[1..];
-                if (ImageValidationRule.IMAGE_EXTENSIONS.Contains(fileExtension))
+                if (FileValidationRule.IMAGE_EXTENSIONS.Contains(fileExtension))
                     return true;
                 return false;
             }
-            if (rule.RuleName == ImageValidationRuleName.SingleMaxFileSize)
+            if (rule.RuleName == FileValidationRuleName.SingleMaxFileSize)
             {
                 if (file.Length <= rule.Value)
                     return true;
@@ -151,21 +144,21 @@ namespace ShopProductService
             return true;
         }
 
-        private static bool ValidateMultiple(IFormFileCollection files, ImageValidationRule rule)
+        private static bool ValidateMultiple(IFormFileCollection files, FileValidationRule rule)
         {
-            if (rule.RuleName == ImageValidationRuleName.MinFileCount)
+            if (rule.RuleName == FileValidationRuleName.MinFileCount)
             {
                 if (files.Count >= rule.Value)
                     return true;
                 return false;
             }
-            if (rule.RuleName == ImageValidationRuleName.MaxFileCount)
+            if (rule.RuleName == FileValidationRuleName.MaxFileCount)
             {
                 if (files.Count <= rule.Value)
                     return true;
                 return false;
             }
-            if (rule.RuleName == ImageValidationRuleName.AllMaxFileSize)
+            if (rule.RuleName == FileValidationRuleName.AllMaxFileSize)
             {
                 if (files.Sum(file => file.Length) <= rule.Value)
                     return true;
@@ -174,11 +167,11 @@ namespace ShopProductService
             return true;
         }
 
-        private static bool IsSuitableForValidateMultiple(ImageValidationRuleName ruleName)
+        private static bool IsSuitableForValidateMultiple(FileValidationRuleName ruleName)
         {
-            return ruleName == ImageValidationRuleName.MinFileCount ||
-                ruleName == ImageValidationRuleName.MinFileCount ||
-                ruleName == ImageValidationRuleName.AllMaxFileSize;
+            return ruleName == FileValidationRuleName.MinFileCount ||
+                ruleName == FileValidationRuleName.MinFileCount ||
+                ruleName == FileValidationRuleName.AllMaxFileSize;
         }
     }
 }

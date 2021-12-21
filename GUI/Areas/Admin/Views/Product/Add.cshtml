@@ -72,7 +72,7 @@
                 filesizeBase: 1024,
                 autoProcessQueue: false,
                 uploadMultiple: true,
-                acceptedFiles: 'image/jpeg,image/jpg,image/png',
+                acceptedFiles: acceptedMimeTypes.join(','),
                 addRemoveLinks: true
             });
             dropzone.on('addedfile', function (file) {

@@ -1,6 +1,6 @@
-﻿namespace Shared.ImageValidations
+﻿namespace Shared.Validations
 {
-    public enum ImageValidationRuleName
+    public enum FileValidationRuleName
     {
         ImageExtension,
         MinFileCount,

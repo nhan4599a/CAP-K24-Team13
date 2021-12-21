@@ -12,6 +12,7 @@ using Shared.RequestModels;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Interfaces;
 using DatabaseAccessor.Mapping;
+using AspNetCoreSharedComponent;
 
 namespace ShopProductService
 {
@@ -35,7 +36,7 @@ namespace ShopProductService
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ProductImageManager>();
+            services.AddScoped<ImageManager>();
             services.AddTransient<IValidator<CreateOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
             services.AddTransient<IValidator<CreateOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
             services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();
