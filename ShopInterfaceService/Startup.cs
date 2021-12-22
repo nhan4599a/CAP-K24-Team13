@@ -1,4 +1,7 @@
+using AspNetCoreSharedComponent;
 using DatabaseAccessor;
+using DatabaseAccessor.Repositories;
+using DatabaseAccessor.Repositories.Interfaces;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -7,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.RequestModels;
-using ShopInterfaceService.Mediator;
 using ShopInterfaceService.Validation;
 
 namespace ShopInterfaceService
@@ -26,8 +28,10 @@ namespace ShopInterfaceService
         {
             services.AddControllers();
             services.AddSwaggerGen();
-            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
-            services.AddTransient<IValidator<CreateOrEditShopInterfaceRequestModel>, CreateOrEditShopInterfaceRequestModelValidator>();
+            services.AddScoped<ApplicationDbContext>();
+            services.AddScoped<ImageManager>();
+            services.AddScoped<IShopInterfaceRepository, ShopInterfaceRepository>();
+            services.AddTransient<IValidator<CreateOrEditInterfaceRequestModel>, CreateOrEditInterfaceRequestModelValidator>();
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>

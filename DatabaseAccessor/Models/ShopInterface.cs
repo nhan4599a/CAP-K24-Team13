@@ -10,6 +10,8 @@ namespace DatabaseAccessor.Models
 
         public string ShopAddress { get; set; }
 
+        public string ShopEmail { get; set; }
+
         public string ShopName { get; set; }
 
         public string ShopPhoneNumber { get; set; }
@@ -18,7 +20,7 @@ namespace DatabaseAccessor.Models
 
         public string Images { get; set; }
 
-        public ShopInterface AssignByRequestModel(CreateOrEditShopInterfaceRequestModel requestModel)
+        public ShopInterface AssignByRequestModel(CreateOrEditInterfaceRequestModel requestModel)
         {
             ShopAddress = requestModel.ShopAddress;
             ShopPhoneNumber = requestModel.ShopPhoneNumber;

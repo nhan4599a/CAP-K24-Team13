@@ -1,4 +1,4 @@
-﻿axios.defaults.baseURL = 'https://localhost:44302/api/';
+﻿axios.defaults.baseURL = '';
 axios.defaults.timeout = 20000;
 
 axios.interceptors.response.use(axiosResp => {
@@ -11,8 +11,9 @@ axios.interceptors.response.use(axiosResp => {
     return Promise.resolve(resp.data);
 }, error => Promise.reject(error));
 
-const productEndpoint = 'products';
-const categoryEndpoint = 'categories';
+const productEndpoint = 'https://localhost:44302/api/products';
+const categoryEndpoint = 'https://localhost:44302/api/categories';
+const interfaceEndpoint = 'https://localhost:44394/api/interfaces';
 
 function findProducts(keyword, pageNumber, pageSize, successCallback) {
     if (keyword === null || keyword === '')
@@ -33,7 +34,7 @@ function findProducts(keyword, pageNumber, pageSize, successCallback) {
 }
 
 function getProductImageUrl(imageFileName) {
-    return `${axios.defaults.baseURL}${productEndpoint}/images/${imageFileName}`;
+    return `${productEndpoint}/images/${imageFileName}`;
 }
 
 function getProductImage(imageFileName, callback) {
@@ -100,4 +101,8 @@ function addCategory(category, successCallback, errorCallback) {
 
 function editCategory(id, category, successCallback, errorCallback) {
     axios.put(categoryEndpoint + `/${id}`, category).then(successCallback).catch(errorCallback);
+}
+
+function getShopInterface(shopId, successCallback) {
+    axios.get(`${interfaceEndpoint}/${shopId}`).then(successCallback);
 }

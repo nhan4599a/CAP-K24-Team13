@@ -22,15 +22,15 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper;
         }
 
-        public async Task<ShopInterfaceDTO> FindShopInterfaceByShopId(int shopId)
+        public async Task<CommandResponse<ShopInterfaceDTO>> FindShopInterfaceByShopIdAsync(int shopId)
         {
             var shopInterface = await _dbContext.ShopInterfaces
                 .AsNoTracking().FirstOrDefaultAsync(e => e.ShopId == shopId);
-            return _mapper.MapToShopInterfaceDTO(shopInterface);
+            return CommandResponse<ShopInterfaceDTO>.Success(_mapper.MapToShopInterfaceDTO(shopInterface));
         }
 
-        public async Task<CommandResponse<int>> EditShopInterfaceAsync(int shopId,
-            CreateOrEditShopInterfaceRequestModel requestModel)
+        public async Task<CommandResponse<ShopInterfaceDTO>> EditShopInterfaceAsync(int shopId,
+            CreateOrEditInterfaceRequestModel requestModel)
         {
             var shopInterface = await _dbContext.ShopInterfaces.FirstOrDefaultAsync(e => e.ShopId == shopId);
             if (shopInterface == null)
@@ -43,8 +43,14 @@ namespace DatabaseAccessor.Repositories
                 shopInterface.AssignByRequestModel(requestModel);
                 _dbContext.Entry(shopInterface).State = EntityState.Modified;
             }
-            await _dbContext.SaveChangesAsync();
-            return CommandResponse<int>.Success(1);
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            } catch (Exception ex)
+            {
+                return CommandResponse<ShopInterfaceDTO>.Error(ex.Message, ex);
+            }
+            return CommandResponse<ShopInterfaceDTO>.Success(_mapper.MapToShopInterfaceDTO(shopInterface));
         }
 
         public void Dispose()

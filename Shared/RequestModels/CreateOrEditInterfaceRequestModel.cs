@@ -1,8 +1,10 @@
 ﻿namespace Shared.RequestModels
 {
-    public class CreateOrEditShopInterfaceRequestModel
+    public class CreateOrEditInterfaceRequestModel
     {
         public string ShopAddress { get; set; }
+
+        public string ShopEmail { get; set; }
 
         public string ShopPhoneNumber { get; set; }
 

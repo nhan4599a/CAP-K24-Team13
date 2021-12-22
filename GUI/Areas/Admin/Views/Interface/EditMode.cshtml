@@ -241,45 +241,47 @@
                         </div>
                     </div>
                 </div>
-                <div class="row justify-content-between mb-3">
-                    <div class="col-12 col-xl-6">
-                        <div class="form-group">
-                            <h6 class="mb-3">Store Description</h6>
-                            <input class="form-control" type="text" id="input-description" name="input-description" />
+                <form enctype="multipart/form-data" method="post">
+                    <div class="row justify-content-between mb-3">
+                        <div class="col-12 col-xl-6">
+                            <div class="form-group">
+                                <h6 class="mb-3">Store Description</h6>
+                                <input class="form-control" type="text" id="input-description" name="input-description" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <h6 class="mb-3">Shop information</h6>
+                            <div class="input-group input-group-outline mb-3">
+                                <label class="form-label" for="input-name">Name</label>
+                                <input type="text" class="form-control" id="input-name" name="input-name" />
+                            </div>
+                            <div class="input-group input-group-outline mb-3">
+                                <label class="form-label" for="input-phone">Phone number</label>
+                                <input type="text" class="form-control" id="input-phone" name="input-phone" />
+                            </div>
+                            <div class="input-group input-group-outline mb-3">
+                                <label class="form-label" for="input-email">Email</label>
+                                <input type="text" class="form-control" id="input-email" name="input-email" />
+                            </div>
+                            <div class="input-group input-group-outline mb-3">
+                                <label class="form-label" for="input-location">Location</label>
+                                <input type="text" class="form-control" id="input-location" name="input-location" />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-xl-6">
-                        <h6 class="mb-3">Shop information</h6>
-                        <div class="input-group input-group-outline mb-3">
-                            <label class="form-label" for="input-name">Name</label>
-                            <input type="text" class="form-control" id="input-name" name="input-name" />
-                        </div>
-                        <div class="input-group input-group-outline mb-3">
-                            <label class="form-label" for="input-phone">Phone number</label>
-                            <input type="text" class="form-control" id="input-phone" name="input-phone" />
-                        </div>
-                        <div class="input-group input-group-outline mb-3">
-                            <label class="form-label" for="input-email">Email</label>
-                            <input type="text" class="form-control" id="input-email" name="input-email" />
-                        </div>
-                        <div class="input-group input-group-outline mb-3">
-                            <label class="form-label" for="input-location">Location</label>
-                            <input type="text" class="form-control" id="input-location" name="input-location" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row justify-content-center">
-                    <div class="col-xl-10">
-                        <div class="form-group mb-3">
-                            <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px"
-                                 action="https://localhost:44302/api/products">
-                                <div class="dz-default dz-message" data-dz-message="">
-                                    <span>Drop images here to upload</span>
+                    <div class="row justify-content-center">
+                        <div class="col-xl-10">
+                            <div class="form-group mb-3">
+                                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px"
+                                     action="https://localhost:44302/api/products">
+                                    <div class="dz-default dz-message" data-dz-message="">
+                                        <span>Drop images here to upload</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
                 <div id="image-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -433,7 +435,7 @@
             });
             dropzone.on('removedfile', function (file) {
                 let removedIndex = this.options.myFiles.findIndex(item => item.upload.uuid == file.upload.uuid);
-                
+
                 let lastAddedIndex = this.options.myFiles.length - 1;
 
                 let carouselItems = $('#image-carousel').children('.carousel-inner').children('.carousel-item');

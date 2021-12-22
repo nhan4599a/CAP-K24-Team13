@@ -3,9 +3,9 @@ using Shared.RequestModels;
 
 namespace ShopInterfaceService.Validation
 {
-    public class CreateOrEditShopInterfaceRequestModelValidator : AbstractValidator<CreateOrEditShopInterfaceRequestModel>
+    public class CreateOrEditInterfaceRequestModelValidator : AbstractValidator<CreateOrEditInterfaceRequestModel>
     {
-        public CreateOrEditShopInterfaceRequestModelValidator()
+        public CreateOrEditInterfaceRequestModelValidator()
         {
             RuleFor(e => e.ShopAddress).NotNull().NotEmpty();
             RuleFor(e => e.ShopDescription).NotNull();

@@ -1,6 +1,7 @@
 using DatabaseAccessor.Repositories.Interfaces;
 using MediatR;
 using Shared;
+using Shared.DTOs;
 using ShopInterfaceService.Commands;
 using System;
 using System.Threading;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace ShopInterfaceService.Handlers
 {
     public class CreateOrEditShopInterfaceCommandHandler :
-        IRequestHandler<CreateOrEditShopInterfaceCommand, CommandResponse<int>>, IDisposable
+        IRequestHandler<CreateOrEditShopInterfaceCommand, CommandResponse<ShopInterfaceDTO>>, IDisposable
     {
         private readonly IShopInterfaceRepository _repository;
 
@@ -18,7 +19,7 @@ namespace ShopInterfaceService.Handlers
             _repository = repository;
         }
 
-        public async Task<CommandResponse<int>> Handle(CreateOrEditShopInterfaceCommand request,
+        public async Task<CommandResponse<ShopInterfaceDTO>> Handle(CreateOrEditShopInterfaceCommand request,
             CancellationToken cancellationToken)
         {
             return await _repository.EditShopInterfaceAsync(request.ShopId, request.RequestModel);
