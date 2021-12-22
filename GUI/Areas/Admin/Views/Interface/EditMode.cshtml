@@ -95,6 +95,17 @@
             display: none;
         }
     </style>
+    <style>
+        .dz-progress {
+            display: none;
+        }
+    </style>
+    <style>
+        #image-carousel .carousel-inner .carousel-item img {
+            width: 1134px;
+            height: 562px;
+        }
+    </style>
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
@@ -366,10 +377,77 @@
     <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script>
+        Dropzone.autoDiscover = false;
         $(document).ready(function () {
             tinymce.init({
                 selector: '#input-description',
                 height: '210px'
+            });
+            const acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            const acceptedMaxBytes = 4 * 1024 * 1024;
+            let remainingBytes = acceptedMaxBytes;
+            let dropzone = new Dropzone('div#file-section', {
+                maxFilesize: 1,
+                paramName: 'files',
+                maxFiles: 5,
+                filesizeBase: 1024,
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                acceptedFiles: acceptedMimeTypes.join(','),
+                addRemoveLinks: true,
+                myFiles: []
+            });
+            dropzone.on('addedfile', function (file) {
+                this.options.myFiles.push(file);
+                let maxFileNumber = this.options.maxFiles;
+                let maxFileSize = this.options.maxFilesize;
+                let uploadedFileSizeInMb = file.size / (1024 * 1024);
+                if (this.files.length > this.options.maxFiles) {
+                    this.removeFile(file);
+                    toastr.error('Max file number exceeded!', 'File is rejected');
+                } else if (!acceptedMimeTypes.includes(file.type)) {
+                    this.removeFile(file);
+                    toastr.error('You can\'t upload this type of file!', 'File is rejected');
+                } else if (uploadedFileSizeInMb > maxFileSize) {
+                    this.removeFile(file);
+                    toastr.error(`${uploadedFileSizeInMb.toFixed(2)} MB file is too big to upload!`, 'File is rejected');
+                } else if (file.size > remainingBytes) {
+                    this.removeFile(file);z
+                    toastr.error('Maximum file size exceeded!', 'File is rejected');
+                } else {
+                    remainingBytes -= file.size;
+                    let fileReader = new FileReader();
+                    let index = this.files.length - 1;
+                    fileReader.onload = function (e) {
+                        let dataURL = e.target.result;
+                        $('#image-carousel').carousel('pause');
+                        $('#image-carousel').children('.carousel-inner').children('.carousel-item').eq(index)
+                            .children('img').attr('src', dataURL);
+                        $('#image-carousel').carousel({
+                            ride: true,
+                            interval: 3500
+                        }).carousel(index);
+                    };
+                    fileReader.readAsDataURL(file);
+                }
+            });
+            dropzone.on('removedfile', function (file) {
+                let removedIndex = this.options.myFiles.findIndex(item => item.upload.uuid == file.upload.uuid);
+                
+                let lastAddedIndex = this.options.myFiles.length - 1;
+
+                let carouselItems = $('#image-carousel').children('.carousel-inner').children('.carousel-item');
+                $('#image-carousel').carousel('pause');
+                for (let i = removedIndex; i < lastAddedIndex; i++) {
+                    carouselItems.eq(i).children('img')
+                        .attr('src', carouselItems.eq(i + 1).children('img').attr('src'));
+                }
+                carouselItems.eq(lastAddedIndex).children('img').attr('src', '/assets/admin/img/image-holder.jpg');
+                $('#image-carousel').carousel({
+                    ride: true,
+                    interval: 3500
+                }).carousel(removedIndex);
+                this.options.myFiles.splice(removedIndex, 1);
             });
         });
     </script>
