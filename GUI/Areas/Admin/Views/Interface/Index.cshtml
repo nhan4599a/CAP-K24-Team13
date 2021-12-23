@@ -248,7 +248,8 @@
                                 <div class="card-header pb-0 p-3">
                                     <h6 class="mb-0">Store Description</h6>
                                 </div>
-                                <div class="card-body p-3">
+                                <div class="card-body p-3" style="padding-bottom: 1.5rem !important">
+                                    <textarea class="form-control" id="input-description" disabled></textarea>
                                 </div>
                             </div>
                         </div>
@@ -259,16 +260,14 @@
                                         <div class="col-md-8 d-flex align-items-center">
                                             <h6 class="mb-0">Profile Information</h6>
                                         </div>
-                                        
                                     </div>
                                 </div>
                                 <div class="card-body p-3">
                                     <hr class="horizontal gray-light my-0">
-                                    <ul class="list-group">
+                                    @*<ul class="list-group">
                                         <li class="list-group-item border-0 ps-0 pt-0 text-sm">
-                                            <strong class="text-dark">
-                                                Full Name:
-                                            </strong>
+                                            <strong class="text-dark">Full Name:</strong>
+                                            <input type="text" disabled value="abc" />
                                         </li>
                                         <li class="list-group-item border-0 ps-0 text-sm">
                                             <strong class="text-dark">Mobile:</strong>
@@ -288,7 +287,39 @@
                                                 <i class="fab fa-instagram fa-lg"></i>
                                             </a>
                                         </li>
-                                    </ul>
+                                    </ul>*@
+                                    <div class="row align-items-center mb-2">
+                                        <div class="col-2">
+                                            <label for="input-name" style="margin: 0px">Name:</label>
+                                        </div>
+                                        <div class="col-10">
+                                            <input class="form-control" type="text" id="input-name" value="abc" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mb-2">
+                                        <div class="col-2">
+                                            <label for="input-name" style="margin: 0px">Phone:</label>
+                                        </div>
+                                        <div class="col-10">
+                                            <input class="form-control" type="text" id="input-name" value="abc" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mb-2">
+                                        <div class="col-2">
+                                            <label for="input-name" style="margin: 0px">Email:</label>
+                                        </div>
+                                        <div class="col-10">
+                                            <input class="form-control" type="text" id="input-name" value="abc" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mb-2">
+                                        <div class="col-2">
+                                            <label for="input-name" style="margin: 0px">Address:</label>
+                                        </div>
+                                        <div class="col-10">
+                                            <input class="form-control" type="text" id="input-name" value="abc" disabled />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -611,6 +642,7 @@
     </script>
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="@Url.Content("~/assets/admin/js/internal/api.js")"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="@Url.Content("~/assets/admin/js/material-dashboard.min.js?v=3.0.0")"></script>
     <script>
@@ -641,6 +673,9 @@
                     }
                 });
             });
+            getShopInterface(0, function (shopInterface) {
+
+            })
         });
     </script>
 </body>

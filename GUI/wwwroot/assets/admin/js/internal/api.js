@@ -1,10 +1,9 @@
-﻿axios.defaults.baseURL = '';
-axios.defaults.timeout = 20000;
+﻿axios.defaults.timeout = 20000;
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
         return Promise.resolve(axiosResp.data);
-    var resp = axiosResp.data;
+    let resp = axiosResp.data;
     if (resp.responseCode != 200) {
         return Promise.reject(resp.errorMessage);
     }
