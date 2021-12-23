@@ -2,6 +2,7 @@
 using DatabaseAccessor.Triggers;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 
 namespace DatabaseAccessor
 {
@@ -17,7 +18,7 @@ namespace DatabaseAccessor
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public ApplicationDbContext() { }
+        public ApplicationDbContext() : base() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

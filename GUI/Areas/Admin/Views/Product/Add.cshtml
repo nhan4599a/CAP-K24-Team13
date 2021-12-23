@@ -103,7 +103,7 @@
                     return;
                 }
                 let formData = new FormData();
-                var requestModelObject = buildRequestModel();
+                let requestModelObject = buildRequestModel();
                 Object.keys(requestModelObject).forEach(key => {
                     formData.append(`requestModel.${key}`, requestModelObject[key]);
                 });

@@ -306,7 +306,7 @@
                                         <label for="input-name" style="margin: 0px">Phone:</label>
                                     </div>
                                     <div class="col-10">
-                                        <input class="form-control" type="text" id="input-name" value="abc" disabled />
+                                        <input class="form-control" type="text" id="input-phone" value="abc" disabled />
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-2">
@@ -314,7 +314,7 @@
                                         <label for="input-name" style="margin: 0px">Email:</label>
                                     </div>
                                     <div class="col-10">
-                                        <input class="form-control" type="text" id="input-name" value="abc" disabled />
+                                        <input class="form-control" type="text" id="input-email" value="abc" disabled />
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-2">
@@ -322,7 +322,7 @@
                                         <label for="input-name" style="margin: 0px">Address:</label>
                                     </div>
                                     <div class="col-10">
-                                        <input class="form-control" type="text" id="input-name" value="abc" disabled />
+                                        <input class="form-control" type="text" id="input-address" value="abc" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -364,29 +364,9 @@
                     </div>
                     <div id="image-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
                         <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#image-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
                         </div>
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://streetstyle.vn/images/companies/1/ban-giay-hieu-1421076935.jpg" class="d-block w-100" alt="image">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://streetstyle.vn/images/companies/1/ban-giay-hieu-1421076935.jpg" class="d-block w-100" alt="image">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://streetstyle.vn/images/companies/1/ban-giay-hieu-1421076935.jpg" class="d-block w-100" alt="image">
-                            </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#image-carousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
                     </div>
                     <div class="col-12 mt-4">
                         <div class="mb-5 ps-3">
@@ -631,6 +611,7 @@
 
     <!--   Core JS Files   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="@Url.Content("~/assets/admin/js/core/popper.min.js")"></script>
     <script src="@Url.Content("~/assets/admin/js/core/bootstrap.min.js")"></script>
     <script src="@Url.Content("~/assets/admin/js/plugins/perfect-scrollbar.min.js")"></script>
@@ -678,9 +659,58 @@
                 });
             });
             getShopInterface(0, function (shopInterface) {
-                console.log(shopInterface);
+                localStorage.setItem('shop-interface.edit-mode', !shopInterface ? 'add' : 'edit');
+                if (shopInterface) {
+                    loadShopInterface(shopInterface);
+                    localStorage.setItem('shop-interface.editting', JSON.stringify(shopInterface));
+                }
             });
         });
+
+        function loadShopInterface(shopInterface) {
+            $('#input-description').val(shopInterface.shopDescription);
+            $('#input-name').val(shopInterface.shopName);
+            $('#input-phone').val(shopInterface.shopPhoneNumber);
+            $('#input-email').val(shopInterface.shopEmail);
+            $('#input-address').val(shopInterface.shopAddress);
+            let carouselItemsHtml = '';
+            let carouselIndicatorsHtml = '';
+            shopInterface.images.forEach((imageFileName, i) => {
+                if (i === 0) {
+                    carouselIndicatorsHtml += `<buttton type="button" data-bs-target="#image-carousel"
+                                                    data-bs-slide-to="0" class="active" aria-current="true"
+                                                    aria-label="Slide 1">
+                                                </button>`;
+                    carouselItemsHtml += `<div class="carousel-item active">
+                                                <img src="${getShopInterfaceImageUrl(imageFileName)}"
+                                                    class="d-block w-100" alt="image" />
+                                            </div>`;
+                } else {
+                    carouselIndicatorsHtml += `<buttton type="button" data-bs-target="#image-carousel"
+                                                    data-bs-slide-to="${i}" aria-label="Slide ${i + 1}">
+                                                </button>`;
+                    carouselItemsHtml += `<div class="carousel-item">
+                                                <img src="${getShopInterfaceImageUrl(imageFileName)}"
+                                                    class="d-block w-100" alt="image" />
+                                            </div>`;
+                }
+            });
+            $('#image-carousel .carousel-indicators').html(carouselIndicatorsHtml);
+            $('#image-carousel .carousel-inner').html(carouselItemsHtml);
+            $('#image-carousel').append(`
+                        <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#image-carousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>`);
+            $('#image-carousel').carousel({
+                slide: true,
+                interval: 3500
+            }).carousel();
+        }
     </script>
 </body>
 

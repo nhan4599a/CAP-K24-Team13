@@ -52,7 +52,7 @@ namespace ShopInterfaceService.Controllers
 
         [HttpPost("{shopId}")]
         public async Task<ApiResult<bool>> CreateShopInterface(int shopId, 
-            CreateOrEditInterfaceRequestModel requestModel)
+            [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
         {
             requestModel.ShopImages = await _imageManager.SaveFilesAsync(Request.Form.Files);
             var result = await _mediator.Send(new CreateOrEditShopInterfaceCommand

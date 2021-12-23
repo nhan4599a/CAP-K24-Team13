@@ -293,3 +293,12 @@ function displayCascadeQuestionDialog(question, buttonOption = {}, confirmedCall
         $(this).remove();
     });
 }
+
+function displayYesNoQuestion(question, confirmCallback) {
+    displayCascadeQuestionDialog(question, {
+        shouldShowCascadeButton: false,
+        shouldShowNonCascadeButton: true,
+        nonCascadeButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }, confirmCallback);
+}

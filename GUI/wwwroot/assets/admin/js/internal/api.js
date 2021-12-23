@@ -36,13 +36,13 @@ function getProductImageUrl(imageFileName) {
     return `${productEndpoint}/images/${imageFileName}`;
 }
 
-function getProductImage(imageFileName, callback) {
+function getProductImage(imageFileName, successCallback) {
     axios.get(getProductImageUrl(imageFileName), {
         responseType: 'blob'
     }).then(blob => {
         blob.name = imageFileName;
         return blob;
-    }).then(callback);
+    }).then(successCallback);
 }
 
 function activateProduct(id, isActivateCommand, successCallback, errorCallback) {
@@ -104,4 +104,33 @@ function editCategory(id, category, successCallback, errorCallback) {
 
 function getShopInterface(shopId, successCallback) {
     axios.get(`${interfaceEndpoint}/${shopId}`).then(successCallback);
+}
+
+function getShopInterfaceImageUrl(imageFileName) {
+    return `${interfaceEndpoint}/images/${imageFileName}`;
+}
+
+function getShopInterfaceImage(imageFileName, successCallback) {
+    axios.get(getProductImageUrl(imageFileName), {
+        responseType: 'blob'
+    }).then(blob => {
+        blob.name = imageFileName;
+        return blob;
+    }).then(successCallback);
+}
+
+function addShopInterface(shopId, formData, successCallback, errorCallback) {
+    axios.post(`${interfaceEndpoint}/${shopId}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }).then(successCallback).catch(errorCallback);
+}
+
+function editShopInterface(shopId, formData, successCallback, errorCallback) {
+    axios.put(`${interfaceEndpoint}/${shopId}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }).then(successCallback).catch(errorCallback);
 }

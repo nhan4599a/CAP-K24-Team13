@@ -1,5 +1,6 @@
 using AspNetCoreSharedComponent;
 using DatabaseAccessor;
+using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Interfaces;
 using FluentValidation;
@@ -32,6 +33,7 @@ namespace ShopInterfaceService
             services.AddScoped<ImageManager>();
             services.AddScoped<IShopInterfaceRepository, ShopInterfaceRepository>();
             services.AddTransient<IValidator<CreateOrEditInterfaceRequestModel>, CreateOrEditInterfaceRequestModelValidator>();
+            services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
