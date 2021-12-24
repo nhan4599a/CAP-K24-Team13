@@ -93,7 +93,7 @@ function buildEditButtonHtml() {
 
 function renderPagination(currentPageNumber, maxPageNumber) {
     let paginationHtml = '';
-    if (currentPageNumber != 1)
+    if (currentPageNumber !== 1)
         paginationHtml += '<a href="#" id="previous-page">«</a>';
     for (var i = 1; i <= maxPageNumber; i++) {
         if (i == currentPageNumber)
@@ -101,7 +101,7 @@ function renderPagination(currentPageNumber, maxPageNumber) {
         else
             paginationHtml += `<a href="#" class="pagination-item">${i}</a>`;
     }
-    if (currentPageNumber != maxPageNumber)
+    if (currentPageNumber !== maxPageNumber && maxPageNumber !== 0)
         paginationHtml += '<a href="#" id="next-page">»</a>';
     $('.pagination').html(paginationHtml);
 }

@@ -2,7 +2,6 @@
 using DatabaseAccessor.Triggers;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.IO;
 
 namespace DatabaseAccessor
 {
@@ -75,8 +74,7 @@ namespace DatabaseAccessor
             modelBuilder.Entity<ShopProduct>()
                 .HasCheckConstraint("CK_ShopProducts_Price", "[Price] >= 0")
                 .HasCheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 1")
-                .HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100")
-                .ToTable("ShopProducts");
+                .HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
 
             modelBuilder.Entity<ShopCategory>()
                 .Property(e => e.IsDisabled)
@@ -85,15 +83,9 @@ namespace DatabaseAccessor
             modelBuilder.Entity<ShopCategory>()
                 .HasIndex(e => e.CategoryName);
 
-            modelBuilder.Entity<ShopCategory>()
-                .ToTable("ShopCategories");
-
             modelBuilder.Entity<ShopInterface>()
                 .HasIndex(e => e.ShopId)
                 .IsUnique();
-
-            modelBuilder.Entity<ShopInterface>()
-                .ToTable("ShopInterfaces");
         }
     }
 }

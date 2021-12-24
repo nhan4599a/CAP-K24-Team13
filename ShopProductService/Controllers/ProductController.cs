@@ -95,11 +95,11 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet("images/{imageId}")]
-        public PhysicalFileResult Index(string imageId)
+        public IActionResult Index(string imageId)
         {
             var fileResponse = _imageManager.GetImage(imageId);
             if (!fileResponse.IsExisted)
-                return null;
+                return StatusCode(404);
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
     }

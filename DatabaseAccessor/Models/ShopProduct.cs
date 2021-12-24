@@ -1,9 +1,10 @@
-﻿using Shared.DTOs;
-using Shared.RequestModels;
+﻿using Shared.RequestModels;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
+    [Table("ShopProducts")]
     public class ShopProduct
     {
         public Guid Id { get; set; }

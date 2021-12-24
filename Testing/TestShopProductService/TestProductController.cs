@@ -7,6 +7,7 @@ using Moq;
 using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
+using Shared.Validations;
 using ShopProductService;
 using ShopProductService.Commands.Product;
 using ShopProductService.Controllers;
@@ -27,7 +28,8 @@ namespace TestShopProductService
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
             var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
             imageManagerMock
-                .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>()))
+                .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
+                    It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
 
             var mediatorMock = new Mock<IMediator>();
@@ -73,7 +75,8 @@ namespace TestShopProductService
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
             var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
             imageManagerMock
-                .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>()))
+                .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>(),
+                    It.IsAny<bool>(), It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
 
             var mediatorMock = new Mock<IMediator>();
@@ -120,7 +123,8 @@ namespace TestShopProductService
             var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
 
             imageManagerMock
-                .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>()))
+                .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
+                    It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
 
             var emptyProductDTO = new ProductDTO();
@@ -170,7 +174,8 @@ namespace TestShopProductService
             var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
 
             imageManagerMock
-                .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>()))
+                .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
+                    It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
 
             var emptyProductDTO = new ProductDTO();

@@ -111,7 +111,7 @@ function getShopInterfaceImageUrl(imageFileName) {
 }
 
 function getShopInterfaceImage(imageFileName, successCallback) {
-    axios.get(getProductImageUrl(imageFileName), {
+    axios.get(getShopInterfaceImageUrl(imageFileName), {
         responseType: 'blob'
     }).then(blob => {
         blob.name = imageFileName;

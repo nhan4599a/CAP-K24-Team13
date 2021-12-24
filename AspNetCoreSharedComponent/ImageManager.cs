@@ -13,54 +13,30 @@ namespace AspNetCoreSharedComponent
             _environment = environment;
         }
 
-        public FileValidationResult Validate(IFormFileCollection images)
+        public async Task<string[]> SaveFilesAsync(IFormFileCollection images, bool shouldValidate = true,
+            FileValidationRuleSet? rules = null)
         {
-            var validationRules = new FileValidationRuleSet
+            if (shouldValidate)
             {
-                new FileValidationRule
-                {
-                    RuleName = FileValidationRuleName.ImageExtension,
-                },
-                new FileValidationRule
-                {
-                    RuleName = FileValidationRuleName.MinFileCount,
-                    Value = 2
-                },
-                new FileValidationRule
-                {
-                    RuleName = FileValidationRuleName.MaxFileCount,
-                    Value = 5
-                },
-                new FileValidationRule
-                {
-                    RuleName = FileValidationRuleName.SingleMaxFileSize,
-                    Value = 1024 * 1024
-                },
-                new FileValidationRule
-                {
-                    RuleName = FileValidationRuleName.AllMaxFileSize,
-                    Value = 4 * 1024 * 1024
-                }
-            };
-            return Validate(images, validationRules);
-        }
-
-        public async Task<string[]> SaveFilesAsync(IFormFileCollection images)
-        {
-            var validationResult = Validate(images);
-            if (validationResult.IsError)
-                throw new ImageValidationException(validationResult);
+                var validationResult = Validate(images, rules);
+                if (validationResult.IsError)
+                    throw new ImageValidationException(validationResult);
+            }
             List<string> savedFileNames = new(5);
             foreach (IFormFile image in images)
                 savedFileNames.Add(await SaveFileAsync(image));
             return savedFileNames.ToArray();
         }
 
-        public async Task<string[]> EditFilesAsync(string[] oldImagesName, IFormFileCollection images)
+        public async Task<string[]> EditFilesAsync(string[] oldImagesName, IFormFileCollection images,
+            bool shouldValidate = true, FileValidationRuleSet? rules = null)
         {
-            var validationResult = Validate(images);
-            if (validationResult.IsError)
-                throw new ImageValidationException(validationResult);
+            if (shouldValidate)
+            {
+                var validationResult = Validate(images, rules);
+                if (validationResult.IsError)
+                    throw new ImageValidationException(validationResult);
+            }
             var imageFilesName = images.Select(x => x.FileName).ToList();
             List<string> savedFileNames = new(images.Count);
             var shouldBeEdittedFileNames = oldImagesName.Intersect(imageFilesName).ToList();
@@ -99,8 +75,11 @@ namespace AspNetCoreSharedComponent
 
         private string GetSavePathForImage(string imageName) => Path.Combine(_environment.WebRootPath, imageName);
 
-        public FileValidationResult Validate(IFormFileCollection files, FileValidationRuleSet rules)
+        public FileValidationResult Validate(IFormFileCollection files, FileValidationRuleSet? rules)
         {
+            if (rules == null || rules.IsEmpty)
+                rules = FileValidationRuleSet.DefaultValidationRules;
+
             var passedRules = new List<FileValidationRuleName>();
             var suitableValidationRuleForMultiple =
                 rules.Where(validationRule => IsSuitableForValidateMultiple(validationRule.RuleName));

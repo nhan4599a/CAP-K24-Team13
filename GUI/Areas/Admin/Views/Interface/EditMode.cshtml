@@ -408,9 +408,6 @@
     <script>
         Dropzone.autoDiscover = false;
         $(document).ready(function () {
-            let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting'));
-            if (edittingShopInterface)
-                loadEdittingShopInterface(edittingShopInterface);
             tinymce.init({
                 selector: '#input-description',
                 height: '210px'
@@ -429,6 +426,9 @@
                 addRemoveLinks: true,
                 myFiles: []
             });
+            let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting'));
+            if (edittingShopInterface)
+                loadEdittingShopInterface(edittingShopInterface, dropzone);
             dropzone.on('addedfile', function (file) {
                 this.options.myFiles.push(file);
                 let maxFileNumber = this.options.maxFiles;
@@ -547,7 +547,7 @@
             }
         }
 
-        function loadEdittingShopInterface(shopInterface) {
+        function loadEdittingShopInterface(shopInterface, dropzone) {
             $('#input-name').val(shopInterface.shopName);
             $('#input-phone').val(shopInterface.shopPhoneNumber);
             $('#input-email').val(shopInterface.shopEmail);
