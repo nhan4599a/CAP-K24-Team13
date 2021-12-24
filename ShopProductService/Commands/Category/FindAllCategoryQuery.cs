@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using Shared;
 using Shared.DTOs;
-using System.Collections.Generic;
 
 namespace ShopProductService.Commands.Category
 {
-    public class FindAllCategoryQuery : IRequest<List<CategoryDTO>>
+    public class FindAllCategoryQuery : IRequest<PaginatedDataList<CategoryDTO>>
     {
+        public PaginationInfo PaginationInfo { get; set; }
     }
 }
