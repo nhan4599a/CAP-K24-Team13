@@ -68,17 +68,18 @@ namespace ShopProductService.Controllers
         [HttpGet]
         public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
         {
-            IRequest<List<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
-                ? new FindAllProductQuery() 
+            IRequest<PaginatedDataList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
+                ? new FindAllProductQuery { PaginationInfo = requestModel.PaginationInfo }
                 : new FindProductsByKeywordQuery
                 {
-                    Keyword = requestModel.Keyword
+                    Keyword = requestModel.Keyword,
+                    PaginationInfo = requestModel.PaginationInfo
                 };
             var productList = await _mediator.Send(request);
             return new ApiResult<PaginatedDataList<ProductDTO>>
             {
                 ResponseCode = 200,
-                Data = productList.Paginate(requestModel.PaginationInfo.PageNumber, requestModel.PaginationInfo.PageSize)
+                Data = productList
             };
         }
 

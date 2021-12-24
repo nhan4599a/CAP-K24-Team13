@@ -4,17 +4,21 @@ namespace Shared
 {
     public class PaginatedDataList<T>
     {
-        private int _maxPageNumber;
+        private readonly int _maxPageNumber;
 
-        private List<T> _data;
+        private readonly List<T> _data;
 
-        private int _currentPageNumber;
+        private readonly int _currentPageNumber;
 
         public int MaxPageNumber { get => _maxPageNumber; }
 
         public List<T> Data { get => _data; }
 
         public int CurrentPageNumber { get => _currentPageNumber; }
+
+        public int Count { get => _data.Count; }
+
+        public T this[int index] => _data[index];
 
         public PaginatedDataList(List<T> data, int maxPageNumber, int currentPageNumber)
         {

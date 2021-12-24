@@ -1,16 +1,16 @@
 ﻿using DatabaseAccessor.Repositories.Interfaces;
 using MediatR;
+using Shared;
 using Shared.DTOs;
 using ShopProductService.Commands.Product;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Product
 {
     public class FindProductsByKeywordQueryHandler : 
-        IRequestHandler<FindProductsByKeywordQuery, List<ProductDTO>>, IDisposable
+        IRequestHandler<FindProductsByKeywordQuery, PaginatedDataList<ProductDTO>>, IDisposable
     {
         private readonly IProductRepository _repository;
 
@@ -19,9 +19,10 @@ namespace ShopProductService.Handlers.Product
             _repository = repository;
         }
 
-        public async Task<List<ProductDTO>> Handle(FindProductsByKeywordQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedDataList<ProductDTO>> Handle(FindProductsByKeywordQuery request,
+            CancellationToken cancellationToken)
         {
-            return await _repository.GetProductsAsync(request.Keyword);
+            return await _repository.GetProductsAsync(request.Keyword, request.PaginationInfo);
         }
 
         public void Dispose()

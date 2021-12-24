@@ -255,5 +255,51 @@ namespace TestShopProductService
             Assert.False(result.Data);
             Assert.Empty(result.ErrorMessage);
         }
+
+        [TestCasePriority(7)]
+        [Fact]
+        public async void TestActivateProductFailed()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<ActivateProductCommand>(), CancellationToken.None))
+                .ReturnsAsync(CommandResponse<bool>.Error("Action failed", null));
+
+            var controller = new ProductController(mediatorMock.Object, null);
+
+            var result = await controller.DeleteProduct(Guid.NewGuid().ToString(), DeleteAction.Activate);
+
+            Assert.NotNull(result);
+            Assert.Equal(500, result.ResponseCode);
+            Assert.False(result.Data);
+            Assert.Equal("Action failed", result.ErrorMessage);
+        }
+
+        [TestCasePriority(8)]
+        [Fact]
+        public async void TestDeactivateProductFailed()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<ActivateProductCommand>(), CancellationToken.None))
+                .ReturnsAsync(CommandResponse<bool>.Error("Action failed", null));
+
+            var controller = new ProductController(mediatorMock.Object, null);
+
+            var result = await controller.DeleteProduct(Guid.NewGuid().ToString(), DeleteAction.Deactivate);
+
+            Assert.NotNull(result);
+            Assert.Equal(500, result.ResponseCode);
+            Assert.False(result.Data);
+            Assert.Equal("Action failed", result.ErrorMessage);
+        }
+
+        //public async void TestFindAllProduct()
+        //{
+        //    var mediatorMock = new Mock<IMediator>();
+        //    mediatorMock
+        //        .Setup(e => e.Send(It.IsAny<FindAllProductQuery>(), CancellationToken.None))
+        //        .ReturnsAsync(CommandResponse<>>)
+        //}
     }
 }
