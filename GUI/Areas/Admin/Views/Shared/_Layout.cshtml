@@ -459,9 +459,9 @@
     <script>
         if (window.location.pathname != "/admin/product")
             $('#input-search').parent().remove();
+        toastr.options.closeButton = true;
     </script>
     @RenderSection("Scripts", false)
-
 </body>
 
 </html>

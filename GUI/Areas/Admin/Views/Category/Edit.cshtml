@@ -39,10 +39,16 @@
                     categoryName: name,
                     special: special
                 };
+                let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+                animationLoader.showAnimation();
                 editCategory(id, category, () => { 
+                    animationLoader.hideAnimation();
                     window.location.href = '/admin/category';
                     window.localStorage.removeItem('editting-category');
-                }, (err) => toastr.error(err));
+                }, (error) => {
+                    animationLoader.hideAnimation();
+                    toastr.error(error, 'Error');
+                });
             });
         });
         function loadEdittingCategory() {

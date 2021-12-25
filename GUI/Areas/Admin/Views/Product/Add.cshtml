@@ -104,6 +104,8 @@
                     toastr.error('You must upload at least 2 pictures!', 'Error');
                     return;
                 }
+                let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+                animationLoader.showAnimation();
                 let formData = new FormData();
                 let requestModelObject = buildRequestModel();
                 Object.keys(requestModelObject).forEach(key => {
@@ -112,14 +114,23 @@
                 for (let i = 0; i < dropzone.files.length; i++)
                     formData.append(`images[${i}]`, dropzone.files[i]);
                 addProduct(formData, () => {
+                    animationLoader.hideAnimation();
                     window.location.href = '/admin/product';
                 }, (error) => {
-                    alert(error);
+                    animationLoader.hideAnimation();
+                    toastr.error(error, 'Error');
                 });
             });
+            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            animationLoader.showAnimation(3500);
             getAllCategories(
                 categories => renderCategoryDropdown(categories.filter(category => !category.isDisabled))
-            );
+            ).then(() => {
+                animationLoader.hideAnimation();
+            }).catch(() => {
+                animationLoader.hideAnimation();
+                toastr.error('Failed to load list categories', 'Error');
+            });
         });
         function buildRequestModel() {
             let name = $("#input-name").val();

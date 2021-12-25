@@ -16,14 +16,14 @@ const interfaceEndpoint = 'https://localhost:44394/api/interfaces';
 
 function findProducts(keyword, pageNumber, pageSize, successCallback) {
     if (keyword === null || keyword === '')
-        axios.get(productEndpoint, {
+        return axios.get(productEndpoint, {
             params: {
                 'paginationInfo.pageNumber': pageNumber,
                 'paginationInfo.pageSize': pageSize
             }
         }).then(successCallback);
     else
-        axios.get(productEndpoint, {
+        return axios.get(productEndpoint, {
             params: {
                 keyword: encodeURIComponent(keyword),
                 'paginationInfo.pageNumber': pageNumber,
@@ -37,7 +37,7 @@ function getProductImageUrl(imageFileName) {
 }
 
 function getProductImage(imageFileName, successCallback) {
-    axios.get(getProductImageUrl(imageFileName), {
+    return axios.get(getProductImageUrl(imageFileName), {
         responseType: 'blob'
     }).then(blob => {
         blob.name = imageFileName;
@@ -46,13 +46,13 @@ function getProductImage(imageFileName, successCallback) {
 }
 
 function activateProduct(id, isActivateCommand, successCallback, errorCallback) {
-    axios.delete(
+    return axios.delete(
         `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`
     ).then(successCallback).catch(errorCallback);
 }
 
 function addProduct(formData, successCallback, errorCallback) {
-    axios.post(productEndpoint, formData, {
+    return axios.post(productEndpoint, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -60,7 +60,7 @@ function addProduct(formData, successCallback, errorCallback) {
 }
 
 function editProduct(id, formData, successCallback, errorCallback) {
-    axios.put(productEndpoint + `/${id}`, formData, {
+    return axios.put(productEndpoint + `/${id}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -68,11 +68,11 @@ function editProduct(id, formData, successCallback, errorCallback) {
 }
 
 function getAllCategories(successCallback) {
-    axios.get(categoryEndpoint).then(paginatedResponse => successCallback(paginatedResponse.data));
+    return axios.get(categoryEndpoint).then(paginatedResponse => successCallback(paginatedResponse.data));
 }
 
 function getCategories(pageNumber, pageSize, successCallback) {
-    axios.get(categoryEndpoint, {
+    return axios.get(categoryEndpoint, {
         params: {
             pageNumber: pageNumber,
             pageSize: pageSize || 5
@@ -89,21 +89,21 @@ function activateCategory(activateCommand, successCallback, errorCallback) {
         throw new Error('Action does not supported');
     var action = activateCommand.isActivateCommand ? 1 : 0;
     var cascade = activateCommand.shouldBeCascade ? 1 : 0;
-    axios.delete(
+    return axios.delete(
         `${categoryEndpoint}/${activateCommand.id}?action=${action}&cascade=${cascade}`
     ).then(successCallback).catch(errorCallback);
 }
 
 function addCategory(category, successCallback, errorCallback) {
-    axios.post(categoryEndpoint, category).then(successCallback).catch(errorCallback);
+    return axios.post(categoryEndpoint, category).then(successCallback).catch(errorCallback);
 }
 
 function editCategory(id, category, successCallback, errorCallback) {
-    axios.put(categoryEndpoint + `/${id}`, category).then(successCallback).catch(errorCallback);
+    return axios.put(categoryEndpoint + `/${id}`, category).then(successCallback).catch(errorCallback);
 }
 
 function getShopInterface(shopId, successCallback) {
-    axios.get(`${interfaceEndpoint}/${shopId}`).then(successCallback);
+    return axios.get(`${interfaceEndpoint}/${shopId}`).then(successCallback);
 }
 
 function getShopInterfaceImageUrl(imageFileName) {
@@ -111,7 +111,7 @@ function getShopInterfaceImageUrl(imageFileName) {
 }
 
 function getShopInterfaceImage(imageFileName, successCallback) {
-    axios.get(getShopInterfaceImageUrl(imageFileName), {
+    return axios.get(getShopInterfaceImageUrl(imageFileName), {
         responseType: 'blob'
     }).then(blob => {
         blob.name = imageFileName;
@@ -120,7 +120,7 @@ function getShopInterfaceImage(imageFileName, successCallback) {
 }
 
 function addShopInterface(shopId, formData, successCallback, errorCallback) {
-    axios.post(`${interfaceEndpoint}/${shopId}`, formData, {
+    return axios.post(`${interfaceEndpoint}/${shopId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -128,7 +128,7 @@ function addShopInterface(shopId, formData, successCallback, errorCallback) {
 }
 
 function editShopInterface(shopId, formData, successCallback, errorCallback) {
-    axios.put(`${interfaceEndpoint}/${shopId}`, formData, {
+    return axios.put(`${interfaceEndpoint}/${shopId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }

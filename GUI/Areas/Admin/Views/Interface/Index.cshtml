@@ -23,7 +23,9 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- CSS Files -->
+    <link href="@Url.Content("~/assets/admin/css/loading.css")" rel="stylesheet" />
     <link id="pagestyle" href="@Url.Content("~/assets/admin/css/material-dashboard.css?v=3.0.0")" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <style>
         #button-img {
             display: inline-block;
@@ -86,24 +88,32 @@
         }
     </style>
     <style>
-        .edit-profile{
+        .edit-profile {
             color: #000 !important
         }
-        .edit-profile:hover{
-            color: #2f9db6 !important
-        }
+
+            .edit-profile:hover {
+                color: #2f9db6 !important
+            }
+
         .col-xl-4 {
             flex: 0 0 auto;
             width: 50%;
         }
-        .ms-sm-auto{
+
+        .ms-sm-auto {
             margin-right: auto !important;
             margin-left: 0 !important
+        }
+
+        .d-grid {
+            display: grid;
         }
     </style>
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
+    <div id="loading-container"></div>
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark"
            id="sidenav-main">
         <div class="sidenav-header">
@@ -210,7 +220,6 @@
                         <div class="avatar avatar-xl position-relative">
                             <button id="button-img"><img src="https://gigamall.com.vn/data/2019/09/05/15023424_LOGO-NIKE-500x500.jpg"></button>
                         </div>
-
                     </div>
                     <div class="col-auto my-auto">
                         <div class="h-100">
@@ -225,21 +234,21 @@
                             </a>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="row">
                     <div class="col-12 col-xl-4">
-                        <div class="card card-plain h-100">
+                        <div class="card card-plain" style="height: 97% !important">
                             <div class="card-header pb-0 p-3">
                                 <h6 class="mb-0">Store Description</h6>
                             </div>
-                            <div class="card-body p-3" style="padding-bottom: 1.5rem !important">
+                            <div class="card-body p-2">
                                 <textarea class="form-control" id="input-description" disabled></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-xl-4">
-                        <div class="card card-plain h-100">
+                        <div class="card card-plain" style="height: 90% !important">
                             <div class="card-header pb-0 p-3">
                                 <div class="row">
                                     <div class="col-md-8 d-flex align-items-center">
@@ -247,7 +256,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body p-3">
+                            <div class="card-body p-2" style="padding-left: 1rem !important">
                                 <hr class="horizontal gray-light my-0">
                                 @*<ul class="list-group">
                                     <li class="list-group-item border-0 ps-0 pt-0 text-sm">
@@ -310,65 +319,74 @@
                     </div>
                     @*<div class="col-12 col-xl-4 tab-page">
                         <div class="card card-plain h-100 active" tab-page="1">
-                            <div class="card-header pb-0 p-3">
-                                <h6 class="mb-0">Conversations 1</h6>
-                            </div>
-                            <div class="card-body p-3">
-                                <ul class="list-group">
-                                    <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2 pt-0">
-                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">Bộ ảnh Anjme sju cấp vjp pro</h6>
-                                        </div>
-                                        <a class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                                           href="javascript:;">View detais</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="card-header pb-0 p-3">
+                        <h6 class="mb-0">Conversations 1</h6>
+                        </div>
+                        <div class="card-body p-3">
+                        <ul class="list-group">
+                        <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2 pt-0">
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">Bộ ảnh Anjme sju cấp vjp pro</h6>
+                        </div>
+                        <a class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
+                        href="javascript:;">View detais</a>
+                        </li>
+                        </ul>
+                        </div>
                         </div>
                         <div class="card card-plain h-100" tab-page="2">
-                            <div class="card-header pb-0 p-3">
-                                <h6 class="mb-0">Conversations 2</h6>
-                            </div>
-                            <div class="card-body p-3">
-                                <ul class="list-group">
-                                    <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2 pt-0">
-                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">Bộ ảnh Anjme sju cấp vjp pro</h6>
-                                        </div>
-                                        <a class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                                           href="javascript:;">View detais</a>
+                        <div class="card-header pb-0 p-3">
+                        <h6 class="mb-0">Conversations 2</h6>
+                        </div>
+                        <div class="card-body p-3">
+                        <ul class="list-group">
+                        <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2 pt-0">
+                        <div class="d-flex align-items-start flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">Bộ ảnh Anjme sju cấp vjp pro</h6>
+                        </div>
+                        <a class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
+                        href="javascript:;">View detais</a>
+                        </li>
+                        </ul>
+                        </div>
+                        </div>
+                        </div>*@
+                    <div id="image-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
+                        <div class="carousel-indicators"></div>
+                        <div class="carousel-inner"></div>
+                    </div>
+                    <div class="col-12 mt-1">
+                        <div class="col-lg-4 col-md-6 ms-sm-auto me-sm-0 mx-auto mt-1">
+                            <div class="nav-wrapper position-relative end-0">
+                                <ul class="nav nav-pills nav-fill p-1 tab-button" style="cursor: pointer;" tab-content-selector=".tab-page">
+                                    <li class="nav-item">
+                                        <a class="tablinks nav-link mb-0 px-0 py-1 active" tab-index="1">
+                                            <span class="ms-1">Products</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="tablinks nav-link mb-0 px-0 py-1" tab-index="2">
+                                            <span class="ms-1">Categories</span>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                    </div>*@
-                    <div id="image-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
-                        <div class="carousel-indicators">
+                        <div class="tab-page">
+                            <div tab-page="1" class="active">
+                                <div class="mb-5 ps-3 mt-2">
+                                    <h6 class="mb-1">Products</h6>
+                                    <p class="text-sm">All products</p>
+                                </div>
+                            </div>
+                            <div tab-page="2">
+                                <div class="mb-5 ps-3 mt-2">
+                                    <h6 class="mb-1">Categories</h6>
+                                    <p class="text-sm">All categories</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="carousel-inner">
-                        </div>
-                    </div>
-                    <div class="col-12 mt-4">
-                        <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-                        <div class="nav-wrapper position-relative end-0">
-                            <ul class="nav nav-pills nav-fill p-1 tab-button" style="cursor: pointer;" tab-content-selector=".tab-page">
-                                <li class="nav-item">
-                                    <a class="tablinks nav-link mb-0 px-0 py-1 active" tab-index="1">
-                                        <span class="ms-1">Products</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="tablinks nav-link mb-0 px-0 py-1" tab-index="2">
-                                        <span class="ms-1">Categories</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                        <div class="mb-5 ps-3">
-                            <h6 class="mb-1">Products</h6>
-                            <p class="text-sm">All products</p>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -394,7 +412,7 @@
                             <li class="nav-item">
                                 <a href="https://www.creative-tim.com" class="nav-link text-muted"
                                    target="_blank">
-                                   Creative Tim
+                                    Creative Tim
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -406,13 +424,13 @@
                             <li class="nav-item">
                                 <a href="https://www.creative-tim.com/blog" class="nav-link text-muted"
                                    target="_blank">
-                                   Blog
+                                    Blog
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted"
                                    target="_blank">
-                                   License
+                                    License
                                 </a>
                             </li>
                         </ul>
@@ -440,10 +458,14 @@
     </script>
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.8.1/lottie.min.js" integrity="sha512-V1YyTKZJrzJNhcKthpNAaohFXBnu5K9j7Qiz6gv1knFuf13TW/3vpgVVhJu9fvbdW8lb5J6czIhD4fWK2iHKXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="@Url.Content("~/assets/admin/js/internal/api.js")"></script>
+    <script src="@Url.Content("~/assets/admin/js/internal/animation.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="@Url.Content("~/assets/admin/js/material-dashboard.min.js?v=3.0.0")"></script>
     <script>
+        toastr.options.closeButton = true;
         $(function() {
             var tabButtons = $('.tab-button');
             var oldTabIndex = parseInt(tabButtons.children().children('.active').attr('tab-index'));
@@ -471,52 +493,64 @@
                     }
                 });
             });
-            getShopInterface(0, function (shopInterface) {
-                localStorage.setItem('shop-interface.edit-mode', !shopInterface ? 'add' : 'edit');
-                if (shopInterface) {
-                    loadShopInterface(shopInterface);
-                    localStorage.setItem('shop-interface.editting', JSON.stringify(shopInterface));
+            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            animationLoader.showAnimation();
+            Promise.all([getShopInterface(0, onInterfaceGot), findProducts('', 1, 8, onProductGot)])
+                .then(() => animationLoader.hideAnimation())
+                .catch(() => {
+                    animationLoader.hideAnimation();
+                    toastr.error('Something went wrong', 'Error');
+                });
+        });
+
+        function onInterfaceGot(shopInterface) {
+            localStorage.setItem('shop-interface.edit-mode', !shopInterface ? 'add' : 'edit');
+            if (shopInterface) {
+                loadShopInterface(shopInterface);
+                localStorage.setItem('shop-interface.editting', JSON.stringify(shopInterface));
+            }
+        }
+
+        function onProductGot(products) {
+            let temp = 3;
+            let productsHtml = '';
+            let tempArr = [];
+            let lastIndex = products.data.length - 1;
+            products.data.forEach((product, index) => {
+                productsHtml += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                                    <div class="card card-blog card-plain">
+                                        <div class="card-header p-0 mt-n4 mx-3">
+                                            <a class="d-grid shadow-xl border-radius-xl" style="height: 234px">
+                                                <img src="${getProductImageUrl(product.images[0])}"
+                                                    alt="${product.productName}"
+                                                    class="img-fluid" style="align-self: center" />
+                                            </a>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <p class="mb-0 text-sm">${product.categoryName}</p>
+                                            <a href="#">
+                                                <h5>${product.productName}</h5>
+                                            </a>
+                                            <p class="mb-2 text-sm">${product.description}</p>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <button type="button" class="btn btn-outline-primary btn-sm mb-0">
+                                                    View details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                if (index == lastIndex || index == temp) {
+                    tempArr.push(`<div class="row mb-3">
+                                    ${productsHtml}
+                                </div>`);
+                    productsHtml = '';
+                    if (index == temp)
+                        temp += 4;
                 }
             });
-            //findProducts('', 1, 8, (products) => {
-            //    let temp = 3;
-            //    let productsHtml = '';
-            //    let tempArr = [];
-            //    products.data.forEach((product, index) => {
-            //        productsHtml += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-            //                            <div class="card card-blog card-plain">
-            //                                <div class="card-header p-0 mt-n4 mx-3">
-            //                                    <a class="d-block shadow-xl border-radius-xl">
-            //                                        <img src="${getProductImageUrl(product.images[0])}"
-            //                                            alt="${product.productName}" 
-            //                                            class="img-fluid shadow border-radius-xl" />
-            //                                    </a>
-            //                                </div>
-            //                                <div class="card-body p-3">
-            //                                    <p class="mb-0 text-sm">${product.categoryName}</p>
-            //                                    <a href="#">
-            //                                        <h5>${product.productName}</h5>
-            //                                    </a>
-            //                                    <p class="mb-2 text-sm">${product.description}</p>
-            //                                    <div class="d-flex align-items-center justify-content-between">
-            //                                        <button type="button" class="btn btn-outline-primary btn-sm mb-0">
-            //                                            View details 
-            //                                        </button>
-            //                                    </div>
-            //                                </div>
-            //                            </div>
-            //                        </div>`;
-            //        if (index == temp) {
-            //            tempArr.push(`<div class="row mb-3">
-            //                                ${productsHtml}
-            //                            </div>`);
-            //            productsHtml = '';
-            //            temp += 4;
-            //        }
-            //    });
-            //    $('div.card.card-body > .row:not(.gx-4) > .col-12.mt-4').append(tempArr.join(''));
-            });
-        });
+            $('div.card.card-body > .row:not(.gx-4) > .col-12.mt-1 > div.tab-page > div:first-child').append(tempArr.join(''));
+        }
 
         function loadShopInterface(shopInterface) {
             $('#input-description').val(shopInterface.shopDescription);
