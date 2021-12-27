@@ -4,7 +4,6 @@ using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
 using ShopProductService.Commands.Category;
-using System;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -62,11 +61,14 @@ namespace ShopProductService.Controllers
         [ActionName("Index")]
         public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
         {
-            var categories = await _mediator.Send(new FindAllCategoryQuery());
+            var categories = await _mediator.Send(new FindAllCategoryQuery
+            {
+                PaginationInfo = paginationInfo
+            });
             return new ApiResult<PaginatedDataList<CategoryDTO>>
             {
                 ResponseCode = 200,
-                Data = categories.Paginate(paginationInfo.PageNumber, paginationInfo.PageSize)
+                Data = categories
             };
         }
 

@@ -8,76 +8,83 @@
 function loadCategories(pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
     animationLoader.showAnimation();
-    getCategories(pageNumber, pageSize, paginatedData => {
-        let categories = paginatedData.data;
-        renderCategoryTable(categories);
-        renderPagination(pageNumber, paginatedData.maxPageNumber);
-        $('a[name=btn-edit]').click(function (e) {
-            e.preventDefault();
-            let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-            let categoryInfoStr = JSON.stringify(categories[index]);
-            window.localStorage.setItem('editting-category', categoryInfoStr);
-            window.location.href = "/admin/category/edit";
-        });
-        $('a[name=btn-action]').click(function (e) {
-            e.preventDefault();
-            let id = $(this).parent().parent().children('#cate-id').text();
-            let name = $(this).parent().parent().children('td:nth-child(4)').children().text();
-            let action = $(this).text().trim().toLowerCase();
-            if (action !== 'deactivate' && action !== 'activate')
-                return;
-            displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, {
-                shouldShowCascadeButton: true,
-                shouldShowNonCascadeButton: action === 'activate'
-            }, option => {
-                var shouldBeCascade = option === 'cascade';
-                var command = {
-                    id: id,
-                    isActivateCommand: action === 'activate',
-                    shouldBeCascade: action === 'activate' ? shouldBeCascade : true
-                };
-                var successCallback = command.isActivateCommand ? () => {
-                    toastr.success(`Activated ${name}`, 'Success');
-                    $(this).parent().parent().children('td:nth-child(6)').children()
-                            .removeClass('bg-gradient-secondary')
-                            .addClass('bg-gradient-success')
-                            .text('Activated');
-                    $(this).parent().prepend(buildEditButtonHtml());
-                    $(this).children('span').text(' Deactivate')
-                    $('a[name=btn-edit]').click(function (e) {
-                        e.preventDefault();
-                        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-                        let categoryInfoStr = JSON.stringify(categories[index]);
-                        window.localStorage.setItem('editting-category', categoryInfoStr);
-                        window.location.href = "/admin/category/edit";
-                    });
-                } : () => {
-                    toastr.success(`Deactivated ${name}`, 'Success');
-                    $(this).parent().parent().children('td:nth-child(6)').children()
-                            .removeClass('bg-gradient-success')
-                            .addClass('bg-gradient-secondary')
-                            .text('Deactivated');
-                    $(this).parent().children('*[name="btn-edit"]').remove();
-                    $(this).children('span').text(' Activate');
-                    $(this).children('i').removeClass().addClass('fas fa-check');
-                };
-                activateCategory(command, successCallback, () => toastr.error(`Failed to ${action} ${name}`));
-            });
-        });
-
-        $('#previous-page').click(() => {
-            let currentPageInfo = getCurrentPageInfo();
-            moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
-        });
-        $('#next-page').click(() => {
-            let currentPageInfo = getCurrentPageInfo();
-            moveToPage(currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
-        });
-        $('a.pagination-item').click(function () {
-            let pageNumber = $(this).text();
-            moveToPage(pageNumber, getCurrentPageInfo().pageSize);
-        });
+    getCategories(pageNumber, pageSize, onCategoriesLoaded).then(() => {
         animationLoader.hideAnimation();
+    }).catch(() => {
+        animationLoader.hideAnimation();
+        toastr.error('Failed to load categories', 'Error');
+    });
+}
+
+function onCategoriesLoaded(paginatedData) {
+    let categories = paginatedData.data;
+    let pageNumber = paginatedData.currentPageNumber;
+    renderCategoryTable(categories);
+    renderPagination(pageNumber, paginatedData.maxPageNumber);
+    $('a[name=btn-edit]').click(function (e) {
+        e.preventDefault();
+        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+        let categoryInfoStr = JSON.stringify(categories[index]);
+        window.localStorage.setItem('editting-category', categoryInfoStr);
+        window.location.href = "/admin/category/edit";
+    });
+    $('a[name=btn-action]').click(function (e) {
+        e.preventDefault();
+        let id = $(this).parent().parent().children('#cate-id').text();
+        let name = $(this).parent().parent().children('td:nth-child(4)').children().text();
+        let action = $(this).text().trim().toLowerCase();
+        if (action !== 'deactivate' && action !== 'activate')
+            return;
+        displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, {
+            shouldShowCascadeButton: true,
+            shouldShowNonCascadeButton: action === 'activate'
+        }, option => {
+            var shouldBeCascade = option === 'cascade';
+            var command = {
+                id: id,
+                isActivateCommand: action === 'activate',
+                shouldBeCascade: action === 'activate' ? shouldBeCascade : true
+            };
+            var successCallback = command.isActivateCommand ? () => {
+                toastr.success(`Activated ${name}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(6)').children()
+                    .removeClass('bg-gradient-secondary')
+                    .addClass('bg-gradient-success')
+                    .text('Activated');
+                $(this).parent().prepend(buildEditButtonHtml());
+                $(this).children('span').text(' Deactivate')
+                $('a[name=btn-edit]').click(function (e) {
+                    e.preventDefault();
+                    let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+                    let categoryInfoStr = JSON.stringify(categories[index]);
+                    window.localStorage.setItem('editting-category', categoryInfoStr);
+                    window.location.href = "/admin/category/edit";
+                });
+            } : () => {
+                toastr.success(`Deactivated ${name}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(6)').children()
+                    .removeClass('bg-gradient-success')
+                    .addClass('bg-gradient-secondary')
+                    .text('Deactivated');
+                $(this).parent().children('*[name="btn-edit"]').remove();
+                $(this).children('span').text(' Activate');
+                $(this).children('i').removeClass().addClass('fas fa-check');
+            };
+            activateCategory(command, successCallback, () => toastr.error(`Failed to ${action} ${name}`));
+        });
+    });
+
+    $('#previous-page').click(() => {
+        let currentPageInfo = getCurrentPageInfo();
+        moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
+    });
+    $('#next-page').click(() => {
+        let currentPageInfo = getCurrentPageInfo();
+        moveToPage(currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
+    });
+    $('a.pagination-item').click(function () {
+        let pageNumber = $(this).text();
+        moveToPage(pageNumber, getCurrentPageInfo().pageSize);
     });
 }
 

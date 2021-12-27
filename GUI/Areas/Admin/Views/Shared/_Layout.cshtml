@@ -83,6 +83,10 @@
         .shadow {
             box-shadow: 0 7px 10px -5px rgb(47 157 182) !important;
         }
+
+        button.btn > a {
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -455,9 +459,9 @@
     <script>
         if (window.location.pathname != "/admin/product")
             $('#input-search').parent().remove();
+        toastr.options.closeButton = true;
     </script>
     @RenderSection("Scripts", false)
-
 </body>
 
 </html>

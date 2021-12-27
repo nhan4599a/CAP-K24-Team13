@@ -7,6 +7,7 @@ using Moq;
 using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
+using Shared.Validations;
 using ShopProductService;
 using ShopProductService.Commands.Product;
 using ShopProductService.Controllers;
@@ -27,7 +28,8 @@ namespace TestShopProductService
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
             var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
             imageManagerMock
-                .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>()))
+                .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
+                    It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
 
             var mediatorMock = new Mock<IMediator>();
@@ -73,7 +75,8 @@ namespace TestShopProductService
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
             var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
             imageManagerMock
-                .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>()))
+                .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>(),
+                    It.IsAny<bool>(), It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
 
             var mediatorMock = new Mock<IMediator>();
@@ -120,7 +123,8 @@ namespace TestShopProductService
             var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
 
             imageManagerMock
-                .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>()))
+                .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
+                    It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
 
             var emptyProductDTO = new ProductDTO();
@@ -170,7 +174,8 @@ namespace TestShopProductService
             var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
 
             imageManagerMock
-                .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>()))
+                .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
+                    It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
 
             var emptyProductDTO = new ProductDTO();
@@ -250,5 +255,51 @@ namespace TestShopProductService
             Assert.False(result.Data);
             Assert.Empty(result.ErrorMessage);
         }
+
+        [TestCasePriority(7)]
+        [Fact]
+        public async void TestActivateProductFailed()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<ActivateProductCommand>(), CancellationToken.None))
+                .ReturnsAsync(CommandResponse<bool>.Error("Action failed", null));
+
+            var controller = new ProductController(mediatorMock.Object, null);
+
+            var result = await controller.DeleteProduct(Guid.NewGuid().ToString(), DeleteAction.Activate);
+
+            Assert.NotNull(result);
+            Assert.Equal(500, result.ResponseCode);
+            Assert.False(result.Data);
+            Assert.Equal("Action failed", result.ErrorMessage);
+        }
+
+        [TestCasePriority(8)]
+        [Fact]
+        public async void TestDeactivateProductFailed()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<ActivateProductCommand>(), CancellationToken.None))
+                .ReturnsAsync(CommandResponse<bool>.Error("Action failed", null));
+
+            var controller = new ProductController(mediatorMock.Object, null);
+
+            var result = await controller.DeleteProduct(Guid.NewGuid().ToString(), DeleteAction.Deactivate);
+
+            Assert.NotNull(result);
+            Assert.Equal(500, result.ResponseCode);
+            Assert.False(result.Data);
+            Assert.Equal("Action failed", result.ErrorMessage);
+        }
+
+        //public async void TestFindAllProduct()
+        //{
+        //    var mediatorMock = new Mock<IMediator>();
+        //    mediatorMock
+        //        .Setup(e => e.Send(It.IsAny<FindAllProductQuery>(), CancellationToken.None))
+        //        .ReturnsAsync(CommandResponse<>>)
+        //}
     }
 }

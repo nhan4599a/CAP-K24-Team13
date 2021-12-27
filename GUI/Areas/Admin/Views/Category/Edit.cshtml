@@ -10,7 +10,9 @@
             @await Component.InvokeAsync("CategorySpecialDropdown")
             <div class="form-group">
                 <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Update</button>
-                <a class="btn bg-gradient-primary-dark my-shadow text-white" style="float: right" href="category">Cancel</a>
+                <button class="btn btn-danger" style="float: right">
+                    <a href="category" class="text-white">Cancel</a>
+                </button>
             </div>
         </div>
     </div>
@@ -37,10 +39,16 @@
                     categoryName: name,
                     special: special
                 };
+                let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+                animationLoader.showAnimation();
                 editCategory(id, category, () => { 
+                    animationLoader.hideAnimation();
                     window.location.href = '/admin/category';
                     window.localStorage.removeItem('editting-category');
-                }, (err) => toastr.error(err));
+                }, (error) => {
+                    animationLoader.hideAnimation();
+                    toastr.error(error, 'Error');
+                });
             });
         });
         function loadEdittingCategory() {

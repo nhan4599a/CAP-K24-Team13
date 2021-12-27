@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
+using Shared.Validations;
 using ShopInterfaceService.Commands;
 using ShopInterfaceService.Mediator;
 using System.Threading.Tasks;
@@ -15,33 +16,16 @@ namespace ShopInterfaceService.Controllers
     [ApiController]
     public class ShopInterfaceController : ControllerBase
     {
-        //private readonly IShopService _shopService;
-
-        //public ShopInterfaceController(IShopService shopService)
-        //{
-        //    _shopService = shopService;
-        //}
-
-        //[HttpPost]
-        //[Route("{shopId}")]
-        //public async Task<ApiResult<ShopInterfaceDTO>> EditShopInterface(int shopId, AddOrEditShopInterfaceRequestModel requestModel)
-        //{
-        //    var existedShopInterface = await _shopService.FindShopInterfaceAsync(shopId);
-        //    ShopInterfaceDTO result;
-        //    if (existedShopInterface == null)
-        //        result = await _shopService.AddShopInterfaceAsync(shopId, requestModel);
-        //    else
-        //        result = await _shopService.EditShopInterfaceAsync(shopId, requestModel);
-        //    if (result == null) return new ApiResult<ShopInterfaceDTO> { Data = null, ResponseCode = 404 };
-        //    return new ApiResult<ShopInterfaceDTO> { Data = result, ResponseCode = 200 };
-        //}
         private readonly IMediator _mediator;
         private readonly ImageManager _imageManager;
+        private readonly FileValidationRuleSet rules;
 
         public ShopInterfaceController(IMediator mediator, ImageManager imageManager)
         {
             _mediator = mediator;
             _imageManager = imageManager;
+            rules = FileValidationRuleSet.DefaultValidationRules;
+            rules.Change(FileValidationRuleName.MinFileCount, 1);
         }
 
         [HttpGet]
@@ -54,9 +38,9 @@ namespace ShopInterfaceService.Controllers
 
         [HttpPost("{shopId}")]
         public async Task<ApiResult<bool>> CreateShopInterface(int shopId, 
-            CreateOrEditInterfaceRequestModel requestModel)
+            [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
         {
-            requestModel.ShopImages = await _imageManager.SaveFilesAsync(Request.Form.Files);
+            requestModel.ShopImages = await _imageManager.SaveFilesAsync(Request.Form.Files, rules: rules);
             var result = await _mediator.Send(new CreateOrEditShopInterfaceCommand
             {
                 ShopId = shopId,
@@ -69,16 +53,17 @@ namespace ShopInterfaceService.Controllers
 
         [HttpPut("{shopId}")]
         public async Task<ApiResult<bool>> EditShopInterface(int shopId,
-            CreateOrEditInterfaceRequestModel requestModel)
+            [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
         {
-            requestModel.ShopImages = await _imageManager.EditFilesAsync(requestModel.ShopImages, Request.Form.Files);
+            requestModel.ShopImages = await _imageManager.EditFilesAsync(requestModel.ShopImages, Request.Form.Files,
+                rules: rules);
             var result = await _mediator.Send(new CreateOrEditShopInterfaceCommand
             {
                 ShopId = shopId,
                 RequestModel = requestModel
             });
             if (!result.IsSuccess)
-                return new ApiResult<bool> { ResponseCode = 500, Data = false };
+                return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = result.ErrorMessage };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
@@ -93,6 +78,15 @@ namespace ShopInterfaceService.Controllers
             var result = await _mediator.Send(command);
 
             return new ApiResult<ShopInterfaceDTO> { ResponseCode = 200, Data = result.Response };
+        }
+
+        [HttpGet("images/{imageId}")]
+        public IActionResult Index(string imageId)
+        {
+            var fileResponse = _imageManager.GetImage(imageId);
+            if (!fileResponse.IsExisted)
+                return StatusCode(404);
+            return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
     }
 }

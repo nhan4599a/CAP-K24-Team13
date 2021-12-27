@@ -1,15 +1,16 @@
 ﻿using DatabaseAccessor.Repositories.Interfaces;
 using MediatR;
+using Shared;
 using Shared.DTOs;
 using ShopProductService.Commands.Category;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Category
 {
-    public class FindAllCategoryQueryHandler : IRequestHandler<FindAllCategoryQuery, List<CategoryDTO>>, IDisposable
+    public class FindAllCategoryQueryHandler : 
+        IRequestHandler<FindAllCategoryQuery, PaginatedDataList<CategoryDTO>>, IDisposable
     {
         private readonly ICategoryRepository _repository;
 
@@ -18,9 +19,10 @@ namespace ShopProductService.Handlers.Category
             _repository = repository;
         }
 
-        public async Task<List<CategoryDTO>> Handle(FindAllCategoryQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedDataList<CategoryDTO>> Handle(FindAllCategoryQuery request,
+            CancellationToken cancellationToken)
         {
-            return await _repository.GetAllCategoryAsync();
+            return await _repository.GetAllCategoryAsync(request.PaginationInfo);
         }
 
         public void Dispose()

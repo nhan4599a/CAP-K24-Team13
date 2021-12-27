@@ -1,13 +1,14 @@
 ﻿using DatabaseAccessor.Models;
 using DatabaseAccessor.Triggers;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace DatabaseAccessor
 {
     public class ApplicationDbContext : DbContext
     {
-        private static readonly string _connectionString = "Data Source=NDB;Initial Catalog=CapTeam13;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        //private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
+
+        private static readonly string _connectionString = "Server=.,4599;Database=DemoCapTeam13;User ID=sa;Password=nhan4599@Nhan;TrustServerCertificate=true";
 
         public DbSet<ShopCategory> ShopCategories { get; set; }
 
@@ -17,7 +18,7 @@ namespace DatabaseAccessor
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public ApplicationDbContext() { }
+        public ApplicationDbContext() : base() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -74,8 +75,7 @@ namespace DatabaseAccessor
             modelBuilder.Entity<ShopProduct>()
                 .HasCheckConstraint("CK_ShopProducts_Price", "[Price] >= 0")
                 .HasCheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 1")
-                .HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100")
-                .ToTable("ShopProducts");
+                .HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
 
             modelBuilder.Entity<ShopCategory>()
                 .Property(e => e.IsDisabled)
@@ -84,15 +84,9 @@ namespace DatabaseAccessor
             modelBuilder.Entity<ShopCategory>()
                 .HasIndex(e => e.CategoryName);
 
-            modelBuilder.Entity<ShopCategory>()
-                .ToTable("ShopCategories");
-
             modelBuilder.Entity<ShopInterface>()
                 .HasIndex(e => e.ShopId)
                 .IsUnique();
-
-            modelBuilder.Entity<ShopInterface>()
-                .ToTable("ShopInterfaces");
         }
     }
 }

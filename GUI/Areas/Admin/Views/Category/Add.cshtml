@@ -9,7 +9,9 @@
             @await Component.InvokeAsync("CategorySpecialDropdown")
             <div class="form-group">
                 <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Add</button>
-                <a class="btn bg-gradient-primary-dark my-shadow text-white" style="float: right" href="category">Cancel</a>
+                <button class="btn btn-danger" style="float: right">
+                    <a href="category" class="text-white">Cancel</a>
+                </button>
             </div>
         </div>
     </div>
@@ -17,6 +19,7 @@
 @section Scripts {
     <script>
         $(function () {
+            toastr.error('demo', 'Error');
             let classNames = ['active'];
             $('#nav-item-category').addClass(classNames).css('background-color','#2f9db6');
             $('#btn-submit').click(function (e) {
@@ -26,9 +29,16 @@
                 let special = $('#input-special').val();
 
                 let category = { categoryName: name, special: special };
+
+                let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+                animationLoader.showAnimation();
                 addCategory(category, () => {
+                    animationLoader.hideAnimation();
                     window.location.href = "/admin/category";
-                }, () => alert("Something when wrong"));
+                }, (error) => {
+                    animationLoader.hideAnimation();
+                    toastr.error(error, 'Error');
+                });
             });
         });
     </script>

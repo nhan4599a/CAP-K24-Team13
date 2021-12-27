@@ -34,7 +34,7 @@
             <div class="form-group mb-3">
                 <label class="form-label">Images</label>
                 <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px"
-                        action="https://localhost:44302/api/products">
+                     action="https://localhost:44302/api/products">
                     <div class="dz-default dz-message" data-dz-message="">
                         <span>Drop images here to upload</span>
                     </div>
@@ -42,117 +42,135 @@
             </div>
             <div class="form-group">
                 <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Update</button>
-                <a class="btn bg-gradient-primary-dark my-shadow text-white" style="float: right" href="product">Cancel</a>
+                <button class="btn btn-danger" style="float: right">
+                    <a href="product" class="text-white">Cancel</a>
+                </button>
             </div>
         </div>
     </div>
 </form>
 
 @section Scripts {
-    <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-    <script>
-        Dropzone.autoDiscover = false;
-        const edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
-        $(function () {
-            let classNames = ['active', 'bg-gradient-primary'];
-            $('#nav-item-product').addClass(classNames);
-            getAllCategories(categories => {
-                renderCategoryDropdown(categories);
-                tinymce.init({
-                    selector: '#input-description'
-                });
-                let acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-                const acceptedMaxBytes = 4 * 1024 * 1024;
-                let remainingBytes = acceptedMaxBytes;
-                let dropzone = new Dropzone('div#file-section', {
-                    maxFilesize: 1,
-                    paramName: 'files',
-                    maxFiles: 5,
-                    filesizeBase: 1024,
-                    autoProcessQueue: false,
-                    uploadMultiple: true,
-                    acceptedFiles: 'image/jpeg,image/jpg,image/png',
-                    addRemoveLinks: true
-                });
-                dropzone.on('addedfile', function (file) {
-                    let maxFileNumber = this.options.maxFiles;
-                    let maxFileSize = this.options.maxFilesize;
-                    let uploadedFileSizeInMb = file.size / (1024 * 1024);
-                    if (this.files.length > this.options.maxFiles) {
-                        this.removeFile(file);
-                        toastr.error('Max file number exceeded!', 'File is rejected');
-                    } else if (!acceptedMimeTypes.includes(file.type)) {
-                        this.removeFile(file);
-                        toastr.error('You can\'t upload this type of file!', 'File is rejected');
-                    } else if (uploadedFileSizeInMb > maxFileSize) {
-                        this.removeFile(file);
-                        toastr.error(`${uploadedFileSizeInMb.toFixed(2)} MB file is too big to upload!`, 'File is rejected');
-                    } else if (file.size > remainingBytes) {
-                        this.removeFile(file);
-                        toastr.error('Maximum file size exceeded!', 'File is rejected');
-                    } else {
-                        remainingBytes -= file.size;
-                    }
-                });
-                loadEdittingProduct(edittingProduct, dropzone);
-                $('#btn-submit').click(e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (dropzone.files.length < 2) {
-                        toastr.error('You must upload at least 2 pictures!', 'Error');
-                        return;
-                    }
-                    let formData = new FormData();
-                    var requestModelObject = buildRequestModel();
-                    Object.keys(requestModelObject).forEach(key => {
-                        formData.append(`requestModel.${key}`, requestModelObject[key]);
-                    });
-                    for (let i = 0; i < edittingProduct.images.length; i++)
-                        formData.append(`requestModel.imagePaths[${i}]`, edittingProduct.images[i]);
-                    for (let i = 0; i < dropzone.files.length; i++)
-                        formData.append(`images[${i}]`, dropzone.files[i]);
-                    editProduct(edittingProduct.id, formData, () => { 
-                        window.location.href = '/admin/product';
-                        window.localStorage.removeItem('editting-product');
-                    }, () => alert('something went wrong!'));
-                });
+<script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<script>
+    Dropzone.autoDiscover = false;
+    const edittingProduct = JSON.parse(window.localStorage.getItem('editting-product'));
+    $(function () {
+        let classNames = ['active', 'bg-gradient-primary'];
+        $('#nav-item-product').addClass(classNames);
+        let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+        animationLoader.showAnimation(3500);
+        getAllCategories(onLoadedAllCategories).then(() => {
+            animationLoader.hideAnimation();
+        }).catch(() => {
+            animationLoader.hideAnimation();
+            toastr.error('Failed to load categories', 'Error');
+        });
+    });
+
+    function onLoadedAllCategories(categories) {
+        renderCategoryDropdown(categories);
+        tinymce.init({
+            selector: '#input-description'
+        });
+        let acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        const acceptedMaxBytes = 4 * 1024 * 1024;
+        let remainingBytes = acceptedMaxBytes;
+        let dropzone = new Dropzone('div#file-section', {
+            maxFilesize: 1,
+            paramName: 'files',
+            maxFiles: 5,
+            filesizeBase: 1024,
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            acceptedFiles: acceptedMimeTypes.join(','),
+            addRemoveLinks: true
+        });
+        dropzone.on('addedfile', function (file) {
+            let maxFileNumber = this.options.maxFiles;
+            let maxFileSize = this.options.maxFilesize;
+            let uploadedFileSizeInMb = file.size / (1024 * 1024);
+            if (this.files.length > this.options.maxFiles) {
+                this.removeFile(file);
+                toastr.error('Max file number exceeded!', 'File is rejected');
+            } else if (!acceptedMimeTypes.includes(file.type)) {
+                this.removeFile(file);
+                toastr.error('You can\'t upload this type of file!', 'File is rejected');
+            } else if (uploadedFileSizeInMb > maxFileSize) {
+                this.removeFile(file);
+                toastr.error(`${uploadedFileSizeInMb.toFixed(2)} MB file is too big to upload!`, 'File is rejected');
+            } else if (file.size > remainingBytes) {
+                this.removeFile(file);
+                toastr.error('Maximum file size exceeded!', 'File is rejected');
+            } else {
+                remainingBytes -= file.size;
+            }
+        });
+        loadEdittingProduct(edittingProduct, dropzone);
+        $('#btn-submit').click(e => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (dropzone.files.length < 2) {
+                toastr.error('You must upload at least 2 pictures!', 'Error');
+                return;
+            }
+            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            animationLoader.showAnimation();
+            let formData = new FormData();
+            var requestModelObject = buildRequestModel();
+            Object.keys(requestModelObject).forEach(key => {
+                formData.append(`requestModel.${key}`, requestModelObject[key]);
+            });
+            for (let i = 0; i < edittingProduct.images.length; i++)
+                formData.append(`requestModel.imagePaths[${i}]`, edittingProduct.images[i]);
+            for (let i = 0; i < dropzone.files.length; i++)
+                formData.append(`images[${i}]`, dropzone.files[i]);
+            editProduct(edittingProduct.id, formData, () => {
+                animationLoader.hideAnimation();
+                window.location.href = '/admin/product';
+                window.localStorage.removeItem('editting-product');
+            }, (error) => {
+                animationLoader.hideAnimation();
+                toastr.error(error, 'Error');
             });
         });
-        function loadEdittingProduct(edittingProduct, dropzone) {
-            if (!edittingProduct) {
-                alert("Something went wrong!");
-                window.location.href = "/admin/product";
-            }
-            $('#input-id').val(edittingProduct.id);
-            $('#input-name').val(edittingProduct.productName);
-            $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
-            $('#input-description').val(edittingProduct.description);
-            $('#input-quantity').val(edittingProduct.quantity);
-            $('#input-price').val(edittingProduct.price);
-            $('#input-discount').val(edittingProduct.discount);
-            edittingProduct.images.forEach(imageUrl => getProductImage(imageUrl, blob => {
-                let file = new File([blob], blob.name, { type: blob.type });
-                dropzone.addFile(file);
-            }));
-            $('.input-group-outline').addClass('is-filled');
+    }
+
+    function loadEdittingProduct(edittingProduct, dropzone) {
+        if (!edittingProduct) {
+            alert("Something went wrong!");
+            window.location.href = "/admin/product";
         }
-        function buildRequestModel() {
-            let id = $('#input-id').val();
-            let name = $('#input-name').val();
-            let category = $('#input-category').val();
-            let description = tinymce.activeEditor.getContent({ format: 'text' });
-            let quantity = $('#input-quantity').val();
-            let price = $('#input-price').val();
-            let discount = $('#input-discount').val();
-            return {
-                productName: name,
-                categoryId: category,
-                description: description,
-                quantity: quantity,
-                price: price,
-                discount: discount
-            };
-        }
-    </script>
+        $('#input-id').val(edittingProduct.id);
+        $('#input-name').val(edittingProduct.productName);
+        $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
+        $('#input-description').val(edittingProduct.description);
+        $('#input-quantity').val(edittingProduct.quantity);
+        $('#input-price').val(edittingProduct.price);
+        $('#input-discount').val(edittingProduct.discount);
+        edittingProduct.images.forEach(imageUrl => getProductImage(imageUrl, blob => {
+            let file = new File([blob], blob.name, { type: blob.type });
+            dropzone.addFile(file);
+        }));
+        $('.input-group-outline').addClass('is-filled');
+    }
+    function buildRequestModel() {
+        let id = $('#input-id').val();
+        let name = $('#input-name').val();
+        let category = $('#input-category').val();
+        let description = tinymce.activeEditor.getContent({ format: 'text' });
+        let quantity = $('#input-quantity').val();
+        let price = $('#input-price').val();
+        let discount = $('#input-discount').val();
+        return {
+            productName: name,
+            categoryId: category,
+            description: description,
+            quantity: quantity,
+            price: price,
+            discount: discount
+        };
+    }
+</script>
 }
