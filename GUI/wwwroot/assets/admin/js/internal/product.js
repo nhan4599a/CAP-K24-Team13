@@ -41,7 +41,8 @@ function loadProducts(keyword, pageNumber, pageSize) {
 }
 
 function onLoadProductsCompleted(paginatedData) {
-    renderProductTable(paginatedData.data);
+    let products = paginatedData.data;
+    renderProductTable(products);
     renderPagination({
         hasPreviousPage: paginatedData.hasPreviousPage,
         hasNextPage: paginatedData.hasNextPage,
@@ -93,8 +94,15 @@ function onLoadProductsCompleted(paginatedData) {
                 $(this).children('span').text(' Activate');
                 $(this).children('i').removeClass().addClass('fas fa-check');
             };
-            activateProduct(id, isActivateCommand, successCallback,
-                (err) => toastr.error(`Failed to ${action} ${name}, ${err}`, 'Error'));
+            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            animationLoader.showAnimation();
+            activateProduct(id, isActivateCommand).then(() => {
+                successCallback();
+                animationLoader.hideAnimation();
+            }).catch(err => {
+                animationLoader.hideAnimation();
+                toastr.error(`Failed to ${action} ${name}, ${err}`, 'Error')
+            });
         });
     });
     $('#previous-page').click((e) => {

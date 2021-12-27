@@ -78,7 +78,7 @@
                 addCategory(formData).then(() => {
                     animationLoader.hideAnimation();
                     window.location.href = "/admin/category";
-                }).cathc(error => {
+                }).catch(error => {
                     animationLoader.hideAnimation();
                     toastr.error(error, 'Error');
                 });

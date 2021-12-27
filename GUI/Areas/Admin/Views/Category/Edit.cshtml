@@ -97,7 +97,7 @@
             $('#input-id').val(edittingCategory.id);
             $('#input-name').val(edittingCategory.categoryName);
             $(`#input-special option[value=${edittingCategory.special}]`).attr('selected', true);
-            getCategoryImage(edittingCategory.image, blob => {
+            getCategoryImage(edittingCategory.image).then(blob => {
                 let file = new File([blob], blob.name, { type: blob.type });
                 dropzone.addFile(file);
             });

@@ -75,7 +75,15 @@ function onCategoriesLoaded(paginatedData) {
                 $(this).children('span').text(' Activate');
                 $(this).children('i').removeClass().addClass('fas fa-check');
             };
-            activateCategory(command, successCallback, () => toastr.error(`Failed to ${action} ${name}`));
+            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            animationLoader.showAnimation();
+            activateCategory(command).then(() => {
+                successCallback();
+                animationLoader.hideAnimation()
+            }).catch(() => {
+                animationLoader.hideAnimation();
+                toastr.error(`Failed to ${action} ${name}`);
+            });
         });
     });
 

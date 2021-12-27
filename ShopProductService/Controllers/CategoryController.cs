@@ -25,9 +25,8 @@ namespace ShopProductService.Controllers
             _mediator = mediator;
             _fileStore = fileStore;
             _fileStore.SetRelationalPath("categories");
-            _rules = FileValidationRuleSet.DefaultValidationRules;
-            _rules.Change(FileValidationRuleName.MinFileCount, 1);
-            _rules.Change(FileValidationRuleName.MaxFileCount, 1);
+            _rules = FileValidationRuleSet.DefaultSingleValidationRules;
+            _rules.Change(FileValidationRuleName.SingleMaxFileSize, (long)(0.3 * 1024 * 1024));
         }
 
         [HttpPost]

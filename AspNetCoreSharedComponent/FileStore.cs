@@ -61,11 +61,9 @@ namespace AspNetCoreSharedComponent
             var shouldBeCreatedFileNames = imageFilesName.Except(oldImagesName).ToList();
             foreach (var shouldBeEdittedFileName in shouldBeEdittedFileNames)
             {
-                await EditFileAsync(
-                    GetSavePathForFile(shouldBeEdittedFileName),
-                    files.First(image => image.FileName == shouldBeEdittedFileName)
+                savedFileNames.Add(
+                    await SaveFileAsync(files.First(image => image.FileName == shouldBeEdittedFileName), shouldBeEdittedFileName)
                 );
-                savedFileNames.Add(shouldBeEdittedFileName);
             }
             foreach (var shouldBeDeletedFileName in shouldBeDeletedFileNames)
                 File.Delete(GetSavePathForFile(shouldBeDeletedFileName));
@@ -76,7 +74,7 @@ namespace AspNetCoreSharedComponent
             return savedFileNames.ToArray();
         }
 
-        public async Task<string> SaveFileAsync(IFormFile file, 
+        public async Task<string> SaveFileAsync(IFormFile file,
             bool shouldValidate = true, FileValidationRuleSet? rules = null)
         {
             if (file == null)
@@ -105,24 +103,23 @@ namespace AspNetCoreSharedComponent
                     throw new ImageValidationException(validationResult);
             }
             CreateDirectory();
-            return await EditFileAsync(oldFileName, file);
+            return await SaveFileAsync(file, oldFileName);
         }
 
         private async Task<string> SaveFileAsync(IFormFile file, string? fileName = null)
         {
             fileName ??= Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            using var fileStream = File.Create(GetSavePathForFile(fileName));
-            await file.CopyToAsync(fileStream);
+            var savePath = GetSavePathForFile(fileName);
+            FileStream fileStream;
+            if (File.Exists(savePath))
+                fileStream = File.Open(savePath, FileMode.Truncate);
+            else
+                fileStream = File.Create(savePath);
+            using (fileStream)
+            {
+                await file.CopyToAsync(fileStream);
+            }
             return fileName;
-        }
-
-        private static async Task<string> EditFileAsync(string filePath, IFormFile image)
-        {
-            if (!File.Exists(filePath))
-                throw new IOException($"{filePath} is not existed in the filesystem");
-            using var fileStream = File.Open(filePath, FileMode.Truncate);
-            await image.CopyToAsync(fileStream);
-            return filePath;
         }
 
         public string GetSavePathForFile(string fileName) => Path.Combine(_directoryInfo.FullName, fileName);
