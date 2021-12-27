@@ -96,7 +96,7 @@ namespace DatabaseAccessor.Repositories
             try
             {
                 await _dbContext.SaveChangesAsync();
-                return CommandResponse<ProductDTO>.Success(_mapper.MapToProductDTO(product)); 
+                return CommandResponse<ProductDTO>.Success(_mapper.MapToProductDTO(product));
             }
             catch (Exception e)
             {
@@ -113,6 +113,22 @@ namespace DatabaseAccessor.Repositories
         {
             _dbContext.Dispose();
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<CommandResponse<ProductDTO>> EditQuantity(Guid id, int quantity)
+        {
+            var product = await _dbContext.ShopProducts.FirstOrDefaultAsync(x => x.Id == id);
+            if (product == null || quantity <= 0) return null;
+            product.Quantity = quantity;
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return CommandResponse<ProductDTO>.Success(_mapper.MapToProductDTO(product));
+            }
+            catch (Exception e)
+            {
+                return CommandResponse<ProductDTO>.Error(e.Message, e);
+            }
         }
     }
 }

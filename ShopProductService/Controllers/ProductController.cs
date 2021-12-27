@@ -103,5 +103,13 @@ namespace ShopProductService.Controllers
                 return StatusCode(404);
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
+        [HttpPut("EditQuantity")]
+        public async Task<ApiResult<ProductDTO>> EditQuantity(string id, int quantity)
+        {
+            var response = await _mediator.Send(new EditQuantityOfProductCommand { Id = Guid.Parse(id), Quantity = quantity });
+            if (!response.IsSuccess)
+                return new ApiResult<ProductDTO> { ResponseCode = 500, Data = null, ErrorMessage = response.ErrorMessage };
+            return new ApiResult<ProductDTO> { ResponseCode = 200, Data = response.Response };
+        }
     }
 }

@@ -19,5 +19,6 @@ namespace DatabaseAccessor.Repositories.Interfaces
         Task<CommandResponse<bool>> ActivateProductAsync(Guid id, bool isActivateCommand);
 
         Task<CommandResponse<ProductDTO>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel);
+        Task<CommandResponse<ProductDTO>> EditQuantity(Guid id, int quantity);
     }
 }
