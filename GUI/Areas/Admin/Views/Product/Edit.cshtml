@@ -61,7 +61,8 @@
         $('#nav-item-product').addClass(classNames);
         let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
         animationLoader.showAnimation(3500);
-        getAllCategories(onLoadedAllCategories).then(() => {
+        getAllCategories().then(categories => {
+            onLoadedAllCategories(categories.filter(category => !category.isDisabled));
             animationLoader.hideAnimation();
         }).catch(() => {
             animationLoader.hideAnimation();
@@ -110,7 +111,6 @@
         loadEdittingProduct(edittingProduct, dropzone);
         $('#btn-submit').click(e => {
             e.preventDefault();
-            e.stopPropagation();
             if (dropzone.files.length < 2) {
                 toastr.error('You must upload at least 2 pictures!', 'Error');
                 return;
@@ -126,11 +126,11 @@
                 formData.append(`requestModel.imagePaths[${i}]`, edittingProduct.images[i]);
             for (let i = 0; i < dropzone.files.length; i++)
                 formData.append(`images[${i}]`, dropzone.files[i]);
-            editProduct(edittingProduct.id, formData, () => {
+            editProduct(edittingProduct.id, formData).then(() => {
                 animationLoader.hideAnimation();
                 window.location.href = '/admin/product';
                 window.localStorage.removeItem('editting-product');
-            }, (error) => {
+            }).catch(error => {
                 animationLoader.hideAnimation();
                 toastr.error(error, 'Error');
             });

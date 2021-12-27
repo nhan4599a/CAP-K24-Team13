@@ -31,7 +31,8 @@
 function loadProducts(keyword, pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
-    findProducts(keyword, pageNumber, pageSize, onLoadProductsCompleted).then(() => {
+    findProducts(keyword, pageNumber, pageSize).then((paginatedData) => {
+        onLoadProductsCompleted(paginatedData);
         animationLoader.hideAnimation();
     }).catch(() => {
         animationLoader.hideAnimation();
@@ -40,10 +41,13 @@ function loadProducts(keyword, pageNumber, pageSize) {
 }
 
 function onLoadProductsCompleted(paginatedData) {
-    let products = paginatedData.data;
-    let pageNumber = paginatedData.currentPageNumber;
-    renderProductTable(products);
-    renderPagination(pageNumber, paginatedData.maxPageNumber);
+    renderProductTable(paginatedData.data);
+    renderPagination({
+        hasPreviousPage: paginatedData.hasPreviousPage,
+        hasNextPage: paginatedData.hasNextPage,
+        pageNumber: paginatedData.pageNumber,
+        maxPageNumber: paginatedData.maxPageNumber
+    });
     $('a[name=btn-edit]').click(function (e) {
         e.preventDefault();
         let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;

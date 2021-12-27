@@ -29,13 +29,11 @@ namespace DatabaseAccessor.Repositories
             return _mapper.MapToCategoryDTO(await FindCategoryByIdAsync(id));
         }
 
-        public async Task<PaginatedDataList<CategoryDTO>> GetAllCategoryAsync(PaginationInfo paginationInfo)
+        public async Task<PaginatedList<CategoryDTO>> GetAllCategoryAsync(PaginationInfo paginationInfo)
         {
-            return (await _dbContext.ShopCategories.AsNoTracking()
+            return await _dbContext.ShopCategories.AsNoTracking()
                 .Select(category => _mapper.MapToCategoryDTO(category))
-                .Paginate(paginationInfo.PageNumber, paginationInfo.PageSize)
-                .ToListAsync())
-                .ToPaginatedDataList(paginationInfo.PageNumber, paginationInfo.PageSize);
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
         public async Task<CommandResponse<bool>> AddCategoryAsync(CreateOrEditCategoryRequestModel requestModel)

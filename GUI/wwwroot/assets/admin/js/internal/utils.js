@@ -91,17 +91,17 @@ function buildEditButtonHtml() {
             </a>`;
 }
 
-function renderPagination(currentPageNumber, maxPageNumber) {
+function renderPagination(paginationObject) {
     let paginationHtml = '';
-    if (currentPageNumber !== 1)
+    if (paginationObject.hasPreviousPage)
         paginationHtml += '<a href="#" id="previous-page">«</a>';
-    for (var i = 1; i <= maxPageNumber; i++) {
-        if (i == currentPageNumber)
+    for (let i = 1; i <= paginationObject.maxPageNumber; i++) {
+        if (i == paginationObject.pageNumber)
             paginationHtml += `<a class="active">${i}</a>`;
         else
             paginationHtml += `<a href="#" class="pagination-item">${i}</a>`;
     }
-    if (currentPageNumber !== maxPageNumber && maxPageNumber !== 0)
+    if (paginationObject.hasNextPage)
         paginationHtml += '<a href="#" id="next-page">»</a>';
     $('.pagination').html(paginationHtml);
 }

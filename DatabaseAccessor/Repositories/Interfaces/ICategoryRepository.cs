@@ -11,7 +11,7 @@ namespace DatabaseAccessor.Repositories.Interfaces
     {
         Task<CategoryDTO> GetCategoryAsync(int id);
 
-        Task<PaginatedDataList<CategoryDTO>> GetAllCategoryAsync(PaginationInfo paginationInfo);
+        Task<PaginatedList<CategoryDTO>> GetAllCategoryAsync(PaginationInfo paginationInfo);
 
         Task<CommandResponse<bool>> AddCategoryAsync(CreateOrEditCategoryRequestModel requestModel);
 

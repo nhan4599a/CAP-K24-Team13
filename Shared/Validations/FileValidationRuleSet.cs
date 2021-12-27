@@ -40,6 +40,22 @@ namespace Shared.Validations
             };
         }
 
+        public static FileValidationRuleSet DefaultSingleValidationRules
+        {
+            get => new()
+            {
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.ImageExtension,
+                },
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.SingleMaxFileSize,
+                    Value = 1024 * 1024
+                }
+            };
+        }
+
         public int Count => _rules.Count;
 
         public bool IsEmpty => _rules.Count == 0;

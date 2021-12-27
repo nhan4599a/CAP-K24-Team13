@@ -10,9 +10,9 @@ namespace DatabaseAccessor.Repositories.Interfaces
     {
         Task<ProductDTO> GetProductAsync(Guid id);
 
-        Task<PaginatedDataList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo);
+        Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo);
 
-        Task<PaginatedDataList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo);
+        Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo);
 
         Task<CommandResponse<Guid>> AddProductAsync(CreateOrEditProductRequestModel requestModel);
 

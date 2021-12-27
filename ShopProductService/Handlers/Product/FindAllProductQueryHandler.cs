@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ShopProductService.Handlers.Product
 {
     public class FindAllProductQueryHandler : 
-        IRequestHandler<FindAllProductQuery, PaginatedDataList<ProductDTO>>, IDisposable
+        IRequestHandler<FindAllProductQuery, PaginatedList<ProductDTO>>, IDisposable
     {
         private readonly IProductRepository _repository;
 
@@ -19,7 +19,7 @@ namespace ShopProductService.Handlers.Product
             _repository = repository;
         }
 
-        public async Task<PaginatedDataList<ProductDTO>> Handle(FindAllProductQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedList<ProductDTO>> Handle(FindAllProductQuery request, CancellationToken cancellationToken)
         {
             return await _repository.GetAllProductAsync(request.PaginationInfo);
         }

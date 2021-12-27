@@ -1,18 +1,20 @@
+using AspNetCoreSharedComponent;
 using DatabaseAccessor;
+using DatabaseAccessor.Mapping;
+using DatabaseAccessor.Repositories;
+using DatabaseAccessor.Repositories.Interfaces;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using FluentValidation.AspNetCore;
-using FluentValidation;
-using ShopProductService.Validations;
-using MediatR;
 using Shared.RequestModels;
-using DatabaseAccessor.Repositories;
-using DatabaseAccessor.Repositories.Interfaces;
-using DatabaseAccessor.Mapping;
-using AspNetCoreSharedComponent;
+using ShopProductService.Validations;
+using StackExchange.Redis;
+using System;
 
 namespace ShopProductService
 {
@@ -36,7 +38,7 @@ namespace ShopProductService
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ImageManager>();
+            services.AddScoped<IFileStorable, FileStore>();
             services.AddTransient<IValidator<CreateOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
             services.AddTransient<IValidator<CreateOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
             services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();
@@ -48,6 +50,11 @@ namespace ShopProductService
                 {
                     builder.WithOrigins("https://localhost:44349").AllowAnyMethod().AllowAnyHeader();
                 });
+            });
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.ConfigurationOptions.Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD");
+                options.ConfigurationOptions.ClientName = "localhost:4600";
             });
         }
 

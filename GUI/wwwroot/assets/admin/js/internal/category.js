@@ -8,7 +8,8 @@
 function loadCategories(pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
     animationLoader.showAnimation();
-    getCategories(pageNumber, pageSize, onCategoriesLoaded).then(() => {
+    getCategories(pageNumber, pageSize).then((paginatedData) => {
+        onCategoriesLoaded(paginatedData);
         animationLoader.hideAnimation();
     }).catch(() => {
         animationLoader.hideAnimation();
@@ -18,9 +19,13 @@ function loadCategories(pageNumber, pageSize) {
 
 function onCategoriesLoaded(paginatedData) {
     let categories = paginatedData.data;
-    let pageNumber = paginatedData.currentPageNumber;
     renderCategoryTable(categories);
-    renderPagination(pageNumber, paginatedData.maxPageNumber);
+    renderPagination({
+        hasPreviousPage: paginatedData.hasPreviousPage,
+        hasNextPage: paginatedData.hasNextPage,
+        pageNumber: paginatedData.pageNumber,
+        maxPageNumber: paginatedData.maxPageNumber
+    });
     $('a[name=btn-edit]').click(function (e) {
         e.preventDefault();
         let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;

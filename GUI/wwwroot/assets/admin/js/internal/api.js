@@ -14,14 +14,14 @@ const productEndpoint = 'https://localhost:44302/api/products';
 const categoryEndpoint = 'https://localhost:44302/api/categories';
 const interfaceEndpoint = 'https://localhost:44394/api/interfaces';
 
-function findProducts(keyword, pageNumber, pageSize, successCallback) {
+function findProducts(keyword, pageNumber, pageSize) {
     if (keyword === null || keyword === '')
         return axios.get(productEndpoint, {
             params: {
                 'paginationInfo.pageNumber': pageNumber,
                 'paginationInfo.pageSize': pageSize
             }
-        }).then(successCallback);
+        });
     else
         return axios.get(productEndpoint, {
             params: {
@@ -29,58 +29,71 @@ function findProducts(keyword, pageNumber, pageSize, successCallback) {
                 'paginationInfo.pageNumber': pageNumber,
                 'paginationInfo.pageSize:': pageSize || 5
             }
-        }).then(successCallback);
+        });
 }
 
 function getProductImageUrl(imageFileName) {
     return `${productEndpoint}/images/${imageFileName}`;
 }
 
-function getProductImage(imageFileName, successCallback) {
+function getProductImage(imageFileName) {
     return axios.get(getProductImageUrl(imageFileName), {
         responseType: 'blob'
     }).then(blob => {
         blob.name = imageFileName;
         return blob;
-    }).then(successCallback);
+    });
 }
 
-function activateProduct(id, isActivateCommand, successCallback, errorCallback) {
+function activateProduct(id, isActivateCommand) {
     return axios.delete(
         `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`
-    ).then(successCallback).catch(errorCallback);
+    );
 }
 
-function addProduct(formData, successCallback, errorCallback) {
+function addProduct(formData) {
     return axios.post(productEndpoint, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    }).then(successCallback).catch(errorCallback);
+    });
 }
 
-function editProduct(id, formData, successCallback, errorCallback) {
+function editProduct(id, formData) {
     return axios.put(productEndpoint + `/${id}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    }).then(successCallback).catch(errorCallback);
+    });
 }
 
-function getAllCategories(successCallback) {
-    return axios.get(categoryEndpoint).then(paginatedResponse => successCallback(paginatedResponse.data));
+function getAllCategories() {
+    return axios.get(categoryEndpoint).then(paginatedResponse => paginatedResponse.data);
 }
 
-function getCategories(pageNumber, pageSize, successCallback) {
+function getCategories(pageNumber, pageSize) {
     return axios.get(categoryEndpoint, {
         params: {
             pageNumber: pageNumber,
             pageSize: pageSize || 5
         }
-    }).then(successCallback);
+    });
 }
 
-function activateCategory(activateCommand, successCallback, errorCallback) {
+function getCategoryImageUrl(imageFileName) {
+    return `${categoryEndpoint}/images/${imageFileName}`;
+}
+
+function getCategoryImage(imageFileName) {
+    return axios.get(getCategoryImageUrl(imageFileName), {
+        responseType: 'blob'
+    }).then(blob => {
+        blob.name = imageFileName;
+        return blob;
+    });
+}
+
+function activateCategory(activateCommand) {
     if (!activateCommand)
         throw new Error('activeCommand can not be null');
     if (!activateCommand.id)
@@ -91,46 +104,54 @@ function activateCategory(activateCommand, successCallback, errorCallback) {
     var cascade = activateCommand.shouldBeCascade ? 1 : 0;
     return axios.delete(
         `${categoryEndpoint}/${activateCommand.id}?action=${action}&cascade=${cascade}`
-    ).then(successCallback).catch(errorCallback);
+    );
 }
 
-function addCategory(category, successCallback, errorCallback) {
-    return axios.post(categoryEndpoint, category).then(successCallback).catch(errorCallback);
+function addCategory(formData) {
+    return axios.post(categoryEndpoint, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }
 
-function editCategory(id, category, successCallback, errorCallback) {
-    return axios.put(categoryEndpoint + `/${id}`, category).then(successCallback).catch(errorCallback);
+function editCategory(id, formData) {
+    return axios.put(categoryEndpoint + `/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }
 
-function getShopInterface(shopId, successCallback) {
-    return axios.get(`${interfaceEndpoint}/${shopId}`).then(successCallback);
+function getShopInterface(shopId) {
+    return axios.get(`${interfaceEndpoint}/${shopId}`);
 }
 
 function getShopInterfaceImageUrl(imageFileName) {
     return `${interfaceEndpoint}/images/${imageFileName}`;
 }
 
-function getShopInterfaceImage(imageFileName, successCallback) {
+function getShopInterfaceImage(imageFileName) {
     return axios.get(getShopInterfaceImageUrl(imageFileName), {
         responseType: 'blob'
     }).then(blob => {
         blob.name = imageFileName;
         return blob;
-    }).then(successCallback);
+    });
 }
 
-function addShopInterface(shopId, formData, successCallback, errorCallback) {
+function addShopInterface(shopId, formData) {
     return axios.post(`${interfaceEndpoint}/${shopId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    }).then(successCallback).catch(errorCallback);
+    });
 }
 
-function editShopInterface(shopId, formData, successCallback, errorCallback) {
+function editShopInterface(shopId, formData) {
     return axios.put(`${interfaceEndpoint}/${shopId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    }).then(successCallback).catch(errorCallback);
+    });
 }

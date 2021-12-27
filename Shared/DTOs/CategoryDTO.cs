@@ -11,5 +11,7 @@ namespace Shared.DTOs
         public int Special { get; set; }
 
         public bool IsDisabled { get; set; }
+
+        public string Image { get; set; }
     }
 }

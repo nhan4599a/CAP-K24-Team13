@@ -1,4 +1,4 @@
-﻿﻿<h4 class="font-weight-bolder text-center">Add Product</h4>
+﻿﻿﻿<h4 class="font-weight-bolder text-center">Add Product</h4>
 <hr />
 <form id="product-form" enctype="multipart/form-data" method="post">
     <div class="row justify-content-center">
@@ -113,19 +113,18 @@
                 });
                 for (let i = 0; i < dropzone.files.length; i++)
                     formData.append(`images[${i}]`, dropzone.files[i]);
-                addProduct(formData, () => {
+                addProduct(formData).then(() => {
                     animationLoader.hideAnimation();
                     window.location.href = '/admin/product';
-                }, (error) => {
+                }).catch(error => {
                     animationLoader.hideAnimation();
                     toastr.error(error, 'Error');
                 });
             });
             let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
             animationLoader.showAnimation(3500);
-            getAllCategories(
-                categories => renderCategoryDropdown(categories.filter(category => !category.isDisabled))
-            ).then(() => {
+            getAllCategories().then(categories => {
+                renderCategoryDropdown(categories.filter(category => !category.isDisabled))
                 animationLoader.hideAnimation();
             }).catch(() => {
                 animationLoader.hideAnimation();

@@ -6,7 +6,6 @@ using Shared.DTOs;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -16,18 +15,20 @@ namespace ShopProductService.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ImageManager _imageManager;
 
-        public ProductController(IMediator mediator, ImageManager imageManager)
+        private readonly IFileStorable _fileStore;
+
+        public ProductController(IMediator mediator, IFileStorable fileStore)
         {
             _mediator = mediator;
-            _imageManager = imageManager;
+            _fileStore = fileStore;
+            _fileStore.SetRelationalPath("products");
         }
 
         [HttpPost]
         public async Task<ApiResult<Guid>> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
-            requestModel.ImagePaths = await _imageManager.SaveFilesAsync(Request.Form.Files);
+            requestModel.ImagePaths = await _fileStore.SaveFilesAsync(Request.Form.Files);
             var response = await _mediator.Send(new CreateProductCommand
             {
                 RequestModel = requestModel
@@ -40,8 +41,7 @@ namespace ShopProductService.Controllers
         [HttpPut("{id}")]
         public async Task<ApiResult<ProductDTO>> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
-            var oldFilesName = requestModel.ImagePaths;
-            requestModel.ImagePaths = await _imageManager.EditFilesAsync(oldFilesName, Request.Form.Files);
+            requestModel.ImagePaths = await _fileStore.EditFilesAsync(requestModel.ImagePaths, Request.Form.Files);
             var response = await _mediator.Send(new EditProductCommand
             {
                 Id = Guid.Parse(id),
@@ -66,9 +66,9 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<PaginatedDataList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
+        public async Task<ApiResult<PaginatedList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
         {
-            IRequest<PaginatedDataList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
+            IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
                 ? new FindAllProductQuery { PaginationInfo = requestModel.PaginationInfo }
                 : new FindProductsByKeywordQuery
                 {
@@ -76,7 +76,7 @@ namespace ShopProductService.Controllers
                     PaginationInfo = requestModel.PaginationInfo
                 };
             var productList = await _mediator.Send(request);
-            return new ApiResult<PaginatedDataList<ProductDTO>>
+            return new ApiResult<PaginatedList<ProductDTO>>
             {
                 ResponseCode = 200,
                 Data = productList
@@ -95,10 +95,10 @@ namespace ShopProductService.Controllers
             return new ApiResult<ProductDTO> { ResponseCode = 200, Data = product };
         }
 
-        [HttpGet("images/{imageId}")]
-        public IActionResult Index(string imageId)
+        [HttpGet("images/{image}")]
+        public IActionResult GetImage(string image)
         {
-            var fileResponse = _imageManager.GetImage(imageId);
+            var fileResponse = _fileStore.GetFile(image);
             if (!fileResponse.IsExisted)
                 return StatusCode(404);
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
