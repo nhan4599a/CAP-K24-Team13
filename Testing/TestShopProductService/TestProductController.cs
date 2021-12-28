@@ -26,8 +26,8 @@ namespace TestShopProductService
         public async void TestAddProductSuccess()
         {
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
-            imageManagerMock
+            var fileStoreMock = new Mock<IFileStorable>(webHostEnvironmentMock.Object);
+            fileStoreMock
                 .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
                     It.IsAny<FileValidationRuleSet>()))
                 .ReturnsAsync(Array.Empty<string>());
@@ -45,7 +45,7 @@ namespace TestShopProductService
             httpRequestMock.Setup(e => e.Form).Returns(formMock.Object);
             contextMock.Setup(e => e.Request).Returns(httpRequestMock.Object);
 
-            var productController = new ProductController(mediatorMock.Object, imageManagerMock.Object)
+            var productController = new ProductController(mediatorMock.Object, fileStoreMock.Object)
             {
                 ControllerContext = new ControllerContext { HttpContext = contextMock.Object }
             };
@@ -73,7 +73,7 @@ namespace TestShopProductService
         public async void TestAddProductFail()
         {
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
+            var imageManagerMock = new Mock<IFileStorable>(webHostEnvironmentMock.Object);
             imageManagerMock
                 .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>(),
                     It.IsAny<bool>(), It.IsAny<FileValidationRuleSet>()))
@@ -120,7 +120,7 @@ namespace TestShopProductService
         public async void TestEditProductSuccess()
         {
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
+            var imageManagerMock = new Mock<IFileStorable>(webHostEnvironmentMock.Object);
 
             imageManagerMock
                 .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
@@ -171,7 +171,7 @@ namespace TestShopProductService
         public async void TestEditProductFail()
         {
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            var imageManagerMock = new Mock<ImageManager>(webHostEnvironmentMock.Object);
+            var imageManagerMock = new Mock<IFileStorable>(webHostEnvironmentMock.Object);
 
             imageManagerMock
                 .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),

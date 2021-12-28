@@ -30,7 +30,7 @@ namespace ShopInterfaceService
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext>();
-            services.AddScoped<ImageManager>();
+            services.AddScoped<IFileStorable, FileStore>();
             services.AddScoped<IShopInterfaceRepository, ShopInterfaceRepository>();
             services.AddTransient<IValidator<CreateOrEditInterfaceRequestModel>, CreateOrEditInterfaceRequestModelValidator>();
             services.AddSingleton(Mapper.GetInstance());

@@ -16,13 +16,13 @@ namespace ShopInterfaceService.Controllers
     public class ShopInterfaceController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ImageManager _imageManager;
+        private readonly IFileStorable _fileStore;
         private readonly FileValidationRuleSet rules;
 
-        public ShopInterfaceController(IMediator mediator, ImageManager imageManager)
+        public ShopInterfaceController(IMediator mediator, IFileStorable imageManager)
         {
             _mediator = mediator;
-            _imageManager = imageManager;
+            _fileStore = imageManager;
             rules = FileValidationRuleSet.DefaultValidationRules;
             rules.Change(FileValidationRuleName.MinFileCount, 1);
         }
@@ -38,7 +38,7 @@ namespace ShopInterfaceService.Controllers
         public async Task<ApiResult<bool>> CreateShopInterface(int shopId, 
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
         {
-            requestModel.ShopImages = await _imageManager.SaveFilesAsync(Request.Form.Files, rules: rules);
+            requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files, rules: rules);
             var result = await _mediator.Send(new CreateOrEditShopInterfaceCommand
             {
                 ShopId = shopId,
@@ -53,7 +53,7 @@ namespace ShopInterfaceService.Controllers
         public async Task<ApiResult<bool>> EditShopInterface(int shopId,
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
         {
-            requestModel.ShopImages = await _imageManager.EditFilesAsync(requestModel.ShopImages, Request.Form.Files,
+            requestModel.ShopImages = await _fileStore.EditFilesAsync(requestModel.ShopImages, Request.Form.Files,
                 rules: rules);
             var result = await _mediator.Send(new CreateOrEditShopInterfaceCommand
             {
@@ -81,7 +81,7 @@ namespace ShopInterfaceService.Controllers
         [HttpGet("images/{imageId}")]
         public IActionResult Index(string imageId)
         {
-            var fileResponse = _imageManager.GetImage(imageId);
+            var fileResponse = _fileStore.GetFile(imageId);
             if (!fileResponse.IsExisted)
                 return StatusCode(404);
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);

@@ -4,7 +4,7 @@ using Shared.DTOs;
 
 namespace ShopProductService.Commands.Product
 {
-    public class FindAllProductQuery : IRequest<PaginatedDataList<ProductDTO>>
+    public class FindAllProductQuery : IRequest<PaginatedList<ProductDTO>>
     {
         public PaginationInfo PaginationInfo { get; set; }
     }

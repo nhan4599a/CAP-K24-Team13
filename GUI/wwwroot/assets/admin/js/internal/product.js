@@ -31,7 +31,8 @@
 function loadProducts(keyword, pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
-    findProducts(keyword, pageNumber, pageSize, onLoadProductsCompleted).then(() => {
+    findProducts(keyword, pageNumber, pageSize).then((paginatedData) => {
+        onLoadProductsCompleted(paginatedData);
         animationLoader.hideAnimation();
     }).catch(() => {
         animationLoader.hideAnimation();
@@ -41,9 +42,13 @@ function loadProducts(keyword, pageNumber, pageSize) {
 
 function onLoadProductsCompleted(paginatedData) {
     let products = paginatedData.data;
-    let pageNumber = paginatedData.currentPageNumber;
     renderProductTable(products);
-    renderPagination(pageNumber, paginatedData.maxPageNumber);
+    renderPagination({
+        hasPreviousPage: paginatedData.hasPreviousPage,
+        hasNextPage: paginatedData.hasNextPage,
+        pageNumber: paginatedData.pageNumber,
+        maxPageNumber: paginatedData.maxPageNumber
+    });
     $('a[name=btn-edit]').click(function (e) {
         e.preventDefault();
         let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
@@ -89,8 +94,15 @@ function onLoadProductsCompleted(paginatedData) {
                 $(this).children('span').text(' Activate');
                 $(this).children('i').removeClass().addClass('fas fa-check');
             };
-            activateProduct(id, isActivateCommand, successCallback,
-                (err) => toastr.error(`Failed to ${action} ${name}, ${err}`, 'Error'));
+            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            animationLoader.showAnimation();
+            activateProduct(id, isActivateCommand).then(() => {
+                successCallback();
+                animationLoader.hideAnimation();
+            }).catch(err => {
+                animationLoader.hideAnimation();
+                toastr.error(`Failed to ${action} ${name}, ${err}`, 'Error')
+            });
         });
     });
     $('#previous-page').click((e) => {

@@ -5,7 +5,9 @@ using System;
 
 namespace DatabaseAccessor.Resolvers
 {
-    public class ImageValueResolver : IValueResolver<ShopProduct, ProductDTO, string[]>, IValueResolver<ShopInterface, ShopInterfaceDTO, string[]>
+    public class ImageValueResolver :
+        IValueResolver<ShopProduct, ProductDTO, string[]>,
+        IValueResolver<ShopInterface, ShopInterfaceDTO, string[]>
     {
         public string[] Resolve(ShopProduct source, ProductDTO destination, string[] destMember, ResolutionContext context)
         {

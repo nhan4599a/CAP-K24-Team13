@@ -1,8 +1,10 @@
+using AspNetCoreSharedComponent;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
+using Shared.Validations;
 using ShopProductService.Commands.Category;
 using System.Threading.Tasks;
 
@@ -14,15 +16,24 @@ namespace ShopProductService.Controllers
     {
         private readonly IMediator _mediator;
 
-        public CategoryController(IMediator mediator)
+        private readonly IFileStorable _fileStore;
+
+        private readonly FileValidationRuleSet _rules;
+
+        public CategoryController(IMediator mediator, IFileStorable fileStore)
         {
             _mediator = mediator;
+            _fileStore = fileStore;
+            _fileStore.SetRelationalPath("categories");
+            _rules = FileValidationRuleSet.DefaultSingleValidationRules;
+            _rules.Change(FileValidationRuleName.SingleMaxFileSize, (long)(0.3 * 1024 * 1024));
         }
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task<ApiResult<bool>> AddCategory(CreateOrEditCategoryRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddCategory([FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
         {
+            requestModel.ImagePath = await _fileStore.SaveFileAsync(Request.Form.Files[0], rules: _rules);
             var response = await _mediator.Send(new AddCategoryCommand
             {
                 RequestModel = requestModel
@@ -45,8 +56,9 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ApiResult<bool>> EditCategory(int id, CreateOrEditCategoryRequestModel requestModel)
+        public async Task<ApiResult<bool>> EditCategory(int id, [FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
         {
+            requestModel.ImagePath = await _fileStore.EditFileAsync(requestModel.ImagePath, Request.Form.Files[0], rules: _rules);
             var response = await _mediator.Send(new EditCategoryCommand
             {
                 Id = id,
@@ -59,13 +71,13 @@ namespace ShopProductService.Controllers
 
         [HttpGet]
         [ActionName("Index")]
-        public async Task<ApiResult<PaginatedDataList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
+        public async Task<ApiResult<PaginatedList<CategoryDTO>>> ListCategory([FromQuery] PaginationInfo paginationInfo)
         {
             var categories = await _mediator.Send(new FindAllCategoryQuery
             {
                 PaginationInfo = paginationInfo
             });
-            return new ApiResult<PaginatedDataList<CategoryDTO>>
+            return new ApiResult<PaginatedList<CategoryDTO>>
             {
                 ResponseCode = 200,
                 Data = categories
@@ -87,6 +99,15 @@ namespace ShopProductService.Controllers
             if (!response.Response)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
+        }
+
+        [HttpGet("images/{image}")]
+        public IActionResult GetImage(string image)
+        {
+            var fileResponse = _fileStore.GetFile(image);
+            if (!fileResponse.IsExisted)
+                return StatusCode(404);
+            return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
     }
 }

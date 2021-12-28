@@ -495,8 +495,12 @@
             });
             let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
             animationLoader.showAnimation();
-            Promise.all([getShopInterface(0, onInterfaceGot), findProducts('', 1, 8, onProductGot)])
-                .then(() => animationLoader.hideAnimation())
+            Promise.all([getShopInterface(0), findProducts('', 1, 8)])
+                .then(responses => {
+                    onInterfaceGot(responses[0]);
+                    onProductGot(responses[1]);
+                    animationLoader.hideAnimation();
+                })
                 .catch(() => {
                     animationLoader.hideAnimation();
                     toastr.error('Something went wrong', 'Error');
@@ -561,7 +565,6 @@
             let carouselItemsHtml = '';
             let carouselIndicatorsHtml = '';
             shopInterface.images.forEach((imageFileName, i) => {
-                console.log(i);
                 if (i === 0) {
                     carouselIndicatorsHtml += `<button type="button" data-bs-target="#image-carousel"
                                                     data-bs-slide-to="0" class="active" aria-current="true"
@@ -581,10 +584,10 @@
                                             </div>`;
                 }
             });
-            console.log(carouselIndicatorsHtml);
             $('#image-carousel .carousel-indicators').html(carouselIndicatorsHtml);
             $('#image-carousel .carousel-inner').html(carouselItemsHtml);
-            $('#image-carousel').append(`
+            if (shopInterface.images.length > 1)
+                $('#image-carousel').append(`
                         <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>

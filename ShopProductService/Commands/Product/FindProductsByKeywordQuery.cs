@@ -4,7 +4,7 @@ using Shared.DTOs;
 
 namespace ShopProductService.Commands.Product
 {
-    public class FindProductsByKeywordQuery : IRequest<PaginatedDataList<ProductDTO>>
+    public class FindProductsByKeywordQuery : IRequest<PaginatedList<ProductDTO>>
     {
         public string Keyword { get; set; }
 

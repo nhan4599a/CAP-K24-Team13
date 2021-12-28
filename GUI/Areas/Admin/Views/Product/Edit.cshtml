@@ -61,15 +61,18 @@
         $('#nav-item-product').addClass(classNames);
         let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
         animationLoader.showAnimation(3500);
-        getAllCategories(onLoadedAllCategories).then(() => {
+        getAllCategories().then(categories => {
+            onLoadedAllCategories(categories.filter(category => !category.isDisabled));
             animationLoader.hideAnimation();
         }).catch(() => {
+            console.log('error');
             animationLoader.hideAnimation();
             toastr.error('Failed to load categories', 'Error');
         });
     });
 
     function onLoadedAllCategories(categories) {
+        console.log(categories);
         renderCategoryDropdown(categories);
         tinymce.init({
             selector: '#input-description'
@@ -110,7 +113,6 @@
         loadEdittingProduct(edittingProduct, dropzone);
         $('#btn-submit').click(e => {
             e.preventDefault();
-            e.stopPropagation();
             if (dropzone.files.length < 2) {
                 toastr.error('You must upload at least 2 pictures!', 'Error');
                 return;
@@ -126,11 +128,11 @@
                 formData.append(`requestModel.imagePaths[${i}]`, edittingProduct.images[i]);
             for (let i = 0; i < dropzone.files.length; i++)
                 formData.append(`images[${i}]`, dropzone.files[i]);
-            editProduct(edittingProduct.id, formData, () => {
+            editProduct(edittingProduct.id, formData).then(() => {
                 animationLoader.hideAnimation();
                 window.location.href = '/admin/product';
                 window.localStorage.removeItem('editting-product');
-            }, (error) => {
+            }).catch(error => {
                 animationLoader.hideAnimation();
                 toastr.error(error, 'Error');
             });
@@ -142,6 +144,7 @@
             alert("Something went wrong!");
             window.location.href = "/admin/product";
         }
+        console.log('loaded editting product');
         $('#input-id').val(edittingProduct.id);
         $('#input-name').val(edittingProduct.productName);
         $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
@@ -149,9 +152,9 @@
         $('#input-quantity').val(edittingProduct.quantity);
         $('#input-price').val(edittingProduct.price);
         $('#input-discount').val(edittingProduct.discount);
-        edittingProduct.images.forEach(imageUrl => getProductImage(imageUrl, blob => {
+        edittingProduct.images.forEach(imageUrl => getProductImage(imageUrl).then(blob => {
             let file = new File([blob], blob.name, { type: blob.type });
-            dropzone.addFile(file);
+            dropzone.addFile(file); 
         }));
         $('.input-group-outline').addClass('is-filled');
     }

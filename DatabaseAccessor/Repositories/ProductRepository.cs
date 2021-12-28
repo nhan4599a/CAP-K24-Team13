@@ -27,23 +27,21 @@ namespace DatabaseAccessor.Repositories
             return _mapper.MapToProductDTO(await FindProductByIdAsync(id));
         }
 
-        public async Task<PaginatedDataList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo)
         {
-            return (await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
+            return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
                 .Where(product => product.ProductName.Contains(keyword)
                         || product.Category.CategoryName.Contains(keyword))
                 .Select(product => _mapper.MapToProductDTO(product))
-                .Paginate(paginationInfo.PageNumber, paginationInfo.PageSize)
-                .ToListAsync()).ToPaginatedDataList(paginationInfo.PageNumber, paginationInfo.PageSize);
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
-        public async Task<PaginatedDataList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo)
         {
-            return (await _dbContext.ShopProducts.AsNoTracking()
+            return await _dbContext.ShopProducts.AsNoTracking()
                 .Include(e => e.Category)
                 .Select(product => _mapper.MapToProductDTO(product))
-                .Paginate(paginationInfo.PageNumber, paginationInfo.PageSize)
-                .ToListAsync()).ToPaginatedDataList(paginationInfo.PageNumber, paginationInfo.PageSize);
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
         public async Task<CommandResponse<Guid>> AddProductAsync(CreateOrEditProductRequestModel requestModel)
