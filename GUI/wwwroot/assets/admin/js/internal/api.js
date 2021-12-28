@@ -85,7 +85,7 @@ function getCategoryImageUrl(imageFileName) {
 }
 
 function getCategoryImage(imageFileName) {
-    return axios.get(getCategoryImageUrl(imageFileName), {
+    return axios.get(`${getCategoryImageUrl(imageFileName)}?${Date.now() / 1000}`, {
         responseType: 'blob'
     }).then(blob => {
         blob.name = imageFileName;

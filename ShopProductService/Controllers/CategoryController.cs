@@ -56,7 +56,8 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ApiResult<bool>> EditCategory(int id, [FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
+        public async Task<ApiResult<bool>> EditCategory(int id,
+            [FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
         {
             requestModel.ImagePath = await _fileStore.EditFileAsync(requestModel.ImagePath, Request.Form.Files[0], rules: _rules);
             var response = await _mediator.Send(new EditCategoryCommand

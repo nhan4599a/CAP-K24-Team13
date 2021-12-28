@@ -167,7 +167,7 @@ function buildCategoryTableRowHtml(category, index) {
                 <td class="align-middle text-center">
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="${getCategoryImageUrl(category.image)}" class="avatar avatar-sm me-3 border-radius-lg">
+                            <img src="${getCategoryImageUrl(category.image)}?${Date.now() / 1000}" class="avatar avatar-sm me-3 border-radius-lg">
                         </div>
                         <div class="d-grid flex-column" style="align-self: center">
                             <h6 class="mb-0 text-sm">${category.categoryName}</h6>
