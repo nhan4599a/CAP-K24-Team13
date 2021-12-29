@@ -3,7 +3,7 @@
 namespace GUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class InterfaceController : Controller
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {
