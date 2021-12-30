@@ -1,5 +1,6 @@
 using AspNetCoreSharedComponent;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using Shared.DTOs;
@@ -21,8 +22,11 @@ namespace ShopProductService.Controllers
         public ProductController(IMediator mediator, IFileStorable fileStore)
         {
             _mediator = mediator;
-            _fileStore = fileStore;
-            _fileStore.SetRelationalPath("products");
+            if (fileStore != null)
+            {
+                _fileStore = fileStore;
+                _fileStore.SetRelationalPath("products");
+            }
         }
 
         [HttpPost]
@@ -95,12 +99,13 @@ namespace ShopProductService.Controllers
             return new ApiResult<ProductDTO> { ResponseCode = 200, Data = product };
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet("images/{image}")]
         public IActionResult GetImage(string image)
         {
             var fileResponse = _fileStore.GetFile(image);
             if (!fileResponse.IsExisted)
-                return StatusCode(404);
+                return StatusCode(StatusCodes.Status404NotFound);
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
     }

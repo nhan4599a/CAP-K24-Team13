@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Shared
 {
     public class FileResponse
     {
-        public string FullPath { get; set; }
+        public virtual string FullPath { get; set; }
 
-        public string MimeType { get; set; }
+        public virtual string MimeType { get; set; }
 
-        public bool IsExisted { get => File.Exists(FullPath); }
+        public virtual bool IsExisted { get => File.Exists(FullPath); }
     }
 }

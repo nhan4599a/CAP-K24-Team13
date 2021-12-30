@@ -102,6 +102,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet("images/{image}")]
         public IActionResult GetImage(string image)
         {
