@@ -1,4 +1,7 @@
-﻿<h4 class="font-weight-bolder text-center">Edit Product</h4>
+﻿@section SideBar {
+    @await Component.InvokeAsync("SideBar", new { activeItem = "products" });
+}
+<h4 class="font-weight-bolder text-center">Edit Product</h4>
 <hr />
 <form id="product-form" enctype="multipart/form-data" method="post">
     <div class="row justify-content-center">
