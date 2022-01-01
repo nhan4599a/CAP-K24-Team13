@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.RequestModels;
 using ShopProductService.Validations;
-using StackExchange.Redis;
 using System;
 
 namespace ShopProductService
@@ -34,6 +33,7 @@ namespace ShopProductService
             {
                 options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
             }).AddFluentValidation();
+            services.RegisterOcelotService(Configuration);
             services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
