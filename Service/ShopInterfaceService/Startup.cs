@@ -27,6 +27,7 @@ namespace ShopInterfaceService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.RegisterOcelotService(Configuration);
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext>();
