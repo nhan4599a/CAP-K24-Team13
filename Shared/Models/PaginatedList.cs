@@ -38,5 +38,7 @@ namespace Shared.Models
         }
 
         public static PaginatedList<T> Empty => new(new List<T>(), 1, null, 0);
+
+        public static PaginatedList<T> All(List<T> data) => new(data, 1, data.Count, data.Count);
     }
 }
