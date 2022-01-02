@@ -1,4 +1,5 @@
 ﻿using AspNetCoreSharedComponent;
+using AspNetCoreSharedComponent.ServiceDiscoveries;
 
 namespace ApiGateway
 {

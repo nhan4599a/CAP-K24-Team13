@@ -22,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ShopInterfaceService\ShopInterfaceService.csproj" />
-    <ProjectReference Include="..\..\ShopProductService\ShopProductService.csproj" />
+    <ProjectReference Include="..\..\Service\ShopProductService\ShopProductService.csproj" />
     <ProjectReference Include="..\DatabaseSharing\DatabaseSharing.csproj" />
     <ProjectReference Include="..\UnitTestSupport\UnitTestSupport.csproj" />
   </ItemGroup>

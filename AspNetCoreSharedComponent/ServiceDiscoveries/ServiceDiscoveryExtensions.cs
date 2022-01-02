@@ -4,7 +4,7 @@ using Ocelot.Middleware;
 using Consul;
 using Shared;
 
-namespace AspNetCoreSharedComponent
+namespace AspNetCoreSharedComponent.ServiceDiscoveries
 {
     public static class ServiceDiscoveryExtensions
     {
