@@ -1,10 +1,9 @@
-﻿axios.defaults.baseURL = '';
-axios.defaults.timeout = 20000;
+﻿axios.defaults.timeout = 20000;
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
         return Promise.resolve(axiosResp.data);
-    var resp = axiosResp.data;
+    let resp = axiosResp.data;
     if (resp.responseCode != 200) {
         return Promise.reject(resp.errorMessage);
     }
@@ -15,73 +14,86 @@ const productEndpoint = 'https://localhost:44302/api/products';
 const categoryEndpoint = 'https://localhost:44302/api/categories';
 const interfaceEndpoint = 'https://localhost:44394/api/interfaces';
 
-function findProducts(keyword, pageNumber, pageSize, successCallback) {
+function findProducts(keyword, pageNumber, pageSize) {
     if (keyword === null || keyword === '')
-        axios.get(productEndpoint, {
+        return axios.get(productEndpoint, {
             params: {
                 'paginationInfo.pageNumber': pageNumber,
                 'paginationInfo.pageSize': pageSize
             }
-        }).then(successCallback);
+        });
     else
-        axios.get(productEndpoint, {
+        return axios.get(productEndpoint, {
             params: {
                 keyword: encodeURIComponent(keyword),
                 'paginationInfo.pageNumber': pageNumber,
                 'paginationInfo.pageSize:': pageSize || 5
             }
-        }).then(successCallback);
+        });
 }
 
 function getProductImageUrl(imageFileName) {
     return `${productEndpoint}/images/${imageFileName}`;
 }
 
-function getProductImage(imageFileName, callback) {
-    axios.get(getProductImageUrl(imageFileName), {
+function getProductImage(imageFileName) {
+    return axios.get(getProductImageUrl(imageFileName), {
         responseType: 'blob'
     }).then(blob => {
         blob.name = imageFileName;
         return blob;
-    }).then(callback);
+    });
 }
 
-function activateProduct(id, isActivateCommand, successCallback, errorCallback) {
-    axios.delete(
+function activateProduct(id, isActivateCommand) {
+    return axios.delete(
         `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`
-    ).then(successCallback).catch(errorCallback);
+    );
 }
 
-function addProduct(formData, successCallback, errorCallback) {
-    axios.post(productEndpoint, formData, {
+function addProduct(formData) {
+    return axios.post(productEndpoint, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    }).then(successCallback).catch(errorCallback);
+    });
 }
 
-function editProduct(id, formData, successCallback, errorCallback) {
-    axios.put(productEndpoint + `/${id}`, formData, {
+function editProduct(id, formData) {
+    return axios.put(productEndpoint + `/${id}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    }).then(successCallback).catch(errorCallback);
+    });
 }
 
-function getAllCategories(successCallback) {
-    axios.get(categoryEndpoint).then(paginatedResponse => successCallback(paginatedResponse.data));
+function getAllCategories() {
+    return axios.get(categoryEndpoint).then(paginatedResponse => paginatedResponse.data);
 }
 
-function getCategories(pageNumber, pageSize, successCallback) {
-    axios.get(categoryEndpoint, {
+function getCategories(pageNumber, pageSize) {
+    return axios.get(categoryEndpoint, {
         params: {
             pageNumber: pageNumber,
             pageSize: pageSize || 5
         }
-    }).then(successCallback);
+    });
 }
 
-function activateCategory(activateCommand, successCallback, errorCallback) {
+function getCategoryImageUrl(imageFileName) {
+    return `${categoryEndpoint}/images/${imageFileName}`;
+}
+
+function getCategoryImage(imageFileName) {
+    return axios.get(`${getCategoryImageUrl(imageFileName)}?${Date.now() / 1000}`, {
+        responseType: 'blob'
+    }).then(blob => {
+        blob.name = imageFileName;
+        return blob;
+    });
+}
+
+function activateCategory(activateCommand) {
     if (!activateCommand)
         throw new Error('activeCommand can not be null');
     if (!activateCommand.id)
@@ -90,19 +102,56 @@ function activateCategory(activateCommand, successCallback, errorCallback) {
         throw new Error('Action does not supported');
     var action = activateCommand.isActivateCommand ? 1 : 0;
     var cascade = activateCommand.shouldBeCascade ? 1 : 0;
-    axios.delete(
+    return axios.delete(
         `${categoryEndpoint}/${activateCommand.id}?action=${action}&cascade=${cascade}`
-    ).then(successCallback).catch(errorCallback);
+    );
 }
 
-function addCategory(category, successCallback, errorCallback) {
-    axios.post(categoryEndpoint, category).then(successCallback).catch(errorCallback);
+function addCategory(formData) {
+    return axios.post(categoryEndpoint, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }
 
-function editCategory(id, category, successCallback, errorCallback) {
-    axios.put(categoryEndpoint + `/${id}`, category).then(successCallback).catch(errorCallback);
+function editCategory(id, formData) {
+    return axios.put(categoryEndpoint + `/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }
 
-function getShopInterface(shopId, successCallback) {
-    axios.get(`${interfaceEndpoint}/${shopId}`).then(successCallback);
+function getShopInterface(shopId) {
+    return axios.get(`${interfaceEndpoint}/${shopId}`);
+}
+
+function getShopInterfaceImageUrl(imageFileName) {
+    return `${interfaceEndpoint}/images/${imageFileName}`;
+}
+
+function getShopInterfaceImage(imageFileName) {
+    return axios.get(getShopInterfaceImageUrl(imageFileName), {
+        responseType: 'blob'
+    }).then(blob => {
+        blob.name = imageFileName;
+        return blob;
+    });
+}
+
+function addShopInterface(shopId, formData) {
+    return axios.post(`${interfaceEndpoint}/${shopId}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
+
+function editShopInterface(shopId, formData) {
+    return axios.put(`${interfaceEndpoint}/${shopId}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }

@@ -1,63 +1,125 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shared.Validations
 {
-    public class FileValidationRuleSet : IList<FileValidationRule>
+    public class FileValidationRuleSet : IReadOnlySet<FileValidationRule>
     {
-        private readonly IList<FileValidationRule> _rules;
+        private readonly ISet<FileValidationRule> _rules;
 
-        public FileValidationRuleSet()
+        public static FileValidationRuleSet DefaultValidationRules
         {
-            _rules = new List<FileValidationRule>();
+            get => new()
+            {
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.ImageExtension,
+                },
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.MinFileCount,
+                    Value = 2
+                },
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.MaxFileCount,
+                    Value = 5
+                },
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.SingleMaxFileSize,
+                    Value = 1024 * 1024
+                },
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.AllMaxFileSize,
+                    Value = 4 * 1024 * 1024
+                }
+            };
         }
 
-        public FileValidationRuleSet(List<FileValidationRule> rules)
+        public static FileValidationRuleSet DefaultSingleValidationRules
         {
-            _rules = rules;
+            get => new()
+            {
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.ImageExtension,
+                },
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.SingleMaxFileSize,
+                    Value = 1024 * 1024
+                }
+            };
         }
-
-        public FileValidationRule this[int index] => _rules[index];
-
-        FileValidationRule IList<FileValidationRule>.this[int index] { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         public int Count => _rules.Count;
 
-        public bool IsReadOnly => throw new System.NotImplementedException();
+        public bool IsEmpty => _rules.Count == 0;
 
-        public void Add(FileValidationRule item)
+        public FileValidationRule this[FileValidationRuleName ruleName]
         {
-            _rules.Add(item);
+            get => _rules.FirstOrDefault(rule => rule.RuleName == ruleName);
+            set => Change(ruleName, value.Value);
         }
 
-        public void Clear()
+        public FileValidationRuleSet()
         {
-            _rules.Clear();
+            _rules = new HashSet<FileValidationRule>();
+        }
+
+        public FileValidationRuleSet(ISet<FileValidationRule> rules) : this()
+        {
+            foreach (FileValidationRule rule in rules)
+                _rules.Add(rule);
+        }
+
+        public void Add(FileValidationRule rule)
+        {
+            if (_rules.Contains(rule))
+                throw new InvalidOperationException($"{rule.RuleName} rule is already exsited");
+            _rules.Add(rule);
+        }
+
+        public void Change(FileValidationRuleName ruleName, long value)
+        {
+            if (!_rules.Contains(this[ruleName]))
+                throw new InvalidOperationException($"{ruleName} rule is not existed");
+            _rules.Remove(this[ruleName]);
+            _rules.Add(new FileValidationRule
+            {
+                RuleName = ruleName,
+                Value = value
+            });
+        }
+
+        public void Remove(FileValidationRuleName ruleName)
+        {
+            var rule = this[ruleName];
+            if (rule == null)
+                throw new InvalidOperationException($"{ruleName} rule is not existed");
+            _rules.Remove(rule);
         }
 
         public bool Contains(FileValidationRule item) => _rules.Contains(item);
 
-        public void CopyTo(FileValidationRule[] array, int arrayIndex)
-        {
-            _rules.CopyTo(array, arrayIndex);
-        }
+        public bool IsProperSubsetOf(IEnumerable<FileValidationRule> other) => _rules.IsProperSubsetOf(other);
+
+        public bool IsProperSupersetOf(IEnumerable<FileValidationRule> other) => _rules.IsProperSupersetOf(other);
+
+        public bool IsSubsetOf(IEnumerable<FileValidationRule> other) => _rules.IsSubsetOf(other);
+
+        public bool IsSupersetOf(IEnumerable<FileValidationRule> other) => _rules.IsSupersetOf(other);
+
+        public bool Overlaps(IEnumerable<FileValidationRule> other) => _rules.Overlaps(other);
+
+        public bool SetEquals(IEnumerable<FileValidationRule> other) => _rules.SetEquals(other);
 
         public IEnumerator<FileValidationRule> GetEnumerator() => _rules.GetEnumerator();
 
-        public int IndexOf(FileValidationRule item) => _rules.IndexOf(item);
-
-        public void Insert(int index, FileValidationRule item)
-        {
-            _rules.Insert(index, item);
-        }
-
-        public bool Remove(FileValidationRule item) => _rules.Remove(item);
-
-        public void RemoveAt(int index)
-        {
-            _rules.RemoveAt(index);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() => _rules.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

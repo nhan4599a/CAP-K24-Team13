@@ -1,6 +1,8 @@
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories;
 using DatabaseSharing;
+using Shared;
+using Shared.Models;
 using Shared.RequestModels;
 using System;
 using UnitTestSupport;
@@ -47,7 +49,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestAddProductSuccess()
         {
-            var productCount = (await _repository.GetAllProductAsync()).Count;
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
             var requestModel = new CreateOrEditProductRequestModel
             {
                 CategoryId = 1,
@@ -61,7 +68,7 @@ namespace TestShopProductService
 
             var result = await _repository.AddProductAsync(requestModel);
 
-            var afterProductCount = (await _repository.GetAllProductAsync()).Count;
+            var afterProductCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
 
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
@@ -75,7 +82,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestAddProductFailBecauseCategoryNotExisted()
         {
-            var productCount = (await _repository.GetAllProductAsync()).Count;
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
             var requestModel = new CreateOrEditProductRequestModel
             {
                 CategoryId = 0,
@@ -89,7 +101,7 @@ namespace TestShopProductService
 
             var result = await _repository.AddProductAsync(requestModel);
 
-            var afterProductCount = (await _repository.GetAllProductAsync()).Count;
+            var afterProductCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
 
             Assert.NotNull(result);
             Assert.False(result.IsSuccess);
@@ -104,7 +116,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestAddProductFailBecauseCategoryIsDisabled()
         {
-            var productCount = (await _repository.GetAllProductAsync()).Count;
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
             var requestModel = new CreateOrEditProductRequestModel
             {
                 CategoryId = 2,
@@ -117,7 +134,7 @@ namespace TestShopProductService
             };
 
             var result = await _repository.AddProductAsync(requestModel);
-            var afterProductCount = (await _repository.GetAllProductAsync()).Count;
+            var afterProductCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
 
             Assert.NotNull(result);
             Assert.Throws<InvalidOperationException>(() => result.Response);
@@ -131,7 +148,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestEditProductSuccess()
         {
-            var product = (await _repository.GetAllProductAsync())[0];
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
             var requestModel = new CreateOrEditProductRequestModel
             {
                 ProductName = product.ProductName,
@@ -178,7 +200,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestDeactivateProductSuccess()
         {
-            var product = (await _repository.GetAllProductAsync())[0];
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
             var result = await _repository.ActivateProductAsync(Guid.Parse(product.Id), false);
 
@@ -188,7 +215,7 @@ namespace TestShopProductService
             Assert.Null(result.ErrorMessage);
             Assert.Null(result.Exception);
 
-            var afterProduct = (await _repository.GetAllProductAsync())[0];
+            var afterProduct = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
             Assert.True(afterProduct.IsDisabled);
         }
@@ -197,7 +224,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestActivateProductSuccess()
         {
-            var product = (await _repository.GetAllProductAsync())[0];
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
             var result = await _repository.ActivateProductAsync(Guid.Parse(product.Id), true);
 
             Assert.NotNull(result);
@@ -206,7 +238,7 @@ namespace TestShopProductService
             Assert.Null(result.ErrorMessage);
             Assert.Null(result.Exception);
 
-            var afterProduct = (await _repository.GetAllProductAsync())[0];
+            var afterProduct = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
             Assert.False(afterProduct.IsDisabled);
         }
@@ -241,7 +273,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestDeactivateProductFailedBecauseProductIsDeactivated()
         {
-            var product = (await _repository.GetAllProductAsync())[0];
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
             var result = await _repository.ActivateProductAsync(Guid.Parse(product.Id), false);
 
@@ -251,7 +288,7 @@ namespace TestShopProductService
             Assert.Equal("Product is already deactivated", result.ErrorMessage);
             Assert.Null(result.Exception);
 
-            var afterProduct = (await _repository.GetAllProductAsync())[0];
+            var afterProduct = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
             Assert.Equal(product.IsDisabled, afterProduct.IsDisabled);
         }
@@ -260,7 +297,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestActivateProductFailedBecauseProductIsActivated()
         {
-            var product = (await _repository.GetAllProductAsync())[0];
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
             var result = await _repository.ActivateProductAsync(Guid.Parse(product.Id), true);
 
@@ -270,7 +312,7 @@ namespace TestShopProductService
             Assert.Equal("Product is already activated", result.ErrorMessage);
             Assert.Null(result.Exception);
 
-            var afterProduct = (await _repository.GetAllProductAsync())[0];
+            var afterProduct = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
             Assert.Equal(product.IsDisabled, afterProduct.IsDisabled);
         }
@@ -279,7 +321,12 @@ namespace TestShopProductService
         [Fact]
         public async void TestGetProduct()
         {
-            var firstProductId = (await _repository.GetAllProductAsync())[0].Id;
+            var paginationInfo = new PaginationInfo
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+            var firstProductId = (await _repository.GetAllProductAsync(paginationInfo)).Data[0].Id;
 
             var product = await _repository.GetProductAsync(Guid.Parse(firstProductId));
 

@@ -85,23 +85,22 @@ function buildActionButtonHtml(isDisabled) {
 
 function buildEditButtonHtml() {
     return `<a href="#" class="text-secondary font-weight-bold text-xs"
-                data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit"
-                onclick="edit(e)">
+                data-toggle="tooltip" data-original-title="Edit user" style="margin-right: 24px" name="btn-edit">
                 <i class="far fa-edit"></i><span> Edit</span>
             </a>`;
 }
 
-function renderPagination(currentPageNumber, maxPageNumber) {
+function renderPagination(paginationObject) {
     let paginationHtml = '';
-    if (currentPageNumber != 1)
+    if (paginationObject.hasPreviousPage)
         paginationHtml += '<a href="#" id="previous-page">«</a>';
-    for (var i = 1; i <= maxPageNumber; i++) {
-        if (i == currentPageNumber)
+    for (let i = 1; i <= paginationObject.maxPageNumber; i++) {
+        if (i == paginationObject.pageNumber)
             paginationHtml += `<a class="active">${i}</a>`;
         else
             paginationHtml += `<a href="#" class="pagination-item">${i}</a>`;
     }
-    if (currentPageNumber != maxPageNumber)
+    if (paginationObject.hasNextPage)
         paginationHtml += '<a href="#" id="next-page">»</a>';
     $('.pagination').html(paginationHtml);
 }
@@ -133,10 +132,13 @@ function buildCategoryTableHtml(categories) {
                 <thead>
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                            style="width: 70px;">
+                            style="width: 50px; min-width: 50px !important;">
                             #
                         </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                            style="padding-left: 24px!important">
+                            ID
+                        </th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                             Category name
                         </th>
@@ -158,18 +160,19 @@ function buildCategoryTableHtml(categories) {
 function buildCategoryTableRowHtml(category, index) {
     return `<tr>
                 <td style="display: none" id="cate-id">${category.id}</td>
-                <td>
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center"">
-                            <p class="mb-0 text-sm">${index + 1}</p>
-                        </div>
-                    </div>
-                </td>
+                <td class="align-middle text-center">${index + 1}</td>
                 <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-success">${category.id}</span>
                 </td>
-                <td>
-                    <p class="text-xs font-weight-bold mb-0" style="font-size: 50px;">${category.categoryName}</p>
+                <td class="align-middle text-center">
+                    <div class="d-flex px-2 py-1">
+                        <div>
+                            <img src="${getCategoryImageUrl(category.image)}?${Date.now() / 1000}" class="avatar avatar-sm me-3 border-radius-lg">
+                        </div>
+                        <div class="d-grid flex-column" style="align-self: center">
+                            <h6 class="mb-0 text-sm">${category.categoryName}</h6>
+                        </div>
+                    </div>
                 </td>
                 <td class="align-middle text-center">
                     <input type="checkbox" checked="checked">
@@ -292,4 +295,13 @@ function displayCascadeQuestionDialog(question, buttonOption = {}, confirmedCall
         $(this).modal('dispose');
         $(this).remove();
     });
+}
+
+function displayYesNoQuestion(question, confirmCallback) {
+    displayCascadeQuestionDialog(question, {
+        shouldShowCascadeButton: false,
+        shouldShowNonCascadeButton: true,
+        nonCascadeButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }, confirmCallback);
 }

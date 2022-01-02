@@ -1,7 +1,9 @@
 ﻿using Shared.RequestModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
+    [Table("ShopInterfaces")]
     public class ShopInterface
     {
         public int Id { get; set; }
@@ -25,6 +27,8 @@ namespace DatabaseAccessor.Models
             ShopAddress = requestModel.ShopAddress;
             ShopPhoneNumber = requestModel.ShopPhoneNumber;
             ShopDescription = requestModel.ShopDescription;
+            ShopName = requestModel.Name;
+            ShopEmail = requestModel.ShopEmail;
             if (requestModel.ShopImages != null)
                 Images = string.Join(";", requestModel.ShopImages);
             return this;

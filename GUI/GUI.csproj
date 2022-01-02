@@ -2022,7 +2022,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Customer\Data\" />
     <Folder Include="Areas\User\Controllers\" />
     <Folder Include="Areas\User\Views\" />
     <Folder Include="wwwroot\assets\user\" />

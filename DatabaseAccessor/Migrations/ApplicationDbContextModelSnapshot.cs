@@ -17,7 +17,7 @@ namespace DatabaseAccessor.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -32,6 +32,9 @@ namespace DatabaseAccessor.Migrations
 
                     b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDisabled")
                         .ValueGeneratedOnAdd()
@@ -48,7 +51,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("CategoryName");
 
-                    b.ToTable("ShopCategories", (string)null);
+                    b.ToTable("ShopCategories");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopInterface", b =>
@@ -68,6 +71,9 @@ namespace DatabaseAccessor.Migrations
                     b.Property<string>("ShopDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ShopEmail")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ShopId")
                         .HasColumnType("int");
 
@@ -82,7 +88,7 @@ namespace DatabaseAccessor.Migrations
                     b.HasIndex("ShopId")
                         .IsUnique();
 
-                    b.ToTable("ShopInterfaces", (string)null);
+                    b.ToTable("ShopInterfaces");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
@@ -133,7 +139,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductName");
 
-                    b.ToTable("ShopProducts", (string)null);
+                    b.ToTable("ShopProducts");
 
                     b.HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
 

@@ -1,8 +1,8 @@
 ﻿using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using Shared.RequestModels;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Interfaces
@@ -11,9 +11,9 @@ namespace DatabaseAccessor.Repositories.Interfaces
     {
         Task<ProductDTO> GetProductAsync(Guid id);
 
-        Task<List<ProductDTO>> GetProductsAsync(string keyword);
+        Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo);
 
-        Task<List<ProductDTO>> GetAllProductAsync();
+        Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo);
 
         Task<CommandResponse<Guid>> AddProductAsync(CreateOrEditProductRequestModel requestModel);
 

@@ -106,78 +106,32 @@
             height: 562px;
         }
     </style>
+    <style>
+        .bg-gradient-primary-dark {
+            background-color: #2f9db6 !important;
+        }
+
+        .my-shadow {
+            box-shadow: 0 3px 3px 0 rgb(47 157 182 / 15%), 0 3px 1px -2px rgb(47 157 182 / 20%), 0 1px 5px 0 rgb(47 157 182 / 15%);
+        }
+
+        .btn.my-shadow:hover {
+            box-shadow: 0 14px 26px -12px rgb(47 157 182), 0 4px 23px 0 rgb(47 157 182 / 15%), 0 8px 10px -5px rgb(47 157 182 / 20%);
+        }
+
+        .shadow {
+            box-shadow: 0 7px 10px -5px rgb(47 157 182) !important;
+        }
+
+        .mr-1 {
+            margin-right: 0.5rem;
+        }
+    </style>
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
-    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark"
-           id="sidenav-main">
-        <div class="sidenav-header">
-            <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
-               aria-hidden="true" id="iconSidenav"></i>
-            <a class="navbar-brand m-0" href="#"
-               target="_blank">
-                <img src="@Url.Content("~/assets/admin/img/logo-ct.png")" class="navbar-brand-img h-100" alt="main_logo">
-                <span class="ms-1 font-weight-bold text-white">E-Mall Management</span>
-            </a>
-        </div>
-        <hr class="horizontal light mt-0 mb-2">
-        <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link text-white " href="/admin/product">
-                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">dashboard</i>
-                        </div>
-                        <span class="nav-link-text ms-1">Products</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white " href="/admin/category">
-                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">table_view</i>
-                        </div>
-                        <span class="nav-link-text ms-1">Categories</span>
-                    </a>
-                </li>
-
-                <li class="nav-item mt-3">
-                    <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white active bg-gradient-primary" href="#">
-                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">person</i>
-                        </div>
-                        <span class="nav-link-text ms-1">Profile</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white " href="../pages/sign-in.html">
-                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">login</i>
-                        </div>
-                        <span class="nav-link-text ms-1">Sign In</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white " href="../pages/sign-up.html">
-                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">assignment</i>
-                        </div>
-                        <span class="nav-link-text ms-1">Sign Up</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="sidenav-footer position-absolute w-100 bottom-0 ">
-            <div class="mx-3">
-                <a class="btn bg-gradient-primary mt-4 w-100"
-                   href="#"
-                   type="button">
-                </a>
-            </div>
-        </div>
-    </aside>
+    <div id="loading-container"></div>
+    @await Component.InvokeAsync("SideBar", new { activeItem = "profile" })
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
         <!-- Navbar -->
         <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
@@ -227,17 +181,23 @@
             </div>
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row gx-4 mb-2">
-                    <div class="col-auto">
+                    <div class="col-1">
                         <div class="avatar avatar-xl position-relative">
                             <button id="button-img">
                                 <img src="https://gigamall.com.vn/data/2019/09/05/15023424_LOGO-NIKE-500x500.jpg">
                             </button>
                         </div>
                     </div>
-                    <div class="col-auto my-auto">
+                    <div class="col-8 my-auto">
                         <div class="h-100">
                             <h5 class="mb-1">Nike</h5>
                             <p class="mb-0 font-weight-normal text-sm">Store</p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="h-100 d-flex" style="align-items: center; float: right">
+                            <a class="btn btn-danger text-white mr-1" style="margin-bottom: 0px;" name="btn-clear">Clear</a>
+                            <a class="btn bg-gradient-primary-dark my-shadow text-white" style="margin-bottom: 0px;" name="btn-save">Save</a>
                         </div>
                     </div>
                 </div>
@@ -256,7 +216,7 @@
                                 <input type="text" class="form-control" id="input-name" name="input-name" />
                             </div>
                             <div class="input-group input-group-outline mb-3">
-                                <label class="form-label" for="input-phone">Phone number</label>
+                                <label class="form-label" for="input-phone">Phone</label>
                                 <input type="text" class="form-control" id="input-phone" name="input-phone" />
                             </div>
                             <div class="input-group input-group-outline mb-3">
@@ -264,8 +224,8 @@
                                 <input type="text" class="form-control" id="input-email" name="input-email" />
                             </div>
                             <div class="input-group input-group-outline mb-3">
-                                <label class="form-label" for="input-location">Location</label>
-                                <input type="text" class="form-control" id="input-location" name="input-location" />
+                                <label class="form-label" for="input-address">Address</label>
+                                <input type="text" class="form-control" id="input-address" name="input-address" />
                             </div>
                         </div>
                     </div>
@@ -318,7 +278,7 @@
                 </div>
             </div>
         </div>
-        <footer class="footer py-4  ">
+        <footer class="footer py-4">
             <div class="container-fluid">
                 <div class="row align-items-center justify-content-lg-between">
                     <div class="col-lg-6 mb-lg-0 mb-4">
@@ -358,10 +318,14 @@
     </div>
     <!--   Core JS Files   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="@Url.Content("~/assets/admin/js/core/popper.min.js")"></script>
     <script src="@Url.Content("~/assets/admin/js/core/bootstrap.min.js")"></script>
     <script src="@Url.Content("~/assets/admin/js/plugins/perfect-scrollbar.min.js")"></script>
     <script src="@Url.Content("~/assets/admin/js/plugins/smooth-scrollbar.min.js")"></script>
+    <script src="@Url.Content("~/assets/admin/js/internal/utils.js")"></script>
+    <script src="@Url.Content("~/assets/admin/js/internal/animation.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.8.1/lottie.min.js" integrity="sha512-V1YyTKZJrzJNhcKthpNAaohFXBnu5K9j7Qiz6gv1knFuf13TW/3vpgVVhJu9fvbdW8lb5J6czIhD4fWK2iHKXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -373,6 +337,7 @@
     </script>
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="@Url.Content("~/assets/admin/js/internal/api.js")"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="@Url.Content("~/assets/admin/js/material-dashboard.min.js?v=3.0.0")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
@@ -399,6 +364,9 @@
                 addRemoveLinks: true,
                 myFiles: []
             });
+            let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting'));
+            if (edittingShopInterface)
+                loadEdittingShopInterface(edittingShopInterface, dropzone);
             dropzone.on('addedfile', function (file) {
                 this.options.myFiles.push(file);
                 let maxFileNumber = this.options.maxFiles;
@@ -451,7 +419,93 @@
                 }).carousel(removedIndex);
                 this.options.myFiles.splice(removedIndex, 1);
             });
+            $('a.btn[name=btn-clear]').click(function () {
+                displayYesNoQuestion('Are you sure?', () => {
+                    $('#input-name').val('');
+                    $('#input-phone').val('');
+                    $('#input-email').val('');
+                    $('#input-address').val('');
+
+                    $('#input-name').parent().removeClass('is-filled');
+                    $('#input-phone').parent().removeClass('is-filled');
+                    $('#input-email').parent().removeClass('is-filled');
+                    $('#input-address').parent().removeClass('is-filled');
+
+                    dropzone.files.forEach(function (file) {
+                        dropzone.removeFile(file);
+                    });
+                });
+            });
+
+            $('a.btn[name=btn-save]').click(function () {
+                let editMode = localStorage.getItem('shop-interface.edit-mode');
+                
+                let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+                animationLoader.showAnimation();
+                let successCallback = () => {
+                    localStorage.removeItem('shop-interface.edit-mode');
+                    localStorage.removeItem('shop-interface.editting');
+                    animationLoader.hideAnimation();
+                    setTimeout(() => window.location = '/admin/interface', 500);
+                };
+                let errorCallback = () => {
+                    animationLoader.hideAnimation();
+                    toastr.error('Failed to edit interface!', 'Error');
+                };
+
+                if (dropzone.files.length < 1) {
+                    toastr.error('You must upload at least 1 pictures!', 'Error');
+                    return;
+                }
+
+                let formData = new FormData();
+                let requestModelObject = buildRequestModel();
+                Object.keys(requestModelObject).forEach(key => {
+                    formData.append(`requestModel.${key}`, requestModelObject[key]);
+                });
+                for (let i = 0; i < dropzone.files.length; i++)
+                    formData.append(`images[${i}]`, dropzone.files[i]);
+                if (editMode === 'add') {
+                    addShopInterface(0, formData).then(successCallback).catch(errorCallback);
+                } else {
+                    for (let i = 0; i < edittingShopInterface.images.length; i++)
+                        formData.append(`requestModel.shopImages[${i}]`, edittingShopInterface.images[i]);
+                    editShopInterface(0, formData).then(successCallback).catch(errorCallback);
+                }
+            });
         });
+
+        function buildRequestModel() {
+            let name = $('#input-name').val();
+            let phone = $('#input-phone').val();
+            let email = $('#input-email').val();
+            let address = $('#input-address').val();
+            let description = tinymce.activeEditor.getContent({ format: 'text' });
+
+            return {
+                name: name,
+                shopPhoneNumber: phone,
+                shopEmail: email,
+                shopAddress: address,
+                shopDescription: description
+            }
+        }
+
+        function loadEdittingShopInterface(shopInterface, dropzone) {
+            $('#input-name').val(shopInterface.shopName);
+            $('#input-phone').val(shopInterface.shopPhoneNumber);
+            $('#input-email').val(shopInterface.shopEmail);
+            $('#input-address').val(shopInterface.shopAddress);
+            $('#input-description').val(shopInterface.shopDescription);
+            shopInterface.images.forEach(imageUrl => getShopInterfaceImage(imageUrl).then(blob => {
+                let file = new File([blob], blob.name, { type: blob.type });
+                dropzone.addFile(file);
+            }));
+            $('#input-name').parent().addClass('is-filled');
+            $('#input-phone').parent().addClass('is-filled');
+            $('#input-email').parent().addClass('is-filled');
+            $('#input-address').parent().addClass('is-filled');
+        }
     </script>
 </body>
 

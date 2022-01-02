@@ -2,6 +2,8 @@
 {
     public class CreateOrEditInterfaceRequestModel
     {
+        public string Name { get; set; }
+
         public string ShopAddress { get; set; }
 
         public string ShopEmail { get; set; }

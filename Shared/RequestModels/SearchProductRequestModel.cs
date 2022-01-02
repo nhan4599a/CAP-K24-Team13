@@ -1,9 +1,11 @@
-﻿namespace Shared.RequestModels
+﻿using Shared.Models;
+
+namespace Shared.RequestModels
 {
     public class SearchProductRequestModel
     {
         public string Keyword { get; set; } = string.Empty;
 
-        public PaginationInfo PaginationInfo { get; set; }
+        public PaginationInfo PaginationInfo { get; set; } = PaginationInfo.Default;
     }
 }

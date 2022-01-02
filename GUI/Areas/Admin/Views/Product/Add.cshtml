@@ -1,3 +1,6 @@
+﻿@section SideBar {
+    @await Component.InvokeAsync("SideBar", new { activeItem = "products" });
+}
 ﻿﻿<h4 class="font-weight-bolder text-center">Add Product</h4>
 <hr />
 <form id="product-form" enctype="multipart/form-data" method="post">
@@ -41,7 +44,9 @@
             </div>
             <div class="form-group">
                 <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Add</button>
-                <a class="btn bg-gradient-primary-dark my-shadow text-white" style="float: right" href="product">Cancel</a>
+                <button class="btn btn-danger" style="float: right">
+                    <a href="product" class="text-white">Cancel</a>
+                </button>
             </div>
             <p id="demo"></p>
         </div>
@@ -102,22 +107,32 @@
                     toastr.error('You must upload at least 2 pictures!', 'Error');
                     return;
                 }
+                let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+                animationLoader.showAnimation();
                 let formData = new FormData();
-                var requestModelObject = buildRequestModel();
+                let requestModelObject = buildRequestModel();
                 Object.keys(requestModelObject).forEach(key => {
                     formData.append(`requestModel.${key}`, requestModelObject[key]);
                 });
                 for (let i = 0; i < dropzone.files.length; i++)
                     formData.append(`images[${i}]`, dropzone.files[i]);
-                addProduct(formData, () => {
+                addProduct(formData).then(() => {
+                    animationLoader.hideAnimation();
                     window.location.href = '/admin/product';
-                }, (error) => {
-                    alert(error);
+                }).catch(error => {
+                    animationLoader.hideAnimation();
+                    toastr.error(error, 'Error');
                 });
             });
-            getAllCategories(
-                categories => renderCategoryDropdown(categories.filter(category => !category.isDisabled))
-            );
+            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            animationLoader.showAnimation(3500);
+            getAllCategories().then(categories => {
+                renderCategoryDropdown(categories.filter(category => !category.isDisabled))
+                animationLoader.hideAnimation();
+            }).catch(() => {
+                animationLoader.hideAnimation();
+                toastr.error('Failed to load list categories', 'Error');
+            });
         });
         function buildRequestModel() {
             let name = $("#input-name").val();

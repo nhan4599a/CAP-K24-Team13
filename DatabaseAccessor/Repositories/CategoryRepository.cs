@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using Shared.RequestModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,10 +30,11 @@ namespace DatabaseAccessor.Repositories
             return _mapper.MapToCategoryDTO(await FindCategoryByIdAsync(id));
         }
 
-        public async Task<List<CategoryDTO>> GetAllCategoryAsync()
+        public async Task<PaginatedList<CategoryDTO>> GetAllCategoryAsync(PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopCategories.AsNoTracking()
-                .Select(category => _mapper.MapToCategoryDTO(category)).ToListAsync();
+                .Select(category => _mapper.MapToCategoryDTO(category))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
         public async Task<CommandResponse<bool>> AddCategoryAsync(CreateOrEditCategoryRequestModel requestModel)

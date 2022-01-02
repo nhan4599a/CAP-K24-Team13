@@ -2,8 +2,6 @@
     let currentPageInfo = getCurrentPageInfo();
     loadProducts(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
-    let classNames = ['active', 'bg-gradient-primary'];
-    $('#nav-item-product').addClass(classNames);
     let searchTextField = $('#input-search');
     if (currentPageInfo.keyword) {
         searchTextField.parent().addClass('is-filled');
@@ -30,82 +28,101 @@
 
 function loadProducts(keyword, pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
-    animationLoader.showAnimation();
-    findProducts(keyword, pageNumber, pageSize, paginatedData => {
-        let products = paginatedData.data;
-        renderProductTable(products);
-        renderPagination(pageNumber, paginatedData.maxPageNumber);
-        $('a[name=btn-edit]').click(function (e) {
-            e.preventDefault();
-            let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-            let productInfoStr = JSON.stringify(products[index]);
-            window.localStorage.setItem('editting-product', productInfoStr);
-            window.location.href = "/admin/product/edit";
-        });
-        $('a[name=btn-action]').click(function (e) {
-            e.preventDefault();
-            let action = $(this).text().trim().toLowerCase();
-            let id = $(this).parent().parent().children('#prod-id').text();
-            let name = $(this).parent().parent().children('td:nth-child(3)')
-                .children().children('div:nth-child(2)').children('h6').text();
-            if (action !== 'deactivate' && action !== 'activate')
-                return;
-            displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, {
-                shouldShowNonCascadeButton: true
-            }, () => {
-                let isActivateCommand = action === 'activate';
-                let successCallback = isActivateCommand ? () => {
-                    toastr.success(`Activated ${name}`, 'Success');
-                    $(this).parent().parent().children('td:nth-child(5)').children()
-                        .removeClass('bg-gradient-secondary')
-                        .addClass('bg-gradient-success')
-                        .text('Activated');
-                    $(this).parent().prepend(buildEditButtonHtml());
-                    $('a[name=btn-edit]').click(function (e) {
-                        e.preventDefault();
-                        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-                        let productInfoStr = JSON.stringify(products[index]);
-                        window.localStorage.setItem('editting-product', productInfoStr);
-                        window.location.href = "/admin/product/edit";
-                    });
-                    $(this).children('span').text(' Deactivate');
-                    $(this).children('i').removeClass().addClass('far fa-trash-alt');
-                } : () => {
-                    toastr.success(`Deactivated ${name}`, 'Success');
-                    $(this).parent().parent().children('td:nth-child(5)').children()
-                        .removeClass('bg-gradient-success')
-                        .addClass('bg-gradient-secondary')
-                        .text('deactivated');
-                    $(this).parent().children('*[name="btn-edit"]').remove();
-                    $(this).children('span').text(' Activate');
-                    $(this).children('i').removeClass().addClass('fas fa-check');
-                };
-                activateProduct(id, isActivateCommand, successCallback,
-                    (err) => toastr.error(`Failed to ${action} ${name}, ${err}`, 'Error'));
+    animationLoader.showAnimation(3500);
+    findProducts(keyword, pageNumber, pageSize).then((paginatedData) => {
+        onLoadProductsCompleted(paginatedData);
+        animationLoader.hideAnimation();
+    }).catch(() => {
+        animationLoader.hideAnimation();
+        toastr.error('Failed to load list of products', 'Error');
+    });
+}
+
+function onLoadProductsCompleted(paginatedData) {
+    let products = paginatedData.data;
+    renderProductTable(products);
+    renderPagination({
+        hasPreviousPage: paginatedData.hasPreviousPage,
+        hasNextPage: paginatedData.hasNextPage,
+        pageNumber: paginatedData.pageNumber,
+        maxPageNumber: paginatedData.maxPageNumber
+    });
+    $('a[name=btn-edit]').click(function (e) {
+        e.preventDefault();
+        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+        let productInfoStr = JSON.stringify(products[index]);
+        window.localStorage.setItem('editting-product', productInfoStr);
+        window.location.href = "/admin/product/edit";
+    });
+    $('a[name=btn-action]').click(function (e) {
+        e.preventDefault();
+        let action = $(this).text().trim().toLowerCase();
+        let id = $(this).parent().parent().children('#prod-id').text();
+        let name = $(this).parent().parent().children('td:nth-child(3)')
+            .children().children('div:nth-child(2)').children('h6').text();
+        if (action !== 'deactivate' && action !== 'activate')
+            return;
+        displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, {
+            shouldShowNonCascadeButton: true
+        }, () => {
+            let isActivateCommand = action === 'activate';
+            let successCallback = isActivateCommand ? () => {
+                toastr.success(`Activated ${name}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(5)').children()
+                    .removeClass('bg-gradient-secondary')
+                    .addClass('bg-gradient-success')
+                    .text('Activated');
+                $(this).parent().prepend(buildEditButtonHtml());
+                $('a[name=btn-edit]').click(function (e) {
+                    e.preventDefault();
+                    let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+                    let productInfoStr = JSON.stringify(products[index]);
+                    window.localStorage.setItem('editting-product', productInfoStr);
+                    window.location.href = "/admin/product/edit";
+                });
+                $(this).children('span').text(' Deactivate');
+                $(this).children('i').removeClass().addClass('far fa-trash-alt');
+            } : () => {
+                toastr.success(`Deactivated ${name}`, 'Success');
+                $(this).parent().parent().children('td:nth-child(5)').children()
+                    .removeClass('bg-gradient-success')
+                    .addClass('bg-gradient-secondary')
+                    .text('deactivated');
+                $(this).parent().children('*[name="btn-edit"]').remove();
+                $(this).children('span').text(' Activate');
+                $(this).children('i').removeClass().addClass('fas fa-check');
+            };
+            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            animationLoader.showAnimation();
+            activateProduct(id, isActivateCommand).then(() => {
+                successCallback();
+                animationLoader.hideAnimation();
+            }).catch(err => {
+                animationLoader.hideAnimation();
+                toastr.error(`Failed to ${action} ${name}, ${err}`, 'Error')
             });
         });
-        $('#previous-page').click((e) => {
-            e.preventDefault();
-            let currentPageInfo = getCurrentPageInfo();
-            moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
-        });
-        $('#next-page').click((e) => {
-            e.preventDefault();
-            let currentPageInfo = getCurrentPageInfo();
-            moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
-        });
-        $('a.pagination-item').click(function (e) {
-            e.preventDefault();
-            let pageNumber = $(this).text();
-            let currentPageInfo = getCurrentPageInfo();
-            moveToPage(currentPageInfo.keyword, pageNumber, currentPageInfo.pageSize);
-        });
-        $('#sort-select').change(function () {
-            let sortDirection = $(this).val();
-            clearTable();
-            renderProductTable(sortList('productName', sortDirection, products));
-        });
-        animationLoader.hideAnimation();
+    });
+    $('#previous-page').click((e) => {
+        e.preventDefault();
+        let currentPageInfo = getCurrentPageInfo();
+        moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
+    });
+    $('#next-page').click((e) => {
+        e.preventDefault();
+        let currentPageInfo = getCurrentPageInfo();
+        moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
+    });
+    $('a.pagination-item').click(function (e) {
+        e.preventDefault();
+        let pageNumber = $(this).text();
+        let currentPageInfo = getCurrentPageInfo();
+        moveToPage(currentPageInfo.keyword, pageNumber, currentPageInfo.pageSize);
+    });
+    $('#sort-select').change(function () {
+        let sortDirection = $(this).val();
+        clearTable();
+        renderProductTable(sortList('productName', sortDirection, products));
     });
 }
 

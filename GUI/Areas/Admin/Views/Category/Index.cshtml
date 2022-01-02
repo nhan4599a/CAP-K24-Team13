@@ -1,4 +1,7 @@
-﻿<div class="row">
+﻿@section SideBar {
+    @await Component.InvokeAsync("SideBar", new { activeItem = "categories" });
+}
+<div class="row">
     <div class="col-12">
         <div class="row">
             <div class="col-md-3">
@@ -25,6 +28,5 @@
 </div>
 <div class="pagination"></div>
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.8.1/lottie.min.js" integrity="sha512-V1YyTKZJrzJNhcKthpNAaohFXBnu5K9j7Qiz6gv1knFuf13TW/3vpgVVhJu9fvbdW8lb5J6czIhD4fWK2iHKXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="@Url.Content("~/assets/admin/js/internal/category.js")" type="text/javascript"></script>
 }
