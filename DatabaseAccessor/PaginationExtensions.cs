@@ -12,7 +12,7 @@ namespace DatabaseAccessor
             var count = await source.CountAsync();
             if (count == 0)
                 return PaginatedList<T>.Empty;
-            if (pageSize == null)
+            if (!pageSize.HasValue)
                 return PaginatedList<T>.All(await source.ToListAsync());
             var items = await source.Skip((pageNumber - 1) * pageSize.Value).Take(pageSize.Value).ToListAsync();
             return new PaginatedList<T>(items, pageNumber, pageSize.Value, count);
