@@ -51,7 +51,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
@@ -84,7 +84,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
@@ -118,7 +118,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
@@ -150,7 +150,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
@@ -202,7 +202,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
@@ -226,7 +226,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
@@ -275,7 +275,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
@@ -299,7 +299,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
@@ -323,7 +323,7 @@ namespace TestShopProductService
         {
             var paginationInfo = new PaginationInfo
             {
-                PageNumber = null,
+                PageNumber = 1,
                 PageSize = 10
             };
             var firstProductId = (await _repository.GetAllProductAsync(paginationInfo)).Data[0].Id;

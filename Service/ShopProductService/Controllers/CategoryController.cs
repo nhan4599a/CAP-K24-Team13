@@ -23,8 +23,11 @@ namespace ShopProductService.Controllers
         public CategoryController(IMediator mediator, IFileStorable fileStore)
         {
             _mediator = mediator;
-            _fileStore = fileStore;
-            _fileStore.SetRelationalPath("categories");
+            if (fileStore != null)
+            {
+                _fileStore = fileStore;
+                _fileStore.SetRelationalPath("categories");
+            }
             _rules = FileValidationRuleSet.DefaultSingleValidationRules;
             _rules.Change(FileValidationRuleName.SingleMaxFileSize, (long)(0.3 * 1024 * 1024));
         }

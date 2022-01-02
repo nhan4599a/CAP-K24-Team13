@@ -2,13 +2,12 @@
 {
     public class PaginationInfo
     {
-        public int? PageNumber { get; set; }
+        public int PageNumber { get; set; } = 1;
 
-        public int PageSize { get; set; } = 5;
+        public int? PageSize { get; set; }
 
         public static PaginationInfo Default => new()
         {
-            PageNumber = 1,
             PageSize = 5
         };
     }
