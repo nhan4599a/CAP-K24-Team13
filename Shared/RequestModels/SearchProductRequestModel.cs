@@ -1,4 +1,6 @@
-﻿namespace Shared.RequestModels
+﻿using Shared.Models;
+
+namespace Shared.RequestModels
 {
     public class SearchProductRequestModel
     {

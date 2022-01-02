@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Shared
+namespace Shared.Models
 {
     public class PaginatedList<T>
     {
@@ -24,9 +24,9 @@ namespace Shared
         public PaginatedList(List<T> data, int pageNumber, int pageSize, int count)
         {
             if (pageNumber < 1)
-                throw new ArgumentException($"{pageNumber} must be greater than 0", nameof(pageNumber));
+                throw new ArgumentException($"{nameof(pageNumber)} must be greater than 0, passed value is {pageNumber}", nameof(pageNumber));
             if (pageSize < 1)
-                throw new ArgumentException($"{pageSize} must be greater than 0", nameof(pageSize));
+                throw new ArgumentException($"{nameof(pageSize)} must be greater than 0, passed value is {pageSize}", nameof(pageSize));
             Data = data;
             PageNumber = pageNumber;
             MaxPageNumber = count != 0 ? (int)Math.Ceiling((float)count / pageSize) : 1;

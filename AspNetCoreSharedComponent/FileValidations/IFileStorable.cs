@@ -1,4 +1,5 @@
 ﻿using Shared;
+using Shared.Models;
 using Shared.Validations;
 
 namespace AspNetCoreSharedComponent.FileValidations
