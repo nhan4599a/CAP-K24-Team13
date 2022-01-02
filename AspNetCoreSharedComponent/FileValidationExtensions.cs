@@ -2,7 +2,7 @@
 
 namespace AspNetCoreSharedComponent
 {
-    public static class FileValidatorExtensions
+    public static class FileValidationExtensions
     {
         public static FileValidationResult Validate(this IFormFile file, FileValidationRuleSet? rules = null)
         {

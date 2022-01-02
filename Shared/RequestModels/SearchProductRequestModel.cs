@@ -4,6 +4,6 @@
     {
         public string Keyword { get; set; } = string.Empty;
 
-        public PaginationInfo PaginationInfo { get; set; }
+        public PaginationInfo PaginationInfo { get; set; } = PaginationInfo.Default;
     }
 }

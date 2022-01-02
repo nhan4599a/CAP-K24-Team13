@@ -12,6 +12,7 @@ using ShopProductService;
 using ShopProductService.Commands.Product;
 using ShopProductService.Controllers;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnitTestSupport;
 using Xunit;
@@ -25,8 +26,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestAddProductSuccess()
         {
-            var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            var fileStoreMock = new Mock<IFileStorable>(webHostEnvironmentMock.Object);
+            var fileStoreMock = new Mock<IFileStorable>();
             fileStoreMock
                 .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
                     It.IsAny<FileValidationRuleSet>()))
@@ -72,8 +72,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestAddProductFail()
         {
-            var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            var imageManagerMock = new Mock<IFileStorable>(webHostEnvironmentMock.Object);
+            var imageManagerMock = new Mock<IFileStorable>();
             imageManagerMock
                 .Setup(e => e.SaveFilesAsync(It.IsAny<IFormFileCollection>(),
                     It.IsAny<bool>(), It.IsAny<FileValidationRuleSet>()))
@@ -119,8 +118,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestEditProductSuccess()
         {
-            var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            var imageManagerMock = new Mock<IFileStorable>(webHostEnvironmentMock.Object);
+            var imageManagerMock = new Mock<IFileStorable>();
 
             imageManagerMock
                 .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
@@ -170,8 +168,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestEditProductFail()
         {
-            var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            var imageManagerMock = new Mock<IFileStorable>(webHostEnvironmentMock.Object);
+            var imageManagerMock = new Mock<IFileStorable>();
 
             imageManagerMock
                 .Setup(e => e.EditFilesAsync(It.IsAny<string[]>(), It.IsAny<IFormFileCollection>(), It.IsAny<bool>(),
@@ -294,12 +291,151 @@ namespace TestShopProductService
             Assert.Equal("Action failed", result.ErrorMessage);
         }
 
-        //public async void TestFindAllProduct()
-        //{
-        //    var mediatorMock = new Mock<IMediator>();
-        //    mediatorMock
-        //        .Setup(e => e.Send(It.IsAny<FindAllProductQuery>(), CancellationToken.None))
-        //        .ReturnsAsync(CommandResponse<>>)
-        //}
+        [TestCasePriority(9)]
+        [Fact]
+        public async void TestFindAllProductSuccess()
+        {
+            var paginatedList = new PaginatedList<ProductDTO>(new List<ProductDTO>(), 1, 10, 0);
+            var requestModel = new SearchProductRequestModel { Keyword = string.Empty, PaginationInfo = new PaginationInfo() };
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindAllProductQuery>(), CancellationToken.None))
+                .ReturnsAsync(paginatedList);
+
+            var controller = new ProductController(mediatorMock.Object, null);
+
+            var result = await controller.ListProduct(requestModel);
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.ResponseCode);
+            Assert.NotNull(result.Data);
+            Assert.Equal(1, result.Data.PageNumber);
+            Assert.Equal(1, result.Data.MaxPageNumber);
+            Assert.False(result.Data.HasNextPage);
+            Assert.False(result.Data.HasPreviousPage);
+        }
+
+        [TestCasePriority(10)]
+        [Fact]
+        public async void TestFindProductsByKeywordSuccess()
+        {
+            var paginatedList = new PaginatedList<ProductDTO>(new List<ProductDTO>(), 1, 10, 0);
+            var requestModel = new SearchProductRequestModel { Keyword = "abc", PaginationInfo = new PaginationInfo() };
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductsByKeywordQuery>(), CancellationToken.None))
+                .ReturnsAsync(paginatedList);
+
+            var controller = new ProductController(mediatorMock.Object, null);
+
+            var result = await controller.ListProduct(requestModel);
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.ResponseCode);
+            Assert.NotNull(result.Data);
+            Assert.Equal(1, result.Data.PageNumber);
+            Assert.Equal(1, result.Data.MaxPageNumber);
+            Assert.False(result.Data.HasNextPage);
+            Assert.False(result.Data.HasPreviousPage);
+        }
+
+        [TestCasePriority(11)]
+        [Fact]
+        public async void TestGetSingleProductSuccess()
+        {
+            var id = Guid.NewGuid().ToString();
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductByIdQuery>(), CancellationToken.None))
+                .ReturnsAsync(new ProductDTO { Id = id });
+
+            var controller = new ProductController(mediatorMock.Object, null);
+
+            var result = await controller.GetSingleProduct(id);
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.ResponseCode);
+            Assert.Empty(result.ErrorMessage);
+            Assert.NotNull(result.Data);
+            Assert.Equal(id, result.Data.Id);
+        }
+
+        [TestCasePriority(12)]
+        [Fact]
+        public async void TestGetSingleProductFailed()
+        {
+            var id = Guid.NewGuid().ToString();
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductByIdQuery>(), CancellationToken.None))
+                .ReturnsAsync((ProductDTO?)null);
+
+            var controller = new ProductController(mediatorMock.Object, null);
+
+            var result = await controller.GetSingleProduct(id);
+
+            Assert.NotNull(result);
+            Assert.Equal(404, result.ResponseCode);
+            Assert.NotEmpty(result.ErrorMessage);
+            Assert.Equal("Product is not found", result.ErrorMessage);
+            Assert.Null(result.Data);
+        }
+
+        [TestCasePriority(13)]
+        [Fact]
+        public void TestGetImageSuccess()
+        {
+            var fileStoreMock = new Mock<IFileStorable>();
+
+            var fileResponseMock = new Mock<FileResponse>();
+
+            fileResponseMock.SetupGet(e => e.IsExisted).Returns(true);
+
+            fileResponseMock.SetupGet(e => e.FullPath).Returns("abc.jpg");
+
+            fileResponseMock.SetupGet(e => e.MimeType).Returns("image/jpg");
+
+            fileStoreMock
+                .Setup(e => e.GetFile(It.IsAny<string>()))
+                .Returns(fileResponseMock.Object);
+
+            var controller = new ProductController(null, fileStoreMock.Object);
+
+            var result = controller.GetImage("abc.jpg");
+
+            Assert.NotNull(result);
+            Assert.IsType<PhysicalFileResult>(result);
+
+            var temp = result as PhysicalFileResult;
+
+            Assert.Equal("abc.jpg", temp?.FileName);
+            Assert.Equal("image/jpg", temp?.ContentType);
+        }
+
+        [TestCasePriority(14)]
+        [Fact]
+        public void TestGetImageFailed()
+        {
+            var fileResponseMock = new Mock<FileResponse>();
+
+            fileResponseMock.SetupGet(e => e.IsExisted).Returns(false);
+
+            var fileStoreMock = new Mock<IFileStorable>();
+
+            fileStoreMock
+                .Setup(e => e.GetFile(It.IsAny<string>()))
+                .Returns(fileResponseMock.Object);
+
+            var controller = new ProductController(null, fileStoreMock.Object);
+
+            var result = controller.GetImage("abc.jpg");
+
+            Assert.NotNull(result);
+            Assert.IsType<StatusCodeResult>(result);
+
+            var temp = result as StatusCodeResult;
+
+            Assert.Equal(StatusCodes.Status404NotFound, temp?.StatusCode);
+        }
     }
 }

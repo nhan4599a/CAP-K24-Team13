@@ -29,7 +29,7 @@ namespace Shared
                 throw new ArgumentException($"{pageSize} must be greater than 0", nameof(pageSize));
             Data = data;
             PageNumber = pageNumber;
-            MaxPageNumber = (int)Math.Ceiling((float)count / pageSize);
+            MaxPageNumber = count != 0 ? (int)Math.Ceiling((float)count / pageSize) : 1;
         }
     }
 }

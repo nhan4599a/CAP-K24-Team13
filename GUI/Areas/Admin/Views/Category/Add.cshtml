@@ -1,4 +1,7 @@
-﻿<h4 class="font-weight-bolder text-center">Add Category</h4>
+﻿@section SideBar {
+    @await Component.InvokeAsync("SideBar", new { activeItem = "categories" });
+}
+<h4 class="font-weight-bolder text-center">Add Category</h4>
 <hr />
 <form id="category-form" enctype="multipart/form-data" method="post">
     <div class="row justify-content-center">
