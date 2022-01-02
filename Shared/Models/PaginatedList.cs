@@ -26,6 +26,8 @@ namespace Shared.Models
 
         public IReadOnlyList<T> Data { get; private set; }
 
+        public PaginatedList() { }
+
         public PaginatedList(List<T> data, int pageNumber, int? pageSize, int count)
         {
             if (pageNumber < 1)

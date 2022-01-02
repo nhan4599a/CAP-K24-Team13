@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
@@ -12,11 +13,12 @@ namespace GUI.Areas.User.Controllers
             _productClient = productClient;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _productClient.GetProductsAsync(1, 5);
+            var products = await _productClient.GetProductsAsync(1, 5);
             return View();
         }
+
         public IActionResult ListProduct()
         {
             return View();
