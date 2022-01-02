@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using Shared.RequestModels;
 using System;
 using System.Linq;

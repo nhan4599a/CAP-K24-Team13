@@ -1,6 +1,6 @@
 ﻿using Shared.Validations;
 
-namespace AspNetCoreSharedComponent
+namespace AspNetCoreSharedComponent.FileValidations
 {
     public static class FileValidationExtensions
     {

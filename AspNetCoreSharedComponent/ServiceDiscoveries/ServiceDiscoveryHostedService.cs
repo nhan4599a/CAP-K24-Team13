@@ -1,7 +1,7 @@
 ﻿using Consul;
 using Shared;
 
-namespace AspNetCoreSharedComponent
+namespace AspNetCoreSharedComponent.ServiceDiscoveries
 {
     public class ServiceDiscoveryHostedService : IHostedService
     {

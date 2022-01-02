@@ -1,7 +1,8 @@
 ﻿using Shared;
+using Shared.Models;
 using Shared.Validations;
 
-namespace AspNetCoreSharedComponent
+namespace AspNetCoreSharedComponent.FileValidations
 {
     public interface IFileStorable
     {

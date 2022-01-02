@@ -1,8 +1,8 @@
-using AspNetCoreSharedComponent;
+using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using Shared.RequestModels;
 using Shared.Validations;
 using ShopProductService.Commands.Category;
@@ -23,8 +23,11 @@ namespace ShopProductService.Controllers
         public CategoryController(IMediator mediator, IFileStorable fileStore)
         {
             _mediator = mediator;
-            _fileStore = fileStore;
-            _fileStore.SetRelationalPath("categories");
+            if (fileStore != null)
+            {
+                _fileStore = fileStore;
+                _fileStore.SetRelationalPath("categories");
+            }
             _rules = FileValidationRuleSet.DefaultSingleValidationRules;
             _rules.Change(FileValidationRuleName.SingleMaxFileSize, (long)(0.3 * 1024 * 1024));
         }

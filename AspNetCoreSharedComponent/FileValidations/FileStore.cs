@@ -1,8 +1,8 @@
-﻿using Shared;
-using Shared.Exceptions;
+﻿using Shared.Exceptions;
+using Shared.Models;
 using Shared.Validations;
 
-namespace AspNetCoreSharedComponent
+namespace AspNetCoreSharedComponent.FileValidations
 {
     public class FileStore : IFileStorable
     {

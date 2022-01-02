@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using Shared;
 using Shared.DTOs;
+using Shared.Models;
 
 namespace ShopProductService.Commands.Product
 {
@@ -8,6 +8,6 @@ namespace ShopProductService.Commands.Product
     {
         public string Keyword { get; set; }
 
-        public PaginationInfo PaginationInfo { get; set; }
+        public PaginationInfo PaginationInfo { get; set; } = PaginationInfo.Default;
     }
 }

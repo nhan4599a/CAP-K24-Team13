@@ -1,6 +1,6 @@
 ﻿using Shared;
 
-namespace AspNetCoreSharedComponent
+namespace AspNetCoreSharedComponent.ServiceDiscoveries
 {
     public static class ServiceConfigurationExtensions
     {

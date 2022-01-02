@@ -1,9 +1,9 @@
-using AspNetCoreSharedComponent;
+using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;

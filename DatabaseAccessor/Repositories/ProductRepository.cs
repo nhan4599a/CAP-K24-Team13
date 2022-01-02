@@ -4,6 +4,7 @@ using DatabaseAccessor.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using Shared.RequestModels;
 using System;
 using System.Linq;
