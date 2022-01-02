@@ -8,6 +8,11 @@ namespace GUI.Areas.Home.Controllers
         public IActionResult Index()
         {
             return View();
-        }   
+        }
+         
+        public IActionResult ListProduct()
+        {
+            return View();
+        }
     }
 }

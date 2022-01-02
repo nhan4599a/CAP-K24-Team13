@@ -1978,10 +1978,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
+    <PackageReference Include="Refit" Version="6.1.15" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="6.1.15" />
+    <PackageReference Include="Refit.Newtonsoft.Json" Version="6.1.15" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\User\Views\" />
     <Folder Include="wwwroot\assets\user\" />
   </ItemGroup>
 
