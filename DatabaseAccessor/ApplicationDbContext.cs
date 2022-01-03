@@ -1,10 +1,14 @@
-﻿using DatabaseAccessor.Models;
+﻿using DatabaseAccessor.Configurations;
+using DatabaseAccessor.Models;
 using DatabaseAccessor.Triggers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DatabaseAccessor
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         //private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
@@ -39,6 +43,8 @@ namespace DatabaseAccessor
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
 
             modelBuilder.Entity<ShopProduct>()
                 .Property(e => e.Id)
