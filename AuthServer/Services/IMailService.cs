@@ -6,6 +6,8 @@ namespace AuthServer
     {
         string MailProvider { get; }
 
+        string MailAddress { get; }
+
         void SendMail(MailRequest mailRequest);
     }
 }

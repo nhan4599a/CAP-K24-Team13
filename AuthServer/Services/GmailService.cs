@@ -1,6 +1,5 @@
 ﻿using AuthServer.Events;
 using AuthServer.Models;
-using System.ComponentModel;
 using System.Net;
 using System.Net.Mail;
 
@@ -11,6 +10,8 @@ namespace AuthServer.Services
         private readonly SmtpClient _smtpClient;
 
         public string MailProvider => "GMAIL";
+
+        public string MailAddress => Username;
 
         public string Username { get; }
 
