@@ -1,12 +1,12 @@
 ﻿using DatabaseAccessor.Models;
 using DatabaseAccessor.Triggers;
 using Microsoft.EntityFrameworkCore;
+using Shared.Models;
 
 namespace DatabaseAccessor
 {
     public class ApplicationDbContext : DbContext
     {
-        private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
         private static readonly string _connectionString = "Server=.,4599;Database=DemoCapTeam13;User ID=sa;Password=nhan4599@Nhan;TrustServerCertificate=true";
 
@@ -15,6 +15,7 @@ namespace DatabaseAccessor
         public DbSet<ShopInterface> ShopInterfaces { get; set; }
 
         public DbSet<ShopProduct> ShopProducts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -87,6 +88,9 @@ namespace DatabaseAccessor
             modelBuilder.Entity<ShopInterface>()
                 .HasIndex(e => e.ShopId)
                 .IsUnique();
+
+            modelBuilder.Entity<CartItem>()
+                .HasKey(x => x.CartItemId);
         }
     }
 }

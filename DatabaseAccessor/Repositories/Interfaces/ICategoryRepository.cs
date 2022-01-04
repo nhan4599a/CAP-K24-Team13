@@ -3,6 +3,7 @@ using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Interfaces
