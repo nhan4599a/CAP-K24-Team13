@@ -2,8 +2,8 @@
 {
     public class SignUpModel : AuthenticationModelBase
     {
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
-        public DateOnly DoB { get; set; }
+        public DateTime DoB { get; set; }
     }
 }

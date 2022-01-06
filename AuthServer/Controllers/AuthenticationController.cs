@@ -44,7 +44,7 @@ namespace AuthServer.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, model.Username),
+                    new Claim(ClaimTypes.Name, model.Username!),
                     new Claim(ClaimTypes.Role, (await _signInManager.UserManager.GetRolesAsync(user))[0])
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

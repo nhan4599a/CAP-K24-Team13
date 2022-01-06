@@ -37,18 +37,18 @@ namespace AuthServer.Services
         {
             MailMessage mail = new()
             {
-                From = new MailAddress(mailRequest.Sender)
+                From = new MailAddress(mailRequest.Sender!)
             };
-            mail.To.Add(new MailAddress(mailRequest.Receiver));
+            mail.To.Add(new MailAddress(mailRequest.Receiver!));
             mail.Subject = mailRequest.Subject;
             mail.SubjectEncoding = System.Text.Encoding.UTF8;
             mail.Body = mailRequest.Body;
             mail.BodyEncoding = System.Text.Encoding.UTF8;
             mail.IsBodyHtml = mailRequest.IsHtmlMessage;
             mail.Priority = MailPriority.High;
-            foreach (string cc in mailRequest.Cc)
+            foreach (string cc in mailRequest.Cc!)
                 mail.CC.Add(new MailAddress(cc));
-            foreach (string bcc in mailRequest.Bcc)
+            foreach (string bcc in mailRequest.Bcc!)
                 mail.Bcc.Add(new MailAddress(bcc));
             _smtpClient.SendCompleted += (sender, args) =>
             {

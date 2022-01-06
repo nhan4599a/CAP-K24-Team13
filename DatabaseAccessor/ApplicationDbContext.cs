@@ -4,6 +4,7 @@ using DatabaseAccessor.Triggers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 
 namespace DatabaseAccessor
@@ -26,18 +27,20 @@ namespace DatabaseAccessor
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (optionsBuilder.IsConfigured)
-                return;
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder
-                .UseLazyLoadingProxies()
-                .UseSqlServer(_connectionString)
-                .UseTriggers(options =>
-                {
-                    options.UseTransactionTriggers();
-                    options.AddTrigger<CategoryActivatedTrigger>();
-                    options.AddTrigger<CategoryDeactivatedTrigger>();
-                });
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder
+                        .UseLazyLoadingProxies()
+                        .UseOpenIddict()
+                        .UseSqlServer(_connectionString)
+                        .UseTriggers(options =>
+                        {
+                            options.UseTransactionTriggers();
+                            options.AddTrigger<CategoryActivatedTrigger>();
+                            options.AddTrigger<CategoryDeactivatedTrigger>();
+                        });
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

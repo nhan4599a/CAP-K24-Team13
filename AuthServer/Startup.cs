@@ -1,4 +1,5 @@
-﻿using DatabaseAccessor;
+﻿using AuthServer.Services;
+using DatabaseAccessor;
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -48,7 +49,11 @@ namespace AuthServer
                 {
                     options.AllowClientCredentialsFlow();
 
+                    options.AllowAuthorizationCodeFlow();
+
                     options.SetTokenEndpointUris("/connect/token");
+
+                    options.SetAuthorizationEndpointUris("/connect/authorize");
 
                     options.AddEphemeralEncryptionKey().AddEphemeralSigningKey();
 
@@ -56,6 +61,8 @@ namespace AuthServer
 
                     options.UseAspNetCore().EnableTokenEndpointPassthrough();
                 });
+
+            services.AddHostedService<SetupDefaultClientService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
