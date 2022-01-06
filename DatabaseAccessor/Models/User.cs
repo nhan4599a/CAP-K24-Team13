@@ -9,8 +9,8 @@ namespace DatabaseAccessor.Models
 
         public string LastName { get; set; }
 
-        public DateTime? DoB { get; set; }
-
+        public DateOnly? DoB { get; set; }
+ 
         public AccountStatus Status { get; set; }
     }
 }

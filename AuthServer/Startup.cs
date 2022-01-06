@@ -3,6 +3,7 @@ using DatabaseAccessor;
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuthServer
@@ -20,6 +21,11 @@ namespace AuthServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
+            services.AddScoped<UserManager<User>, ApplicationUserManager>();
+            services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
+            services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
+            services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseOpenIddict();
@@ -30,7 +36,7 @@ namespace AuthServer
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
                 });
-            services.AddIdentity<User, IdentityRole>(options =>
+            services.AddIdentity<User, Role>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = true;
                 options.Password.RequireNonAlphanumeric = false;
@@ -38,7 +44,11 @@ namespace AuthServer
                 options.Tokens.ProviderMap.Add("MailConfirmation",
                     new TokenProviderDescriptor(typeof(MailConfirmationTokenProvider)));
                 options.Tokens.EmailConfirmationTokenProvider = "MailConfirmation";
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddUserStore<ApplicationUserStore>()
+            .AddUserManager<ApplicationUserManager>()
+            .AddRoleStore<ApplicationRoleStore>()
+            .AddRoleManager<ApplicationRoleManager>()
+            .AddSignInManager<ApplicationSignInManager>();
 
             services.AddOpenIddict()
                 .AddCore(options =>

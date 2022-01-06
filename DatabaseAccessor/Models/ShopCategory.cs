@@ -19,7 +19,7 @@ namespace DatabaseAccessor.Models
 
         public string Image { get; set; }
 
-        public virtual List<ShopProduct> ShopProducts { get; set; }
+        public virtual IList<ShopProduct> ShopProducts { get; set; }
 
         public ShopCategory AssignByRequestModel(CreateOrEditCategoryRequestModel requestModel)
         {

@@ -1,25 +1,29 @@
 ﻿using DatabaseAccessor.Configurations;
+using DatabaseAccessor.Converters;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Triggers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 
 namespace DatabaseAccessor
 {
-    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     {
         //private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
-        private static readonly string _connectionString = "Server=.,4599;Database=DemoCapTeam13;User ID=sa;Password=nhan4599@Nhan;TrustServerCertificate=true";
+        private static readonly string _connectionString = "Server=.,4599;Database=Temp;User ID=sa;Password=nhan4599@Nhan;TrustServerCertificate=true";
 
         public DbSet<ShopCategory> ShopCategories { get; set; }
 
         public DbSet<ShopInterface> ShopInterfaces { get; set; }
 
         public DbSet<ShopProduct> ShopProducts { get; set; }
+
+        public DbSet<Invoice> Invoices { get; set; }
+
+        public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -41,6 +45,19 @@ namespace DatabaseAccessor
                             options.AddTrigger<CategoryDeactivatedTrigger>();
                         });
             }
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+
+            configurationBuilder.Properties<DateOnly>()
+                .HaveConversion<DateOnlyConverter>()
+                .HaveColumnType("date");
+
+            configurationBuilder.Properties<DateOnly?>()
+                .HaveConversion<NullableDateOnlyConverter>()
+                .HaveColumnType("date");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
