@@ -26,5 +26,7 @@ namespace DatabaseAccessor.Models
         public virtual User User { get; set; }
 
         public virtual IList<InvoiceDetail> Details { get; set; }
+
+        public virtual IList<InvoiceStatusChangedHistory> StatusChangedHistory { get; set; }
     }
 }

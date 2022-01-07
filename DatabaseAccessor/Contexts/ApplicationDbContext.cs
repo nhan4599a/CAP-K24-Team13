@@ -26,6 +26,8 @@ namespace DatabaseAccessor.Contexts
 
         public DbSet<ProductComment> ProductComments { get; set; }
 
+        public DbSet<InvoiceStatusChangedHistory> InvoiceStatusChangedHistory { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public ApplicationDbContext(string connectionString) : base(
@@ -47,6 +49,7 @@ namespace DatabaseAccessor.Contexts
                             options.UseTransactionTriggers();
                             options.AddTrigger<CategoryActivatedTrigger>();
                             options.AddTrigger<CategoryDeactivatedTrigger>();
+                            options.AddTrigger<InvoiceAddedTrigger>();
                         });
             }
         }
@@ -75,6 +78,7 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceStatusChangedHistoryConfiguration());
         }
     }
 }

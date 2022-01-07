@@ -29,8 +29,8 @@ namespace DatabaseAccessor.Models
 
         public virtual User User { get; set; }
 
-        public virtual ProductComment Parent { get; set; }
-
         public virtual IList<ProductComment> Children { get; set; }
+
+        public virtual ProductComment Parent { get; set; }
     }
 }

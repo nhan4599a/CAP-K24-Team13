@@ -16,7 +16,7 @@ namespace AuthServer.Services
         {
             using var scope = _serviceProvider.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ClientAuthenticationDbContext>();
             await context.Database.EnsureCreatedAsync(cancellationToken);
 
             var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();

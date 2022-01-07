@@ -4,6 +4,7 @@ using DatabaseAccessor.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseAccessor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220107122504_FullDb3")]
+    partial class FullDb3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,6 +109,9 @@ namespace DatabaseAccessor.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProductCommentId")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
@@ -121,9 +126,13 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductCommentId");
+
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("ReferenceId");
+                    b.HasIndex("ReferenceId")
+                        .IsUnique()
+                        .HasFilter("[ReferenceId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -503,6 +512,10 @@ namespace DatabaseAccessor.Migrations
 
             modelBuilder.Entity("DatabaseAccessor.Models.ProductComment", b =>
                 {
+                    b.HasOne("DatabaseAccessor.Models.ProductComment", null)
+                        .WithMany("Children")
+                        .HasForeignKey("ProductCommentId");
+
                     b.HasOne("DatabaseAccessor.Models.ShopProduct", "Product")
                         .WithMany("Comments")
                         .HasForeignKey("ProductId")
@@ -510,8 +523,8 @@ namespace DatabaseAccessor.Migrations
                         .IsRequired();
 
                     b.HasOne("DatabaseAccessor.Models.ProductComment", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ReferenceId");
+                        .WithOne()
+                        .HasForeignKey("DatabaseAccessor.Models.ProductComment", "ReferenceId");
 
                     b.HasOne("DatabaseAccessor.Models.User", "User")
                         .WithMany()
