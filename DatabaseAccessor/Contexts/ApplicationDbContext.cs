@@ -2,12 +2,11 @@
 using DatabaseAccessor.Converters;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Triggers;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace DatabaseAccessor
+namespace DatabaseAccessor.Contexts
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     {
@@ -24,6 +23,8 @@ namespace DatabaseAccessor
         public DbSet<Invoice> Invoices { get; set; }
 
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
+
+        public DbSet<ProductComment> ProductComments { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -65,54 +66,9 @@ namespace DatabaseAccessor
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-
-            modelBuilder.Entity<ShopProduct>()
-                .Property(e => e.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<ShopProduct>()
-                .HasOne(e => e.Category)
-                .WithMany(e => e.ShopProducts)
-                .IsRequired();
-
-            modelBuilder.Entity<ShopProduct>()
-                .Property(e => e.ProductName)
-                .IsRequired();
-
-            modelBuilder.Entity<ShopProduct>()
-                .Property(e => e.IsDisabled)
-                .HasDefaultValue(false);
-
-            modelBuilder.Entity<ShopProduct>()
-                .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("getdate()");
-
-            modelBuilder.Entity<ShopProduct>()
-                .Property(e => e.Discount)
-                .HasDefaultValue(0);
-
-            modelBuilder.Entity<ShopProduct>()
-                .Property(e => e.Quantity)
-                .HasDefaultValue(1);
-
-            modelBuilder.Entity<ShopProduct>()
-                .HasIndex(e => e.ProductName);
-
-            modelBuilder.Entity<ShopProduct>()
-                .HasCheckConstraint("CK_ShopProducts_Price", "[Price] >= 0")
-                .HasCheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 1")
-                .HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
-
-            modelBuilder.Entity<ShopCategory>()
-                .Property(e => e.IsDisabled)
-                .HasDefaultValue(false);
-
-            modelBuilder.Entity<ShopCategory>()
-                .HasIndex(e => e.CategoryName);
-
-            modelBuilder.Entity<ShopInterface>()
-                .HasIndex(e => e.ShopId)
-                .IsUnique();
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ShopInterfaceConfiguration());
         }
     }
 }

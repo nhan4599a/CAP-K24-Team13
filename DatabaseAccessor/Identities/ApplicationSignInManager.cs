@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace DatabaseAccessor
+namespace DatabaseAccessor.Identities
 {
     public class ApplicationSignInManager : SignInManager<User>
     {

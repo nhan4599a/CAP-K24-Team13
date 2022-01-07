@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 
-namespace DatabaseAccessor
+namespace DatabaseAccessor.Identities
 {
     public class ApplicationRoleManager : RoleManager<Role>
     {

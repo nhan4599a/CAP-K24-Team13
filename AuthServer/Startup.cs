@@ -1,5 +1,7 @@
 ﻿using AuthServer.Services;
 using DatabaseAccessor;
+using DatabaseAccessor.Contexts;
+using DatabaseAccessor.Identities;
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -20,15 +22,18 @@ namespace AuthServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var password = Configuration.GetValue<string>("CLIENT_AUTH_PASSWORD");
+            var clientConnectionString = string.Format(Configuration.GetConnectionString("ClientAuthentication"), password);
             services.AddControllersWithViews();
             services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
             services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddDbContext<ClientAuthenticationDbContext>(options =>
             {
-                options.UseOpenIddict();
+                options.UseSqlServer(clientConnectionString).UseOpenIddict();
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -53,7 +58,7 @@ namespace AuthServer
             services.AddOpenIddict()
                 .AddCore(options =>
                 {
-                    options.UseEntityFrameworkCore().UseDbContext<ApplicationDbContext>();
+                    options.UseEntityFrameworkCore().UseDbContext<ClientAuthenticationDbContext>();
                 })
                 .AddServer(options =>
                 {

@@ -1,10 +1,11 @@
-﻿using DatabaseAccessor.Models;
+﻿using DatabaseAccessor.Contexts;
+using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Security.Claims;
 
-namespace DatabaseAccessor
+namespace DatabaseAccessor.Identities
 {
     public class ApplicationRoleStore : RoleStore<Role, ApplicationDbContext, Guid>
     {
