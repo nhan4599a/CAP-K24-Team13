@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DatabaseAccessor.Migrations
+namespace DatabaseAccessor.Migrations.ClientAuthenticationDb
 {
-    public partial class AddOpenIddict : Migration
+    public partial class ClientAuthV1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

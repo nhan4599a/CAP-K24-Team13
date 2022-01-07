@@ -15,6 +15,10 @@ namespace DatabaseAccessor.Configurations
                 .WithMany(e => e.ShopProducts)
                 .IsRequired();
 
+            builder.HasMany(e => e.Invoices)
+                .WithOne(e => e.Product)
+                .IsRequired();
+
             builder.Property(e => e.ProductName)
                 .IsRequired();
 

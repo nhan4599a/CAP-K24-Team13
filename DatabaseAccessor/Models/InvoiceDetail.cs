@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
@@ -8,12 +9,16 @@ namespace DatabaseAccessor.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public int InvoiceId { get; set; }
 
+        [Required]
         public Guid ProductId { get; set; }
 
+        [Required]
         public int Quantity { get; set; }
 
+        [Required]
         public double Price { get; set; }
 
         public virtual Invoice Invoice { get; set; }

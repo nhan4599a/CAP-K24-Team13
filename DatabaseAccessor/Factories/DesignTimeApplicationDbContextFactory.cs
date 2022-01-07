@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
+﻿using DatabaseAccessor.Contexts;
+using Microsoft.EntityFrameworkCore.Design;
 
-namespace DatabaseAccessor
+namespace DatabaseAccessor.Factories
 {
     internal class DesignTimeApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {

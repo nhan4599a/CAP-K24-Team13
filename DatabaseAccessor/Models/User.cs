@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace DatabaseAccessor.Models
 {
@@ -12,5 +13,7 @@ namespace DatabaseAccessor.Models
         public DateOnly? DoB { get; set; }
  
         public AccountStatus Status { get; set; }
+
+        public virtual IList<Invoice> Invoices { get; set; }
     }
 }

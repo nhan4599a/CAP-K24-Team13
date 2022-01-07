@@ -12,7 +12,7 @@ namespace DatabaseAccessor.Contexts
     {
         //private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
-        private static readonly string _connectionString = "Server=.,4599;Database=Temp;User ID=sa;Password=nhan4599@Nhan;TrustServerCertificate=true";
+        private static readonly string _connectionString = "Server=.,4599;Database=DemoCapTeam13;User ID=sa;Password=nhan4599@Nhan;TrustServerCertificate=true";
 
         public DbSet<ShopCategory> ShopCategories { get; set; }
 
@@ -28,6 +28,10 @@ namespace DatabaseAccessor.Contexts
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        public ApplicationDbContext(string connectionString) : base(
+            new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(connectionString).Options)
+        { }
+
         public ApplicationDbContext() : base() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -37,7 +41,6 @@ namespace DatabaseAccessor.Contexts
             {
                 optionsBuilder
                         .UseLazyLoadingProxies()
-                        .UseOpenIddict()
                         .UseSqlServer(_connectionString)
                         .UseTriggers(options =>
                         {
@@ -69,6 +72,9 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ShopInterfaceConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new CommentConfiguration());
         }
     }
 }

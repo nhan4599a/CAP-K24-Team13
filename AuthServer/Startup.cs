@@ -1,5 +1,4 @@
 ﻿using AuthServer.Services;
-using DatabaseAccessor;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Identities;
 using DatabaseAccessor.Models;
@@ -31,10 +30,7 @@ namespace AuthServer
             services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
             services.AddDbContext<ApplicationDbContext>();
-            services.AddDbContext<ClientAuthenticationDbContext>(options =>
-            {
-                options.UseSqlServer(clientConnectionString).UseOpenIddict();
-            });
+            services.AddDbContext<ClientAuthenticationDbContext>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {

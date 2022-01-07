@@ -1,4 +1,4 @@
-﻿using DatabaseAccessor;
+﻿using DatabaseAccessor.Contexts;
 using OpenIddict.Abstractions;
 
 namespace AuthServer.Services
