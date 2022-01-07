@@ -28,6 +28,10 @@ namespace DatabaseAccessor.Contexts
 
         public DbSet<InvoiceStatusChangedHistory> InvoiceStatusChangedHistory { get; set; }
 
+        public DbSet<Cart> Carts { get; set; }
+
+        public DbSet<CartDetail> CartDetails { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public ApplicationDbContext(string connectionString) : base(
@@ -79,6 +83,8 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceStatusChangedHistoryConfiguration());
+            modelBuilder.ApplyConfiguration(new CartConfiguration());
+            modelBuilder.ApplyConfiguration(new CartDetailConfiguration());
         }
     }
 }

@@ -8,6 +8,10 @@ namespace DatabaseAccessor.Configurations
     {
         public void Configure(EntityTypeBuilder<ShopCategory> builder)
         {
+            builder.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasIdentityOptions(0, 1);
+
             builder.Property(e => e.IsDisabled)
                 .HasDefaultValue(false);
 

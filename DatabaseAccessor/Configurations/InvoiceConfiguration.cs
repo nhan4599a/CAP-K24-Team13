@@ -9,6 +9,10 @@ namespace DatabaseAccessor.Configurations
     {
         public void Configure(EntityTypeBuilder<Invoice> builder)
         {
+            builder.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasIdentityOptions(0, 1);
+
             builder.HasOne(e => e.User)
                 .WithMany(e => e.Invoices)
                 .IsRequired();

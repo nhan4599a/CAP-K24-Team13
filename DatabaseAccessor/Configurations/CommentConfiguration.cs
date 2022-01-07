@@ -8,6 +8,10 @@ namespace DatabaseAccessor.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductComment> builder)
         {
+            builder.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasIdentityOptions(0, 1);
+
             builder.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("getdate()");
 

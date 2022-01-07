@@ -34,6 +34,8 @@ namespace DatabaseAccessor.Models
 
         public virtual IList<ProductComment> Comments { get; set; }
 
+        public virtual IList<CartDetail> CartDetails { get; set; }
+
         public ShopProduct AssignByRequestModel(CreateOrEditProductRequestModel requestModel)
         {
             ProductName = requestModel.ProductName;

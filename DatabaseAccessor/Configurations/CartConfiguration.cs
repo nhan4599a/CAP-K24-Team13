@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseAccessor.Configurations
 {
-    public class ShopInterfaceConfiguration : IEntityTypeConfiguration<ShopInterface>
+    public class CartConfiguration : IEntityTypeConfiguration<Cart>
     {
-        public void Configure(EntityTypeBuilder<ShopInterface> builder)
+        public void Configure(EntityTypeBuilder<Cart> builder)
         {
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasIdentityOptions(0, 1);
 
-            builder.HasIndex(e => e.ShopId)
-                .IsUnique();
+            builder.HasOne(e => e.User)
+                .WithOne(e => e.Cart);
         }
     }
 }
