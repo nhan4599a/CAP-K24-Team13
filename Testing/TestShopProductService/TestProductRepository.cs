@@ -1,7 +1,6 @@
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories;
 using DatabaseSharing;
-using Shared;
 using Shared.Models;
 using Shared.RequestModels;
 using System;

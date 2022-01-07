@@ -1,5 +1,6 @@
 ﻿using Shared.RequestModels;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
@@ -28,6 +29,12 @@ namespace DatabaseAccessor.Models
         public int CategoryId { get; set; }
 
         public virtual ShopCategory Category { get; set; }
+
+        public virtual IList<InvoiceDetail> Invoices { get; set; }
+
+        public virtual IList<ProductComment> Comments { get; set; }
+
+        public virtual IList<CartDetail> CartDetails { get; set; }
 
         public ShopProduct AssignByRequestModel(CreateOrEditProductRequestModel requestModel)
         {
