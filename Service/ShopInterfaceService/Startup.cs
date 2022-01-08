@@ -1,6 +1,6 @@
 using AspNetCoreSharedComponent.FileValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
-using DatabaseAccessor;
+using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Interfaces;
