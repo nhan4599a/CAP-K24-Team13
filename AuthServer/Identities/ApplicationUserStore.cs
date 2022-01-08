@@ -2,14 +2,13 @@
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System;
 using System.Security.Claims;
 
-namespace DatabaseAccessor.Identities
+namespace AuthServer.Identities
 {
     public class ApplicationUserStore : UserStore<User, Role, ApplicationDbContext, Guid>
     {
-        public ApplicationUserStore(ApplicationDbContext context, IdentityErrorDescriber describer = null)
+        public ApplicationUserStore(ApplicationDbContext context, IdentityErrorDescriber? describer = null)
             : base(context, describer)
         {
         }

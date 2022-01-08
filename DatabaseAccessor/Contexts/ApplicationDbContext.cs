@@ -54,6 +54,7 @@ namespace DatabaseAccessor.Contexts
                             options.AddTrigger<CategoryActivatedTrigger>();
                             options.AddTrigger<CategoryDeactivatedTrigger>();
                             options.AddTrigger<InvoiceAddedTrigger>();
+                            options.AddTrigger<InvoiceStatusChangedTrigger>();
                         });
             }
         }

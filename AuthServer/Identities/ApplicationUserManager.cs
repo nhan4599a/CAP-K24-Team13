@@ -1,11 +1,8 @@
 ﻿using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 
-namespace DatabaseAccessor.Identities
+namespace AuthServer.Identities
 {
     public class ApplicationUserManager : UserManager<User>
     {

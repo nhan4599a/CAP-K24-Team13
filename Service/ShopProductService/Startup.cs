@@ -7,6 +7,7 @@ using DatabaseAccessor.Repositories.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,12 @@ namespace ShopProductService
                 options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
             }).AddFluentValidation();
             services.RegisterOcelotService(Configuration);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = "https://localhost:7265";
+                    options.Audience = "product";
+                });
             services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -77,11 +84,10 @@ namespace ShopProductService
 
             app.UseCors("Default");
             app.UseRouting();
-            
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
