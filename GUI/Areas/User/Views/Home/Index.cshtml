@@ -1,6 +1,9 @@
-﻿
+﻿@{
+	Layout = null;
+}
+@model Shared.Models.PaginatedList<Shared.DTOs.ProductDTO>
 <!DOCTYPE html>
-<html class="no-js" lang="vi"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script id="hrfwidget-core" src="./Delight Shop_files/widget.js"></script>
+<html class="no-js" lang="vi"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script id="hrfwidget-core" src="/Delight Shop_files/widget.js"></script>
 		<!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' /><![endif]-->
 		<!--[if lt IE 9]><script src="//hsta tic.net/0/0/global/design/theme-default/html5shiv.js"></script><![endif]-->
 		<meta content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=0" name="viewport">
@@ -159,7 +162,7 @@ window.HaravanAnalytics.AutoTrack = true;
 																		</a>
 																	</li>
 																	<li class="" data-menu-root="101556874">
-																		<a class="parent" href="https://delight-shop.myharavan.com/?_ga=2.123497163.118807207.1639121104-57172452.1639121104#">
+																		<a class="parent" href="https://localhost:44349/user/product/index">
 																			Thương hiệu
 																			<i>
 																				<svg class="icon icon--arrow-right" viewBox="0 0 8 12">
@@ -310,7 +313,7 @@ window.HaravanAnalytics.AutoTrack = true;
 					</div>
 					<div class="col-md-4 header-upper-logo">
 						<div class="wrap-logo text-center" itemscope="">						
-							<img src="./assets/home/img/logo-1.png">
+							<img src="/assets/home/img/logo-1.png">
 						</div>
 					</div>
 					<div class="col-md-4 header-upper-icon">
@@ -563,7 +566,7 @@ window.HaravanAnalytics.AutoTrack = true;
 			<div class="container-fluid">
 				<div class="header-navbar-menu">
 					<div class="wrap-logo wrap-logo-sticky">
-						<img src="./assets//img/logo-footer.png">
+						<img src="/assets//img/logo-footer.png">
 					</div>
 					<div class="navbar-mainmenu">
 						<div id="nav">
@@ -739,9 +742,9 @@ window.HaravanAnalytics.AutoTrack = true;
                         <div class="item ">
                             <a href="#" title="Sản phẩm nổi bật" aria-label="Banner 1">
                                 <picture>
-                                    <source media="(max-width: 480px)" srcset="./assets/home/img/slideshow_1_large.jpg?v=2278">
-                                    <source media="(min-width: 481px)" srcset="./assets/home/img/slideshow_1.jpg?v=2278">
-                                    <img src="./assets/home/img/slideshow_1.jpg" alt="Sản phẩm nổi bật">
+                                    <source media="(max-width: 480px)" srcset="/assets/home/img/slideshow_1_large.jpg?v=2278">
+                                    <source media="(min-width: 481px)" srcset="/assets/home/img/slideshow_1.jpg?v=2278">
+                                    <img src="/assets/home/img/slideshow_1.jpg" alt="Sản phẩm nổi bật">
                                 </picture>
                             </a>
                         </div>
@@ -750,9 +753,9 @@ window.HaravanAnalytics.AutoTrack = true;
                         <div class="item ">
                             <<a href="#" title="Sản phẩm nổi bật" aria-label="Banner 2">
                                 <picture>
-                                    <source media="(max-width: 480px)" srcset="./assets/home/img/slideshow_2_large.jpg?v=2278">
-                                    <source media="(min-width: 481px)" srcset="./assets/home/img/slideshow_2.jpg?v=2278">
-                                    <img src="./assets/home/img/slideshow_2.jpg" alt="Sản phẩm nổi bật">
+                                    <source media="(max-width: 480px)" srcset="/assets/home/img/slideshow_2_large.jpg?v=2278">
+                                    <source media="(min-width: 481px)" srcset="/assets/home/img/slideshow_2.jpg?v=2278">
+                                    <img src="/assets/home/img/slideshow_2.jpg" alt="Sản phẩm nổi bật">
                                 </picture>
                             </a>
                         </div>
@@ -761,9 +764,9 @@ window.HaravanAnalytics.AutoTrack = true;
                         <div class="item ">
                            <a href="#" title="Sản phẩm nổi bật" aria-label="Banner 3">
                                 <picture>
-                                    <source media="(max-width: 480px)" srcset="./assets/home/img/slideshow_3_large.jpg?v=2278">
-                                    <source media="(min-width: 481px)" srcset="./assets/home/img/slideshow_3.jpg?v=2278">
-                                    <img src="./assets/home/img/slideshow_3.jpg" alt="Sản phẩm nổi bật">
+                                    <source media="(max-width: 480px)" srcset="/assets/home/img/slideshow_3_large.jpg?v=2278">
+                                    <source media="(min-width: 481px)" srcset="/assets/home/img/slideshow_3.jpg?v=2278">
+                                    <img src="/assets/home/img/slideshow_3.jpg" alt="Sản phẩm nổi bật">
                                 </picture>
                             </a>
                         </div>
@@ -817,7 +820,7 @@ window.HaravanAnalytics.AutoTrack = true;
                         <div class="home-banner-pd">
                             <div class="block-banner-category ">
                                 <a class="link-banner ratiobox lazyloaded" href ="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 5" data-expand="-1">
-                                <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_5_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_5_banner.jpg?v=2278" src="./assets/home/img/home_category_5_banner.jpg" alt="Banner 5" sizes="600px">
+                                <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_5_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_5_banner.jpg?v=2278" src="/assets/home/img/home_category_5_banner.jpg" alt="Banner 5" sizes="600px">
                                 </a>												
                                 <div class="caption_banner_slide">
                                     <h3>Thiết bị gia đình</h3>
@@ -830,7 +833,7 @@ window.HaravanAnalytics.AutoTrack = true;
                         <div class="home-banner-pd">
                             <div class="block-banner-category ">
                                 <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 1" data-expand="-1">
-                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_1_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_1_banner.jpg?v=2278" src="./assets/home/img/home_category_1_banner.jpg" alt="Sản phẩm khuyến mãi" sizes="600px">
+                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_1_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_1_banner.jpg?v=2278" src="/assets/home/img/home_category_1_banner.jpg" alt="Sản phẩm khuyến mãi" sizes="600px">
                                 </a>									
                                 <div class="caption_banner_slide">
                                     <h3>Sản phẩm khuyến mãi</h3>
@@ -843,7 +846,7 @@ window.HaravanAnalytics.AutoTrack = true;
                         <div class="home-banner-pd">
                             <div class="block-banner-category ">
                                 <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 2" data-expand="-1">
-                                <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_2_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_2_banner.jpg?v=2278" src="./assets/home/img/home_category_2_banner.jpg" alt="Sản phẩm hot" sizes="600px">
+                                <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_2_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_2_banner.jpg?v=2278" src="/assets/home/img/home_category_2_banner.jpg" alt="Sản phẩm hot" sizes="600px">
                                 </a>											
                                 <div class="caption_banner_slide">
                                     <h3>Sản phẩm hot</h3>
@@ -856,7 +859,7 @@ window.HaravanAnalytics.AutoTrack = true;
                         <div class="home-banner-pd">
                             <div class="block-banner-category ">
                                 <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 3" data-expand="-1">
-                                <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_3_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_3_banner.jpg?v=2278" src="./assets/home/img/home_category_3_banner.jpg" alt="Banner 3" sizes="600px">
+                                <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_3_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_3_banner.jpg?v=2278" src="/assets/home/img/home_category_3_banner.jpg" alt="Banner 3" sizes="600px">
                                 </a>											
                                 <div class="caption_banner_slide">
                                     <h3> Sản phẩm mới</h3>
@@ -869,7 +872,7 @@ window.HaravanAnalytics.AutoTrack = true;
                         <div class="home-banner-pd">
                             <div class="block-banner-category ">
                                 <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 4" data-expand="-1">
-                                <img class="lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_4_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_4_banner.jpg?v=2278" src="./assets/home/img/home_category_4_banner.jpg" alt="Banner 4" sizes="600px">
+                                <img class="lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_4_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_4_banner.jpg?v=2278" src="/assets/home/img/home_category_4_banner.jpg" alt="Banner 4" sizes="600px">
                                 </a>												
                                 <div class="caption_banner_slide">
                                     <h3>Làm việc hiệu quả</h3>
@@ -901,55 +904,50 @@ window.HaravanAnalytics.AutoTrack = true;
             <div class="container-fluid">
                 <div class="row">
                     <div class="clearfix content-product-list">
-                        
-                        <div class="col-md-4 col-sm-6 col-xs-6 pro-loop  pro-loop-lastHide ">
+						@foreach (var product in Model)
+						{
+                        <div class="col-md-4 col-sm-6 col-xs-6 pro-loop ">
                             <div class="product-block product-resize fixheight" style="height: 381px;">
                                 <div class="product-img ">
-                                    <div class="product-sale"><span></span></div>
-                                    <a href="https://delight-shop.myharavan.com/products/imac-21-5-inch-2017-mmqa2" title="iMac 21.5 inch 2017 MMQA2" class="image-resize ratiobox lazyload" data-expand="-1" style="height: 296px;">
+                                    <a href="https://delight-shop.myharavan.com/products/ipad-pro-10-5-inch-64gb" title="@product.ProductName" class="image-resize ratiobox lazyload" data-expand="-1" style="height: 296px;">
                                         <picture>
-                                            <source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_medium.jpg" srcset="//product.hstatic.net/1000306140/product/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_medium.jpg" sizes="266px">
-                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_large.jpg" srcset="//product.hstatic.net/1000306140/product/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_large.jpg" sizes="266px">
-                                            <source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_grande.jpg" srcset="//product.hstatic.net/1000306140/product/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_grande.jpg" sizes="266px">
-                                            <img class="img-loop lazyautosizes lazyloaded" data-sizes="auto" data-src="//product.hstatic.net/1000306140/product/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_grande.jpg" data-lowsrc="//product.hstatic.net/1000306140/product/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_grande.jpg" src="./assets/home/img/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_grande.jpg" alt=" iMac 21.5 inch 2017 MMQA2 " sizes="266px">
+                                            <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <img class="img-loop lazyautosizes lazyloaded" data-sizes="auto" data-src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" data-lowsrc="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" alt=" iPad Pro 10.5 inch 64GB " sizes="266px">
                                         </picture>
-                                        <img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="./assets/home/img/mug-today-is-a-good-day_f3d1123c921349aeb926e94558d1c76c_grande.jpg" alt="" aria-hidden="true">
+									        <img class="ls-original-loaded" src="https://localhost:44302/api/products/images/@product.Images[0]" alt="" aria-hidden="true">
                                         <picture>
-                                            <source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/49_58df399e-061c-438a-b22d-8d514ca1904a_9318c89589ff4346b99e6902ae3293b3_medium.jpg" srcset="//product.hstatic.net/1000306140/product/49_58df399e-061c-438a-b22d-8d514ca1904a_9318c89589ff4346b99e6902ae3293b3_medium.jpg">
-                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/49_58df399e-061c-438a-b22d-8d514ca1904a_9318c89589ff4346b99e6902ae3293b3_large.jpg" srcset="//product.hstatic.net/1000306140/product/49_58df399e-061c-438a-b22d-8d514ca1904a_9318c89589ff4346b99e6902ae3293b3_large.jpg">
-                                            <source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/49_58df399e-061c-438a-b22d-8d514ca1904a_9318c89589ff4346b99e6902ae3293b3_grande.jpg" srcset="//product.hstatic.net/1000306140/product/49_58df399e-061c-438a-b22d-8d514ca1904a_9318c89589ff4346b99e6902ae3293b3_grande.jpg">
-                                            <img class="img-loop img-hover ls-is-cached lazyloaded" data-src="//product.hstatic.net/1000306140/product/49_58df399e-061c-438a-b22d-8d514ca1904a_9318c89589ff4346b99e6902ae3293b3_grande.jpg" src="./assets/home/img/49_58df399e-061c-438a-b22d-8d514ca1904a_9318c89589ff4346b99e6902ae3293b3_grande.jpg" alt=" iMac 21.5 inch 2017 MMQA2 ">
+                                            <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <img class="img-loop img-hover ls-is-cached lazyloaded" data-src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" alt=" iPad Pro 10.5 inch 64GB ">
                                         </picture>
                                     </a>
                                     <div class="button-add hidden">
-                                        <button type="submit" title="Buy now" class="action">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
+                                        <button type="submit" title="Buy now" class="action" onclick="buy_now('1031386001')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
                                     </div>
                                     <div class="pro-price-mb">	
-                                        <span class="pro-price">22,090,000₫</span>
-                                        <span class="pro-price-del"><del class="compare-price">24,000,000₫</del></span>
+                                        <span class="pro-price">@product.Price</span>			
                                     </div>
                                 </div>
                                 <div class="product-detail clearfix">
                                     <div class="box-pro-detail">
                                         <h3 class="pro-name">
-                                            <a href="https://delight-shop.myharavan.com/products/imac-21-5-inch-2017-mmqa2" title="iMac 21.5 inch 2017 MMQA2">
-                                            iMac 21.5 inch 2017 MMQA2
+                                            <a href="https://delight-shop.myharavan.com/products/ipad-pro-10-5-inch-64gb" title="@product.ProductName" >
+												@product.ProductName
                                             </a>
                                         </h3>
                                         <div class="box-pro-prices">
-                                            <p class="pro-price highlight">
-                                                <span>22,090,000₫</span>
-                                                <span class="pro-price-del">
-                                                <del class="compare-price">
-                                                24,000,000₫
-                                                </del>
-                                                </span>
+                                            <p class="pro-price ">
+                                                <span>@product.Price</span>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+						}
                     </div>
                 </div>
             </div>
@@ -960,7 +958,7 @@ window.HaravanAnalytics.AutoTrack = true;
             <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                 <div class="block-banner-category ratiobox">
                     <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
-                    <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" src="./assets/home/img/block_home_category1.jpg" alt="Khuyến mãi 1" sizes="600px"><img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="./assets/home/img/block_home_category1.jpg" alt="" aria-hidden="true">
+                    <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" src="/assets/home/img/block_home_category1.jpg" alt="Khuyến mãi 1" sizes="600px"><img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="/assets/home/img/block_home_category1.jpg" alt="" aria-hidden="true">
                     </a>		
                     <div class="caption_banner">
                         <span class="subtitle">Phụ kiện</span>
@@ -972,7 +970,7 @@ window.HaravanAnalytics.AutoTrack = true;
             <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                 <div class="block-banner-category ratiobox">
                     <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
-                    <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" src="./assets/home/img/block_home_category2.jpg" alt="Khuyến mãi 2" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="./assets/home/img/block_home_category2.jpg" alt="" aria-hidden="true">
+                    <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" src="/assets/home/img/block_home_category2.jpg" alt="Khuyến mãi 2" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="/assets/home/img/block_home_category2.jpg" alt="" aria-hidden="true">
                     </a>		
                     <div class="caption_banner">
                         <span class="subtitle">Sản phẩm</span>
@@ -984,7 +982,7 @@ window.HaravanAnalytics.AutoTrack = true;
             <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                 <div class="block-banner-category ratiobox">
                     <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/hot-products" data-expand="-1">
-                    <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" src="./assets/home/img/block_home_category3.jpg" alt="Khuyến mãi 3" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="./assets/home/img/block_home_category3.jpg" alt="" aria-hidden="true">
+                    <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" src="/assets/home/img/block_home_category3.jpg" alt="Khuyến mãi 3" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="/assets/home/img/block_home_category3.jpg" alt="" aria-hidden="true">
                     </a>		
                     <div class="caption_banner">
                         <span class="subtitle">Xu hướng công nghệ</span>
@@ -996,116 +994,66 @@ window.HaravanAnalytics.AutoTrack = true;
         </div>
     </div>
     <!-- Nhóm 2 -->
-    <section class="section section-collection">
+	  <section class="section section-collection">
         <div class="wrapper-heading-home animation-tran text-center">
             <div class="container-fluid">
                 <div class="site-animation">
                     <h2>
-                        <a href="https://delight-shop.myharavan.com/collections/onsale">						
-                        Sản phẩm bán chạy					
+                        <a href="https://delight-shop.myharavan.com/collections/hot-products">						
+                        Sản phẩm bán chạy		
                         </a>
                     </h2>
                 </div>
             </div>
         </div>
-        <div class="wrapper-collection-2">
+      <div class="wrapper-collection-1">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="clearfix content-product-list ">
+                    <div class="clearfix content-product-list">
+						@foreach (var product in Model)
+						{
                         <div class="col-md-4 col-sm-6 col-xs-6 pro-loop ">
-                            <div class="product-block product-resize fixheight" style="height: 87px;">
+                            <div class="product-block product-resize fixheight" style="height: 381px;">
                                 <div class="product-img ">
-                                    <div class="product-sale"><span></span></div>
-                                    <a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100" class="image-resize ratiobox" style="height: auto;">
+                                    <a href="https://delight-shop.myharavan.com/products/ipad-pro-10-5-inch-64gb" title="@product.ProductName" class="image-resize ratiobox lazyload" data-expand="-1" style="height: 296px;">
                                         <picture>
-                                            <source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/gg_medium.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/gg_large.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/gg_grande.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <img class="lazyload img-loop" data-sizes="auto" data-src="//product.hstatic.net/1000306140/product/gg_grande.jpg" data-lowsrc="//product.hstatic.net/1000306140/product/gg_grande.jpg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt=" Máy ảnh Panasonic X-T100 ">
+                                            <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <img class="img-loop lazyautosizes lazyloaded" data-sizes="auto" data-src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" data-lowsrc="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" alt=" iPad Pro 10.5 inch 64GB " sizes="266px">
                                         </picture>
+									        <img class="ls-original-loaded" src="https://localhost:44302/api/products/images/@product.Images[0]" alt="" aria-hidden="true">
                                         <picture>
-                                            <source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/sf_medium.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/sf_large.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/sf_grande.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <img class="img-loop img-hover lazyload" data-src="//product.hstatic.net/1000306140/product/sf_grande.jpg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt=" Máy ảnh Panasonic X-T100 ">
+                                            <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <img class="img-loop img-hover ls-is-cached lazyloaded" data-src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" alt=" iPad Pro 10.5 inch 64GB ">
                                         </picture>
                                     </a>
                                     <div class="button-add hidden">
-                                        <button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
+                                        <button type="submit" title="Buy now" class="action" onclick="buy_now('1031386001')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
                                     </div>
                                     <div class="pro-price-mb">	
-                                        <span class="pro-price">12,300,000₫</span>
-                                        <span class="pro-price-del"><del class="compare-price">12,999,000₫</del></span>
+                                        <span class="pro-price">@product.Price</span>			
                                     </div>
                                 </div>
                                 <div class="product-detail clearfix">
                                     <div class="box-pro-detail">
                                         <h3 class="pro-name">
-                                            <a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100">
-                                            Máy ảnh Panasonic X-T100
+                                            <a href="https://delight-shop.myharavan.com/products/ipad-pro-10-5-inch-64gb" title="@product.ProductName" >
+												@product.ProductName
                                             </a>
                                         </h3>
                                         <div class="box-pro-prices">
-                                            <p class="pro-price highlight">
-                                                <span>12,300,000₫</span>
-                                                <span class="pro-price-del">
-                                                <del class="compare-price">
-                                                12,999,000₫
-                                                </del>
-                                                </span>	
+                                            <p class="pro-price ">
+                                                <span>@product.Price</span>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-6 col-xs-6 pro-loop  pro-loop-lastHide ">
-                            <div class="product-block product-resize fixheight" style="height: 87px;">
-                                <div class="product-img ">
-                                    <div class="product-sale"><span>-3%</span></div>
-                                    <a href="https://delight-shop.myharavan.com/products/dong-ho-thong-minh-xtf" title="Đồng hồ thông minh XTF" class="image-resize ratiobox" style="height: auto;">
-                                        <picture>
-                                            <source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_medium.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_large.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_grande.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <img class="lazyload img-loop" data-sizes="auto" data-src="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_grande.jpg" data-lowsrc="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_grande.jpg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt=" Đồng hồ thông minh XTF ">
-                                        </picture>
-                                        <picture>
-                                            <source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/42_bdd58983-d548-4492-8525-79c5c5aa33f6_2d08b191e2504cebb5dc368db237fda0_medium.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/42_bdd58983-d548-4492-8525-79c5c5aa33f6_2d08b191e2504cebb5dc368db237fda0_large.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/42_bdd58983-d548-4492-8525-79c5c5aa33f6_2d08b191e2504cebb5dc368db237fda0_grande.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                                            <img class="img-loop img-hover lazyload" data-src="//product.hstatic.net/1000306140/product/42_bdd58983-d548-4492-8525-79c5c5aa33f6_2d08b191e2504cebb5dc368db237fda0_grande.jpg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt=" Đồng hồ thông minh XTF ">
-                                        </picture>
-                                    </a>
-                                    <div class="button-add hidden">
-                                        <button type="submit" title="Buy now" class="action" onclick="buy_now('1031396371')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
-                                    </div>
-                                    <div class="pro-price-mb">	
-                                        <span class="pro-price">3,456,000₫</span>
-                                        <span class="pro-price-del"><del class="compare-price">3,568,000₫</del></span>
-                                    </div>
-                                </div>
-                                <div class="product-detail clearfix">
-                                    <div class="box-pro-detail">
-                                        <h3 class="pro-name">
-                                            <a href="https://delight-shop.myharavan.com/products/dong-ho-thong-minh-xtf" title="Đồng hồ thông minh XTF">
-                                            Đồng hồ thông minh XTF
-                                            </a>
-                                        </h3>
-                                        <div class="box-pro-prices">
-                                            <p class="pro-price highlight">
-                                                <span>3,456,000₫</span>
-                                                <span class="pro-price-del">
-                                                <del class="compare-price">
-                                                3,568,000₫
-                                                </del>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						}
                     </div>
                 </div>
             </div>
@@ -1411,8 +1359,8 @@ window.HaravanAnalytics.AutoTrack = true;
 			</div>
 			<div id="site-overlay" class="site-overlay"></div>
 		</div>  		
-<script src="./assets/home/js/option_selection.js" type="text/javascript"></script>
-<script src="./assets/home/js/api.jquery.js" type="text/javascript"></script>
+<script src="/assets/home/js/option_selection.js" type="text/javascript"></script>
+<script src="/assets/home/js/api.jquery.js" type="text/javascript"></script>
 
 <script>
 	/* imagesloaded */
@@ -1429,7 +1377,7 @@ animateIn:!1},e.prototype.swap=function(){if(1===this.core.settings.items&&a.sup
 </script>	
 <!-- haravan app -->
 <!-- END - haravan app -->
-<script src="./assets/home/js/scripts.js" type="text/javascript"></script>
+<script src="/assets/home/js/scripts.js" type="text/javascript"></script>
 <!-- chatbot-harafunnel -->
 <script>
 	setTimeout(function(){ 
@@ -1461,11 +1409,11 @@ animateIn:!1},e.prototype.swap=function(){if(1===this.core.settings.items&&a.sup
 <iframe id="nr-ext-rsicon" style="position: absolute; display: none; width: 50px; height: 50px; z-index: 2147483647; border-style: none; background: transparent;" src="/Delight Shop_files/saved_resource(1).html"></iframe>
 <div>
    <div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;">
-      <div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="./assets/home/Delight Shop_files/anchor.html" width="256" height="60" role="presentation" name="a-u4egs57rdomp" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div>
+      <div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="/assets/home/Delight Shop_files/anchor.html" width="256" height="60" role="presentation" name="a-u4egs57rdomp" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div>
       <div class="grecaptcha-error"></div>
       <textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea>
    </div>
-   <iframe style="display: none;" src="./assets/home/Delight Shop_files/saved_resource(2).html"></iframe>
+   <iframe style="display: none;" src="/assets/home/Delight Shop_files/saved_resource(2).html"></iframe>
 </div>
 </body>
 	</html>
