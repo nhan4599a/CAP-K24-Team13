@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 namespace ShopProductService.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("/api/products")]
     public class ProductController : ControllerBase
     {

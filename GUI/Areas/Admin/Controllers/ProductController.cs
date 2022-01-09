@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GUI.Areas.Admin.Customers
 {
+    [Authorize]
     [Area("Admin")]
     public class ProductController : Controller
     {

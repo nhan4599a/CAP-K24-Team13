@@ -1,9 +1,8 @@
-﻿namespace AuthServer.Models
-{
-    public class SignUpModel : AuthenticationModelBase
-    {
-        public string? Email { get; set; }
+﻿using System.ComponentModel.DataAnnotations;
 
-        public DateTime DoB { get; set; }
-    }
+namespace AuthServer.Models
+{
+    public record SignUpModel([Required] string Username, [Required] string Password,
+            [Required] string Email, [Required] DateOnly DoB
+        ) : AuthenticationModelBase(Username, Password);
 }

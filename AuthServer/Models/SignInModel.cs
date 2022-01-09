@@ -1,9 +1,7 @@
-﻿namespace AuthServer.Models
-{
-    public class SignInModel : AuthenticationModelBase
-    {
-        public bool RememberMe { get; set; }
+﻿using System.ComponentModel.DataAnnotations;
 
-        public string? ReturnUrl { get; set; }
-    }
+namespace AuthServer.Models
+{
+    public record SignInModel([Required] string Username, [Required] string Password, bool RememberMe = false, string ReturnUrl = "~/")
+        : AuthenticationModelBase(Username, Password);
 }

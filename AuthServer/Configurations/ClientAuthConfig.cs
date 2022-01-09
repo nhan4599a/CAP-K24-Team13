@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4;
+using IdentityServer4.Models;
 
 namespace AuthServer.Configurations
 {
@@ -19,6 +20,29 @@ namespace AuthServer.Configurations
                 {
                     "product.read", "product.write"
                 }
+            },
+            new Client
+            {
+                ClientId = "oidc-client",
+                ClientName = "OIDC client",
+                AllowedGrantTypes = GrantTypes.Code,
+                ClientSecrets = new[]
+                {
+                    new Secret("CapK24Team13".Sha256())
+                },
+                RedirectUris = new[]
+                {
+                    "https://localhost:44349/signin-oidc"
+                },
+                AllowedScopes = new[]
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Email,
+                    "product.read", "product.write"
+                },
+                RequirePkce = true,
+                AllowPlainTextPkce = false
             }
         };
 

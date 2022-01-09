@@ -1,28 +1,35 @@
-﻿using AuthServer.Models;
+﻿using AuthServer.Configurations;
+using AuthServer.Identities;
+using AuthServer.Models;
 using DatabaseAccessor.Models;
+using IdentityServer4;
+using IdentityServer4.Events;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Identity = Microsoft.AspNetCore.Identity;
 
 namespace AuthServer.Controllers
 {
-    [Route("/auth")]
     public class AuthenticationController : Controller
     {
-        private readonly Identity.SignInManager<User> _signInManager;
+        private readonly ApplicationSignInManager _signInManager;
+        private readonly IIdentityServerInteractionService _interaction;
         private readonly IMailService _mailer;
+        private readonly IEventService _events;
 
-        public AuthenticationController(Identity.SignInManager<User> signInManager, IMailService mailer)
+        public AuthenticationController(IIdentityServerInteractionService interaction,
+            ApplicationSignInManager signInManager, IEventService eventService,IMailService mailer)
         {
             _signInManager = signInManager;
+            _interaction = interaction;
+            _events = eventService;
             _mailer = mailer;
         }
 
         [AllowAnonymous]
-        public IActionResult SignIn(string returnUrl)
+        [Route("/auth/signin")]
+        public IActionResult SignIn(string returnUrl = "~/")
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -30,6 +37,7 @@ namespace AuthServer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("/auth/signin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(SignInModel model)
         {
@@ -38,26 +46,47 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("SignIn-Error", "Username or password is invalid");
                 return View(model);
             }
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            if (context == null)
+            {
+                ModelState.AddModelError("SignIn-Error", "Something went wrong!");
+                return View(model);
+            }
             var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password,
+                AccountConfig.AccountLockedOutEnabled);
             if (user != null && signInResult.Succeeded)
             {
-                var claims = new List<Claim>
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(),
+                    user.UserName, clientId: context.Client.ClientId));
+                AuthenticationProperties? props = null;
+                if (AccountConfig.AllowRememberMe && model.RememberMe)
+                    props = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountConfig.RememberMeDuration)
+                    };
+                var identityServerUser = new IdentityServerUser(user.Id.ToString())
                 {
-                    new Claim(ClaimTypes.Name, model.Username!),
-                    new Claim(ClaimTypes.Role, (await _signInManager.UserManager.GetRolesAsync(user))[0])
+                    DisplayName = user.UserName
                 };
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
+                await HttpContext.SignInAsync(identityServerUser, props);
                 if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     return Redirect(model.ReturnUrl);
                 throw new InvalidOperationException($"\"{model.ReturnUrl}\" is not valid");
+            }
+            else if (user != null && signInResult.IsLockedOut)
+            {
+                ModelState.AddModelError("SignIn-Error", "Account is locked out");
+                ViewBag.LockedOutCancelTime = user.LockoutEnd!.Value;
+                return View(model);
             }
             ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
             return View(model);
         }
 
         [AllowAnonymous]
+        [Route("/auth/signup")]
         public IActionResult SignUp()
         {
             return View();
@@ -65,6 +94,7 @@ namespace AuthServer.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("/auth/signup")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp(SignUpModel model)
         {
@@ -78,12 +108,14 @@ namespace AuthServer.Controllers
                 Email = model.Email,
                 UserName = model.Username,
                 NormalizedEmail = model.Email,
-                NormalizedUserName = model.Username
+                NormalizedUserName = model.Username,
+                DoB = model.DoB
             };
             var identityResult = await _signInManager.UserManager.CreateAsync(user, model.Password);
             if (identityResult.Succeeded)
             {
-                await SendUserConfirmationEmail(user);
+                if (AccountConfig.RequireEmailConfirmation)
+                    await SendUserConfirmationEmail(user);
                 return RedirectToAction("SignIn");
             }
             foreach (var error in identityResult.Errors)

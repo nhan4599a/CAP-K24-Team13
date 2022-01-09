@@ -1,9 +1,6 @@
-﻿namespace AuthServer.Models
-{
-    public class AuthenticationModelBase
-    {
-        public string? Username { get; set; }
+﻿using System.ComponentModel.DataAnnotations;
 
-        public string? Password { get; set; }
-    }
+namespace AuthServer.Models
+{
+    public record AuthenticationModelBase([Required] string Username, [Required] string Password);
 }
