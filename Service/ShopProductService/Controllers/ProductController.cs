@@ -70,7 +70,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = response.Response };
         }
 
-        [HttpGet]
+        [HttpGet("search")]
         public async Task<ApiResult<PaginatedList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
         {
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)

@@ -1,7 +1,8 @@
 ﻿@{
 	Layout = null;
 }
-@model Shared.Models.PaginatedList<Shared.DTOs.ProductDTO>
+@*@model Shared.DTOs.ProductDTO*@
+@model string
 <!DOCTYPE html>
 <html class="no-js" lang="vi"><!--<![endif]-->
 <head>
@@ -854,37 +855,32 @@ window.HaravanAnalytics.AutoTrack = true;
 		<div class="container-fluid">
 			<div class="row">	
 				<div class="col-md-12 col-sm-12 col-xs-12">
-					@foreach (var product in Model)
-						{
 					<div class="row product-detail-main pr_style_01">
 						<div class="col-md-8 col-sm-12 col-xs-12">
 							<div class="product-gallery">
 								<div class="product-gallery__thumbs-container hidden-sm hidden-xs">
 									<div class="product-gallery__thumbs thumb-fix">
-										
-										<div class="product-gallery__thumb active">
-											<a class="product-gallery__thumb-placeholder" href="javascript:void(0);" data-image="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" data-zoom-image="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
-												<img alt="" src="https://localhost:44302/api/products/images/@product.Images[0]" data-image="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+										@*<div class="product-gallery__thumb active">
+											<a class="product-gallery__thumb-placeholder" href="javascript:void(0);" data-image="https://localhost:44302/api/products/images/@Model.Images[0]" data-zoom-image="https://localhost:44302/api/products/images/@Model.Images[0]">
+												<img alt="" src="https://localhost:44302/api/products/images/@Model.Images[0]" data-image="https://localhost:44302/api/products/images/@Model.Images[0]">
 											</a>
-
 										</div>
 										<div class="product-gallery__thumb active">
-											<a class="product-gallery__thumb-placeholder" href="javascript:void(0);" data-image="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" data-zoom-image="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
-												<img alt="" src="https://localhost:44302/api/products/images/@product.Images[1]" data-image="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+											<a class="product-gallery__thumb-placeholder" href="javascript:void(0);" data-image="https://localhost:44302/api/products/images/@Model.Images[0]" data-zoom-image="https://localhost:44302/api/products/images/@Model.Images[0]">
+												<img alt="" src="https://localhost:44302/api/products/images/@Model.Images[0]" data-image="https://localhost:44302/api/products/images/@Model.Images[0]">
 											</a>
-
 										</div>
-									</div>
+									</div>*@
 								</div> 
 								<div class="product-image-detail box__product-gallery scroll">
 									<ul id="sliderproduct" class="site-box-content slide_product">
 										
-										<li class="product-gallery-item gallery-item current">
-											<img class="product-image-feature" src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" alt="@product.ProductName">
+									@*	<li class="product-gallery-item gallery-item current">
+											<img class="product-image-feature" src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" alt="@Model.ProductName">
 										</li>
 										<li class="product-gallery-item gallery-item current">
-											<img class="product-image-feature" src="https://localhost:44302/api/products/images/ca9666ea-617a-4897-810c-df047c972e84.png" alt="@product.ProductName">
-										</li>	
+											<img class="product-image-feature" src="https://localhost:44302/api/products/images/ca9666ea-617a-4897-810c-df047c972e84.png" alt="@Model.ProductName">
+										</li>	*@
 									</ul>
 									<div class="product-image__button">
 										<div id="product-zoom-in" class="product-zoom icon-pr-fix " aria-label="Zoom in" title="Zoom in">
@@ -899,22 +895,22 @@ window.HaravanAnalytics.AutoTrack = true;
 							
 						</div>
 						<div class="col-md-4 col-sm-12 col-xs-12 product-content-desc" id="detail-product">
-							<div class="product-title">
-								<h1>@product.ProductName</h1>
+							@*<div class="product-title">
+								<h1>@Model.ProductName</h1>
 								
 								 		
 							</div>
 							<div class="product-price" id="price-preview">
 									
-								<span class="pro-price">@product.Price</span>
+								<span class="pro-price">@Model.Price</span>
 								
-							</div>
+							</div>*@
 
 							<form id="add-item-form" action="https://delight-shop.myharavan.com/cart/add" method="post" class="variants clearfix">				
 								<div class="select clearfix" style="display:none">
 									<select id="product-select" name="id" style="display:none;">
 										
-										<option value="1031385246">Default Title - @product.Price</option>
+									@*	<option value="1031385246">Default Title - @Model.Price</option>*@
 										
 									</select>
 								</div>
@@ -948,13 +944,12 @@ window.HaravanAnalytics.AutoTrack = true;
 								</div>
 							</form>
 							<div class="product-description">	
-								<div class="title-bl">
-									<h2>@product.Description</h2>
-								</div>							
+							@*	<div class="title-bl">
+									<h2>@Model.Description</h2>
+								</div>		*@					
 							</div>
 						</div>
 					</div>		
-					}
 					<div class="list-productRelated clearfix">
 	<div class="heading-title text-center">
 		<h2>Sản phẩm liên quan</h2>
