@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace ShopProductService.Controllers
 {
     [ApiController]
-    [Route("/api/products")]
+    [Route("/api/products/search")]
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;

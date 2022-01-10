@@ -18,7 +18,6 @@ namespace GUI.Areas.User.Controllers
         {
             return View();
         }
-
         public async Task<IActionResult> Index(string id)
         {
             var result = await _productClient.GetProductAsync(id);

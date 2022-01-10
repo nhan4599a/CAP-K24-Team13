@@ -2,9 +2,11 @@
 
 namespace GUI.Areas.User.Controllers
 {
+    [Area("User")]
     public class ShopController : Controller
     {
-        public IActionResult Index()
+        [ActionName("Index")]
+        public IActionResult ShopIndex()
         {
             return View();
         }
