@@ -8,6 +8,10 @@
 
         public static bool AccountLockedOutEnabled => true;
 
+        public static int MinAge => 18;
+
+        public static int MaxAge => 50;
+
         public static TimeSpan RememberMeDuration => TimeSpan.FromMinutes(30);
     }
 }

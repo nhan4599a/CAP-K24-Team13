@@ -1,4 +1,6 @@
 using AspNetCoreSharedComponent.FileValidations;
+using AspNetCoreSharedComponent.ModelBinders.Providers;
+using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
@@ -34,7 +36,9 @@ namespace ShopProductService
             services.AddControllers(options =>
             {
                 options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
-            }).AddFluentValidation();
+            }).AddFluentValidation<CreateOrEditCategoryRequestModel, AddOrEditCategoryRequestModelValidator>()
+            .AddFluentValidation<CreateOrEditProductRequestModel, AddOrEditProductRequestModelValidator>()
+            .AddFluentValidation<SearchProductRequestModel, SearchProductRequestModelValidator>();
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -47,9 +51,6 @@ namespace ShopProductService
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IFileStorable, FileStore>();
-            services.AddTransient<IValidator<CreateOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
-            services.AddTransient<IValidator<CreateOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
-            services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();
             services.AddCors(options =>

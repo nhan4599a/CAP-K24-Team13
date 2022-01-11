@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
 
-namespace ShopProductService
+namespace AspNetCoreSharedComponent.ModelBinders.Providers
 {
     public class IntToBoolModelBinderProvider : IModelBinderProvider
     {
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
+        public IModelBinder? GetBinder(ModelBinderProviderContext context)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreSharedComponent\AspNetCoreSharedComponent.csproj" />
     <ProjectReference Include="..\DatabaseAccessor\DatabaseAccessor.csproj" />
   </ItemGroup>
 

@@ -29,9 +29,8 @@ namespace AuthServer.Controllers
 
         [AllowAnonymous]
         [Route("/auth/signin")]
-        public IActionResult SignIn(string returnUrl = "~/")
+        public IActionResult SignIn()
         {
-            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -47,11 +46,6 @@ namespace AuthServer.Controllers
                 return View(model);
             }
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-            if (context == null)
-            {
-                ModelState.AddModelError("SignIn-Error", "Something went wrong!");
-                return View(model);
-            }
             var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
             var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password,
                 AccountConfig.AccountLockedOutEnabled);
@@ -98,13 +92,15 @@ namespace AuthServer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp(SignUpModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("SignUp-Error", "Username or password is invalid");
+                ModelState.AddModelError("SignUp-Error", "Input information is invalid");
                 return View(model);
             }
             var user = new User
             {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
                 Email = model.Email,
                 UserName = model.Username,
                 NormalizedEmail = model.Email,

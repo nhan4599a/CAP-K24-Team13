@@ -1,4 +1,5 @@
 using AspNetCoreSharedComponent.FileValidations;
+using AspNetCoreSharedComponent.ModelBinders;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;

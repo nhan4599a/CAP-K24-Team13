@@ -20,6 +20,12 @@ namespace AuthServer.Validators
                     Code = "PasswordContainsPassword",
                     Description = "Password can't be contains \"password\""
                 });
+            if (password.ToLower().Contains(user.UserName.ToLower()))
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "PasswordContainsUsername",
+                    Description = "Password can't be contains username"
+                });
             return IdentityResult.Success;
         }
     }

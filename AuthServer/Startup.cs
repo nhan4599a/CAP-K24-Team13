@@ -1,5 +1,8 @@
-﻿using AuthServer.Configurations;
+﻿using AspNetCoreSharedComponent.ModelBinders.Providers;
+using AspNetCoreSharedComponent.ModelValidations;
+using AuthServer.Configurations;
 using AuthServer.Identities;
+using AuthServer.Models;
 using AuthServer.Providers;
 using AuthServer.Services;
 using AuthServer.Validators;
@@ -31,7 +34,10 @@ namespace AuthServer
         public void ConfigureServices(IServiceCollection services)
         {
             var certFilePath = Path.Combine(Environment.ContentRootPath, "auth-server.pfx");
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
+            }).AddFluentValidation<SignUpModel, SignUpModelValidator>();
             services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();

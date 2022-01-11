@@ -1,4 +1,5 @@
-﻿<html>
+﻿@model string
+<html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
@@ -27,31 +28,31 @@
                                         <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
                                     </div>
 
-                                    <form>
+                                    <form method="POST">
                                         <p>Please login to your account</p>
 
                                         <div class="form-outline mb-4">
-                                            <input type="text" id="input-username" class="form-control" placeholder="Username" />
+                                            <input type="text" id="input-username" class="form-control" placeholder="Username" name="Username" />
                                             <label class="form-label" for="input-username">Username</label>
                                         </div>
 
                                         <div class="form-outline mb-4">
-                                            <input type="password" id="input-password" class="form-control" placeholder="Password" />
+                                            <input type="password" id="input-password" class="form-control" placeholder="Password" name="Password" />
                                             <label class="form-label" for="input-password">Password</label>
                                         </div>
 
                                         <div class="text-center pt-1 mb-5 pb-1">
-                                            <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Sign In</button>
+                                            <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Sign In</button>
                                             <a class="text-muted" href="#!">Forgot password?</a>
                                         </div>
-
+                                        <div>
+                                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                                        </div>
                                         <div class="d-flex align-items-center justify-content-center pb-4">
                                             <p class="mb-0 me-2">Don't have an account?</p>
                                             <a class="btn btn-outline-danger" href="/auth/signup">Sign Up</a>
                                         </div>
-
                                     </form>
-
                                 </div>
                             </div>
                             <div class="col-lg-6 d-flex align-items-center gradient-custom-2">

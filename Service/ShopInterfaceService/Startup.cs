@@ -1,4 +1,5 @@
 using AspNetCoreSharedComponent.FileValidations;
+using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
@@ -29,12 +30,12 @@ namespace ShopInterfaceService
         public void ConfigureServices(IServiceCollection services)
         {
             services.RegisterOcelotService(Configuration);
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation<CreateOrEditInterfaceRequestModel, CreateOrEditInterfaceRequestModelValidator>();
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IFileStorable, FileStore>();
             services.AddScoped<IShopInterfaceRepository, ShopInterfaceRepository>();
-            services.AddTransient<IValidator<CreateOrEditInterfaceRequestModel>, CreateOrEditInterfaceRequestModelValidator>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {

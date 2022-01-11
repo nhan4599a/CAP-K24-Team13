@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AspNetCoreSharedComponent.ModelBinders;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AuthServer.Models
 {
-    public record SignUpModel([Required] string Username, [Required] string Password,
-            [Required] string Email, [Required] DateOnly DoB
-        ) : AuthenticationModelBase(Username, Password);
+    public record SignUpModel(string FirstName, string LastName, string Username, string Password,
+        string RePassword, string Email,
+        [ModelBinder(BinderType = typeof(StringToDateOnlyModelBinder))] DateOnly DoB)
+        : AuthenticationModelBase(Username, Password);
 }

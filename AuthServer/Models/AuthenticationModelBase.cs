@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AuthServer.Models
+﻿namespace AuthServer.Models
 {
-    public record AuthenticationModelBase([Required] string Username, [Required] string Password);
+    public record AuthenticationModelBase(string Username, string Password);
 }
