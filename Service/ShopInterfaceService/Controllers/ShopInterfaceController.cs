@@ -9,6 +9,7 @@ using Shared.Validations;
 using ShopInterfaceService.Commands;
 using ShopInterfaceService.Mediator;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ShopInterfaceService.Controllers
 {
@@ -29,9 +30,10 @@ namespace ShopInterfaceService.Controllers
         }
 
         [HttpGet]
-        public async Task<CommandResponse<ShopInterfaceDTO>> Get(string searchString)
+        public async Task<ApiResult<List<ShopInterfaceDTO>>> Get(string searchString)
         {
-            var result = await _mediator.Send(new FindShop.Query { SearchString = searchString });
+            var result = await _mediator.Send(new FindShopInterfaceByKeywordCommand.Query { SearchString = searchString });
+            if (result == null) return null;
             return result;
         }
 

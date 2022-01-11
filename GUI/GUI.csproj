@@ -1974,13 +1974,55 @@
     <None Include="wwwroot\assets\admin\scss\material-dashboard\_utilities-extend.scss" />
     <None Include="wwwroot\assets\admin\scss\material-dashboard\_utilities.scss" />
     <None Include="wwwroot\assets\admin\scss\material-dashboard\_variables.scss" />
+    <None Include="wwwroot\assets\customer\Delight Shop_files\css" />
+    <None Include="wwwroot\assets\customer\js\108520260558644.js" />
+    <None Include="wwwroot\assets\customer\js\29EmyRktoi2.js" />
+    <None Include="wwwroot\assets\customer\js\5lHoFibekWy.js" />
+    <None Include="wwwroot\assets\customer\js\analytics.min.js" />
+    <None Include="wwwroot\assets\customer\js\api.jquery.js" />
+    <None Include="wwwroot\assets\customer\js\api.js" />
+    <None Include="wwwroot\assets\customer\js\BqEjD1dj1pL.js" />
+    <None Include="wwwroot\assets\customer\js\BQqO9rJLf4N.js" />
+    <None Include="wwwroot\assets\customer\js\CH0TBeW-HEd.js" />
+    <None Include="wwwroot\assets\customer\js\cN-N4Eu_deZ.js" />
+    <None Include="wwwroot\assets\customer\js\cQhwKjUup0w.js" />
+    <None Include="wwwroot\assets\customer\js\CWJINsGKrOS.js" />
+    <None Include="wwwroot\assets\customer\js\daMxoGouqDk.js" />
+    <None Include="wwwroot\assets\customer\js\DU4KbWyH3Gm.js" />
+    <None Include="wwwroot\assets\customer\js\E6ygH181Dok.js" />
+    <None Include="wwwroot\assets\customer\js\GG1Y0sYc7My.js" />
+    <None Include="wwwroot\assets\customer\js\HRzfKqhF6hL.js" />
+    <None Include="wwwroot\assets\customer\js\ieUAqp7lqlN.js" />
+    <None Include="wwwroot\assets\customer\js\kAcgLiP00wL.js" />
+    <None Include="wwwroot\assets\customer\js\Kbfitua6AZ5.js" />
+    <None Include="wwwroot\assets\customer\js\LYdd3giDmU5.js" />
+    <None Include="wwwroot\assets\customer\js\LZuUkTwNadW.js" />
+    <None Include="wwwroot\assets\customer\js\MCvDnmkd6ZH.js" />
+    <None Include="wwwroot\assets\customer\js\MQ_lIk609EO.js" />
+    <None Include="wwwroot\assets\customer\js\MT6vZEPoab5.js" />
+    <None Include="wwwroot\assets\customer\js\NOzP0uIXOqi.js" />
+    <None Include="wwwroot\assets\customer\js\Nt-vUD5KnG7.js" />
+    <None Include="wwwroot\assets\customer\js\option_selection.js" />
+    <None Include="wwwroot\assets\customer\js\qXh9KJvs0hU.js" />
+    <None Include="wwwroot\assets\customer\js\recaptcha__en.js" />
+    <None Include="wwwroot\assets\customer\js\rY5h-EDox1c.js" />
+    <None Include="wwwroot\assets\customer\js\scripts.js" />
+    <None Include="wwwroot\assets\customer\js\VRzSVH5iU-V.js" />
+    <None Include="wwwroot\assets\customer\js\VydpzWpaoaC.js" />
+    <None Include="wwwroot\assets\customer\js\widget.js" />
+    <None Include="wwwroot\assets\customer\js\wlnbzjJv_0g.js" />
+    <None Include="wwwroot\assets\customer\js\Xc-buPNEADH.js" />
+    <None Include="wwwroot\assets\customer\js\xfbml.customerchat.js" />
+    <None Include="wwwroot\assets\customer\js\xJXDhNCU-Wh.js" />
+    <None Include="wwwroot\assets\customer\js\Z9R-rV9pea1.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\User\Controllers\" />
     <Folder Include="Areas\User\Views\" />
     <Folder Include="wwwroot\assets\user\" />
   </ItemGroup>

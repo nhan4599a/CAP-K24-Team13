@@ -32,7 +32,7 @@ namespace GUI
             services.AddSingleton<HttpClient>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
-            
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -62,8 +62,8 @@ namespace GUI
                         pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
-                        name: "User",
-                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                  name: "Customer",
+                  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

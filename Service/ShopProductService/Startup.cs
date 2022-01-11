@@ -39,6 +39,7 @@ namespace ShopProductService
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IFileStorable, FileStore>();
             services.AddTransient<IValidator<CreateOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
             services.AddTransient<IValidator<CreateOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
