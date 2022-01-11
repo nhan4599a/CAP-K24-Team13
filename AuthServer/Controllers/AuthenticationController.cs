@@ -51,8 +51,9 @@ namespace AuthServer.Controllers
                 AccountConfig.AccountLockedOutEnabled);
             if (user != null && signInResult.Succeeded)
             {
-                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(),
-                    user.UserName, clientId: context.Client.ClientId));
+                if (context != null)
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(),
+                        user.UserName, clientId: context.Client.ClientId));
                 AuthenticationProperties? props = null;
                 if (AccountConfig.AllowRememberMe && model.RememberMe)
                     props = new AuthenticationProperties
@@ -67,7 +68,7 @@ namespace AuthServer.Controllers
                 await HttpContext.SignInAsync(identityServerUser, props);
                 if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     return Redirect(model.ReturnUrl);
-                throw new InvalidOperationException($"\"{model.ReturnUrl}\" is not valid");
+                throw new InvalidOperationException($"\"{model.ReturnUrl}\" is  invalid");
             }
             else if (user != null && signInResult.IsLockedOut)
             {

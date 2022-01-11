@@ -66,7 +66,7 @@ namespace AuthServer
                     options.Tokens.EmailConfirmationTokenProvider = "MailConfirmation";
                 }
                 options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountConfig.LockOutTime);
             }).AddUserStore<ApplicationUserStore>()
             .AddUserManager<ApplicationUserManager>()
             .AddRoleStore<ApplicationRoleStore>()

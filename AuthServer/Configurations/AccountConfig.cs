@@ -12,6 +12,8 @@
 
         public static int MaxAge => 50;
 
+        public static int LockOutTime => 10;
+
         public static TimeSpan RememberMeDuration => TimeSpan.FromMinutes(30);
     }
 }

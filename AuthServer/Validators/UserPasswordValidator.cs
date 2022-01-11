@@ -8,23 +8,17 @@ namespace AuthServer.Validators
         public async Task<IdentityResult> ValidateAsync(UserManager<User> manager, User user, string password)
         {
             var usernane = await manager.GetUserNameAsync(user);
-            if (usernane.ToLower().Equals(password.ToLower()))
+            if (password.ToLower().Contains(usernane.ToLower()))
                 return IdentityResult.Failed(new IdentityError
                 {
-                    Code = "SameUsernameAndPassword",
-                    Description = "Username and password can't be the same"
+                    Code = "PasswordContainsUsername",
+                    Description = "Password can't be contains username"
                 });
             if (password.ToLower().Contains("password"))
                 return IdentityResult.Failed(new IdentityError
                 {
                     Code = "PasswordContainsPassword",
                     Description = "Password can't be contains \"password\""
-                });
-            if (password.ToLower().Contains(user.UserName.ToLower()))
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Code = "PasswordContainsUsername",
-                    Description = "Password can't be contains username"
                 });
             return IdentityResult.Success;
         }
