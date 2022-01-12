@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+Layout = null;
+}
+@model Shared.Models.PaginatedList<Shared.DTOs.ProductDTO>
+<!DOCTYPE html>
 <html class="no-js" lang="vi"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script id="hrfwidget-core" src="https://hstatic.net/harasocial/widget.js?v=1.1"></script>
 		
 		<!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' /><![endif]-->
@@ -31,7 +35,7 @@
 		<link rel="dns-prefetch" href="https://static.ak.fbcdn.net/">
 		<link rel="dns-prefetch" href="https://s-static.ak.facebook.com/"> 
 		<link rel="preload" as="style" href="@Url.Content("~/assets/home/css/styles.css")">
-		<link rel="preconnect" href="@Url.Content("~/assets/home/Landing page fashion 01 – Delight Shop_files/css")">
+		<link rel="preconnect" href=".@Url.Content("~/assets/home/Landing page fashion 01 – Delight Shop_files/css")">
 		<link rel="preload" href="@Url.Content("~/assets/home/Landing page fashion 01 – Delight Shop_files/css")" as="style">
 		<!--+++++++++++++++++++++++++  CSS ++++++++++++++++++++++++-->
 		<link href="@Url.Content("~/assets/home/Landing page fashion 01 – Delight Shop_files/css")" rel="stylesheet">
@@ -428,7 +432,7 @@ window.HaravanAnalytics.AutoTrack = true;
 								</div>
 								<div class="col-md-4 header-upper-logo">
 									<div class="wrap-logo text-center" itemscope="">						
-										<img src="@Url.Content("~/assets/homeimg/logo-1.png")">
+										<img src="@Url.Content("~/assets/home/img/logo-1.png")">
 									</div>
 								</div>
 								<div class="col-md-4 header-upper-icon">
@@ -710,7 +714,7 @@ window.HaravanAnalytics.AutoTrack = true;
 						<div class="container-fluid">
 							<div class="header-navbar-menu">
 								<div class="wrap-logo wrap-logo-sticky">
-									<img src="@Url.Content("~/assets/home/img/logo-footer.png")">
+									<img src="/assets/home/img/logo-footer.png">
 								</div>
 								<div class="navbar-mainmenu">
 									<div id="nav">
@@ -883,7 +887,7 @@ window.HaravanAnalytics.AutoTrack = true;
 			<picture>
 				<source media="(max-width:767px)" srcset="//theme.hstatic.net/1000306140/1000709257/14/technology01_bannertop_mobile.jpg?v=2278">
 				<source media="(min-width:768px)" srcset="//theme.hstatic.net/1000306140/1000709257/14/technology01_bannertop_image.jpg?v=2278">
-				<img src="@Url.Content("~/assets/homeimg/technology01_bannertop_image.jpg")" alt="banner">
+				<img src="@Url.Content("~/assets/home/img/technology01_bannertop_image.jpg")" alt="banner">
 			</picture>
 		</div>
 	</section>
@@ -927,77 +931,59 @@ window.HaravanAnalytics.AutoTrack = true;
 						</li>
 					</ul>
 				</div>
-				<div class="tablist-product-content tab-content" id="collection-tabs-ajax">
-											<div class="tab-pane fade in active" id="collection-tabs-1" data-get="true">
-							<div class="collection-list-prd listProduct-ldpage-row">									
-								<div class="product-loop-ldpage animated">
-<div class="product-block ">
-	<div class="product-image ">			
-		<div class="product-sale"><span>-5%</span></div>			
-		<a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100" class="image-resize ratiobox lazyload" data-expand="-1">
-			<picture>
-				<source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/gg_medium.jpg" srcset="//product.hstatic.net/1000306140/product/gg_medium.jpg" sizes="219px">
-				<source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/gg_large.jpg" srcset="//product.hstatic.net/1000306140/product/gg_large.jpg" sizes="219px">
-				<source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/gg_grande.jpg" srcset="//product.hstatic.net/1000306140/product/gg_grande.jpg" sizes="219px">
-				<img class="img-loop lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//product.hstatic.net/1000306140/product/gg_grande.jpg" data-lowsrc="//product.hstatic.net/1000306140/product/gg_grande.jpg" src="@Url.Content("~/assets/homeimg/gg_grande.jpg")" alt=" Máy ảnh Panasonic X-T100 " sizes="219px">
-			</picture><img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="@Url.Content("~/assets/home/img/gg_grande.jpg")" alt="" aria-hidden="true">
-			<picture>
-				<source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/sf_medium.jpg" srcset="//product.hstatic.net/1000306140/product/sf_medium.jpg">
-				<source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/sf_large.jpg" srcset="//product.hstatic.net/1000306140/product/sf_large.jpg">
-				<source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/sf_grande.jpg" srcset="//product.hstatic.net/1000306140/product/sf_grande.jpg">
-				<img class="img-loop img-hover ls-is-cached lazyloaded" data-src="//product.hstatic.net/1000306140/product/sf_grande.jpg" src="@Url.Content("~/assets/home/img/sf_grande.jpg")" alt=" Máy ảnh Panasonic X-T100 ">
-			</picture>	
-		</a>	
-		<div class="button-add hidden">
-			<button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
-		</div>	
-	</div>
-	<div class="product-detail ">
-		<div class="box-pro-detail">
-			<h3 class="pro-name"><a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100">Máy ảnh Panasonic X-T100</a></h3>
-			<div class="box-pro-prices">	
-				<p class="pro-price highlight">
-					<span>12,300,000₫</span>
-					
-					<span class="pro-price-del">
-						<del class="compare-price">
-							12,999,000₫
-						</del>
-					</span>
-					
-				</p>
-			</div>
-		</div>
-	</div>
-</div>
-								</div>
-							</div>
-							<div class="collection-loadmore text-center">
-								<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
-							</div>
-						</div>
-						<div class="tab-pane fade " id="collection-tabs-2" data-get="false">
-							<div class="collection-list-prd listProduct-ldpage-row"><div class="icon-loading"></div></div>
-							<div class="collection-loadmore text-center">
-								<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
-							</div>
-						</div>
-						<div class="tab-pane fade " id="collection-tabs-3" data-get="false">
-							<div class="collection-list-prd listProduct-ldpage-row"><div class="icon-loading"></div></div>
-							<div class="collection-loadmore text-center">
-								<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
-
-							</div>
-						</div>
-						<div class="tab-pane fade " id="collection-tabs-4" data-get="false">
-							<div class="collection-list-prd listProduct-ldpage-row"><div class="icon-loading"></div></div>
-							<div class="collection-loadmore text-center">
-							</div>
-						</div>
-				</div>
-			</div>
-		</div>
-	</section>
+				    <div class="wrapper-collection-1">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="clearfix content-product-list">
+						@foreach (var product in Model)
+						{
+                        <div class="col-md-4 col-sm-6 col-xs-6 pro-loop ">
+                            <div class="product-block product-resize fixheight" style="height: 381px;">
+                                <div class="product-img ">
+                                    <a href="https://delight-shop.myharavan.com/products/ipad-pro-10-5-inch-64gb" title="@product.ProductName" class="image-resize ratiobox lazyload" data-expand="-1" style="height: 296px;">
+                                        <picture>
+                                            <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" sizes="266px">
+                                            <img class="img-loop lazyautosizes lazyloaded" data-sizes="auto" data-src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" data-lowsrc="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" alt=" iPad Pro 10.5 inch 64GB " sizes="266px">
+                                        </picture>
+									        <img class="ls-original-loaded" src="https://localhost:44302/api/products/images/@product.Images[0]" alt="" aria-hidden="true">
+                                        <picture>
+                                            <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" srcset="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png">
+                                            <img class="img-loop img-hover ls-is-cached lazyloaded" data-src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" src="https://localhost:44302/api/products/images/7076af84-294a-4a12-a2bf-df7177028976.png" alt=" iPad Pro 10.5 inch 64GB ">
+                                        </picture>
+                                    </a>
+                                    <div class="button-add hidden">
+                                        <button type="submit" title="Buy now" class="action" onclick="buy_now('1031386001')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
+                                    </div>
+                                    <div class="pro-price-mb">	
+                                        <span class="pro-price">@product.Price</span>			
+                                    </div>
+                                </div>
+                                <div class="product-detail clearfix">
+                                    <div class="box-pro-detail">
+                                        <h3 class="pro-name">
+                                            <a href="https://delight-shop.myharavan.com/products/ipad-pro-10-5-inch-64gb" title="@product.ProductName" >
+												@product.ProductName
+                                            </a>
+                                        </h3>
+                                        <div class="box-pro-prices">
+                                            <p class="pro-price ">
+                                                <span>@product.Price</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 	<section class="ldpage-technology01-flashsale ldpage-technology01-flashsale-02 ">
 		<div class="wrapper-ldpage-heading">
@@ -1085,6 +1071,48 @@ window.HaravanAnalytics.AutoTrack = true;
 	</div>
 </div>	
 								</div>
+								<div class="product-loop-ldpage animated">
+<div class="product-block ">
+	<div class="product-image ">		
+		<div class="product-sale"><span>-3%</span></div>	
+		<a href="https://delight-shop.myharavan.com/products/dong-ho-thong-minh-xtf" title="Đồng hồ thông minh XTF" class="image-resize ratiobox">
+			<picture>
+				<source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_medium.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+				<source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_large.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+				<source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_grande.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+				<img class="lazyload img-loop" data-sizes="auto" data-src="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_grande.jpg" data-lowsrc="//product.hstatic.net/1000306140/product/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_grande.jpg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt=" Đồng hồ thông minh XTF ">
+			</picture>
+			<picture>
+				<source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/42_bdd58983-d548-4492-8525-79c5c5aa33f6_2d08b191e2504cebb5dc368db237fda0_medium.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+				<source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/42_bdd58983-d548-4492-8525-79c5c5aa33f6_2d08b191e2504cebb5dc368db237fda0_large.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+				<source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/42_bdd58983-d548-4492-8525-79c5c5aa33f6_2d08b191e2504cebb5dc368db237fda0_grande.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+				<img class="img-loop img-hover lazyload" data-src="//product.hstatic.net/1000306140/product/42_bdd58983-d548-4492-8525-79c5c5aa33f6_2d08b191e2504cebb5dc368db237fda0_grande.jpg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt=" Đồng hồ thông minh XTF ">
+			</picture>	
+		</a>	
+		<div class="button-add hidden">
+			<button type="submit" title="Buy now" class="action" onclick="buy_now('1031396371')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
+		</div>	
+	</div>
+	<div class="product-detail ">
+		<div class="box-pro-detail">
+			<h3 class="pro-name"><a href="https://delight-shop.myharavan.com/products/dong-ho-thong-minh-xtf" title="Đồng hồ thông minh XTF">Đồng hồ thông minh XTF</a></h3>
+			<div class="box-pro-prices">	
+				<p class="pro-price highlight">
+					<span>3,456,000₫</span>
+					
+					<span class="pro-price-del">
+						<del class="compare-price">
+							3,568,000₫
+						</del>
+					</span>
+					
+				</p>
+			</div>
+		</div>
+	</div>
+</div>	
+								</div>
+								
 							</div>
 							<div class="collection-loadmore text-center">
 								<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
@@ -1412,10 +1440,10 @@ window.HaravanAnalytics.AutoTrack = true;
 					<circle cx="22" cy="22" r="22" fill="url(#paint2_linear)"></circle>
 					<path fill-rule="evenodd" clip-rule="evenodd" d="M14.0087 9.35552C14.1581 9.40663 14.3885 9.52591 14.5208 9.61114C15.3315 10.148 17.5888 13.0324 18.3271 14.4726C18.7495 15.2949 18.8903 15.9041 18.758 16.3558C18.6214 16.8415 18.3953 17.0971 17.384 17.9109C16.9786 18.239 16.5988 18.5756 16.5391 18.6651C16.3855 18.8866 16.2617 19.3212 16.2617 19.628C16.266 20.3395 16.7269 21.6305 17.3328 22.6232C17.8021 23.3944 18.6428 24.3828 19.4749 25.1413C20.452 26.0361 21.314 26.6453 22.2869 27.1268C23.5372 27.7488 24.301 27.9064 24.86 27.6466C25.0008 27.5826 25.1501 27.4974 25.1971 27.4591C25.2397 27.4208 25.5683 27.0202 25.9268 26.5772C26.618 25.7079 26.7759 25.5674 27.2496 25.4055C27.8513 25.201 28.4657 25.2563 29.0844 25.5716C29.5538 25.8145 30.5779 26.4493 31.2393 26.9095C32.1098 27.5187 33.9703 29.0355 34.2221 29.3381C34.6658 29.8834 34.7427 30.5821 34.4439 31.3534C34.1281 32.1671 32.8992 33.6925 32.0415 34.3444C31.2649 34.9323 30.7145 35.1581 29.9891 35.1922C29.3917 35.222 29.1442 35.1709 28.3804 34.8556C22.3893 32.3887 17.6059 28.7075 13.8081 23.65C11.8239 21.0084 10.3134 18.2688 9.28067 15.427C8.67905 13.7696 8.64921 13.0495 9.14413 12.2017C9.35753 11.8438 10.2664 10.9575 10.9278 10.4633C12.0288 9.64524 12.5365 9.34273 12.9419 9.25754C13.2193 9.19787 13.7014 9.24473 14.0087 9.35552Z" fill="white"></path>
 					<defs>
-						<lineargradient id="paint2_linear" x1="22" y1="-7.26346e-09" x2="22.1219" y2="40.5458" gradientUnits="userSpaceOnUse">
+						<linearGradient id="paint2_linear" x1="22" y1="-7.26346e-09" x2="22.1219" y2="40.5458" gradientUnits="userSpaceOnUse">
 							<stop offset="50%" stop-color="#e8434c"></stop>
 							<stop offset="100%" stop-color="#d61114"></stop>
-						</lineargradient>
+						</linearGradient>
 					</defs>
 				</svg>
 				<span class="tooltip-text">Gọi ngay cho chúng tôi</span>
@@ -1432,13 +1460,13 @@ window.HaravanAnalytics.AutoTrack = true;
 						<path d="M22.2947 20.7828C22.289 20.0013 22.7302 19.5302 23.3547 19.5634C23.6239 19.5745 23.876 19.702 24.0364 19.9181C24.3573 20.3339 24.3573 21.0322 24.0364 21.4535C23.7271 21.8526 23.1369 21.9357 22.7187 21.6364C22.65 21.5865 22.5869 21.5255 22.5296 21.4535C22.3864 21.2595 22.3062 21.0267 22.2947 20.7828ZM29.7314 20.683C29.7314 19.9957 30.1668 19.5357 30.7856 19.569C31.0549 19.5745 31.307 19.7075 31.4674 19.9181C31.794 20.3394 31.794 21.0544 31.4617 21.4701C31.1408 21.8636 30.545 21.9302 30.1382 21.6198C30.0752 21.5754 30.0236 21.52 29.9778 21.459C29.8059 21.2318 29.7257 20.9602 29.7314 20.683Z" fill="#0068FF"></path>
 					</g>
 					<defs>
-						<lineargradient id="paint4_linear" x1="22" y1="0" x2="22" y2="44" gradientUnits="userSpaceOnUse">
+						<linearGradient id="paint4_linear" x1="22" y1="0" x2="22" y2="44" gradientUnits="userSpaceOnUse">
 							<stop offset="50%" stop-color="#3985f7"></stop>
 							<stop offset="100%" stop-color="#1272e8"></stop>
-						</lineargradient>
-						<clippath id="clip0">
+						</linearGradient>
+						<clipPath id="clip0">
 							<rect width="26.3641" height="24.2" fill="white" transform="translate(8.78906 9.90234)"></rect>
-						</clippath>
+						</clipPath>
 					</defs>
 				</svg>
 				<span class="tooltip-text">Chat với chúng tôi qua Zalo</span>
@@ -1450,10 +1478,10 @@ window.HaravanAnalytics.AutoTrack = true;
 					<circle cx="22" cy="22" r="22" fill="url(#paint1_linear)"></circle>
 					<path fill-rule="evenodd" clip-rule="evenodd" d="M11.4589 11.6667H32.5414C33.1621 11.6667 33.6993 11.8861 34.153 12.3245C34.6062 12.7634 34.8332 13.2904 34.8332 13.9064C34.8332 14.6435 34.599 15.3481 34.1319 16.0197C33.6639 16.6914 33.0816 17.2655 32.3846 17.7413C30.0672 19.3131 28.3185 20.4998 27.1311 21.3061C26.4785 21.7489 25.9931 22.0787 25.6817 22.2905C25.6355 22.3222 25.5634 22.3723 25.4675 22.4396C25.3643 22.5117 25.2337 22.6037 25.0729 22.7174C24.7625 22.9368 24.5048 23.114 24.2994 23.2495C24.0938 23.3846 23.8457 23.5363 23.5545 23.7043C23.2631 23.8724 22.9887 23.9983 22.7309 24.0823C22.4731 24.1661 22.2344 24.2082 22.0148 24.2082H22.0006H21.9863C21.7667 24.2082 21.5281 24.1661 21.2702 24.0823C21.0125 23.9983 20.7378 23.8721 20.4466 23.7043C20.1552 23.5363 19.9068 23.385 19.7017 23.2495C19.4964 23.114 19.2386 22.9368 18.9284 22.7174C18.7672 22.6037 18.6366 22.5118 18.5334 22.4393L18.5233 22.4323C18.4325 22.3688 18.3638 22.3208 18.3195 22.2905C17.9197 22.0157 17.4354 21.6846 16.8739 21.3022C16.2152 20.8532 15.4486 20.3329 14.5671 19.7359C12.9342 18.6303 11.9554 17.9654 11.6308 17.7413C11.0388 17.3494 10.4802 16.8107 9.95513 16.1248C9.43011 15.4387 9.16748 14.8018 9.16748 14.214C9.16748 13.4864 9.36539 12.8796 9.76184 12.3944C10.158 11.9095 10.7234 11.6667 11.4589 11.6667ZM33.4002 19.2392C31.4494 20.5296 29.7913 21.6405 28.4258 22.5725L34.8324 28.8337V18.0213C34.4217 18.4695 33.9443 18.8752 33.4002 19.2392ZM9.1665 18.0214C9.58659 18.4788 10.0691 18.8848 10.6132 19.2393C12.6414 20.5863 14.2935 21.6952 15.5757 22.5701L9.1665 28.8335V18.0214ZM34.0421 30.8208C33.6172 31.1883 33.1173 31.3745 32.5403 31.3745H11.4578C10.8809 31.3745 10.3807 31.1883 9.95575 30.8208L17.2287 23.7122C17.4107 23.8399 17.5789 23.9592 17.7306 24.0679C18.2751 24.4597 18.7165 24.7654 19.0556 24.9845C19.3944 25.2041 19.8455 25.4279 20.4091 25.6564C20.9726 25.8853 21.4976 25.9993 21.9847 25.9993H21.9989H22.0132C22.5002 25.9993 23.0253 25.8852 23.5888 25.6564C24.152 25.4279 24.6032 25.2041 24.9423 24.9845C25.2814 24.7654 25.7231 24.4597 26.2672 24.0679C26.427 23.955 26.5961 23.8362 26.7705 23.7141L34.0421 30.8208Z" fill="white"></path>
 					<defs>
-						<lineargradient id="paint1_linear" x1="22" y1="0" x2="22" y2="44" gradientUnits="userSpaceOnUse">
+						<linearGradient id="paint1_linear" x1="22" y1="0" x2="22" y2="44" gradientUnits="userSpaceOnUse">
 							<stop offset="50%" stop-color="#70f3ff"></stop>
 							<stop offset="100%" stop-color="#00dcf0"></stop>
-						</lineargradient>
+						</linearGradient>
 					</defs>
 				</svg>
 				<span class="tooltip-text">Đăng kí thông tin và để lại lời nhắn</span>
@@ -1465,10 +1493,10 @@ window.HaravanAnalytics.AutoTrack = true;
 					<circle cx="22" cy="22" r="22" fill="url(#paint5_linear)"></circle>
 					<path d="M22 10C17.0374 10 13 13.7367 13 18.3297C13 24.0297 21.0541 32.3978 21.397 32.7512C21.7191 33.0832 22.2815 33.0826 22.603 32.7512C22.9459 32.3978 31 24.0297 31 18.3297C30.9999 13.7367 26.9626 10 22 10ZM22 22.5206C19.5032 22.5206 17.4719 20.6406 17.4719 18.3297C17.4719 16.0188 19.5032 14.1388 22 14.1388C24.4968 14.1388 26.528 16.0189 26.528 18.3297C26.528 20.6406 24.4968 22.5206 22 22.5206Z" fill="white"></path>
 					<defs>
-						<lineargradient id="paint5_linear" x1="22" y1="0" x2="22" y2="44" gradientUnits="userSpaceOnUse">
+						<linearGradient id="paint5_linear" x1="22" y1="0" x2="22" y2="44" gradientUnits="userSpaceOnUse">
 							<stop offset="50%" stop-color="#f5ae16"></stop>
 							<stop offset="100%" stop-color="#d99009"></stop>
-						</lineargradient>
+						</linearGradient>
 					</defs>
 				</svg>
 				<span class="tooltip-text">Xem địa chỉ doanh nghiệp</span>
@@ -1497,10 +1525,10 @@ window.HaravanAnalytics.AutoTrack = true;
 						<circle cx="22" cy="22" r="22" fill="url(#paint3_linear)"></circle>
 						<path fill-rule="evenodd" clip-rule="evenodd" d="M22.0026 7.70215C14.1041 7.70215 7.70117 13.6308 7.70117 20.9442C7.70117 25.1115 9.78083 28.8286 13.0309 31.256V36.305L17.9004 33.6325C19.2 33.9922 20.5767 34.1863 22.0026 34.1863C29.9011 34.1863 36.304 28.2576 36.304 20.9442C36.304 13.6308 29.9011 7.70215 22.0026 7.70215ZM23.4221 25.5314L19.7801 21.6471L12.6738 25.5314L20.4908 17.2331L24.2216 21.1174L31.239 17.2331L23.4221 25.5314Z" fill="white"></path>
 						<defs>
-							<lineargradient id="paint3_linear" x1="21.6426" y1="43.3555" x2="21.6426" y2="0.428639" gradientUnits="userSpaceOnUse">
+							<linearGradient id="paint3_linear" x1="21.6426" y1="43.3555" x2="21.6426" y2="0.428639" gradientUnits="userSpaceOnUse">
 								<stop offset="50%" stop-color="#1168CF"></stop>
 								<stop offset="100%" stop-color="#2CB7FF"></stop>
-							</lineargradient>
+							</linearGradient>
 						</defs>
 					</svg>
 				</span>
@@ -1646,7 +1674,7 @@ var e=this._canvas.getContext("2d");e.clearRect(0,0,this._canvas.width,this._can
 		//}, 500);
 	})
 </script>
-<iframe id="nr-ext-rsicon" style="position: absolute; display: none; width: 50px; height: 50px; z-index: 2147483647; border-style: none; background: transparent;" src="@Url.Content("~/assets/home/Landing page fashion 01 – Delight Shop_files")"/saved_resource.html></iframe>
+<iframe id="nr-ext-rsicon" style="position: absolute; display: none; width: 50px; height: 50px; z-index: 2147483647; border-style: none; background: transparent;" src="@Url.Content("~/assets/home/Landing page fashion 01 – Delight Shop_files/saved_resource.html")"></iframe>
 <div id="eJOY__extension_root" class="eJOY__extension_root_class" style="all: unset;"></div>
 <div>
    <div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;">

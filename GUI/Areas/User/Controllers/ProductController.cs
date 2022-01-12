@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -14,19 +12,21 @@ namespace GUI.Areas.User.Controllers
         {
             _productClient = productClient;
         }
+
         public IActionResult ListProduct()
         {
             return View();
         }
+
         public async Task<IActionResult> Index(string id)
         {
             var result = await _productClient.GetProductAsync(id);
-            if (result.ResponseCode == 404)
+            if (!result.IsSuccessStatusCode)
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                return StatusCode((int)result.StatusCode);
             }
-            var product = result.Data;
-            return View(JsonConvert.SerializeObject(product));
+            var product = result.Content;
+            return View(product);
         }
     }
 }
