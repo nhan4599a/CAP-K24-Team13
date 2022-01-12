@@ -9,15 +9,16 @@ namespace ShopProductService.Handlers.Cart
 {
     public class RemoveCartItemHandler : IRequestHandler<RemoveCartItemCommand, CommandResponse<bool>>
     {
-        private readonly ICartRepository _cartRepository;
+        private readonly ICartRepository _repository;
 
-        public RemoveCartItemHandler(ICartRepository cartRepository)
+        public RemoveCartItemHandler(ICartRepository repository)
         {
-            _cartRepository = cartRepository;
+            _repository = repository;
         }
+
         public async Task<CommandResponse<bool>> Handle(RemoveCartItemCommand request, CancellationToken cancellationToken)
         {
-            return await _cartRepository.RemoveCartItem(request.requestModel);
+            return await _repository.RemoveCartItem(request.requestModel);
         }
     }
 }

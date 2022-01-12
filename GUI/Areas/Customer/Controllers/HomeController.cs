@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shared;
+using Shared.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;

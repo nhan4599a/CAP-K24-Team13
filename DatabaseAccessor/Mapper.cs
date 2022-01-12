@@ -2,7 +2,6 @@ using AutoMapper;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Resolvers;
 using Shared.DTOs;
-using Shared.Models;
 
 namespace DatabaseAccessor.Mapping
 {
@@ -27,7 +26,7 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
-                cfg.CreateMap<CartItem, CartItemDto>();
+                cfg.CreateMap<Cart, CartDTO>();
             });
             _mapper = config.CreateMapper();
         }
@@ -41,7 +40,9 @@ namespace DatabaseAccessor.Mapping
 
         public CategoryDTO MapToCategoryDTO(ShopCategory category) => _mapper.Map<CategoryDTO>(category);
 
-        public ShopInterfaceDTO MapToShopInterfaceDTO(ShopInterface shopInterface) => _mapper.Map<ShopInterfaceDTO>(shopInterface);
-        public CartItemDto MapToCartItemDto(CartItem cartItem) => _mapper.Map<CartItemDto>(cartItem);
+        public ShopInterfaceDTO MapToShopInterfaceDTO(ShopInterface shopInterface) 
+            => _mapper.Map<ShopInterfaceDTO>(shopInterface);
+
+        public CartDTO MapToCartItemDto(Cart cartItem) => _mapper.Map<CartDTO>(cartItem);
     }
 }

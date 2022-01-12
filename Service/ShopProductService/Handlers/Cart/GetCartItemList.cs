@@ -2,13 +2,12 @@
 using MediatR;
 using Shared.DTOs;
 using ShopProductService.Commands.Cart;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Cart
 {
-    public class GetCartItemList : IRequestHandler<GetCartItemListQuery, List<CartItemDto>>
+    public class GetCartItemList : IRequestHandler<GetCartItemListQuery, CartDTO>
     {
         private readonly ICartRepository _cartRepository;
 
@@ -16,9 +15,9 @@ namespace ShopProductService.Handlers.Cart
         {
             _cartRepository = cartRepository;
         }
-        public Task<List<CartItemDto>> Handle(GetCartItemListQuery request, CancellationToken cancellationToken)
+        public async Task<CartDTO> Handle(GetCartItemListQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_cartRepository.GetCartAsync(request.UserId));
+            return await _cartRepository.GetCartAsync(request.UserId);
         }
     }
 }

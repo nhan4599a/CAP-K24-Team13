@@ -21,10 +21,10 @@ namespace ShopProductService.Controllers
 
         [HttpGet]
         [ActionName("GetCartItems")]
-        public async Task<ApiResult<List<CartItemDto>>> GetCartItems()
+        public async Task<ApiResult<CartDTO>> GetCartItems()
         {
             var response = await _mediator.Send(new GetCartItemListQuery { UserId = "69" });
-            return new ApiResult<List<CartItemDto>> { ResponseCode = 200, Data = response };
+            return new ApiResult<CartDTO> { ResponseCode = 200, Data = response };
         }
 
         [HttpPost]

@@ -16,7 +16,7 @@ namespace DatabaseAccessor.Repositories.Interfaces
         Task<CommandResponse<bool>> EditQuantity(AddOrEditQuantityCartItemRequestModel requestModel);
 
         Task<CommandResponse<bool>> RemoveCartItem(RemoveCartItemRequestModel requestModel);
-        List<CartItemDto> GetCartAsync(string userId);
-
+        
+        Task<CartDTO> GetCartAsync(string userId);
     }
 }
