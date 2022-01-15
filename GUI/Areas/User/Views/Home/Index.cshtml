@@ -7,7 +7,9 @@
 <!--<![endif]-->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script id="hrfwidget-core" src="/Delight Shop_files/widget.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script id="hrfwidget-core" src="@Url.Content("~/assets/user/js/widget.js")"></script>
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' /><![endif]-->
     <!--[if lt IE 9]><script src="//hsta tic.net/0/0/global/design/theme-default/html5shiv.js"></script><![endif]-->
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=0" name="viewport">
@@ -23,23 +25,20 @@
     <meta name="keywords" content="GIGAMALL">
     <meta name="robots" content="index,follow,noodp">
     <meta http-equiv="x-dns-prefetch-control" content="on">
-    <link rel="preload" href="@Url.Content("~/assets/home/img/slideshow_1.jpg")" as="image" media="(min-width: 481px)">
-    <link rel="preload" href="@Url.Content("~/assets/home/img/slideshow_2.jpg")" as="image" media="(min-width: 481px)">
-    <link rel="preload" href="@Url.Content("~/assets/home/img/slideshow_3.jpg")" as="image" media="(min-width: 481px)">
-    <link rel="preload" href="https://theme.hstatic.net/1000306140/1000709257/14/slideshow_1_large.jpg?v=2278" as="image" media="(max-width: 480px)">
-    <link rel="preload" as="style" href="@Url.Content("~/assets/home/css/styles.css")">
-    <link rel="preconnect" href="@Url.Content("~/assets/home/Delight Shop_files/css")">
-    <link rel="preload" href="@Url.Content("~/assets/home/Delight Shop_files/css")" as="style">
+    <link rel="preload" href="@Url.Content("~/assets/user/img/slideshow_1.jpg")" as="image" media="(min-width: 481px)" />
+    <link rel="preload" href="@Url.Content("~/assets/user/img/slideshow_2.jpg")" as="image" media="(min-width: 481px)" />
+    <link rel="preload" href="@Url.Content("~/assets/user/img/slideshow_3.jpg")" as="image" media="(min-width: 481px)" />
+    <link rel="preload" href="https://theme.hstatic.net/1000306140/1000709257/14/slideshow_1_large.jpg?v=2278" as="image" media="(max-width: 480px)" />
+    <link rel="preload" as="style" href="@Url.Content("~/assets/user/css/styles.css")" />
+    <link rel="preconnect" href="@Url.Content("~/assets/user/css/shop_styles.css")" />
+    <link rel="preload" href="@Url.Content("~/assets/user/css/shop_styles.css")" as="style" />
     <!--+++++++++++++++++++++++++  CSS ++++++++++++++++++++++++-->
-    <link href="@Url.Content("~/assets/home/Delight Shop_files/css")" rel="stylesheet">
-    <link href="@Url.Content("~/assets/home/css/styles.css")" rel="stylesheet" type="text/css" media="all">
-    <link href="@Url.Content("~/assets/home/css/style.css")" rel="stylesheet" type="text/css" media="all">
+    <link href="@Url.Content("~/assets/user/css/shop_styles.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/assets/user/css/styles.css")" rel="stylesheet" type="text/css" media="all" />
+    <link href="@Url.Content("~/assets/user/css/style.css")" rel="stylesheet" type="text/css" media="all" />
     <!--+++++++++++++++++++++++++  JS ++++++++++++++++++++++++-->
-    <script type="text/javascript" async="" src="@Url.Content("~/assets/home/js/recaptcha__en.js")" crossorigin="anonymous" integrity="sha384-Cr+nkafY9HA+49PzRTzvm9wOv1bIcrLbq3GdihimIUtkckBPSema3//0/Jmxo4ok"></script>
-    <script async="" src="@Url.Content("~/assets/home/js/api.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/assets/home/js/jquery.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/assets/home/js/jquery(1).js")"></script>
-    <script type="text/javascript" async="" src="@Url.Content("~/assets/home/js/analytics.min.js")"></script>
+    <script src="@Url.Content("~/assets/user/js/api.js")"></script>
+    <script async src="@Url.Content("~/assets/user/js/analytics.min.js")"></script>
     <script>
         var template = 'index';
         var formatMoney = '{{amount}}₫';
@@ -70,16 +69,53 @@
         //]]>
     </script>
     <meta name="google-site-verification" content="xHjo5O-zeCo_hiytjCaJl4drBW6LryWRImkMdc432XU">
-    <script type="text/javascript">!function(){var hrv_analytics=window.hrv_analytics=window.hrv_analytics||[];if(!hrv_analytics.initialize)if(hrv_analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{hrv_analytics.invoked=!0;hrv_analytics.methods=["start","trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];hrv_analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);hrv_analytics.push(e);return hrv_analytics}};for(var t=0;t<hrv_analytics.methods.length;t++){var e=hrv_analytics.methods[t];hrv_analytics[e]=hrv_analytics.factory(e)}hrv_analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://stats.hstatic.net/analytics.min.js?t=2";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);hrv_analytics._loadOptions=e};hrv_analytics.SNIPPET_VERSION="4.1.0";hrv_analytics.start('pro:web:1000306140');hrv_analytics.page();hrv_analytics.load();}}();</script>
+    <script type="text/javascript">
+        !function() {
+            var hrv_analytics=window.hrv_analytics=window.hrv_analytics || [];
+            if (!hrv_analytics.initialize)
+                if (hrv_analytics.invoked)
+                    window.console && console.error && console.error("Segment snippet included twice.");
+                else {
+                    hrv_analytics.invoked = ! 0;
+                    hrv_analytics.methods = ["start", "trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on"];
+                    hrv_analytics.factory = function(t) {
+                        return function() {
+                            var e = Array.prototype.slice.call(arguments);
+                            e.unshift(t);
+                            hrv_analytics.push(e);
+                            return hrv_analytics;
+                        }
+                    };
+                    for(var t = 0; t < hrv_analytics.methods.length; t++) {
+                        var e = hrv_analytics.methods[t];
+                        hrv_analytics[e] = hrv_analytics.factory(e);
+                    }
+                    hrv_analytics.load = function(t, e) {
+                        var n = document.createElement("script");
+                        n.type = "text/javascript";
+                        n.async = !0;
+                        n.src = "https://stats.hstatic.net/analytics.min.js?t=2";
+                        var a = document.getElementsByTagName("script")[0];
+                        a.parentNode.insertBefore(n,a);
+                        hrv_analytics._loadOptions=e
+                    };
+                    hrv_analytics.SNIPPET_VERSION = "4.1.0";
+                    hrv_analytics.start('pro:web:1000306140');
+                    hrv_analytics.page();
+                    hrv_analytics.load();
+                }
+            }();
+        </script>
     <style>
         .grecaptcha-badge {
             visibility: hidden;
-        }</style>
+        }
+    </style>
     <script type="text/javascript">
         window.HaravanAnalytics = window.HaravanAnalytics || {};
         window.HaravanAnalytics.meta = window.HaravanAnalytics.meta || {};
         window.HaravanAnalytics.meta.currency = 'VND';
-        var meta = {"page":{"pageType":"home"}};
+        var meta = { "page": { "pageType" : "home" } };
         for (var attr in meta) {
             window.HaravanAnalytics.meta[attr] = meta[attr];
         }
@@ -323,7 +359,7 @@
                             </div>
                             <div class="col-md-4 header-upper-logo">
                                 <div class="wrap-logo text-center" itemscope="">
-                                    <img src="/assets/home/img/logo-1.png">
+                                    <img src="@Url.Content("~/assets/user/img/logo-1.png")">
                                 </div>
                             </div>
                             <div class="col-md-4 header-upper-icon">
@@ -579,7 +615,7 @@
                     <div class="container-fluid">
                         <div class="header-navbar-menu">
                             <div class="wrap-logo wrap-logo-sticky">
-                                <img src="/assets//img/logo-footer.png">
+                                <img src="@Url.Content("~/assets/user/img/logo-footer.png")">
                             </div>
                             <div class="navbar-mainmenu">
                                 <div id="nav">
@@ -755,9 +791,9 @@
                                 <div class="item ">
                                     <a href="#" title="Sản phẩm nổi bật" aria-label="Banner 1">
                                         <picture>
-                                            <source media="(max-width: 480px)" srcset="/assets/home/img/slideshow_1_large.jpg?v=2278">
-                                            <source media="(min-width: 481px)" srcset="/assets/home/img/slideshow_1.jpg?v=2278">
-                                            <img src="/assets/home/img/slideshow_1.jpg" alt="Sản phẩm nổi bật">
+                                            <source media="(max-width: 480px)" srcset="@Url.Content("~/assets/user/img/slideshow_1_large.jpg?v=2278")">
+                                            <source media="(min-width: 481px)" srcset="@Url.Content("~/assets/user/img/slideshow_1.jpg?v=2278")">
+                                            <img src="@Url.Content("~/assets/user/img/slideshow_1.jpg")" alt="Sản phẩm nổi bật">
                                         </picture>
                                     </a>
                                 </div>
@@ -766,9 +802,9 @@
                                 <div class="item ">
                                     <<a href="#" title="Sản phẩm nổi bật" aria-label="Banner 2">
                                         <picture>
-                                            <source media="(max-width: 480px)" srcset="/assets/home/img/slideshow_2_large.jpg?v=2278">
-                                            <source media="(min-width: 481px)" srcset="/assets/home/img/slideshow_2.jpg?v=2278">
-                                            <img src="/assets/home/img/slideshow_2.jpg" alt="Sản phẩm nổi bật">
+                                            <source media="(max-width: 480px)" srcset="@Url.Content("~/assets/user/img/slideshow_2_large.jpg?v=2278")">
+                                            <source media="(min-width: 481px)" srcset="@Url.Content("~/assets/user/img/slideshow_2.jpg?v=2278")">
+                                            <img src="@Url.Content("~/assets/user/img/slideshow_2.jpg")" alt="Sản phẩm nổi bật">
                                         </picture>
                                     </a>
                                 </div>
@@ -777,9 +813,9 @@
                                 <div class="item ">
                                     <a href="#" title="Sản phẩm nổi bật" aria-label="Banner 3">
                                         <picture>
-                                            <source media="(max-width: 480px)" srcset="/assets/home/img/slideshow_3_large.jpg?v=2278">
-                                            <source media="(min-width: 481px)" srcset="/assets/home/img/slideshow_3.jpg?v=2278">
-                                            <img src="/assets/home/img/slideshow_3.jpg" alt="Sản phẩm nổi bật">
+                                            <source media="(max-width: 480px)" srcset="@Url.Content("~/assets/user/img/slideshow_3_large.jpg?v=2278")">
+                                            <source media="(min-width: 481px)" srcset="@Url.Content("~/assets/user/img/slideshow_3.jpg?v=2278")">
+                                            <img src="@Url.Content("~/assets/user/img/slideshow_3.jpg")" alt="Sản phẩm nổi bật">
                                         </picture>
                                     </a>
                                 </div>
@@ -795,7 +831,15 @@
                         </button>
                     </div>
                     <div class="owl-dots">
-                        <button role="button" class="owl-dot active" aria-label="1"><span></span></button><button role="button" class="owl-dot" aria-label="2"><span></span></button><button role="button" class="owl-dot" aria-label="3"><span></span></button>
+                        <button role="button" class="owl-dot active" aria-label="1">
+                            <span></span>
+                        </button>
+                        <button role="button" class="owl-dot" aria-label="2">
+                            <span></span>
+                        </button>
+                        <button role="button" class="owl-dot" aria-label="3">
+                            <span></span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -833,7 +877,7 @@
                                 <div class="home-banner-pd">
                                     <div class="block-banner-category ">
                                         <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 5" data-expand="-1">
-                                            <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_5_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_5_banner.jpg?v=2278" src="/assets/home/img/home_category_5_banner.jpg" alt="Banner 5" sizes="600px">
+                                            <img class="lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_5_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_5_banner.jpg?v=2278" src="~/assets/user/img/home_category_5_banner.jpg" alt="Banner 5" sizes="600px">
                                         </a>
                                         <div class="caption_banner_slide">
                                             <h3>Thiết bị gia đình</h3>
@@ -846,7 +890,7 @@
                                 <div class="home-banner-pd">
                                     <div class="block-banner-category ">
                                         <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 1" data-expand="-1">
-                                            <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_1_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_1_banner.jpg?v=2278" src="/assets/home/img/home_category_1_banner.jpg" alt="Sản phẩm khuyến mãi" sizes="600px">
+                                            <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_1_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_1_banner.jpg?v=2278" src="~/assets/user/img/home_category_1_banner.jpg" alt="Sản phẩm khuyến mãi" sizes="600px">
                                         </a>
                                         <div class="caption_banner_slide">
                                             <h3>Sản phẩm khuyến mãi</h3>
@@ -859,7 +903,7 @@
                                 <div class="home-banner-pd">
                                     <div class="block-banner-category ">
                                         <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 2" data-expand="-1">
-                                            <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_2_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_2_banner.jpg?v=2278" src="/assets/home/img/home_category_2_banner.jpg" alt="Sản phẩm hot" sizes="600px">
+                                            <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_2_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_2_banner.jpg?v=2278" src="~/assets/user/img/home_category_2_banner.jpg" alt="Sản phẩm hot" sizes="600px">
                                         </a>
                                         <div class="caption_banner_slide">
                                             <h3>Sản phẩm hot</h3>
@@ -872,7 +916,7 @@
                                 <div class="home-banner-pd">
                                     <div class="block-banner-category ">
                                         <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 3" data-expand="-1">
-                                            <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_3_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_3_banner.jpg?v=2278" src="/assets/home/img/home_category_3_banner.jpg" alt="Banner 3" sizes="600px">
+                                            <img class=" lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_3_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_3_banner.jpg?v=2278" src="~/assets/user/img/home_category_3_banner.jpg" alt="Banner 3" sizes="600px">
                                         </a>
                                         <div class="caption_banner_slide">
                                             <h3> Sản phẩm mới</h3>
@@ -885,7 +929,7 @@
                                 <div class="home-banner-pd">
                                     <div class="block-banner-category ">
                                         <a class="link-banner ratiobox lazyloaded" href="https://delight-shop.myharavan.com/collections/all" aria-label="Banner 4" data-expand="-1">
-                                            <img class="lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_4_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_4_banner.jpg?v=2278" src="/assets/home/img/home_category_4_banner.jpg" alt="Banner 4" sizes="600px">
+                                            <img class="lazyautosizes lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/home_category_4_banner.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/home_category_4_banner.jpg?v=2278" src="~/assets/user/img/home_category_4_banner.jpg" alt="Banner 4" sizes="600px">
                                         </a>
                                         <div class="caption_banner_slide">
                                             <h3>Làm việc hiệu quả</h3>
@@ -896,7 +940,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><span aria-label="Previous">‹</span></button><button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span></button></div>
+                    <div class="owl-nav">
+                        <button type="button" role="presentation" class="owl-prev">
+                            <span aria-label="Previous">
+                                ‹
+                            </span>
+                        </button>
+                        <button type="button" role="presentation" class="owl-next">
+                            <span aria-label="Next">›</span>
+                        </button>
+                    </div>
                     <div class="owl-dots disabled"></div>
                 </div>
             </div>
@@ -972,7 +1025,7 @@
                     <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                         <div class="block-banner-category ratiobox">
                             <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
-                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" src="/assets/home/img/block_home_category1.jpg" alt="Khuyến mãi 1" sizes="600px"><img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="/assets/home/img/block_home_category1.jpg" alt="" aria-hidden="true">
+                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" src="~/assets/user/img/block_home_category1.jpg" alt="Khuyến mãi 1" sizes="600px"><img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="~/assets/user/img/block_home_category1.jpg" alt="" aria-hidden="true">
                             </a>
                             <div class="caption_banner">
                                 <span class="subtitle">Phụ kiện</span>
@@ -984,7 +1037,7 @@
                     <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                         <div class="block-banner-category ratiobox">
                             <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
-                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" src="/assets/home/img/block_home_category2.jpg" alt="Khuyến mãi 2" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="/assets/home/img/block_home_category2.jpg" alt="" aria-hidden="true">
+                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" src="~/assets/user/img/block_home_category2.jpg" alt="Khuyến mãi 2" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="~/assets/user/img/block_home_category2.jpg" alt="" aria-hidden="true">
                             </a>
                             <div class="caption_banner">
                                 <span class="subtitle">Sản phẩm</span>
@@ -996,7 +1049,7 @@
                     <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                         <div class="block-banner-category ratiobox">
                             <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/hot-products" data-expand="-1">
-                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" src="/assets/home/img/block_home_category3.jpg" alt="Khuyến mãi 3" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="/assets/home/img/block_home_category3.jpg" alt="" aria-hidden="true">
+                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" src="~/assets/user/img/block_home_category3.jpg" alt="Khuyến mãi 3" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="~/assets/user/img/block_home_category3.jpg" alt="" aria-hidden="true">
                             </a>
                             <div class="caption_banner">
                                 <span class="subtitle">Xu hướng công nghệ</span>
@@ -1381,8 +1434,8 @@
         </div>
         <div id="site-overlay" class="site-overlay"></div>
     </div>
-    <script src="/assets/home/js/option_selection.js" type="text/javascript"></script>
-    <script src="/assets/home/js/api.jquery.js" type="text/javascript"></script>
+    <script src="~/assets/user/js/option_selection.js" type="text/javascript"></script>
+    <script src="~/assets/user/js/api.jquery.js" type="text/javascript"></script>
 
     <script>
             /* imagesloaded */
@@ -1393,13 +1446,22 @@
     </script>
     <script>
         /*! blur-up - v5.2.0 */
-        !function(a,b){if(a){var c=function(){b(a.lazySizes),a.removeEventListener("lazyunveilread",c,!0)};b=b.bind(null,a,a.document),"object"==typeof module&&module.exports?b(require("lazysizes")):a.lazySizes?c():a.addEventListener("lazyunveilread",c,!0)}}("undefined"!=typeof window?window:0,function(a,b,c){"use strict";var d=[].slice,e=/blur-up["']*\s*:\s*["']*(always|auto)/,f=/image\/(jpeg|png|gif|svg\+xml)/,g=function(b){var d=b.getAttribute("data-media")||b.getAttribute("media"),e=b.getAttribute("type");return(!e||f.test(e))&&(!d||a.matchMedia(c.cfg.customMedia[d]||d).matches)},h=function(a,b){var c;return(a?d.call(a.querySelectorAll("source, img")):[b]).forEach(function(a){if(!c){var b=a.getAttribute("data-lowsrc");b&&g(a)&&(c=b)}}),c},i=function(a,d,e,f){var g,h=!1,i=!1,j="always"==f?0:Date.now(),k=0,l=(a||d).parentNode,m=function(){if(e){var j=function(a){h=!0,g||(g=a.target),c.rAF(function(){c.rC(d,"ls-blur-up-is-loading"),g&&c.aC(g,"ls-blur-up-loaded")}),g&&(g.removeEventListener("load",j),g.removeEventListener("error",j))};g=b.createElement("img"),g.addEventListener("load",j),g.addEventListener("error",j),g.className="ls-blur-up-img",g.src=e,g.alt="",g.setAttribute("aria-hidden","true"),l.insertBefore(g,(a||d).nextSibling),"always"!=f&&(g.style.visibility="hidden",c.rAF(function(){g&&setTimeout(function(){g&&c.rAF(function(){!i&&g&&(g.style.visibility="")})},c.cfg.blurupCacheDelay||33)}))}},n=function(){g&&c.rAF(function(){c.rC(d,"ls-blur-up-is-loading");try{g.parentNode.removeChild(g)}catch(a){}g=null})},o=function(a){k++,i=a||i,a?n():k>1&&setTimeout(n,5e3)},p=function(){d.removeEventListener("load",p),d.removeEventListener("error",p),g&&c.rAF(function(){g&&c.aC(g,"ls-original-loaded")}),"always"!=f&&(!h||Date.now()-j<66)?o(!0):o()};m(),d.addEventListener("load",p),d.addEventListener("error",p),c.aC(d,"ls-blur-up-is-loading");var q=function(a){l==a.target&&(c.aC(g||d,"ls-inview"),o(),l.removeEventListener("lazybeforeunveil",q))};l.getAttribute("data-expand")||l.setAttribute("data-expand",-1),l.addEventListener("lazybeforeunveil",q),c.aC(l,c.cfg.lazyClass)};a.addEventListener("lazybeforeunveil",function(a){var b=a.detail;if(b.instance==c&&b.blurUp){var d=a.target,e=d.parentNode;"PICTURE"!=e.nodeName&&(e=null),i(e,d,h(e,d)||"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",b.blurUp)}}),a.addEventListener("lazyunveilread",function(a){var b=a.detail;if(b.instance==c){var d=a.target,f=(getComputedStyle(d,null)||{fontFamily:""}).fontFamily.match(e);(f||d.getAttribute("data-lowsrc"))&&(b.blurUp=f&&f[1]||c.cfg.blurupMode||"always")}})});
+        !function(a, b) {
+            if(a) {
+                var c = function() {
+                    b(a.lazySizes);
+                    a.removeEventListener("lazyunveilread", c, !0)
+                };
+                b = b.bind(null,a,a.document);
+                "object" == typeof module && module.exports ? b(require("lazysizes")) : a.lazySizes ? c() : a.addEventListener("lazyunveilread", c, !0)4
+            }
+        }("undefined" != typeof window ? window : 0, function(a,b,c){"use strict";var d=[].slice,e=/blur-up["']*\s*:\s*["']*(always|auto)/,f=/image\/(jpeg|png|gif|svg\+xml)/,g=function(b){var d=b.getAttribute("data-media")||b.getAttribute("media"),e=b.getAttribute("type");return(!e||f.test(e))&&(!d||a.matchMedia(c.cfg.customMedia[d]||d).matches)},h=function(a,b){var c;return(a?d.call(a.querySelectorAll("source, img")):[b]).forEach(function(a){if(!c){var b=a.getAttribute("data-lowsrc");b&&g(a)&&(c=b)}}),c},i=function(a,d,e,f){var g,h=!1,i=!1,j="always"==f?0:Date.now(),k=0,l=(a||d).parentNode,m=function(){if(e){var j=function(a){h=!0,g||(g=a.target),c.rAF(function(){c.rC(d,"ls-blur-up-is-loading"),g&&c.aC(g,"ls-blur-up-loaded")}),g&&(g.removeEventListener("load",j),g.removeEventListener("error",j))};g=b.createElement("img"),g.addEventListener("load",j),g.addEventListener("error",j),g.className="ls-blur-up-img",g.src=e,g.alt="",g.setAttribute("aria-hidden","true"),l.insertBefore(g,(a||d).nextSibling),"always"!=f&&(g.style.visibility="hidden",c.rAF(function(){g&&setTimeout(function(){g&&c.rAF(function(){!i&&g&&(g.style.visibility="")})},c.cfg.blurupCacheDelay||33)}))}},n=function(){g&&c.rAF(function(){c.rC(d,"ls-blur-up-is-loading");try{g.parentNode.removeChild(g)}catch(a){}g=null})},o=function(a){k++,i=a||i,a?n():k>1&&setTimeout(n,5e3)},p=function(){d.removeEventListener("load",p),d.removeEventListener("error",p),g&&c.rAF(function(){g&&c.aC(g,"ls-original-loaded")}),"always"!=f&&(!h||Date.now()-j<66)?o(!0):o()};m(),d.addEventListener("load",p),d.addEventListener("error",p),c.aC(d,"ls-blur-up-is-loading");var q=function(a){l==a.target&&(c.aC(g||d,"ls-inview"),o(),l.removeEventListener("lazybeforeunveil",q))};l.getAttribute("data-expand")||l.setAttribute("data-expand",-1),l.addEventListener("lazybeforeunveil",q),c.aC(l,c.cfg.lazyClass)};a.addEventListener("lazybeforeunveil",function(a){var b=a.detail;if(b.instance==c&&b.blurUp){var d=a.target,e=d.parentNode;"PICTURE"!=e.nodeName&&(e=null),i(e,d,h(e,d)||"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",b.blurUp)}}),a.addEventListener("lazyunveilread",function(a){var b=a.detail;if(b.instance==c){var d=a.target,f=(getComputedStyle(d,null)||{fontFamily:""}).fontFamily.match(e);(f||d.getAttribute("data-lowsrc"))&&(b.blurUp=f&&f[1]||c.cfg.blurupMode||"always")}})});
         /*! lazysizes - v5.2.0 (https://github.com/aFarkas/lazysizes) */
         !function(a,b){var c=b(a,a.document,Date);a.lazySizes=c,"object"==typeof module&&module.exports&&(module.exports=c)}("undefined"!=typeof window?window:{},function(a,b,c){"use strict";var d,e;if(function(){var b,c={lazyClass:"lazyload",loadedClass:"lazyloaded",loadingClass:"lazyloading",preloadClass:"lazypreload",errorClass:"lazyerror",autosizesClass:"lazyautosizes",srcAttr:"data-src",srcsetAttr:"data-srcset",sizesAttr:"data-sizes",minSize:40,customMedia:{},init:!0,expFactor:1.5,hFac:.8,loadMode:2,loadHidden:!0,ricTimeout:0,throttleDelay:125};e=a.lazySizesConfig||a.lazysizesConfig||{};for(b in c)b in e||(e[b]=c[b])}(),!b||!b.getElementsByClassName)return{init:function(){},cfg:e,noSupport:!0};var f=b.documentElement,g=a.HTMLPictureElement,h="addEventListener",i="getAttribute",j=a[h].bind(a),k=a.setTimeout,l=a.requestAnimationFrame||k,m=a.requestIdleCallback,n=/^picture$/i,o=["load","error","lazyincluded","_lazyloaded"],p={},q=Array.prototype.forEach,r=function(a,b){return p[b]||(p[b]=new RegExp("(\\s|^)"+b+"(\\s|$)")),p[b].test(a[i]("class")||"")&&p[b]},s=function(a,b){r(a,b)||a.setAttribute("class",(a[i]("class")||"").trim()+" "+b)},t=function(a,b){var c;(c=r(a,b))&&a.setAttribute("class",(a[i]("class")||"").replace(c," "))},u=function(a,b,c){var d=c?h:"removeEventListener";c&&u(a,b),o.forEach(function(c){a[d](c,b)})},v=function(a,c,e,f,g){var h=b.createEvent("Event");return e||(e={}),e.instance=d,h.initEvent(c,!f,!g),h.detail=e,a.dispatchEvent(h),h},w=function(b,c){var d;!g&&(d=a.picturefill||e.pf)?(c&&c.src&&!b[i]("srcset")&&b.setAttribute("srcset",c.src),d({reevaluate:!0,elements:[b]})):c&&c.src&&(b.src=c.src)},x=function(a,b){return(getComputedStyle(a,null)||{})[b]},y=function(a,b,c){for(c=c||a.offsetWidth;c<e.minSize&&b&&!a._lazysizesWidth;)c=b.offsetWidth,b=b.parentNode;return c},z=function(){var a,c,d=[],e=[],f=d,g=function(){var b=f;for(f=d.length?e:d,a=!0,c=!1;b.length;)b.shift()();a=!1},h=function(d,e){a&&!e?d.apply(this,arguments):(f.push(d),c||(c=!0,(b.hidden?k:l)(g)))};return h._lsFlush=g,h}(),A=function(a,b){return b?function(){z(a)}:function(){var b=this,c=arguments;z(function(){a.apply(b,c)})}},B=function(a){var b,d=0,f=e.throttleDelay,g=e.ricTimeout,h=function(){b=!1,d=c.now(),a()},i=m&&g>49?function(){m(h,{timeout:g}),g!==e.ricTimeout&&(g=e.ricTimeout)}:A(function(){k(h)},!0);return function(a){var e;(a=!0===a)&&(g=33),b||(b=!0,e=f-(c.now()-d),e<0&&(e=0),a||e<9?i():k(i,e))}},C=function(a){var b,d,e=99,f=function(){b=null,a()},g=function(){var a=c.now()-d;a<e?k(g,e-a):(m||f)(f)};return function(){d=c.now(),b||(b=k(g,e))}},D=function(){var g,m,o,p,y,D,F,G,H,I,J,K,L=/^img$/i,M=/^iframe$/i,N="onscroll"in a&&!/(gle|ing)bot/.test(navigator.userAgent),O=0,P=0,Q=0,R=-1,S=function(a){Q--,(!a||Q<0||!a.target)&&(Q=0)},T=function(a){return null==K&&(K="hidden"==x(b.body,"visibility")),K||!("hidden"==x(a.parentNode,"visibility")&&"hidden"==x(a,"visibility"))},U=function(a,c){var d,e=a,g=T(a);for(G-=c,J+=c,H-=c,I+=c;g&&(e=e.offsetParent)&&e!=b.body&&e!=f;)(g=(x(e,"opacity")||1)>0)&&"visible"!=x(e,"overflow")&&(d=e.getBoundingClientRect(),g=I>d.left&&H<d.right&&J>d.top-1&&G<d.bottom+1);return g},V=function(){var a,c,h,j,k,l,n,o,q,r,s,t,u=d.elements;if((p=e.loadMode)&&Q<8&&(a=u.length)){for(c=0,R++;c<a;c++)if(u[c]&&!u[c]._lazyRace)if(!N||d.prematureUnveil&&d.prematureUnveil(u[c]))ba(u[c]);else if((o=u[c][i]("data-expand"))&&(l=1*o)||(l=P),r||(r=!e.expand||e.expand<1?f.clientHeight>500&&f.clientWidth>500?500:370:e.expand,d._defEx=r,s=r*e.expFactor,t=e.hFac,K=null,P<s&&Q<1&&R>2&&p>2&&!b.hidden?(P=s,R=0):P=p>1&&R>1&&Q<6?r:O),q!==l&&(D=innerWidth+l*t,F=innerHeight+l,n=-1*l,q=l),h=u[c].getBoundingClientRect(),(J=h.bottom)>=n&&(G=h.top)<=F&&(I=h.right)>=n*t&&(H=h.left)<=D&&(J||I||H||G)&&(e.loadHidden||T(u[c]))&&(m&&Q<3&&!o&&(p<3||R<4)||U(u[c],l))){if(ba(u[c]),k=!0,Q>9)break}else!k&&m&&!j&&Q<4&&R<4&&p>2&&(g[0]||e.preloadAfterLoad)&&(g[0]||!o&&(J||I||H||G||"auto"!=u[c][i](e.sizesAttr)))&&(j=g[0]||u[c]);j&&!k&&ba(j)}},W=B(V),X=function(a){var b=a.target;if(b._lazyCache)return void delete b._lazyCache;S(a),s(b,e.loadedClass),t(b,e.loadingClass),u(b,Z),v(b,"lazyloaded")},Y=A(X),Z=function(a){Y({target:a.target})},$=function(a,b){try{a.contentWindow.location.replace(b)}catch(c){a.src=b}},_=function(a){var b,c=a[i](e.srcsetAttr);(b=e.customMedia[a[i]("data-media")||a[i]("media")])&&a.setAttribute("media",b),c&&a.setAttribute("srcset",c)},aa=A(function(a,b,c,d,f){var g,h,j,l,m,p;(m=v(a,"lazybeforeunveil",b)).defaultPrevented||(d&&(c?s(a,e.autosizesClass):a.setAttribute("sizes",d)),h=a[i](e.srcsetAttr),g=a[i](e.srcAttr),f&&(j=a.parentNode,l=j&&n.test(j.nodeName||"")),p=b.firesLoad||"src"in a&&(h||g||l),m={target:a},s(a,e.loadingClass),p&&(clearTimeout(o),o=k(S,2500),u(a,Z,!0)),l&&q.call(j.getElementsByTagName("source"),_),h?a.setAttribute("srcset",h):g&&!l&&(M.test(a.nodeName)?$(a,g):a.src=g),f&&(h||l)&&w(a,{src:g})),a._lazyRace&&delete a._lazyRace,t(a,e.lazyClass),z(function(){var b=a.complete&&a.naturalWidth>1;p&&!b||(b&&s(a,"ls-is-cached"),X(m),a._lazyCache=!0,k(function(){"_lazyCache"in a&&delete a._lazyCache},9)),"lazy"==a.loading&&Q--},!0)}),ba=function(a){if(!a._lazyRace){var b,c=L.test(a.nodeName),d=c&&(a[i](e.sizesAttr)||a[i]("sizes")),f="auto"==d;(!f&&m||!c||!a[i]("src")&&!a.srcset||a.complete||r(a,e.errorClass)||!r(a,e.lazyClass))&&(b=v(a,"lazyunveilread").detail,f&&E.updateElem(a,!0,a.offsetWidth),a._lazyRace=!0,Q++,aa(a,b,f,d,c))}},ca=C(function(){e.loadMode=3,W()}),da=function(){3==e.loadMode&&(e.loadMode=2),ca()},ea=function(){if(!m){if(c.now()-y<999)return void k(ea,999);m=!0,e.loadMode=3,W(),j("scroll",da,!0)}};return{_:function(){y=c.now(),d.elements=b.getElementsByClassName(e.lazyClass),g=b.getElementsByClassName(e.lazyClass+" "+e.preloadClass),j("scroll",W,!0),j("resize",W,!0),j("pageshow",function(a){if(a.persisted){var c=b.querySelectorAll("."+e.loadingClass);c.length&&c.forEach&&l(function(){c.forEach(function(a){a.complete&&ba(a)})})}}),a.MutationObserver?new MutationObserver(W).observe(f,{childList:!0,subtree:!0,attributes:!0}):(f[h]("DOMNodeInserted",W,!0),f[h]("DOMAttrModified",W,!0),setInterval(W,999)),j("hashchange",W,!0),["focus","mouseover","click","load","transitionend","animationend"].forEach(function(a){b[h](a,W,!0)}),/d$|^c/.test(b.readyState)?ea():(j("load",ea),b[h]("DOMContentLoaded",W),k(ea,2e4)),d.elements.length?(V(),z._lsFlush()):W()},checkElems:W,unveil:ba,_aLSL:da}}(),E=function(){var a,c=A(function(a,b,c,d){var e,f,g;if(a._lazysizesWidth=d,d+="px",a.setAttribute("sizes",d),n.test(b.nodeName||""))for(e=b.getElementsByTagName("source"),f=0,g=e.length;f<g;f++)e[f].setAttribute("sizes",d);c.detail.dataAttr||w(a,c.detail)}),d=function(a,b,d){var e,f=a.parentNode;f&&(d=y(a,f,d),e=v(a,"lazybeforesizes",{width:d,dataAttr:!!b}),e.defaultPrevented||(d=e.detail.width)&&d!==a._lazysizesWidth&&c(a,f,e,d))},f=function(){var b,c=a.length;if(c)for(b=0;b<c;b++)d(a[b])},g=C(f);return{_:function(){a=b.getElementsByClassName(e.autosizesClass),j("resize",g)},checkElems:g,updateElem:d}}(),F=function(){!F.i&&b.getElementsByClassName&&(F.i=!0,E._(),D._())};return k(function(){e.init&&F()}),d={cfg:e,autoSizer:E,loader:D,init:F,uP:w,aC:s,rC:t,hC:r,fire:v,gW:y,rAF:z}});
     </script>
     <!-- haravan app -->
     <!-- END - haravan app -->
-    <script src="/assets/home/js/scripts.js" type="text/javascript"></script>
+    <script src="~/assets/user/js/scripts.js" type="text/javascript"></script>
     <!-- chatbot-harafunnel -->
     <script>
         setTimeout(function(){
@@ -1428,14 +1490,5 @@
             //}, 500);
         })
     </script>
-    <iframe id="nr-ext-rsicon" style="position: absolute; display: none; width: 50px; height: 50px; z-index: 2147483647; border-style: none; background: transparent;" src="/Delight Shop_files/saved_resource(1).html"></iframe>
-    <div>
-        <div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;">
-            <div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="/assets/home/Delight Shop_files/anchor.html" width="256" height="60" role="presentation" name="a-u4egs57rdomp" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div>
-            <div class="grecaptcha-error"></div>
-            <textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea>
-        </div>
-        <iframe style="display: none;" src="/assets/home/Delight Shop_files/saved_resource(2).html"></iframe>
-    </div>
 </body>
 </html>

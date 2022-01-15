@@ -1,12 +1,17 @@
+using GUI.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Refit;
 using System;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 
 namespace GUI
 {
@@ -30,6 +35,16 @@ namespace GUI
                 options.Cookie.IsEssential = true;
             });
             services.AddControllersWithViews();
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                var virtualAreaNames = Assembly.GetExecutingAssembly().GetTypes()
+                    .Where(type => typeof(Controller).IsAssignableFrom(type)
+                        && type.GetCustomAttribute<VirtualAreaAttribute>() != null)
+                    .Select(type => type.GetCustomAttribute<VirtualAreaAttribute>(false))
+                    .Select(attribute => attribute!.Name);
+                foreach (var virtualArea in virtualAreaNames)
+                    options.ViewLocationFormats.Add($"/Areas/{virtualArea}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
+            });
             services.AddSingleton<HttpClient>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddRefitClient<IProductClient>().ConfigureHttpClient(options =>
@@ -64,13 +79,12 @@ namespace GUI
             {
 
                 endpoints.MapControllerRoute(
-                        name: "Admin",
-                        pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+                        name: "User",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
-                        name: "Customer",
-                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
+                        name: "Admin",
+                        pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
             });
         }
     }

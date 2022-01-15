@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using GUI.Attributes;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
-    [Area("User")]
+    [VirtualArea("User")]
     public class HomeController : Controller
     {
         private readonly IProductClient _productClient;
@@ -13,15 +13,11 @@ namespace GUI.Areas.User.Controllers
         {
             _productClient = productClient;
         }
+
         public async Task<IActionResult> Index()
         {
             var products = (await _productClient.GetProductsAsync(1, 5)).Data;
             return View(products);
-        }
-        
-        public IActionResult ListProduct()
-        {
-            return View();
         }
     }
 }
