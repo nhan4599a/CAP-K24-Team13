@@ -16,14 +16,14 @@ const interfaceEndpoint = 'https://localhost:44394/api/interfaces';
 
 function findProducts(keyword, pageNumber, pageSize) {
     if (keyword === null || keyword === '')
-        return axios.get(productEndpoint, {
+        return axios.get(productEndpoint + '/search', {
             params: {
                 'paginationInfo.pageNumber': pageNumber,
                 'paginationInfo.pageSize': pageSize
             }
         });
     else
-        return axios.get(productEndpoint, {
+        return axios.get(productEndpoint + '/search', {
             params: {
                 keyword: encodeURIComponent(keyword),
                 'paginationInfo.pageNumber': pageNumber,
