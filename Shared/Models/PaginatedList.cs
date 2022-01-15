@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Shared.Models
 {
@@ -26,6 +27,14 @@ namespace Shared.Models
 
         public IReadOnlyList<T> Data { get; private set; }
 
+        [JsonConstructor]
+        public PaginatedList(int pageNumber, int maxPageNumber, IReadOnlyList<T> data) 
+        {
+            PageNumber = pageNumber;
+            MaxPageNumber = maxPageNumber;
+            Data = data;
+        }
+
         public PaginatedList(List<T> data, int pageNumber, int? pageSize, int count)
         {
             if (pageNumber < 1)
@@ -40,5 +49,7 @@ namespace Shared.Models
         public static PaginatedList<T> Empty => new(new List<T>(), 1, null, 0);
 
         public static PaginatedList<T> All(List<T> data) => new(data, 1, data.Count, data.Count);
+
+        public IEnumerator<T> GetEnumerator() => Data.GetEnumerator();
     }
 }

@@ -2,6 +2,7 @@ using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
@@ -69,7 +70,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = response.Response };
         }
 
-        [HttpGet]
+        [HttpGet("search")]
         public async Task<ApiResult<PaginatedList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
         {
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
@@ -80,6 +81,7 @@ namespace ShopProductService.Controllers
                     PaginationInfo = requestModel.PaginationInfo
                 };
             var productList = await _mediator.Send(request);
+            System.IO.File.AppendAllText(@"E:/test.txt", JsonConvert.SerializeObject(productList));
             return new ApiResult<PaginatedList<ProductDTO>>
             {
                 ResponseCode = 200,

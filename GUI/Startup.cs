@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Refit;
 using System;
 using System.Net.Http;
 
@@ -31,6 +32,10 @@ namespace GUI
             services.AddControllersWithViews();
             services.AddSingleton<HttpClient>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddRefitClient<IProductClient>().ConfigureHttpClient(options =>
+            {
+                options.BaseAddress = new Uri("https://localhost:7157");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,13 +62,15 @@ namespace GUI
 
             app.UseEndpoints(endpoints =>
             {
+
                 endpoints.MapControllerRoute(
                         name: "Admin",
                         pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
-                  name: "Customer",
-                  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                        name: "Customer",
+                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
             });
         }
     }
