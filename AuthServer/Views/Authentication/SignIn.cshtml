@@ -1,4 +1,7 @@
-﻿<form method="POST">
+﻿@using Microsoft.AspNetCore.Authentication
+@model List<AuthenticationScheme>
+<form method="POST">
+    @Html.AntiForgeryToken()
     <p>Please login to your account</p>
     <div class="form-outline mb-4">
         <input type="text" id="input-username" class="form-control" placeholder="Username" name="Username" />
@@ -10,15 +13,56 @@
         <label class="form-label" for="input-password">Password</label>
     </div>
 
-    <div class="text-center pt-1 mb-5 pb-1">
+    <div class="text-center pt-1 mb-3 pb-1">
         <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Sign In</button>
         <a class="text-muted" href="#!">Forgot password?</a>
     </div>
     <div>
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     </div>
+    @if (Model!.Count >= 0)
+    {
+        <div class="text-center mb-2 change-color" id="external-provider-signin">
+            @foreach (var provider in Model)
+            {
+                @if (provider.Name == "Google")
+                {
+                    <i class="fab fa-google fa-2x mx-2" data-hover-color="ea4335" data-provider-name="Google"></i>
+                }
+                else if (provider.Name == "Facebook")
+                {
+                    <i class="fab fa-facebook fa-2x mx-2" data-hover-color="0b84ee" data-provider-name="Facebook"></i>
+                }
+            }
+        </div>
+    }
     <div class="d-flex align-items-center justify-content-center pb-4">
         <p class="mb-0 me-2">Don't have an account?</p>
         <a class="btn btn-outline-danger" href="/auth/signup">Sign Up</a>
     </div>
 </form>
+@section Scripts {
+<script>
+    $(document).ready(() => {
+        $('.change-color').children().each((_, element) => {
+            $(element).hover(function() {
+                var colorHexCode = '#' + $(this).attr('data-hover-color');
+                $(this).css('color', colorHexCode);
+            }, function() {
+                $(this).css('color', '#000');
+            });
+        });
+        $('#external-provider-signin').children().click(function() {
+            var provider = $(this).attr('data-provider-name');
+            var searchParams = new URL(window.location.href).searchParams;
+            var returnUrl = searchParams.get('ReturnUrl');
+            var form = 
+            `<form method="POST" action="ExternalSignIn${returnUrl ? `?returnUrl=${returnUrl}` : ''}" style="display: none" id="external-login-form">
+                <input name="provider" type="hidden" value="${provider}"/>
+            </form>`;
+            $('form').eq(0).parent().append(form);
+            $('#external-login-form').submit();
+        });
+    });
+</script>
+}

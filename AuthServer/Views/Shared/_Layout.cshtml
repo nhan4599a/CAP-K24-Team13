@@ -1,5 +1,4 @@
-﻿@model string
-<html>
+﻿<html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
@@ -12,9 +11,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
           rel="stylesheet" />
     <link href="@Url.Content("~/css/site.css")" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.js"></script>
     <style>
-        .row .form-outline input.form-control {
+        form > .row > .form-outline > input.form-control {
             padding-inline: 0px
+        }
+
+        div#external-provider-signin > i {
+            cursor: pointer
         }
     </style>
 </head>
@@ -26,7 +31,7 @@
                     <div class="card rounded-3 text-black">
                         <div class="row g-0">
                             <div class="col-lg-6">
-                                <div class="card-body p-md-5 mx-md-4">
+                                <div class="card-body p-md-3 mx-md-4">
                                     <div class="text-center">
                                         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" style="width: 185px;" alt="logo">
                                         <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
@@ -46,11 +51,33 @@
             </div>
         </div>
     </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.js"></script>
+    <script>
+        const datePicker = MCDatepicker.create({
+            dateFormat: 'dd/mm/yyyy'
+        });
+        datePicker.onSelect((_, selectedDate) => {
+            $('#input-dob').val(selectedDate).addClass('active');
+        });
+        function openDatePicker() {
+            datePicker.open();
+        }
+        $(document).ready(() => {
+            $('.form-outline').each((index, element) => {
+                if ($(element).children('input[readonly]').length != 0) {
+                    $(element).css('background', '#e9ecef');
+                }
+            });
+        });
+    </script>
+    @RenderSection("Scripts", false)
 </body>
 </html>

@@ -1,5 +1,6 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
+using System.Security.Claims;
 
 namespace AuthServer.Configurations
 {
@@ -58,6 +59,14 @@ namespace AuthServer.Configurations
                 {
                     "Role"
                 }
+            },
+            new IdentityResource
+            {
+                Name = "Name",
+                UserClaims = new[]
+                {
+                    ClaimTypes.Email
+                }
             }
         };
 
@@ -78,7 +87,7 @@ namespace AuthServer.Configurations
                 },
                 UserClaims = new[]
                 {
-                    "Role"
+                    "Role", ClaimTypes.Email
                 }
             }
         };

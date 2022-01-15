@@ -8,7 +8,7 @@ using AuthServer.Services;
 using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -37,18 +37,25 @@ namespace AuthServer
             services.AddControllersWithViews(options =>
             {
                 options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
-            }).AddFluentValidation<SignUpModel, SignUpModelValidator>();
+            }).AddFluentValidation<SignUpModel, SignUpModelValidator>()
+            .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>();
             services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
             services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
             services.AddDbContext<ApplicationDbContext>();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            services.AddAuthentication()
+                .AddCookie(options =>
                 {
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
+                })
+                .AddGoogle(options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.ClientId = Configuration["GOOGLE_CLIENT_ID"];
+                    options.ClientSecret = Configuration["GOOGLE_CLIENT_SECRET"];
                 });
             services.AddTransient<MailConfirmationTokenProvider<User>>();
             services.AddScoped<SmtpClient>();
@@ -86,7 +93,6 @@ namespace AuthServer
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
             })
-                .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = ApplyOptions;
@@ -97,7 +103,7 @@ namespace AuthServer
                 })
                 .AddSigningCredential(
                     new X509Certificate2(certFilePath, "nhan4599")
-                );
+                ).AddProfileService<UserProfileService>();
             services.AddHostedService<InitializeAuthenticationService>();
         }
 
@@ -108,8 +114,8 @@ namespace AuthServer
                 app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseIdentityServer();
             app.UseAuthentication();
+            app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

@@ -1,9 +1,18 @@
-﻿<form method="POST">
+﻿@using AuthServer.ViewModels
+@model ExternalSignInCreateAccountViewModel
+<form method="POST" action="/auth/ExternalConfirmation">
     @Html.AntiForgeryToken()
     <p>Input your account informantion</p>
+    <input type="hidden" value="@Model!.ReturnUrl" name="ReturnUrl" />
+    <input type="hidden" value="@Model!.Provider" name="Provider" />
+    <input type="hidden" value="@Model!.ProviderId" name="ProviderId" />
+    <input type="hidden" value="a" name="SessionId" />
+    <input type="hidden" value="b" name="IdToken" />
     <div class="row mb-4">
         <div class="form-outline">
-            <input type="email" id="input-email" class="form-control" placeholder="Email" name="Email" />
+            <input type="email" id="input-email"
+                   class="form-control" placeholder="Email" name="Email"
+                   @(Model!.Email != null ? "readonly" : "") value="@(Model!.Email != null ? Model.Email : "")" />
             <label class="form-label" for="input-email">Email</label>
         </div>
     </div>
@@ -43,15 +52,9 @@
         </div>
     </div>
     <div class="row">
-        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Sign Up</button>
+        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Sign In</button>
     </div>
     <div class="row">
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-    </div>
-    <div class="row">
-        <div class="d-flex align-items-center justify-content-center pb-4">
-            <p class="mb-0 me-2">Already have an account?</p>
-            <a class="btn btn-outline-danger" href="/auth/signin">Sign In</a>
-        </div>
     </div>
 </form>

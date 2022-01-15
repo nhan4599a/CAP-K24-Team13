@@ -16,6 +16,7 @@ namespace GUI.Areas.Admin.Customers
         [ActionName("Index")]
         public IActionResult ListProduct()
         {
+            var item = User;
             return View();
         }
 

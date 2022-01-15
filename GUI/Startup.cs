@@ -2,13 +2,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Net.Http;
-using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace GUI
 {
@@ -42,6 +40,10 @@ namespace GUI
                 options.Scope.Add("product.read");
                 options.Scope.Add("product.write");
                 options.SaveTokens = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = ClaimTypes.Email
+                };
             });
         }
 
