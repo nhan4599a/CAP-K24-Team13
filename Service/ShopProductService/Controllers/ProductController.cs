@@ -1,5 +1,6 @@
 using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 namespace ShopProductService.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("/api/products")]
     public class ProductController : ControllerBase
     {

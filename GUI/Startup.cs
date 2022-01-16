@@ -1,17 +1,12 @@
-using GUI.Attributes;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Refit;
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Reflection;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace GUI
 {
@@ -27,12 +22,28 @@ namespace GUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDistributedMemoryCache();
-            services.AddSession(options =>
+
+            services.AddControllersWithViews();
+            services.AddAuthentication(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.Authority = "https://localhost:7265";
+                options.ClientId = "oidc-client";
+                options.ClientSecret = "CapK24Team13";
+                options.ResponseType = "code";
+                options.UsePkce = true;
+                options.ResponseMode = "query";
+                options.Scope.Add("product.read");
+                options.Scope.Add("product.write");
+                options.SaveTokens = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = ClaimTypes.Email
+                };
             });
             services.AddControllersWithViews();
             services.Configure<RazorViewEngineOptions>(options =>
@@ -71,9 +82,8 @@ namespace GUI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,9 +1,10 @@
-﻿namespace AuthServer.Models
-{
-    public class SignInModel : AuthenticationModelBase
-    {
-        public bool RememberMe { get; set; }
+﻿using Microsoft.AspNetCore.Mvc;
 
-        public string? ReturnUrl { get; set; }
+namespace AuthServer.Models
+{
+    public record SignInModel(string Username, string Password, bool RememberMe, [FromQuery] string ReturnUrl)
+        : AuthenticationModelBase(Username, Password)
+    {
+        public string ReturnUrl { get; init; } = string.IsNullOrEmpty(ReturnUrl) ? "~/" : ReturnUrl;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Threading.Tasks;
 
-namespace ShopProductService
+namespace AspNetCoreSharedComponent.ModelBinders
 {
     public class IntToBoolModelBinder : IModelBinder
     {

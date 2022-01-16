@@ -1,4 +1,6 @@
 using AspNetCoreSharedComponent.FileValidations;
+using AspNetCoreSharedComponent.ModelBinders.Providers;
+using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
@@ -7,6 +9,7 @@ using DatabaseAccessor.Repositories.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,17 +36,22 @@ namespace ShopProductService
             services.AddControllers(options =>
             {
                 options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
-            }).AddFluentValidation();
+            }).AddFluentValidation<CreateOrEditCategoryRequestModel, AddOrEditCategoryRequestModelValidator>()
+            .AddFluentValidation<CreateOrEditProductRequestModel, AddOrEditProductRequestModelValidator>()
+            .AddFluentValidation<SearchProductRequestModel, SearchProductRequestModelValidator>();
             services.RegisterOcelotService(Configuration);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = "https://localhost:7265";
+                    options.Audience = "product";
+                });
             services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IFileStorable, FileStore>();
-            services.AddTransient<IValidator<CreateOrEditCategoryRequestModel>, AddOrEditCategoryRequestModelValidator>();
-            services.AddTransient<IValidator<CreateOrEditProductRequestModel>, AddOrEditProductRequestModelValidator>();
-            services.AddTransient<IValidator<SearchProductRequestModel>, SearchProductRequestModelValidator>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();
             services.AddCors(options =>
@@ -78,11 +86,10 @@ namespace ShopProductService
 
             app.UseCors("Default");
             app.UseRouting();
-            
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

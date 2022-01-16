@@ -1,79 +1,111 @@
-﻿using AuthServer.Services;
+﻿using AspNetCoreSharedComponent.ModelBinders.Providers;
+using AspNetCoreSharedComponent.ModelValidations;
+using AuthServer.Configurations;
+using AuthServer.Identities;
+using AuthServer.Models;
+using AuthServer.Providers;
+using AuthServer.Services;
+using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
-using DatabaseAccessor.Identities;
 using DatabaseAccessor.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AuthServer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
 
+        public IWebHostEnvironment Environment { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var password = Configuration.GetValue<string>("CLIENT_AUTH_PASSWORD");
-            var clientConnectionString = string.Format(Configuration.GetConnectionString("ClientAuthentication"), password);
-            services.AddControllersWithViews();
+            var certFilePath = Path.Combine(Environment.ContentRootPath, "auth-server.pfx");
+            services.AddControllersWithViews(options =>
+            {
+                options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
+            }).AddFluentValidation<SignUpModel, SignUpModelValidator>()
+            .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>();
             services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
             services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
             services.AddDbContext<ApplicationDbContext>();
-            services.AddDbContext<ClientAuthenticationDbContext>();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            services.AddAuthentication()
+                .AddCookie(options =>
                 {
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
+                })
+                .AddGoogle(options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.ClientId = Configuration["GOOGLE_CLIENT_ID"];
+                    options.ClientSecret = Configuration["GOOGLE_CLIENT_SECRET"];
                 });
+            services.AddTransient<MailConfirmationTokenProvider<User>>();
+            services.AddScoped<SmtpClient>();
+            services.AddScoped<IMailService, GmailService>();
             services.AddIdentity<User, Role>(options =>
             {
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = AccountConfig.RequireEmailConfirmation;
+                options.SignIn.RequireConfirmedAccount = AccountConfig.RequireEmailConfirmation;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
-                options.Tokens.ProviderMap.Add("MailConfirmation",
-                    new TokenProviderDescriptor(typeof(MailConfirmationTokenProvider)));
-                options.Tokens.EmailConfirmationTokenProvider = "MailConfirmation";
+                if (AccountConfig.RequireEmailConfirmation)
+                {
+                    options.Tokens.ProviderMap.Add("MailConfirmation",
+                        new TokenProviderDescriptor(typeof(MailConfirmationTokenProvider<User>)));
+                    options.Tokens.EmailConfirmationTokenProvider = "MailConfirmation";
+                }
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountConfig.LockOutTime);
             }).AddUserStore<ApplicationUserStore>()
             .AddUserManager<ApplicationUserManager>()
             .AddRoleStore<ApplicationRoleStore>()
             .AddRoleManager<ApplicationRoleManager>()
-            .AddSignInManager<ApplicationSignInManager>();
+            .AddSignInManager<ApplicationSignInManager>()
+            .AddPasswordValidator<UserPasswordValidator>();
 
-            services.AddOpenIddict()
-                .AddCore(options =>
+            services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseSuccessEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.UserInteraction.LoginUrl = "/auth/signin";
+                options.UserInteraction.LogoutUrl = "/auth/signout";
+                options.Endpoints.EnableAuthorizeEndpoint = true;
+                options.Endpoints.EnableTokenEndpoint = true;
+                options.Endpoints.EnableIntrospectionEndpoint = true;
+            })
+                .AddOperationalStore(options =>
                 {
-                    options.UseEntityFrameworkCore().UseDbContext<ClientAuthenticationDbContext>();
+                    options.ConfigureDbContext = ApplyOptions;
                 })
-                .AddServer(options =>
+                .AddConfigurationStore(options =>
                 {
-                    options.AllowClientCredentialsFlow();
-
-                    options.AllowAuthorizationCodeFlow();
-
-                    options.SetTokenEndpointUris("/connect/token");
-
-                    options.SetAuthorizationEndpointUris("/connect/authorize");
-
-                    options.AddEphemeralEncryptionKey().AddEphemeralSigningKey();
-
-                    options.RegisterScopes("api");
-
-                    options.UseAspNetCore().EnableTokenEndpointPassthrough();
-                });
-
-            services.AddHostedService<SetupDefaultClientService>();
+                    options.ConfigureDbContext = ApplyOptions;
+                })
+                .AddSigningCredential(
+                    new X509Certificate2(certFilePath, "nhan4599")
+                ).AddProfileService<UserProfileService>();
+            services.AddHostedService<InitializeClientAuthenticationService>();
+            services.AddHostedService<InitializeAccountChallengeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,10 +115,21 @@ namespace AuthServer
                 app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
             });
+        }
+
+        private void ApplyOptions(DbContextOptionsBuilder builder)
+        {
+            var connectionString =
+                "Server=.,4599;Database=ClientAuth;User ID=sa;Password=nhan4599@Nhan;TrustServerCertificate=True";
+            var assemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+            builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(assemblyName));
         }
     }
 }
