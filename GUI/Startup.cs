@@ -1,11 +1,18 @@
+using GUI.Attributes;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Refit;
+using System;
+using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 
 namespace GUI
@@ -56,8 +63,6 @@ namespace GUI
                 foreach (var virtualArea in virtualAreaNames)
                     options.ViewLocationFormats.Add($"/Areas/{virtualArea}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
-            services.AddSingleton<HttpClient>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddRefitClient<IProductClient>().ConfigureHttpClient(options =>
             {
                 options.BaseAddress = new Uri("https://localhost:7157");
