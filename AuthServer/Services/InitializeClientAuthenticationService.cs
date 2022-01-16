@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AuthServer.Services
 {
-    public class InitializeAuthenticationService : IHostedService
+    public class InitializeClientAuthenticationService : IHostedService
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public InitializeAuthenticationService(IServiceProvider serviceProvider)
+        public InitializeClientAuthenticationService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

@@ -104,7 +104,8 @@ namespace AuthServer
                 .AddSigningCredential(
                     new X509Certificate2(certFilePath, "nhan4599")
                 ).AddProfileService<UserProfileService>();
-            services.AddHostedService<InitializeAuthenticationService>();
+            services.AddHostedService<InitializeClientAuthenticationService>();
+            services.AddHostedService<InitializeAccountChallengeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
