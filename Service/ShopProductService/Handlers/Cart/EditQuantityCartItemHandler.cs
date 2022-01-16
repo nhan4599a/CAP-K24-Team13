@@ -2,12 +2,14 @@
 using MediatR;
 using Shared;
 using ShopProductService.Commands.Cart;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Cart
 {
-    public class EditQuantityCartItemHandler : IRequestHandler<EditQuantityCartItemCommand, CommandResponse<bool>>
+    public class EditQuantityCartItemHandler : 
+        IRequestHandler<EditQuantityCartItemCommand, CommandResponse<bool>>, IDisposable
     {
         private readonly ICartRepository _cartRepository;
 
@@ -15,9 +17,16 @@ namespace ShopProductService.Handlers.Cart
         {
             _cartRepository = cartRepository;
         }
+
         public async Task<CommandResponse<bool>> Handle(EditQuantityCartItemCommand request, CancellationToken cancellationToken)
         {
-            return await _cartRepository.EditQuantity(request.requestModel);
+            return await _cartRepository.EditQuantityAsync(request.requestModel);
+        }
+
+        public void Dispose()
+        {
+            _cartRepository.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

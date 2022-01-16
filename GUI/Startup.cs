@@ -40,8 +40,8 @@ namespace GUI
                 var virtualAreaNames = Assembly.GetExecutingAssembly().GetTypes()
                     .Where(type => typeof(Controller).IsAssignableFrom(type)
                         && type.GetCustomAttribute<VirtualAreaAttribute>() != null)
-                    .Select(type => type.GetCustomAttribute<VirtualAreaAttribute>(false))
-                    .Select(attribute => attribute!.Name);
+                    .Select(type => type.GetCustomAttribute<VirtualAreaAttribute>(false)!.Name)
+                    .Distinct();
                 foreach (var virtualArea in virtualAreaNames)
                     options.ViewLocationFormats.Add($"/Areas/{virtualArea}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
@@ -77,14 +77,14 @@ namespace GUI
 
             app.UseEndpoints(endpoints =>
             {
-
+                endpoints.MapAreaControllerRoute(
+                        name: "Admin",
+                        areaName: "Admin",
+                        pattern: "Admin/{controller=Product}/{action=Index}/{id?}");
+                
                 endpoints.MapControllerRoute(
                         name: "User",
                         pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                endpoints.MapControllerRoute(
-                        name: "Admin",
-                        pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
             });
         }
     }

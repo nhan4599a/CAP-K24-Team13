@@ -22,7 +22,7 @@ namespace DatabaseAccessor.Repositories
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public async Task<CommandResponse<bool>> AddProductToCart(AddOrEditQuantityCartItemRequestModel requestModel)
+        public async Task<CommandResponse<bool>> AddProductToCartAsync(AddOrEditQuantityCartItemRequestModel requestModel)
         {
             var cart = await _dbContext.Carts.
                 FirstOrDefaultAsync(c => requestModel.UserId == c.UserId.ToString());
@@ -56,7 +56,7 @@ namespace DatabaseAccessor.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public async Task<CommandResponse<bool>> EditQuantity(
+        public async Task<CommandResponse<bool>> EditQuantityAsync(
             AddOrEditQuantityCartItemRequestModel requestModel)
         {
             var cartItem = await _dbContext.CartDetails
@@ -75,7 +75,7 @@ namespace DatabaseAccessor.Repositories
             return _mapper.MapToCartItemDto(cart);
         }
 
-        public async Task<CommandResponse<bool>> RemoveCartItem(RemoveCartItemRequestModel requestModel)
+        public async Task<CommandResponse<bool>> RemoveCartItemAsync(RemoveCartItemRequestModel requestModel)
         {
             var cart = await _dbContext.Carts.FirstOrDefaultAsync(cart => cart.UserId.ToString() == requestModel.UserId);
             if (cart == null)

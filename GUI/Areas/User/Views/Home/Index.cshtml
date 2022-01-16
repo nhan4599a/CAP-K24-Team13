@@ -60,7 +60,7 @@
     <script type="text/javascript">
         //<![CDATA[
         if ((typeof Haravan) === 'undefined') {
-          Haravan = {};
+            Haravan = {};
         }
         Haravan.culture = 'vi-VN';
         Haravan.shop = 'delight-shop.myharavan.com';
@@ -123,7 +123,12 @@
     </script>
 
     <style type="text/css" data-styled-components="FiaaB gTcftA caPIRE" data-styled-components-is-local="true">
+    </style>
 
+    <style>
+        .d-grid {
+            display: grid !important;
+        }
     </style>
 </head>
 <body id="lama-theme" class="index" style="" data-new-gr-c-s-check-loaded="14.1041.0" data-gr-ext-installed="">
@@ -145,7 +150,7 @@
             </svg>
         </symbol>
         <symbol id="icon-list-switch">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 194.828 194.828" style="enable-background:new 0 0 194.828 194.828;" xml:space="preserve">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 194.828 194.828" xml:space="preserve">
             <g>
             <g>
             <g>
@@ -169,7 +174,6 @@
             <path class="path1" d="M1014.176 968.256l-264.32-260.128c69.184-75.264 111.68-174.688 111.68-284.128 0-234.080-192.8-423.872-430.688-423.872s-430.72 189.792-430.72 423.872c0 234.112 192.864 423.872 430.72 423.872 102.752 0 197.088-35.552 271.072-94.688l265.376 261.12c12.928 12.736 33.952 12.736 46.88 0 12.96-12.672 12.96-33.376 0-46.048zM430.848 782.688c-201.312 0-364.48-160.64-364.48-358.688 0-198.080 163.168-358.656 364.48-358.656 201.28 0 364.448 160.576 364.448 358.656 0.032 198.048-163.168 358.688-364.448 358.688z"></path>
         </symbol>
         <symbol idh="path1" d="M622.826 702.736c-22.11-3.518-22.614-64.314-22.614-64.314s64.968-64.316 79.128-150.802c38.090 0 61.618-91.946 23.522-124.296 1.59-34.054 48.96-267.324-190.862-267.324s-192.45 233.27-190.864 267.324c-38.094 32.35-14.57 124.296 23.522 124.296 14.158 86.486 79.128 150.802 79.128 150.802s-0.504 60.796-22.614 64.314c-71.22 11.332-337.172 128.634-337.172 257.264h896c0-128.63-265.952-245.932-337.174-257.264z">
-            </path>
         </symbol>
     </svg>
     <div class="main-body  layoutProduct_scroll   ">
@@ -439,10 +443,10 @@
                                                 <div class="site_account " id="siteNav-account">
                                                     <div class="site_account_panel_list">
                                                         <div id="header-login-panel" class="site_account_panel site_account_default is-selected">
-                                                            <header class="site_account_header">
+                                                            <section class="site_account_header">
                                                                 <h2 class="site_account_title heading">Đăng nhập tài khoản</h2>
                                                                 <p class="site_account_legend">Nhập email và mật khẩu của bạn:</p>
-                                                            </header>
+                                                            </section>
                                                             <div class="site_account_inner">
                                                                 <form accept-charset="UTF-8" action="https://delight-shop.myharavan.com/account/login" id="customer_login" method="post">
                                                                     <input name="form_type" type="hidden" value="customer_login">
@@ -478,10 +482,10 @@
                                                             </div>
                                                         </div>
                                                         <div id="header-recover-panel" class="site_account_panel  site_account_sliding">
-                                                            <header class="site_account_header">
+                                                            <section class="site_account_header">
                                                                 <h2 class="site_account_title heading">Khôi phục mật khẩu</h2>
                                                                 <p class="site_account_legend">Nhập email của bạn:</p>
-                                                            </header>
+                                                            </section>
                                                             <div class="site_account_inner">
                                                                 <form accept-charset="UTF-8" action="https://delight-shop.myharavan.com/account/recover" method="post">
                                                                     <input name="form_type" type="hidden" value="recover_customer_password">
@@ -913,23 +917,11 @@
                             <div class="clearfix content-product-list">
                                 @foreach (var product in Model)
                                 {
-                                    <div class="col-md-4 col-sm-6 col-xs-6 pro-loop ">
+                                    <div class="col-md-4 col-sm-6 col-xs-6 pro-loop">
                                         <div class="product-block product-resize fixheight" style="height: 381px;">
-                                            <div class="product-img ">
-                                                <a href="https://localhost:44349/user/product/index/@product.Id" title="@product.ProductName" class="image-resize ratiobox lazyload" data-expand="-1" style="height: 296px;">
-                                                   <picture>
-                                                        <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[1]" srcset="https://localhost:44302/api/products/images/@product.Images[1]" sizes="266px">
-                                                        <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[1]" srcset="https://localhost:44302/api/products/images/@product.Images[1]" sizes="266px">
-                                                        <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[1]" srcset="https://localhost:44302/api/products/images/@product.Images[1]" sizes="266px">
-                                                        <img class="img-loop lazyautosizes lazyloaded" data-sizes="auto" data-src="https://localhost:44302/api/products/images/@product.Images[1]" data-lowsrc="https://localhost:44302/api/products/images/@product.Images[1]" src="https://localhost:44302/api/products/images/@product.Images[1]" alt=" iPad Pro 10.5 inch 64GB " sizes="266px">
-                                                    </picture>
-                                                    <img class="ls-original-loaded" src="https://localhost:44302/api/products/images/@product.Images[1]" alt="" aria-hidden="true">
-                                                    <picture>
-                                                        <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[0]" srcset="https://localhost:44302/api/products/images/@product.Images[0]">
-                                                        <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[0]" srcset="https://localhost:44302/api/products/images/@product.Images[0]">
-                                                        <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[0]" srcset="https://localhost:44302/api/products/images/@product.Images[0]">
-                                                        <img class="img-loop img-hover ls-is-cached lazyloaded" data-src="https://localhost:44302/api/products/images/@product.Images[0]" src="https://localhost:44302/api/products/images/@product.Images[0]" alt=" iPad Pro 10.5 inch 64GB ">
-                                                    </picture>
+                                            <div class="product-img">
+                                                <a href="https://localhost:44349/product/detail/@product.Id" title="@product.ProductName" class="image-resize ratiobox lazyload d-grid" data-expand="-1" style="height: 296px;">
+                                                    <img class="ls-original-loaded" src="https://localhost:44302/api/products/images/@product.Images[0]" alt="@product.ProductName" aria-hidden="true" style="align-self: center">
                                                 </a>
                                                 <div class="button-add hidden">
                                                     <button type="submit" title="Buy now" class="action" onclick="buy_now('1031386001')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
@@ -965,8 +957,9 @@
                 <div class="clearfix">
                     <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                         <div class="block-banner-category ratiobox">
-                            <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
-                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category1.jpg?v=2278" src="~/assets/user/img/block_home_category1.jpg" alt="Khuyến mãi 1" sizes="600px"><img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="~/assets/user/img/block_home_category1.jpg" alt="" aria-hidden="true">
+                            <a class="link-banner" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
+                                <img data-sizes="auto"src="~/assets/user/img/block_home_category1.jpg" alt="Khuyến mãi 1" sizes="600px">
+                                <img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="@Url.Content("~/assets/user/img/block_home_category1.jpg")" aria-hidden="true">
                             </a>
                             <div class="caption_banner">
                                 <span class="subtitle">Phụ kiện</span>
@@ -977,8 +970,9 @@
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                         <div class="block-banner-category ratiobox">
-                            <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
-                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category2.jpg?v=2278" src="~/assets/user/img/block_home_category2.jpg" alt="Khuyến mãi 2" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="~/assets/user/img/block_home_category2.jpg" alt="" aria-hidden="true">
+                            <a class="link-banner" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
+                                <img data-sizes="auto" src="@Url.Content("~/assets/user/img/block_home_category2.jpg")" alt="Khuyến mãi 2" sizes="600px">
+                                <img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="@Url.Content("~/assets/user/img/block_home_category2.jpg")" alt="" aria-hidden="true">
                             </a>
                             <div class="caption_banner">
                                 <span class="subtitle">Sản phẩm</span>
@@ -989,8 +983,9 @@
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                         <div class="block-banner-category ratiobox">
-                            <a class="link-banner lazyload" href="https://delight-shop.myharavan.com/collections/hot-products" data-expand="-1">
-                                <img class=" lazyautosizes ls-is-cached lazyloaded" data-sizes="auto" data-src="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" data-lowsrc="//theme.hstatic.net/1000306140/1000709257/14/block_home_category3.jpg?v=2278" src="~/assets/user/img/block_home_category3.jpg" alt="Khuyến mãi 3" sizes="600px"><img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="~/assets/user/img/block_home_category3.jpg" alt="" aria-hidden="true">
+                            <a class="link-banner" href="https://delight-shop.myharavan.com/collections/hot-products" data-expand="-1">
+                                <img data-sizes="auto" src="@Url.Content("~/assets/user/img/block_home_category3.jpg")" alt="Khuyến mãi 3" sizes="600px">
+                                <img class="ls-blur-up-img ls-blur-up-loaded ls-original-loaded" src="@Url.Content("~/assets/user/img/block_home_category3.jpg")" alt="" aria-hidden="true">
                             </a>
                             <div class="caption_banner">
                                 <span class="subtitle">Xu hướng công nghệ</span>
@@ -1021,23 +1016,11 @@
 
                                 @foreach (var product in Model)
                                 {
-                                    <div class="col-md-4 col-sm-6 col-xs-6 pro-loop ">
+                                    <div class="col-md-4 col-sm-6 col-xs-6 pro-loop">
                                         <div class="product-block product-resize fixheight" style="height: 381px;">
-                                            <div class="product-img ">
-                                                <a href="https://localhost:44349/user/product/index/@product.Id" title="@product.ProductName" class="image-resize ratiobox lazyload" data-expand="-1" style="height: 296px;">
-                                                    <picture>
-                                                        <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[1]" srcset="https://localhost:44302/api/products/images/@product.Images[1]" sizes="266px">
-                                                        <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[1]" srcset="https://localhost:44302/api/products/images/@product.Images[1]" sizes="266px">
-                                                        <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[1]" srcset="https://localhost:44302/api/products/images/@product.Images[1]" sizes="266px">
-                                                        <img class="img-loop lazyautosizes lazyloaded" data-sizes="auto" data-src="https://localhost:44302/api/products/images/@product.Images[1]" data-lowsrc="https://localhost:44302/api/products/images/@product.Images[1]" src="https://localhost:44302/api/products/images/@product.Images[1]" alt=" iPad Pro 10.5 inch 64GB " sizes="266px">
-                                                    </picture>
-                                                    <img class="ls-original-loaded" src="https://localhost:44302/api/products/images/@product.Images[1]" alt="" aria-hidden="true">
-                                                    <picture>
-                                                        <source media="(max-width: 480px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[0]" srcset="https://localhost:44302/api/products/images/@product.Images[0]">
-                                                        <source media="(min-width: 481px) and (max-width: 767px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[0]" srcset="https://localhost:44302/api/products/images/@product.Images[0]">
-                                                        <source media="(min-width: 768px)" data-srcset="https://localhost:44302/api/products/images/@product.Images[0]" srcset="https://localhost:44302/api/products/images/@product.Images[0]">
-                                                        <img class="img-loop img-hover ls-is-cached lazyloaded" data-src="https://localhost:44302/api/products/images/@product.Images[0]" src="https://localhost:44302/api/products/images/@product.Images[0]" alt=" iPad Pro 10.5 inch 64GB ">
-                                                    </picture>
+                                            <div class="product-img">
+                                                <a href="https://localhost:44349/product/detail/@product.Id" title="@product.ProductName" class="image-resize ratiobox lazyload d-grid" data-expand="-1" style="height: 296px;">
+                                                    <img class="ls-original-loaded" src="https://localhost:44302/api/products/images/@product.Images[0]" alt="@product.ProductName" aria-hidden="true" style="align-self: center">
                                                 </a>
                                                 <div class="button-add hidden">
                                                     <button type="submit" title="Buy now" class="action" onclick="buy_now('1031386001')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
@@ -1081,7 +1064,7 @@
                                 </div>
                             </div>
                             <div class="container-background">
-                                <img class="lazyload" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="https://cafeland.vn/image-data/720-480/static1.cafeland.vn/cafelandnew/imagedata/tintuc/duan/2019/01/tuan-02/trung-tam-thuong-mai-gigamall-quan-thu-duc-1546207860.jpg?v=2278" alt="Về chúng tôi">
+                                <img src="https://cafeland.vn/image-data/720-480/static1.cafeland.vn/cafelandnew/imagedata/tintuc/duan/2019/01/tuan-02/trung-tam-thuong-mai-gigamall-quan-thu-duc-1546207860.jpg?v=2278" alt="Về chúng tôi">
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12 wrap-pd-infor wrap-flex-align flex-column">
@@ -1102,7 +1085,7 @@
                 </div>
             </div>
         </main>
-        <footer class="footer  mainfooter-toolbar   ">
+        <footer class="footer  mainfooter-toolbar">
             <div class="top-footer">
                 <div class="container-fluid">
                     <div class="row">
@@ -1120,14 +1103,6 @@
                                             <input required="" type="email" id="newsletter-email" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,4}$" value="" placeholder="Nhập email của bạn" name="contact[email]" aria-label="Email Address">
                                             <button type="submit" class="button dark">Đăng ký</button>
                                         </div>
-                                        <div class="sitebox-recaptcha hidden">
-                                            This site is protected by reCAPTCHA and the Google
-                                            <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
-                                            and <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Terms of Service</a> apply.
-                                        </div>
-                                        <input id="36acfc9c7c344381bb85790030ca12b8" name="g-recaptcha-response" type="hidden">
-                                        <noscript src="https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-"></noscript>
-                                        <noscript>grecaptcha.ready(function() {grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', {action: 'submit'}).then(function(token) {document.getElementById('36acfc9c7c344381bb85790030ca12b8').value = token;});});</noscript>
                                     </form>
                                 </div>
                             </div>
@@ -1273,15 +1248,15 @@
                 <!-- chatbot harafunnel -->
                 <li class="actionToolbar_chatbot">
                     <a href="https://m.me/108520260558644" target="_blank" rel="noreferrer" aria-label="messenger">
-                        <span class="messenger_absolute ">
+                        <span class="messenger_absolute">
                             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="22" cy="22" r="22" fill="url(#paint3_linear)"></circle>
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M22.0026 7.70215C14.1041 7.70215 7.70117 13.6308 7.70117 20.9442C7.70117 25.1115 9.78083 28.8286 13.0309 31.256V36.305L17.9004 33.6325C19.2 33.9922 20.5767 34.1863 22.0026 34.1863C29.9011 34.1863 36.304 28.2576 36.304 20.9442C36.304 13.6308 29.9011 7.70215 22.0026 7.70215ZM23.4221 25.5314L19.7801 21.6471L12.6738 25.5314L20.4908 17.2331L24.2216 21.1174L31.239 17.2331L23.4221 25.5314Z" fill="white"></path>
                                 <defs>
-                                    <lineargradient id="paint3_linear" x1="21.6426" y1="43.3555" x2="21.6426" y2="0.428639" gradientUnits="userSpaceOnUse">
+                                    <linear-gradient id="paint3_linear" x1="21.6426" y1="43.3555" x2="21.6426" y2="0.428639" gradientUnits="userSpaceOnUse">
                                         <stop offset="50%" stop-color="#1168CF"></stop>
                                         <stop offset="100%" stop-color="#2CB7FF"></stop>
-                                    </lineargradient>
+                                    </linear-gradient>
                                 </defs>
                             </svg>
                         </span>
@@ -1336,18 +1311,10 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-xs-12">
-
                                         <div class="hidden alert alert-danger error-formcontact" id="error-popupform" role="alert">Thông tin bạn nhập chưa chính xác. Vui lòng kiểm tra lại!</div>
-                                        <div class="sitebox-recaptcha">
-                                            This site is protected by reCAPTCHA and the Google
-                                            <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
-                                            and <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Terms of Service</a> apply.
-                                        </div>
                                     </div>
                                     <div class="col-xs-12 text-center"><button type="submit" class="btnSubmit-modal button dark">Gửi cho chúng tôi</button></div>
                                 </div>
-
-                                <input id="d56685ab37044bff924def341f190a02" name="g-recaptcha-response" type="hidden"><noscript src="https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-"></noscript><noscript>grecaptcha.ready(function() {grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', {action: 'submit'}).then(function(token) {document.getElementById('d56685ab37044bff924def341f190a02').value = token;});});</noscript>
                             </form>
                         </div>
                     </div>
@@ -1376,8 +1343,8 @@
         </div>
         <div id="site-overlay" class="site-overlay"></div>
     </div>
-    <script src="~/assets/user/js/option_selection.js" type="text/javascript"></script>
-    <script src="~/assets/user/js/api.jquery.js" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/user/js/option_selection.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/user/js/api.jquery.js")" type="text/javascript"></script>
 
     <script>
             /* imagesloaded */
@@ -1403,7 +1370,7 @@
     </script>
     <!-- haravan app -->
     <!-- END - haravan app -->
-    <script src="~/assets/user/js/scripts.js" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/user/js/scripts.js")" type="text/javascript"></script>
     <!-- chatbot-harafunnel -->
     <script>
         setTimeout(function(){
@@ -1412,7 +1379,7 @@
                 $("head").append('<!-- harafunnel --><script src="' + chatbot_src + '" ' + 'async="async"><\/script>');
             }
 
-        },5000);
+        }, 5000);
     </script>
     <script>
         setTimeout(function(){
@@ -1420,13 +1387,13 @@
         }, 100);
         function animation_check(){
             var scrollTop = $(window).scrollTop() - 300;
-            $('.animation-tran').each(function(){
+            $('.animation-tran').each(function() {
                 if($(this).offset().top < scrollTop + $(window).height()){
                     $(this).addClass('active');
                 }
             })
         }
-        $(window).scroll(function(){
+        $(window).scroll(function() {
             //setTimeout(function(){
             animation_check();
             //}, 500);

@@ -2,20 +2,17 @@
 using Shared.DTOs;
 using Shared.RequestModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Interfaces
 {
     public interface ICartRepository : IDisposable
     {
-        Task<CommandResponse<bool>> AddProductToCart(AddOrEditQuantityCartItemRequestModel requestModel);
+        Task<CommandResponse<bool>> AddProductToCartAsync(AddOrEditQuantityCartItemRequestModel requestModel);
 
-        Task<CommandResponse<bool>> EditQuantity(AddOrEditQuantityCartItemRequestModel requestModel);
+        Task<CommandResponse<bool>> EditQuantityAsync(AddOrEditQuantityCartItemRequestModel requestModel);
 
-        Task<CommandResponse<bool>> RemoveCartItem(RemoveCartItemRequestModel requestModel);
+        Task<CommandResponse<bool>> RemoveCartItemAsync(RemoveCartItemRequestModel requestModel);
         
         Task<CartDTO> GetCartAsync(string userId);
     }

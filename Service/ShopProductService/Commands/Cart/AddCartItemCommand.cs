@@ -6,6 +6,6 @@ namespace ShopProductService.Commands.Cart
 {
     public class AddCartItemCommand : IRequest<CommandResponse<bool>>
     {
-        public AddOrEditQuantityCartItemRequestModel requestModel { get; set; }
+        public AddOrEditQuantityCartItemRequestModel RequestModel { get; set; }
     }
 }
