@@ -17,12 +17,26 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Detail(string id)
         {
-            var response = await _productClient.GetProductAsync(id);
-            if (!response.IsSuccessStatusCode || response.Content.ResponseCode != StatusCodes.Status200OK)
+        	var response = await _productClient.GetProductAsync(id);
+        	if (!response.IsSuccessStatusCode || response.Content.ResponseCode != StatusCodes.Status200OK)
+			return new StatusCodeResult(StatusCodes.Status404NotFound);
+		return View(response.Content.Data);
+	}
+
+        public async Task<IActionResult> Index(string id)
+        {
+            var result = await _productClient.GetProductAsync(id);
+            if (!result.IsSuccessStatusCode || result.Content.ResponseCode == 404)
             {
                 return new StatusCodeResult(StatusCodes.Status404NotFound);
             }
             return View(response.Content.Data);
+        }
+
+        public async Task<IActionResult> ProductbyCategory()
+        {
+            var products = (await _productClient.GetProductsAsync(1, 5)).Data;
+            return View(products);
         }
     }
 }
