@@ -216,12 +216,12 @@ window.HaravanAnalytics.AutoTrack = true;
 															<div class="mplus-menu">
 																<ul class="mm-panel vertical-menu-list list-root">
 																	<li class="active" data-menu-root="5618826">
-																		<a class="parent" href="https://delight-shop.myharavan.com/">
+																		<a class="parent" href="/">
 																			Trang chủ
 																		</a>
 																	</li>
 																	<li class="" data-menu-root="101556874">
-																		<a class="parent" href="https://delight-shop.myharavan.com/?_ga=2.123497163.118807207.1639121104-57172452.1639121104#">
+																		<a class="parent" href="/">
 																			Thương hiệu
 																			<i>
 																				<svg class="icon icon--arrow-right" viewBox="0 0 8 12">
@@ -372,7 +372,7 @@ window.HaravanAnalytics.AutoTrack = true;
 					</div>
 					<div class="col-md-4 header-upper-logo">
 						<div class="wrap-logo text-center">						
-							<img src="@Url.Content("~/assets/user/img/logo-1.png")">
+							<a href="/"><img src="@Url.Content("~/assets/user/img/logo-1.png")"></a>
 						</div>
 					</div>
 					<div class="col-md-4 header-upper-icon">
@@ -647,7 +647,7 @@ window.HaravanAnalytics.AutoTrack = true;
 							<nav class="main-nav text-center">
 								<ul class="clearfix">
 									<li class="active">
-										<a href="https://delight-shop.myharavan.com/" title="Trang chủ"> 
+										<a href="/" title="Trang chủ"> 
 										Trang chủ
 									</li>
 									<li class="">
@@ -896,8 +896,8 @@ window.HaravanAnalytics.AutoTrack = true;
 							<div class="col-md-4 col-sm-6 col-xs-6 pro-loop">
                             <div class="product-block product-resize fixheight">
                                 <div class="product-img">
-                                    <a href="/product/detail/@shop.Id" title="Máy ảnh Panasonic X-T100" class="image-resize ratiobox" style="height: auto;">
-										<img class="lazyload img-loop" data-sizes="auto" src="https://localhost:44302/api/products/images/@shop.Image" alt="@shop.Name">
+                                    <a href="/product/detail/@shop.Id" title="@shop.Name" class="image-resize ratiobox" style="height: auto;">
+										<img class="lazyload img-loop" data-sizes="auto" src="@shop.Image" alt="@shop.Name">
                                     </a>
                                     <div class="button-add hidden">
                                         <button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
@@ -1231,9 +1231,24 @@ animateIn:!1},e.prototype.swap=function(){if(1===this.core.settings.items&&a.sup
 		//setTimeout(function(){
 		animation_check();
 		//}, 500);
-	})
+	});
 </script>
-<iframe id="nr-ext-rsicon" style="position: absolute; display: none; width: 50px; height: 50px; z-index: 2147483647; border-style: none; background: transparent;" src="../Delight Shop_files/saved_resource(1).html"></iframe>
-
+	
+    <script>
+        $(document).ready(function () {
+            $('.site_search input.input-search.search-input').off('keydown');
+            $('.site_search input.input-search.search-input').keydown(function (e) {
+                var which = e.originalEvent.keyCode;
+                if (which == 13) {
+                    e.preventDefault();
+                    let keyword = $(this).val().trim();
+                    let urlEncodedKeyword = encodeURIComponent(keyword);
+                    //let currentPageSize = getCurrentPageInfo().pageSize;
+                    window.location.href =
+                        `/home/search?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=1`;
+                }
+            });
+        });
+    </script>
 </body>
 	</html>

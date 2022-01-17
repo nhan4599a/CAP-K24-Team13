@@ -96,7 +96,6 @@ namespace ShopProductService.Controllers
                     PaginationInfo = requestModel.PaginationInfo
                 };
             var productList = await _mediator.Send(request);
-            System.IO.File.AppendAllText(@"E:/test.txt", JsonConvert.SerializeObject(productList));
             return new ApiResult<PaginatedList<ProductDTO>>
             {
                 ResponseCode = 200,
