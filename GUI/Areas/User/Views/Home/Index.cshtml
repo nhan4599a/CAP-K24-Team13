@@ -1399,5 +1399,21 @@
             //}, 500);
         })
     </script>
+    <script>
+        $(document).ready(function () {
+            $('.site_search input.input-search.search-input').off('keydown');
+            $('.site_search input.input-search.search-input').keydown(function (e) {
+                var which = e.originalEvent.keyCode;
+                if (which == 13) {
+                    e.preventDefault();
+                    let keyword = $(this).val().trim();
+                    let urlEncodedKeyword = encodeURIComponent(keyword);
+                    //let currentPageSize = getCurrentPageInfo().pageSize;
+                    window.location.href =
+                        `/home/search?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=1`;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

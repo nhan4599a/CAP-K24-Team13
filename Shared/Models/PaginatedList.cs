@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -51,5 +52,5 @@ namespace Shared.Models
         public static PaginatedList<T> All(List<T> data) => new(data, 1, data.Count, data.Count);
 
         public IEnumerator<T> GetEnumerator() => Data.GetEnumerator();
-    }
+	}
 }

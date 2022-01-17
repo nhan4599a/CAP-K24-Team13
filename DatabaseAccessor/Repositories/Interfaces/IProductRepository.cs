@@ -20,5 +20,7 @@ namespace DatabaseAccessor.Repositories.Interfaces
         Task<CommandResponse<bool>> ActivateProductAsync(Guid id, bool isActivateCommand);
 
         Task<CommandResponse<ProductDTO>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel);
+
+        Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo pagination);
     }
 }

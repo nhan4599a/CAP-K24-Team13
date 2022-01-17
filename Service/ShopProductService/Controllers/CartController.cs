@@ -13,6 +13,7 @@ namespace ShopProductService.Controllers
     public class CartController : ControllerBase
     {
         private readonly IMediator _mediator;
+
         public CartController(IMediator mediator)
         {
             _mediator = mediator;
@@ -28,13 +29,13 @@ namespace ShopProductService.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task<ApiResult<bool>> AddCartItem(AddOrEditQuantityCartItemRequestModel requestModel)
+        public async Task<ApiResult<bool>> AddCartItem([FromForm] AddOrEditQuantityCartItemRequestModel requestModel)
         {
             var response = await _mediator.Send(new AddCartItemCommand
             {
                 RequestModel = requestModel,
             });
-            if (!response.Response)
+            if (!response.IsSuccess)
                 return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }

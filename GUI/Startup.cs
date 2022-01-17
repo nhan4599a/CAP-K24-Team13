@@ -29,7 +29,6 @@ namespace GUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllersWithViews();
             services.AddAuthentication(options =>
             {
@@ -66,6 +65,10 @@ namespace GUI
             services.AddRefitClient<IProductClient>().ConfigureHttpClient(options =>
             {
                 options.BaseAddress = new Uri("https://localhost:7157");
+            });
+            services.AddRefitClient<IShopClient>().ConfigureHttpClient(options =>
+            {
+                options.BaseAddress = new Uri("https://localhost:44302");
             });
         }
 

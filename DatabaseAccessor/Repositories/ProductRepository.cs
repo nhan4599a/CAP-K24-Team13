@@ -109,6 +109,16 @@ namespace DatabaseAccessor.Repositories
             return await _dbContext.ShopProducts.FindAsync(id);
         }
 
+        public async Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo paginationInfo)
+        {
+            var result = await _dbContext.ShopProducts
+                .AsNoTracking()
+                .Where(product => product.Category.ShopId == shopId)
+                .Select(product => _mapper.MapToProductDTO(product))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+            return result;
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();

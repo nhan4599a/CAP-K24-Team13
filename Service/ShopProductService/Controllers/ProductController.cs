@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace ShopProductService.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("/api/products")]
     public class ProductController : ControllerBase
     {
@@ -70,6 +69,20 @@ namespace ShopProductService.Controllers
             if (!response.IsSuccess)
                 return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = response.ErrorMessage };
             return new ApiResult<bool> { ResponseCode = 200, Data = response.Response };
+        }
+
+        [HttpGet("shop/{shopId}")]
+        public async Task<ApiResult<PaginatedList<ProductDTO>>> GetProductsOfShop(int shopId)
+        {
+            var response = await _mediator.Send(new FindProductsByShopIdQuery
+            {
+                ShopId = shopId
+            });
+            return new ApiResult<PaginatedList<ProductDTO>>
+            {
+                ResponseCode = 200,
+                Data = response
+            };
         }
 
         [HttpGet("search")]

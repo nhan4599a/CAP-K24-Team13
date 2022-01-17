@@ -5,68 +5,68 @@ namespace AuthServer.Services
 {
     public class InitializeAccountChallengeService : IHostedService
     {
-        private readonly ApplicationUserManager _userManager;
-        private readonly ApplicationRoleManager _roleManager;
+        private readonly IServiceProvider _serviceProvider;
 
-        public InitializeAccountChallengeService(
-            ApplicationUserManager userManager, ApplicationRoleManager roleManager)
+        public InitializeAccountChallengeService(IServiceProvider serviceProvider)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await InitializeRoles();
-            await InitializeTestUser();
+            using var scope = _serviceProvider.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<ApplicationUserManager>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<ApplicationRoleManager>();
+            await InitializeRoles(roleManager);
+            await InitializeTestUsers(userManager);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        private async Task InitializeTestUser()
+        private async Task InitializeTestUsers(ApplicationUserManager userManager)
         {
             string password = "CapK24Team13@Default";
-            if (_userManager.FindByNameAsync("customer_test") == null)
+            if (await userManager.FindByNameAsync("customer_test") == null)
             {
                 var user = await CreateUserObj("customer_test");
-                await _userManager.CreateAsync(user, password);
-                await _userManager.AddToRoleAsync(user, "Customer");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, "Customer");
             }
-            if (_userManager.FindByNameAsync("admin_test") == null)
+            if (await userManager.FindByNameAsync("admin_test") == null)
             {
                 var user = await CreateUserObj("admin_test");
-                await _userManager.CreateAsync(user, password);
-                await _userManager.AddToRoleAsync(user, "Admin");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, "Admin");
             }
-            if (_userManager.FindByNameAsync("owner_test") == null)
+            if (await userManager.FindByNameAsync("owner_test") == null)
             {
                 var user = await CreateUserObj("owner_test");
-                await _userManager.CreateAsync(user, password);
-                await _userManager.AddToRoleAsync(user, "ShopOwner");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, "ShopOwner");
             }
         }
 
-        private async Task InitializeRoles()
+        private async Task InitializeRoles(ApplicationRoleManager roleManager)
         {
-            if (_roleManager.FindByNameAsync("Customer") == null)
+            if (await roleManager.FindByNameAsync("Customer") == null)
             {
-                await _roleManager.CreateAsync(new Role
+                await roleManager.CreateAsync(new Role
                 {
                     Name = "Customer",
                     NormalizedName = "CUSTOMER"
                 });
             }
-            if (_roleManager.FindByNameAsync("Admin") == null)
+            if (await roleManager.FindByNameAsync("Admin") == null)
             {
-                await _roleManager.CreateAsync(new Role
+                await roleManager.CreateAsync(new Role
                 {
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 });
             }
-            if (_roleManager.FindByNameAsync("ShopOwner") == null)
+            if (await roleManager.FindByNameAsync("ShopOwner") == null)
             {
-                await _roleManager.CreateAsync(new Role
+                await roleManager.CreateAsync(new Role
                 {
                     Name = "ShopOwner",
                     NormalizedName = "SHOP_OWNER"
@@ -82,7 +82,9 @@ namespace AuthServer.Services
                 UserName = username,
                 NormalizedUserName = username.ToUpper(),
                 Email = email,
-                NormalizedEmail = email.ToUpper()
+                NormalizedEmail = email.ToUpper(),
+                FirstName = "test",
+                LastName = "test"
             });
         }
     }
