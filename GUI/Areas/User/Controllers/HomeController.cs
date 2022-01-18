@@ -24,13 +24,14 @@ namespace GUI.Areas.User.Controllers
             return View(products);
         }
 
-        public async Task<IActionResult> Search(string keyword, int pageNumber, int? pageSize)
+        public async Task<IActionResult> Search(string keyword, int pageNumber, int pageSize = 5)
         {
             var productResponse = await _productClient.FindProducts(keyword, pageNumber, pageSize);
             var shopResponse = await _shopClient.FindShops(keyword, pageNumber, pageSize);
             if (!productResponse.IsSuccessStatusCode || !shopResponse.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             ViewBag.Keyword = keyword;
+            ViewBag.PageSize = pageSize;
             return View(new SearchResultViewModel
             {
                 Products = productResponse.Content.Data,

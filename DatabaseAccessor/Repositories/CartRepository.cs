@@ -8,6 +8,7 @@ using Shared.DTOs;
 using Shared.RequestModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace DatabaseAccessor.Repositories
             var cart = await _dbContext.Carts.
                 FirstOrDefaultAsync(c => c.UserId.ToString() == requestModel.UserId);
             var cartItem =
-                cart.Details?.FirstOrDefault(c => c.ProductId.ToString() == requestModel.ProductId);
+                cart?.Details?.FirstOrDefault(c => c.ProductId.ToString() == requestModel.ProductId);
             if (cartItem != null)
             {
                 return CommandResponse<bool>.Error("Product is already existed cart", null);

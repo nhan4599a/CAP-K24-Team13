@@ -12,6 +12,7 @@ axios.interceptors.response.use(axiosResp => {
 
 const productEndpoint = 'https://localhost:44302/api/products';
 const categoryEndpoint = 'https://localhost:44302/api/categories';
+const cartEndpoint = 'https://localhost:44302/api/cart'
 const interfaceEndpoint = 'https://localhost:44394/api/interfaces';
 
 function findProducts(keyword, pageNumber, pageSize) {
@@ -154,4 +155,11 @@ function editShopInterface(shopId, formData) {
             'Content-Type': 'multipart/form-data'
         }
     });
+}
+
+function addProductToCart(userId, productId) {
+    var formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('productId', productId);
+    return axios.post(`${cartEndpoint}`, formData);
 }

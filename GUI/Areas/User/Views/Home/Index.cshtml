@@ -8,7 +8,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script id="hrfwidget-core" src="@Url.Content("~/assets/user/js/widget.js")"></script>
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' /><![endif]-->
     <!--[if lt IE 9]><script src="//hsta tic.net/0/0/global/design/theme-default/html5shiv.js"></script><![endif]-->
@@ -105,7 +105,7 @@
                     hrv_analytics.load();
                 }
             }();
-        </script>
+    </script>
     <style>
         .grecaptcha-badge {
             visibility: hidden;
@@ -394,16 +394,16 @@
                                                 <p class="ttbold">Tìm kiếm</p>
                                                 <div class="site_search">
                                                     <div class="search-box wpo-wrapper-search">
-                                                        <form action="https://delight-shop.myharavan.com/search" class="searchform searchform-categoris ultimate-search">
+                                                        <form class="searchform searchform-categoris ultimate-search">
                                                             <div class="wpo-search-inner">
                                                                 <input type="hidden" name="type" value="product">
-                                                                <input required="" id="inputSearchAuto" name="q" maxlength="40" autocomplete="off" class="searchinput input-search search-input" type="text" size="20" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+                                                                <input required="" id="inputSearchAuto" name="q" maxlength="40" autocomplete="off" class="searchinput input-search search-input" type="text" size="20" placeholder="Tìm kiếm" aria-label="Search">
                                                             </div>
-                                                            <button type="submit" class="btn-search btn" id="search-header-btn" aria-label="Tìm kiếm">
+                                                            <button class="btn-search btn" id="search-header-btn" aria-label="Tìm kiếm">
                                                                 <svg version="1.1" class="svg search" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 27" style="enable-background:new 0 0 24 27;" xml:space="preserve">
                                                                 <path d="M10,2C4.5,2,0,6.5,0,12s4.5,10,10,10s10-4.5,10-10S15.5,2,10,2z M10,19c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S13.9,19,10,19z"></path>
                                                                 <rect x="17" y="17" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -9.2844 19.5856)" width="4" height="8"></rect>
-                                                        </svg>
+                                                                </svg>
                                                             </button>
                                                         </form>
                                                         <div id="ajaxSearchResults" class="smart-search-wrapper ajaxSearchResults" style="display: none">
@@ -634,7 +634,7 @@
                                                     <i class="fa fa-chevron-down" aria-hidden="true"></i>
                                                 </a>
                                                 <ul class="sub_menu">
-                                                   
+
                                                     <li class="">
                                                         <a href="#" title="Khác">
                                                             Khác
@@ -958,7 +958,7 @@
                     <div class="col-xs-12 col-sm-4 col-md-4 home-banner-pd">
                         <div class="block-banner-category ratiobox">
                             <a class="link-banner" href="https://delight-shop.myharavan.com/collections/all" data-expand="-1">
-                                <img data-sizes="auto"src="~/assets/user/img/block_home_category1.jpg" alt="Khuyến mãi 1" sizes="600px">
+                                <img data-sizes="auto" src="~/assets/user/img/block_home_category1.jpg" alt="Khuyến mãi 1" sizes="600px">
                                 <img class="ls-blur-up-img ls-original-loaded ls-blur-up-loaded" src="@Url.Content("~/assets/user/img/block_home_category1.jpg")" aria-hidden="true">
                             </a>
                             <div class="caption_banner">
@@ -1402,18 +1402,25 @@
     <script>
         $(document).ready(function () {
             $('.site_search input.input-search.search-input').off('keydown');
+            $('form.searchform').submit(function (e) {
+                e.preventDefault();
+                let keyword = $('.site_search input.input-search.search-input').val().trim();
+                search(keyword, 1, 5);
+            });
             $('.site_search input.input-search.search-input').keydown(function (e) {
                 var which = e.originalEvent.keyCode;
                 if (which == 13) {
                     e.preventDefault();
                     let keyword = $(this).val().trim();
-                    let urlEncodedKeyword = encodeURIComponent(keyword);
-                    //let currentPageSize = getCurrentPageInfo().pageSize;
-                    window.location.href =
-                        `/home/search?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=5`;
+                    search(keyword, 1, 5);
                 }
             });
         });
+        function search(keyword, pageNumber, pageSize) {
+            let urlEncodedKeyword = encodeURIComponent(keyword);
+            //let currentPageSize = getCurrentPageInfo().pageSize;
+            window.location.href = `/home/search?keyword=${urlEncodedKeyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        }
     </script>
 </body>
 </html>
