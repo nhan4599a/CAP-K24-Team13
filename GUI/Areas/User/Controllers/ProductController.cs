@@ -30,7 +30,7 @@ namespace GUI.Areas.User.Controllers
             {
                 return new StatusCodeResult(StatusCodes.Status404NotFound);
             }
-            return View(response.Content.Data);
+            return View(result.Content.Data);
         }
 
         public async Task<IActionResult> ProductbyCategory()
