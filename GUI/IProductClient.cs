@@ -16,7 +16,7 @@ namespace GUI
         [Get("/products/shop/{shopId}")]
         Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsOfShopAsync(int shopId);
 
-        [Get("/products/search?requestModel.keyword={keyword}&requestModel.paginationInfo.pageNumber={pageNumber}&requestModel.paginationInfo.pageSize={pageSize}")]
+        [Get("/products/search?keyword={keyword}&paginationInfo.pageNumber={pageNumber}&paginationInfo.pageSize={pageSize}")]
         Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> FindProducts(string keyword, int pageNumber, int? pageSize);
     }
 } 

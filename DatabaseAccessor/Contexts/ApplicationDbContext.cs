@@ -12,7 +12,6 @@ namespace DatabaseAccessor.Contexts
     {
         private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
-
         public DbSet<ShopCategory> ShopCategories { get; set; }
 
         public DbSet<ShopInterface> ShopInterfaces { get; set; }
