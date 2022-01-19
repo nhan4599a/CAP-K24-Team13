@@ -88,14 +88,6 @@
         }
     </style>
     <style>
-        .edit-profile {
-            color: #000 !important
-        }
-
-            .edit-profile:hover {
-                color: #2f9db6 !important
-            }
-
         .col-xl-4 {
             flex: 0 0 auto;
             width: 50%;
@@ -113,6 +105,15 @@
         #image-carousel .carousel-inner .carousel-item img {
             width: 1134px;
             height: 562px;
+        }
+
+        #edit-mode{
+            text-align: left !important;
+            padding: 1px
+        }
+
+        #edit:hover{
+            color: #2f9db6 !important
         }
     </style>
 </head>
@@ -178,7 +179,11 @@
                         <div class="h-100">
                             <h5 class="mb-1">Nguyen Kim</h5>
                         </div>
-
+                        <div class="col-md-4 text-end" id="edit-mode">
+                            <a href="/admin/interface/edit">
+                                <i class="fas fa-user-edit text-secondary text-sm" id="edit" data-bs-toggle="tooltip">&ensp;Edit mode</i>
+                            </a>
+                        </div>
                     </div>
 
                 </div>
