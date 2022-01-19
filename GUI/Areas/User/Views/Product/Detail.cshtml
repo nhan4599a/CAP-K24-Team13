@@ -15,9 +15,10 @@
 	<meta name="HandheldFriendly" content="true">
 	<link rel="shortcut icon" href="@Url.Content("~/assets/user/img/logo-title.png")" type="image/png">
 	<title>Product - GIGAMALL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 	<meta name="description" content="Thiết kế sang trọng – hiện đạiSmart Tivi Asanzo 40 inch HD 40AS320 sở hữu thiết kế hiện đại với màn hình LED siêu tiết kiệm điện, Smart Tivi Asanzo 40 inch HD 40AS320 sẽ đem đến sự sang trọng cho phòng khách nhà bạn. Thiết kế viền mỏng lịch lãm và sang trọng thể hiện nét lịch lãm và khỏe khoắn qua các thiết kế góc cạnh">
 	<link rel="canonical" href="https://delight-shop.myharavan.com/products/smart-tivi-asanzo-40-inch-hd-40as320">		
-	<link rel="alternate" href="https://delight-shop.myharavan.com/products/smart-tivi-asanzo-40-inch-hd-40as320" 
+	<link rel="alternate" href="https://delight-shop.myharavan.com/products/smart-tivi-asanzo-40-inch-hd-40as320" />
 	<link rel="alternate" href="https://delight-shop.myharavan.com/products/smart-tivi-asanzo-40-inch-hd-40as320" 
 		hreflang="vi-vn">	
 	<meta name="keywords" content="Delight Shop">
@@ -844,27 +845,18 @@
 												</li>
 											}
 										</ul>
-										<div class="product-image__button">
-											<div id="product-zoom-in" class="product-zoom icon-pr-fix " aria-label="Zoom in" title="Zoom in">
-												<span class="zoom-in" aria-hidden="true">
-													<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 36 36" style="enable-background:new 0 0 36 36; width: 30px; height: 30px;" xml:space="preserve"><polyline points="6,14 9,11 14,16 16,14 11,9 14,6 6,6 "></polyline><polyline points="22,6 25,9 20,14 22,16 27,11 30,14 30,6 "></polyline><polyline points="30,22 27,25 22,20 20,22 25,27 22,30 30,30 "></polyline><polyline points="14,30 11,27 16,22 14,20 9,25 6,22 6,30 "></polyline> </svg>
-												</span>
-											</div>	
-										<div class="gallery-index icon-pr-fix">
-											<span class="current">1</span> / <span class="total">4</span>
-										</div>
 									</div>
-								</div>
-							</div>							
+							</div>
 						</div>
 						<div class="col-md-4 col-sm-12 col-xs-12 product-content-desc" id="detail-product">
+							<div style="display: none" class="product-id">@Model.Id</div>
 							<div class="product-title">
 								<h1>@Model.ProductName</h1>
 							</div>
 							<div class="product-price" id="price-preview">
 								<span class="pro-price">@Model.Price</span>	
 							</div>
-							<form id="add-item-form" action="https://delight-shop.myharavan.com/cart/add" method="post" class="variants clearfix">
+							<form id="add-item-form" method="post" class="variants clearfix">
 								<div class="select clearfix" style="display:none">
 									<select id="product-select" name="id" style="display:none;">
 										<option value="1031385246">Default Title - @Model.Price</option>
@@ -878,7 +870,7 @@
 										<input type="button" value="+" onclick="plusQuantity()" class="qty-btn">
 									</div>
 									<div class="wrap-addcart clearfix">						
-										<button type="button" id="add-to-cart" class=" add-to-cartProduct button dark btn-addtocart addtocart-modal " name="add"> 
+										<button type="button" id="add-to-cart" class="add-to-cartProduct button dark btn-addtocart addtocart-modal" name="add"> 
 											Thêm vào giỏ 
 										</button>
 									</div>	
@@ -892,7 +884,7 @@
 									</button>
 								</div>
 							</form>
-							<div class="product-description">	
+							<div class="product-description">
 								<div class="title-bl">
 									<h2>Mô tả</h2>
 								</div>							
@@ -926,7 +918,7 @@
 												<div class="product-detail clearfix">
 													<div class="box-pro-detail">
 														<h3 class="pro-name">
-															<a href="https://delight-shop.myharavan.com/products/dong-ho-smart-watch" title="Đồng hồ Smart watch">
+															<a href="#" title="Đồng hồ Smart watch">
 																Đồng hồ Smart watch
 															</a>
 														</h3>
@@ -992,15 +984,22 @@
 			</div>
 			<button id="closedivZoom"><i></i></button>
 		</div>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+		<script src="@Url.Content("~/assets/admin/js/internal/api.js")"></script>
 		<script>
 			$(document).ready(function() {
-				$('#add-to-cart').click(function(e) {
-					e.preventDefault();
-					$.post('https://localhost:44302/api/cart', {
-						userId: '53FBEA4C-3C29-41DD-8631-08D9D8B5CA90',
-						productId: 'e148843e-e72e-410b-c3a8-08d9d8579a62'
-					}).done(function (data) {
-						console.log(data);
+				$('#add-to-cart').click(function (e) {
+					let productId = $('#detail-product > .product-id').html();
+					console.log(productId);
+					addProductToCart('F081C3C0-3314-44D8-1055-08D9DA433EEF', productId)
+					.then(function () {
+						toastr.success('added to product to cart');
+						let currentCartItemCount = parseInt($('.count-holder > .count').html());
+						$('.count-holder > .count').html(currentCartItemCount + 1);
+					})
+					.catch(function (error) {
+						toastr.error(error);
 					});
 				});
 			});
@@ -1559,14 +1558,13 @@
 	<script src="@Url.Content("~/assets/user/js/scripts.js")" type="text/javascript"></script>
 	<!-- chatbot-harafunnel -->
 	<script>
-		setTimeout(function(){ 
+		setTimeout(function() { 
 			if ($(window).width() > 767) {
 				var chatbot_src = "https://assets.harafunnel.com/widget/108520260558644.js";
 				$("head").append('<!-- harafunnel --><script src="' + chatbot_src + '" ' + 'async="async"><\/script>');
 			}
 		}, 5000);
 	</script>
-
 	<script>
 		setTimeout(function(){
 			animation_check();

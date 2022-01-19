@@ -1,8 +1,13 @@
 ﻿@using GUI.Areas.User.ViewModels
+@using GUI.Extensions
 @{
 	Layout = null;
 }
 @model SearchResultViewModel
+@{
+	var keyword = (string) ViewBag.Keyword;
+	var pageSize = (int)ViewBag.PageSize;
+}
 <!DOCTYPE html>
 <html class="no-js" lang="vi"><!--<![endif]-->
 <head>
@@ -403,10 +408,10 @@ window.HaravanAnalytics.AutoTrack = true;
 										<p class="ttbold">Tìm kiếm</p>
 										<div class="site_search">
 											<div class="search-box wpo-wrapper-search">
-												<form action="https://delight-shop.myharavan.com/search" class="searchform searchform-categoris ultimate-search">
+												<form class="searchform searchform-categoris ultimate-search">
 													<div class="wpo-search-inner">
 														<input type="hidden" name="type" value="product">
-														<input required="" id="inputSearchAuto" name="q" maxlength="40" autocomplete="off" class="searchinput input-search search-input" type="text" size="20" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+														<input required="" id="inputSearchAuto" name="q" maxlength="40" autocomplete="off" class="searchinput input-search search-input" type="text" size="20" placeholder="Tìm kiếm" aria-label="Search">
 													</div>
 													<button type="submit" class="btn-search btn" id="search-header-btn" aria-label="Tìm kiếm">
 														<svg version="1.1" class="svg search" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 27" style="enable-background:new 0 0 24 27;" xml:space="preserve">
@@ -824,58 +829,61 @@ window.HaravanAnalytics.AutoTrack = true;
 			<button class="tablinks" onclick="openTab(event, 'shop')">Shops</button>
 		  </div>
 		  <div id="products" class="tabcontent" style="display: block">
-			<div class="wrapper-collection-2">
-            <div class="container-fluid @(Model.Products.Data.Count != 0 ? "mt-30" : "")" @(Model.Products.Data.Count == 0 ? "style=\"margin: 30px 0\"" : "")>
-                @if (Model.Products.Data.Count == 0)
-				{
-					<h3 style="text-align: center">There is no product to display!</h3>
-				}
-				else
-				{
-					<div class="row">
-                    <div class="clearfix content-product-list">
-                        @foreach (var product in Model.Products)
-						{
-							<div class="col-md-4 col-sm-6 col-xs-6 pro-loop">
-                            <div class="product-block product-resize fixheight">
-                                <div class="product-img">
-                                    <a href="/product/detail/@product.Id" title="Máy ảnh Panasonic X-T100" class="image-resize ratiobox" style="height: auto;">
-										<img class="lazyload img-loop" data-sizes="auto" src="https://localhost:44302/api/products/images/@product.Images[0]" alt="@product.ProductName">
-                                    </a>
-                                    <div class="button-add hidden">
-                                        <button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
-                                    </div>
-                                    <div class="pro-price-mb">	
-                                        <span class="pro-price">@(product.Price)₫</span>
-                                        <span class="pro-price-del"><del class="compare-price">@(product.Price)₫</del></span>
-                                    </div>
-                                </div>
-                                <div class="product-detail clearfix">
-                                    <div class="box-pro-detail">
-                                        <h3 class="pro-name">
-                                            <a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100">
-                                            @product.ProductName
-                                            </a>
-                                        </h3>
-                                        <div class="box-pro-prices">
-                                            <p class="pro-price highlight">
-                                                <span>@(product.Price)đ</span>
-                                                <span class="pro-price-del">
-                                                <del class="compare-price">
-                                                @(product.Price)₫
-                                                </del>
-                                                </span>	
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-						}
-                    </div>
-                </div>
-				}
-            </div>
+				<div class="wrapper-collection-2">
+					<div class="container-fluid @(Model.Products.Data.Count != 0 ? "mt-30" : "")" @(Model.Products.Data.Count == 0 ? "style=\"margin: 30px 0\"" : "")>
+					@if (Model.Products.Data.Count == 0)
+					{
+						<h3 style="text-align: center">There is no product to display!</h3>
+					}
+					else
+					{
+						<div class="row">
+							<div class="clearfix content-product-list">
+								@foreach (var product in Model.Products)
+								{
+									<div class="col-md-4 col-sm-6 col-xs-6 pro-loop">
+									<div class="product-block product-resize fixheight">
+										<div class="product-img">
+											<a href="/product/detail/@product.Id" title="Máy ảnh Panasonic X-T100" class="image-resize ratiobox" style="height: auto;">
+												<img class="lazyload img-loop" data-sizes="auto" src="https://localhost:44302/api/products/images/@product.Images[0]" alt="@product.ProductName">
+											</a>
+											<div class="button-add hidden">
+												<button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
+											</div>
+											<div class="pro-price-mb">	
+												<span class="pro-price">@(product.Price)₫</span>
+												<span class="pro-price-del"><del class="compare-price">@(product.Price)₫</del></span>
+											</div>
+										</div>
+										<div class="product-detail clearfix">
+											<div class="box-pro-detail">
+												<h3 class="pro-name">
+													<a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100">
+													@product.ProductName
+													</a>
+												</h3>
+												<div class="box-pro-prices">
+													<p class="pro-price highlight">
+														<span>@(product.Price)đ</span>
+														<span class="pro-price-del">
+														<del class="compare-price">
+														@(product.Price)₫
+														</del>
+														</span>	
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								}
+							</div>
+						</div>
+						@Html.RenderPagination(Model.Products, keyword, pageSize,
+							(keyword, pageNumber, pageSize) => 
+								$"/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}");
+					}
+				</div>
         	</div>
 		  </div>
 		  
@@ -889,33 +897,36 @@ window.HaravanAnalytics.AutoTrack = true;
 				else
 				{
 					<div class="row">
-                    <div class="clearfix content-product-list">
-                        @foreach (var shop in Model.Shops)
-						{
-							<div class="col-md-4 col-sm-6 col-xs-6 pro-loop">
-                            <div class="product-block product-resize fixheight">
-                                <div class="product-img">
-                                    <a href="/product/detail/@shop.Id" title="@shop.Name" class="image-resize ratiobox" style="height: auto;">
-										<img class="lazyload img-loop" data-sizes="auto" src="@shop.Image" alt="@shop.Name">
-                                    </a>
-                                    <div class="button-add hidden">
-                                        <button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
-                                    </div>
-                                </div>
-                                <div class="product-detail clearfix">
-                                    <div class="box-pro-detail">
-                                        <h3 class="pro-name">
-                                            <a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100">
-                                            @shop.Name
-                                            </a>
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-						}
-                    </div>
-                </div>
+						<div class="clearfix content-product-list">
+							@foreach (var shop in Model.Shops)
+							{
+								<div class="col-md-4 col-sm-6 col-xs-6 pro-loop">
+								<div class="product-block product-resize fixheight">
+									<div class="product-img">
+										<a href="/shop/index/@shop.Id" title="@shop.Name" class="image-resize ratiobox" style="height: auto;">
+											<img class="lazyload img-loop" data-sizes="auto" src="@shop.Image" alt="@shop.Name">
+										</a>
+										<div class="button-add hidden">
+											<button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
+										</div>
+									</div>
+									<div class="product-detail clearfix">
+										<div class="box-pro-detail">
+											<h3 class="pro-name">
+												<a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100">
+												@shop.Name
+												</a>
+											</h3>
+										</div>
+									</div>
+								</div>
+							</div>
+							}
+						</div>
+					</div>
+					@Html.RenderPagination(Model.Shops, keyword, pageSize, 
+						(keyword, pageNumber, pageSize) => 
+							$"/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}")
 				}
             </div>
 				</div> 
@@ -1236,18 +1247,25 @@ animateIn:!1},e.prototype.swap=function(){if(1===this.core.settings.items&&a.sup
     <script>
         $(document).ready(function () {
             $('.site_search input.input-search.search-input').off('keydown');
+            $('form.searchform').submit(function (e) {
+                e.preventDefault();
+                let keyword = $('.site_search input.input-search.search-input').val().trim();
+                search(keyword, 1, 5);
+            });
             $('.site_search input.input-search.search-input').keydown(function (e) {
                 var which = e.originalEvent.keyCode;
                 if (which == 13) {
                     e.preventDefault();
                     let keyword = $(this).val().trim();
-                    let urlEncodedKeyword = encodeURIComponent(keyword);
-                    //let currentPageSize = getCurrentPageInfo().pageSize;
-                    window.location.href =
-                        `/home/search?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=5`;
+                    search(keyword, 1, 5);
                 }
             });
         });
+        function search(keyword, pageNumber, pageSize) {
+            let urlEncodedKeyword = encodeURIComponent(keyword);
+            //let currentPageSize = getCurrentPageInfo().pageSize;
+            window.location.href = `/home/search?keyword=${urlEncodedKeyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        }
     </script>
 </body>
 	</html>
