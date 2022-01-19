@@ -1,4 +1,5 @@
 using AspNetCoreSharedComponent.FileValidations;
+using DatabaseAccessor;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -20,6 +22,85 @@ namespace ShopProductService.Controllers
         private readonly IMediator _mediator;
 
         private readonly IFileStorable _fileStore;
+
+        private PaginatedList<ProductDTO> FakeProducts = new List<ProductDTO>
+        {
+            new ProductDTO
+            {
+                Id = "fake1",
+                ProductName = "Fake product 1",
+                CategoryName = "Fake category",
+                Price = 20000,
+                Description = "Description",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images =
+                {
+
+                }
+            },
+            new ProductDTO
+            {
+                Id = "fake2",
+                ProductName = "Fake product 2",
+                CategoryName = "Fake category",
+                Price = 20000,
+                Description = "Description",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images =
+                {
+
+                }
+            },
+            new ProductDTO
+            {
+                Id = "fake3",
+                ProductName = "Fake product 3",
+                CategoryName = "Fake category",
+                Price = 20000,
+                Description = "Description",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images =
+                {
+
+                }
+            },
+            new ProductDTO
+            {
+                Id = "fake4",
+                ProductName = "Fake product 4",
+                CategoryName = "Fake category",
+                Price = 20000,
+                Description = "Description",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images =
+                {
+
+                }
+            },
+            new ProductDTO
+            {
+                Id = "fake5",
+                ProductName = "Fake product 5",
+                CategoryName = "Fake category",
+                Price = 20000,
+                Description = "Description",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images =
+                {
+
+                }
+            }
+        }.Paginate(1, 5);
 
         public ProductController(IMediator mediator, IFileStorable fileStore)
         {
@@ -74,6 +155,8 @@ namespace ShopProductService.Controllers
         [HttpGet("shop/{shopId}")]
         public async Task<ApiResult<PaginatedList<ProductDTO>>> GetProductsOfShop(int shopId)
         {
+            if (shopId != 0)
+                return new ApiResult<PaginatedList<ProductDTO>> { ResponseCode = 200, Data = FakeProducts };
             var response = await _mediator.Send(new FindProductsByShopIdQuery
             {
                 ShopId = shopId

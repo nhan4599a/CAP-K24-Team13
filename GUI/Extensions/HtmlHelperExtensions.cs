@@ -13,7 +13,7 @@ namespace GUI.Extensions
         {
             if (paginatedList == null)
                 throw new ArgumentNullException(nameof(paginatedList));
-            if (paginatedList.Data.Count == 0)
+            if (paginatedList.IsEmpty)
                 return new HtmlString("");
 
             var navTag = new TagBuilder("nav");
@@ -31,9 +31,7 @@ namespace GUI.Extensions
             var previousATag = new TagBuilder("a");
             previousATag.AddCssClass("page-link");
             previousATag.Attributes.Add("tabindex", "-1");
-            if (!paginatedList.HasPreviousPage)
-                previousATag.Attributes.Add("aria-disabled", "true");
-            else
+            if (paginatedList.HasPreviousPage)
                 previousATag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, paginatedList.PageNumber - 1, pageSize));
             previousATag.InnerHtml.Append("Previous");
 
@@ -48,15 +46,8 @@ namespace GUI.Extensions
                 liTag.AddCssClass("page-item");
                 aTag.AddCssClass("page-link");
                 aTag.InnerHtml.Append(i.ToString());
-                if (i == paginatedList.PageNumber)
-                {
-                    liTag.AddCssClass("disabled");
-                    aTag.Attributes.Add("aria-disabled", "true");
-                }
-                else
-                {
+                if (i != paginatedList.PageNumber)
                     aTag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, i, pageSize));
-                }
                 liTag.InnerHtml.AppendHtml(aTag);
                 ulTag.InnerHtml.AppendHtml(liTag);
             }
