@@ -25,8 +25,6 @@ namespace GUI.Extensions
 
             var previousLiTag = new TagBuilder("li");
             previousLiTag.AddCssClass("page-item");
-            if (!paginatedList.HasPreviousPage)
-                previousLiTag.AddCssClass("disabled");
 
             var previousATag = new TagBuilder("a");
             previousATag.AddCssClass("page-link");
@@ -54,15 +52,11 @@ namespace GUI.Extensions
 
             var nextLiTag = new TagBuilder("li");
             nextLiTag.AddCssClass("page-item");
-            if (!paginatedList.HasPreviousPage)
-                nextLiTag.AddCssClass("disabled");
 
             var nextATag = new TagBuilder("a");
             nextATag.AddCssClass("page-link");
             nextATag.Attributes.Add("tabindex", "-1");
-            if (!paginatedList.HasNextPage)
-                nextATag.Attributes.Add("aria-disabled", "true");
-            else
+            if (paginatedList.HasNextPage)
                 nextATag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, paginatedList.PageNumber + 1, pageSize));
             nextATag.InnerHtml.Append("Next");
 
