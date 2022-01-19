@@ -28,39 +28,39 @@ namespace ShopProductService.Controllers
             new CategoryDTO
             {
                 Id = -5,
-                CategoryName = "Fake category 1",
+                CategoryName = "category 1",
                 IsDisabled = false,
                 Image = ""
             },
             new CategoryDTO
             {
                 Id = -4,
-                CategoryName = "Fake category 2",
+                CategoryName = "category 2",
                 IsDisabled = false,
                 Image = ""
             },
-            new CategoryDTO
-            {
-                Id = -3,
-                CategoryName = "Fake category 3",
-                IsDisabled = false,
-                Image = ""
-            },
-            new CategoryDTO
-            {
-                Id = -2,
-                CategoryName = "Fake category 4",
-                IsDisabled = false,
-                Image = ""
-            },
-            new CategoryDTO
-            {
-                Id = -1,
-                CategoryName = "Fake category 5",
-                IsDisabled = false,
-                Image = ""
-            }
-        }.Paginate(1, 5);
+            //new CategoryDTO
+            //{
+            //    Id = -3,
+            //    CategoryName = "category 3",
+            //    IsDisabled = false,
+            //    Image = ""
+            //},
+            //new CategoryDTO
+            //{
+            //    Id = -2,
+            //    CategoryName = "category 4",
+            //    IsDisabled = false,
+            //    Image = ""
+            //},
+            //new CategoryDTO
+            //{
+            //    Id = -1,
+            //    CategoryName = "category 5",
+            //    IsDisabled = false,
+            //    Image = ""
+            //}
+        }.Paginate(1, 2);
         
         public CategoryController(IMediator mediator, IFileStorable fileStore)
         {

@@ -27,11 +27,11 @@ namespace ShopProductService.Controllers
         {
             new ProductDTO
             {
-                Id = "fake1",
-                ProductName = "Fake product 1",
-                CategoryName = "Fake category",
+                Id = "MacBook Pro M1",
+                ProductName = "Macbook Pro M1",
+                CategoryName = "category 1",
                 Price = 20000,
-                Description = "Description",
+                Description = "GOLD",
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
@@ -42,11 +42,11 @@ namespace ShopProductService.Controllers
             },
             new ProductDTO
             {
-                Id = "fake2",
-                ProductName = "Fake product 2",
-                CategoryName = "Fake category",
+                Id = "iphone 13",
+                ProductName = "Iphone 13",
+                CategoryName = "category 2",
                 Price = 20000,
-                Description = "Description",
+                Description = "64gb",
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
@@ -57,11 +57,11 @@ namespace ShopProductService.Controllers
             },
             new ProductDTO
             {
-                Id = "fake3",
-                ProductName = "Fake product 3",
-                CategoryName = "Fake category",
+                Id = "Nike AIR",
+                ProductName = "Nike AIR",
+                CategoryName = "category 1",
                 Price = 20000,
-                Description = "Description",
+                Description = "White",
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
@@ -72,11 +72,11 @@ namespace ShopProductService.Controllers
             },
             new ProductDTO
             {
-                Id = "fake4",
-                ProductName = "Fake product 4",
-                CategoryName = "Fake category",
+                Id = "Bitis Hunter",
+                ProductName = "Bitis Hunter",
+                CategoryName = "category 1",
                 Price = 20000,
-                Description = "Description",
+                Description = "Back-Orange",
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
@@ -87,11 +87,11 @@ namespace ShopProductService.Controllers
             },
             new ProductDTO
             {
-                Id = "fake5",
-                ProductName = "Fake product 5",
-                CategoryName = "Fake category",
+                Id = "Converse",
+                ProductName = "ASM Converse",
+                CategoryName = "category 1",
                 Price = 20000,
-                Description = "Description",
+                Description = "WHITE",
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
