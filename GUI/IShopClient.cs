@@ -12,5 +12,8 @@ namespace GUI
 
         [Get("/interfaces/{shopId}")]
         Task<ApiResponse<ApiResult<ShopInterfaceDTO>>> FindInformation(int shopId);
+
+        [Get("/shop/{shopId}")]
+        Task<ApiResult<ShopDTO>> GetShop(int shopId);
     }
 }

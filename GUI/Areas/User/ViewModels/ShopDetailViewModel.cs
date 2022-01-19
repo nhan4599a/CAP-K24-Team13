@@ -10,5 +10,7 @@ namespace GUI.Areas.User.ViewModels
         public PaginatedList<CategoryDTO> Categories { get; set; }
 
         public ShopInterfaceDTO Information { get; set; }
+
+        public ShopDTO Shop { get; set; }
     }
 }

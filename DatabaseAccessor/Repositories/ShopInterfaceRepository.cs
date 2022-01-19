@@ -92,7 +92,7 @@ namespace DatabaseAccessor.Repositories
         {
             if (shopId != 0)
                 return CommandResponse<ShopInterfaceDTO>.Success(
-                    FakeInterfaces.FirstOrDefault(@interface => @interface.Id == shopId));
+                    FakeInterfaces.FirstOrDefault(@interface => @interface.ShopId == shopId));
             var shopInterface = await _dbContext.ShopInterfaces
                 .AsNoTracking().FirstOrDefaultAsync(e => e.ShopId == shopId);
             return CommandResponse<ShopInterfaceDTO>.Success(_mapper.MapToShopInterfaceDTO(shopInterface));

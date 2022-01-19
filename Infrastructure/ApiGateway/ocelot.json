@@ -59,6 +59,16 @@
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/shop/{id}",
+      "DownstreamScheme": "https",
+      "ServiceName": "ProductService",
+      "UpstreamPathTemplate": "/shop/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
     }
   ],
   "GlobalConfiguration": {

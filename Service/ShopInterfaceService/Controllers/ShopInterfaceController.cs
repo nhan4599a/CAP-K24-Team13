@@ -29,14 +29,6 @@ namespace ShopInterfaceService.Controllers
             rules.Change(FileValidationRuleName.MinFileCount, 1);
         }
 
-        [HttpGet]
-        public async Task<ApiResult<List<ShopInterfaceDTO>>> Get(string searchString)
-        {
-            var result = await _mediator.Send(new FindShopInterfaceByKeywordCommand.Query { SearchString = searchString });
-            if (result == null) return null;
-            return result;
-        }
-
         [HttpPost("{shopId}")]
         public async Task<ApiResult<bool>> CreateShopInterface(int shopId, 
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
