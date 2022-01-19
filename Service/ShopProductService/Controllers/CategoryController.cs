@@ -23,7 +23,7 @@ namespace ShopProductService.Controllers
 
         private readonly FileValidationRuleSet _rules;
 
-        private PaginatedList<CategoryDTO> FakeCategories = new List<CategoryDTO>
+        private readonly static PaginatedList<CategoryDTO> FakeCategories = new List<CategoryDTO>
         {
             new CategoryDTO
             {

@@ -23,7 +23,7 @@ namespace ShopProductService.Controllers
 
         private readonly IFileStorable _fileStore;
 
-        private PaginatedList<ProductDTO> FakeProducts = new List<ProductDTO>
+        private readonly static PaginatedList<ProductDTO> FakeProducts = new List<ProductDTO>
         {
             new ProductDTO
             {
