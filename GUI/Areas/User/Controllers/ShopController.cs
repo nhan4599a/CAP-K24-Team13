@@ -15,10 +15,11 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index(int id)
         {
-            var response = await _productClient.GetProductsOfShopAsync(id);
-            if (!response.IsSuccessStatusCode)
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            return View(response.Content.Data);
+            //var response = await _productClient.GetProductsOfShopAsync(id);
+            //if (!response.IsSuccessStatusCode)
+            //    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            //return View(response.Content.Data);
+            return View();
         }
     }
 }

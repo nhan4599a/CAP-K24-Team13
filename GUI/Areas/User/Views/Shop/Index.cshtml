@@ -116,7 +116,7 @@ Haravan.domain = 'delight-shop.myharavan.com';
 <meta name="google-site-verification" content="xHjo5O-zeCo_hiytjCaJl4drBW6LryWRImkMdc432XU"><script type="text/javascript">!function(){var hrv_analytics=window.hrv_analytics=window.hrv_analytics||[];if(!hrv_analytics.initialize)if(hrv_analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{hrv_analytics.invoked=!0;hrv_analytics.methods=["start","trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];hrv_analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);hrv_analytics.push(e);return hrv_analytics}};for(var t=0;t<hrv_analytics.methods.length;t++){var e=hrv_analytics.methods[t];hrv_analytics[e]=hrv_analytics.factory(e)}hrv_analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://stats.hstatic.net/analytics.min.js?t=2";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);hrv_analytics._loadOptions=e};hrv_analytics.SNIPPET_VERSION="4.1.0";hrv_analytics.start('pro:web:1000306140');hrv_analytics.page();hrv_analytics.load();}}();</script><style>.grecaptcha-badge{visibility:hidden;}</style>
 <script type="text/javascript">
 window.HaravanAnalytics = window.HaravanAnalytics || {};
-window.HaravanAnalytics.meta = window.HaravanAnalytics.meta || {};
+window.#shop-namenamearavanAnalytics.meta = window.HaravanAnalytics.meta || {};
 window.HaravanAnalytics.meta.currency = 'VND';
 var meta = {"page":{"pageType":"page","resourceType":"page","resourceId":1002046722}};
 for (var attr in meta) {
@@ -807,7 +807,7 @@ window.HaravanAnalytics.AutoTrack = true;
 
 			<main class="mainContent-theme ">
 				<div class="layoutPage-technology-01">
-					<div class="container-fluid">
+@*					<div class="container-fluid">
 						<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
 							<div class="col-xs-12 col-sm-6 col-md-8">
 								<div class="footer-col footer-content1">
@@ -839,11 +839,81 @@ window.HaravanAnalytics.AutoTrack = true;
 								</div>
 							</div>
 						</div>
+					</div>*@
+			<div class="container-fluid">
+				<div class="row my-2">
+					<div class="col-sm-12" style="margin: 10px 0 13px 0">
+						<style>
+							#shop-name{
+								margin: 2%;
+								text-transform:uppercase; 
+								font-size: 28px; 
+								cursor: pointer;
+								font-weight: 600;
+							}
+							#shop-name:hover{
+								color: #000;
+							
+							}
+							#shop-ava{
+								border-radius: 20px
+							}
+
+							#form-control{
+								resize: none;
+								height: 100%
+							}
+						</style>
+						<a><img id="shop-ava" style="width:10%" src="https://i.pinimg.com/736x/ea/5f/0a/ea5f0ab8b79e381ffbf86b99d513755d.jpg" /></a>
+						<a id="shop-name">Adidas</a>
 					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6" style="height:240px">
+						<h3>Store description</h3> 
+						<textarea id="form-control" class="form-control" disabled></textarea>
+					</div>
+					<div class="col-sm-6">
+						<h3>Store information</h3> 
+								<div class="row align-items-center"  style="margin: 5px">
+                                    <div class="col-2">
+                                        <label for="input-name">Shop Owner Name:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-name" disabled />
+                                    </div>
+                                </div>
+                                <div class="row align-items-center"  style="margin: 5px">
+                                    <div class="col-2">
+                                        <label for="input-name" style="margin: 0px">Phone:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-phone" disabled />
+                                    </div>
+                                </div>
+                                <div class="row align-items-center" style="margin: 5px">
+                                    <div class="col-2">
+                                        <label for="input-name">Email:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-email" disabled />
+                                    </div>
+                                </div>
+                                <div class="row align-items-center"  style="margin: 5px">
+                                    <div class="col-2">
+                                        <label for="input-name" style="margin: 0px">Location:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-address" disabled />
+                                    </div>
+                                </div>
+					</div>
+				</div>
+			</div>
 	<section class="ldpage-technology01-bannerTop">
 		<div class="bannerTop-item ">
 			<picture>	
-				<img style="width:80%" src="/assets/shop/images/apple-banner.jpg" alt="banner">
+				<img style="width:90%; border-radius:10px; margin-top: 20px" src="/assets/shop/images/banners/d8a427104454435.5f634129afe77.jpg" alt="banner">
 			</picture>
 		</div>
 		<div class="bannerBottom-item">
@@ -877,12 +947,12 @@ window.HaravanAnalytics.AutoTrack = true;
 
 						<li class="active">
 							<a href="https://delight-shop.myharavan.com/pages/ldp-technology-1#collection-tabs-1" data-handle="/collections/onsale" data-toggle="tab">			
-								Sản phẩm khuyến mãi
+								Danh muc 1
 							</a>
 						</li>
 						<li>
 							<a href="https://delight-shop.myharavan.com/pages/ldp-technology-1#collection-tabs-2" data-handle="/collections/nhom-test" data-toggle="tab">
-								Sản phẩm nổi bật
+								Danh muc 2
 							</a>
 						</li>
 						<li>
@@ -902,7 +972,7 @@ window.HaravanAnalytics.AutoTrack = true;
                     <div class="container-fluid">
                         <div class="row">
                             <div class="clearfix content-product-list">
-                                @foreach (var product in Model)
+                              @*  @foreach (var product in Model)
                                 {
                                     <div class="col-md-4 col-sm-6 col-xs-6 pro-loop ">
                                         <div class="product-block product-resize fixheight" style="height: 381px;">
@@ -946,7 +1016,7 @@ window.HaravanAnalytics.AutoTrack = true;
                                             </div>
                                         </div>
                                     </div>
-                                }
+                                }*@
 
                             </div>
                         </div>
