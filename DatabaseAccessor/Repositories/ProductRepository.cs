@@ -113,6 +113,7 @@ namespace DatabaseAccessor.Repositories
         {
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
+                .Include(e => e.Category)
                 .Where(product => product.Category.ShopId == shopId)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);

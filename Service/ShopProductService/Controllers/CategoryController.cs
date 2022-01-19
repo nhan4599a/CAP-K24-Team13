@@ -147,6 +147,7 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
+        [HttpGet("shop/{id}")]
         public async Task<ApiResult<PaginatedList<CategoryDTO>>> GetCategoriesOfShop(int id)
         {
             if (id != 0)
@@ -155,7 +156,15 @@ namespace ShopProductService.Controllers
                     ResponseCode = 200,
                     Data = FakeCategories
                 };
-            
+            var result = await _mediator.Send(new FindCategoriesByShopIdQuery
+            {
+                ShopId = id
+            });
+            return new ApiResult<PaginatedList<CategoryDTO>>
+            {
+                ResponseCode = 200,
+                Data = result
+            };
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

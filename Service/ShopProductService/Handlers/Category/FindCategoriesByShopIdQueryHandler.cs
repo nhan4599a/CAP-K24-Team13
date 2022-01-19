@@ -18,9 +18,9 @@ namespace ShopProductService.Handlers.Category
             _categoryRepository = categoryRepository;
         }
 
-        public Task<PaginatedList<CategoryDTO>> Handle(FindCategoriesByShopIdQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedList<CategoryDTO>> Handle(FindCategoriesByShopIdQuery request, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return await _categoryRepository.GetCategoriesOfShopAsync(request.ShopId, request.PaginationInfo);
         }
 
         public void Dispose()

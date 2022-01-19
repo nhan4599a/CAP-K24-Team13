@@ -740,8 +740,12 @@ INDEX
 	position: relative;	
 	overflow: hidden;	
 	height: 100%;
-	background:#fff;
+	
+}
+
+#shop-product{
 	margin-bottom: 10px;
+	border-radius: 5px;
 }
 .pro-loop a {display:block;}
 .pro-loop .product-detail {padding: 20px 0;}

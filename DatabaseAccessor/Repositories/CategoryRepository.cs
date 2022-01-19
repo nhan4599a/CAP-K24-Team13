@@ -89,6 +89,14 @@ namespace DatabaseAccessor.Repositories
             return await _dbContext.ShopCategories.FindAsync(id);
         }
 
+        public async Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo)
+        {
+            return await _dbContext.ShopCategories.AsNoTracking()
+                .Where(category => category.ShopId == shopId)
+                .Select(category => _mapper.MapToCategoryDTO(category))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();

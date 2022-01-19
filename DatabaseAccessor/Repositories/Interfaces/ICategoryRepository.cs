@@ -19,5 +19,7 @@ namespace DatabaseAccessor.Repositories.Interfaces
         Task<CommandResponse<bool>> EditCategoryAsync(int id, CreateOrEditCategoryRequestModel requestModel);
 
         Task<CommandResponse<bool>> ActivateCategoryAsync(int id, bool isActivateCommand, bool shouldBeCascade);
+
+        Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo);
     }
 }

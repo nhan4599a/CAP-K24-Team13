@@ -31,6 +31,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreamScheme": "https",
+      "ServiceName": "ProductService",
+      "UpstreamPathTemplate": "/categories/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/interfaces/{id}",
       "DownstreamScheme": "https",
       "ServiceName": "InterfaceService",

@@ -35,9 +35,9 @@ namespace ShopProductService.Controllers
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
-                Images =
+                Images = new string[]
                 {
-
+                    "https://futureworld.com.vn/media/catalog/product/cache/374a8abfba56573d9bc051f80221efb2/m/b/mba_gold_m1_2.jpg"
                 }
             },
             new ProductDTO
@@ -50,9 +50,9 @@ namespace ShopProductService.Controllers
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
-                Images =
+                Images = new string[]
                 {
-
+                    "https://mega.com.vn/media/product/20113_iphone_13_256gb_white.jpg"
                 }
             },
             new ProductDTO
@@ -65,9 +65,9 @@ namespace ShopProductService.Controllers
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
-                Images =
+                Images =new string[]
                 {
-
+                    "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e777c881-5b62-4250-92a6-362967f54cca/air-force-1-07-shoe-NMmm1B.png?fbclid=IwAR3CJ3AKilbPvMX9um9TvclM3DWYhA926X4kpb_wsCY-YHPrmP3qLlLvhTg"
                 }
             },
             new ProductDTO
@@ -80,9 +80,9 @@ namespace ShopProductService.Controllers
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
-                Images =
+                Images = new string[]
                 {
-
+                    "https://product.hstatic.net/1000230642/product/03400cam__6__5022ef5622dc46b1bd893b238de2200f_1024x1024.jpg?fbclid=IwAR0gO4z_CTAtebCC0LEhJqPOK0I3rBJ75lsGaffq8SLwzQmD6hieOQfVWwQ"
                 }
             },
             new ProductDTO
@@ -95,9 +95,9 @@ namespace ShopProductService.Controllers
                 IsDisabled = false,
                 Quantity = 10,
                 Discount = 0,
-                Images =
+                Images = new string[]
                 {
-
+                    "https://th.bing.com/th/id/OIP.yRbQi9-1aDN-BXHuyD_vZAHaG5?pid=ImgDet&rs=1"
                 }
             }
         }.Paginate(1, 5);

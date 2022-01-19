@@ -70,6 +70,10 @@ namespace GUI
             {
                 options.BaseAddress = new Uri("https://localhost:7157");
             });
+            services.AddRefitClient<ICategoryClient>().ConfigureHttpClient(options =>
+            {
+                options.BaseAddress = new Uri("https://localhost:7157");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
