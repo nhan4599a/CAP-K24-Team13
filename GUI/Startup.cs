@@ -68,7 +68,7 @@ namespace GUI
             });
             services.AddRefitClient<IShopClient>().ConfigureHttpClient(options =>
             {
-                options.BaseAddress = new Uri("https://localhost:44302");
+                options.BaseAddress = new Uri("https://localhost:7157");
             });
         }
 

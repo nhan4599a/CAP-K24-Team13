@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using Shared.Models;
+using Shared.RequestModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,9 +23,10 @@ namespace ShopProductService.Controllers
         };
 
         [HttpGet("search")]
-        public PaginatedList<ShopDTO> FindShops(string keyword, int pageNumber, int? pageSize)
+        public PaginatedList<ShopDTO> FindShops([FromQuery] SearchRequestModel requestModel)
         {
-            var result = FakeShops.Where(shop => shop.Name.ToLower().Contains(keyword.ToLower())).Paginate(pageNumber, pageSize);
+            var result = FakeShops.Where(shop => shop.Name.ToLower().Contains(requestModel.Keyword.ToLower()))
+                .Paginate(requestModel.PaginationInfo.PageNumber, requestModel.PaginationInfo.PageSize);
             return result;
         }
     }

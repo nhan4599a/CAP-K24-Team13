@@ -36,7 +36,7 @@ namespace ShopProductService
                 options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
             }).AddFluentValidation<CreateOrEditCategoryRequestModel, AddOrEditCategoryRequestModelValidator>()
             .AddFluentValidation<CreateOrEditProductRequestModel, AddOrEditProductRequestModelValidator>()
-            .AddFluentValidation<SearchProductRequestModel, SearchProductRequestModelValidator>();
+            .AddFluentValidation<SearchRequestModel, SearchProductRequestModelValidator>();
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>

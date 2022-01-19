@@ -1,5 +1,6 @@
 using AspNetCoreSharedComponent.FileValidations;
 using AspNetCoreSharedComponent.ModelBinders;
+using DatabaseAccessor;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
@@ -7,6 +8,7 @@ using Shared.Models;
 using Shared.RequestModels;
 using Shared.Validations;
 using ShopProductService.Commands.Category;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -21,6 +23,45 @@ namespace ShopProductService.Controllers
 
         private readonly FileValidationRuleSet _rules;
 
+        private PaginatedList<CategoryDTO> FakeCategories = new List<CategoryDTO>
+        {
+            new CategoryDTO
+            {
+                Id = -5,
+                CategoryName = "Fake category 1",
+                IsDisabled = false,
+                Image = ""
+            },
+            new CategoryDTO
+            {
+                Id = -4,
+                CategoryName = "Fake category 2",
+                IsDisabled = false,
+                Image = ""
+            },
+            new CategoryDTO
+            {
+                Id = -3,
+                CategoryName = "Fake category 3",
+                IsDisabled = false,
+                Image = ""
+            },
+            new CategoryDTO
+            {
+                Id = -2,
+                CategoryName = "Fake category 4",
+                IsDisabled = false,
+                Image = ""
+            },
+            new CategoryDTO
+            {
+                Id = -1,
+                CategoryName = "Fake category 5",
+                IsDisabled = false,
+                Image = ""
+            }
+        }.Paginate(1, 5);
+        
         public CategoryController(IMediator mediator, IFileStorable fileStore)
         {
             _mediator = mediator;
@@ -104,6 +145,17 @@ namespace ShopProductService.Controllers
             if (!response.Response)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
+        }
+
+        public async Task<ApiResult<PaginatedList<CategoryDTO>>> GetCategoriesOfShop(int id)
+        {
+            if (id != 0)
+                return new ApiResult<PaginatedList<CategoryDTO>>
+                {
+                    ResponseCode = 200,
+                    Data = FakeCategories
+                };
+            
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

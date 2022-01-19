@@ -296,7 +296,7 @@ namespace TestShopProductService
         public async void TestFindAllProductSuccess()
         {
             var paginatedList = new PaginatedList<ProductDTO>(new List<ProductDTO>(), 1, 10, 0);
-            var requestModel = new SearchProductRequestModel { Keyword = string.Empty, PaginationInfo = new PaginationInfo() };
+            var requestModel = new SearchRequestModel { Keyword = string.Empty, PaginationInfo = new PaginationInfo() };
             var mediatorMock = new Mock<IMediator>();
             mediatorMock
                 .Setup(e => e.Send(It.IsAny<FindAllProductQuery>(), CancellationToken.None))
@@ -320,7 +320,7 @@ namespace TestShopProductService
         public async void TestFindProductsByKeywordSuccess()
         {
             var paginatedList = new PaginatedList<ProductDTO>(new List<ProductDTO>(), 1, 10, 0);
-            var requestModel = new SearchProductRequestModel { Keyword = "abc", PaginationInfo = new PaginationInfo() };
+            var requestModel = new SearchRequestModel { Keyword = "abc", PaginationInfo = new PaginationInfo() };
             var mediatorMock = new Mock<IMediator>();
             mediatorMock
                 .Setup(e => e.Send(It.IsAny<FindProductsByKeywordQuery>(), CancellationToken.None))

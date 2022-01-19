@@ -1,7 +1,8 @@
+@using GUI.Areas.User.ViewModels
 @{
 	Layout = null;
 }
-@model Shared.Models.PaginatedList<Shared.DTOs.ProductDTO>
+@model ShopDetailViewModel
 <!DOCTYPE html>
 <html class="no-js" lang="vi"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script id="hrfwidget-core" src="../js/widget.js"></script>
 		<meta content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=0" name="viewport">
@@ -807,39 +808,6 @@ window.HaravanAnalytics.AutoTrack = true;
 
 			<main class="mainContent-theme ">
 				<div class="layoutPage-technology-01">
-@*					<div class="container-fluid">
-						<div class="row" style="margin-top: 30px; margin-bottom: 30px;">
-							<div class="col-xs-12 col-sm-6 col-md-8">
-								<div class="footer-col footer-content1">
-									<div class=" div_left"><img class="logo-shop" src="https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png?202101262201&fbclid=IwAR1ShHgOzagAI72uYzd0ggS6f7bMO2FWgVAsx3g-cdT31441nvkDk5G1FUo"></div>
-									<div class=" div_right">
-										<h2 style="color: #b0297e; font-weight: 700; vertical-align: middle;">Apple </h2>
-									</div>	
-								</div>
-									<div style="color: #b0297e; font-size: 20px">
-										Description
-									</div>
-									<div class="footer-content">
-										<p>Apple Inc. Là một tập đoàn công nghệ đa quốc gia của Mỹ có trụ sở chính tại Cupertino, California, chuyên thiết kế, phát triển và bán thiết bị điện tử tiêu dùng, phần mềm máy tính và các dịch vụ trực tuyến.</p>
-									</div>
-							</div>
-							<div class="col-xs-12 col-sm-6 col-md-4">
-								<div class="footer-col">
-									<h4 class="footer-title"  style="color: #b0297e; font-size: 20px">
-										Profile Information
-									</h4>
-									<div class="footer-content footer-contact">
-										<ul>
-											<li style="font-weight: 600; margin-bottom: 5px;">Full name: Phan Lê Huy</li>
-											<li style="font-weight: 600;  margin-bottom: 5px;">Mobile: 0903751020</li>
-											<li style="font-weight: 600; margin-bottom: 5px;">Email: huy123@gmail.com</li>
-											<li style="font-weight: 600; margin-bottom: 5px;">Location: #L2-07</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>*@
 			<div class="container-fluid">
 				<div class="row my-2">
 					<div class="col-sm-12" style="margin: 10px 0 13px 0">
@@ -972,7 +940,7 @@ window.HaravanAnalytics.AutoTrack = true;
                     <div class="container-fluid">
                         <div class="row">
                             <div class="clearfix content-product-list">
-                              @*  @foreach (var product in Model)
+								@foreach (var product in Model.Products)
                                 {
                                     <div class="col-md-4 col-sm-6 col-xs-6 pro-loop ">
                                         <div class="product-block product-resize fixheight" style="height: 381px;">
@@ -1016,7 +984,7 @@ window.HaravanAnalytics.AutoTrack = true;
                                             </div>
                                         </div>
                                     </div>
-                                }*@
+                                }
 
                             </div>
                         </div>
@@ -1093,69 +1061,55 @@ window.HaravanAnalytics.AutoTrack = true;
 					</ul>
 				</div>
 				<div class="tablist-product-content tab-content">
-											<div class="tab-pane fade in active" id="collection-tabs-5" data-get="true">
-
-							<div class="collection-list-prd listProduct-ldpage-row">
-								
+					<div class="tab-pane fade in active" id="collection-tabs-5" data-get="true">
+						<div class="collection-list-prd listProduct-ldpage-row">
+							@foreach (var product in Model.Products)
+							{
 								<div class="product-loop-ldpage animated">
-<div class="product-block ">
-	<div class="product-image ">
-		<a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100" class="image-resize ratiobox">
-			<picture>
-				<source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/gg_medium.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-				<source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/gg_large.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-				<source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/gg_grande.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-				<img class="lazyload img-loop" data-sizes="auto" data-src="//product.hstatic.net/1000306140/product/gg_grande.jpg" data-lowsrc="//product.hstatic.net/1000306140/product/gg_grande.jpg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt=" Máy ảnh Panasonic X-T100 ">
-			</picture>
-			<picture>
-				<source media="(max-width: 480px)" data-srcset="//product.hstatic.net/1000306140/product/sf_medium.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-				<source media="(min-width: 481px) and (max-width: 767px)" data-srcset="//product.hstatic.net/1000306140/product/sf_large.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-				<source media="(min-width: 768px)" data-srcset="//product.hstatic.net/1000306140/product/sf_grande.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-				<img class="img-loop img-hover lazyload" data-src="//product.hstatic.net/1000306140/product/sf_grande.jpg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt=" Máy ảnh Panasonic X-T100 ">
-			</picture>	
-		</a>	
-		<div class="button-add hidden">
-			<button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
-		</div>	
-	</div>
-	<div class="product-detail ">
-		<div class="box-pro-detail">
-			<h3 class="pro-name"><a href="https://delight-shop.myharavan.com/products/may-anh-panasonic-x-t100" title="Máy ảnh Panasonic X-T100">Máy ảnh Panasonic X-T100</a></h3>
-			<div class="box-pro-prices">	
-				<p class="pro-price highlight">
-					<span>12,300,000₫</span>
-					
-					<span class="pro-price-del">
-						<del class="compare-price">
-							12,999,000₫
-						</del>
-					</span>
-					
-				</p>
-			</div>
-		</div>
-	</div>
-</div>	
-								</div>	
-							</div>
-							<div class="collection-loadmore text-center">
-								<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
-							</div>
+									<div class="product-block">
+										<div class="product-image">
+											<a href="/product/detail/@product.Id" title="@product.ProductName" class="image-resize ratiobox">
+												<img class="lazyload img-loop" data-sizes="auto" src="https://localhost:44302/api/products/images/@product.Images[0]" alt="@product.ProductName">
+											</a>
+											<div class="button-add hidden">
+												<button type="submit" title="Buy now" class="action" onclick="buy_now('1031396101')">Mua ngay<i class="fa fa-long-arrow-right"></i></button>
+											</div>
+										</div>
+										<div class="product-detail ">
+											<div class="box-pro-detail">
+												<h3 class="pro-name"><a href="#" title="Máy ảnh Panasonic X-T100">@product.ProductName</a></h3>
+												<div class="box-pro-prices">	
+													<p class="pro-price highlight">
+														<span>@(product.Price)₫</span>
+														<span class="pro-price-del">
+															<del class="compare-price">
+																@(product.Price)₫
+															</del>
+														</span>
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							}
 						</div>
-						<div class="tab-pane fade " id="collection-tabs-6" data-get="false">
-							<div class="collection-list-prd listProduct-ldpage-row"><div class="icon-loading"></div></div>
-							<div class="collection-loadmore text-center">
-								<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
-
-							</div>
+						<div class="collection-loadmore text-center">
+							<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
 						</div>
-						<div class="tab-pane fade " id="collection-tabs-7" data-get="false">
-							<div class="collection-list-prd listProduct-ldpage-row"><div class="icon-loading"></div></div>
-							<div class="collection-loadmore text-center">
-								<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
-
-							</div>
+					</div>
+					<div class="tab-pane fade " id="collection-tabs-6" data-get="false">
+						<div class="collection-list-prd listProduct-ldpage-row"><div class="icon-loading"></div></div>
+						<div class="collection-loadmore text-center">
+							<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
 						</div>
+					</div>
+					<div class="tab-pane fade " id="collection-tabs-7" data-get="false">
+						<div class="collection-list-prd listProduct-ldpage-row"><div class="icon-loading"></div></div>
+						<div class="collection-loadmore text-center">
+							<a class="button dark btn-loadmore" href="javascript:void(0);">Xem thêm sản phẩm</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

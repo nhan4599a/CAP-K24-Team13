@@ -29,6 +29,26 @@
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/interfaces/{id}",
+      "DownstreamScheme": "https",
+      "ServiceName": "InterfaceService",
+      "UpstreamPathTemplate": "/interfaces/{id}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/shop/search",
+      "DownstreamScheme": "https",
+      "ServiceName": "ProductService",
+      "UpstreamPathTemplate": "/shop/search",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
     }
   ],
   "GlobalConfiguration": {

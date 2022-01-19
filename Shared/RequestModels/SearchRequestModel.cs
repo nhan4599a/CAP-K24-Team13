@@ -2,7 +2,7 @@
 
 namespace Shared.RequestModels
 {
-    public class SearchProductRequestModel
+    public class SearchRequestModel
     {
         public string Keyword { get; set; } = string.Empty;
 

@@ -7,7 +7,10 @@ namespace GUI
 {
     public interface IShopClient
     {
-        [Get("/api/shop/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}")]
+        [Get("/shop/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}")]
         Task<ApiResponse<PaginatedList<ShopDTO>>> FindShops(string keyword, int pageNumber, int? pageSize);
+
+        [Get("/interfaces/{shopId}")]
+        Task<ApiResponse<ApiResult<ShopInterfaceDTO>>> FindInformation(int shopId);
     }
 }
