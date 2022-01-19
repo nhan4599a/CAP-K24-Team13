@@ -839,7 +839,7 @@ window.HaravanAnalytics.AutoTrack = true;
 				<div class="row">
 					<div class="col-sm-6" style="height:240px">
 						<h3>Store description</h3> 
-						<textarea id="form-control" class="form-control" disabled value="@Model.Information?.ShopDescription"></textarea>
+						<textarea id="form-control" class="form-control" disabled>@Model.Information?.ShopDescription</textarea>
 					</div>
 					<div class="col-sm-6">
 						<h3>Store information</h3> 
@@ -880,8 +880,15 @@ window.HaravanAnalytics.AutoTrack = true;
 			</div>
 	<section class="ldpage-technology01-bannerTop">
 		<div class="bannerTop-item ">
-			<picture>	
-				<img style="width:90%; border-radius:10px; margin-top: 20px" src="/assets/shop/images/banners/d8a427104454435.5f634129afe77.jpg" alt="banner">
+			<picture>
+				@if (Model.Information.Images[0].StartsWith("http"))
+				{
+					<img style="width:90%; border-radius:10px; margin-top: 20px" src="@Model.Information.Images[0]" alt="banner">
+				}
+				else
+				{
+					<img style="width:90%; border-radius:10px; margin-top: 20px" src="https://localhost:44394/api/interfaces/images/@Model.Information.Images[0]" alt="banner">
+				}
 			</picture>
 		</div>
 		<div class="bannerBottom-item">
@@ -911,29 +918,25 @@ window.HaravanAnalytics.AutoTrack = true;
 				<h2 class="hidden"></h2>
 				<div class="tablist-product-title">
 					<ul class="nav nav-tabs collection-navtabs-title">
-
-
-						<li class="active">
-							<a href="https://delight-shop.myharavan.com/pages/ldp-technology-1#collection-tabs-1" data-handle="/collections/onsale" data-toggle="tab">			
-								Danh muc 1
-							</a>
-						</li>
-						<li>
-							<a href="https://delight-shop.myharavan.com/pages/ldp-technology-1#collection-tabs-2" data-handle="/collections/nhom-test" data-toggle="tab">
-								Danh muc 2
-							</a>
-						</li>
-						<li>
-							<a href="https://delight-shop.myharavan.com/pages/ldp-technology-1#collection-tabs-3" data-handle="/collections/nhom-test" data-toggle="tab">
-								Giá sốc hôm nay
-							</a>
-						</li>
-						<li>
-							<a href="https://delight-shop.myharavan.com/pages/ldp-technology-1#collection-tabs-4" data-handle="" data-toggle="tab">	
-								Nhóm sản phẩm
-							</a>
-						</li>
-
+						@for (var i = 0; i < Model.Categories.Data.Count; i++)
+						{
+							if (i == 0)
+							{
+								<li class="active">
+									<a href="#" data-handle="/collections/onsale" data-toggle="tab">			
+										@Model.Categories.Data[i].CategoryName
+									</a>
+								</li>
+							}
+							else
+							{
+								<li>
+									<a href="#" data-handle="/collections/onsale" data-toggle="tab">			
+										@Model.Categories.Data[i].CategoryName
+									</a>
+								</li>
+							}
+						}
 					</ul>
 				</div>
 				<div class="wrapper-collection-1">
