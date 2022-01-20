@@ -1982,6 +1982,7 @@
     <None Include="wwwroot\assets\admin\scss\material-dashboard\_utilities-extend.scss" />
     <None Include="wwwroot\assets\admin\scss\material-dashboard\_utilities.scss" />
     <None Include="wwwroot\assets\admin\scss\material-dashboard\_variables.scss" />
+    <None Include="wwwroot\assets\user\js\cart.js" />
     <Content Include="wwwroot\assets\user\css\27auzeZAVcn.css">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -2002,6 +2003,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="wwwroot\assets\user\css\cart_style.css" />
     <Content Include="wwwroot\assets\user\css\ctG_nU578dx.css">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -2075,6 +2077,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="wwwroot\assets\user\css\cart.css" />
     <Content Include="wwwroot\assets\user\css\styles__ltr.css">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

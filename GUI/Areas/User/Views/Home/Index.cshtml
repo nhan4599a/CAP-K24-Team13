@@ -519,7 +519,7 @@
                                     </div>
                                     <div class="header-action header-action_cart">
                                         <div class="header-action_text">
-                                            <a class="header-action__link header-action-toggle" href="javascript:void(0)" id="site-cart-handle" aria-label="Giỏ hàng" title="Giỏ hàng">
+                                            <a class="header-action__link header-action-toggle" href="/cart" id="site-cart-handle" aria-label="Giỏ hàng" title="Giỏ hàng">
                                                 <span class="box-icon">
                                                     <svg version="1.1" class="svg-ico-cart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 27" style="enable-background:new 0 0 24 27;" xml:space="preserve">
                                                     <g>
@@ -1401,6 +1401,7 @@
     </script>
     <script>
         $(document).ready(function () {
+            $('.header-action_cart > .header-action_text > a.header-action__link').off('click');
             $('.site_search input.input-search.search-input').off('keydown');
             $('form.searchform').submit(function (e) {
                 e.preventDefault();
