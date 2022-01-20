@@ -3,7 +3,7 @@ using Shared.DTOs;
 using Shared.Models;
 using System.Threading.Tasks;
 
-namespace GUI
+namespace GUI.Clients
 {
     public interface ICategoryClient
     {

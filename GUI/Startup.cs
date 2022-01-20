@@ -1,4 +1,5 @@
 using GUI.Attributes;
+using GUI.Clients;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Refit;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
 
@@ -62,18 +64,14 @@ namespace GUI
                 foreach (var virtualArea in virtualAreaNames)
                     options.ViewLocationFormats.Add($"/Areas/{virtualArea}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
-            services.AddRefitClient<IProductClient>().ConfigureHttpClient(options =>
-            {
-                options.BaseAddress = new Uri("https://localhost:7157");
-            });
-            services.AddRefitClient<IShopClient>().ConfigureHttpClient(options =>
-            {
-                options.BaseAddress = new Uri("https://localhost:7157");
-            });
-            services.AddRefitClient<ICategoryClient>().ConfigureHttpClient(options =>
-            {
-                options.BaseAddress = new Uri("https://localhost:7157");
-            });
+            services.AddRefitClient<IProductClient>()
+                .ConfigureHttpClient(ConfigureHttpClient);
+            services.AddRefitClient<IShopClient>()
+                .ConfigureHttpClient(ConfigureHttpClient);
+            services.AddRefitClient<ICategoryClient>()
+                .ConfigureHttpClient(ConfigureHttpClient);
+            services.AddRefitClient<ICartClient>()
+                .ConfigureHttpClient(ConfigureHttpClient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,6 +106,11 @@ namespace GUI
                         name: "User",
                         pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void ConfigureHttpClient(HttpClient client)
+        {
+            client.BaseAddress = new Uri("https://localhost:7157");
         }
     }
 }

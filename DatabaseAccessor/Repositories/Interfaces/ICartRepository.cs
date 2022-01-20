@@ -2,6 +2,7 @@
 using Shared.DTOs;
 using Shared.RequestModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Interfaces
@@ -14,6 +15,8 @@ namespace DatabaseAccessor.Repositories.Interfaces
 
         Task<CommandResponse<bool>> RemoveCartItemAsync(RemoveCartItemRequestModel requestModel);
         
-        Task<CartDTO> GetCartAsync(string userId);
+        Task<List<CartItemDTO>> GetCartAsync(string userId);
+
+        Task<int> GetCartItemCountAsync(string userId);
     }
 }
