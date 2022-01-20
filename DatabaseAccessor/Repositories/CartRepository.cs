@@ -8,7 +8,6 @@ using Shared.DTOs;
 using Shared.RequestModels;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -63,12 +62,6 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
-        public void Dispose()
-        {
-            _dbContext.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
         public async Task<CommandResponse<bool>> EditQuantityAsync(
             AddOrEditQuantityCartItemRequestModel requestModel)
         {
@@ -82,13 +75,6 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
-        public async Task<CartDTO> GetCartAsync(string userId = "69")
-        {
-            var cart = await _dbContext.Carts.AsNoTracking()
-                .FirstOrDefaultAsync(cartItem => cartItem.UserId.ToString() == userId);
-            return null;
-        }
-
         public async Task<CommandResponse<bool>> RemoveCartItemAsync(RemoveCartItemRequestModel requestModel)
         {
             var cart = 
@@ -100,6 +86,25 @@ namespace DatabaseAccessor.Repositories
             cart.Details.Remove(cartItem);
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
+        }
+
+        public async Task<List<CartItemDTO>> GetCartAsync(string userId)
+        {
+            var cart = await _dbContext.Carts.FirstOrDefaultAsync(cart => cart.UserId.ToString() == userId);
+            if (cart == null)
+                return new List<CartItemDTO>();
+            return cart.Details.Select(item => _mapper.MapToCartItemDTO(item)).ToList();
+        }
+
+        public async Task<int> GetCartItemCountAsync(string userId)
+        {
+            return await _dbContext.CartDetails.CountAsync(cart => cart.Cart.UserId.ToString() == userId);
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

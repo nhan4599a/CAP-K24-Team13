@@ -26,7 +26,11 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
-                cfg.CreateMap<Cart, CartDTO>();
+                cfg.CreateMap<CartDetail, CartItemDTO>()
+                    .ForMember(target => target.ProductName,
+                        options => options.MapFrom(source => source.Product.ProductName))
+                    .ForMember(target => target.Price,
+                        options => options.MapFrom(source => source.Product.Price));
             });
             _mapper = config.CreateMapper();
         }
@@ -43,6 +47,6 @@ namespace DatabaseAccessor.Mapping
         public ShopInterfaceDTO MapToShopInterfaceDTO(ShopInterface shopInterface) 
             => _mapper.Map<ShopInterfaceDTO>(shopInterface);
 
-        public CartDTO MapToCartItemDto(Cart cartItem) => _mapper.Map<CartDTO>(cartItem);
+        public CartItemDTO MapToCartItemDTO(CartDetail cartItem) => _mapper.Map<CartItemDTO>(cartItem);
     }
 }

@@ -4,6 +4,7 @@ using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Cart;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -19,16 +20,19 @@ namespace ShopProductService.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        [ActionName("GetCartItems")]
-        public async Task<ApiResult<CartDTO>> GetCartItems()
+        [HttpGet("{userId}/items")]
+        public async Task<List<CartItemDTO>> GetCartItems(string userId)
         {
-            var response = await _mediator.Send(new GetCartItemListQuery { UserId = "69" });
-            return new ApiResult<CartDTO> { ResponseCode = 200, Data = response };
+            return await _mediator.Send(new GetCartItemsQuery { UserId = userId });
+        }
+
+        [HttpGet("{userId}/count")]
+        public async Task<int> GetCartItemCount(string userId)
+        {
+            return await _mediator.Send(new GetCartItemCountQuery { UserId = userId });
         }
 
         [HttpPost]
-        [ActionName("Add")]
         public async Task<ApiResult<bool>> AddCartItem([FromForm] AddOrEditQuantityCartItemRequestModel requestModel)
         {
             var response = await _mediator.Send(new AddCartItemCommand
@@ -41,7 +45,6 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPut]
-        [ActionName("EditQuantity")]
         public async Task<ApiResult<bool>> EditQuantity(AddOrEditQuantityCartItemRequestModel requestModel)
         {
             var response = await _mediator.Send(new EditQuantityCartItemCommand
@@ -52,8 +55,8 @@ namespace ShopProductService.Controllers
                 return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
+
         [HttpDelete]
-        [ActionName("RemoveCartItem")]
         public async Task<ApiResult<bool>> RemoveCartItem(RemoveCartItemRequestModel requestModel)
         {
             var response = await _mediator.Send(new RemoveCartItemCommand { requestModel = requestModel });
