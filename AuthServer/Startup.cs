@@ -50,13 +50,13 @@ namespace AuthServer
                 {
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
-                })
-                .AddGoogle(options =>
-                {
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    options.ClientId = Configuration["GOOGLE_CLIENT_ID"];
-                    options.ClientSecret = Configuration["GOOGLE_CLIENT_SECRET"];
                 });
+                //.AddGoogle(options =>
+                //{
+                //    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                //    options.ClientId = Configuration["GOOGLE_CLIENT_ID"];
+                //    options.ClientSecret = Configuration["GOOGLE_CLIENT_SECRET"];
+                //});
             services.AddTransient<MailConfirmationTokenProvider<User>>();
             services.AddScoped<SmtpClient>();
             services.AddScoped<IMailService, GmailService>();

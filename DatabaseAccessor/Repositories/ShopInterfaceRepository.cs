@@ -72,7 +72,7 @@ namespace DatabaseAccessor.Repositories
                 ShopId = 5,
                 ShopName = "Converse",
                 ShopAddress = " 234 Nguyễn Thị Minh Khai, Phường 6, Quận 3, Thành phố Hồ Chí Minh",
-                ShopEmail = "Futureworld@gmail.com",
+                ShopEmail = "Converse@gmail.com",
                 ShopPhoneNumber = "090 383 85 40",
                 Images = new string[]
                 {

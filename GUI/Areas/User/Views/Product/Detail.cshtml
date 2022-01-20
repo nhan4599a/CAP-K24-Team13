@@ -991,8 +991,7 @@
 			$(document).ready(function() {
 				$('#add-to-cart').click(function (e) {
 					let productId = $('#detail-product > .product-id').html();
-					console.log(productId);
-					addProductToCart('F081C3C0-3314-44D8-1055-08D9DA433EEF', productId)
+					addProductToCart('90CCBB88-C919-4CA7-FC67-08D9DBBCCCFB', productId)
 					.then(function () {
 						toastr.success('added to product to cart');
 						let currentCartItemCount = parseInt($('.count-holder > .count').html());
