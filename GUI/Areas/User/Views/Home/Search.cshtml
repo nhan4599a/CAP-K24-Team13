@@ -193,7 +193,7 @@ window.HaravanAnalytics.AutoTrack = true;
 		<path class="path1" d="M622.826 702.736c-22.11-3.518-22.614-64.314-22.614-64.314s64.968-64.316 79.128-150.802c38.090 0 61.618-91.946 23.522-124.296 1.59-34.054 48.96-267.324-190.862-267.324s-192.45 233.27-190.864 267.324c-38.094 32.35-14.57 124.296 23.522 124.296 14.158 86.486 79.128 150.802 79.128 150.802s-0.504 60.796-22.614 64.314c-71.22 11.332-337.172 128.634-337.172 257.264h896c0-128.63-265.952-245.932-337.174-257.264z"></path>
 	</symbol>
 </svg>
-		<div class="main-body  layoutProduct_scroll   ">			
+		<div class="main-body  layoutProduct_scroll">			
 <div class="mainHeader--height" style="min-height: 147px;">
 	<header id="site-header" class="main-header mainHeader_temp01">
 		<div class="header-upper-middle">
@@ -203,7 +203,7 @@ window.HaravanAnalytics.AutoTrack = true;
 						<div class="visible-sm visible-xs">
 							<div class="header-action header-action_menu">
 								<div class="header-action_text">
-									<a class="header-action__link header-action-toggle" href="javascript:void(0)" id="site-menu-handle" aria-label="Menu" title="Menu">
+									<a class="header-action__link header-action-toggle" href="/cart" id="site-menu-handle" aria-label="Menu" title="Menu">
 									<span class="hamburger-menu " aria-hidden="true">
 									<span class="bar"></span>
 									</span>
@@ -387,7 +387,7 @@ window.HaravanAnalytics.AutoTrack = true;
 						<div class="header-wrap-icon">
 							<div class="header-action header-action_search">
 								<div class="header-action_text">
-									<a class="header-action__link header-action-toggle" href="javascript:void(0)" id="site-search-handle" aria-label="Tìm kiếm" title="Tìm kiếm">
+									<a class="header-action__link header-action-toggle" href="/cart" id="site-search-handle" aria-label="Tìm kiếm" title="Tìm kiếm">
 										<span class="box-icon">
 											<svg class="svg-ico-search" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 27" style="enable-background:new 0 0 24 27;" xml:space="preserve">
 												<path d="M10,2C4.5,2,0,6.5,0,12s4.5,10,10,10s10-4.5,10-10S15.5,2,10,2z M10,19c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S13.9,19,10,19z"></path>
@@ -533,7 +533,7 @@ window.HaravanAnalytics.AutoTrack = true;
 							</div>
 							<div class="header-action header-action_cart">
 								<div class="header-action_text">
-									<a class="header-action__link header-action-toggle" href="javascript:void(0)" id="site-cart-handle" aria-label="Giỏ hàng" title="Giỏ hàng">
+									<a class="header-action__link header-action-toggle" href="/cart" id="site-cart-handle" aria-label="Giỏ hàng" title="Giỏ hàng">
 										<span class="box-icon">
 											<svg version="1.1" class="svg-ico-cart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 27" style="enable-background:new 0 0 24 27;" xml:space="preserve">
 												<g>
@@ -1249,6 +1249,7 @@ animateIn:!1},e.prototype.swap=function(){if(1===this.core.settings.items&&a.sup
 	
     <script>
         $(document).ready(function () {
+            $('.header-action_cart > .header-action_text > a.header-action__link').off('click');
             $('.site_search input.input-search.search-input').off('keydown');
             $('form.searchform').submit(function (e) {
                 e.preventDefault();

@@ -199,7 +199,7 @@
 								<div class="visible-sm visible-xs">
 									<div class="header-action header-action_menu">
 										<div class="header-action_text">
-											<a class="header-action__link header-action-toggle" href="javascript:void(0)" id="site-menu-handle" aria-label="Menu" title="Menu">
+											<a class="header-action__link header-action-toggle" href="/cart" id="site-menu-handle" aria-label="Menu" title="Menu">
 												<span class="hamburger-menu" aria-hidden="true">
 													<span class="bar"></span>
 												</span>
@@ -380,7 +380,7 @@
 								<div class="header-wrap-icon">
 									<div class="header-action header-action_search">
 										<div class="header-action_text">
-											<a class="header-action__link header-action-toggle" href="javascript:void(0)" id="site-search-handle" aria-label="Tìm kiếm" title="Tìm kiếm">
+											<a class="header-action__link header-action-toggle" href="#" id="site-search-handle" aria-label="Tìm kiếm" title="Tìm kiếm">
 												<span class="box-icon">
 													<svg class="svg-ico-search" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 27" style="enable-background:new 0 0 24 27;" xml:space="preserve">
 														<path d="M10,2C4.5,2,0,6.5,0,12s4.5,10,10,10s10-4.5,10-10S15.5,2,10,2z M10,19c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S13.9,19,10,19z"></path>
@@ -426,7 +426,7 @@
 									</div>
 									<div class="header-action header-action_account">
 										<div class="header-action_text">
-											<a class="header-action__link  header-action-toggle " href="javascript:void(0);" id="site-account-handle" aria-label="Tài khoản" title="Tài khoản">
+											<a class="header-action__link" href="/cart" id="site-account-handle" aria-label="Tài khoản" title="Tài khoản">
 												<span class="box-icon">
 													<svg class="svg-ico-account" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="510px" height="510px" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve">
 														<g>
@@ -510,7 +510,7 @@
 								</div>
 								<div class="header-action header-action_cart">
 									<div class="header-action_text">
-										<a class="header-action__link header-action-toggle" href="javascript:void(0)" id="site-cart-handle" aria-label="Giỏ hàng" title="Giỏ hàng">
+										<a class="header-action__link" href="/cart" id="site-cart-handle" aria-label="Giỏ hàng" title="Giỏ hàng">
 											<span class="box-icon">
 												<svg version="1.1" class="svg-ico-cart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 27" style="enable-background:new 0 0 24 27;" xml:space="preserve">
 													<g>
@@ -989,6 +989,7 @@
 		<script src="@Url.Content("~/assets/admin/js/internal/api.js")"></script>
 		<script>
 			$(document).ready(function() {
+				$('.header-action_cart > .header-action_text > a.header-action__link').off('click');
 				$('#add-to-cart').click(function (e) {
 					let productId = $('#detail-product > .product-id').html();
 					console.log(productId);
@@ -1002,7 +1003,27 @@
 						toastr.error(error);
 					});
 				});
+				$('.site_search input.input-search.search-input').off('keydown');
+				$('form.searchform').submit(function (e) {
+					e.preventDefault();
+					let keyword = $('.site_search input.input-search.search-input').val().trim();
+					search(keyword, 1, 5);
+				});
+				$('.site_search input.input-search.search-input').keydown(function (e) {
+					let which = e.originalEvent.keyCode;
+					if (which == 13) {
+						e.preventDefault();
+						let keyword = $(this).val().trim();
+						search(keyword, 1, 5);
+					}
+				});
 			});
+			
+			function search(keyword, pageNumber, pageSize) {
+				let urlEncodedKeyword = encodeURIComponent(keyword);
+				//let currentPageSize = getCurrentPageInfo().pageSize;
+				window.location.href = `/home/search?keyword=${urlEncodedKeyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+			}
 		</script>
 		<script>
 			$(document).ready(function() {

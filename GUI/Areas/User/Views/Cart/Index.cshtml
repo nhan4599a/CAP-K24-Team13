@@ -181,7 +181,7 @@ window.HaravanAnalytics.AutoTrack = true;
 						<div class="visible-sm visible-xs">
 							<div class="header-action header-action_menu">
 								<div class="header-action_text">
-									<a class="header-action__link header-action-toggle" href="javascript:void(0)" id="site-menu-handle" aria-label="Menu" title="Menu">
+									<a class="header-action__link header-action-toggle" href="/cart" id="site-menu-handle" aria-label="Menu" title="Menu">
 									<span class="hamburger-menu " aria-hidden="true">
 									<span class="bar"></span>
 									</span>
@@ -1003,7 +1003,6 @@ window.HaravanAnalytics.AutoTrack = true;
 						</p>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 	</div>
@@ -1233,6 +1232,29 @@ window.HaravanAnalytics.AutoTrack = true;
 <!-- haravan app -->
 <!-- END - haravan app -->
 <script src="@Url.Content("~/assets/user/js/scripts.js")" type="text/javascript"></script>
+<script>
+	$(document).ready(function (e) {
+		$('.site_search input.input-search.search-input').off('keydown');
+		$('form.searchform').submit(function (e) {
+			e.preventDefault();
+			let keyword = $('.site_search input.input-search.search-input').val().trim();
+			search(keyword, 1, 5);
+		});
+		$('.site_search input.input-search.search-input').keydown(function (e) {
+			let which = e.originalEvent.keyCode;
+			if (which == 13) {
+				e.preventDefault();
+				let keyword = $(this).val().trim();
+				search(keyword, 1, 5);
+			}
+		});
+	});
+	function search(keyword, pageNumber, pageSize) {
+		let urlEncodedKeyword = encodeURIComponent(keyword);
+		//let currentPageSize = getCurrentPageInfo().pageSize;
+		window.location.href = `/home/search?keyword=${urlEncodedKeyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+	}
+</script>
 
 <!-- POPUP LOAD --> 
 <!--END *** POPUP LOAD =====================-->
