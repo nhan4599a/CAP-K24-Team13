@@ -1,4 +1,5 @@
 ﻿using Refit;
+using Shared.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,6 +11,6 @@ namespace GUI.Clients
         Task<ApiResponse<int>> GetCartItemCountAsync(string userId);
 
         [Get("/cart/{userId}/items")]
-        Task<ApiResponse<List<object>>> GetCartItemsAsync(string userId);
+        Task<ApiResponse<List<CartItemDTO>>> GetCartItemsAsync(string userId);
     }
 }

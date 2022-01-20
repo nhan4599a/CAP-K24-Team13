@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Shared.DTOs;
+using System.Collections.Generic;
 
 namespace GUI.Areas.User.ViewModels
 {
@@ -8,6 +9,6 @@ namespace GUI.Areas.User.ViewModels
 
         public int Size { get; set; }
 
-        public List<object> Items { get; set; }
+        public List<CartItemDTO> Items { get; set; }
     }
 }

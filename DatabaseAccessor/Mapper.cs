@@ -26,11 +26,15 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
-                cfg.CreateMap<CartDetail, CartItemDTO>()
-                    .ForMember(target => target.ProductName,
-                        options => options.MapFrom(source => source.Product.ProductName))
-                    .ForMember(target => target.Price,
-                        options => options.MapFrom(source => source.Product.Price));
+            cfg.CreateMap<CartDetail, CartItemDTO>()
+                .ForMember(target => target.ProductName,
+                    options => options.MapFrom(source => source.Product.ProductName))
+                .ForMember(target => target.Price,
+                    options => options.MapFrom(source => source.Product.Price))
+                .ForMember(target => target.Discount,
+                    options => options.MapFrom(source => source.Product.Discount))
+                .ForMember(target => target.Image,
+                    options => options.MapFrom<SingleImageResolver>());
             });
             _mapper = config.CreateMapper();
         }

@@ -158,8 +158,20 @@ function editShopInterface(shopId, formData) {
 }
 
 function addProductToCart(userId, productId) {
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append('userId', userId);
     formData.append('productId', productId);
     return axios.post(`${cartEndpoint}`, formData);
+}
+
+function updateCartQuantity(userId, productId, quantity) {
+    let formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('productId', productId);
+    formData.append('quantity', quantity);
+    return axios.put(`${cartEndpoint}`, formData);
+}
+
+function removeProductInCart(userId, productId) {
+    return axios.delete(`${cartEndpoint}?userId=${userId}&productId=${productId}`);
 }

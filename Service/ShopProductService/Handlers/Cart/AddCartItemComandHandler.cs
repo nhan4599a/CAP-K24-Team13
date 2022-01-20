@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Cart
 {
-    public class AddCartItemHandler : IRequestHandler<AddCartItemCommand, CommandResponse<bool>>,
+    public class AddCartItemComandHandler : IRequestHandler<AddCartItemCommand, CommandResponse<bool>>,
         IDisposable
     {
         private readonly ICartRepository _cartRepository;
 
-        public AddCartItemHandler(ICartRepository cartRepository)
+        public AddCartItemComandHandler(ICartRepository cartRepository)
         {
             _cartRepository = cartRepository;
         }

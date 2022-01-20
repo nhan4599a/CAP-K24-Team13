@@ -45,7 +45,7 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPut]
-        public async Task<ApiResult<bool>> EditQuantity(AddOrEditQuantityCartItemRequestModel requestModel)
+        public async Task<ApiResult<bool>> EditQuantity([FromForm] AddOrEditQuantityCartItemRequestModel requestModel)
         {
             var response = await _mediator.Send(new EditQuantityCartItemCommand
             {
@@ -60,7 +60,7 @@ namespace ShopProductService.Controllers
         public async Task<ApiResult<bool>> RemoveCartItem(RemoveCartItemRequestModel requestModel)
         {
             var response = await _mediator.Send(new RemoveCartItemCommand { requestModel = requestModel });
-            if (!response.Response)
+            if (!response.IsSuccess)
                 return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }

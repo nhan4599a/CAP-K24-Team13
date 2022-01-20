@@ -42,22 +42,24 @@ namespace DatabaseAccessor.Repositories
                 cart?.Details?.FirstOrDefault(c => c.ProductId.ToString() == requestModel.ProductId);
             if (cartItem != null)
             {
-                return CommandResponse<bool>.Error("Product is already existed cart", null);
+                cartItem.Quantity += 1;
             }
             if (cart == null)
             {
                 cart = new Cart
                 {
                     UserId = Guid.Parse(requestModel.UserId),
-                    Details = new List<CartDetail>()
+                    Details = new List<CartDetail>
+					{
+                        new CartDetail
+						{
+                            ProductId = Guid.Parse(requestModel.ProductId),
+                            Quantity = 1
+                        }
+					}
                 };
                 _dbContext.Carts.Add(cart);
             }
-            cart.Details.Add(new CartDetail
-            {
-                ProductId = Guid.Parse(requestModel.ProductId),
-                Quantity = 1
-            });
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }

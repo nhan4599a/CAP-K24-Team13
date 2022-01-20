@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using GUI.Areas.User.ViewModels
+@using System.Globalization
+@{
+	Layout= null;
+}
+@model CartViewModel
+<!DOCTYPE html>
 <!-- saved from url=(0039)https://delight-shop.myharavan.com/cart -->
 <html class="no-js" lang="vi"><!--<![endif]-->
 <head>
@@ -11,6 +17,7 @@
 		<title>
 			Cart - GIGAMALL
 		</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 		
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -840,39 +847,43 @@ window.HaravanAnalytics.AutoTrack = true;
 													</tr>
 												</thead>
 												<tbody>
-													<tr class="line-item-container" data-variant-id="1371072386">
+													@foreach (var item in Model.Items)
+													{
+														<tr class="line-item-container" data-variant-id="1371072386">
+															<td><input type="hidden" value="@item.ProductId"/></td>
 														<td class="image">
 															<div class="product_image">
 																<a href="#">
-																	<img src="@Url.Content("~/assets/user/img/41_069da30d-1e6c-45e4-abbc-36d21811745e_80df7c267ec74268926ed1047bd2679c_medium.jpg")" alt="Đồng hồ thông minh XTF">
+																	<img src="https://localhost:44302/api/products/images/@item.Image">
 																</a>
 
 															</div>
 														</td>
 														<td class="item">															
-																<h3><a href="#">Đồng hồ thông minh XTF</a> </h3>
+															<h3><a href="#">@item.ProductName</a> </h3>
 															<p>
-																<span class="pri">3,456,000₫</span>
-																<del>(3,568,000₫)</del>
+																<span class="pri">@(item.Price.ToString("N0", CultureInfo.InvariantCulture))</span>
+																<del>(@((item.Price * (1 + item.Discount / 100.0)).ToString("N0", CultureInfo.InvariantCulture))))</del>
 															</p>
 															<p class="variant">
 																<span class="variant_title">Đen</span>
 															</p>
 															<div class="qty quantity-partent qty-click clearfix">
-<button type="button" class="qtyminus qty-btn">-</button>																<input type="text" size="4" name="updates[]" min="1" id="updates_1371072386" data-price="345600000" value="1" class="tc line-item-qty item-quantity">
-<button type="button" class="qtyplus qty-btn">+</button>															</div>
-
+																<button type="button" class="qtyminus qty-btn">-</button>																
+																<input type="text" size="4" name="updates[]" min="1" id="updates_1371072386" data-price="345600000" value="@item.Quantity" class="tc line-item-qty item-quantity">
+																<button type="button" class="qtyplus qty-btn">+</button>															
+															</div>
 															<p class="price">
 																<span class="text">Thành tiền:</span>
-																<span class="line-item-total">3,456,000₫</span>
+																<span class="line-item-total">@((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</span>
 															</p>
-
 														</td>
 														<td class="remove">
 															<a href="#" class="cart">
 																<img src="@Url.Content("~/assets/user/img/ic_close.png")"></a>
 														</td>
-													</tr>
+													</tr>			
+													}
 													
 												</tbody>
 											</table>
@@ -919,7 +930,7 @@ window.HaravanAnalytics.AutoTrack = true;
 							</div>
 							<div class="sidebox-order_total">
 								<p>Tổng tiền:
-									<span class="total-price">3,456,000₫</span>
+									<span class="total-price">@Model.Items.Sum(item => item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture)</span>
 								</p>
 							</div>
 							<div class="sidebox-order_text">
@@ -1213,8 +1224,8 @@ window.HaravanAnalytics.AutoTrack = true;
 		</div>  
 		
 		<script src="@Url.Content("~/assets/user/js/option_selection.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/assets/user/js/api.jquery.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/assets/user/js/cart.js")" type="text/javascript"></script>
+@*<script src="@Url.Content("~/assets/user/js/api.jquery.js")" type="text/javascript"></script>*@
+@*<script src="@Url.Content("~/assets/user/js/cart.js")" type="text/javascript"></script>*@
 <script>
 	/*! blur-up - v5.2.0 */
 	
@@ -1222,7 +1233,11 @@ window.HaravanAnalytics.AutoTrack = true;
 	
 <!-- haravan app -->
 <!-- END - haravan app -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="@Url.Content("~/assets/admin/js/internal/api.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/assets/user/js/scripts.js")" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 <script>
 	$(document).ready(function (e) {
 		$('.site_search input.input-search.search-input').off('keydown');
@@ -1239,6 +1254,47 @@ window.HaravanAnalytics.AutoTrack = true;
 				search(keyword, 1, 5);
 			}
 		});
+		$('.qtyminus.qty-btn').click(function() {
+			let input = $(this).parent().children('input');
+			let currentQuantity = parseInt(input.val());
+			if (currentQuantity > 1) {
+				input.val(currentQuantity - 1);
+				let productId = $(this).parent().parent().parent().children('td:nth-child(1)').children().val();
+				//$(this).parent().parent().children('p.price').children('.line-item-total').val()
+				updateCartQuantity('90CCBB88-C919-4CA7-FC67-08D9DBBCCCFB', productId, input.val())
+					.then(function () {
+						toastr.success('Update Success');
+					}).catch(function (err) {
+						toastr.error(err);
+					});
+			}
+
+		});
+		$('.qtyplus.qty-btn').click(function() { 
+			//console.log('ok');
+			let input = $(this).parent().children('input');
+			let currentQuantity = parseInt(input.val());
+			input.val(currentQuantity + 1);
+				let productId = $(this).parent().parent().parent().children('td:nth-child(1)').children().val();
+				//$(this).parent().parent().children('p.price').children('.line-item-total').val()
+				updateCartQuantity('90CCBB88-C919-4CA7-FC67-08D9DBBCCCFB', productId, input.val())
+					.then(function () {
+						toastr.success('Update Success');
+					}).catch(function (err) {
+						toastr.error(err);
+					});
+		});
+
+		$('td.remove > a.cart').click(function(){
+			let productId = $(this).parent().parent().children('td:nth-child(1)').children().val();
+			removeProductInCart('90CCBB88-C919-4CA7-FC67-08D9DBBCCCFB', productId)
+					.then(function () {
+						toastr.success('Update Success');
+					}).catch(function (err) {
+						toastr.error(err);
+					});
+		});
+
 	});
 	function search(keyword, pageNumber, pageSize) {
 		let urlEncodedKeyword = encodeURIComponent(keyword);
