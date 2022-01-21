@@ -992,15 +992,15 @@
 				$('.header-action_cart > .header-action_text > a.header-action__link').off('click');
 				$('#add-to-cart').click(function (e) {
 					let productId = $('#detail-product > .product-id').html();
-					addProductToCart('90CCBB88-C919-4CA7-FC67-08D9DBBCCCFB', productId)
-					.then(function () {
-						toastr.success('added to product to cart');
-						let currentCartItemCount = parseInt($('.count-holder > .count').html());
-						$('.count-holder > .count').html(currentCartItemCount + 1);
-					})
-					.catch(function (error) {
-						toastr.error(error);
-					});
+					addProductToCart('F081C3C0-3314-44D8-1055-08D9DA433EEF', productId)
+						.then(function () {
+							toastr.success('added to product to cart');
+							let currentCartItemCount = parseInt($('.count-holder > .count').html());
+							$('.count-holder > .count').html(currentCartItemCount + 1);
+						})
+						.catch(function (error) {
+							toastr.error(error);
+						});
 				});
 				$('.site_search input.input-search.search-input').off('keydown');
 				$('form.searchform').submit(function (e) {

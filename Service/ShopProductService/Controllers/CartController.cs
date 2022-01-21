@@ -51,15 +51,22 @@ namespace ShopProductService.Controllers
             {
                 requestModel = requestModel,
             });
-            if (!response.Response)
+            if (!response.IsSuccess)
                 return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };
         }
 
-        [HttpDelete]
-        public async Task<ApiResult<bool>> RemoveCartItem(RemoveCartItemRequestModel requestModel)
+        [HttpDelete("{userId}/{productId}")]
+        public async Task<ApiResult<bool>> RemoveCartItem(string userId, string productId)
         {
-            var response = await _mediator.Send(new RemoveCartItemCommand { requestModel = requestModel });
+            var response = await _mediator.Send(new RemoveCartItemCommand
+            { 
+                requestModel = new RemoveCartItemRequestModel
+                {
+                    UserId = userId,
+                    ProductId = productId
+                }
+            });
             if (!response.IsSuccess)
                 return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
             return new ApiResult<bool> { ResponseCode = 200, Data = true };

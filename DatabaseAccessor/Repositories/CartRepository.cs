@@ -38,28 +38,24 @@ namespace DatabaseAccessor.Repositories
             }
             var cart = await _dbContext.Carts.
                 FirstOrDefaultAsync(c => c.UserId.ToString() == requestModel.UserId);
-            var cartItem =
-                cart?.Details?.FirstOrDefault(c => c.ProductId.ToString() == requestModel.ProductId);
-            if (cartItem != null)
-            {
-                cartItem.Quantity += 1;
-            }
             if (cart == null)
             {
                 cart = new Cart
                 {
                     UserId = Guid.Parse(requestModel.UserId),
-                    Details = new List<CartDetail>
-					{
-                        new CartDetail
-						{
-                            ProductId = Guid.Parse(requestModel.ProductId),
-                            Quantity = 1
-                        }
-					}
                 };
                 _dbContext.Carts.Add(cart);
             }
+            var cartDetail = cart.Details
+                .FirstOrDefault(item => item.ProductId == Guid.Parse(requestModel.ProductId));
+            if (cartDetail == null)
+                cart.Details.Add(new CartDetail
+                {
+                    ProductId = Guid.Parse(requestModel.ProductId),
+                    Quantity = 1,
+                });
+            else
+                cartDetail.Quantity += 1;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }

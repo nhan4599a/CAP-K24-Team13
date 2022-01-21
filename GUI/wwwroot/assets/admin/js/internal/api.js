@@ -173,5 +173,5 @@ function updateCartQuantity(userId, productId, quantity) {
 }
 
 function removeProductInCart(userId, productId) {
-    return axios.delete(`${cartEndpoint}?userId=${userId}&productId=${productId}`);
+    return axios.delete(`${cartEndpoint}/${userId}/${productId}`);
 }

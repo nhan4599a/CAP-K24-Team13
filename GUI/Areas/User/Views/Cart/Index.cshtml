@@ -534,8 +534,8 @@ window.HaravanAnalytics.AutoTrack = true;
 												</svg>
 											</span>
 											<span class="count-holder">
-											<span class="count">0</span>
-											</span>									
+												<span class="count">@Model.Size</span>
+											</span>		
 										</span>
 									</a>
 								</div>
@@ -827,7 +827,7 @@ window.HaravanAnalytics.AutoTrack = true;
 			<div class="heading-page">
 				<div class="header-page">
 					<h1>Giỏ hàng của bạn</h1>
-					<p class="count-cart">Có <span>1 sản phẩm</span> trong giỏ hàng</p>
+					<p class="count-cart">Có <span><span>@Model.Size</span> sản phẩm</span> trong giỏ hàng</p>
 				</div>
 			</div>
 			<div class="row wrapbox-content-cart">
@@ -837,57 +837,64 @@ window.HaravanAnalytics.AutoTrack = true;
 							<div class="main-content-cart">
 								<form action="/cart" method="post" id="cartformpage">
 									<div class="row">
-										<div class="col-md-12 col-sm-12 col-xs-12">
-											<table class="table-cart">
-												<thead>
-													<tr>
-														<th class="image">&nbsp;</th>
-														<th class="item">Tên sản phẩm</th>
-														<th class="remove">&nbsp;</th>
-													</tr>
-												</thead>
-												<tbody>
-													@foreach (var item in Model.Items)
-													{
-														<tr class="line-item-container" data-variant-id="1371072386">
-															<td><input type="hidden" value="@item.ProductId"/></td>
-														<td class="image">
-															<div class="product_image">
-																<a href="#">
-																	<img src="https://localhost:44302/api/products/images/@item.Image">
-																</a>
-
-															</div>
-														</td>
-														<td class="item">															
-															<h3><a href="#">@item.ProductName</a> </h3>
-															<p>
-																<span class="pri">@(item.Price.ToString("N0", CultureInfo.InvariantCulture))</span>
-																<del>(@((item.Price * (1 + item.Discount / 100.0)).ToString("N0", CultureInfo.InvariantCulture))))</del>
-															</p>
-															<p class="variant">
-																<span class="variant_title">Đen</span>
-															</p>
-															<div class="qty quantity-partent qty-click clearfix">
-																<button type="button" class="qtyminus qty-btn">-</button>																
-																<input type="text" size="4" name="updates[]" min="1" id="updates_1371072386" data-price="345600000" value="@item.Quantity" class="tc line-item-qty item-quantity">
-																<button type="button" class="qtyplus qty-btn">+</button>															
-															</div>
-															<p class="price">
-																<span class="text">Thành tiền:</span>
-																<span class="line-item-total">@((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</span>
-															</p>
-														</td>
-														<td class="remove">
-															<a href="#" class="cart">
-																<img src="@Url.Content("~/assets/user/img/ic_close.png")"></a>
-														</td>
-													</tr>			
-													}
-													
-												</tbody>
-											</table>
-										</div>
+										@foreach (var item in Model.Items)
+										{
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												<div class="col-sm-2" style="width: 10%; text-align: center; height: 182px; padding: 70px 45px">
+													<div class="form-check">
+														<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+													</div>
+												</div>
+												<div class="col-sm-10" style="float:right; width: 90%">
+													<table class="table-cart">
+														<thead>
+															<tr>
+																<th class="image">&nbsp;</th>
+																<th class="item">Tên sản phẩm</th>
+																<th class="remove">&nbsp;</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr class="line-item-container">
+																<td class="image">
+																	<div class="product_image">
+																		<a href="#">
+																			<img src="https://localhost:44302/api/products/images/@item.Image" alt="@item.ProductName" />
+																		</a>
+																	</div>
+																</td>
+																<td class="item">															
+																	<h3>
+																		<a href="#">@item.ProductName</a>
+																	</h3>
+																	<p>
+																		<span class="pri">@(item.Price.ToString("N0", CultureInfo.InvariantCulture))</span>	
+																		<del>(@((item.Price * (item.Discount / 100.0)).ToString("N0", CultureInfo.InvariantCulture)))</del>																
+																	</p>
+																	<p class="variant">															
+																		<span class="variant_title">Đen</span>																
+																	</p>
+																	<div class="qty quantity-partent qty-click clearfix">
+																		<button type="button" class="qtyminus qty-btn">-</button>																
+																		<input type="text" size="4" min="1" value="1" class="tc line-item-qty item-quantity">
+																		<button type="button" class="qtyplus qty-btn">+</button>															
+																	</div>
+																	<p class="price">
+																		<span class="text">Thành tiền:</span>
+																		<span class="line-item-total">@((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</span>
+																	</p>
+																</td>
+																<td class="remove">
+																	<a href="#" class="cart">
+																		<img src="@Url.Content("~/assets/user/img/ic_close.png")">
+																	</a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										}
 									</div>
 									<div class="row">
 										<div class="col-md-5 col-sm-12 col-xs-12">
@@ -940,7 +947,7 @@ window.HaravanAnalytics.AutoTrack = true;
 							<div class="sidebox-order_action">
 								<a class="button dark btncart-checkout">THANH TOÁN</a>
 								<p class="link-continue text-center">
-									<a href="#">
+									<a href="/">
 										<i class="fa fa-reply"></i> Tiếp tục mua hàng
 									</a>
 								</p>
@@ -963,19 +970,11 @@ window.HaravanAnalytics.AutoTrack = true;
 		</div>
 	</div>
 </div> 
-
-
-
-
-
-
 			</main>
-<footer class="footer  mainfooter-toolbar   ">
-	
+<footer class="footer  mainfooter-toolbar">
 	<div class="top-footer">
 		<div class="container-fluid">
 			<div class="row">
-				
 				<div class="col-xs-12 col-sm-12 col-md-8">
 					<div class="area_newsletter">
 						<div class="title_newsletter">
@@ -1258,41 +1257,95 @@ window.HaravanAnalytics.AutoTrack = true;
 			let input = $(this).parent().children('input');
 			let currentQuantity = parseInt(input.val());
 			if (currentQuantity > 1) {
-				input.val(currentQuantity - 1);
+				currentQuantity -= 1;
+				input.val(currentQuantity);
 				let productId = $(this).parent().parent().parent().children('td:nth-child(1)').children().val();
-				//$(this).parent().parent().children('p.price').children('.line-item-total').val()
-				updateCartQuantity('90CCBB88-C919-4CA7-FC67-08D9DBBCCCFB', productId, input.val())
+				let unformattedValue = $(this).parent().parent().children('p:not([class])')
+					.children('span.pri').html().replace(/,/g, '');
+				
+				let newPrice = parseFloat(unformattedValue) * currentQuantity;
+
+				let newValue = new Intl.NumberFormat(
+					'en-US', {
+						maximumFractionDigits: 3
+					}).format(newPrice);
+				let target = $(this).parent().parent().children('p.price').children('.line-item-total');
+				updateCartQuantity('F081C3C0-3314-44D8-1055-08D9DA433EEF', productId, input.val())
 					.then(function () {
+						target.html(newValue);
+						let totalPrice = parseFloat(
+							$('.sidebox-order_total > p > span.total-price').html().replace(/,/g, '')
+						);
+						totalPrice -= parseFloat(unformattedValue);
+						let newFormattedTotalPrice = new Intl.NumberFormat(
+							'en-US', {
+								maximumFractionDigits: 3
+							}).format(totalPrice);
+						$('.sidebox-order_total > p > span.total-price').html(newFormattedTotalPrice);
 						toastr.success('Update Success');
 					}).catch(function (err) {
+						input.val(currentQuantity + 1);
 						toastr.error(err);
 					});
 			}
-
 		});
 		$('.qtyplus.qty-btn').click(function() { 
-			//console.log('ok');
 			let input = $(this).parent().children('input');
-			let currentQuantity = parseInt(input.val());
-			input.val(currentQuantity + 1);
-				let productId = $(this).parent().parent().parent().children('td:nth-child(1)').children().val();
-				//$(this).parent().parent().children('p.price').children('.line-item-total').val()
-				updateCartQuantity('90CCBB88-C919-4CA7-FC67-08D9DBBCCCFB', productId, input.val())
-					.then(function () {
-						toastr.success('Update Success');
-					}).catch(function (err) {
-						toastr.error(err);
-					});
+			let currentQuantity = parseInt(input.val()) + 1;
+			input.val(currentQuantity);
+			let productId = $(this).parent().parent().parent().children('td:nth-child(1)').children().val();
+			let unformattedValue = $(this).parent().parent().children('p:not([class])')
+					.children('span.pri').html().replace(/,/g, '');
+				
+			let newPrice = parseFloat(unformattedValue) * currentQuantity;
+
+			let newValue = new Intl.NumberFormat(
+				'en-US', {
+					maximumFractionDigits: 3
+				}).format(newPrice);
+			let target = $(this).parent().parent().children('p.price').children('.line-item-total');
+			updateCartQuantity('F081C3C0-3314-44D8-1055-08D9DA433EEF', productId, input.val())
+				.then(function () {
+					target.html(newValue);
+					let totalPrice = parseFloat(
+						$('.sidebox-order_total > p > span.total-price').html().replace(/,/g, '')
+					);
+					totalPrice += parseFloat(unformattedValue);
+					let newFormattedTotalPrice = new Intl.NumberFormat(
+						'en-US', {
+							maximumFractionDigits: 3
+						}).format(totalPrice);
+					$('.sidebox-order_total > p > span.total-price').html(newFormattedTotalPrice);
+					toastr.success('Update Success');
+				}).catch(function (err) {
+					input.val(currentQuantity - 1);
+					toastr.error(err);
+				});
 		});
 
-		$('td.remove > a.cart').click(function(){
-			let productId = $(this).parent().parent().children('td:nth-child(1)').children().val();
-			removeProductInCart('90CCBB88-C919-4CA7-FC67-08D9DBBCCCFB', productId)
-					.then(function () {
-						toastr.success('Update Success');
-					}).catch(function (err) {
-						toastr.error(err);
-					});
+		$('td.remove > a.cart').click(function(e) {
+			e.preventDefault();
+			let parent = $(this).parent().parent();
+			let unformattedPrice = parent.children('td.item').children('p.price').children('.line-item-total')
+				.html().replace(/,/g, '');
+			let price = parseFloat(unformattedPrice);
+			let productId = parent.children('td:nth-child(1)').children().val();
+			removeProductInCart('F081C3C0-3314-44D8-1055-08D9DA433EEF', productId)
+				.then(function () {
+					parent.remove();
+					let itemsCount = parseInt($('.count-cart > span > span').html());
+					$('.count-cart > span > span').html(itemsCount - 1);
+					$('.count-holder > .count').html(itemsCount - 1);
+					let totalAll = $('.sidebox-order_total').children().children('span');
+					let newPrice = parseFloat(totalAll.html().replace(/,/g, '')) - price;
+					let formattedNewPrice = new Intl.NumberFormat('en-US', {
+						maximumFractionDigits: 3
+					}).format(newPrice);
+					totalAll.html(formattedNewPrice);
+					toastr.success('Update Success');
+				}).catch(function (err) {
+					toastr.error(err);
+				});
 		});
 
 	});

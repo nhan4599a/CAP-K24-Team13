@@ -13,6 +13,6 @@ namespace DatabaseAccessor.Models
 
         public virtual User User { get; set; }
 
-        public virtual IList<CartDetail> Details { get; set; }
+        public virtual IList<CartDetail> Details { get; set; } = new List<CartDetail>();
     }
 }

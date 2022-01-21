@@ -8,7 +8,7 @@ namespace GUI.Clients
     public interface IProductClient
     {
         [Get("/products/search?paginationInfo.pageNumber={pageNumber}&paginationInfo.pageSize={pageSize}")]
-        Task<ApiResult<PaginatedList<ProductDTO>>> GetProductsAsync(int pageNumber, int? pageSize);
+        Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsAsync(int pageNumber, int? pageSize);
 
         [Get("/products/{productId}")]
         Task<ApiResponse<ApiResult<ProductDTO>>> GetProductAsync(string productId);

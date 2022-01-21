@@ -23,8 +23,12 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var products = (await _productClient.GetProductsAsync(1, 5)).Data;
-            return View(products);
+            var productsResponse = await _productClient.GetProductsAsync(1, 5);
+            var cartItemCountResponse = await _cartClient.GetCartItemCountAsync("F081C3C0-3314-44D8-1055-08D9DA433EEF");
+            if (!productsResponse.IsSuccessStatusCode)
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            ViewBag.CartItemCount = cartItemCountResponse.IsSuccessStatusCode ? cartItemCountResponse.Content : 0;
+            return View(productsResponse.Content.Data);
         }
 
         public async Task<IActionResult> Search(string keyword, int pageNumber, int pageSize = 5)
