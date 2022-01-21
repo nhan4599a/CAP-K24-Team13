@@ -157,10 +157,11 @@ function editShopInterface(shopId, formData) {
     });
 }
 
-function addProductToCart(userId, productId) {
+function addProductToCart(userId, productId, quantity) {
     let formData = new FormData();
     formData.append('userId', userId);
     formData.append('productId', productId);
+    formData.append('quantity', quantity);
     return axios.post(`${cartEndpoint}`, formData);
 }
 

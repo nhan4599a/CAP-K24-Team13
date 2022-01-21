@@ -52,10 +52,10 @@ namespace DatabaseAccessor.Repositories
                 cart.Details.Add(new CartDetail
                 {
                     ProductId = Guid.Parse(requestModel.ProductId),
-                    Quantity = 1,
+                    Quantity = requestModel.Quantity,
                 });
             else
-                cartDetail.Quantity += 1;
+                cartDetail.Quantity += requestModel.Quantity;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
@@ -63,9 +63,12 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<bool>> EditQuantityAsync(
             AddOrEditQuantityCartItemRequestModel requestModel)
         {
-            var cartItem = await _dbContext.CartDetails
-                .FirstOrDefaultAsync(cartItem => cartItem.Cart.UserId.ToString() == requestModel.UserId
-                    && cartItem.ProductId.ToString() == requestModel.ProductId);
+            var cart = await _dbContext.Carts
+                .FirstOrDefaultAsync(cart => cart.UserId == Guid.Parse(requestModel.UserId));
+            if (cart == null)
+                return CommandResponse<bool>.Error("User does not have cart", null);
+            var cartItem = cart.Details
+                .FirstOrDefault(item => item.ProductId == Guid.Parse(requestModel.ProductId));
             if (cartItem == null)
                 return CommandResponse<bool>.Error("Destination cart item does not exsisted", null);
             cartItem.Quantity = requestModel.Quantity;
@@ -75,11 +78,12 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<CommandResponse<bool>> RemoveCartItemAsync(RemoveCartItemRequestModel requestModel)
         {
-            var cart = 
-                await _dbContext.Carts.FirstOrDefaultAsync(cart => cart.UserId.ToString() == requestModel.UserId);
+            var cart = await _dbContext.Carts
+                .FirstOrDefaultAsync(cart => cart.UserId.ToString() == requestModel.UserId);
             if (cart == null)
                 return CommandResponse<bool>.Error("User does not have cart", null);
-            var cartItem = cart.Details.FirstOrDefault(item => item.ProductId.ToString() == requestModel.ProductId);
+            var cartItem = cart.Details
+                .FirstOrDefault(item => item.ProductId.ToString() == requestModel.ProductId);
             if (cartItem == null) return CommandResponse<bool>.Error("Can't find cart item", null);
             cart.Details.Remove(cartItem);
             await _dbContext.SaveChangesAsync();

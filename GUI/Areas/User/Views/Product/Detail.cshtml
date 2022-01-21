@@ -1,4 +1,5 @@
-﻿﻿@{
+﻿@using System.Globalization
+﻿@{
 	Layout = null;
 }
 @model Shared.DTOs.ProductDTO
@@ -526,8 +527,8 @@
 													</svg>
 												</span>
 												<span class="count-holder">
-													<span class="count">0</span>
-												</span>									
+													<span class="count">@ViewBag.CartItemCount</span>
+												</span>
 											</span>
 										</a>
 									</div>
@@ -854,7 +855,7 @@
 								<h1>@Model.ProductName</h1>
 							</div>
 							<div class="product-price" id="price-preview">
-								<span class="pro-price">@Model.Price</span>	
+								<span class="pro-price">@Model.Price.ToString("N0", CultureInfo.InvariantCulture)</span>	
 							</div>
 							<form id="add-item-form" method="post" class="variants clearfix">
 								<div class="select clearfix" style="display:none">
@@ -992,7 +993,8 @@
 				$('.header-action_cart > .header-action_text > a.header-action__link').off('click');
 				$('#add-to-cart').click(function (e) {
 					let productId = $('#detail-product > .product-id').html();
-					addProductToCart('F081C3C0-3314-44D8-1055-08D9DA433EEF', productId)
+					let selectedQuantity = $('.quantity-selector').val();
+					addProductToCart('F081C3C0-3314-44D8-1055-08D9DA433EEF', productId, selectedQuantity)
 						.then(function () {
 							toastr.success('added to product to cart');
 							let currentCartItemCount = parseInt($('.count-holder > .count').html());
