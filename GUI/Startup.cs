@@ -56,13 +56,13 @@ namespace GUI
             services.AddControllersWithViews();
             services.Configure<RazorViewEngineOptions>(options =>
             {
-                var virtualAreaNames = Assembly.GetExecutingAssembly().GetTypes()
-                    .Where(type => typeof(Controller).IsAssignableFrom(type)
-                        && type.GetCustomAttribute<VirtualAreaAttribute>() != null)
-                    .Select(type => type.GetCustomAttribute<VirtualAreaAttribute>(false)!.Name)
-                    .Distinct();
-                foreach (var virtualArea in virtualAreaNames)
-                    options.ViewLocationFormats.Add($"/Areas/{virtualArea}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
+            var virtualAreaNames = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(type => typeof(Controller).IsAssignableFrom(type)
+                    && type.GetCustomAttribute<VirtualAreaAttribute>() != null)
+                .Select(type => type.GetCustomAttribute<VirtualAreaAttribute>(false)!.Name)
+                .Distinct();
+            foreach (var virtualArea in virtualAreaNames)
+                options.ViewLocationFormats.Add($"/Areas/{virtualArea}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
