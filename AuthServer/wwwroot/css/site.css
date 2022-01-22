@@ -20,3 +20,16 @@
         border-bottom-right-radius: .3rem;
     }
 }
+
+.btn-hover:hover {
+    background: linear-gradient(to right, #e72f6b, #1f5b9c, #2fadbc);
+    color: #fff;
+    border-color: #000
+
+}
+
+.btn-outline-danger{
+    
+}
+
+
