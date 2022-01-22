@@ -50,13 +50,13 @@ namespace AuthServer
                 {
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
-                })
-                .AddGoogle(options =>
-                {
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    options.ClientId = Configuration["GOOGLE_CLIENT_ID"];
-                    options.ClientSecret = Configuration["GOOGLE_CLIENT_SECRET"];
                 });
+                //.AddGoogle(options =>
+                //{
+                //    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                //    options.ClientId = Configuration["GOOGLE_CLIENT_ID"];
+                //    options.ClientSecret = Configuration["GOOGLE_CLIENT_SECRET"];
+                //});
             services.AddTransient<MailConfirmationTokenProvider<User>>();
             services.AddScoped<SmtpClient>();
             services.AddScoped<IMailService, GmailService>();
@@ -126,8 +126,7 @@ namespace AuthServer
 
         private void ApplyOptions(DbContextOptionsBuilder builder)
         {
-            var connectionString =
-                "Server=.,4599;Database=ClientAuth;User ID=sa;Password=nhan4599@Nhan;TrustServerCertificate=True";
+            var connectionString = Configuration["ClIENT_AUTH_CONNECTION_STRING"];
             var assemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(assemblyName));
         }
