@@ -2,20 +2,20 @@
 @model List<AuthenticationScheme>
 <form method="POST">
     @Html.AntiForgeryToken()
-    <p>Please login to your account</p>
+    <p style="font-family: Lora;">Please login to your account</p>
     <div class="form-outline mb-4">
         <input type="text" id="input-username" class="form-control" placeholder="Username" name="Username" />
-        <label class="form-label" for="input-username">Username</label>
+        <label class="form-label" for="input-username" style="font-family: Lora;">Username</label>
     </div>
 
     <div class="form-outline mb-4">
         <input type="password" id="input-password" class="form-control" placeholder="Password" name="Password" />
-        <label class="form-label" for="input-password">Password</label>
+        <label class="form-label" for="input-password" style="font-family: Lora;">Password</label>
     </div>
 
     <div class="text-center pt-1 mb-3 pb-1">
         <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Sign In</button>
-        <a class="text-muted" href="#!">Forgot password?</a>
+        <a class="text-muted" href="#!" style="font-family: Lora;">Forgot password?</a>
     </div>
     <div>
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })

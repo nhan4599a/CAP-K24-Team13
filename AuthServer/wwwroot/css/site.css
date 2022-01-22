@@ -1,10 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
 .gradient-custom-2 {
     /* fallback for old browsers */
     background: #fccb90;
     /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    background: -webkit-linear-gradient(to right, #f9b83b, #eb417c, #1f5b9c, #2fadbc);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    background: linear-gradient(to right, #e72f6b, #1f5b9c, #2fadbc);
 }
 
 @media (min-width: 768px) {
