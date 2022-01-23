@@ -1,4 +1,5 @@
 ﻿axios.defaults.timeout = 20000;
+axios.defaults.baseURL = 'https://localhost:7157';
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
@@ -10,10 +11,10 @@ axios.interceptors.response.use(axiosResp => {
     return Promise.resolve(resp.data);
 }, error => Promise.reject(error));
 
-const productEndpoint = 'https://localhost:44302/api/products';
-const categoryEndpoint = 'https://localhost:44302/api/categories';
-const cartEndpoint = 'https://localhost:44302/api/cart'
-const interfaceEndpoint = 'https://localhost:44394/api/interfaces';
+const productEndpoint = '/products';
+const categoryEndpoint = '/categories';
+const cartEndpoint = '/cart'
+const interfaceEndpoint = '/interfaces';
 
 function findProducts(keyword, pageNumber, pageSize) {
     if (keyword === null || keyword === '')
@@ -34,7 +35,7 @@ function findProducts(keyword, pageNumber, pageSize) {
 }
 
 function getProductImageUrl(imageFileName) {
-    return `${productEndpoint}/images/${imageFileName}`;
+    return `https://localhost:7157${productEndpoint}/images/${imageFileName}`;
 }
 
 function getProductImage(imageFileName) {
@@ -48,7 +49,11 @@ function getProductImage(imageFileName) {
 
 function activateProduct(id, isActivateCommand) {
     return axios.delete(
-        `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`
+        `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`, {
+            headers: {
+                "Origin": 'https://localhost:44349'
+            }
+        }
     );
 }
 
@@ -82,7 +87,7 @@ function getCategories(pageNumber, pageSize) {
 }
 
 function getCategoryImageUrl(imageFileName) {
-    return `${categoryEndpoint}/images/${imageFileName}`;
+    return `https://localhost:7157${categoryEndpoint}/images/${imageFileName}`;
 }
 
 function getCategoryImage(imageFileName) {
@@ -129,7 +134,7 @@ function getShopInterface(shopId) {
 }
 
 function getShopInterfaceImageUrl(imageFileName) {
-    return `${interfaceEndpoint}/images/${imageFileName}`;
+    return `https://localhost:7157${interfaceEndpoint}/images/${imageFileName}`;
 }
 
 function getShopInterfaceImage(imageFileName) {
