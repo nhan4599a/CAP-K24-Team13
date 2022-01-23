@@ -1,8 +1,15 @@
-﻿<main class="main">
+﻿@using GUI.Areas.User.ViewModels
+@using GUI.Extensions
+@{
+    var keyword = (string)ViewBag.Keyword;
+    var pageSize = (int)ViewBag.PageSize;
+}
+@model SearchResultViewModel
+<main class="main">
     @await Component.InvokeAsync("HomePageSlider")
     <div class="mb-2"></div><!-- End .mb-2-->
     <div class="col-md-12">
-        <h3 style="text-align: center;">Search results for: "<a href="#" style="color: #c96" ,>...........</a>"</h3>
+        <h3 style="text-align: center;">Search results for: "<a href="#" style="color: #c96" ,>@ViewBag.Keyword</a>"</h3>
         <ul class="nav nav-tabs justify-content-center" id="tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="tab-1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Products</a>
@@ -15,132 +22,74 @@
             <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab-1-tab">
                 <div class="container" style="width:100%">
                     <div class="row" style="text-align: center;">
-                        <div class="col-2" style="margin-right: 20px;">
-                            <div class="product">
-                                <figure class="product-media">
-                                    <span class="product-label label-sale">Sale</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user-offical/images/demos/demo-13/products/product-1.jpg")" alt="Product image" class="product-image">
-                                    </a>
-                                    <!-- End .product-action-vertical -->
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div>
-                                    <!-- End .product-action -->
-                                </figure>
-                                <!-- End .product-media -->
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Furniture</a>
-                                    </div>
-                                    <!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Butler Stool Ladder</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        <span class="new-price">$251.99</span>
-                                        <span class="old-price">Was $290.00</span>
-                                    </div>
-                                    <!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 100%;"></div>
-                                            <!-- End .ratings-val -->
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="col-2" style="margin-right: 20px;">
+                                <div class="product">
+                                    <figure class="product-media">
+                                        <span class="product-label label-sale">Sale</span>
+                                        <a href="product.html">
+                                            <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.Images[0]" class="product-image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
                                         </div>
-                                        <!-- End .ratings -->
-                                    </div>
-                                    <!-- End .rating-container -->
-                                </div>
-                                <!-- End .product-body -->
-                            </div>
-                        </div>
-                        <div class="col-2" style="margin-right: 20px;">
-                            <div class="product">
-                                <figure class="product-media">
-                                    <span class="product-label label-sale">Sale</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/products/product-1.jpg")" alt="Product image" class="product-image">
-                                    </a>
-                                    <!-- End .product-action-vertical -->
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div>
-                                    <!-- End .product-action -->
-                                </figure>
-                                <!-- End .product-media -->
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Furniture</a>
-                                    </div>
-                                    <!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Butler Stool Ladder</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        <span class="new-price">$251.99</span>
-                                        <span class="old-price">Was $290.00</span>
-                                    </div>
-                                    <!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 100%;"></div>
-                                            <!-- End .ratings-val -->
+                                    </figure>
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">Furniture</a>
                                         </div>
-                                        <!-- End .ratings -->
-                                        <span class="ratings-text">( 2 Reviews )</span>
+                                        <h3 class="product-title"><a href="product.html">Butler Stool Ladder</a></h3>
+                                        <div class="product-price">
+                                            <span class="new-price">@product.Price</span>
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="old-price">Was $290.00</span>
+                                            }
+                                        </div>
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 100%;"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- End .rating-container -->
                                 </div>
-                                <!-- End .product-body -->
                             </div>
-                        </div>
+                        }
                     </div>
+                    @Html.RenderPagination(Model.Products, keyword, pageSize,
+                        (keyword, pageNumber, pageSize) =>
+                            $"https://localhost:44349/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
+                    )
                 </div><!-- .End .tab-pane -->
             </div><!-- End .tab-content -->
             <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab-2-tab">
                 <div class="container" style="width:100%">
                     <div class="row" style="text-align: center;">
-                        <div class="col-2" style="margin-right: 20px;">
-                            <div class="product shop-items">
-                                <figure class="product-media shop-ava">
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/products/product-1.jpg")" alt="Product image" class="product-image">
-                                    </a>
-                                    <!-- End .shop-action-vertical -->
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product" title="Go to shop"><span>go to shop</span></a>
+                        @foreach (var shop in Model.Shops)
+                        {
+                            <div class="col-2" style="margin-right: 20px;">
+                                <div class="product shop-items">
+                                    <figure class="product-media shop-ava">
+                                        <a href="product.html">
+                                            <img src="@Url.ShopImageUrl(shop.Image)" alt="Product image" class="product-image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product" title="Go to shop"><span>go to shop</span></a>
+                                        </div>
+                                    </figure>
+                                    <div class="product-body">
+                                        <h3 class="product-title"><a href="product.html">@shop.Name</a></h3>
                                     </div>
-                                    <!-- End .shop-action -->
-                                </figure>
-                                <!-- End .shop-media -->
-                                <div class="product-body">
-                                    <!-- End .shop-cat -->
-                                    <h3 class="product-title"><a href="product.html">Nike</a></h3>
-                                    <!-- End .shop-title -->
                                 </div>
-                                <!-- End .product-body -->
                             </div>
-                        </div>
-                        <div class="col-2" style="margin-right: 20px;">
-                            <div class="product shop-items">
-                                <figure class="product-media shop-ava">
-                                    <a href="product.html" style="height: 100%">
-                                        <img src="https://rubee.com.vn/admin/webroot/upload/image/images/nike-logo.jpg" alt="Product image" class="product-image">
-                                    </a>
-                                    <!-- End .shop-action-vertical -->
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product" title="Go to shop"><span>go to shop</span></a>
-                                    </div>
-                                    <!-- End .shop-action -->
-                                </figure>
-                                <!-- End .shop-media -->
-                                <div class="product-body">
-                                    <!-- End .shop-cat -->
-                                    <h3 class="product-title"><a href="product.html">Nike</a></h3>
-                                    <!-- End .shop-title -->
-                                </div>
-                                <!-- End .product-body -->
-                            </div>
-                        </div>
+                        }
                     </div>
+
+                    @Html.RenderPagination(Model.Shops, keyword, pageSize,
+                    (keyword, pageNumber, pageSize) =>
+                    $"https://localhost:44349/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
+                    )
                 </div>
             </div><!-- .End .tab-pane -->
         </div>

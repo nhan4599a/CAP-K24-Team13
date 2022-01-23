@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Models;
 using System;
@@ -67,6 +68,18 @@ namespace GUI.Extensions
             navTag.InnerHtml.AppendHtml(ulTag);
 
             return navTag;
+        }
+
+        public static string ProductImageUrl(this IUrlHelper _, string imageUrl)
+        {
+            return $"https://localhost:7157/products/images/{imageUrl}";
+        }
+
+        public static string ShopImageUrl(this IUrlHelper _, string imageUrl)
+        {
+            if (imageUrl.StartsWith("http") || imageUrl.StartsWith("data:"))
+                return imageUrl;
+            return $"https://localhost:7157/interfaces/images/{imageUrl}";
         }
     }
 }
