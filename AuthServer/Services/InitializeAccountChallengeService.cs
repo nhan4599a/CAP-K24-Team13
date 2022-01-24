@@ -26,19 +26,19 @@ namespace AuthServer.Services
         private static async Task InitializeTestUser(ApplicationUserManager userManager)
         {
             string password = "CapK24Team13@Default";
-            if (userManager.FindByNameAsync("customer_test") == null)
+            if (await userManager.FindByNameAsync("customer_test") == null)
             {
                 var user = await CreateUserObj("customer_test");
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(user, "Customer");
             }
-            if (userManager.FindByNameAsync("admin_test") == null)
+            if (await userManager.FindByNameAsync("admin_test") == null)
             {
                 var user = await CreateUserObj("admin_test");
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(user, "Admin");
             }
-            if (userManager.FindByNameAsync("owner_test") == null)
+            if (await userManager.FindByNameAsync("owner_test") == null)
             {
                 var user = await CreateUserObj("owner_test");
                 await userManager.CreateAsync(user, password);
@@ -48,7 +48,7 @@ namespace AuthServer.Services
 
         private static async Task InitializeRoles(ApplicationRoleManager roleManager)
         {
-            if (roleManager.FindByNameAsync("Customer") == null)
+            if (await roleManager.FindByNameAsync("Customer") == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
@@ -56,7 +56,7 @@ namespace AuthServer.Services
                     NormalizedName = "CUSTOMER"
                 });
             }
-            if (roleManager.FindByNameAsync("Admin") == null)
+            if (await roleManager.FindByNameAsync("Admin") == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
@@ -64,7 +64,7 @@ namespace AuthServer.Services
                     NormalizedName = "ADMIN"
                 });
             }
-            if (roleManager.FindByNameAsync("ShopOwner") == null)
+            if (await roleManager.FindByNameAsync("ShopOwner") == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
@@ -82,7 +82,9 @@ namespace AuthServer.Services
                 UserName = username,
                 NormalizedUserName = username.ToUpper(),
                 Email = email,
-                NormalizedEmail = email.ToUpper()
+                NormalizedEmail = email.ToUpper(),
+                FirstName = "Test",
+                LastName = "Test"
             });
         }
     }

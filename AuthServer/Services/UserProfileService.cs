@@ -17,7 +17,7 @@ namespace AuthServer.Services
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var user = await _userManager.GetUserAsync(context.Subject);
+            var user = await _userManager.FindByNameAsync(context.Subject!.Identity!.Name);
             var claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Email, user.Email)
@@ -27,7 +27,7 @@ namespace AuthServer.Services
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
-            var user = await _userManager.GetUserAsync(context.Subject);
+            var user = await _userManager.FindByNameAsync(context.Subject!.Identity!.Name);
             context.IsActive = user != null;
         }
     }
