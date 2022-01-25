@@ -1,4 +1,4 @@
-﻿using DatabaseAccessor.Repositories.Interfaces;
+﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using ShopProductService.Commands.Cart;
 using System;

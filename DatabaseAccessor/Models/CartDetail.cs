@@ -14,6 +14,8 @@ namespace DatabaseAccessor.Models
 
         public int Quantity { get; set; }
 
+        public int ShopId { get; set; }
+
         public virtual Cart Cart { get; set; }
 
         public virtual ShopProduct Product { get; set; }

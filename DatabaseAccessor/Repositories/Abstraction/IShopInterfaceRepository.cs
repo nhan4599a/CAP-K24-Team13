@@ -4,7 +4,7 @@ using Shared.RequestModels;
 using System;
 using System.Threading.Tasks;
 
-namespace DatabaseAccessor.Repositories.Interfaces
+namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface IShopInterfaceRepository : IDisposable
     {
