@@ -1,7 +1,7 @@
 ﻿using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
-using DatabaseAccessor.Repositories.Interfaces;
+using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
