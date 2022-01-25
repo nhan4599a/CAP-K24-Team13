@@ -1,12 +1,11 @@
 ﻿using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
-using DatabaseAccessor.Repositories.Interfaces;
+using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories
@@ -45,6 +44,15 @@ namespace DatabaseAccessor.Repositories
                     Quantity = cartItem.Quantity
                 });
             }
+            _dbContext.Invoices.AddRange(invoices.Values);
+            await _dbContext.SaveChangesAsync();
+            return CommandResponse<bool>.Success(true);
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

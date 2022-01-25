@@ -1,6 +1,7 @@
-﻿using AspNetCoreSharedComponent.FileValidations;
-using AspNetCoreSharedComponent.ServiceDiscoveries;
+﻿using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Mapping;
+using DatabaseAccessor.Repositories;
+using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -27,7 +28,7 @@ namespace CheckoutService
                     options.Audience = "product";
                 });
             services.AddMediatR(typeof(Startup));
-            services.AddScoped<IFileStorable, FileStore>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();
             services.AddCors(options =>

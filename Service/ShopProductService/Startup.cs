@@ -5,7 +5,7 @@ using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
-using DatabaseAccessor.Repositories.Interfaces;
+using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
