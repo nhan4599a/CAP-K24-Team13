@@ -256,7 +256,6 @@
     }
 
     function onPointerUp(element, callback) {
-        console.log('up');
         element.addEventListener("mouseup", function (e) {
             callback(e)
         })
@@ -272,7 +271,6 @@
     }
 
     function onPointerDown(element, callback) {
-        console.log('down');
         element.addEventListener("mousedown", function (e) {
             e.preventDefault()
             callback(e)

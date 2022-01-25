@@ -6,4 +6,20 @@
             .then(() => toastr.success('Added product to cart'))
             .catch(error => toastr.error(error));
     });
+
+    $('.quantity-col > .cart-product-quantity > .input-group > .input-group-prepend > button.btn-decrement.btn-spinner')
+        .click(function () {
+            let currentQuantity = $(this).parent().parent().children('input').val();
+            console.log(currentQuantity);
+        });
+
+    $('.quantity-col > .cart-product-quantity > .input-group > .input-group-append > button.btn-increment.btn-spinner')
+        .click(function () {
+            let currentQuantity = $(this).parent().parent().children('input').val();
+            console.log(currentQuantity);
+        });
 });
+
+function updatePriceByQuantity(productId, quantity) {
+    $('table.table.table-cart').children('tr')
+}
