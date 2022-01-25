@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     $('.product > .product-media > .product-action > a.btn-product.btn-cart').click(function () {
         let productId = $(this).data('product');
-        let userId = 'adf66c79-e39a-4288-fcf9-08d9df112449';
+        let userId = 'B8A936EB-3904-4DBE-D29F-08D9E0150BF3';
         addProductToCart(userId, productId)
             .then(() => toastr.success('Added product to cart'))
             .catch(error => toastr.error(error));

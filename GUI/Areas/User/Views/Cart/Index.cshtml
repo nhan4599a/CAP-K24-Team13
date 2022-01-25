@@ -1,5 +1,6 @@
 ﻿@using GUI.Areas.User.ViewModels
 @using GUI.Extensions
+@using System.Globalization
 @model CartViewModel
 <main class="main">
     <div class="page-header text-center" style="background-image: url('@Url.Content("~/assets/user-official/images/page-header-bg.jpg")')">
@@ -50,13 +51,13 @@
                                                 </h3><!-- End .product-title -->
                                             </div><!-- End .product -->
                                         </td>
-                                        <td class="price-col">$84.00</td>
+                                        <td class="price-col">@(item.Price.ToString("N0", CultureInfo.InvariantCulture))</td>
                                         <td class="quantity-col">
                                             <div class="cart-product-quantity">
                                                 <input type="number" class="form-control" value="@item.Quantity" min="1" step="1" data-decimals="0" required>
                                             </div><!-- End .cart-product-quantity -->
                                         </td>
-                                        <td class="total-col">$84.00</td>
+                                        <td class="total-col">@((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
                                         <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
                                     </tr>
                                 }
@@ -72,14 +73,14 @@
                                 <tbody>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>$160.00</td>
+                                        <td>@Model.Items.Sum(item => item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture)</td>
                                     </tr><!-- End .summary-subtotal -->
-                                    <tr class="summary-shipping">
+                                    @*<tr class="summary-shipping">
                                         <td>Shipping:</td>
                                         <td>&nbsp;</td>
-                                    </tr>
+                                    </tr>*@
 
-                                    <tr class="summary-shipping-row">
+                                   @* <tr class="summary-shipping-row">
                                         <td>
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
@@ -107,11 +108,11 @@
                                             </div><!-- End .custom-control -->
                                         </td>
                                         <td>$20.00</td>
-                                    </tr><!-- End .summary-shipping-row -->
+                                    </tr><!-- End .summary-shipping-row -->*@
 
-                                    <tr class="summary-total">
+                                    @*<tr class="summary-total">
                                         <td>Total:</td>
-                                        <td>$160.00</td>
+                                        <td>$160.00</td>*@
                                     </tr><!-- End .summary-total -->
                                 </tbody>
                             </table><!-- End .table table-summary -->
