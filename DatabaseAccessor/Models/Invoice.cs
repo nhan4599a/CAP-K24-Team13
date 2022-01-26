@@ -23,6 +23,8 @@ namespace DatabaseAccessor.Models
 
         public InvoiceStatus Status { get; set; }
 
+        public int ShopId { get; set; }
+
         public virtual User User { get; set; }
 
         public virtual IList<InvoiceDetail> Details { get; set; }

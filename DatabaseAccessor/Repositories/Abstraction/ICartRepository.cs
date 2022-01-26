@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DatabaseAccessor.Repositories.Interfaces
+namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface ICartRepository : IDisposable
     {

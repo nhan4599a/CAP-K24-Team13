@@ -95,7 +95,7 @@
       "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart/{userId}/{productId}",
-      "UpstreamHttpMethod": [ "DELETE" ],
+      "UpstreamHttpMethod": [ "DELETE", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
@@ -105,7 +105,7 @@
       "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart",
-      "UpstreamHttpMethod": [ "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "POST", "PUT", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }

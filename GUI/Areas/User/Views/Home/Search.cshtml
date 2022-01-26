@@ -32,14 +32,16 @@
                                             <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.Images[0]" class="product-image">
                                         </a>
                                         <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                            <a href="#" onclick="return false;" class="btn-product btn-cart" title="Add to cart" data-product="@product.Id">
+                                                <span>add to cart</span>
+                                            </a>
                                         </div>
                                     </figure>
                                     <div class="product-body">
                                         <div class="product-cat">
-                                            <a href="#">Furniture</a>
+                                            <a href="#">@product.CategoryName</a>
                                         </div>
-                                        <h3 class="product-title"><a href="product.html">Butler Stool Ladder</a></h3>
+                                        <h3 class="product-title"><a href="product.html">@product.ProductName</a></h3>
                                         <div class="product-price">
                                             <span class="new-price">@product.Price</span>
                                             @if (product.Discount > 0)
@@ -143,4 +145,7 @@
             background-color: #
         }
 </style>
+}
+@section Scripts {
+    <script src="@Url.Content("~/assets/user-official/js/cart.js")"></script>
 }

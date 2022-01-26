@@ -30,6 +30,14 @@
     <link rel="stylesheet" href="@Url.Content("~/assets/user-official/css/style.css")">
     <link rel="stylesheet" href="@Url.Content("~/assets/user-official/css/skins/skin-demo-13.css")">
     <link rel="stylesheet" href="@Url.Content("~/assets/user-official/css/demos/demo-13.css")">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .toast-message {
+            font-size: 16px;
+        }
+    </style>
     @RenderSection("Styles", false)
 </head>
 
@@ -156,11 +164,11 @@
             <div class="header-bottom sticky-header">
                 <div class="container">
                     <div class="header-left">
-                        <div class="dropdown category-dropdown show is-on" data-visible="true">
+                        <div class="dropdown category-dropdown is-on" data-visible="true">
                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-display="static" title="Browse Categories">
                                 Browse Categories
                             </a>
-                            <div class="dropdown-menu show">
+                            <div class="dropdown-menu">
                                 <nav class="side-nav">
                                     <ul class="menu-vertical sf-arrows">
                                         <li class="megamenu-container">
@@ -1012,6 +1020,11 @@
     <!-- Main JS File -->
     <script src="@Url.Content("~/assets/user-official/js/main.js")"></script>
     <script src="@Url.Content("~/assets/user-official/js/demos/demo-13.js")"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="@Url.Content("~/assets/admin/js/internal/api.js")"></script>
+    @RenderSection("Scripts", false)
 </body>
 
 

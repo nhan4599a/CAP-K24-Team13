@@ -1,23 +1,11 @@
-using AspNetCoreSharedComponent.FileValidations;
-using AspNetCoreSharedComponent.ModelBinders.Providers;
-using AspNetCoreSharedComponent.ModelValidations;
-using AspNetCoreSharedComponent.ServiceDiscoveries;
-using DatabaseAccessor.Contexts;
+﻿using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Shared.RequestModels;
-using ShopProductService.Validations;
-using System;
 
-namespace ShopProductService
+namespace CheckoutService
 {
     public class Startup
     {
@@ -31,12 +19,7 @@ namespace ShopProductService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(options =>
-            {
-                options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
-            }).AddFluentValidation<CreateOrEditCategoryRequestModel, AddOrEditCategoryRequestModelValidator>()
-            .AddFluentValidation<CreateOrEditProductRequestModel, AddOrEditProductRequestModelValidator>()
-            .AddFluentValidation<SearchRequestModel, SearchProductRequestModelValidator>();
+            services.AddControllers();
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -45,11 +28,7 @@ namespace ShopProductService
                     options.Audience = "product";
                 });
             services.AddMediatR(typeof(Startup));
-            services.AddScoped<ApplicationDbContext>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICartRepository, CartRepository>();
-            services.AddScoped<IFileStorable, FileStore>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();
             services.AddCors(options =>
