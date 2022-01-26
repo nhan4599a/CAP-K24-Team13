@@ -98,9 +98,9 @@ namespace GUI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapAreaControllerRoute(
-                        name: "Admin",
+                        name: "ShopOwner",
                         areaName: "Admin",
-                        pattern: "Admin/{controller=Product}/{action=Index}/{id?}");
+                        pattern: "ShopOwner/{controller=Product}/{action=Index}/{id?}");
                 
                 endpoints.MapControllerRoute(
                         name: "User",

@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using GUI.Extensions
 @model Shared.DTOs.ProductDTO
 <main class="main">
     <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
@@ -6,7 +7,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Products</a></li>
-                <li class="breadcrumb-item active" aria-current="page">ProductName</li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.ProductName</li>
             </ol>
         </div><!-- End .container-fluid -->
     </nav><!-- End .breadcrumb-nav -->
@@ -21,15 +22,17 @@
                                 <div class="product-gallery">
                                     <figure class="product-main-image">
                                        @* <span class="product-label label-sale">Sale</span>*@
-                                        <img id="product-zoom" src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/3.jpg")" data-zoom-image="~/assets/user-official/images/products/single/fullwidth/3-big.jpg" alt="product image">
+                                        <img id="product-zoom" src="@Url.ProductImageUrl(Model.Images[0])" data-zoom-image="~/assets/user-official/images/products/single/fullwidth/3-big.jpg" alt="product image">
                                     </figure><!-- End .product-main-image -->
 
                                     <div id="product-zoom-gallery" class="product-image-gallery max-col-6">
-                                        <a class="product-gallery-item" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/1.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/1-big.jpg")">
-                                            <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/1-small.jpg")" alt="product side">
-                                        </a>
-
-                                        <a class="product-gallery-item" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2-big.jpg")">
+                                        @foreach (var item in Model.Images)
+                                        {
+                                            <a class="product-gallery-item" href="#" data-image="@Url.ProductImageUrl(item)" data-zoom-image="@Url.ProductImageUrl(item)">
+                                                <img src="@Url.ProductImageUrl(item)" alt="product side">
+                                            </a>
+                                        }
+                                        @*<a class="product-gallery-item" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2-big.jpg")">
                                             <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2-small.jpg")" alt="product cross">
                                         </a>
 
@@ -39,14 +42,14 @@
 
                                         <a class="product-gallery-item" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4-big.jpg")">
                                             <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4-small.jpg")" alt="product back">
-                                        </a>
+                                        </a>*@
                                     </div><!-- End .product-image-gallery -->
                                 </div><!-- End .product-gallery -->
                             </div><!-- End .col-lg-7 -->
 
                             <div class="col-md-6 col-lg-5">
                                 <div class="product-details">
-                                    <h1 class="product-title">Beige ring handle circle cross body bag</h1><!-- End .product-title -->
+                                    <h1 class="product-title">@Model.ProductName</h1><!-- End .product-title -->
 
                                     <div class="ratings-container">
                                         <div class="ratings">
@@ -55,13 +58,13 @@
                                     </div><!-- End .rating-container -->
 
                                     <div class="product-price">
-                                        <span class="new-price">$56.00</span>
-                                        <span class="old-price" style="text-decoration: line-through;">$110.00</span>
+                                        <span class="new-price">@(Model.Price.ToString("N0", CultureInfo.InvariantCulture))</span>
+                                        <span class="old-price" style="text-decoration: line-through;">(@((Model.Price * (1 + Model.Discount / 100.0)).ToString("N0", CultureInfo.InvariantCulture)))</span>
                                     </div><!-- End .product-price -->
 
-                                    <div class="product-content">
+                                    @*<div class="product-content">
                                         <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus adipiscing. Sed lectus. </p>
-                                    </div><!-- End .product-content -->
+                                    </div><!-- End .product-content -->*@
 
                                     <div class="details-filter-row details-row-size">
                                         <label>Color:</label>
@@ -103,22 +106,20 @@
                                     </div><!-- End .details-filter-row -->
 
                                     <div class="product-details-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a href="#" class="btn-product btn-cart" data-product="@Model.Id"><span>Add To Cart</span></a>
                                     </div><!-- End .product-details-action -->
 
                                     <div class="product-details-footer">
                                         <div class="product-cat">
                                             <span>Category:</span>
-                                            <a href="#">...</a>,
-                                            <a href="#">...</a>,
-                                            <a href="#">...</a>
+                                            <a href="#">@Model.CategoryName</a>
                                         </div><!-- End .product-cat -->
 
-                                        <div class="social-icons social-icons-sm">
+                                        @*<div class="social-icons social-icons-sm">
                                             <span class="social-label">Share:</span>
                                             <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>    
                                             <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                                        </div>
+                                        </div>*@
                                     </div><!-- End .product-details-footer -->
 
                                     <div class="accordion accordion-plus product-details-accordion" id="product-accordion">
@@ -133,66 +134,18 @@
                                             <div id="product-accordion-desc" class="collapse" aria-labelledby="product-desc-heading" data-parent="#product-accordion">
                                                 <div class="card-body">
                                                     <div class="product-desc-content">
-                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci.</p>
-                                                        <ul>
+                                                        <p>@Model.Description</p>
+                                                        @*<ul>
                                                             <li>Nunc nec porttitor turpis. In eu risus enim. In vitae mollis elit. </li>
                                                             <li>Vivamus finibus vel mauris ut vehicula.</li>
                                                             <li>Nullam a magna porttitor, dictum risus nec, faucibus sapien.</li>
-                                                        </ul>
-
-                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede.</p>
+                                                        </ul>*@
                                                     </div><!-- End .product-desc-content -->
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .collapse -->
                                         </div><!-- End .card -->
 
-                                        <div class="card card-box card-sm">
-                                            <div class="card-header" id="product-info-heading">
-                                                <h2 class="card-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" href="#product-accordion-info" aria-expanded="false" aria-controls="product-accordion-info">
-                                                        Additional Information
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                            <div id="product-accordion-info" class="collapse" aria-labelledby="product-info-heading" data-parent="#product-accordion">
-                                                <div class="card-body">
-                                                    <div class="product-desc-content">
-                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. </p>
-
-                                                        <h3>Fabric & care</h3>
-                                                        <ul>
-                                                            <li>100% Polyester</li>
-                                                            <li>Do not iron</li>
-                                                            <li>Do not wash</li>
-                                                            <li>Do not bleach</li>
-                                                            <li>Do not tumble dry</li>
-                                                            <li>Professional dry clean only</li>
-                                                        </ul>
-
-                                                        <h3>Size</h3>
-                                                        <p>S, M, L, XL</p>
-                                                    </div><!-- End .product-desc-content -->
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .collapse -->
-                                        </div><!-- End .card -->
-
-                                        <div class="card card-box card-sm">
-                                            <div class="card-header" id="product-shipping-heading">
-                                                <h2 class="card-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" href="#product-accordion-shipping" aria-expanded="false" aria-controls="product-accordion-shipping">
-                                                        Shipping & Returns
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                            <div id="product-accordion-shipping" class="collapse" aria-labelledby="product-shipping-heading" data-parent="#product-accordion">
-                                                <div class="card-body">
-                                                    <div class="product-desc-content">
-                                                        <p>We deliver to over 100 countries around the world. For full details of the delivery options we offer, please view our <a href="#">Delivery information</a><br>
-                                                        We hope you’ll love every purchase, but if you ever need to return an item you can do so within a month of receipt. For full details of how to make a return, please view our <a href="#">Returns information</a></p>
-                                                    </div><!-- End .product-desc-content -->
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .collapse -->
-                                        </div><!-- End .card -->
+                                       
 
                                         <div class="card card-box card-sm">
                                             <div class="card-header" id="product-review-heading">
@@ -354,3 +307,6 @@
         </div><!-- End .container-fluid -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+@section Scripts {
+    <script src="@Url.Content("~/assets/user-official/js/cart.js")"></script>
+}

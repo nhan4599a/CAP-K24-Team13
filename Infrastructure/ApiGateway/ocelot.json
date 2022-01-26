@@ -45,7 +45,7 @@
       "DownstreamScheme": "https",
       "ServiceName": "InterfaceService",
       "UpstreamPathTemplate": "/interfaces/{id}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }

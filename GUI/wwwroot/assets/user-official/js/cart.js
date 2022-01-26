@@ -1,12 +1,21 @@
 ﻿$(document).ready(function () {
-    let userId = 'C61AF282-818D-43CA-6DA9-08D9E08DBE4D';
+    let userId = 'B8A936EB-3904-4DBE-D29F-08D9E0150BF3';
     $('.product > .product-media > .product-action > a.btn-product.btn-cart').click(function (e) {
         e.preventDefault();
         let productId = $(this).data('product');
         addProductToCart(userId, productId, 1)
             .then(() => toastr.success('Added product to cart'))
             .catch(error => toastr.error(error));
-        console.log(productId);
+    });
+
+    $('.product-details-action > .btn-product.btn-cart').click(function (e) {
+        e.preventDefault();
+        let productId = $(this).data('product');
+        let quantity = $(this).parent().parent().children('details-filter-row details-row-size').eq(2)
+            .find('.input-group.input-spinner').children('input').val();
+        addProductToCart(userId, productId, quantity)
+            .then(() => toastr.success('Added product to cart'))
+            .catch(error => toastr.error(error));
     });
 
     $('.quantity-col > .cart-product-quantity > .input-group > .input-group-prepend > button.btn-decrement.btn-spinner')

@@ -80,7 +80,7 @@
                 animationLoader.showAnimation();
                 addCategory(formData).then(() => {
                     animationLoader.hideAnimation();
-                    window.location.href = "/admin/category";
+                    window.location.href = "/shopowner/category";
                 }).catch(error => {
                     animationLoader.hideAnimation();
                     toastr.error(error, 'Error');
