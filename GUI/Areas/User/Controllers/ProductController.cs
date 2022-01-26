@@ -18,7 +18,7 @@ namespace GUI.Areas.User.Controllers
             _cartClient = cartClient;
         }
 
-        public async Task<IActionResult> Detail(string id)
+        public async Task<IActionResult>Index(string id)
         {
         	var productResponse = await _productClient.GetProductAsync(id);
             var cartItemCountResponse = await _cartClient.GetCartItemCountAsync("F081C3C0-3314-44D8-1055-08D9DA433EEF");
