@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\AspNetCoreSharedComponent\AspNetCoreSharedComponent.csproj" />
+    <ProjectReference Include="..\..\DatabaseAccessor\DatabaseAccessor.csproj" />
+    <ProjectReference Include="..\..\Testing\DatabaseSharing\DatabaseSharing.csproj" />
   </ItemGroup>
-
 </Project>

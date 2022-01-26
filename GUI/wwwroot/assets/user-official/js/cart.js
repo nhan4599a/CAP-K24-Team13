@@ -1,10 +1,12 @@
 ﻿$(document).ready(function () {
-    let userId = 'adf66c79-e39a-4288-fcf9-08d9df112449';
-    $('.product > .product-media > .product-action > a.btn-product.btn-cart').click(function () {
+    let userId = 'C61AF282-818D-43CA-6DA9-08D9E08DBE4D';
+    $('.product > .product-media > .product-action > a.btn-product.btn-cart').click(function (e) {
+        e.preventDefault();
         let productId = $(this).data('product');
-        addProductToCart(userId, productId)
+        addProductToCart(userId, productId, 1)
             .then(() => toastr.success('Added product to cart'))
             .catch(error => toastr.error(error));
+        console.log(productId);
     });
 
     $('.quantity-col > .cart-product-quantity > .input-group > .input-group-prepend > button.btn-decrement.btn-spinner')
