@@ -9,29 +9,24 @@
 
     $('.quantity-col > .cart-product-quantity > .input-group > .input-group-prepend > button.btn-decrement.btn-spinner')
         .click(function () {
-            let inputGroup = $(this).parent().parent();
-            let currentQuantity = inputGroup.children('input').val();
-            let productId = inputGroup.parent().parent().parent().data('product');
-            updateCartQuantity(userId, productId, currentQuantity)
-                .then(function () {
-                    updatePriceByQuantity(productId, currentQuantity);
-                    toastr.success('Update cart successfully');
-                })
-                .catch(error => toastr.error(error));
+            $(this).parent().parent().children('input').trigger('change');
         });
 
     $('.quantity-col > .cart-product-quantity > .input-group > .input-group-append > button.btn-increment.btn-spinner')
         .click(function () {
-            let inputGroup = $(this).parent().parent();
-            let currentQuantity = inputGroup.children('input').val();
-            let productId = inputGroup.parent().parent().parent().data('product');
-            updateCartQuantity(userId, productId, currentQuantity)
-                .then(function () {
-                    updatePriceByQuantity(productId, currentQuantity);
-                    toastr.success('Update cart successfully');
-                })
-                .catch(error => toastr.error(error));
+            $(this).parent().parent().children('input').trigger('change');
         });
+
+    $('.quantity-col > .cart-product-quantity > .input-group > input').change(function () {
+        let currentQuantity = $(this).val();
+        let productId = $(this).parent().parent().parent().parent().data('product');
+        updateCartQuantity(userId, productId, currentQuantity)
+            .then(function () {
+                updatePriceByQuantity(productId, currentQuantity);
+                toastr.success('Update cart successfully');
+            })
+            .catch(error => toastr.error(error));
+    });
 
     $('.remove-col > button.btn-remove').click(function () {
         let mostParentElement = $(this).parent().parent();
