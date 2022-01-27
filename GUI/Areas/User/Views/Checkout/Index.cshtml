@@ -1,4 +1,10 @@
-﻿<main class="main">
+﻿@using GUI.Areas.User.ViewModels
+@using System.Globalization
+@model List<CheckOutViewModel>
+@{
+    var totalPrice = Model.Sum(item => item.Quantity * item.Item.Price);
+}
+<main class="main">
     <div class="page-header text-center" style="background-image: url('@Url.Content("~/assets/user-official/images/page-header-bg.jpg")')">
         <div class="container">
             <h1 class="page-title">Checkout<span>Shop</span></h1>
@@ -89,9 +95,9 @@
                             <label>Order notes (optional)</label>
                             <textarea style="resize: none" class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
                             <a href="#" title="">
-                                <img  style="margin-bottom: 2rem; width: 100%" src="https://creativedesign.rs/cd_app/public/images/products/357822246632231.jpg" alt="banner" />
-                             </a>
-                            
+                                <img style="margin-bottom: 2rem; width: 100%" src="https://creativedesign.rs/cd_app/public/images/products/357822246632231.jpg" alt="banner" />
+                            </a>
+
                         </div><!-- End .col-lg-9 -->
                         <aside class="col-lg-3">
                             <div class="summary">
@@ -106,18 +112,16 @@
                                     </thead>
 
                                     <tbody>
-                                        <tr>
-                                            <td><a href="#">Beige knitted elastic runner shoes</a></td>
-                                            <td>$84.00</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td><a href="#">Blue utility pinafore denimdress</a></td>
-                                            <td>$76,00</td>
-                                        </tr>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td><a href="/product/index/@item.Item.Id">@item.Item.ProductName</a></td>
+                                                <td>@((item.Item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
+                                            </tr>
+                                        }
                                         <tr class="summary-subtotal">
                                             <td>Subtotal:</td>
-                                            <td>$160.00</td>
+                                            <td>@totalPrice.ToString("N0", CultureInfo.InvariantCulture)</td>
                                         </tr><!-- End .summary-subtotal -->
                                         <tr>
                                             <td>Shipping:</td>
@@ -125,7 +129,7 @@
                                         </tr>
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>$160.00</td>
+                                            <td>@totalPrice.ToString("N0", CultureInfo.InvariantCulture)</td>
                                         </tr><!-- End .summary-total -->
                                     </tbody>
                                 </table><!-- End .table table-summary -->

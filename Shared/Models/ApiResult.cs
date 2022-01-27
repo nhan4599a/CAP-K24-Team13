@@ -4,7 +4,7 @@
     {
         public T Data { get; set; }
 
-        public ApiResult<T> CreateSuccessResult(T data)
+        public static ApiResult<T> CreateSuccessResult(T data)
         {
             return new ApiResult<T>
             {

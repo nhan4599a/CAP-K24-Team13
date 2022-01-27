@@ -1,10 +1,8 @@
 using AspNetCoreSharedComponent.FileValidations;
 using DatabaseAccessor;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
@@ -187,15 +185,28 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ApiResult<ProductDTO>> GetSingleProduct(string id)
+        public async Task<ApiResult> GetSingleProduct(string id)
         {
             var product = await _mediator.Send(new FindProductByIdQuery
             {
                 Id = Guid.Parse(id)
             });
             if (product == null)
-                return new ApiResult<ProductDTO> { ResponseCode = 404, ErrorMessage = "Product is not found" };
-            return new ApiResult<ProductDTO> { ResponseCode = 200, Data = product };
+                return ApiResult.CreateErrorResult(404, "Product is not found");
+            return ApiResult<ProductDTO>.CreateSuccessResult(product);
+        }
+
+        [HttpGet("less/{id}")]
+        public async Task<ApiResult> GetMinimalSingleProduct(string id)
+        {
+            var product = await _mediator.Send(new FindProductByIdQuery
+            {
+                Id = Guid.Parse(id),
+                IsMinimal = true
+            });
+            if (product == null)
+                return ApiResult.CreateErrorResult(404, "Product is not found");
+            return ApiResult<MinimalProductDTO>.CreateSuccessResult(product);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

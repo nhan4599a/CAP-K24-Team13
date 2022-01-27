@@ -18,7 +18,25 @@
             .catch(error => toastr.error(error));
     });
 
-    $('.product-col > .form-check-input')
+    $('a.btn.btn-outline-primary-2').click(function (e) {
+        e.preventDefault();
+        let selectedItems = [];
+        $('.table.table-cart.table-mobile').find('input.form-check-input[type=checkbox]:checked')
+            .each((_, element) => {
+                let root = $(element).parent().parent();
+                selectedItems.push({
+                    productId: root.data('product'),
+                    quantity: root.children('.quantity-col').find('.input-group.input-spinner > input').val()
+                });
+            });
+        $('body').append('<form id="checkout-form"></form>');
+        let form = $('form#checkout-form').attr('method', 'POST').attr('action', '/checkout');
+        for (let i = 0; i < selectedItems.length; i++) {
+            form = form.append(`<input type="hidden" value="${selectedItems[i].productId}" name="models[${i}].ProductId" />`)
+                .append(`<input type="hidden" value="${selectedItems[i].quantity}" name="models[${i}].Quantity" />`);
+        }
+        form.submit();
+    });
 
     $('.quantity-col > .cart-product-quantity > .input-group > .input-group-prepend > button.btn-decrement.btn-spinner')
         .click(function () {

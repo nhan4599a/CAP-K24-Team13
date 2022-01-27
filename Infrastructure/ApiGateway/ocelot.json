@@ -21,6 +21,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/products/less/{id}",
+      "DownstreamScheme": "https",
+      "ServiceName": "ProductService",
+      "UpstreamPathTemplate": "/products/less/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/categories/",
       "DownstreamScheme": "https",
       "ServiceName": "ProductService",
