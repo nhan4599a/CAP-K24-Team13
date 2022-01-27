@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GUI.Abtractions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GUI.Areas.User.Controllers
 {
-    public class CheckoutController : Controller
+    public class CheckoutController : BaseUserController
     {
         public IActionResult Index()
         {

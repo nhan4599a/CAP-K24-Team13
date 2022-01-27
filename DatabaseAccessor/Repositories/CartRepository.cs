@@ -98,11 +98,6 @@ namespace DatabaseAccessor.Repositories
             return cart.Details.Select(item => _mapper.MapToCartItemDTO(item)).ToList();
         }
 
-        public async Task<int> GetCartItemCountAsync(string userId)
-        {
-            return await _dbContext.CartDetails.CountAsync(cart => cart.Cart.UserId.ToString() == userId);
-        }
-
         public void Dispose()
         {
             _dbContext.Dispose();

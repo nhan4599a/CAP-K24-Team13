@@ -1,5 +1,5 @@
-﻿using GUI.Areas.User.ViewModels;
-using GUI.Attributes;
+﻿using GUI.Abtractions;
+using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
-    [VirtualArea("User")]
-    public class CartController : Controller
+    public class CartController : BaseUserController
     {
         private readonly ICartClient _cartClient;
 

@@ -1,4 +1,10 @@
-﻿ <!DOCTYPE html>
+﻿@using GUI.Extensions
+@using Shared.DTOs
+@using System.Globalization
+@{
+    var cartItems = (List<CartItemDTO>)ViewData["CartItems"];
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,8 +37,8 @@
     <link rel="stylesheet" href="@Url.Content("~/assets/user-official/css/skins/skin-demo-13.css")">
     <link rel="stylesheet" href="@Url.Content("~/assets/user-official/css/demos/demo-13.css")">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+          integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         .toast-message {
             font-size: 16px;
@@ -104,58 +110,56 @@
                             <div class="dropdown cart-dropdown">
                                 <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                     <i class="icon-shopping-cart"></i>
-                                    <span class="cart-count">2</span>
                                     <span class="cart-txt">Cart</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="dropdown-cart-products">
-                                        <div class="product">
-                                            <div class="product-cart-details">
+                                        @if (cartItems == null)
+                                        {
+                                            <div class="product" style="flex-direction: column; align-items: center; padding: 2.4rem;">
+                                                <i class="fas fa-times fa-5x" style="margin: auto"></i>
                                                 <h4 class="product-title">
-                                                    <a href="product.html">Beige knitted elastic runner shoes</a>
+                                                    There are no products in cart 
                                                 </h4>
-                                                <span class="cart-product-info">
-                                                    <span class="cart-product-qty">1</span>
-                                                    x $84.00
-                                                </span>
-                                            </div><!-- End .product-cart-details -->
-                                            <figure class="product-image-container">
-                                                <a href="product.html" class="product-image">
-                                                    <img src="assets/user-official/images/products/cart/product-1.jpg" alt="product">
-                                                </a>
-                                            </figure>
-                                            <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                        </div><!-- End .product -->
-                                        <div class="product">
-                                            <div class="product-cart-details">
-                                                <h4 class="product-title">
-                                                    <a href="product.html">Blue utility pinafore denim dress</a>
+                                            </div>
+                                        }
+                                        else if (cartItems.Count == 0)
+                                        {
+                                            <div class="product">
+                                                <h4 class=product-title style="padding-left: 20px;">
+                                                    There are no products in cart 
                                                 </h4>
-
-                                                <span class="cart-product-info">
-                                                    <span class="cart-product-qty">1</span>
-                                                    x $76.00
-                                                </span>
-                                            </div><!-- End .product-cart-details -->
-                                            <figure class="product-image-container">
-                                                <a href="product.html" class="product-image">
-                                                    <img src="assets/user-official/images/products/cart/product-2.jpg" alt="product">
-                                                </a>
-                                            </figure>
-                                            <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                        </div><!-- End .product -->
-                                    </div><!-- End .cart-product -->
-
-                                    <div class="dropdown-cart-total">
-                                        <span>Total</span>
-                                        <span class="cart-total-price">$160.00</span>
-                                    </div><!-- End .dropdown-cart-total -->
-                                    <div class="dropdown-cart-action">
-                                        <a href="/cart" class="btn btn-primary">View Cart</a>
-                                        <a href="#" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
-                                    </div><!-- End .dropdown-cart-total -->
-                                </div><!-- End .dropdown-menu -->
-                            </div><!-- End .cart-dropdown -->
+                                            </div>
+                                            <div class="dropdown-cart-action" style="display: block">
+                                                <a href="/cart" class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto">View Cart</a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            foreach (var item in cartItems)
+                                            {
+                                                <div class="product">
+                                                    <div class="product-cart-details">
+                                                        <h4 class="product-title">
+                                                            <a href="product.html">@item.ProductName</a>
+                                                        </h4>
+                                                        <span class="cart-product-info">
+                                                            <span class="cart-product-qty">@item.Quantity</span>
+                                                            x @item.Price.ToString("N0", CultureInfo.InvariantCulture)
+                                                        </span>
+                                                    </div><!-- End .product-cart-details -->
+                                                    <figure class="product-image-container">
+                                                        <a href="/product/detail/@item.ProductId" class="product-image">
+                                                            <img src="@Url.ProductImageUrl(item.Image)" alt="product">
+                                                        </a>
+                                                    </figure>
+                                                    <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
@@ -224,7 +228,7 @@
                                                     <div class="col-md-4">
                                                         <div class="banner banner-overlay">
                                                             <a href="category.html" class="banner banner-menu">
-                                                                <img src="assets/user-official/images/demos/demo-13/menu/banner-1.jpg" alt="Banner">
+                                                                <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/menu/banner-1.jpg")" alt="Banner">
                                                             </a>
                                                         </div><!-- End .banner banner-overlay -->
                                                     </div><!-- End .col-md-4 -->
@@ -286,7 +290,7 @@
                                                     <div class="col-md-4">
                                                         <div class="banner banner-overlay">
                                                             <a href="category.html" class="banner banner-menu">
-                                                                <img src="assets/user-official/images/demos/demo-13/menu/banner-2.jpg" alt="Banner">
+                                                                <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/menu/banner-2.jpg")" alt="Banner">
                                                             </a>
                                                         </div><!-- End .banner banner-overlay -->
                                                     </div><!-- End .col-md-4 -->
@@ -339,7 +343,7 @@
                                                         <div class="col-md-4">
                                                             <div class="banner">
                                                                 <a href="#">
-                                                                    <img src="assets/user-official/images/demos/demo-13/menu/1.jpg" alt="image">
+                                                                    <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/menu/1.jpg")" alt="image">
                                                                 </a>
                                                             </div><!-- End .banner -->
                                                         </div><!-- End .col-md-4 -->
@@ -347,7 +351,7 @@
                                                         <div class="col-md-4">
                                                             <div class="banner">
                                                                 <a href="#">
-                                                                    <img src="assets/user-official/images/demos/demo-13/menu/2.jpg" alt="image">
+                                                                    <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/menu/2.jpg")" alt="image">
                                                                 </a>
                                                             </div><!-- End .banner -->
                                                         </div><!-- End .col-md-4 -->
@@ -355,7 +359,7 @@
                                                         <div class="col-md-4">
                                                             <div class="banner">
                                                                 <a href="#">
-                                                                    <img src="assets/user-official/images/demos/demo-13/menu/3.jpg" alt="image">
+                                                                    <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/menu/3.jpg")" alt="image">
                                                                 </a>
                                                             </div><!-- End .banner -->
                                                         </div><!-- End .col-md-4 -->
@@ -406,7 +410,7 @@
                                                     <div class="col-md-4">
                                                         <div class="banner banner-overlay">
                                                             <a href="category.html" class="banner banner-menu">
-                                                                <img src="assets/user-official/images/demos/demo-13/menu/banner-3.jpg" alt="Banner">
+                                                                <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/menu/banner-3.jpg")" alt="Banner">
                                                             </a>
                                                         </div><!-- End .banner banner-overlay -->
                                                     </div><!-- End .col-md-4 -->
@@ -416,31 +420,31 @@
                                                     <div class="row">
                                                         <div class="col-lg-2">
                                                             <a href="#" class="brand">
-                                                                <img src="assets/user-official/images/brands/1.png" alt="Brand Name">
+                                                                <img src="@Url.Content("~/assets/user-official/images/brands/1.png")" alt="Brand Name">
                                                             </a>
                                                         </div><!-- End .col-lg-2 -->
 
                                                         <div class="col-lg-2">
                                                             <a href="#" class="brand">
-                                                                <img src="assets/user-official/images/brands/2.png" alt="Brand Name">
+                                                                <img src="@Url.Content("~/assets/user-official/images/brands/2.png")" alt="Brand Name">
                                                             </a>
                                                         </div><!-- End .col-lg-2 -->
 
                                                         <div class="col-lg-2">
                                                             <a href="#" class="brand">
-                                                                <img src="assets/user-official/images/brands/3.png" alt="Brand Name">
+                                                                <img src="@Url.Content("~/assets/user-official/images/brands/3.png")" alt="Brand Name">
                                                             </a>
                                                         </div><!-- End .col-lg-2 -->
 
                                                         <div class="col-lg-2">
                                                             <a href="#" class="brand">
-                                                                <img src="assets/user-official/images/brands/4.png" alt="Brand Name">
+                                                                <img src="@Url.Content("~/assets/user-official/images/brands/4.png")" alt="Brand Name">
                                                             </a>
                                                         </div><!-- End .col-lg-2 -->
 
                                                         <div class="col-lg-2">
                                                             <a href="#" class="brand">
-                                                                <img src="assets/user-official/images/brands/5.png" alt="Brand Name">
+                                                                <img src="@Url.Content("~/assets/user-official/images/brands/5.png")" alt="Brand Name">
                                                             </a>
                                                         </div><!-- End .col-lg-2 -->
 
@@ -475,59 +479,59 @@
                                     <a href="category.html" class="sf-with-ul">Shop</a>
 
                                     <div class="megamenu megamenu-md">
-                                    <div class="row no-gutters">
-                                        <div class="col-md-8">
-                                            <div class="menu-col">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="menu-title">Shop with sidebar</div><!-- End .menu-title -->
-                                                        <ul>
-                                                            <li><a href="category-list.html">Shop List</a></li>
-                                                            <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
-                                                            <li><a href="category.html">Shop Grid 3 Columns</a></li>
-                                                            <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
-                                                            <li><a href="category-market.html"><span>Shop Market<span class="tip tip-new">New</span></span></a></li>
-                                                        </ul>
+                                        <div class="row no-gutters">
+                                            <div class="col-md-8">
+                                                <div class="menu-col">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="menu-title">Shop with sidebar</div><!-- End .menu-title -->
+                                                            <ul>
+                                                                <li><a href="category-list.html">Shop List</a></li>
+                                                                <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
+                                                                <li><a href="category.html">Shop Grid 3 Columns</a></li>
+                                                                <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
+                                                                <li><a href="category-market.html"><span>Shop Market<span class="tip tip-new">New</span></span></a></li>
+                                                            </ul>
 
-                                                        <div class="menu-title">Shop no sidebar</div><!-- End .menu-title -->
-                                                        <ul>
-                                                            <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span class="tip tip-hot">Hot</span></span></a></li>
-                                                            <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
-                                                        </ul>
-                                                    </div><!-- End .col-md-6 -->
+                                                            <div class="menu-title">Shop no sidebar</div><!-- End .menu-title -->
+                                                            <ul>
+                                                                <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span class="tip tip-hot">Hot</span></span></a></li>
+                                                                <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
+                                                            </ul>
+                                                        </div><!-- End .col-md-6 -->
 
-                                                    <div class="col-md-6">
-                                                        <div class="menu-title">Product Category</div><!-- End .menu-title -->
-                                                        <ul>
-                                                            <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
-                                                            <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span class="tip tip-new">New</span></span></a></li>
-                                                        </ul>
-                                                        <div class="menu-title">Shop Pages</div><!-- End .menu-title -->
-                                                        <ul>
-                                                            <li><a href="cart.html">Cart</a></li>
-                                                            <li><a href="checkout.html">Checkout</a></li>
-                                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                                            <li><a href="dashboard.html">My Account</a></li>
-                                                            <li><a href="#">Lookbook</a></li>
-                                                        </ul>
-                                                    </div><!-- End .col-md-6 -->
-                                                </div><!-- End .row -->
-                                            </div><!-- End .menu-col -->
-                                        </div><!-- End .col-md-8 -->
+                                                        <div class="col-md-6">
+                                                            <div class="menu-title">Product Category</div><!-- End .menu-title -->
+                                                            <ul>
+                                                                <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
+                                                                <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span class="tip tip-new">New</span></span></a></li>
+                                                            </ul>
+                                                            <div class="menu-title">Shop Pages</div><!-- End .menu-title -->
+                                                            <ul>
+                                                                <li><a href="cart.html">Cart</a></li>
+                                                                <li><a href="checkout.html">Checkout</a></li>
+                                                                <li><a href="wishlist.html">Wishlist</a></li>
+                                                                <li><a href="dashboard.html">My Account</a></li>
+                                                                <li><a href="#">Lookbook</a></li>
+                                                            </ul>
+                                                        </div><!-- End .col-md-6 -->
+                                                    </div><!-- End .row -->
+                                                </div><!-- End .menu-col -->
+                                            </div><!-- End .col-md-8 -->
 
-                                        <div class="col-md-4">
-                                            <div class="banner banner-overlay">
-                                                <a href="category.html" class="banner banner-menu">
-                                                    <img src="@Url.Content("~/assets/user-official/images/menu/banner-1.jpg")" alt="Banner">
+                                            <div class="col-md-4">
+                                                <div class="banner banner-overlay">
+                                                    <a href="category.html" class="banner banner-menu">
+                                                        <img src="@Url.Content("~/assets/user-official/images/menu/banner-1.jpg")" alt="Banner">
 
-                                                    <div class="banner-content banner-content-top">
-                                                        <div class="banner-title text-white">Last <br>Chance<br><span><strong>Sale</strong></span></div><!-- End .banner-title -->
-                                                    </div><!-- End .banner-content -->
-                                                </a>
-                                            </div><!-- End .banner banner-overlay -->
-                                        </div><!-- End .col-md-4 -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .megamenu megamenu-md -->
+                                                        <div class="banner-content banner-content-top">
+                                                            <div class="banner-title text-white">Last <br>Chance<br><span><strong>Sale</strong></span></div><!-- End .banner-title -->
+                                                        </div><!-- End .banner-content -->
+                                                    </a>
+                                                </div><!-- End .banner banner-overlay -->
+                                            </div><!-- End .col-md-4 -->
+                                        </div><!-- End .row -->
+                                    </div><!-- End .megamenu megamenu-md -->
                                 </li>
                                 <li>
                                     <a href="product.html" class="sf-with-ul">Product</a>
@@ -661,61 +665,61 @@
         <footer class="footer footer-2">
             @*<div class="icon-boxes-container">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-rocket"></i>
-                                </span>
+                <div class="row">
+                <div class="col-sm-6 col-lg-3">
+                <div class="icon-box icon-box-side">
+                <span class="icon-box-icon">
+                <i class="icon-rocket"></i>
+                </span>
 
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Free Shipping</h3><!-- End .icon-box-title -->
-                                    <p>Orders $50 or more</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-                        
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-rotate-left"></i>
-                                </span>
+                <div class="icon-box-content">
+                <h3 class="icon-box-title">Free Shipping</h3><!-- End .icon-box-title -->
+                <p>Orders $50 or more</p>
+                </div><!-- End .icon-box-content -->
+                </div><!-- End .icon-box -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
 
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Free Returns</h3><!-- End .icon-box-title -->
-                                    <p>Within 30 days</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
+                <div class="col-sm-6 col-lg-3">
+                <div class="icon-box icon-box-side">
+                <span class="icon-box-icon">
+                <i class="icon-rotate-left"></i>
+                </span>
 
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-info-circle"></i>
-                                </span>
+                <div class="icon-box-content">
+                <h3 class="icon-box-title">Free Returns</h3><!-- End .icon-box-title -->
+                <p>Within 30 days</p>
+                </div><!-- End .icon-box-content -->
+                </div><!-- End .icon-box -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
 
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Get 20% Off 1 Item</h3><!-- End .icon-box-title -->
-                                    <p>When you sign up</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
+                <div class="col-sm-6 col-lg-3">
+                <div class="icon-box icon-box-side">
+                <span class="icon-box-icon">
+                <i class="icon-info-circle"></i>
+                </span>
 
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-life-ring"></i>
-                                </span>
+                <div class="icon-box-content">
+                <h3 class="icon-box-title">Get 20% Off 1 Item</h3><!-- End .icon-box-title -->
+                <p>When you sign up</p>
+                </div><!-- End .icon-box-content -->
+                </div><!-- End .icon-box -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
 
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">We Support</h3><!-- End .icon-box-title -->
-                                    <p>24/7 amazing services</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-                    </div><!-- End .row -->
+                <div class="col-sm-6 col-lg-3">
+                <div class="icon-box icon-box-side">
+                <span class="icon-box-icon">
+                <i class="icon-life-ring"></i>
+                </span>
+
+                <div class="icon-box-content">
+                <h3 class="icon-box-title">We Support</h3><!-- End .icon-box-title -->
+                <p>24/7 amazing services</p>
+                </div><!-- End .icon-box-content -->
+                </div><!-- End .icon-box -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
+                </div><!-- End .row -->
                 </div><!-- End .container -->
-            </div><!-- End .icon-boxes-container -->*@
+                </div><!-- End .icon-boxes-container -->*@
 
             <div class="footer-middle border-0">
                 <div class="container">
@@ -724,7 +728,7 @@
                             <div class="widget widget-about">
                                 <img src="@Url.Content("~/assets/user-official/images/demos/demo-13/logo-footer.png")" class="footer-logo" alt="Footer Logo" width="105" height="25">
                                 <p>GIGAMALL's online shopping site, helping you access the latest trends.</p>
-                                
+
                                 <div class="widget-about-info">
                                     <div class="row">
                                         <div class="col-sm-6 col-md-4">
@@ -809,7 +813,7 @@
     <div class="mobile-menu-container mobile-menu-light">
         <div class="mobile-menu-wrapper">
             <span class="mobile-menu-close"><i class="icon-close"></i></span>
-            
+
             <form action="#" method="get" class="mobile-search">
                 <label for="mobile-search" class="sr-only">Search</label>
                 <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
@@ -1004,7 +1008,6 @@
             </div><!-- End .social-icons -->
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
-
     <!-- Plugins JS File -->
     <script src="@Url.Content("~/assets/user-official/js/jquery.min.js")"></script>
     <script src="@Url.Content("~/assets/user-official/js/bootstrap.bundle.min.js")"></script>
@@ -1016,7 +1019,7 @@
     <script src="@Url.Content("~/assets/user-official/js/jquery.magnific-popup.min.js")"></script>
     <script src="@Url.Content("~/assets/user-official/js/jquery.plugin.min.js")"></script>
     <script src="@Url.Content("~/assets/user-official/js/jquery.countdown.min.js")"></script>
-    
+
     <!-- Main JS File -->
     <script src="@Url.Content("~/assets/user-official/js/main.js")"></script>
     <script src="@Url.Content("~/assets/user-official/js/demos/demo-13.js")"></script>

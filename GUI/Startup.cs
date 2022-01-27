@@ -1,10 +1,10 @@
+using GUI.Abtractions;
 using GUI.Attributes;
 using GUI.Clients;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Refit;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
@@ -56,14 +55,12 @@ namespace GUI
             services.AddControllersWithViews();
             services.Configure<RazorViewEngineOptions>(options =>
             {
-            var virtualAreaNames = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(type => typeof(Controller).IsAssignableFrom(type)
-                    && type.GetCustomAttribute<VirtualAreaAttribute>() != null)
-                .Select(type => type.GetCustomAttribute<VirtualAreaAttribute>(false)!.Name)
-                .Distinct();
-            foreach (var virtualArea in virtualAreaNames)
-                options.ViewLocationFormats.Add($"/Areas/{virtualArea}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
+                var virtualAreaName = typeof(BaseUserController)
+                    .GetCustomAttribute<VirtualAreaAttribute>(false)
+                    .Name;
+                options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
+            services.AddScoped<BaseActionFilter>();
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IShopClient>()

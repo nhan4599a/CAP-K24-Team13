@@ -71,16 +71,6 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/cart/{userId}/count",
-      "DownstreamScheme": "https",
-      "ServiceName": "ProductService",
-      "UpstreamPathTemplate": "/cart/{userId}/count",
-      "UpstreamHttpMethod": [ "GET" ],
-      "LoadBalancerOptions": {
-        "Type": "LeastConnection"
-      }
-    },
-    {
       "DownstreamPathTemplate": "/api/cart/{userId}/items",
       "DownstreamScheme": "https",
       "ServiceName": "ProductService",

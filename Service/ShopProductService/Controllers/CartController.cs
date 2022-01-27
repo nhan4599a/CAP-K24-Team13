@@ -26,12 +26,6 @@ namespace ShopProductService.Controllers
             return await _mediator.Send(new GetCartItemsQuery { UserId = userId });
         }
 
-        [HttpGet("{userId}/count")]
-        public async Task<int> GetCartItemCount(string userId)
-        {
-            return await _mediator.Send(new GetCartItemCountQuery { UserId = userId });
-        }
-
         [HttpPost]
         public async Task<ApiResult<bool>> AddCartItem([FromForm] AddOrEditQuantityCartItemRequestModel requestModel)
         {
