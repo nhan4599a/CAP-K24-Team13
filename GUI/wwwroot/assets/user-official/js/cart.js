@@ -11,12 +11,14 @@
     $('.product-details-action > .btn-product.btn-cart').click(function (e) {
         e.preventDefault();
         let productId = $(this).data('product');
-        let quantity = $(this).parent().parent().children('details-filter-row details-row-size').eq(2)
+        let quantity = $(this).parent().parent().children('.details-filter-row.details-row-size').eq(2)
             .find('.input-group.input-spinner').children('input').val();
         addProductToCart(userId, productId, quantity)
             .then(() => toastr.success('Added product to cart'))
             .catch(error => toastr.error(error));
     });
+
+    $('.product-col > .form-check-input')
 
     $('.quantity-col > .cart-product-quantity > .input-group > .input-group-prepend > button.btn-decrement.btn-spinner')
         .click(function () {
