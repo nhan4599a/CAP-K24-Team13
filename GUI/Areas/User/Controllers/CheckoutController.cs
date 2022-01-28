@@ -3,7 +3,6 @@ using GUI.Areas.User.Models;
 using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Mvc;
-using Shared.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

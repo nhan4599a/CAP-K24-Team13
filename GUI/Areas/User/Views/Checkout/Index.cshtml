@@ -29,7 +29,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <label>Full Name *</label>
-                                    <input type="text" id="input-fullname" class="form-control" required >
+                                    <input type="text" id="input-fullname" class="form-control" required>
                                 </div><!-- End .col-sm-6 -->
 
                                 <div class="col-sm-4">
@@ -224,35 +224,6 @@
         </div><!-- End .checkout -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
-
 @section Scripts {
-
-    <script>
-        $('#form-input').submit(function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log(buildRequestModel());
-         });
-         function buildRequestModel() {
-            let fullname = $("#input-fullname").val();
-            let phone = $('#input-phone').val();
-            let streetaddress = $("#input-streetaddress").val();
-            let ward = $("#input-ward").val();
-            let district = $("#input-district").val();
-            let towncity = $("#input-towncity").val();
-            let ordernotes = $("#input-ordernotes").val();
-            let ordernotes = $("#product-nameandprice").val();
-            let ordernotes = $("#input-ordernotes").val();
-            let ordernotes = $("#input-ordernotes").val();
-            return {
-                fullname: fullname,
-                phone: phone,
-                streetaddress: streetaddress,
-                ward: ward,
-                district: district,   
-                towncity: towncity,
-                ordernotes: ordernotes,
-            };
-        }
-    </script>
+    <script src="@Url.Content("~/assets/user-official/js/checkout.js")"></script>
 }
