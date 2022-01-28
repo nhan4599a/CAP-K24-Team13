@@ -22,41 +22,41 @@
     <div class="page-content">
         <div class="checkout">
             <div class="container">
-                <form action="#">
+                <form id="form-input">
                     <div class="row">
                         <div class="col-lg-9">
                             <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
                             <div class="row">
                                 <div class="col-sm-8">
                                     <label>Full Name *</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" id="input-fullname" class="form-control" required >
                                 </div><!-- End .col-sm-6 -->
 
                                 <div class="col-sm-4">
                                     <label>Phone *</label>
-                                    <input type="tel" class="form-control" required>
+                                    <input type="tel" id="input-phone" class="form-control" required>
                                 </div><!-- End .col-sm-4 -->
                             </div><!-- End .row -->
                             <div class="row">
                                 <div class="col-sm-12">
                                     <label>Street Address *</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" id="input-streetaddress" class="form-control" required>
                                 </div><!-- End .col-sm-12 -->
                             </div><!-- End .row -->
                             <div class="row">
                                 <div class="col-sm-4">
                                     <label>Ward *</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" id="input-ward" class="form-control" required>
                                 </div><!-- End .col-sm-4 -->
 
                                 <div class="col-sm-4">
                                     <label>District *</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" id="input-district" class="form-control" required>
                                 </div><!-- End .col-sm-4 -->
 
                                 <div class="col-sm-4">
                                     <label>Town/City *</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" id="input-towncity" class="form-control" required>
                                 </div><!-- End .col-sm-4 -->
                             </div><!-- End .row -->
                             @*<label>Company Name (Optional)</label>
@@ -93,7 +93,7 @@
                                 <input type="email" class="form-control" required>*@
 
                             <label>Order notes (optional)</label>
-                            <textarea style="resize: none" class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+                            <textarea id="input-ordernotes" style="resize: none" class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
                             <a href="#" title="">
                                 <img style="margin-bottom: 2rem; width: 100%" src="https://creativedesign.rs/cd_app/public/images/products/357822246632231.jpg" alt="banner" />
                             </a>
@@ -119,7 +119,7 @@
                                                 <td>@((item.Item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
                                             </tr>
                                         }
-                                        <tr class="summary-subtotal">
+                                        <tr class="summary-subtotal" id="product-subtotal">
                                             <td>Subtotal:</td>
                                             <td>@totalPrice.ToString("N0", CultureInfo.InvariantCulture)</td>
                                         </tr><!-- End .summary-subtotal -->
@@ -127,7 +127,7 @@
                                             <td>Shipping:</td>
                                             <td>Free shipping</td>
                                         </tr>
-                                        <tr class="summary-total">
+                                        <tr class="summary-total" id="product-total">
                                             <td>Total:</td>
                                             <td>@totalPrice.ToString("N0", CultureInfo.InvariantCulture)</td>
                                         </tr><!-- End .summary-total -->
@@ -224,3 +224,35 @@
         </div><!-- End .checkout -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+
+@section Scripts {
+
+    <script>
+        $('#form-input').submit(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log(buildRequestModel());
+         });
+         function buildRequestModel() {
+            let fullname = $("#input-fullname").val();
+            let phone = $('#input-phone').val();
+            let streetaddress = $("#input-streetaddress").val();
+            let ward = $("#input-ward").val();
+            let district = $("#input-district").val();
+            let towncity = $("#input-towncity").val();
+            let ordernotes = $("#input-ordernotes").val();
+            let ordernotes = $("#product-nameandprice").val();
+            let ordernotes = $("#input-ordernotes").val();
+            let ordernotes = $("#input-ordernotes").val();
+            return {
+                fullname: fullname,
+                phone: phone,
+                streetaddress: streetaddress,
+                ward: ward,
+                district: district,   
+                towncity: towncity,
+                ordernotes: ordernotes,
+            };
+        }
+    </script>
+}

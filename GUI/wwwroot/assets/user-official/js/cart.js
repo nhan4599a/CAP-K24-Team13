@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    let userId = 'B8A936EB-3904-4DBE-D29F-08D9E0150BF3';
+    let userId = 'C61AF282-818D-43CA-6DA9-08D9E08DBE4D';
     $('.product > .product-media > .product-action > a.btn-product.btn-cart').click(function (e) {
         e.preventDefault();
         let productId = $(this).data('product');
