@@ -20,7 +20,7 @@ namespace GUI.Abtractions
             var controller = context.Controller as Controller;
             if (controller is not CartController)
             {
-                var cartItemsResponse = await _cartClient.GetCartItemsAsync("C61AF282-818D-43CA-6DA9-08D9E08DBE4D");
+                var cartItemsResponse = await _cartClient.GetCartItemsAsync("adf66c79-e39a-4288-fcf9-08d9df112449");
                 if (cartItemsResponse.IsSuccessStatusCode)
                     controller.ViewData["CartItems"] = cartItemsResponse.Content;
             }

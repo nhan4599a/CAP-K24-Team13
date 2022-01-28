@@ -4,6 +4,28 @@
     var keyword = (string)ViewBag.Keyword;
     var pageSize = (int)ViewBag.PageSize;
 }
+@section Styles {
+<style>
+    .shop-items {
+        height: 100%
+    }
+
+    .shop-ava {
+        height: 75%
+    }
+
+        .shop-ava > a {
+            height: 100%;
+        }
+
+            .shop-ava > a > img {
+                height: 100% !important
+            }
+        .page-item{
+            background-color: #
+        }
+</style>
+}
 @model SearchResultViewModel
 <main class="main">
     @await Component.InvokeAsync("HomePageSlider")
@@ -124,28 +146,3 @@
     </div>
     <div class="mb-4"></div><!-- End .mb-4 -->
 </main><!-- End .main -->
-@section Styles {
-<style>
-    .shop-items {
-        height: 100%
-    }
-
-    .shop-ava {
-        height: 75%
-    }
-
-        .shop-ava > a {
-            height: 100%;
-        }
-
-            .shop-ava > a > img {
-                height: 100% !important
-            }
-        .page-item{
-            background-color: #
-        }
-</style>
-}
-@section Scripts {
-    <script src="@Url.Content("~/assets/user-official/js/cart.js")"></script>
-}

@@ -1,4 +1,5 @@
-﻿@using GUI.Extensions
+﻿@using GUI.Areas.User.ViewModels
+@using GUI.Extensions
 @using Shared.DTOs
 @using System.Globalization
 @{
@@ -110,6 +111,7 @@
                             <div class="dropdown cart-dropdown">
                                 <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                     <i class="icon-shopping-cart"></i>
+                                    <span class="cart-count">@cartItems?.Count</span>
                                     <span class="cart-txt">Cart</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -138,14 +140,14 @@
                                         {
                                             foreach (var item in cartItems)
                                             {
-                                                <div class="product">
+                                                <div class="product" data-product="@item.ProductId">
                                                     <div class="product-cart-details">
                                                         <h4 class="product-title">
                                                             <a href="product.html">@item.ProductName</a>
                                                         </h4>
                                                         <span class="cart-product-info">
                                                             <span class="cart-product-qty">@item.Quantity</span>
-                                                            x @item.Price.ToString("N0", CultureInfo.InvariantCulture)
+                                                            x <span class="base-price">@item.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
                                                         </span>
                                                     </div><!-- End .product-cart-details -->
                                                     <figure class="product-image-container">
@@ -156,6 +158,17 @@
                                                     <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                                 </div>
                                             }
+                                            <div class="dropdown-cart-total">
+                                                <span>Total</span>
+                                                <span class="cart-total-price">@cartItems.Sum(item => item.Quantity * item.Price).ToString("N0", CultureInfo.InvariantCulture)</span>
+                                            </div>
+                                            <div class="dropdown-cart-action">
+                                                <a class="btn btn-primary" href="/cart">View Cart</a>
+                                                <a class="btn btn-outline-primary-2" href="/checkout">
+                                                    <span>Checkout</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </a>
+                                            </div>
                                         }
                                     </div>
                                 </div>
@@ -1021,9 +1034,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="@Url.Content("~/assets/admin/js/internal/api.js")"></script>
+    <script src="@Url.Content("~/assets/user-official/js/cart.js")"></script>
     @RenderSection("Scripts", false)
 </body>
 
-
-<!-- molla/index-13.html  22 Nov 2019 09:59:31 GMT -->
 </html>
