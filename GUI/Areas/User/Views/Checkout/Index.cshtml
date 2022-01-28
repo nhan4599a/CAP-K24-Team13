@@ -114,7 +114,7 @@
                                     <tbody>
                                         @foreach (var item in Model)
                                         {
-                                            <tr>
+                                            <tr class="product-item">
                                                 <td><a href="/product/index/@item.Item.Id">@item.Item.ProductName</a></td>
                                                 <td>@((item.Item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
                                             </tr>

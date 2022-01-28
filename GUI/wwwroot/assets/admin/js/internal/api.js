@@ -15,6 +15,7 @@ const productEndpoint = '/products';
 const categoryEndpoint = '/categories';
 const cartEndpoint = '/cart'
 const interfaceEndpoint = '/interfaces';
+const checkoutEndpoint = '/checkout';
 
 function findProducts(keyword, pageNumber, pageSize) {
     if (keyword === null || keyword === '')
@@ -180,4 +181,16 @@ function updateCartQuantity(userId, productId, quantity) {
 
 function removeProductInCart(userId, productId) {
     return axios.delete(`${cartEndpoint}/${userId}/${productId}`);
+}
+
+function checkOut(userId, productIds, shippingAddress) {
+    let formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('productIds', productIds);
+    formData.append('shippingAddress', shippingAddress);
+    return axios.post(checkoutEndpoint, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }
