@@ -47,6 +47,7 @@ namespace DatabaseAccessor.Repositories
                     Price = actualProduct.Price,
                     Quantity = cartItem.Quantity
                 });
+                cart.Details.Remove(cartItem);
             }
             _dbContext.Invoices.AddRange(invoices.Values);
             await _dbContext.SaveChangesAsync();

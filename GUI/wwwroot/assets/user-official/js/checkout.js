@@ -5,12 +5,16 @@
         let animationLoader = new AnimationLoader('.loading-container', '/assets/user-official/checking-out.json');
         animationLoader.showAnimation(10000);
         let model = buildRequestModel();
-        checkOut(userId, model.productIdList, model.fullname, model.phone, model.shippingAddress)
+        checkOut(userId, model.productIdList, model.fullname, model.phone, model.shippingAddress, model.orderNotes)
             .then(() => {
                 toastr.success('Checkout successfully');
                 animationLoader.hideAnimation();
+                window.location.href = '/';
             })
-            .catch(error => toastr.error(error));
+            .catch(error => {
+                toastr.error(error);
+                animationLoader.hideAnimation();
+            });
     });
 });
 

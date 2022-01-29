@@ -1,4 +1,4 @@
-let userId = 'adf66c79-e39a-4288-fcf9-08d9df112449';
+let userId = 'B8A936EB-3904-4DBE-D29F-08D9E0150BF3';
 $(document).ready(function () {
     $('.product > .product-media > .product-action > a.btn-product.btn-cart').click(function (e) {
         e.preventDefault();
@@ -68,6 +68,10 @@ $(document).ready(function () {
                     quantity: root.children('.quantity-col').find('.input-group.input-spinner > input').val()
                 });
             });
+        if (selectedItems.length == 0) {
+            toastr.error('Please Select Product');
+            return;
+        }
         $('body').append('<form id="checkout-form"></form>');
         let form = $('form#checkout-form').attr('method', 'POST').attr('action', '/checkout');
         for (let i = 0; i < selectedItems.length; i++) {
