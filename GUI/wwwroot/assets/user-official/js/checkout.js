@@ -2,11 +2,17 @@
     $('#form-input').submit(function (e) {
         e.preventDefault();
         e.stopPropagation();
+        let animationLoader = new AnimationLoader('.loading-container', '/assets/user-official/checking-out.json');
+        animationLoader.showAnimation(10000);
         let model = buildRequestModel();
-        checkOut
+        checkOut(userId, model.productIdList, model.fullname, model.phone, model.shippingAddress)
+            .then(() => {
+                toastr.success('Checkout successfully');
+                animationLoader.hideAnimation();
+            })
+            .catch(error => toastr.error(error));
     });
 });
-
 
 function buildRequestModel() {
     let fullname = $("#input-fullname").val();

@@ -19,7 +19,8 @@ namespace DatabaseAccessor.Repositories
             _dbContext = dbContext;
         }
         
-        public async Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingAddress)
+        public async Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
+            string shippingPhone, string shippingAddress, string orderNotes)
         {
             var cart = await _dbContext.Carts.FirstOrDefaultAsync(cart => cart.UserId == userId);
             if (cart == null)
@@ -28,13 +29,16 @@ namespace DatabaseAccessor.Repositories
             var products = cart.Details.Where(item => productIds.Contains(item.ProductId)).ToList();
             foreach (var cartItem in products)
             {
-                var actualProduct = await _dbContext.ShopProducts.FindAsync(cartItem.Id);
-                if (invoices.ContainsKey(cartItem.ShopId))
+                var actualProduct = await _dbContext.ShopProducts.FindAsync(cartItem.ProductId);
+                if (!invoices.ContainsKey(cartItem.ShopId))
                 {
                     invoices.Add(cartItem.ShopId, new Invoice
                     {
                         UserId = userId,
-                        ShippingAddress = shippingAddress
+                        Phone = shippingPhone,
+                        FullName = shippingName,
+                        ShippingAddress = shippingAddress,
+                        Note = orderNotes
                     });
                 }
                 invoices[cartItem.ShopId].Details.Add(new InvoiceDetail

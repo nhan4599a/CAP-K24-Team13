@@ -16,7 +16,8 @@ namespace CheckoutService.Handlers
 
         public async Task<CommandResponse<bool>> Handle(CheckOutCommand request, CancellationToken cancellationToken)
         {
-            return await _orderRepository.AddOrderAsync(request.UserId, request.ProductIds, request.ShippingAddress);
+            return await _orderRepository.AddOrderAsync(request.UserId, request.ProductIds, request.ShippingName,
+                request.ShippingPhone, request.ShippingAddress, request.OrderNotes);
         }
 
         public void Dispose()

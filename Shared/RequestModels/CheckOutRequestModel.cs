@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Shared.RequestModels
 {
@@ -12,6 +8,12 @@ namespace Shared.RequestModels
 
         public List<string> ProductIds { get; set; }
 
+        public string ShippingName { get; set; }
+
+        public string ShippingPhone { get; set; }
+
         public string ShippingAddress { get; set; }
+
+        public string OrderNotes { get; set; }
     }
 }

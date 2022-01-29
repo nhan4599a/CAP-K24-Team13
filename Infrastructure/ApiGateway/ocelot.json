@@ -109,6 +109,16 @@
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/checkout",
+      "DownstreamScheme": "https",
+      "ServiceName": "CheckoutService",
+      "UpstreamPathTemplate": "/checkout",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
     }
   ],
   "GlobalConfiguration": {
