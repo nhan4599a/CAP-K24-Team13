@@ -37,7 +37,11 @@ namespace DatabaseAccessor.Mapping
                         options => options.MapFrom<SingleImageResolver>());
                 cfg.CreateMap<InvoiceDetail, OrderUserHistoryDTO>()
                     .ForMember(target => target.ProductName,
-                        option => option.MapFrom(source => source.Product.ProductName));    
+                        option => option.MapFrom(source => source.Product.ProductName))              
+                    .ForMember(target => target.Images,
+                        option => option.MapFrom<SingleImageResolver>())
+                    .ForMember(target => target.Created,
+                        option => option.MapFrom(source => source.Invoice.Created));
             });
             _mapper = config.CreateMapper();
         }
