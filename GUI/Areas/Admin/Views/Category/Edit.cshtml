@@ -84,7 +84,7 @@
                 animationLoader.showAnimation();
                 editCategory(id, formData).then(() => {
                     animationLoader.hideAnimation();
-                    window.location.href = '/admin/category';
+                    window.location.href = '/shopowner/category';
                     window.localStorage.removeItem('editting-category');
                 }).catch(error => {
                     animationLoader.hideAnimation();
@@ -95,7 +95,7 @@
         function loadEdittingCategory(edittingCategory, dropzone) {
             if (!edittingCategory) {
                 alert("Something went wrong!");
-                window.location.href = "/admin/category";
+                window.location.href = "/shopowner/category";
             }
             $('#input-id').val(edittingCategory.id);
             $('#input-name').val(edittingCategory.categoryName);
