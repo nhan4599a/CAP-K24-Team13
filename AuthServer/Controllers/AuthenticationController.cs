@@ -1,4 +1,5 @@
-﻿using AuthServer.Configurations;
+﻿using AuthServer.Abstractions;
+using AuthServer.Configurations;
 using AuthServer.Identities;
 using AuthServer.Models;
 using AuthServer.ViewModels;
@@ -15,6 +16,7 @@ using System.Security.Claims;
 
 namespace AuthServer.Controllers
 {
+    [ServiceFilter(typeof(SignInActionFilter))]
     public class AuthenticationController : Controller
     {
         private readonly ApplicationSignInManager _signInManager;
@@ -33,10 +35,9 @@ namespace AuthServer.Controllers
 
         [AllowAnonymous]
         [Route("/auth/SignIn")]
-        public async Task<IActionResult> SignIn()
+        public IActionResult SignIn()
         {
-            var externalProviders = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            return View(externalProviders);
+            return View();
         }
 
         [AllowAnonymous]
@@ -50,32 +51,10 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("SignIn-Error", "Username or password is invalid");
                 return View();
             }
-            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
             var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password,
-                AccountConfig.AccountLockedOutEnabled);
+            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
             if (user != null && signInResult.Succeeded)
             {
-                if (context != null)
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(),
-                        user.UserName, clientId: context.Client.ClientId));
-                AuthenticationProperties? props = null;
-                if (AccountConfig.AllowRememberMe && model.RememberMe)
-                    props = new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountConfig.RememberMeDuration),
-                    };
-                var additionalClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Email, user.Email)
-                };
-                var identityServerUser = new IdentityServerUser(user.Id.ToString())
-                {
-                    DisplayName = user.UserName,
-                    AdditionalClaims = additionalClaims
-                };
-                await HttpContext.SignInAsync(identityServerUser, props);
                 if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     return Redirect(model.ReturnUrl);
                 throw new InvalidOperationException($"\"{model.ReturnUrl}\" is  invalid");
@@ -83,8 +62,8 @@ namespace AuthServer.Controllers
             if (user != null && signInResult.IsLockedOut)
             {
                 ModelState.AddModelError("SignIn-Error", "Account is locked out");
-                ViewBag.LockedOutCancelTime = user.LockoutEnd!.Value;
-                return View();
+                ViewBag.LockedOutCancelTime = user!.LockoutEnd!.Value;
+                return View(model);
             }
             ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
             return View();
@@ -207,7 +186,7 @@ namespace AuthServer.Controllers
                     var additionalClaims = new List<Claim>();
                     if (!string.IsNullOrWhiteSpace(model.SessionId))
                         additionalClaims.Add(new Claim(JwtClaimTypes.SessionId, model.SessionId));
-                    additionalClaims.Add(new Claim(ClaimTypes.Email, model.Email));
+                    additionalClaims.Add(new Claim("name", model.Username));
                     var props = new AuthenticationProperties();
                     if (!string.IsNullOrWhiteSpace(model.IdToken))
                         props.StoreTokens(

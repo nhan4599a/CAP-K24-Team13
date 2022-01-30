@@ -46,7 +46,7 @@ namespace AuthServer.Services
             }
         }
 
-        private async Task InitializeRoles(ApplicationRoleManager roleManager)
+        private static async Task InitializeRoles(ApplicationRoleManager roleManager)
         {
             if (await roleManager.FindByNameAsync("Customer") == null)
             {
@@ -83,8 +83,8 @@ namespace AuthServer.Services
                 NormalizedUserName = username.ToUpper(),
                 Email = email,
                 NormalizedEmail = email.ToUpper(),
-                FirstName = "test",
-                LastName = "test"
+                FirstName = "Test",
+                LastName = "Test"
             });
         }
     }
