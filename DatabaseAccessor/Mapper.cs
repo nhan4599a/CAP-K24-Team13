@@ -52,5 +52,7 @@ namespace DatabaseAccessor.Mapping
             => _mapper.Map<ShopInterfaceDTO>(shopInterface);
 
         public CartItemDTO MapToCartItemDTO(CartDetail cartItem) => _mapper.Map<CartItemDTO>(cartItem);
+
+        public OrderUserHistoryDTO MapToOrderUserHistoryDTO(InvoiceDetail invoice) => _mapper.Map<OrderUserHistoryDTO>(invoice);
     }
 }
