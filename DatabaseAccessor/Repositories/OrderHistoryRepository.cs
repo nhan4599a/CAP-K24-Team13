@@ -30,10 +30,8 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<List<OrderUserHistoryDTO>> GetOrderHistoryAsync(string userId)
         {
-            var invoice = await _dbContext.Invoices.FirstOrDefaultAsync(invoice => invoice.UserId.ToString() == userId);
-            if (invoice == null)
-                return new List<OrderUserHistoryDTO>();
-            return invoice.Details.Select(item => _mapper.MapToOrderUserHistoryDTO(item)).ToList();
+            var invoices = await _dbContext.InvoiceDetails.Where(item => item.Invoice.UserId.ToString() == userId).ToListAsync();
+            return invoices.Select(item => _mapper.MapToOrderUserHistoryDTO(item)).ToList();
         }
     }
 }
