@@ -4,7 +4,7 @@ namespace GUI.Areas.User.Controllers
 {
     public class UserAccountController : Controller
     {
-        public IActionResult Profile()
+        public IActionResult Index()
         {
             return View();
         }
