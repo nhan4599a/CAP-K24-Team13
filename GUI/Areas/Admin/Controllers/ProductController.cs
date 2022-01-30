@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication;
+using GUI.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -18,8 +18,7 @@ namespace GUI.Areas.Admin.Customers
         [ActionName("Index")]
         public async Task<IActionResult> ListProduct()
         {
-            var item = User;
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var uid = User.GetUserId();
             return View();
         }
 

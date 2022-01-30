@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 
 namespace GUI
 {
@@ -41,11 +41,14 @@ namespace GUI
                 options.Scope.Add("product.read");
                 options.Scope.Add("product.write");
                 options.Scope.Add("offline_access");
+                options.Scope.Add("roles");
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
+                options.ClaimActions.MapJsonKey("role", "role", "role");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    NameClaimType = "name"
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
                 };
             });
         }

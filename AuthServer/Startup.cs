@@ -2,6 +2,7 @@
 using AspNetCoreSharedComponent.ModelValidations;
 using AuthServer.Abstractions;
 using AuthServer.Configurations;
+using AuthServer.Factories;
 using AuthServer.Identities;
 using AuthServer.Models;
 using AuthServer.Providers;
@@ -60,6 +61,7 @@ namespace AuthServer
             services.AddScoped<SmtpClient>();
             services.AddScoped<IMailService, GmailService>();
             services.AddScoped<SignInActionFilter>();
+            services.AddScoped<IUserClaimsPrincipalFactory<User>, ApplicationUserClaimsPrincipleFactory>();
             services.AddIdentity<User, Role>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = AccountConfig.RequireEmailConfirmation;

@@ -1,4 +1,5 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace AuthServer.Configurations
@@ -7,20 +8,6 @@ namespace AuthServer.Configurations
     {
         public static IEnumerable<Client> Clients => new[]
         {
-            new Client
-            {
-                ClientId = "products-client",
-                ClientName = "products-client",
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = new[]
-                {
-                    new Secret("CapK24Team13".Sha256())
-                },
-                AllowedScopes = new[]
-                {
-                    "product.read", "product.write"
-                }
-            },
             new Client
             {
                 ClientId = "oidc-client",
@@ -39,7 +26,7 @@ namespace AuthServer.Configurations
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.OfflineAccess,
-                    "product.read", "product.write"
+                    "product.read", "product.write", "roles"
                 },
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
@@ -51,10 +38,15 @@ namespace AuthServer.Configurations
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
-            new IdentityResource("product", new[]
+            new IdentityResource
             {
-                "role"
-            })
+                Name = "roles",
+                DisplayName = "Roles",
+                UserClaims =
+                {
+                    JwtClaimTypes.Role
+                }
+            }
         };
 
         public static IEnumerable<ApiResource> ApiResources => new[]
@@ -71,6 +63,10 @@ namespace AuthServer.Configurations
                 ApiSecrets = new[]
                 {
                     new Secret("CapK24Team13".Sha256())
+                },
+                UserClaims =
+                {
+                    JwtClaimTypes.Role
                 }
             }
         };
