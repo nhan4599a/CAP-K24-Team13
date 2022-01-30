@@ -9,6 +9,7 @@ using Shared.Validations;
 using ShopInterfaceService.Commands;
 using ShopInterfaceService.Mediator;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ShopInterfaceService.Controllers
 {
@@ -26,13 +27,6 @@ namespace ShopInterfaceService.Controllers
             _fileStore = imageManager;
             rules = FileValidationRuleSet.DefaultValidationRules;
             rules.Change(FileValidationRuleName.MinFileCount, 1);
-        }
-
-        [HttpGet]
-        public async Task<CommandResponse<ShopInterfaceDTO>> Get(string searchString)
-        {
-            var result = await _mediator.Send(new FindShop.Query { SearchString = searchString });
-            return result;
         }
 
         [HttpPost("{shopId}")]

@@ -5,9 +5,7 @@ using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
-using DatabaseAccessor.Repositories.Interfaces;
-using FluentValidation;
-using FluentValidation.AspNetCore;
+using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +36,7 @@ namespace ShopProductService
                 options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
             }).AddFluentValidation<CreateOrEditCategoryRequestModel, AddOrEditCategoryRequestModelValidator>()
             .AddFluentValidation<CreateOrEditProductRequestModel, AddOrEditProductRequestModelValidator>()
-            .AddFluentValidation<SearchProductRequestModel, SearchProductRequestModelValidator>();
+            .AddFluentValidation<SearchRequestModel, SearchProductRequestModelValidator>();
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -50,6 +48,7 @@ namespace ShopProductService
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IFileStorable, FileStore>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();

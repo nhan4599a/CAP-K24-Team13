@@ -118,7 +118,7 @@
                     formData.append(`images[${i}]`, dropzone.files[i]);
                 addProduct(formData).then(() => {
                     animationLoader.hideAnimation();
-                    window.location.href = '/admin/product';
+                    window.location.href = '/shopowner/product';
                 }).catch(error => {
                     animationLoader.hideAnimation();
                     toastr.error(error, 'Error');

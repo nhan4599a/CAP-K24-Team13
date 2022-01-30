@@ -1,4 +1,5 @@
 ﻿axios.defaults.timeout = 20000;
+axios.defaults.baseURL = 'https://localhost:7157';
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
@@ -10,20 +11,22 @@ axios.interceptors.response.use(axiosResp => {
     return Promise.resolve(resp.data);
 }, error => Promise.reject(error));
 
-const productEndpoint = 'https://localhost:44302/api/products';
-const categoryEndpoint = 'https://localhost:44302/api/categories';
-const interfaceEndpoint = 'https://localhost:44394/api/interfaces';
+const productEndpoint = '/products';
+const categoryEndpoint = '/categories';
+const cartEndpoint = '/cart'
+const interfaceEndpoint = '/interfaces';
+const checkoutEndpoint = '/checkout';
 
 function findProducts(keyword, pageNumber, pageSize) {
     if (keyword === null || keyword === '')
-        return axios.get(productEndpoint, {
+        return axios.get(productEndpoint + '/search', {
             params: {
                 'paginationInfo.pageNumber': pageNumber,
                 'paginationInfo.pageSize': pageSize
             }
         });
     else
-        return axios.get(productEndpoint, {
+        return axios.get(productEndpoint + '/search', {
             params: {
                 keyword: encodeURIComponent(keyword),
                 'paginationInfo.pageNumber': pageNumber,
@@ -33,7 +36,7 @@ function findProducts(keyword, pageNumber, pageSize) {
 }
 
 function getProductImageUrl(imageFileName) {
-    return `${productEndpoint}/images/${imageFileName}`;
+    return `https://localhost:7157${productEndpoint}/images/${imageFileName}`;
 }
 
 function getProductImage(imageFileName) {
@@ -47,7 +50,11 @@ function getProductImage(imageFileName) {
 
 function activateProduct(id, isActivateCommand) {
     return axios.delete(
-        `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`
+        `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`, {
+            headers: {
+                "Origin": 'https://localhost:44349'
+            }
+        }
     );
 }
 
@@ -81,7 +88,7 @@ function getCategories(pageNumber, pageSize) {
 }
 
 function getCategoryImageUrl(imageFileName) {
-    return `${categoryEndpoint}/images/${imageFileName}`;
+    return `https://localhost:7157${categoryEndpoint}/images/${imageFileName}`;
 }
 
 function getCategoryImage(imageFileName) {
@@ -128,7 +135,7 @@ function getShopInterface(shopId) {
 }
 
 function getShopInterfaceImageUrl(imageFileName) {
-    return `${interfaceEndpoint}/images/${imageFileName}`;
+    return `https://localhost:7157${interfaceEndpoint}/images/${imageFileName}`;
 }
 
 function getShopInterfaceImage(imageFileName) {
@@ -150,6 +157,41 @@ function addShopInterface(shopId, formData) {
 
 function editShopInterface(shopId, formData) {
     return axios.put(`${interfaceEndpoint}/${shopId}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
+
+function addProductToCart(userId, productId, quantity) {
+    let formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('productId', productId);
+    formData.append('quantity', quantity);
+    return axios.post(`${cartEndpoint}`, formData);
+}
+
+function updateCartQuantity(userId, productId, quantity) {
+    let formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('productId', productId);
+    formData.append('quantity', quantity);
+    return axios.put(`${cartEndpoint}`, formData);
+}
+
+function removeProductInCart(userId, productId) {
+    return axios.delete(`${cartEndpoint}/${userId}/${productId}`);
+}
+
+function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAddress, orderNotes) {
+    let formData = new FormData();
+    formData.append('requestModel.userId', userId);
+    formData.append('requestModel.productIds', productIdList);
+    formData.append('requestModel.shippingName', shippingName);
+    formData.append('requestModel.shippingPhone', shippingPhone);
+    formData.append('requestModel.shippingAddress', shippingAddress);
+    formData.append('requestModel.orderNotes', orderNotes);
+    return axios.post(checkoutEndpoint, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }

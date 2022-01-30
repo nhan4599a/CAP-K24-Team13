@@ -1,6 +1,6 @@
 using AspNetCoreSharedComponent.FileValidations;
+using DatabaseAccessor;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
@@ -8,18 +8,97 @@ using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("/api/products")]
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
 
         private readonly IFileStorable _fileStore;
+
+        private readonly static PaginatedList<ProductDTO> FakeProducts = new List<ProductDTO>
+        {
+            new ProductDTO
+            {
+                Id = "MacBook Pro M1",
+                ProductName = "Macbook Pro M1",
+                CategoryName = "category 1",
+                Price = 20000,
+                Description = "GOLD",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images = new string[]
+                {
+                    "https://futureworld.com.vn/media/catalog/product/cache/374a8abfba56573d9bc051f80221efb2/m/b/mba_gold_m1_2.jpg"
+                }
+            },
+            new ProductDTO
+            {
+                Id = "iphone 13",
+                ProductName = "Iphone 13",
+                CategoryName = "category 2",
+                Price = 20000,
+                Description = "64gb",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images = new string[]
+                {
+                    "https://mega.com.vn/media/product/20113_iphone_13_256gb_white.jpg"
+                }
+            },
+            new ProductDTO
+            {
+                Id = "Nike AIR",
+                ProductName = "Nike AIR",
+                CategoryName = "category 1",
+                Price = 20000,
+                Description = "White",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images =new string[]
+                {
+                    "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e777c881-5b62-4250-92a6-362967f54cca/air-force-1-07-shoe-NMmm1B.png?fbclid=IwAR3CJ3AKilbPvMX9um9TvclM3DWYhA926X4kpb_wsCY-YHPrmP3qLlLvhTg"
+                }
+            },
+            new ProductDTO
+            {
+                Id = "Bitis Hunter",
+                ProductName = "Bitis Hunter",
+                CategoryName = "category 1",
+                Price = 20000,
+                Description = "Back-Orange",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images = new string[]
+                {
+                    "https://product.hstatic.net/1000230642/product/03400cam__6__5022ef5622dc46b1bd893b238de2200f_1024x1024.jpg?fbclid=IwAR0gO4z_CTAtebCC0LEhJqPOK0I3rBJ75lsGaffq8SLwzQmD6hieOQfVWwQ"
+                }
+            },
+            new ProductDTO
+            {
+                Id = "Converse",
+                ProductName = "ASM Converse",
+                CategoryName = "category 1",
+                Price = 20000,
+                Description = "WHITE",
+                IsDisabled = false,
+                Quantity = 10,
+                Discount = 0,
+                Images = new string[]
+                {
+                    "https://th.bing.com/th/id/OIP.yRbQi9-1aDN-BXHuyD_vZAHaG5?pid=ImgDet&rs=1"
+                }
+            }
+        }.Paginate(1, 5);
 
         public ProductController(IMediator mediator, IFileStorable fileStore)
         {
@@ -71,8 +150,24 @@ namespace ShopProductService.Controllers
             return new ApiResult<bool> { ResponseCode = 200, Data = response.Response };
         }
 
-        [HttpGet]
-        public async Task<ApiResult<PaginatedList<ProductDTO>>> ListProduct([FromQuery] SearchProductRequestModel requestModel)
+        [HttpGet("shop/{shopId}")]
+        public async Task<ApiResult<PaginatedList<ProductDTO>>> GetProductsOfShop(int shopId)
+        {
+            if (shopId != 0)
+                return new ApiResult<PaginatedList<ProductDTO>> { ResponseCode = 200, Data = FakeProducts };
+            var response = await _mediator.Send(new FindProductsByShopIdQuery
+            {
+                ShopId = shopId
+            });
+            return new ApiResult<PaginatedList<ProductDTO>>
+            {
+                ResponseCode = 200,
+                Data = response
+            };
+        }
+
+        [HttpGet("search")]
+        public async Task<ApiResult<PaginatedList<ProductDTO>>> ListProduct([FromQuery] SearchRequestModel requestModel)
         {
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
                 ? new FindAllProductQuery { PaginationInfo = requestModel.PaginationInfo }
@@ -90,15 +185,28 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ApiResult<ProductDTO>> GetSingleProduct(string id)
+        public async Task<ApiResult> GetSingleProduct(string id)
         {
             var product = await _mediator.Send(new FindProductByIdQuery
             {
                 Id = Guid.Parse(id)
             });
             if (product == null)
-                return new ApiResult<ProductDTO> { ResponseCode = 404, ErrorMessage = "Product is not found" };
-            return new ApiResult<ProductDTO> { ResponseCode = 200, Data = product };
+                return ApiResult.CreateErrorResult(404, "Product is not found");
+            return ApiResult<ProductDTO>.CreateSuccessResult(product);
+        }
+
+        [HttpGet("less/{id}")]
+        public async Task<ApiResult> GetMinimalSingleProduct(string id)
+        {
+            var product = await _mediator.Send(new FindProductByIdQuery
+            {
+                Id = Guid.Parse(id),
+                IsMinimal = true
+            });
+            if (product == null)
+                return ApiResult.CreateErrorResult(404, "Product is not found");
+            return ApiResult<MinimalProductDTO>.CreateSuccessResult(product);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

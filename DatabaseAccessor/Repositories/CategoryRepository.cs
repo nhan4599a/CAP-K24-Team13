@@ -1,7 +1,7 @@
 ﻿using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
-using DatabaseAccessor.Repositories.Interfaces;
+using DatabaseAccessor.Repositories.Abstraction;
 using EntityFrameworkCore.Triggered;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -87,6 +87,14 @@ namespace DatabaseAccessor.Repositories
         private async Task<ShopCategory> FindCategoryByIdAsync(int id)
         {
             return await _dbContext.ShopCategories.FindAsync(id);
+        }
+
+        public async Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo)
+        {
+            return await _dbContext.ShopCategories.AsNoTracking()
+                .Where(category => category.ShopId == shopId)
+                .Select(category => _mapper.MapToCategoryDTO(category))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
         public void Dispose()

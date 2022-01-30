@@ -133,7 +133,7 @@
                 formData.append(`images[${i}]`, dropzone.files[i]);
             editProduct(edittingProduct.id, formData).then(() => {
                 animationLoader.hideAnimation();
-                window.location.href = '/admin/product';
+                window.location.href = '/shopowner/product';
                 window.localStorage.removeItem('editting-product');
             }).catch(error => {
                 animationLoader.hideAnimation();
@@ -145,7 +145,7 @@
     function loadEdittingProduct(edittingProduct, dropzone) {
         if (!edittingProduct) {
             alert("Something went wrong!");
-            window.location.href = "/admin/product";
+            window.location.href = "/shopowner/product";
         }
         console.log('loaded editting product');
         $('#input-id').val(edittingProduct.id);

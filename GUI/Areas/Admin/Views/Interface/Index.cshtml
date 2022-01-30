@@ -71,7 +71,7 @@
         .row-2 {
             margin-top: 30px;
         }
-    </style>
+    </style>x
     <style>
         .tab-page > :not(.active) {
             display: none;
@@ -88,14 +88,6 @@
         }
     </style>
     <style>
-        .edit-profile {
-            color: #000 !important
-        }
-
-            .edit-profile:hover {
-                color: #2f9db6 !important
-            }
-
         .col-xl-4 {
             flex: 0 0 auto;
             width: 50%;
@@ -113,6 +105,15 @@
         #image-carousel .carousel-inner .carousel-item img {
             width: 1134px;
             height: 562px;
+        }
+
+        #edit-mode{
+            text-align: left !important;
+            padding: 1px
+        }
+
+        #edit:hover{
+            color: #2f9db6 !important
         }
     </style>
 </head>
@@ -165,25 +166,22 @@
         <div class="container-fluid px-2 px-md-4">
             <div class="page-header min-height-300 border-radius-xl mt-4"
                  style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
-                <span class="mask  bg-gradient-primary  opacity-6"></span>
+                <span class="mask bg-gradient-primary opacity-6"></span>
             </div>
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row gx-4 mb-2">
                     <div class="col-auto">
                         <div class="avatar avatar-xl position-relative">
-                            <button id="button-img"><img src="https://gigamall.com.vn/data/2019/09/05/15023424_LOGO-NIKE-500x500.jpg"></button>
+                            <button id="button-img"><img src="https://vcdn-kinhdoanh.vnecdn.net/2020/01/21/12-4646-1579596787.png"></button>
                         </div>
                     </div>
                     <div class="col-auto my-auto">
                         <div class="h-100">
-                            <h5 class="mb-1">Nike</h5>
-                            <p class="mb-0 font-weight-normal text-sm">
-                                Store
-                            </p>
+                            <h5 class="mb-1">Nguyen Kim</h5>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <a href="/admin/interface/edit">
-                                <i class="fas fa-user-edit text-secondary text-sm edit-profile" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Profile">&ensp;Edit profile</i>
+                        <div class="col-md-4 text-end" id="edit-mode">
+                            <a href="/shopowner/interface/edit">
+                                <i class="fas fa-user-edit text-secondary text-sm" id="edit" data-bs-toggle="tooltip">&ensp;Edit mode</i>
                             </a>
                         </div>
                     </div>

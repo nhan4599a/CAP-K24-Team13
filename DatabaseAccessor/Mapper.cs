@@ -26,6 +26,22 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
+                cfg.CreateMap<CartDetail, CartItemDTO>()
+                    .ForMember(target => target.ProductName,
+                        options => options.MapFrom(source => source.Product.ProductName))
+                    .ForMember(target => target.Price,
+                        options => options.MapFrom(source => source.Product.Price))
+                    .ForMember(target => target.Discount,
+                        options => options.MapFrom(source => source.Product.Discount))
+                    .ForMember(target => target.Image,
+                        options => options.MapFrom<SingleImageResolver>());
+                cfg.CreateMap<InvoiceDetail, OrderUserHistoryDTO>()
+                    .ForMember(target => target.ProductName,
+                        option => option.MapFrom(source => source.Product.ProductName))              
+                    .ForMember(target => target.Images,
+                        option => option.MapFrom<SingleImageResolver>())
+                    .ForMember(target => target.Created,
+                        option => option.MapFrom(source => source.Invoice.Created));
             });
             _mapper = config.CreateMapper();
         }
@@ -39,6 +55,11 @@ namespace DatabaseAccessor.Mapping
 
         public CategoryDTO MapToCategoryDTO(ShopCategory category) => _mapper.Map<CategoryDTO>(category);
 
-        public ShopInterfaceDTO MapToShopInterfaceDTO(ShopInterface shopInterface) => _mapper.Map<ShopInterfaceDTO>(shopInterface);
+        public ShopInterfaceDTO MapToShopInterfaceDTO(ShopInterface shopInterface)
+            => _mapper.Map<ShopInterfaceDTO>(shopInterface);
+
+        public CartItemDTO MapToCartItemDTO(CartDetail cartItem) => _mapper.Map<CartItemDTO>(cartItem);
+
+        public OrderUserHistoryDTO MapToOrderUserHistoryDTO(InvoiceDetail invoice) => _mapper.Map<OrderUserHistoryDTO>(invoice);
     }
 }

@@ -3,6 +3,7 @@
         this.animationContainer = animationContainer;
         this.animationJsonPath = animationJsonPath;
         this.isAnimationShowing = false;
+        this.timeoutId = null;
         $(this.animationContainer).html('<div id="animation-loading"></div>')
     }
 
@@ -19,8 +20,9 @@
         });
         this.isAnimationShowing = true;
         if (timeInMillis > 0)
-            setTimeout(_this => {
+            this.timeoutId = setTimeout(_this => {
                 _this.hideAnimation();
+                _this.timeoutId = null;
             }, timeInMillis, this);
     }
 
@@ -29,6 +31,8 @@
             return;
         if (!this.animation)
             this.animation.destroy();
+        if (!this.timeoutId)
+            clearTimeout(this.timeoutId);
         $(this.animationContainer).css('display', 'none');
     }
 }

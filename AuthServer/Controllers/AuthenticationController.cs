@@ -49,7 +49,7 @@ namespace AuthServer.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("SignIn-Error", "Username or password is invalid");
-                return View(model);
+                return View();
             }
             var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
             var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
@@ -59,14 +59,14 @@ namespace AuthServer.Controllers
                     return Redirect(model.ReturnUrl);
                 throw new InvalidOperationException($"\"{model.ReturnUrl}\" is  invalid");
             }
-            else if (user != null && signInResult.IsLockedOut)
+            if (user != null && signInResult.IsLockedOut)
             {
                 ModelState.AddModelError("SignIn-Error", "Account is locked out");
                 ViewBag.LockedOutCancelTime = user!.LockoutEnd!.Value;
                 return View(model);
             }
             ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
-            return View(model);
+            return View();
         }
 
         [AllowAnonymous]
@@ -164,12 +164,12 @@ namespace AuthServer.Controllers
         [HttpPost]
         [Route("/auth/ExternalConfirmation")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExternalSignInCreateAccount(ExternalSignUpModel model)
+        public async Task<IActionResult> ExternalConfirmation(ExternalSignUpModel model)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("SignUp-Error", "Input information is invalid");
-                return View(model);
+                return View();
             }
             var createUserResult = 
                 await CreateUserAsync(model);
@@ -217,7 +217,7 @@ namespace AuthServer.Controllers
             }
             foreach (var error in createUserResult.Errors)
                 ModelState.AddModelError("SignUp-Error", error.Description);
-            return View(model);
+            return View();
         }
 
         private async Task SendUserConfirmationEmail(User user)

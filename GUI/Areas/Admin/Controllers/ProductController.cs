@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace GUI.Areas.Admin.Customers
+namespace GUI.Areas.Admin.Controllers
 {
-    [Authorize]
     [Area("Admin")]
     public class ProductController : Controller
     {
@@ -18,7 +17,6 @@ namespace GUI.Areas.Admin.Customers
         [ActionName("Index")]
         public async Task<IActionResult> ListProduct()
         {
-            var uid = User.GetUserId();
             return View();
         }
 

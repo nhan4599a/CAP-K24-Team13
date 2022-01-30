@@ -18,12 +18,12 @@ namespace AuthServer.Services
             var userManager = scope.ServiceProvider.GetRequiredService<ApplicationUserManager>();
             var roleManager = scope.ServiceProvider.GetRequiredService<ApplicationRoleManager>();
             await InitializeRoles(roleManager);
-            await InitializeTestUser(userManager);
+            await InitializeTestUsers(userManager);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        private static async Task InitializeTestUser(ApplicationUserManager userManager)
+        private async Task InitializeTestUsers(ApplicationUserManager userManager)
         {
             string password = "CapK24Team13@Default";
             if (await userManager.FindByNameAsync("customer_test") == null)
