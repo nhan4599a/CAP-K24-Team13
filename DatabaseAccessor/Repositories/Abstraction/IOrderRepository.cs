@@ -7,6 +7,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface IOrderRepository : IDisposable
     {
-        Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingAddress);
+        Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
+            string shippingPhone, string shippingAddress, string orderNotes);
     }
 }

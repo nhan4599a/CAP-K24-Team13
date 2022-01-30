@@ -1,4 +1,5 @@
 ﻿using AspNetCoreSharedComponent.ServiceDiscoveries;
+using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
@@ -28,6 +29,7 @@ namespace CheckoutService
                     options.Audience = "product";
                 });
             services.AddMediatR(typeof(Startup));
+            services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();

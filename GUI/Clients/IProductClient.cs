@@ -13,6 +13,9 @@ namespace GUI.Clients
         [Get("/products/{productId}")]
         Task<ApiResponse<ApiResult<ProductDTO>>> GetProductAsync(string productId);
 
+        [Get("/products/less/{productId}")]
+        Task<ApiResponse<ApiResult<ProductDTO>>> GetProductInfoInCheckout(string productId);
+
         [Get("/products/shop/{shopId}")]
         Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsOfShopAsync(int shopId);
 

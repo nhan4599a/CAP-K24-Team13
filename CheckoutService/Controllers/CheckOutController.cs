@@ -6,7 +6,9 @@ using Shared.RequestModels;
 
 namespace CheckoutService.Controllers
 {
-    public class CheckOutController : Controller
+    [ApiController]
+    [Route("/api/checkout")]
+    public class CheckOutController : ControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -15,12 +17,14 @@ namespace CheckoutService.Controllers
             _mediator = mediator;
         }
 
-        public async Task<ApiResult> CheckOut(CheckOutRequestModel requestModel)
+        [HttpPost]
+        public async Task<ApiResult> CheckOut([FromForm(Name = "requestModel")] CheckOutRequestModel requestModel)
         {
             var userId = Guid.Parse(requestModel.UserId);
             var productIds = requestModel.ProductIds.Select(id => Guid.Parse(id)).ToList();
             var shippingAddress = requestModel.ShippingAddress;
-            var result = await _mediator.Send(new CheckOutCommand(userId, productIds, shippingAddress));
+            var result = await _mediator.Send(new CheckOutCommand(userId, productIds, requestModel.ShippingName,
+                requestModel.ShippingPhone, shippingAddress, requestModel.OrderNotes));
             if (result.IsSuccess)
                 return ApiResult.SucceedResult;
             return ApiResult.CreateErrorResult(404, result.ErrorMessage);

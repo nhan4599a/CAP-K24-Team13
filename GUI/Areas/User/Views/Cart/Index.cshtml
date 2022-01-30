@@ -41,13 +41,13 @@
                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="margin-top: 20px;">
 									        <div class="product" style="margin-left: 10px;">
                                                 <figure class="product-media">
-                                                    <a href="/product/detail/@item.ProductId">
+                                                    <a href="/product/index/@item.ProductId">
                                                         <img src="@Url.ProductImageUrl(item.Image)" alt="Product image">
                                                     </a>
                                                 </figure>
 
                                                 <h3 class="product-title">
-                                                    <a href="#">@item.ProductName</a>
+                                                    <a href="/product/index/@item.ProductId">@item.ProductName</a>
                                                 </h3><!-- End .product-title -->
                                             </div><!-- End .product -->
                                         </td>
@@ -127,6 +127,3 @@
         </div><!-- End .cart -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
-@section Scripts {
-    <script src="@Url.Content("~/assets/user-official/js/cart.js")"></script>
-}
