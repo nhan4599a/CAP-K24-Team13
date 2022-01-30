@@ -1,6 +1,5 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
-using System.Security.Claims;
 
 namespace AuthServer.Configurations
 {
@@ -39,35 +38,23 @@ namespace AuthServer.Configurations
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
-                    IdentityServerConstants.StandardScopes.Email,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
                     "product.read", "product.write"
                 },
                 RequirePkce = true,
-                AllowPlainTextPkce = false
+                AllowPlainTextPkce = false,
+                AllowOfflineAccess = true
             }
         };
 
-        public static IEnumerable<IdentityResource> IdentityResources => new[]
+        public static IEnumerable<IdentityResource> IdentityResources => new IdentityResource[]
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
-            new IdentityResources.Email(),
-            new IdentityResource
+            new IdentityResource("product", new[]
             {
-                Name = "Role",
-                UserClaims = new[]
-                {
-                    "Role"
-                }
-            },
-            new IdentityResource
-            {
-                Name = "Name",
-                UserClaims = new[]
-                {
-                    ClaimTypes.Email
-                }
-            }
+                "role"
+            })
         };
 
         public static IEnumerable<ApiResource> ApiResources => new[]
@@ -84,18 +71,24 @@ namespace AuthServer.Configurations
                 ApiSecrets = new[]
                 {
                     new Secret("CapK24Team13".Sha256())
-                },
-                UserClaims = new[]
-                {
-                    "Role", ClaimTypes.Email
                 }
             }
         };
 
         public static IEnumerable<ApiScope> ApiScopes => new[]
         {
-            new ApiScope("product.read", "Read access to product API"),
-            new ApiScope("product.write", "Write access to product API")
+            new ApiScope
+            {
+                Name = "product.read",
+                DisplayName = "product.read",
+                Description = "Allow application to have read permission on product"
+            },
+            new ApiScope
+            {
+                Name = "product.write",
+                DisplayName = "product.write",
+                Description = "Allow application to have write permission on product"
+            }
         };
     }
 }

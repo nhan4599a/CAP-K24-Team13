@@ -1,5 +1,6 @@
 ﻿using AspNetCoreSharedComponent.ModelBinders.Providers;
 using AspNetCoreSharedComponent.ModelValidations;
+using AuthServer.Abstractions;
 using AuthServer.Configurations;
 using AuthServer.Identities;
 using AuthServer.Models;
@@ -14,7 +15,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 
 namespace AuthServer
 {
@@ -33,7 +33,6 @@ namespace AuthServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var certFilePath = Path.Combine(Environment.ContentRootPath, "auth-server.pfx");
             services.AddControllersWithViews(options =>
             {
                 options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
@@ -60,6 +59,7 @@ namespace AuthServer
             services.AddTransient<MailConfirmationTokenProvider<User>>();
             services.AddScoped<SmtpClient>();
             services.AddScoped<IMailService, GmailService>();
+            services.AddScoped<SignInActionFilter>();
             services.AddIdentity<User, Role>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = AccountConfig.RequireEmailConfirmation;
@@ -93,6 +93,7 @@ namespace AuthServer
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
             })
+                .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = ApplyOptions;
@@ -101,9 +102,7 @@ namespace AuthServer
                 {
                     options.ConfigureDbContext = ApplyOptions;
                 })
-                .AddSigningCredential(
-                    new X509Certificate2(certFilePath, "nhan4599")
-                ).AddProfileService<UserProfileService>();
+                .AddDeveloperSigningCredential();
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
         }

@@ -32,6 +32,7 @@ namespace GUI
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
                 options.Authority = "https://localhost:7265";
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = "oidc-client";
                 options.ClientSecret = "CapK24Team13";
                 options.ResponseType = "code";
@@ -39,10 +40,12 @@ namespace GUI
                 options.ResponseMode = "query";
                 options.Scope.Add("product.read");
                 options.Scope.Add("product.write");
+                options.Scope.Add("offline_access");
+                options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    NameClaimType = ClaimTypes.Email
+                    NameClaimType = "name"
                 };
             });
         }
