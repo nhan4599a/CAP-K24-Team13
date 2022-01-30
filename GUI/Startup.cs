@@ -69,6 +69,8 @@ namespace GUI
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<ICartClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
+            services.AddRefitClient<IOrderHistoryClient>()
+                .ConfigureHttpClient(ConfigureHttpClient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OrderHistoryService.Repository
+namespace DatabaseAccessor.Repositories
 {
 
     public class OrderHistoryRepository : IOrderHistoryRepository

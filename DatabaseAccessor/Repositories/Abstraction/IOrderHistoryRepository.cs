@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OrderHistoryService.Repository
+namespace DatabaseAccessor.Repositories.Abstraction
 {
     
         public interface IOrderHistoryRepository : IDisposable

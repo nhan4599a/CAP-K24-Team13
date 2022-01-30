@@ -1,4 +1,5 @@
-﻿using DatabaseAccessor.Repositories.Abstraction;
+﻿using DatabaseAccessor.Repositories;
+using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using OrderHistoryService.Command;
 using Shared.DTOs;
@@ -7,24 +8,23 @@ namespace OrderHistoryService.Handler
 {
     public class OrderUserHistoryCommandHandler : IRequestHandler<GetOrderHistoryQuery, List<OrderUserHistoryDTO>>, IDisposable
     {
-        private readonly IOrderRepository _OrderRepository;
+        private readonly IOrderHistoryRepository _orderHistoryRepository;
 
-        public OrderUserHistoryCommandHandler(IOrderRepository OrderRepository)
+        public OrderUserHistoryCommandHandler(IOrderHistoryRepository OrderHistoryRepository)
         {
-            _OrderRepository = OrderRepository;
+            _orderHistoryRepository = OrderHistoryRepository;
         }
 
-       
-
+   
         public void Dispose()
         {
-            _OrderRepository.Dispose();
+            _orderHistoryRepository.Dispose();
             GC.SuppressFinalize(this);
         }
 
-        public Task<List<OrderUserHistoryDTO>> Handle(GetOrderHistoryQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
+        public async Task<List<OrderUserHistoryDTO>> Handle(GetOrderHistoryQuery request, CancellationToken cancellationToken)
+{
+            return await _orderHistoryRepository.GetOrderHistoryAsync(request.UserId);
         }
     }
 }

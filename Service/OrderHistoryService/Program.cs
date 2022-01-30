@@ -1,69 +1,17 @@
-using AspNetCoreSharedComponent.FileValidations;
-using AspNetCoreSharedComponent.ServiceDiscoveries;
-using DatabaseAccessor.Contexts;
-using DatabaseAccessor.Mapping;
-using DatabaseAccessor.Repositories;
-using DatabaseAccessor.Repositories.Abstraction;
-using MediatR;
-
-namespace OrderHistoryService
+﻿namespace OrderHistoryService
 {
-    public class Startup
+    public class Program
     {
-        public Startup(IConfiguration configuration)
+        public static void Main(string[] args)
         {
-            Configuration = configuration;
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.RegisterOcelotService(Configuration);
-            services.AddSwaggerGen();
-            services.AddScoped<ApplicationDbContext>();
-            services.AddSingleton(Mapper.GetInstance());
-            services.AddCors(options =>
-            {
-                options.AddPolicy("Default", builder =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    builder.WithOrigins("https://localhost:44349").AllowAnyHeader().AllowAnyMethod();
+                    webBuilder.UseStartup<Startup>();
                 });
-            });
-            services.AddMediatR(typeof(Startup));
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseCors("Default");
-            app.UseRouting();
-
-            app.UseSwagger();
-            app.UseSwaggerUI();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                        name: "Default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
     }
 }
