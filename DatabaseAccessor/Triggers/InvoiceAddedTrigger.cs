@@ -2,9 +2,7 @@
 using DatabaseAccessor.Models;
 using EntityFrameworkCore.Triggered;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,12 +21,14 @@ namespace DatabaseAccessor.Triggers
         {
             if (context.ChangeType == ChangeType.Added)
             {
+                var count = _dbContext.Invoices
+                    .Count(invoice => invoice.Created == context.Entity.Created && invoice.ShopId == context.Entity.ShopId);
                 context.Entity.InvoiceCode = context.Entity.ShopId.ToString();
-                context.Entity.InvoiceCode = context.Entity.Created.Date.ToString();
+                context.Entity.InvoiceCode += "-" + context.Entity.Created.Date.ToString("ddMMyyyy") + "-";
+                context.Entity.InvoiceCode += count.ToString();
             }
             return Task.CompletedTask;
         }
-
 
         public void Dispose()
         {
