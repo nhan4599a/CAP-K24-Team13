@@ -27,26 +27,26 @@
 
 .header.header-10.header-intro-clearance .header-bottom .menu>li>a:hover,
 .header.header-10.header-intro-clearance .header-bottom .menu>li>a:focus {
-	color: #39f
+	color: #c96
 }
 
 .header.header-10.header-intro-clearance .header-bottom .menu>li>a:hover::before,
 .header.header-10.header-intro-clearance .header-bottom .menu>li>a:focus::before {
-	background-color: #39f
+	background-color: #c96
 }
 
 .header.header-10.header-intro-clearance .header-bottom .menu>li:hover>a,
 .header.header-10.header-intro-clearance .header-bottom .menu>li:focus>a,
 .header.header-10.header-intro-clearance .header-bottom .menu>li.active>a,
 .header.header-10.header-intro-clearance .header-bottom .menu>li.show>a {
-	color: #39f
+	color: #c96
 }
 
 .header.header-10.header-intro-clearance .header-bottom .menu>li:hover>a::before,
 .header.header-10.header-intro-clearance .header-bottom .menu>li:focus>a::before,
 .header.header-10.header-intro-clearance .header-bottom .menu>li.active>a::before,
 .header.header-10.header-intro-clearance .header-bottom .menu>li.show>a::before {
-	background-color: #39f
+	background-color: #c96
 }
 
 .header.header-10.header-intro-clearance .header-search-extended {
