@@ -133,7 +133,7 @@
                 formData.append(`images[${i}]`, dropzone.files[i]);
             editProduct(edittingProduct.id, formData).then(() => {
                 animationLoader.hideAnimation();
-                window.location.href = '/admin/product';
+                window.location.href = '/shopowner/product';
                 window.localStorage.removeItem('editting-product');
             }).catch(error => {
                 animationLoader.hideAnimation();

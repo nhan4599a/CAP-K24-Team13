@@ -2,7 +2,7 @@
     $('#form-input').submit(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        let animationLoader = new AnimationLoader('.loading-container', '/assets/user-official/checking-out.json');
+        let animationLoader = new AnimationLoader('#loading-container', '/assets/user-official/checking-out.json');
         animationLoader.showAnimation(10000);
         let model = buildRequestModel();
         checkOut(userId, model.productIdList, model.fullname, model.phone, model.shippingAddress, model.orderNotes)

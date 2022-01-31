@@ -1,4 +1,4 @@
-let userId = 'B8A936EB-3904-4DBE-D29F-08D9E0150BF3';
+let userId = '3ea07403-8d98-4acd-c46f-08d9e300baaf';
 $(document).ready(function () {
     $('.product > .product-media > .product-action > a.btn-product.btn-cart').click(function (e) {
         e.preventDefault();
@@ -203,22 +203,26 @@ function findProductItem(rootElement, selector, productId) {
 }
 
 function updateDropdownCart(product) {
+    if (typeof product.quantity != 'number')
+        product.quantity = parseInt(product.quantity);
+    if (typeof product.price != 'number')
+        product.price = parseFloat(product.price);
+    var currentCartCountValue = $('.cart-count').html();
+    if (!currentCartCountValue)
+        $('.cart-count').html(product.quantity);
     let rootDropdownCartElement = $('div.dropdown-cart-products');
     let productItemElement = findProductItem(rootDropdownCartElement, '.product', product.id);
     if (productItemElement == null) {
         rootDropdownCartElement.find('.product').remove();
         rootDropdownCartElement.find('.dropdown-cart-action').before(buildSingleProductItem(product));
         attachRemoveButtonInDropdownCart();
+        $('.cart-count').html(parseInt(currentCartCountValue) + 1);
     }
     else {
         let cartItemQty = productItemElement.find('span.cart-product-qty');
         let currentQty = parseInt(cartItemQty.html());
-        cartItemQty.html(currentQty + 1);
+        cartItemQty.html(currentQty + product.quantity);
     }
-    if (typeof product.quantity != 'number')
-        product.quantity = parseInt(product.quantity);
-    if (typeof product.price != 'number')
-        product.price = parseFloat(product.price);
     updateDropdownCartTotal(product.quantity * product.price);
 }
 
@@ -228,6 +232,11 @@ function deleteDropdownCartItem(productId) {
     let productElementCount = rootDropdownCartElement.children('.product').length;
     if (productItemElement == null)
         return;
+    let cartCountValue = parseInt($('.cart-count').html());
+    console.log(cartCountValue);
+    if (!cartCountValue || cartCountValue == 0)
+        return;
+    $('.cart-count').html(cartCountValue - 1);
     if (productElementCount == 1) {
         console.log('should build empty dropdown cart');
         rootDropdownCartElement.html(buildEmptyDropdownCart());
@@ -263,7 +272,6 @@ function attachRemoveButtonInDropdownCart() {
     $('div.dropdown-cart-products > div.product > a.btn-remove').click(function (e) {
         e.preventDefault();
         let productId = $(this).parent().data('product');
-        console.log('fire');
         removeProductInCart(userId, productId)
             .then(function () {
                 toastr.success('Remove product in cart successfully');

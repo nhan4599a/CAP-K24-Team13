@@ -14,7 +14,7 @@
             let urlEncodedKeyword = encodeURIComponent(keyword);
             let currentPageSize = getCurrentPageInfo().pageSize;
             window.location.href =
-                `https://localhost:44349/admin/product?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=${currentPageSize}`;
+                `https://localhost:44349/shopowner/product?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=${currentPageSize}`;
         }
     });
 
@@ -52,7 +52,7 @@ function onLoadProductsCompleted(paginatedData) {
         let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
         let productInfoStr = JSON.stringify(products[index]);
         window.localStorage.setItem('editting-product', productInfoStr);
-        window.location.href = "/admin/product/edit";
+        window.location.href = "/shopowner/product/edit";
     });
     $('a[name=btn-action]').click(function (e) {
         e.preventDefault();
@@ -68,7 +68,7 @@ function onLoadProductsCompleted(paginatedData) {
             let isActivateCommand = action === 'activate';
             let successCallback = isActivateCommand ? () => {
                 toastr.success(`Activated ${name}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(5)').children()
+                $(this).parent().parent().children('td:nth-child(6)').children()
                     .removeClass('bg-gradient-secondary')
                     .addClass('bg-gradient-success')
                     .text('Activated');
@@ -78,13 +78,13 @@ function onLoadProductsCompleted(paginatedData) {
                     let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
                     let productInfoStr = JSON.stringify(products[index]);
                     window.localStorage.setItem('editting-product', productInfoStr);
-                    window.location.href = "/admin/product/edit";
+                    window.location.href = "/shopowner/product/edit";
                 });
                 $(this).children('span').text(' Deactivate');
                 $(this).children('i').removeClass().addClass('far fa-trash-alt');
             } : () => {
                 toastr.success(`Deactivated ${name}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(5)').children()
+                $(this).parent().parent().children('td:nth-child(6)').children()
                     .removeClass('bg-gradient-success')
                     .addClass('bg-gradient-secondary')
                     .text('deactivated');
@@ -128,9 +128,9 @@ function onLoadProductsCompleted(paginatedData) {
 
 function moveToPage(keyword, pageNumber, pageSize) {
     if (keyword == '')
-        window.location.href = `https://localhost:44349/admin/product?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        window.location.href = `https://localhost:44349/shopowner/product?pageNumber=${pageNumber}&pageSize=${pageSize}`;
     else
-        window.location.href = `https://localhost:44349/admin/product?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        window.location.href = `https://localhost:44349/shopowner/product?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
 }
 
 function getCurrentPageInfo() {

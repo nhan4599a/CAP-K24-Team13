@@ -1,6 +1,6 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
-using System.Security.Claims;
 
 namespace AuthServer.Configurations
 {
@@ -8,20 +8,6 @@ namespace AuthServer.Configurations
     {
         public static IEnumerable<Client> Clients => new[]
         {
-            new Client
-            {
-                ClientId = "products-client",
-                ClientName = "products-client",
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = new[]
-                {
-                    new Secret("CapK24Team13".Sha256())
-                },
-                AllowedScopes = new[]
-                {
-                    "product.read", "product.write"
-                }
-            },
             new Client
             {
                 ClientId = "oidc-client",
@@ -39,33 +25,26 @@ namespace AuthServer.Configurations
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
-                    IdentityServerConstants.StandardScopes.Email,
-                    "product.read", "product.write"
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    "product.read", "product.write", "roles"
                 },
                 RequirePkce = true,
-                AllowPlainTextPkce = false
+                AllowPlainTextPkce = false,
+                AllowOfflineAccess = true
             }
         };
 
-        public static IEnumerable<IdentityResource> IdentityResources => new[]
+        public static IEnumerable<IdentityResource> IdentityResources => new IdentityResource[]
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
-            new IdentityResources.Email(),
             new IdentityResource
             {
-                Name = "Role",
-                UserClaims = new[]
+                Name = "roles",
+                DisplayName = "Roles",
+                UserClaims =
                 {
-                    "Role"
-                }
-            },
-            new IdentityResource
-            {
-                Name = "Name",
-                UserClaims = new[]
-                {
-                    ClaimTypes.Email
+                    JwtClaimTypes.Role
                 }
             }
         };
@@ -85,17 +64,27 @@ namespace AuthServer.Configurations
                 {
                     new Secret("CapK24Team13".Sha256())
                 },
-                UserClaims = new[]
+                UserClaims =
                 {
-                    "Role", ClaimTypes.Email
+                    JwtClaimTypes.Role
                 }
             }
         };
 
         public static IEnumerable<ApiScope> ApiScopes => new[]
         {
-            new ApiScope("product.read", "Read access to product API"),
-            new ApiScope("product.write", "Write access to product API")
+            new ApiScope
+            {
+                Name = "product.read",
+                DisplayName = "product.read",
+                Description = "Allow application to have read permission on product"
+            },
+            new ApiScope
+            {
+                Name = "product.write",
+                DisplayName = "product.write",
+                Description = "Allow application to have write permission on product"
+            }
         };
     }
 }

@@ -10053,7 +10053,11 @@ label {
 	color: #666;
 	font-weight: 300;
 	font-size: 1.4rem;
+<<<<<<< HEAD
 	margin: 0 0 1.1rem
+=======
+	margin: 0 1.1rem 1.1rem 0
+>>>>>>> 49bd00cc5fe7c49941653dc92f8eb2d45043b95a
 }
 
 .form-text {
@@ -19431,5 +19435,29 @@ button:focus {
 	content: '\f7e3'
 }
 
+<<<<<<< HEAD
+=======
+#product-col{
+    width: 50%;
+	font-size: 20px;
+}
+
+#quantity-col{
+    width: 10%;
+	text-align: center;
+	
+}
+
+#date-col{
+    width: 20%;
+    text-align: center;
+}
+
+#price-col{
+    width:20%;
+    text-align: center;
+}
+
+>>>>>>> 49bd00cc5fe7c49941653dc92f8eb2d45043b95a
 
 /*# sourceMappingURL=style.css.map */
