@@ -203,22 +203,26 @@ function findProductItem(rootElement, selector, productId) {
 }
 
 function updateDropdownCart(product) {
+    if (typeof product.quantity != 'number')
+        product.quantity = parseInt(product.quantity);
+    if (typeof product.price != 'number')
+        product.price = parseFloat(product.price);
+    var currentCartCountValue = $('.cart-count').html();
+    if (!currentCartCountValue)
+        $('.cart-count').html(product.quantity);
     let rootDropdownCartElement = $('div.dropdown-cart-products');
     let productItemElement = findProductItem(rootDropdownCartElement, '.product', product.id);
     if (productItemElement == null) {
         rootDropdownCartElement.find('.product').remove();
         rootDropdownCartElement.find('.dropdown-cart-action').before(buildSingleProductItem(product));
         attachRemoveButtonInDropdownCart();
+        $('.cart-count').html(parseInt(currentCartCountValue) + 1);
     }
     else {
         let cartItemQty = productItemElement.find('span.cart-product-qty');
         let currentQty = parseInt(cartItemQty.html());
-        cartItemQty.html(currentQty + 1);
+        cartItemQty.html(currentQty + product.quantity);
     }
-    if (typeof product.quantity != 'number')
-        product.quantity = parseInt(product.quantity);
-    if (typeof product.price != 'number')
-        product.price = parseFloat(product.price);
     updateDropdownCartTotal(product.quantity * product.price);
 }
 
@@ -228,6 +232,9 @@ function deleteDropdownCartItem(productId) {
     let productElementCount = rootDropdownCartElement.children('.product').length;
     if (productItemElement == null)
         return;
+    let cartCountValue = parseInt($('.cart-count').html());
+    if (!cartCountValue || cartCountValue == 0)
+        return;
     if (productElementCount == 1) {
         console.log('should build empty dropdown cart');
         rootDropdownCartElement.html(buildEmptyDropdownCart());
@@ -236,6 +243,7 @@ function deleteDropdownCartItem(productId) {
     let quantity = parseInt(productItemElement.find('.cart-product-info').children('.cart-product-qty').html());
     let price = unformatPrice(productItemElement.find('.cart-product-info').children('.base-price').html());
     productItemElement.remove();
+    $('.cart-count').html(cartCountValue - 1);
     updateDropdownCartTotal(-(quantity * price));
 }
 
