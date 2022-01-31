@@ -233,8 +233,10 @@ function deleteDropdownCartItem(productId) {
     if (productItemElement == null)
         return;
     let cartCountValue = parseInt($('.cart-count').html());
+    console.log(cartCountValue);
     if (!cartCountValue || cartCountValue == 0)
         return;
+    $('.cart-count').html(cartCountValue - 1);
     if (productElementCount == 1) {
         console.log('should build empty dropdown cart');
         rootDropdownCartElement.html(buildEmptyDropdownCart());
@@ -243,7 +245,6 @@ function deleteDropdownCartItem(productId) {
     let quantity = parseInt(productItemElement.find('.cart-product-info').children('.cart-product-qty').html());
     let price = unformatPrice(productItemElement.find('.cart-product-info').children('.base-price').html());
     productItemElement.remove();
-    $('.cart-count').html(cartCountValue - 1);
     updateDropdownCartTotal(-(quantity * price));
 }
 
@@ -271,7 +272,6 @@ function attachRemoveButtonInDropdownCart() {
     $('div.dropdown-cart-products > div.product > a.btn-remove').click(function (e) {
         e.preventDefault();
         let productId = $(this).parent().data('product');
-        console.log('fire');
         removeProductInCart(userId, productId)
             .then(function () {
                 toastr.success('Remove product in cart successfully');
