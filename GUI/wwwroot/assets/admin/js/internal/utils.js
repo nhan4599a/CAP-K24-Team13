@@ -23,6 +23,9 @@ function buildProductTableHtml(products) {
                             Name
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Quantity
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Price
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -51,6 +54,9 @@ function buildProductTableRowHtml(product, index) {
                             <p class="text-xs text-secondary mb-0" style="text-align: left">${product.categoryName}</p>
                         </div>
                     </div>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${product.quantity}</span>
                 </td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${product.price}đ</span>

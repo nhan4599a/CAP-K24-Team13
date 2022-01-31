@@ -101,6 +101,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/useraccount/orderhistory/{userId}",
+      "DownstreamScheme": "https",
+      "ServiceName": "OrderHistoryService",
+      "UpstreamPathTemplate": "/useraccount/orderhistory/{userId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/cart",
       "DownstreamScheme": "https",
       "ServiceName": "ProductService",

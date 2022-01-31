@@ -31,7 +31,7 @@ function onCategoriesLoaded(paginatedData) {
         let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
         let categoryInfoStr = JSON.stringify(categories[index]);
         window.localStorage.setItem('editting-category', categoryInfoStr);
-        window.location.href = "/admin/category/edit";
+        window.location.href = "/shopowner/category/edit";
     });
     $('a[name=btn-action]').click(function (e) {
         e.preventDefault();
@@ -63,7 +63,7 @@ function onCategoriesLoaded(paginatedData) {
                     let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
                     let categoryInfoStr = JSON.stringify(categories[index]);
                     window.localStorage.setItem('editting-category', categoryInfoStr);
-                    window.location.href = "/admin/category/edit";
+                    window.location.href = "/shopowner/category/edit";
                 });
             } : () => {
                 toastr.success(`Deactivated ${name}`, 'Success');
