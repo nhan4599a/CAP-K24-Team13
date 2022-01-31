@@ -158,7 +158,7 @@ namespace TestShopProductService
                 ProductName = product.ProductName,
                 Description = product.Description,
                 Discount = product.Discount,
-                Price = product.Price,
+                //Price = product.Price,
                 CategoryId = 1,
                 Quantity = 2
             };

@@ -23,10 +23,12 @@ namespace DatabaseAccessor.Triggers
         {
             if (context.ChangeType == ChangeType.Added)
             {
-                //context.Entity.InvoiceCode = context.Entity.
+                context.Entity.InvoiceCode = context.Entity.ShopId.ToString();
+                context.Entity.InvoiceCode = context.Entity.Created.Date.ToString();
             }
             return Task.CompletedTask;
         }
+
 
         public void Dispose()
         {
