@@ -24,7 +24,10 @@ namespace DatabaseAccessor.Triggers
             if (context.ChangeType == ChangeType.Added)
             {
                 context.Entity.InvoiceCode = context.Entity.ShopId.ToString();
-                context.Entity.InvoiceCode = context.Entity.Created.Date.ToString();
+                context.Entity.InvoiceCode += "-" + context.Entity.Created.Date.ToString("ddMMyyyy") + "-" + 
+                    //context.Items.Count.ToString();
+                //context.Entity.InvoiceCode = context.Entity.Created.Date.ToString();
+
             }
             return Task.CompletedTask;
         }
