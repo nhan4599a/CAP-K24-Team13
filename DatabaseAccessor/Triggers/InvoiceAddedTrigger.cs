@@ -25,7 +25,7 @@ namespace DatabaseAccessor.Triggers
                     .Count(invoice => invoice.Created == context.Entity.Created && invoice.ShopId == context.Entity.ShopId);
                 context.Entity.InvoiceCode = context.Entity.ShopId.ToString();
                 context.Entity.InvoiceCode += "-" + context.Entity.Created.Date.ToString("ddMMyyyy") + "-";
-                context.Entity.InvoiceCode += count.ToString();
+                context.Entity.InvoiceCode += (count + 1).ToString("00000");
             }
             return Task.CompletedTask;
         }
