@@ -6,7 +6,7 @@
 });
 
 function loadCategories(pageNumber, pageSize) {
-    let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+    let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
     animationLoader.showAnimation();
     getCategories(pageNumber, pageSize).then((paginatedData) => {
         onCategoriesLoaded(paginatedData);
@@ -75,7 +75,7 @@ function onCategoriesLoaded(paginatedData) {
                 $(this).children('span').text(' Activate');
                 $(this).children('i').removeClass().addClass('fas fa-check');
             };
-            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
             animationLoader.showAnimation();
             activateCategory(command).then(() => {
                 successCallback();

@@ -62,7 +62,7 @@
     $(function () {
         let classNames = ['active', 'bg-gradient-primary'];
         $('#nav-item-product').addClass(classNames);
-        let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
         animationLoader.showAnimation(3500);
         getAllCategories().then(categories => {
             onLoadedAllCategories(categories.filter(category => !category.isDisabled));
@@ -120,7 +120,7 @@
                 toastr.error('You must upload at least 2 pictures!', 'Error');
                 return;
             }
-            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
             animationLoader.showAnimation();
             let formData = new FormData();
             var requestModelObject = buildRequestModel();

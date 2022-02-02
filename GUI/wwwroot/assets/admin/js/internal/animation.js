@@ -4,21 +4,24 @@
         this.animationJsonPath = animationJsonPath;
         this.isAnimationShowing = false;
         this.timeoutId = null;
-        $(this.animationContainer).html('<div id="animation-loading"></div>')
+        this.animationCompletedCallback = null;
+        this.animationLoop = true;
     }
 
     showAnimation(timeInMillis) {
         if (this.isAnimationShowing)
             return;
-        $(this.animationContainer).css('display', 'block');
+        $(this.animationContainer).parent().css('display', 'block');
         this.animation = bodymovin.loadAnimation({
-            container: document.getElementById('animation-loading'),
+            container: document.querySelector(this.animationContainer),
             path: this.animationJsonPath,
             renderer: 'svg',
-            loop: true,
+            loop: this.animationLoop,
             autoplay: true
         });
         this.isAnimationShowing = true;
+        if (this.animationCompletedCallback)
+            this.animation.addEventListener('complete', this.animationCompletedCallback);
         if (timeInMillis > 0)
             this.timeoutId = setTimeout(_this => {
                 _this.hideAnimation();
@@ -26,13 +29,37 @@
             }, timeInMillis, this);
     }
 
-    hideAnimation() {
+    hideAnimation(shouldInvokingCallback = false) {
         if (!this.isAnimationShowing)
             return;
-        if (!this.animation)
+        if (this.animation) {
+            this.animation.stop();
             this.animation.destroy();
-        if (!this.timeoutId)
+        }
+        if (this.animationCompletedCallback && shouldInvokingCallback)
+            this.animationCompletedCallback();
+        if (this.timeoutId)
             clearTimeout(this.timeoutId);
-        $(this.animationContainer).css('display', 'none');
+        $(this.animationContainer).parent().css('display', 'none');
+    }
+
+    setAnimationCompletedCallback(callback) {
+        if (typeof callback != 'function')
+            throw new Error('callback must be a function');
+        this.animationCompletedCallback = callback;
+    }
+
+    setAnimationLoop(count) {
+        if (typeof count == 'number') {
+            if (count >= 0) {
+                this.animationLoop = count;
+                return;
+            }
+        }
+        if (typeof count == 'boolean') {
+            this.animationLoop = count;
+            return;
+        }
+        throw new Error('Invalid animation loop');
     }
 }

@@ -1,4 +1,4 @@
-#animation-loading {
+#loading-container > #animation-container {
     height: 300px;
     width: 300px;
     position: absolute;

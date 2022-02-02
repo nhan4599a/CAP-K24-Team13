@@ -76,7 +76,7 @@
                 formData.append('requestModel.special', special);
                 formData.append('image', dropzone.files[0]);
 
-                let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+                let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
                 animationLoader.showAnimation();
                 addCategory(formData).then(() => {
                     animationLoader.hideAnimation();

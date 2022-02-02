@@ -107,7 +107,7 @@
                     toastr.error('You must upload at least 2 pictures!', 'Error');
                     return;
                 }
-                let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+                let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
                 animationLoader.showAnimation();
                 let formData = new FormData();
                 let requestModelObject = buildRequestModel();
@@ -124,7 +124,7 @@
                     toastr.error(error, 'Error');
                 });
             });
-            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
             animationLoader.showAnimation(3500);
             getAllCategories().then(categories => {
                 renderCategoryDropdown(categories.filter(category => !category.isDisabled))

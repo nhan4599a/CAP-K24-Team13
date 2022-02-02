@@ -444,7 +444,7 @@
                     }
                 });
             });
-            let animationLoader = new AnimationLoader('#loading-container', '/assets/admin/img/illustrations/loading.json');
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
             animationLoader.showAnimation();
             Promise.all([getShopInterface(0), findProducts('', 1, 8), getAllCategories()])
                 .then(responses => {

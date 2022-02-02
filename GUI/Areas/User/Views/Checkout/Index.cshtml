@@ -225,6 +225,24 @@
         </div><!-- End .checkout -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+<div class="modal fade" tabindex="-1" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="animation-container" style="width: 300px; height: 300px; margin: auto"></div>
+                <h5 class="text-center" style="margin-bottom: 40px">Check out completed successfully</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script src="@Url.Content("~/assets/user-official/js/checkout.js")"></script>
 }

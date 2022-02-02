@@ -2,14 +2,15 @@
     $('#form-input').submit(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        let animationLoader = new AnimationLoader('#loading-container', '/assets/user-official/checking-out.json');
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/user-official/checking-out.json');
+        animationLoader.setAnimationCompletedCallback(() => {
+            showCompletedModal();
+        });
         animationLoader.showAnimation(10000);
         let model = buildRequestModel();
         checkOut(userId, model.productIdList, model.fullname, model.phone, model.shippingAddress, model.orderNotes)
             .then(() => {
-                toastr.success('Checkout successfully');
-                animationLoader.hideAnimation();
-                window.location.href = '/';
+                animationLoader.hideAnimation(true);
             })
             .catch(error => {
                 toastr.error(error);
@@ -38,4 +39,21 @@ function buildRequestModel() {
         orderNotes: orderNotes,
         productIdList: productList
     };
+}
+
+function showCompletedModal() {
+    let modal = $('.modal.fade').modal({
+        backdrop: 'static',
+        keyboard: false
+    }).modal('show');
+    modal.on('shown.bs.modal', () => {
+        let animationLoader = new AnimationLoader('.modal .modal-body > #animation-container', '/assets/user-official/checked-out.json');
+        animationLoader.setAnimationLoop(0);
+        animationLoader.showAnimation();
+    });
+    modal.on('hidden.bs.modal', () => {
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 500);
+    });
 }
