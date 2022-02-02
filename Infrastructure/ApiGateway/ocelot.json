@@ -129,6 +129,16 @@
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/rating",
+      "DownstreamScheme": "https",
+      "ServiceName": "RatingService",
+      "UpstreamPathTemplate": "/rating",
+      "UpstreamHttpMethod": [ "POST", "PUT", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
     }
   ],
   "GlobalConfiguration": {
