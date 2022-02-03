@@ -127,6 +127,9 @@
                                             <td id="price-col">
                                                 @((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))
                                             </td>
+                                            <td>
+                                                <button class="btn btn-primary">Rate & comment</button>
+                                            </td>
                                         </tr>
                                     }
 
@@ -170,3 +173,43 @@
     </div>
     <div class="mb-4"></div><!-- End .mb-4 -->
 </main><!-- End .main -->
+    <!-- rating / comments Modal -->
+<div class="modal fade" id="rating-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+                <div class="form-box">
+                    <div class="form-tab">
+                        <ul class="nav nav-pills nav-fill" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="rating-tab" data-toggle="tab" href="#rating" role="tab" aria-controls="rating" aria-selected="true">Rating & Comments</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tab-content-5">
+                            <div class="tab-pane fade show active" id="rating" role="tabpanel" aria-labelledby="rating-tab">
+                                <p>*Please rate before comment</p>
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="rate" value="5" />
+                                    <label for="star5" title="text">5 stars</label>
+                                    <input type="radio" id="star4" name="rate" value="4" />
+                                    <label for="star4" title="text">4 stars</label>
+                                    <input type="radio" id="star3" name="rate" value="3" />
+                                    <label for="star3" title="text">3 stars</label>
+                                    <input type="radio" id="star2" name="rate" value="2" />
+                                    <label for="star2" title="text">2 stars</label>
+                                    <input type="radio" id="star1" name="rate" value="1" />
+                                    <label for="star1" title="text">1 star</label>
+                                </div>                                        
+                                <textarea class="form-control" rows="5" id="comment" style="resize: none"></textarea>
+                                    <button class="btn btn-primary">Send Feedback</button> 
+                            </div><!-- .End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->

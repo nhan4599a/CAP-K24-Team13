@@ -310,7 +310,11 @@
                                                 <td id="price-col">
                                                     10
                                                 </td>
-                                            </tr>     
+                                                <td>
+                                                    <a href="#rating-modal" data-toggle="modal" class="btn btn-primary">Rate & Comments</a>
+                                                </td>
+                                            </tr>   
+                                            <hr>                                            
                                             <tr>
                                                 <td>
                                                     <div class="row">
@@ -332,6 +336,9 @@
                                                 </td>
                                                 <td id="price-col">
                                                     10
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-primary">Rate & comment</button>
                                                 </td>
                                             </tr>                                       
                                         </tbody>        
@@ -475,16 +482,11 @@
     <div class="mobile-menu-container mobile-menu-light">
         <div class="mobile-menu-wrapper">
             <span class="mobile-menu-close"><i class="icon-close"></i></span>
-            
             <form action="#" method="get" class="mobile-search">
                 <label for="mobile-search" class="sr-only">Search</label>
                 <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
                 <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
             </form>
-<<<<<<< HEAD
-=======
-
->>>>>>> 49bd00cc5fe7c49941653dc92f8eb2d45043b95a
             <ul class="nav nav-pills-mobile nav-border-anim" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="mobile-menu-link" data-toggle="tab" href="#mobile-menu-tab" role="tab" aria-controls="mobile-menu-tab" aria-selected="true">Menu</a>
@@ -673,121 +675,103 @@
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
 
-    <!-- Sign in / Register Modal -->
-    <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="icon-close"></i></span>
-                    </button>
+        <!-- Sign in / comments Modal -->
+        <div class="modal fade" id="rating-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="icon-close"></i></span>
+                        </button>
+                        <div class="form-box">
+                            <div class="form-tab">
+                                <ul class="nav nav-pills nav-fill" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="rating-tab" data-toggle="tab" href="#rating" role="tab" aria-controls="rating" aria-selected="true">Rating & Comments</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="tab-content-5">
+                                    <div class="tab-pane fade show active" id="rating" role="tabpanel" aria-labelledby="rating-tab">
+                                        <p>*Please rate before comment</p>
+                                        <div class="rate">
+                                            <input type="radio" id="star5" name="rate" value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                            <input type="radio" id="star4" name="rate" value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                            <input type="radio" id="star3" name="rate" value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                            <input type="radio" id="star2" name="rate" value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                            <input type="radio" id="star1" name="rate" value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                        </div>                                        
+                                        <textarea class="form-control" rows="5" id="comment" style="resize: none"></textarea>
+                                         <button class="btn btn-primary">Send Feedback</button> 
+                                    </div><!-- .End .tab-pane -->
+                                </div><!-- End .tab-content -->
+                            </div><!-- End .form-tab -->
+                        </div><!-- End .form-box -->
+                    </div><!-- End .modal-body -->
+                </div><!-- End .modal-content -->
+            </div><!-- End .modal-dialog -->
+        </div><!-- End .modal -->
 
-                    <div class="form-box">
-                        <div class="form-tab">
-                            <ul class="nav nav-pills nav-fill nav-border-anim" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="tab-content-5">
-                                <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label for="singin-email">Username or email address *</label>
-                                            <input type="text" class="form-control" id="singin-email" name="singin-email" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="singin-password">Password *</label>
-                                            <input type="password" class="form-control" id="singin-password" name="singin-password" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-footer">
-                                            <button type="submit" class="btn btn-outline-primary-2">
-                                                <span>LOG IN</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </button>
-
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="signin-remember">
-                                                <label class="custom-control-label" for="signin-remember">Remember Me</label>
-                                            </div><!-- End .custom-checkbox -->
-
-                                            <a href="#" class="forgot-link">Forgot Your Password?</a>
-                                        </div><!-- End .form-footer -->
-                                    </form>
-                                    <div class="form-choice">
-                                        <p class="text-center">or sign in with</p>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-g">
-                                                    <i class="icon-google"></i>
-                                                    Login With Google
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-f">
-                                                    <i class="icon-facebook-f"></i>
-                                                    Login With Facebook
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .form-choice -->
-                                </div><!-- .End .tab-pane -->
-                                <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label for="register-email">Your email address *</label>
-                                            <input type="email" class="form-control" id="register-email" name="register-email" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="register-password">Password *</label>
-                                            <input type="password" class="form-control" id="register-password" name="register-password" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-footer">
-                                            <button type="submit" class="btn btn-outline-primary-2">
-                                                <span>SIGN UP</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </button>
-
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="register-policy" required>
-                                                <label class="custom-control-label" for="register-policy">I agree to the <a href="#">privacy policy</a> *</label>
-                                            </div><!-- End .custom-checkbox -->
-                                        </div><!-- End .form-footer -->
-                                    </form>
-                                    <div class="form-choice">
-                                        <p class="text-center">or sign in with</p>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-g">
-                                                    <i class="icon-google"></i>
-                                                    Login With Google
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login  btn-f">
-                                                    <i class="icon-facebook-f"></i>
-                                                    Login With Facebook
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .form-choice -->
-                                </div><!-- .End .tab-pane -->
-                            </div><!-- End .tab-content -->
-                        </div><!-- End .form-tab -->
-                    </div><!-- End .form-box -->
-                </div><!-- End .modal-body -->
-            </div><!-- End .modal-content -->
-        </div><!-- End .modal-dialog -->
-    </div><!-- End .modal -->
-
+        
     <!-- Plugins JS File -->
+    <script>
+        /**
+         * Star rating class
+         * @constructor
+         */
+        function StarRating() {
+        this.init();
+        };
+
+        /**
+         * Initialize
+         */
+        StarRating.prototype.init = function() {
+        this.stars = document.querySelectorAll('#rating span');
+        for (var i = 0; i < this.stars.length; i++) {
+            this.stars[i].setAttribute('data-count', i);
+            this.stars[i].addEventListener('mouseenter', this.enterStarListener.bind(this));
+        }
+        document.querySelector('#rating').addEventListener('mouseleave', this.leaveStarListener.bind(this));
+        };
+
+        /**
+         * This method is fired when a user hovers over a single star
+         * @param e
+         */
+        StarRating.prototype.enterStarListener = function(e) {
+        this.fillStarsUpToElement(e.target);
+        };
+
+        /**
+         * This method is fired when the user leaves the #rating element, effectively removing all hover states.
+         */
+        StarRating.prototype.leaveStarListener = function() {
+        this.fillStarsUpToElement(null);
+        };
+
+        /**
+         * Fill the star ratings up to a specific position.
+         * @param el
+         */
+        StarRating.prototype.fillStarsUpToElement = function(el) {
+        // Remove all hover states:
+        for (var i = 0; i < this.stars.length; i++) {
+            if (el == null || this.stars[i].getAttribute('data-count') > el.getAttribute('data-count')) {
+            this.stars[i].classList.remove('hover');
+            } else {
+            this.stars[i].classList.add('hover');
+            }
+        }
+        };
+
+        // Run:
+        new StarRating();
+    </script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/jquery.hoverIntent.min.js"></script>
