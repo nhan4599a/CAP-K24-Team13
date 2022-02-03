@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopInterfaceService", "Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer", "AuthServer\AuthServer.csproj", "{BE35FB29-D5C3-463B-AD49-A33BDCA20A4D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckoutService", "CheckoutService\CheckoutService.csproj", "{7C0F80B6-F87D-4802-BEDA-5398300AFD3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckoutService", "Service\CheckoutService\CheckoutService.csproj", "{7C0F80B6-F87D-4802-BEDA-5398300AFD3C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderHistoryService", "Service\OrderHistoryService\OrderHistoryService.csproj", "{6B760FD9-618A-4048-AB42-3CC2729AD375}"
 EndProject
