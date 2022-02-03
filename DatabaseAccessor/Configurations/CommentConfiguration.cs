@@ -23,10 +23,6 @@ namespace DatabaseAccessor.Configurations
                 .WithMany(e => e.Comments)
                 .IsRequired();
 
-            builder.HasOne(e => e.Parent)
-                .WithMany(e => e.Children)
-                .HasForeignKey(e => e.ReferenceId);
-
             builder.HasCheckConstraint("CK_ProductComments_Star", "[Star] between 1 and 5");
         }
     }

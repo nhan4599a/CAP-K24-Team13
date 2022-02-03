@@ -31,7 +31,7 @@ body {
 }
 
 p {
-	margin-bottom: 1.5rem
+	margin-bottom: 1.5rem	
 }
 
 ul,
@@ -19435,29 +19435,43 @@ button:focus {
 	content: '\f7e3'
 }
 
-<<<<<<< HEAD
-=======
-#product-col{
-    width: 50%;
-	font-size: 20px;
+.rate {
+    height: 46px;
+    padding: 0 150px;
+	float:none
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
 }
 
-#quantity-col{
-    width: 10%;
-	text-align: center;
-	
-}
 
-#date-col{
-    width: 20%;
-    text-align: center;
-}
 
-#price-col{
-    width:20%;
-    text-align: center;
-}
-
->>>>>>> 49bd00cc5fe7c49941653dc92f8eb2d45043b95a
 
 /*# sourceMappingURL=style.css.map */
