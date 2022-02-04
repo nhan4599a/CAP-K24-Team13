@@ -116,7 +116,7 @@ namespace GUI
 
         private void ConfigureHttpClient(HttpClient client)
         {
-            client.BaseAddress = new Uri("https://localhost:7157");
+            client.BaseAddress = new Uri("https://localhost:3000");
         }
     }
 }
