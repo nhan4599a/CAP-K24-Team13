@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>f2b3d114-f162-43c5-a31e-f467a95cb8c2</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreSharedComponent\AspNetCoreSharedComponent.csproj" />
-    <ProjectReference Include="..\DatabaseAccessor\DatabaseAccessor.csproj" />
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\..\AspNetCoreSharedComponent\AspNetCoreSharedComponent.csproj" />
+    <ProjectReference Include="..\..\DatabaseAccessor\DatabaseAccessor.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

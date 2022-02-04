@@ -10,19 +10,19 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["CheckoutService/CheckoutService.csproj", "CheckoutService/"]
+COPY ["Service/ShopProductService/ShopProductService.csproj", "Service/ShopProductService/"]
 COPY ["DatabaseAccessor/DatabaseAccessor.csproj", "DatabaseAccessor/"]
 COPY ["Shared/Shared.csproj", "Shared/"]
 COPY ["AspNetCoreSharedComponent/AspNetCoreSharedComponent.csproj", "AspNetCoreSharedComponent/"]
-RUN dotnet restore "CheckoutService/CheckoutService.csproj"
+RUN dotnet restore "Service/ShopProductService/ShopProductService.csproj"
 COPY . .
-WORKDIR "/src/CheckoutService"
-RUN dotnet build "CheckoutService.csproj" -c Release -o /app/build
+WORKDIR "/src/Service/ShopProductService"
+RUN dotnet build "ShopProductService.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "CheckoutService.csproj" -c Release -o /app/publish
+RUN dotnet publish "ShopProductService.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CheckoutService.dll"]
+ENTRYPOINT ["dotnet", "ShopProductService.dll"]
