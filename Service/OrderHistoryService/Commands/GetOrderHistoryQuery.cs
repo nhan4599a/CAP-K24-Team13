@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Shared.DTOs;
 
-namespace OrderHistoryService.Command
+namespace OrderHistoryService.Commands
 {
     public class GetOrderHistoryQuery: IRequest<List<OrderUserHistoryDTO>>
     {

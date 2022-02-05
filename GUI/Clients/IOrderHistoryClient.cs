@@ -8,7 +8,7 @@ namespace GUI.Clients
 {
     public interface IOrderHistoryClient
     {
-        [Get("/useraccount/orderhistory/{userId}")]
+        [Get("/orders/{userId}")]
         Task<ApiResponse<ApiResult<List<OrderUserHistoryDTO>>>> GetOrderUserHistory(string userId);
     }
 }

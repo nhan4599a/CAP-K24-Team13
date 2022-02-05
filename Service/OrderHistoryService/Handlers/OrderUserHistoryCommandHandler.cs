@@ -1,9 +1,9 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using OrderHistoryService.Command;
+using OrderHistoryService.Commands;
 using Shared.DTOs;
 
-namespace OrderHistoryService.Handler
+namespace OrderHistoryService.Handlers
 {
     public class OrderUserHistoryCommandHandler : IRequestHandler<GetOrderHistoryQuery, List<OrderUserHistoryDTO>>, IDisposable
     {

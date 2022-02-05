@@ -101,10 +101,10 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/useraccount/orderhistory/{userId}",
+      "DownstreamPathTemplate": "/api/orders/{userId}",
       "DownstreamScheme": "http",
       "ServiceName": "OrderHistoryService",
-      "UpstreamPathTemplate": "/useraccount/orderhistory/{userId}",
+      "UpstreamPathTemplate": "/orders/{userId}",
       "UpstreamHttpMethod": [ "GET" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"

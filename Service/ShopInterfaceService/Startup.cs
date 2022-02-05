@@ -40,7 +40,7 @@ namespace ShopInterfaceService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("https://localhost:44349").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("http://localhost:3006").AllowAnyHeader().AllowAnyMethod();
                 });
             });
             services.AddMediatR(typeof(Startup));
