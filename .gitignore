@@ -348,5 +348,10 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-/Service/ShopProductService/wwwroot/*
+/Service/ShopProductService/wwwroot/products/*
+!/Service/ShopProductService/wwwroot/products/*.txt
+/Service/ShopProductService/wwwroot/categories/*
+!/Service/ShopProductService/wwwroot/categories/*.txt
+
 /Service/ShopInterfaceService/wwwroot/*
+!/Service/ShopInterfaceService/wwwroot/*.txt

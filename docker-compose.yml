@@ -61,6 +61,8 @@ services:
     depends_on:
       - "ServiceDiscovery"
       - "DB"
+    volumes:
+      - interface-images:/app/wwwroot
     restart: always
   ShopProductService:
     image: product_service
@@ -69,6 +71,8 @@ services:
     networks:
       static:
         ipv4_address: 172.20.0.8
+    volumes:
+      - product-images:/app/wwwroot
     depends_on:
       - "ServiceDiscovery"
       - "DB"
@@ -89,10 +93,22 @@ services:
     ports:
       - 1433:1433
     volumes:
-      - sqlvolume:/var/opt/mssql
+      - sql-volume:/var/opt/mssql
     networks:
       static:
         ipv4_address: 172.20.0.10
+  AuthServer:
+    image: auth_server
+    environment:
+      - CLIENT_AUTH_CONNECTION_STRING=Server=172.20.0.10,1433; Database=ClientAuth;User ID=sa; Password=nhan4599@Nhan; TrustServerCertificate=True
+    networks:
+      static:
+        ipv4_address: 172.20.0.11
+    ports:
+      - 7265:80
+    depends_on:
+      - "DB"
+    restart: always
 networks:
   static:
     driver: bridge
@@ -100,5 +116,9 @@ networks:
       config:
         - subnet: 172.20.0.0/24
 volumes:
-  sqlvolume:
+  sql-volume:
+    driver: local
+  product-images:
+    driver: local
+  interface-images:
     driver: local

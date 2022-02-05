@@ -16,7 +16,7 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Profile()
         {
-            var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory("B8A936EB-3904-4DBE-D29F-08D9E0150BF3");
+            var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory("db5ccda5-45b8-416f-6458-08d9e89ecc9b");
             if (!orderHistoryRespone.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             return View(orderHistoryRespone.Content.Data);

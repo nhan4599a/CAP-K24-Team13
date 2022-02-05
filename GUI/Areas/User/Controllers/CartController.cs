@@ -18,7 +18,7 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var cartItemsResponse = await _cartClient.GetCartItemsAsync("B8A936EB-3904-4DBE-D29F-08D9E0150BF3");
+            var cartItemsResponse = await _cartClient.GetCartItemsAsync("db5ccda5-45b8-416f-6458-08d9e89ecc9b");
             if (!cartItemsResponse.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             ViewData["CartItems"] = cartItemsResponse.Content;

@@ -19,7 +19,7 @@ namespace AuthServer.Configurations
                 },
                 RedirectUris = new[]
                 {
-                    "https://localhost:44349/signin-oidc"
+                    "http://localhost:3006/signin-oidc"
                 },
                 AllowedScopes = new[]
                 {

@@ -83,7 +83,7 @@
                     </div>
                     @Html.RenderPagination(Model.Products, keyword, pageSize,
                         (keyword, pageNumber, pageSize) =>
-                            $"https://localhost:44349/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
+                            $"http://localhost:3006/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
                     )
                     <nav aria-label="Page navigation example">
                       <ul class="pagination justify-content-center">
@@ -125,7 +125,7 @@
 
                     @Html.RenderPagination(Model.Shops, keyword, pageSize,
                     (keyword, pageNumber, pageSize) =>
-                    $"https://localhost:44349/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
+                    $"http://localhost:3006/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
                     )
                     <nav aria-label="Page navigation example">
                       <ul class="pagination justify-content-center">
