@@ -25,6 +25,8 @@ services:
     networks:
       static:
         ipv4_address: 172.20.0.4
+    depends_on:
+      - "ServiceDiscovery"
     restart: always
   OrderHistoryService:
     image: order_history_service
@@ -33,6 +35,8 @@ services:
     networks:
       static:
         ipv4_address: 172.20.0.5
+    depends_on:
+      - "ServiceDiscovery"
     restart: always
   RatingService:
     image: rating_service
@@ -41,6 +45,8 @@ services:
     networks:
       static:
         ipv4_address: 172.20.0.6
+    depends_on:
+      - "ServiceDiscovery"
     restart: always
   ShopInterfaceService:
     image: interface_service
@@ -49,6 +55,8 @@ services:
     networks:
       static:
         ipv4_address: 172.20.0.7
+    depends_on:
+      - "ServiceDiscovery"
     restart: always
   ShopProductService:
     image: product_service
@@ -57,6 +65,8 @@ services:
     networks:
       static:
         ipv4_address: 172.20.0.8
+    depends_on:
+      - "ServiceDiscovery"
     restart: always
   GUI:
     image: gui
