@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Authentication;
 using GUI.Abtractions;
 using GUI.Attributes;
 using GUI.Clients;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -15,7 +15,6 @@ using Refit;
 using System;
 using System.Net.Http;
 using System.Reflection;
-using System.Security.Claims;
 
 namespace GUI
 {
@@ -116,7 +115,7 @@ namespace GUI
 
         private void ConfigureHttpClient(HttpClient client)
         {
-            client.BaseAddress = new Uri("https://localhost:3000");
+            client.BaseAddress = new Uri("http://172.20.0.3:80");
         }
     }
 }

@@ -1,42 +1,84 @@
+version: '3.4'
 services:
-  ApiGateWay:
-    image: gateway
-    ports:
-      - 3000:80
-    restart: always
-  CheckoutService:
-    image: checkout_service
-    ports:
-      - 3001:80
-    restart: always
-  OrderHistoryService:
-    image: order_history_service
-    ports:
-      - 3002:80
-    restart: always
-  RatingService:
-    image: rating_service
-    ports:
-      - 3003:80
-    restart: always
-  ShopInterfaceService:
-    image: interface_service
-    ports:
-      - 3004:80
-    restart: always
-  ShopProductService:
-    image: product_service
-    ports:
-      - 3005:80
-    restart: always
-  GUI:
-    image: gui
-    ports:
-      - 3006:80
-    restart: always
   ServiceDiscovery:
     image: consul:latest
     ports:
       - 8500:8500
       - 8600:8600/udp
-    command: "agent -retry-join -server -ui -node server-1 -client 0.0.0.0"
+    command: "consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0 -data-dir=/consul/data"
+    networks:
+      static:
+        ipv4_address: 172.20.0.2
+    restart: always
+  ApiGateway:
+    image: gateway
+    ports:
+      - 3000:80
+    networks:
+      static:
+        ipv4_address: 172.20.0.3
+    restart: always
+  CheckoutService:
+    image: checkout_service
+    ports:
+      - 3001:80
+    networks:
+      static:
+        ipv4_address: 172.20.0.4
+    restart: always
+  OrderHistoryService:
+    image: order_history_service
+    ports:
+      - 3002:80
+    networks:
+      static:
+        ipv4_address: 172.20.0.5
+    restart: always
+  RatingService:
+    image: rating_service
+    ports:
+      - 3003:80
+    networks:
+      static:
+        ipv4_address: 172.20.0.6
+    restart: always
+  ShopInterfaceService:
+    image: interface_service
+    ports:
+      - 3004:80
+    networks:
+      static:
+        ipv4_address: 172.20.0.7
+    restart: always
+  ShopProductService:
+    image: product_service
+    ports:
+      - 3005:80
+    networks:
+      static:
+        ipv4_address: 172.20.0.8
+    restart: always
+  GUI:
+    image: gui
+    ports:
+      - 3006:80
+    networks:
+      static:
+        ipv4_address: 172.20.0.9
+    restart: always
+  DB:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=nhan4599@Nhan
+    ports:
+      - 1433:1433
+    networks:
+      static:
+        ipv4_address: 172.20.0.10
+networks:
+  static:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

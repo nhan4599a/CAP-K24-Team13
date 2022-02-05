@@ -2,7 +2,7 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/products/",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/products/",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
@@ -12,7 +12,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/products/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/products/{id}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -22,7 +22,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/products/less/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/products/less/{id}",
       "UpstreamHttpMethod": [ "GET" ],
@@ -32,7 +32,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/categories/",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/categories/",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
@@ -42,7 +42,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/categories/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/categories/{id}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -52,7 +52,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/interfaces/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "InterfaceService",
       "UpstreamPathTemplate": "/interfaces/{id}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -62,7 +62,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/shop/search",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/shop/search",
       "UpstreamHttpMethod": [ "GET" ],
@@ -72,7 +72,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/shop/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/shop/{id}",
       "UpstreamHttpMethod": [ "GET" ],
@@ -82,7 +82,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/cart/{userId}/items",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart/{userId}/items",
       "UpstreamHttpMethod": [ "GET" ],
@@ -92,7 +92,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/cart/{userId}/{productId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart/{userId}/{productId}",
       "UpstreamHttpMethod": [ "DELETE", "OPTIONS" ],
@@ -102,7 +102,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/useraccount/orderhistory/{userId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "OrderHistoryService",
       "UpstreamPathTemplate": "/useraccount/orderhistory/{userId}",
       "UpstreamHttpMethod": [ "GET" ],
@@ -112,7 +112,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/cart",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart",
       "UpstreamHttpMethod": [ "POST", "PUT", "OPTIONS" ],
@@ -122,7 +122,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/checkout",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "CheckoutService",
       "UpstreamPathTemplate": "/checkout",
       "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
@@ -132,7 +132,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/rating",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "RatingService",
       "UpstreamPathTemplate": "/rating",
       "UpstreamHttpMethod": [ "POST", "PUT", "OPTIONS" ],
@@ -143,7 +143,7 @@
   ],
   "GlobalConfiguration": {
     "ServiceDiscoveryProvider": {
-      "Host": "localhost",
+      "Host": "172.20.0.2",
       "Port": 8500,
       "Type": "Consul"
     }
