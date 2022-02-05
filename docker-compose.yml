@@ -27,6 +27,7 @@ services:
         ipv4_address: 172.20.0.4
     depends_on:
       - "ServiceDiscovery"
+      - "DB"
     restart: always
   OrderHistoryService:
     image: order_history_service
@@ -37,6 +38,7 @@ services:
         ipv4_address: 172.20.0.5
     depends_on:
       - "ServiceDiscovery"
+      - "DB"
     restart: always
   RatingService:
     image: rating_service
@@ -47,6 +49,7 @@ services:
         ipv4_address: 172.20.0.6
     depends_on:
       - "ServiceDiscovery"
+      - "DB"
     restart: always
   ShopInterfaceService:
     image: interface_service
@@ -57,6 +60,7 @@ services:
         ipv4_address: 172.20.0.7
     depends_on:
       - "ServiceDiscovery"
+      - "DB"
     restart: always
   ShopProductService:
     image: product_service
@@ -67,6 +71,7 @@ services:
         ipv4_address: 172.20.0.8
     depends_on:
       - "ServiceDiscovery"
+      - "DB"
     restart: always
   GUI:
     image: gui
@@ -83,6 +88,8 @@ services:
       - SA_PASSWORD=nhan4599@Nhan
     ports:
       - 1433:1433
+    volumes:
+      - sqlvolume:/var/opt/mssql
     networks:
       static:
         ipv4_address: 172.20.0.10
@@ -92,3 +99,6 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/24
+volumes:
+  sqlvolume:
+    driver: local

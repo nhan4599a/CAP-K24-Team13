@@ -5,6 +5,7 @@ using DatabaseAccessor.Triggers;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 
 namespace DatabaseAccessor.Contexts
 {
@@ -35,9 +36,12 @@ namespace DatabaseAccessor.Contexts
 
         public ApplicationDbContext(string connectionString) : base(
             new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(connectionString).Options)
-        { }
+        {
+        }
 
-        public ApplicationDbContext() : base() { }
+        public ApplicationDbContext() : base()
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
