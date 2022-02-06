@@ -146,7 +146,7 @@ h1 { font-size: 1.5em; margin: 10px; }
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        <tr class="mb-2">
+                                        <tr class="mb-2" data-product="@item.ProductId">
                                             <td>
                                                 <div class="row">
                                                     <div class="col-md-2">
@@ -172,7 +172,7 @@ h1 { font-size: 1.5em; margin: 10px; }
                                                 @((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))
                                             </td>
                                             <td>
-                                                <button class="btn btn-primary" data-toggle="modal" data-target="#rating-modal">Rate & comment</button>
+                                                <button class="btn btn-primary">Rate & comment</button>
                                             </td>
                                         </tr>
                                     }
@@ -253,3 +253,6 @@ h1 { font-size: 1.5em; margin: 10px; }
         </div><!-- End .modal-content -->
     </div><!-- End .modal-dialog -->
 </div><!-- End .modal -->
+@section Scripts {
+    <script src="@Url.Content("~/assets/user-official/js/Rating.js")"></script>
+}

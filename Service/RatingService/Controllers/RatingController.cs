@@ -9,9 +9,10 @@ namespace RatingService.Controllers
 {
     [Route("api/rating")]
     [ApiController]
-    public class RatingController : Controller
+    public class RatingController : ControllerBase
     {
         private readonly IMediator _mediator;
+
         public RatingController(IMediator mediator)
         {
             _mediator = mediator;
@@ -29,7 +30,7 @@ namespace RatingService.Controllers
 
         [HttpPost]
         public async Task<ApiResult> RatingProduct
-            ([FromForm(Name = "requestModel")] RatingRequestModel requestModel)
+            ([FromForm] RatingRequestModel requestModel)
         {
             var result = await _mediator.Send(new RatingProductCommand
             {

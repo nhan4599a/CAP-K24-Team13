@@ -16,6 +16,7 @@ const categoryEndpoint = '/categories';
 const cartEndpoint = '/cart'
 const interfaceEndpoint = '/interfaces';
 const checkoutEndpoint = '/checkout';
+const ratingProductEndpoint = '/rating';
 
 function findProducts(keyword, pageNumber, pageSize) {
     if (keyword === null || keyword === '')
@@ -187,9 +188,14 @@ function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAd
     formData.append('requestModel.shippingPhone', shippingPhone);
     formData.append('requestModel.shippingAddress', shippingAddress);
     formData.append('requestModel.orderNotes', orderNotes);
-    return axios.post(checkoutEndpoint, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    });
+    return axios.post(checkoutEndpoint, formData);
+}
+
+function ratingProduct(userId, productId, star, comment) {
+    let formData = new FormData();
+    formData.append('UserId', userId);
+    formData.append('ProductId', productId);
+    formData.append('Star', star);
+    formData.append('Message', comment);
+    return axios.post(ratingProductEndpoint, formData);
 }

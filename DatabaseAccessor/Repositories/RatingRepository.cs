@@ -57,6 +57,7 @@ namespace DatabaseAccessor.Repositories
                 Star = requestModel.Star,
                 Message = requestModel.Message
             });
+            await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
 
