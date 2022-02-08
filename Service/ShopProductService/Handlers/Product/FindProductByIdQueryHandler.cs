@@ -19,6 +19,8 @@ namespace ShopProductService.Handlers.Product
 
         public async Task<ProductDTO> Handle(FindProductByIdQuery request, CancellationToken cancellationToken)
         {
+            if (request.IsMinimal)
+                return (ProductDTO) await _repository.GetMinimalProductAsync(request.Id);
             return await _repository.GetProductAsync(request.Id);
         }
 

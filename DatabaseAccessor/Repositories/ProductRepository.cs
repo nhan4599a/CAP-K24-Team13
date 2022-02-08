@@ -29,7 +29,12 @@ namespace DatabaseAccessor.Repositories
             return _mapper.MapToProductDTO(await FindProductByIdAsync(id));
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo)
+        public async Task<MinimalProductDTO> GetMinimalProductAsync(Guid id)
+        {
+            return _mapper.MapToMinimalProductDTO(await FindProductByIdAsync(id));
+        }
+
+        public async Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo, bool includeComments)
         {
             return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
                 .Where(product => product.ProductName.Contains(keyword)
@@ -38,11 +43,19 @@ namespace DatabaseAccessor.Repositories
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo, bool includeComments)
         {
             return await _dbContext.ShopProducts.AsNoTracking()
                 .Include(e => e.Category)
+                .Include(e => e.Comments)
                 .Select(product => _mapper.MapToProductDTO(product))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+        }
+
+        public async Task<PaginatedList<MinimalProductDTO>> GetAllProductMinimalAsync(PaginationInfo paginationInfo)
+        {
+            return await _dbContext.ShopProducts.AsNoTracking()
+                .Select(product => _mapper.MapToMinimalProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 

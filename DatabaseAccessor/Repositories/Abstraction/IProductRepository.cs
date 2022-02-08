@@ -11,9 +11,11 @@ namespace DatabaseAccessor.Repositories.Abstraction
     {
         Task<ProductDTO> GetProductAsync(Guid id);
 
-        Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo);
+        Task<MinimalProductDTO> GetMinimalProductAsync(Guid id);
 
-        Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo);
+        Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo, bool includeComments);
+
+        Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo, bool includeComments);
 
         Task<CommandResponse<Guid>> AddProductAsync(CreateOrEditProductRequestModel requestModel);
 
