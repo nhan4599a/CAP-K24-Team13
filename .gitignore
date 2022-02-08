@@ -355,3 +355,12 @@ MigrationBackup/
 
 /Service/ShopInterfaceService/wwwroot/*
 !/Service/ShopInterfaceService/wwwroot/*.txt
+
+/Service/RatingService/wwwroot/*
+!/Service/RatingService/wwwroot/*.txt
+
+/Service/CheckoutService/wwwroot/*
+!/Service/CheckoutService/wwwroot/*.txt
+
+/Service/OrderHistoryService/wwwroot/*
+!/Service/OrderHistoryService/wwwroot/*.txt

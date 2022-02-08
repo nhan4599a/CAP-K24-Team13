@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Refit;
 using System;
@@ -30,6 +31,7 @@ namespace GUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
             services.AddControllersWithViews();
             services.AddAuthentication(options =>
             {
@@ -38,8 +40,7 @@ namespace GUI
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.Authority = "http://localhost:7265";
+                options.Authority = "https://localhost:7265";
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = "oidc-client";
                 options.ClientSecret = "CapK24Team13";
@@ -116,7 +117,7 @@ namespace GUI
 
         private void ConfigureHttpClient(HttpClient client)
         {
-            client.BaseAddress = new Uri("http://172.20.0.3:80");
+            client.BaseAddress = new Uri("https://localhost:3000");
         }
     }
 }
