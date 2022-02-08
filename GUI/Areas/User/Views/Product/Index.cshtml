@@ -21,7 +21,7 @@
                             <div class="col-md-6 col-lg-7">
                                 <div class="product-gallery">
                                     <figure class="product-main-image">
-                                       @* <span class="product-label label-sale">Sale</span>*@ 
+                                        @* <span class="product-label label-sale">Sale</span>*@
                                         <img id="product-zoom" src="@Url.ProductImageUrl(Model.Images[0])" data-zoom-image="~/assets/user-official/images/products/single/fullwidth/3-big.jpg" alt="product image">
                                     </figure><!-- End .product-main-image -->
 
@@ -34,15 +34,15 @@
                                         }
                                         @*<a class="product-gallery-item" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2-big.jpg")">
                                             <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2-small.jpg")" alt="product cross">
-                                        </a>
+                                            </a>
 
-                                        <a class="product-gallery-item active" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/3.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/3-big.jpg")">
+                                            <a class="product-gallery-item active" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/3.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/3-big.jpg")">
                                             <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/3-small.jpg")" alt="product with model">
-                                        </a>
+                                            </a>
 
-                                        <a class="product-gallery-item" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4-big.jpg")">
+                                            <a class="product-gallery-item" href="#" data-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4.jpg")" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4-big.jpg")">
                                             <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4-small.jpg")" alt="product back">
-                                        </a>*@
+                                            </a>*@
                                     </div><!-- End .product-image-gallery -->
                                 </div><!-- End .product-gallery -->
                             </div><!-- End .col-lg-7 -->
@@ -61,10 +61,9 @@
                                         <span class="new-price">@(Model.Price.ToString("N0", CultureInfo.InvariantCulture))</span>
                                         <span class="old-price" style="text-decoration: line-through;">(@((Model.Price * (1 + Model.Discount / 100.0)).ToString("N0", CultureInfo.InvariantCulture)))</span>
                                     </div><!-- End .product-price -->
-
                                     @*<div class="product-content">
                                         <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus adipiscing. Sed lectus. </p>
-                                    </div><!-- End .product-content -->*@
+                                        </div><!-- End .product-content -->*@
 
                                     <div class="details-filter-row details-row-size">
                                         <label>Color:</label>
@@ -114,12 +113,11 @@
                                             <span>Category:</span>
                                             <a href="#">@Model.CategoryName</a>
                                         </div><!-- End .product-cat -->
-
                                         @*<div class="social-icons social-icons-sm">
                                             <span class="social-label">Share:</span>
-                                            <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>    
+                                            <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
                                             <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                                        </div>*@
+                                            </div>*@
                                     </div><!-- End .product-details-footer -->
 
                                     <div class="accordion accordion-plus product-details-accordion" id="product-accordion">
@@ -139,13 +137,13 @@
                                                             <li>Nunc nec porttitor turpis. In eu risus enim. In vitae mollis elit. </li>
                                                             <li>Vivamus finibus vel mauris ut vehicula.</li>
                                                             <li>Nullam a magna porttitor, dictum risus nec, faucibus sapien.</li>
-                                                        </ul>*@
+                                                            </ul>*@
                                                     </div><!-- End .product-desc-content -->
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .collapse -->
                                         </div><!-- End .card -->
 
-                                       
+
 
                                         <div class="card card-box card-sm">
                                             <div class="card-header" id="product-review-heading">
@@ -158,57 +156,29 @@
                                             <div id="product-accordion-review" class="collapse show" aria-labelledby="product-review-heading" data-parent="#product-accordion">
                                                 <div class="card-body">
                                                     <div class="reviews">
-                                                        <div class="review">
-                                                            <div class="row no-gutters">
-                                                                <div class="col-auto">
-                                                                    <h4><a href="#">Samanta J.</a></h4>
-                                                                    <div class="ratings-container">
-                                                                        <div class="ratings">
-                                                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                                        @foreach (var item in @Model.Comments)
+                                                        {
+                                                            <div class="review">
+                                                                <div class="row no-gutters">
+                                                                    <div class="col-auto">
+                                                                        <h4><a href="#">@item.UserName</a></h4>
+                                                                        <div class="ratings-container">
+                                                                            <div class="ratings">
+                                                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
                                                                         </div><!-- End .ratings -->
                                                                     </div><!-- End .rating-container -->
-                                                                    <span class="review-date">6 days ago</span>
-                                                                </div><!-- End .col -->
+                                                                    <span class="review-date">@((DateTime.Now - item.CreatedDate).ToString(""))</span>
+                                                                    </div><!-- End .col -->
                                                                 <div class="col">
-                                                                    <h4>Good, perfect size</h4>
-
-                                                                    <div class="review-content">
-                                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!</p>
-                                                                    </div><!-- End .review-content -->
-
-                                                                    <div class="review-action">
-                                                                        <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                                    </div><!-- End .review-action -->
+                                                                        <div class="review-content">
+                                                                            <p>@item.Message</p>
+                                                                        </div><!-- End .review-content -->
+                                                                        </div><!-- End .review-action -->
                                                                 </div><!-- End .col-auto -->
-                                                            </div><!-- End .row -->
-                                                        </div><!-- End .review -->
-
-                                                        <div class="review">
-                                                            <div class="row no-gutters">
-                                                                <div class="col-auto">
-                                                                    <h4><a href="#">John Doe</a></h4>
-                                                                    <div class="ratings-container">
-                                                                        <div class="ratings">
-                                                                            <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                                                        </div><!-- End .ratings -->
-                                                                    </div><!-- End .rating-container -->
-                                                                    <span class="review-date">5 days ago</span>
-                                                                </div><!-- End .col -->
-                                                                <div class="col">
-                                                                    <h4>Very good</h4>
-
-                                                                    <div class="review-content">
-                                                                        <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure illum repellendus, blanditiis perspiciatis beatae!</p>
-                                                                    </div><!-- End .review-content -->
-
-                                                                    <div class="review-action">
-                                                                        <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                                    </div><!-- End .review-action -->
-                                                                </div><!-- End .col-auto -->
-                                                            </div><!-- End .row -->
-                                                        </div><!-- End .review -->
+                                                            </div><!-- End .row -->                                                        
+                                                            <!-- End .review -->
+                                                        }
+                                                    </div>
                                                     </div><!-- End .reviews -->
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .collapse -->
@@ -293,7 +263,7 @@
 
                         <div class="widget widget-banner-sidebar">
                             <div class="banner-sidebar-title">ad box 280 x 280</div><!-- End .ad-title -->
-                                    
+
                             <div class="banner-sidebar banner-overlay">
                                 <a href="#">
                                     <img src="@Url.Content("~/assets/user-official/images/blog/sidebar/banner.jpg")" alt="banner">
@@ -308,5 +278,5 @@
     </div><!-- End .page-content -->
 </main><!-- End .main -->
 @section Scripts {
-    <script src="@Url.Content("~/assets/user-official/js/productDetail.js")"></script>
+<script src="@Url.Content("~/assets/user-official/js/productDetail.js")"></script>
 }

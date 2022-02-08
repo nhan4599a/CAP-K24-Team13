@@ -12,7 +12,8 @@
             console.log('comment: ' + comment);
             ratingProduct('0B008236-860D-44BB-3328-08D9E8AFEA5C', productId, star, comment)
                 .then(() => {
-                    toastr.success('Rating Success !!!')
+                    toastr.success('Rating Success !!!');
+                    window.location.href = `/product/index/${productId}`
                 })
                 .catch(() => {
                     toastr.error('Rating Fail')

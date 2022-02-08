@@ -20,7 +20,7 @@ namespace DatabaseAccessor.Mapping
                         options => options.MapFrom(source => source.Category == null ? "" : source.Category.CategoryName))
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
-
+                cfg.CreateMap<ShopProduct, MinimalProductDTO>();
                 cfg.CreateMap<ShopCategory, CategoryDTO>();
 
                 cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
@@ -58,6 +58,8 @@ namespace DatabaseAccessor.Mapping
         }
 
         public ProductDTO MapToProductDTO(ShopProduct product) => _mapper.Map<ProductDTO>(product);
+
+        public MinimalProductDTO MapToMinimalProductDTO(ShopProduct product) => _mapper.Map<MinimalProductDTO>(product);
 
         public CategoryDTO MapToCategoryDTO(ShopCategory category) => _mapper.Map<CategoryDTO>(category);
 
