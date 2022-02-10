@@ -35,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckoutService", "Service\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderHistoryService", "Service\OrderHistoryService\OrderHistoryService.csproj", "{6B760FD9-618A-4048-AB42-3CC2729AD375}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingService", "Service\RatingService\RatingService.csproj", "{C6622A56-C176-4A68-981A-64994B016B63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RatingService", "Service\RatingService\RatingService.csproj", "{C6622A56-C176-4A68-981A-64994B016B63}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "InvoiceService\OrderService.csproj", "{BF06FF62-D79E-4CDB-B017-9DD742A9BBE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{C6622A56-C176-4A68-981A-64994B016B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6622A56-C176-4A68-981A-64994B016B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6622A56-C176-4A68-981A-64994B016B63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF06FF62-D79E-4CDB-B017-9DD742A9BBE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF06FF62-D79E-4CDB-B017-9DD742A9BBE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF06FF62-D79E-4CDB-B017-9DD742A9BBE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF06FF62-D79E-4CDB-B017-9DD742A9BBE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{7C0F80B6-F87D-4802-BEDA-5398300AFD3C} = {BBFFD67C-E2CD-490A-9615-B21B89E554C3}
 		{6B760FD9-618A-4048-AB42-3CC2729AD375} = {BBFFD67C-E2CD-490A-9615-B21B89E554C3}
 		{C6622A56-C176-4A68-981A-64994B016B63} = {BBFFD67C-E2CD-490A-9615-B21B89E554C3}
+		{BF06FF62-D79E-4CDB-B017-9DD742A9BBE5} = {BBFFD67C-E2CD-490A-9615-B21B89E554C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {761D88FF-62D4-4400-84EB-BE7B12959CC4}
