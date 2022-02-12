@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using OrderHistoryService.Commands;
 using Shared.DTOs;
 using Shared.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OrderHistoryService.Controllers
 {

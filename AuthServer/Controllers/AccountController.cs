@@ -23,7 +23,7 @@ namespace AuthServer.Controllers
         [HttpPost]
         [ActionName("Information")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditInformation()
+        public ActionResult EditInformation()
         {
             return View();
         }

@@ -1,4 +1,7 @@
-﻿namespace OrderHistoryService
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+
+namespace OrderHistoryService
 {
     public class Program
     {

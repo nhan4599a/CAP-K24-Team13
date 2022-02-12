@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
+using Shared.Exceptions;
 using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
@@ -65,7 +66,7 @@ namespace ShopProductService.Controllers
                 Discount = 0,
                 Images =new string[]
                 {
-                    "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e777c881-5b62-4250-92a6-362967f54cca/air-force-1-07-shoe-NMmm1B.png?fbclid=IwAR3CJ3AKilbPvMX9um9TvclM3DWYhA926X4kpb_wsCY-YHPrmP3qLlLvhTg"
+                    "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e777c881-5b62-4250-92a6-362967f54cca/air-force-1-07-shoe-NMmm1B.png"
                 }
             },
             new ProductDTO
@@ -80,7 +81,7 @@ namespace ShopProductService.Controllers
                 Discount = 0,
                 Images = new string[]
                 {
-                    "https://product.hstatic.net/1000230642/product/03400cam__6__5022ef5622dc46b1bd893b238de2200f_1024x1024.jpg?fbclid=IwAR0gO4z_CTAtebCC0LEhJqPOK0I3rBJ75lsGaffq8SLwzQmD6hieOQfVWwQ"
+                    "https://product.hstatic.net/1000230642/product/03400cam__6__5022ef5622dc46b1bd893b238de2200f_1024x1024.jpg"
                 }
             },
             new ProductDTO
@@ -111,34 +112,48 @@ namespace ShopProductService.Controllers
         }
 
         [HttpPost]
-        public async Task<ApiResult<Guid>> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+        public async Task<ApiResult> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
-            requestModel.ImagePaths = await _fileStore.SaveFilesAsync(Request.Form.Files);
+            try
+            {
+                requestModel.ImagePaths = await _fileStore.SaveFilesAsync(Request.Form.Files);
+            }
+            catch (ImageValidationException ex)
+            {
+                return ApiResult.CreateErrorResult(400, ex.Message);
+            }
             var response = await _mediator.Send(new CreateProductCommand
             {
                 RequestModel = requestModel
             });
             if (!response.IsSuccess)
-                return new ApiResult<Guid> { ResponseCode = 500, Data = Guid.Empty, ErrorMessage = response.ErrorMessage };
-            return new ApiResult<Guid> { ResponseCode = 200, Data = response.Response };
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult<Guid>.CreateSuccessResult(response.Response);
         }
 
         [HttpPut("{id}")]
-        public async Task<ApiResult<ProductDTO>> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+        public async Task<ApiResult> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
-            requestModel.ImagePaths = await _fileStore.EditFilesAsync(requestModel.ImagePaths, Request.Form.Files);
+            try
+            {
+                requestModel.ImagePaths = await _fileStore.EditFilesAsync(requestModel.ImagePaths, Request.Form.Files);
+            }
+            catch (ImageValidationException ex)
+            {
+                return ApiResult.CreateErrorResult(400, ex.Message);
+            }
             var response = await _mediator.Send(new EditProductCommand
             {
                 Id = Guid.Parse(id),
                 RequestModel = requestModel
             });
             if (!response.IsSuccess)
-                return new ApiResult<ProductDTO> { ResponseCode = 500, Data = null, ErrorMessage = response.ErrorMessage };
-            return new ApiResult<ProductDTO> { ResponseCode = 200, Data = response.Response };
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult<ProductDTO>.CreateSuccessResult(response.Response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ApiResult<bool>> DeleteProduct(string id, [FromQuery] DeleteAction action)
+        public async Task<ApiResult> DeleteProduct(string id, [FromQuery] DeleteAction action)
         {
             var response = await _mediator.Send(new ActivateProductCommand
             {
@@ -146,28 +161,24 @@ namespace ShopProductService.Controllers
                 IsActivateCommand = action == DeleteAction.Activate,
             });
             if (!response.IsSuccess)
-                return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = response.ErrorMessage };
-            return new ApiResult<bool> { ResponseCode = 200, Data = response.Response };
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult<bool>.CreateSuccessResult(response.Response);
         }
 
         [HttpGet("shop/{shopId}")]
-        public async Task<ApiResult<PaginatedList<ProductDTO>>> GetProductsOfShop(int shopId)
+        public async Task<ApiResult> GetProductsOfShop(int shopId)
         {
             if (shopId != 0)
-                return new ApiResult<PaginatedList<ProductDTO>> { ResponseCode = 200, Data = FakeProducts };
+                return ApiResult<PaginatedList<ProductDTO>>.CreateSuccessResult(FakeProducts);
             var response = await _mediator.Send(new FindProductsByShopIdQuery
             {
                 ShopId = shopId
             });
-            return new ApiResult<PaginatedList<ProductDTO>>
-            {
-                ResponseCode = 200,
-                Data = response
-            };
+            return ApiResult<PaginatedList<ProductDTO>>.CreateSuccessResult(response);
         }
 
         [HttpGet("search")]
-        public async Task<ApiResult<PaginatedList<ProductDTO>>> ListProduct([FromQuery] SearchRequestModel requestModel)
+        public async Task<ApiResult> ListProduct([FromQuery] SearchRequestModel requestModel)
         {
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
                 ? new FindAllProductQuery { PaginationInfo = requestModel.PaginationInfo, IncludeComments = false }
@@ -177,11 +188,7 @@ namespace ShopProductService.Controllers
                     PaginationInfo = requestModel.PaginationInfo
                 };
             var productList = await _mediator.Send(request);
-            return new ApiResult<PaginatedList<ProductDTO>>
-            {
-                ResponseCode = 200,
-                Data = productList
-            };
+            return ApiResult<PaginatedList<ProductDTO>>.CreateSuccessResult(productList);
         }
 
         [HttpGet("{id}")]

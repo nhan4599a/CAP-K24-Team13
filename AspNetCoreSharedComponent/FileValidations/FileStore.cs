@@ -30,7 +30,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             if (shouldValidate)
             {
                 var validationResult = files.Validate(rules);
-                if (validationResult.IsError)
+                if (validationResult.IsViolatedResult)
                     throw new ImageValidationException(validationResult);
             }
             CreateDirectory();
@@ -50,7 +50,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             if (shouldValidate)
             {
                 var validationResult = files.Validate(rules);
-                if (validationResult.IsError)
+                if (validationResult.IsViolatedResult)
                     throw new ImageValidationException(validationResult);
             }
             CreateDirectory();
@@ -82,7 +82,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             if (shouldValidate)
             {
                 var validationResult = file.Validate(rules);
-                if (validationResult.IsError)
+                if (validationResult.IsViolatedResult)
                     throw new ImageValidationException(validationResult);
             }
             CreateDirectory();
@@ -99,7 +99,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             if (shouldValidate)
             {
                 var validationResult = file.Validate(rules);
-                if (validationResult.IsError)
+                if (validationResult.IsViolatedResult)
                     throw new ImageValidationException(validationResult);
             }
             CreateDirectory();

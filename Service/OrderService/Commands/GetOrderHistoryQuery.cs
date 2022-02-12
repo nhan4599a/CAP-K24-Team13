@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Shared.DTOs;
+using System.Collections.Generic;
 
 namespace OrderHistoryService.Commands
 {

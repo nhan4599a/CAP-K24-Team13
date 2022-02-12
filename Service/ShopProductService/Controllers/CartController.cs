@@ -21,37 +21,38 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet("{userId}/items")]
-        public async Task<List<CartItemDTO>> GetCartItems(string userId)
+        public async Task<ApiResult> GetCartItems(string userId)
         {
-            return await _mediator.Send(new GetCartItemsQuery { UserId = userId });
+            var result = await _mediator.Send(new GetCartItemsQuery { UserId = userId });
+            return ApiResult<List<CartItemDTO>>.CreateSuccessResult(result);
         }
 
         [HttpPost]
-        public async Task<ApiResult<bool>> AddCartItem([FromForm] AddOrEditQuantityCartItemRequestModel requestModel)
+        public async Task<ApiResult> AddCartItem([FromForm] AddOrEditQuantityCartItemRequestModel requestModel)
         {
             var response = await _mediator.Send(new AddCartItemCommand
             {
                 RequestModel = requestModel,
             });
             if (!response.IsSuccess)
-                return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult<bool>.CreateSuccessResult(true);
         }
 
         [HttpPut]
-        public async Task<ApiResult<bool>> EditQuantity([FromForm] AddOrEditQuantityCartItemRequestModel requestModel)
+        public async Task<ApiResult> EditQuantity([FromForm] AddOrEditQuantityCartItemRequestModel requestModel)
         {
             var response = await _mediator.Send(new EditQuantityCartItemCommand
             {
                 requestModel = requestModel,
             });
             if (!response.IsSuccess)
-                return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult<bool>.CreateSuccessResult(true);
         }
 
         [HttpDelete("{userId}/{productId}")]
-        public async Task<ApiResult<bool>> RemoveCartItem(string userId, string productId)
+        public async Task<ApiResult> RemoveCartItem(string userId, string productId)
         {
             var response = await _mediator.Send(new RemoveCartItemCommand
             { 
@@ -62,8 +63,8 @@ namespace ShopProductService.Controllers
                 }
             });
             if (!response.IsSuccess)
-                return new ApiResult<bool> { ResponseCode = 500, ErrorMessage = response.ErrorMessage, Data = false };
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult<bool>.CreateSuccessResult(true);
         }
     }
 }

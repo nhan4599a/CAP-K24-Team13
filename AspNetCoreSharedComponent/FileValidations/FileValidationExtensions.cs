@@ -14,7 +14,9 @@ namespace AspNetCoreSharedComponent.FileValidations
             foreach (var rule in rules)
                 if (file.ValidateSingle(rule))
                     passedRules.Add(rule.RuleName);
-            return new FileValidationResult(rules, passedRules);
+            if (passedRules.Count == rules.Count)
+                return FileValidationResult.CreateSucceedResult(rules);
+            return FileValidationResult.CreateFailedResult(rules, passedRules);
         }
 
         public static bool ValidateSingle(this IFormFile file, FileValidationRule rule)
@@ -51,7 +53,9 @@ namespace AspNetCoreSharedComponent.FileValidations
             foreach (FileValidationRule rule in rules)
                 if (files.ValidateMultiple(rule))
                     passedRules.Add(rule.RuleName);
-            return new FileValidationResult(rules, passedRules);
+            if (passedRules.Count == rules.Count)
+                return FileValidationResult.CreateSucceedResult(rules);
+            return FileValidationResult.CreateFailedResult(rules, passedRules);
         }
 
         public static bool ValidateMultiple(this IFormFileCollection files, FileValidationRule rule)
