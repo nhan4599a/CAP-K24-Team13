@@ -37,7 +37,7 @@ namespace CheckoutService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3006").AllowAnyMethod().AllowAnyHeader();
+                    builder.WithOrigins("https://localhost:3006").AllowAnyMethod().AllowAnyHeader();
                 });
             });
             services.AddStackExchangeRedisCache(options =>

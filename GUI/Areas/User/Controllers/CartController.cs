@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
-    [Authorize]
     public class CartController : BaseUserController
     {
         private readonly ICartClient _cartClient;
@@ -20,7 +19,7 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var cartItemsResponse = await _cartClient.GetCartItemsAsync("0B008236-860D-44BB-3328-08D9E8AFEA5C");
+            var cartItemsResponse = await _cartClient.GetCartItemsAsync("324DFA41-D0E8-46CD-1975-08D9EB65B707");
             if (!cartItemsResponse.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             ViewData["CartItems"] = cartItemsResponse.Content;

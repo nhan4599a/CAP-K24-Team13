@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ShopProductService.Handlers.Product
 {
     public class FindProductByIdQueryHandler : 
-        IRequestHandler<FindProductByIdQuery, ProductWithCommentsDTO>, IDisposable
+        IRequestHandler<FindProductByIdQuery, MinimalProductDTO>, IDisposable
     {
         private readonly IProductRepository _repository;
 
@@ -18,10 +18,10 @@ namespace ShopProductService.Handlers.Product
             _repository = repository;
         }
 
-        public async Task<ProductWithCommentsDTO> Handle(FindProductByIdQuery request, CancellationToken cancellationToken)
+        public async Task<MinimalProductDTO> Handle(FindProductByIdQuery request, CancellationToken cancellationToken)
         {
             if (request.IsMinimal)
-                return (ProductWithCommentsDTO) await _repository.GetMinimalProductAsync(request.Id);
+                return await _repository.GetMinimalProductAsync(request.Id);
             return await _repository.GetProductAsync(request.Id);
         }
 

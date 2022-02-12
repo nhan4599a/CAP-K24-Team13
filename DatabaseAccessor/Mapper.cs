@@ -20,7 +20,8 @@ namespace DatabaseAccessor.Mapping
                         options => options.MapFrom(source => source.Category == null ? "" : source.Category.CategoryName))
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
-                cfg.CreateMap<ShopProduct, ProductWithCommentsDTO>();
+                cfg.CreateMap<ShopProduct, ProductWithCommentsDTO>()
+                    .IncludeBase<ShopProduct, ProductDTO>();
                 cfg.CreateMap<ShopProduct, MinimalProductDTO>();
                 cfg.CreateMap<ShopCategory, CategoryDTO>();
 

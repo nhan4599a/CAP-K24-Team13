@@ -17,7 +17,7 @@
                 })
                 .catch(() => {
                     toastr.error('Rating Fail')
-                })
+                });
         });
     });
 });

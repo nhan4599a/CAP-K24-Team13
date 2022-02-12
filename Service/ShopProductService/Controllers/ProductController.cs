@@ -193,7 +193,7 @@ namespace ShopProductService.Controllers
             });
             if (product == null)
                 return ApiResult.CreateErrorResult(404, "Product is not found");
-            return ApiResult<ProductWithCommentsDTO>.CreateSuccessResult(product);
+            return ApiResult<ProductWithCommentsDTO>.CreateSuccessResult((ProductWithCommentsDTO) product);
         }
 
         [HttpGet("less/{id}")]
