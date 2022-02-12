@@ -1,5 +1,5 @@
 ﻿axios.defaults.timeout = 20000;
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'https://localhost:3000';
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
@@ -37,7 +37,7 @@ function findProducts(keyword, pageNumber, pageSize) {
 }
 
 function getProductImageUrl(imageFileName) {
-    return `http://localhost:3000${productEndpoint}/images/${imageFileName}`;
+    return `https://localhost:3000${productEndpoint}/images/${imageFileName}`;
 }
 
 function getProductImage(imageFileName) {
@@ -85,7 +85,7 @@ function getCategories(pageNumber, pageSize) {
 }
 
 function getCategoryImageUrl(imageFileName) {
-    return `http://localhost:3000${categoryEndpoint}/images/${imageFileName}`;
+    return `https://localhost:3000${categoryEndpoint}/images/${imageFileName}`;
 }
 
 function getCategoryImage(imageFileName) {
@@ -132,7 +132,7 @@ function getShopInterface(shopId) {
 }
 
 function getShopInterfaceImageUrl(imageFileName) {
-    return `http://localhost:3000${interfaceEndpoint}/images/${imageFileName}`;
+    return `https://localhost:3000${interfaceEndpoint}/images/${imageFileName}`;
 }
 
 function getShopInterfaceImage(imageFileName) {

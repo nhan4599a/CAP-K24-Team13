@@ -29,7 +29,7 @@ namespace OrderHistoryService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3006").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("https://localhost:3006").AllowAnyHeader().AllowAnyMethod();
                 });
             });
             services.AddMediatR(typeof(Startup));
