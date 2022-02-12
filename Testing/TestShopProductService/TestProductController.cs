@@ -347,7 +347,7 @@ namespace TestShopProductService
             var mediatorMock = new Mock<IMediator>();
             mediatorMock
                 .Setup(e => e.Send(It.IsAny<FindProductByIdQuery>(), CancellationToken.None))
-                .ReturnsAsync(new ProductDTO { Id = id });
+                .ReturnsAsync(new ProductWithCommentsDTO { Id = id });
 
             var controller = new ProductController(mediatorMock.Object, null);
 
@@ -368,7 +368,7 @@ namespace TestShopProductService
             var mediatorMock = new Mock<IMediator>();
             mediatorMock
                 .Setup(e => e.Send(It.IsAny<FindProductByIdQuery>(), CancellationToken.None))
-                .ReturnsAsync((ProductDTO?)null);
+                .ReturnsAsync((ProductWithCommentsDTO?)null);
 
             var controller = new ProductController(mediatorMock.Object, null);
 

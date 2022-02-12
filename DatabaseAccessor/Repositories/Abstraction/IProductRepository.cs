@@ -9,7 +9,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface IProductRepository : IDisposable
     {
-        Task<ProductDTO> GetProductAsync(Guid id);
+        Task<ProductWithCommentsDTO> GetProductAsync(Guid id);
 
         Task<MinimalProductDTO> GetMinimalProductAsync(Guid id);
 

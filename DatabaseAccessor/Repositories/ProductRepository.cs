@@ -24,9 +24,9 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper ?? Mapper.GetInstance();
         }
 
-        public async Task<ProductDTO> GetProductAsync(Guid id)
+        public async Task<ProductWithCommentsDTO> GetProductAsync(Guid id)
         {
-            return _mapper.MapToProductDTO(await FindProductByIdAsync(id));
+            return _mapper.MapToProductWithCommentsDTO(await FindProductByIdAsync(id));
         }
 
         public async Task<MinimalProductDTO> GetMinimalProductAsync(Guid id)

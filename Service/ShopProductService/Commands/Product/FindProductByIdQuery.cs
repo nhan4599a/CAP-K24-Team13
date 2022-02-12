@@ -4,7 +4,7 @@ using System;
 
 namespace ShopProductService.Commands.Product
 {
-    public class FindProductByIdQuery : IRequest<ProductDTO>
+    public class FindProductByIdQuery : IRequest<ProductWithCommentsDTO>
     {
         public Guid Id { get; set; }
 
