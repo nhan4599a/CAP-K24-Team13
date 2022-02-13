@@ -1,6 +1,5 @@
 ﻿using DatabaseAccessor.Models;
 using EntityFrameworkCore.Triggered;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

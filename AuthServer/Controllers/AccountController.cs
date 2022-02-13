@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AuthServer.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly ApplicationUserManager _userManager;
@@ -13,17 +14,21 @@ namespace AuthServer.Controllers
             _userManager = userManager;
         }
 
-        [Authorize]
         public IActionResult Information()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         [ActionName("Information")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditInformation()
+        public IActionResult EditInformation()
+        {
+            return View();
+        }
+
+        [ActionName("Password")]
+        public IActionResult ChangePassword()
         {
             return View();
         }

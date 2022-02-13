@@ -17,6 +17,7 @@ using System.Security.Claims;
 namespace AuthServer.Controllers
 {
     [ServiceFilter(typeof(SignInActionFilter))]
+    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         private readonly ApplicationSignInManager _signInManager;
@@ -33,14 +34,12 @@ namespace AuthServer.Controllers
             _mailer = mailer;
         }
 
-        [AllowAnonymous]
         [Route("/auth/SignIn")]
         public IActionResult SignIn()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("/auth/SignIn")]
         [ValidateAntiForgeryToken]
@@ -69,14 +68,12 @@ namespace AuthServer.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         [Route("/auth/SignUp")]
         public IActionResult SignUp()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("/auth/SignUp")]
         [ValidateAntiForgeryToken]
@@ -160,7 +157,6 @@ namespace AuthServer.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("/auth/ExternalConfirmation")]
         [ValidateAntiForgeryToken]
@@ -283,8 +279,12 @@ namespace AuthServer.Controllers
                 {
                     new Claim(ClaimTypes.Email, model.Email)
                 });
+                var addToRoleResult = await _signInManager.UserManager.AddToRoleAsync(user, "Customer");
+                if (addToRoleResult.Succeeded)
+                    return CreateUserResult.Success(user);
+                return CreateUserResult.Failed(addToRoleResult.Errors);
             }
-            return CreateUserResult.Success(user);
+            return CreateUserResult.Failed(createAccountResult.Errors);
         }
     }
 }

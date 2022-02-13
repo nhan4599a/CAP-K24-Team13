@@ -29,5 +29,7 @@ namespace AuthServer.Models
                 Errors = errors
             };
         }
+
+        public static CreateUserResult Failed(IEnumerable<IdentityError> errors) => Failed(errors.ToArray());
     }
 }

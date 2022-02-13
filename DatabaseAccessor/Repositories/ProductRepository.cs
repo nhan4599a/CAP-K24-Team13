@@ -34,7 +34,7 @@ namespace DatabaseAccessor.Repositories
             return _mapper.MapToMinimalProductDTO(await FindProductByIdAsync(id));
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo, bool includeComments)
+        public async Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
                 .Where(product => product.ProductName.Contains(keyword)
@@ -43,11 +43,10 @@ namespace DatabaseAccessor.Repositories
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo, bool includeComments)
+        public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking()
                 .Include(e => e.Category)
-                .Include(e => e.Comments)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -67,6 +66,11 @@ namespace DatabaseAccessor.Repositories
             if (category.IsDisabled)
                 return CommandResponse<Guid>.Error("Category is disabled", null);
             var shopProduct = new ShopProduct().AssignByRequestModel(requestModel);
+            if (await _dbContext.ShopProducts.AnyAsync(product => product.ShopId == shopProduct.ShopId && 
+                product.CategoryId == shopProduct.CategoryId && product.ProductName == shopProduct.ProductName))
+            {
+                return CommandResponse<Guid>.Error("Product's name is already existed", null);
+            }
             _dbContext.ShopProducts.Add(shopProduct);
             try
             {
