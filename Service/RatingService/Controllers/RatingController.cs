@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RatingService.Command;
+using RatingService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;

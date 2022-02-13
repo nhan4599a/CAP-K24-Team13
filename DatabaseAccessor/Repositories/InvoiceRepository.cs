@@ -71,6 +71,8 @@ namespace DatabaseAccessor.Repositories
             var invoice = await _dbContext.Invoices.FindAsync(invoiceId);
             if (invoice == null)
                 return CommandResponse<bool>.Error("Invoice not found", null);
+            invoice.Status = newStatus;
+            await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
 

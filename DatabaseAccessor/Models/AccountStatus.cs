@@ -1,4 +1,4 @@
-﻿namespace DatabaseAccessor
+﻿namespace DatabaseAccessor.Models
 {
     public enum AccountStatus
     {

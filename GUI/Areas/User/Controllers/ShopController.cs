@@ -30,14 +30,14 @@ namespace GUI.Areas.User.Controllers
             if (!productResponse.IsSuccessStatusCode ||
                 !informationResponse.IsSuccessStatusCode ||
                 !categoryResponse.IsSuccessStatusCode ||
-                shopResponse.ResponseCode != 200)
+                !shopResponse.IsSuccessStatusCode)
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             return View(new ShopDetailViewModel
             {
                 Products = productResponse.Content.Data,
                 Information = informationResponse.Content.Data,
                 Categories = categoryResponse.Content.Data,
-                Shop = shopResponse.Data
+                Shop = shopResponse.Content.Data
             });
         }
     }
