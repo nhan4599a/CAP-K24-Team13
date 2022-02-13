@@ -22,7 +22,7 @@ namespace GUI.Abtractions
             {
                 var cartItemsResponse = await _cartClient.GetCartItemsAsync("324DFA41-D0E8-46CD-1975-08D9EB65B707");
                 if (cartItemsResponse.IsSuccessStatusCode)
-                    controller.ViewData["CartItems"] = cartItemsResponse.Content;
+                    controller.ViewData["CartItems"] = cartItemsResponse.Content.Data;
             }
             await next();
         }
