@@ -6,6 +6,6 @@ namespace RatingService.Commands
 {
     public class RatingProductCommand : IRequest<CommandResponse<bool>>
     {
-        public RatingRequestModel RequestModel { get; set; }
+        public RatingRequestModel? RequestModel { get; set; }
     }
 }

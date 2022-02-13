@@ -7,7 +7,5 @@ namespace ShopProductService.Commands.Product
     public class FindAllProductQuery : IRequest<PaginatedList<ProductDTO>>
     {
         public PaginationInfo PaginationInfo { get; set; } = PaginationInfo.Default;
-
-        public bool IncludeComments { get; set; } = true;
     }
 }
