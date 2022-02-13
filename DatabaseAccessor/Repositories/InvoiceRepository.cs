@@ -70,7 +70,22 @@ namespace DatabaseAccessor.Repositories
         {
             var invoice = await _dbContext.Invoices.FindAsync(invoiceId);
             if (invoice == null)
-                return CommandResponse<bool>.Error("Invoice not found", null);
+                return CommandResponse<bool>.Error("Order not found", null);
+
+            // checking new status is valid
+            if (newStatus != InvoiceStatus.Canceled)
+            {
+                if (invoice.Status >= newStatus)
+                    return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
+            }
+            else
+            {
+                if (invoice.Status == InvoiceStatus.Succeed)
+                    return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
+            }
+            if (newStatus - invoice.Status > 1)
+                return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
+
             invoice.Status = newStatus;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);

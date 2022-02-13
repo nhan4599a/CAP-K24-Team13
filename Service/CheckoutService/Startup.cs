@@ -30,7 +30,7 @@ namespace CheckoutService
                 });
             services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();
             services.AddCors(options =>
