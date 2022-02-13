@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace OrderHistoryService.Commands
 {
-    public class GetOrderHistoryQuery: IRequest<List<OrderUserHistoryDTO>>
+    public class GetOrderHistoryByUserIdQuery: IRequest<List<OrderDTO>>
     {
         public string UserId { get; set; }  
     }

@@ -128,7 +128,7 @@ namespace ShopProductService.Controllers
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<Guid>.CreateSuccessResult(response.Response);
+            return ApiResult<Guid>.CreateSucceedResult(response.Response);
         }
 
         [HttpPut("{id}")]
@@ -149,7 +149,7 @@ namespace ShopProductService.Controllers
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<ProductDTO>.CreateSuccessResult(response.Response);
+            return ApiResult<ProductDTO>.CreateSucceedResult(response.Response);
         }
 
         [HttpDelete("{id}")]
@@ -162,19 +162,19 @@ namespace ShopProductService.Controllers
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<bool>.CreateSuccessResult(response.Response);
+            return ApiResult<bool>.CreateSucceedResult(response.Response);
         }
 
         [HttpGet("shop/{shopId}")]
         public async Task<ApiResult> GetProductsOfShop(int shopId)
         {
             if (shopId != 0)
-                return ApiResult<PaginatedList<ProductDTO>>.CreateSuccessResult(FakeProducts);
+                return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(FakeProducts);
             var response = await _mediator.Send(new FindProductsByShopIdQuery
             {
                 ShopId = shopId
             });
-            return ApiResult<PaginatedList<ProductDTO>>.CreateSuccessResult(response);
+            return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(response);
         }
 
         [HttpGet("search")]
@@ -188,7 +188,7 @@ namespace ShopProductService.Controllers
                     PaginationInfo = requestModel.PaginationInfo
                 };
             var productList = await _mediator.Send(request);
-            return ApiResult<PaginatedList<ProductDTO>>.CreateSuccessResult(productList);
+            return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productList);
         }
 
         [HttpGet("{id}")]
@@ -200,7 +200,7 @@ namespace ShopProductService.Controllers
             });
             if (product == null)
                 return ApiResult.CreateErrorResult(404, "Product is not found");
-            return ApiResult<ProductWithCommentsDTO>.CreateSuccessResult((ProductWithCommentsDTO) product);
+            return ApiResult<ProductWithCommentsDTO>.CreateSucceedResult((ProductWithCommentsDTO) product);
         }
 
         [HttpGet("less/{id}")]
@@ -213,7 +213,7 @@ namespace ShopProductService.Controllers
             });
             if (product == null)
                 return ApiResult.CreateErrorResult(404, "Product is not found");
-            return ApiResult<MinimalProductDTO>.CreateSuccessResult(product);
+            return ApiResult<MinimalProductDTO>.CreateSucceedResult(product);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

@@ -6,5 +6,5 @@ wt dotnet run --project %~dp0/Service/ShopProductService
 wt dotnet run --project %~dp0/Service/ShopInterfaceService
 wt dotnet run --project %~dp0/Service/RatingService 
 wt dotnet run --project %~dp0/Service/CheckoutService
-wt dotnet run --project %~dp0/Service/OrderHistoryService
+wt dotnet run --project %~dp0/Service/OrderService
 wt dotnet run --project %~dp0/AuthServer

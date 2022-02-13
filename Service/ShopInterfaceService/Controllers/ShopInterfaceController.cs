@@ -1,15 +1,13 @@
 ﻿using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Shared;
 using Shared.DTOs;
+using Shared.Exceptions;
 using Shared.Models;
 using Shared.RequestModels;
 using Shared.Validations;
 using ShopInterfaceService.Commands;
-using ShopInterfaceService.Mediator;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace ShopInterfaceService.Controllers
 {
@@ -30,38 +28,52 @@ namespace ShopInterfaceService.Controllers
         }
 
         [HttpPost("{shopId}")]
-        public async Task<ApiResult<bool>> CreateShopInterface(int shopId, 
+        public async Task<ApiResult> CreateShopInterface(int shopId, 
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
         {
-            requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files, rules: rules);
+            try
+            {
+                requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files, rules: rules);
+            }
+            catch (ImageValidationException ex)
+            {
+                return ApiResult.CreateErrorResult(400, ex.Message);
+            }
             var result = await _mediator.Send(new CreateOrEditShopInterfaceCommand
             {
                 ShopId = shopId,
                 RequestModel = requestModel
             });
             if (!result.IsSuccess)
-                return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = result.ErrorMessage };
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+                return ApiResult.CreateErrorResult(500, result.ErrorMessage);
+            return ApiResult.SucceedResult;
         }
 
         [HttpPut("{shopId}")]
-        public async Task<ApiResult<bool>> EditShopInterface(int shopId,
+        public async Task<ApiResult> EditShopInterface(int shopId,
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
         {
-            requestModel.ShopImages = await _fileStore.EditFilesAsync(requestModel.ShopImages, Request.Form.Files,
-                rules: rules);
+            try
+            {
+                requestModel.ShopImages = await _fileStore.EditFilesAsync(requestModel.ShopImages, Request.Form.Files,
+                    rules: rules);
+            }
+            catch (ImageValidationException ex)
+            {
+                return ApiResult.CreateErrorResult(400, ex.Message);
+            }
             var result = await _mediator.Send(new CreateOrEditShopInterfaceCommand
             {
                 ShopId = shopId,
                 RequestModel = requestModel
             });
             if (!result.IsSuccess)
-                return new ApiResult<bool> { ResponseCode = 500, Data = false, ErrorMessage = result.ErrorMessage };
-            return new ApiResult<bool> { ResponseCode = 200, Data = true };
+                return ApiResult.CreateErrorResult(500, result.ErrorMessage);
+            return ApiResult.SucceedResult;
         }
 
         [HttpGet("{shopId}")]
-        public async Task<ApiResult<ShopInterfaceDTO>> GetShopInterface(int shopId)
+        public async Task<ApiResult> GetShopInterface(int shopId)
         {
             var command = new FindShopInterfaceByShopIdCommand
             {
@@ -70,7 +82,7 @@ namespace ShopInterfaceService.Controllers
 
             var result = await _mediator.Send(command);
 
-            return new ApiResult<ShopInterfaceDTO> { ResponseCode = 200, Data = result.Response };
+            return ApiResult<ShopInterfaceDTO>.CreateSucceedResult(result.Response);
         }
 
         [HttpGet("images/{imageId}")]

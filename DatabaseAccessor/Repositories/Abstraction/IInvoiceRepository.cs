@@ -1,13 +1,22 @@
 ﻿using Shared;
+using Shared.DTOs;
+using Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-    public interface IOrderRepository : IDisposable
+
+    public interface IInvoiceRepository : IDisposable
     {
+
+        Task<List<OrderDTO>> GetOrderHistoryAsync(string userId);
+
         Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
             string shippingPhone, string shippingAddress, string orderNotes);
+
+        Task<CommandResponse<bool>> ChangeOrderStatusAsync(int invoiceId, InvoiceStatus newStatus);
     }
+
 }

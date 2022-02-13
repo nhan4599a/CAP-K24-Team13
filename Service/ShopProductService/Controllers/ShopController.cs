@@ -57,7 +57,7 @@ namespace ShopProductService.Controllers
         {
             var result = FakeShops.Where(shop => shop.Name.ToLower().Contains(requestModel.Keyword.ToLower()))
                 .Paginate(requestModel.PaginationInfo.PageNumber, requestModel.PaginationInfo.PageSize);
-            return ApiResult<PaginatedList<ShopDTO>>.CreateSuccessResult(result);
+            return ApiResult<PaginatedList<ShopDTO>>.CreateSucceedResult(result);
         }
 
         [HttpGet("{shopId}")]
@@ -66,7 +66,7 @@ namespace ShopProductService.Controllers
             var shop = FakeShops.SingleOrDefault(shop => shop.Id == shopId);
             if (shop == null)
                 return ApiResult.CreateErrorResult(404, "Can't not find shop");
-            return ApiResult<ShopDTO>.CreateSuccessResult(shop);
+            return ApiResult<ShopDTO>.CreateSucceedResult(shop);
         }
     }
 }

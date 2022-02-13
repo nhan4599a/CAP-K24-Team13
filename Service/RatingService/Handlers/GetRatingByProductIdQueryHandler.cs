@@ -1,15 +1,15 @@
 ﻿using MediatR;
-using RatingService.Command;
+using RatingService.Commands;
 using Shared.DTOs;
 using DatabaseAccessor.Repositories.Abstraction;
 
-namespace RatingService.Handler
+namespace RatingService.Handlers
 {
-    public class GetRatingCommandHandler : IRequestHandler<GetRatingQuery, List<RatingDTO>>, IDisposable
+    public class GetRatingByProductIdQueryHandler : IRequestHandler<GetRatingByProductIdQuery, List<RatingDTO>>, IDisposable
     {
         private readonly IRatingRepository _ratingRepository;
 
-        public GetRatingCommandHandler(IRatingRepository RatingRepository)
+        public GetRatingByProductIdQueryHandler(IRatingRepository RatingRepository)
         {
             _ratingRepository = RatingRepository;
         }
@@ -22,7 +22,7 @@ namespace RatingService.Handler
         }
 
 
-        public async Task<List<RatingDTO>> Handle(GetRatingQuery request, CancellationToken cancellationToken)
+        public async Task<List<RatingDTO>> Handle(GetRatingByProductIdQuery request, CancellationToken cancellationToken)
         {
             return await _ratingRepository.GetRatingAsync(request.ProductId);
         }

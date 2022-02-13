@@ -37,7 +37,7 @@ namespace DatabaseAccessor.Mapping
                         options => options.MapFrom(source => source.Product.Discount))
                     .ForMember(target => target.Image,
                         options => options.MapFrom<SingleImageResolver>());
-                cfg.CreateMap<InvoiceDetail, OrderUserHistoryDTO>()
+                cfg.CreateMap<InvoiceDetail, OrderDTO>()
                     .ForMember(target => target.ProductName,
                         option => option.MapFrom(source => source.Product.ProductName))
                     .ForMember(target => target.Images,
@@ -72,7 +72,7 @@ namespace DatabaseAccessor.Mapping
 
         public CartItemDTO MapToCartItemDTO(CartDetail cartItem) => _mapper.Map<CartItemDTO>(cartItem);
 
-        public OrderUserHistoryDTO MapToOrderUserHistoryDTO(InvoiceDetail invoice) => _mapper.Map<OrderUserHistoryDTO>(invoice);
+        public OrderDTO MapToOrderUserHistoryDTO(InvoiceDetail invoice) => _mapper.Map<OrderDTO>(invoice);
 
         public RatingDTO MapToRatingDTO(ProductComment rating) => _mapper.Map<RatingDTO>(rating);
     }

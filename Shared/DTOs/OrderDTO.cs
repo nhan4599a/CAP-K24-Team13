@@ -2,7 +2,7 @@
 
 namespace Shared.DTOs
 {
-    public class OrderUserHistoryDTO
+    public class OrderDTO
     {
         public int Id { get; set; }
 

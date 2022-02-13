@@ -41,7 +41,7 @@ namespace GUI.Areas.User.Controllers
             return View(new SearchResultViewModel
             {
                 Products = productResponse.Content.Data,
-                Shops = shopResponse.Content
+                Shops = shopResponse.Content.Data
             });
         }
     }

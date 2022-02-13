@@ -25,7 +25,7 @@ namespace OrderHistoryService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<IOrderHistoryRepository, OrderHistoryRepository>();
+            services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.RegisterOcelotService(Configuration);
             services.AddSwaggerGen();
             services.AddScoped<ApplicationDbContext>();

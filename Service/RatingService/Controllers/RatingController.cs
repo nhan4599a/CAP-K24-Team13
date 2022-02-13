@@ -21,7 +21,7 @@ namespace RatingService.Controllers
         [HttpGet("{productId}")]
         public async Task<ApiResult<List<RatingDTO>>> GetRating(string productId)
         {
-            var result = await _mediator.Send(new GetRatingQuery
+            var result = await _mediator.Send(new GetRatingByProductIdQuery
             {
                 ProductId = productId
             });

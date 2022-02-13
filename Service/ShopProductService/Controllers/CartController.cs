@@ -24,7 +24,7 @@ namespace ShopProductService.Controllers
         public async Task<ApiResult> GetCartItems(string userId)
         {
             var result = await _mediator.Send(new GetCartItemsQuery { UserId = userId });
-            return ApiResult<List<CartItemDTO>>.CreateSuccessResult(result);
+            return ApiResult<List<CartItemDTO>>.CreateSucceedResult(result);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace ShopProductService.Controllers
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<bool>.CreateSuccessResult(true);
+            return ApiResult<bool>.CreateSucceedResult(true);
         }
 
         [HttpPut]
@@ -48,7 +48,7 @@ namespace ShopProductService.Controllers
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<bool>.CreateSuccessResult(true);
+            return ApiResult<bool>.CreateSucceedResult(true);
         }
 
         [HttpDelete("{userId}/{productId}")]
@@ -64,7 +64,7 @@ namespace ShopProductService.Controllers
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<bool>.CreateSuccessResult(true);
+            return ApiResult<bool>.CreateSucceedResult(true);
         }
     }
 }

@@ -93,7 +93,7 @@ namespace ShopProductService.Controllers
             });
             if (!response.Response)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<bool>.CreateSuccessResult(true);
+            return ApiResult<bool>.CreateSucceedResult(true);
         }
 
         [HttpGet("{id}")]
@@ -105,7 +105,7 @@ namespace ShopProductService.Controllers
             });
             if (category == null)
                 return ApiResult.CreateErrorResult(404, "Category is not found");
-            return ApiResult<CategoryDTO>.CreateSuccessResult(category);
+            return ApiResult<CategoryDTO>.CreateSucceedResult(category);
         }
 
         [HttpPut("{id}")]
@@ -127,7 +127,7 @@ namespace ShopProductService.Controllers
             });
             if (!response.Response)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<bool>.CreateSuccessResult(true);
+            return ApiResult<bool>.CreateSucceedResult(true);
         }
 
         [HttpGet]
@@ -138,7 +138,7 @@ namespace ShopProductService.Controllers
             {
                 PaginationInfo = paginationInfo
             });
-            return ApiResult<PaginatedList<CategoryDTO>>.CreateSuccessResult(categories);
+            return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(categories);
         }
 
         [HttpDelete("{id}")]
@@ -155,19 +155,19 @@ namespace ShopProductService.Controllers
             });
             if (!response.Response)
                 return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = response.ErrorMessage, Data = false };
-            return ApiResult<bool>.CreateSuccessResult(true);
+            return ApiResult<bool>.CreateSucceedResult(true);
         }
 
         [HttpGet("shop/{id}")]
         public async Task<ApiResult> GetCategoriesOfShop(int id)
         {
             if (id != 0)
-                return ApiResult<PaginatedList<CategoryDTO>>.CreateSuccessResult(FakeCategories);
+                return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(FakeCategories);
             var result = await _mediator.Send(new FindCategoriesByShopIdQuery
             {
                 ShopId = id
             });
-            return ApiResult<PaginatedList<CategoryDTO>>.CreateSuccessResult(result);
+            return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(result);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

@@ -2,7 +2,7 @@
 using Shared;
 using Shared.RequestModels;
 
-namespace RatingService.Command
+namespace RatingService.Commands
 {
     public class RatingProductCommand : IRequest<CommandResponse<bool>>
     {

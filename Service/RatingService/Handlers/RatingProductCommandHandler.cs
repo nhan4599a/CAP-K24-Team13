@@ -1,13 +1,10 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using RatingService.Command;
+using RatingService.Commands;
 using Shared;
-using Shared.DTOs;
 
-namespace RatingService.Handler
+namespace RatingService.Handlers
 {
-
-
     public class RatingProductCommandHandler : IRequestHandler<RatingProductCommand, CommandResponse<bool>>, IDisposable
     {
         private readonly IRatingRepository _ratingRepository;
@@ -17,17 +14,16 @@ namespace RatingService.Handler
             _ratingRepository = RatingRepository;
         }
 
+        public async Task<CommandResponse<bool>> Handle(RatingProductCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _ratingRepository.RatingProductAsync(request.RequestModel);
+            return result;
+        }
 
         public void Dispose()
         {
             _ratingRepository.Dispose();
             GC.SuppressFinalize(this);
-        }
-
-        public async Task<CommandResponse<bool>> Handle(RatingProductCommand request, CancellationToken cancellationToken)
-        {
-            var result = await _ratingRepository.RatingProductAsync(request.RequestModel);
-            return result;
         }
     }
 }
