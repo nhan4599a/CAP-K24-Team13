@@ -1,7 +1,10 @@
 ﻿using AuthServer.Identities;
 using AuthServer.Models;
+using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AuthServer.Controllers
 {
@@ -9,10 +12,12 @@ namespace AuthServer.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationUserManager _userManager;
+        private readonly ApplicationSignInManager _signInManager; 
 
-        public AccountController(ApplicationUserManager userManager)
+        public AccountController(ApplicationUserManager userManager,ApplicationSignInManager signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Information()
@@ -55,5 +60,40 @@ namespace AuthServer.Controllers
             }
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Register(SignUpModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    UserName = model.Username,
+                    Password = model.Password,
+                    RePassword = model.RePassword,
+                    Email = model.Email,
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    return RedirectToAction("index", "Home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                ModelState.AddModelError(string.Empty, "Register failed, try again!");
+
+            }
+            return View(model);
+        }
+
     }
 }

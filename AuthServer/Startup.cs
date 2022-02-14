@@ -80,7 +80,8 @@ namespace AuthServer
             .AddRoleStore<ApplicationRoleStore>()
             .AddRoleManager<ApplicationRoleManager>()
             .AddSignInManager<ApplicationSignInManager>()
-            .AddPasswordValidator<UserPasswordValidator>();
+            .AddPasswordValidator<UserPasswordValidator>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();   
 
             services.AddIdentityServer(options =>
             {
@@ -93,6 +94,7 @@ namespace AuthServer
                 options.Endpoints.EnableAuthorizeEndpoint = true;
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
+                
             })
                 .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
@@ -130,5 +132,6 @@ namespace AuthServer
             var assemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(assemblyName));
         }
+
     }
 }
