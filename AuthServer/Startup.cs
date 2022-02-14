@@ -65,7 +65,7 @@ namespace AuthServer
             {
                 options.SignIn.RequireConfirmedEmail = AccountConfig.RequireEmailConfirmation;
                 options.SignIn.RequireConfirmedAccount = AccountConfig.RequireEmailConfirmation;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredLength = 8;
                 if (AccountConfig.RequireEmailConfirmation)
                 {
@@ -73,7 +73,7 @@ namespace AuthServer
                         new TokenProviderDescriptor(typeof(MailConfirmationTokenProvider<User>)));
                     options.Tokens.EmailConfirmationTokenProvider = "MailConfirmation";
                 }
-                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.MaxFailedAccessAttempts = AccountConfig.MaxFailedAccessAttempts;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountConfig.LockOutTime);
             }).AddUserStore<ApplicationUserStore>()
             .AddUserManager<ApplicationUserManager>()
