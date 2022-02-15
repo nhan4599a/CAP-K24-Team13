@@ -5,6 +5,6 @@ namespace RatingService.Commands
 {
     public class GetRatingByProductIdQuery : IRequest<List<RatingDTO>>
     {
-        public string ProductId { get; set; }
+        public string? ProductId { get; set; }
     }
 }

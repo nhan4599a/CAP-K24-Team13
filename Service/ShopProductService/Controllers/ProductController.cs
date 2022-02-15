@@ -181,7 +181,7 @@ namespace ShopProductService.Controllers
         public async Task<ApiResult> ListProduct([FromQuery] SearchRequestModel requestModel)
         {
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
-                ? new FindAllProductQuery { PaginationInfo = requestModel.PaginationInfo, IncludeComments = false }
+                ? new FindAllProductQuery { PaginationInfo = requestModel.PaginationInfo }
                 : new FindProductsByKeywordQuery
                 {
                     Keyword = requestModel.Keyword,

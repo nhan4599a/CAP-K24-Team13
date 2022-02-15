@@ -46,6 +46,26 @@
             font-size: 16px;
         }
     </style>
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
     @RenderSection("Styles", false)
 </head>
 
@@ -76,9 +96,23 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="login">
-                                        <a href="https://localhost:7265/auth/signin">Sign in / Sign up</a>
-                                    </li>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <div class="dropdown">
+                                            <a href="#my-account">My Account</a>
+                                            <div class="dropdown-content">
+                                                <a href="#my-account">My Account</a>
+                                                <a href="#my-purchase">My Purchase</a>
+                                                <a href="#change-password">Change Password</a>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <li class="login">
+                                            <a href="https://localhost:7265/auth/signin">Sign in / Sign up</a>
+                                        </li>
+                                    }
                                 </ul>
                             </li>
                         </ul><!-- End .top-menu -->

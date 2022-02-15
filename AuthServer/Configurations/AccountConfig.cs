@@ -8,6 +8,8 @@
 
         public static bool AccountLockedOutEnabled => true;
 
+        public static int MaxFailedAccessAttempts => 5;
+
         public static int MinAge => 18;
 
         public static int MaxAge => 50;
