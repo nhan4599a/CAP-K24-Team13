@@ -4,6 +4,8 @@ using RatingService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RatingService.Controllers
 {

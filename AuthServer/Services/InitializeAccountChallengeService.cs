@@ -1,5 +1,10 @@
 ﻿using AuthServer.Identities;
 using DatabaseAccessor.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AuthServer.Services
 {

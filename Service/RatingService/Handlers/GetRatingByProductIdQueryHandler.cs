@@ -2,6 +2,10 @@
 using RatingService.Commands;
 using Shared.DTOs;
 using DatabaseAccessor.Repositories.Abstraction;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
+using System.Threading;
 
 namespace RatingService.Handlers
 {
@@ -20,7 +24,6 @@ namespace RatingService.Handlers
             _ratingRepository.Dispose();
             GC.SuppressFinalize(this);
         }
-
 
         public async Task<List<RatingDTO>> Handle(GetRatingByProductIdQuery request, CancellationToken cancellationToken)
         {

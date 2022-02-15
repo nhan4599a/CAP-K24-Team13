@@ -1,5 +1,6 @@
 ﻿using AspNetCoreSharedComponent.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace AuthServer.Models
 {

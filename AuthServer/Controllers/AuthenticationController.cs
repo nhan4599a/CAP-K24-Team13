@@ -10,9 +10,14 @@ using IdentityServer4.Events;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
 {
@@ -62,6 +67,11 @@ namespace AuthServer.Controllers
             {
                 ModelState.AddModelError("SignIn-Error", "Account is locked out");
                 ViewBag.LockedOutCancelTime = user!.LockoutEnd!.Value;
+                return View(model);
+            }
+            if (user != null && signInResult.IsNotAllowed)
+            {
+                ModelState.AddModelError("SignIn-Error", "Account is have not been confirmed");
                 return View(model);
             }
             ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
@@ -227,7 +237,7 @@ namespace AuthServer.Controllers
             _mailer.SendMail(message);
         }
 
-        private Task<MailRequest> GenerateEmailAsync(string receiver, string token)
+        private static Task<MailRequest> GenerateEmailAsync(string receiver, string token)
         {
             var body = "Thanks for your registration," +
                 " this is your email confirmation link" +
@@ -236,7 +246,7 @@ namespace AuthServer.Controllers
             return Task.FromResult<MailRequest>(new()
             {
                 Body = body,
-                Sender = _mailer.MailAddress,
+                Sender = "gigamallservice@gmail.com",
                 IsHtmlMessage = true,
                 Receiver = receiver,
                 Subject = "Email confirmation"
