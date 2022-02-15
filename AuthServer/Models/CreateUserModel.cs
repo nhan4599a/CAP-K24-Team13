@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+
+using Shared;
 
 namespace AuthServer.Models
 {
-    public class CreateUserModel : Controller
+    public class CreateOrEditUserRequestModel : IRequest<CommandResponse<Guid>>
     {
-        public string CategoryName { get; set; }
+        public CreateOrEditUserRequestModel RequestModel { get; set; }
 
-        public int Special { get; set; }
-
-        public string ImagePath { get; set; }
+        public static implicit operator CreateOrEditUserRequestModel(SignUpModel v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

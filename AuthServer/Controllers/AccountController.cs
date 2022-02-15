@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using Microsoft.AspNetCore.Identity;
+using Azure;
+using Consul;
+using IdentityServer4.Models;
 
 namespace AuthServer.Controllers
 {
@@ -12,12 +15,14 @@ namespace AuthServer.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationUserManager _userManager;
-        private readonly ApplicationSignInManager _signInManager; 
-
-        public AccountController(ApplicationUserManager userManager,ApplicationSignInManager signInManager)
+        private readonly ApplicationSignInManager _signInManager;
+        private readonly ApplicationRoleManager _roleManager;
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+
         }
 
         public IActionResult Information()
@@ -61,7 +66,7 @@ namespace AuthServer.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(SignUpModel model)
+        public async Task<IActionResult> Register([FromBody] SignUpModel model)
         {
             if (ModelState.IsValid)
             {
@@ -69,31 +74,35 @@ namespace AuthServer.Controllers
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    UserName = model.Username,
-                    Password = model.Password,
-                    RePassword = model.RePassword,
                     Email = model.Email,
+                    RePassword = model.RePassword,
+                    DoB = model.DoB,
                 };
 
+
                 var result = await _userManager.CreateAsync(user, model.Password);
+                //var roles = await _userManager.GetRolesAsync(user);
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _userManager.AddToRoleAsync(user, "CUSTOMER");
 
-                    return RedirectToAction("index", "Home");
+                    return Ok();
+                    //    foreach (var error in result.Errors)
+                    //{
+                    //        ModelState.AddModelError(string.Empty, error.Description);
+                    //}
+                    //        ModelState.AddModelError(string.Empty, "Register failed, try again!");
                 }
-
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError("", error.Description);
+                    return BadRequest();
                 }
-
-                ModelState.AddModelError(string.Empty, "Register failed, try again!");
-
             }
-            return View(model);
+            return Ok();
         }
-
     }
 }
+
+
+
