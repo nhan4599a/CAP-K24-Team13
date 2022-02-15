@@ -66,7 +66,7 @@ namespace AuthServer
             services.AddTransient<MailConfirmationTokenProvider<User>>();
             services.AddSingleton(new SmtpClient
             {
-                Credentials = new NetworkCredential(Configuration["GMAIL-USERNAME"], Configuration["GMAIL-PASSWORD"]),
+                Credentials = new NetworkCredential(Configuration["GMAIL_USERNAME"], Configuration["GMAIL_PASSWORD"]),
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 EnableSsl = true,
                 Host = "smtp.gmail.com",
@@ -140,7 +140,7 @@ namespace AuthServer
 
         private void ApplyOptions(DbContextOptionsBuilder builder)
         {
-            var connectionString = "Server=.\\SQLExpress; Database=ClientAuth; User ID=sa; Password=123456; TrustServerCertificate=True";
+            var connectionString = "Server=.; Database=ClientAuth; User ID=sa; Password=nhan4599; TrustServerCertificate=True";
             var assemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(assemblyName));
         }
