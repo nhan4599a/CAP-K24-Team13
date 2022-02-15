@@ -10,9 +10,14 @@ using IdentityServer4.Events;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
 {
@@ -62,6 +67,11 @@ namespace AuthServer.Controllers
             {
                 ModelState.AddModelError("SignIn-Error", "Account is locked out");
                 ViewBag.LockedOutCancelTime = user!.LockoutEnd!.Value;
+                return View(model);
+            }
+            if (user != null && signInResult.IsNotAllowed)
+            {
+                ModelState.AddModelError("SignIn-Error", "Account is have not been confirmed");
                 return View(model);
             }
             ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
@@ -216,6 +226,12 @@ namespace AuthServer.Controllers
             return View();
         }
 
+        [Route("/Auth/Confirmation/{email}")]
+        public async Task<IActionResult> ConfirmEmail(string email, string token)
+        {
+            return View();
+        }
+
         private async Task SendUserConfirmationEmail(User user)
         {
             if (user == null)
@@ -227,16 +243,15 @@ namespace AuthServer.Controllers
             _mailer.SendMail(message);
         }
 
-        private Task<MailRequest> GenerateEmailAsync(string receiver, string token)
+        private static Task<MailRequest> GenerateEmailAsync(string receiver, string token)
         {
             var body = "Thanks for your registration," +
-                " this is your email confirmation link" +
-                $" <a href=\"{$"https://localhost:7265/auth/confirmation?token={token}"}\"></a>." +
+                $" this is your email confirmation <a href=\"{$"https://localhost:7265/auth/confirmation/{receiver}?token={token}"}\">link</a>" +
                 $" The link will be expired at {DateTime.UtcNow.AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss tt}";
             return Task.FromResult<MailRequest>(new()
             {
                 Body = body,
-                Sender = _mailer.MailAddress,
+                Sender = "gigamallservice@gmail.com",
                 IsHtmlMessage = true,
                 Receiver = receiver,
                 Subject = "Email confirmation"

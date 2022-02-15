@@ -10,9 +10,16 @@ using AuthServer.Services;
 using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 
@@ -57,15 +64,22 @@ namespace AuthServer
                 //    options.ClientSecret = Configuration["GOOGLE_CLIENT_SECRET"];
                 //});
             services.AddTransient<MailConfirmationTokenProvider<User>>();
-            services.AddScoped<SmtpClient>();
-            services.AddScoped<IMailService, GmailService>();
+            services.AddSingleton(new SmtpClient
+            {
+                Credentials = new NetworkCredential(Configuration["GMAIL_USERNAME"], Configuration["GMAIL_PASSWORD"]),
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = true,
+                Host = "smtp.gmail.com",
+                Port = 587
+            });
+            services.AddSingleton<IMailService, GmailService>();
             services.AddScoped<SignInActionFilter>();
             services.AddScoped<IUserClaimsPrincipalFactory<User>, ApplicationUserClaimsPrincipleFactory>();
             services.AddIdentity<User, Role>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = AccountConfig.RequireEmailConfirmation;
                 options.SignIn.RequireConfirmedAccount = AccountConfig.RequireEmailConfirmation;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredLength = 8;
                 if (AccountConfig.RequireEmailConfirmation)
                 {
@@ -73,7 +87,7 @@ namespace AuthServer
                         new TokenProviderDescriptor(typeof(MailConfirmationTokenProvider<User>)));
                     options.Tokens.EmailConfirmationTokenProvider = "MailConfirmation";
                 }
-                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.MaxFailedAccessAttempts = AccountConfig.MaxFailedAccessAttempts;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountConfig.LockOutTime);
             }).AddUserStore<ApplicationUserStore>()
             .AddUserManager<ApplicationUserManager>()

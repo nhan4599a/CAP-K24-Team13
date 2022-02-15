@@ -1,4 +1,6 @@
-﻿namespace AuthServer.Models
+﻿using System;
+
+namespace AuthServer.Models
 {
     public class MailRequest
     {
@@ -6,9 +8,9 @@
 
         public string? Receiver { get; set; }
 
-        public string[]? Cc { get; set; }
+        public string[] Cc { get; set; } = Array.Empty<string>();
 
-        public string[]? Bcc { get; set; }
+        public string[] Bcc { get; set; } = Array.Empty<string>();
 
         public string? Subject { get; set; }
 

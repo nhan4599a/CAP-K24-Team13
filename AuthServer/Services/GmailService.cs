@@ -1,6 +1,6 @@
 ﻿using AuthServer.Events;
 using AuthServer.Models;
-using System.Net;
+using System;
 using System.Net.Mail;
 
 namespace AuthServer.Services
@@ -9,28 +9,11 @@ namespace AuthServer.Services
     {
         private readonly SmtpClient _smtpClient;
 
-        public string MailProvider => "GMAIL";
-
-        public string MailAddress => Username;
-
-        public string Username { get; }
-
-        public string Password { get; }
-
         public event EventHandler<MailSentAsyncEventArgs>? MailSent;
 
-        public GmailService(SmtpClient smtpClient, IConfiguration configuration)
+        public GmailService(SmtpClient smtpClient)
         {
-            var username = configuration.GetValue<string>("GMAIL-USERNAME");
-            var password = configuration.GetValue<string>("GMAIL-PASSWORD");
             _smtpClient = smtpClient;
-            _smtpClient.Credentials = new NetworkCredential(username, password);
-            _smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            _smtpClient.EnableSsl = true;
-            _smtpClient.Host = "smtp.gmail.com";
-            _smtpClient.Port = 587;
-            Username = username;
-            Password = password;
         }
 
         public void SendMail(MailRequest mailRequest)
@@ -50,7 +33,7 @@ namespace AuthServer.Services
                 mail.CC.Add(new MailAddress(cc));
             foreach (string bcc in mailRequest.Bcc!)
                 mail.Bcc.Add(new MailAddress(bcc));
-            _smtpClient.SendCompleted += (sender, args) =>
+            _smtpClient!.SendCompleted += (sender, args) =>
             {
                 OnMailSent(new MailSentAsyncEventArgs(args));
             };
@@ -61,12 +44,6 @@ namespace AuthServer.Services
         {
             args.MailMessage?.Dispose();
             MailSent?.Invoke(this, args);
-        }
-
-        public void Dispose()
-        {
-            _smtpClient.Dispose();
-            GC.SuppressFinalize(this);
         }
     }
 }

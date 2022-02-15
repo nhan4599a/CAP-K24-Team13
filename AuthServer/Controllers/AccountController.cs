@@ -1,13 +1,9 @@
-﻿using AuthServer.Identities;
+using AuthServer.Identities;
 using AuthServer.Models;
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Models;
-using Microsoft.AspNetCore.Identity;
-using Azure;
-using Consul;
-using IdentityServer4.Models;
+using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
 {
@@ -15,14 +11,10 @@ namespace AuthServer.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationUserManager _userManager;
-        private readonly ApplicationSignInManager _signInManager;
-        private readonly ApplicationRoleManager _roleManager;
+        
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
-
         }
 
         public IActionResult Information()
@@ -65,6 +57,7 @@ namespace AuthServer.Controllers
             }
             return View();
         }
+        
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] SignUpModel model)
         {
