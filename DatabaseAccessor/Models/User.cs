@@ -17,7 +17,5 @@ namespace DatabaseAccessor.Models
         public virtual IList<Invoice> Invoices { get; set; }
 
         public virtual Cart Cart { get; set; }
-        public string Password { get; set; }
-        public string RePassword { get; set; }
     }
 }

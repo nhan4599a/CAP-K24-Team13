@@ -1,6 +1,5 @@
 using AuthServer.Identities;
 using AuthServer.Models;
-using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -57,45 +56,5 @@ namespace AuthServer.Controllers
             }
             return View();
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] SignUpModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new User
-                {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email,
-                    RePassword = model.RePassword,
-                    DoB = model.DoB,
-                };
-
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-                //var roles = await _userManager.GetRolesAsync(user);
-
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, "CUSTOMER");
-
-                    return Ok();
-                    //    foreach (var error in result.Errors)
-                    //{
-                    //        ModelState.AddModelError(string.Empty, error.Description);
-                    //}
-                    //        ModelState.AddModelError(string.Empty, "Register failed, try again!");
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            return Ok();
-        }
     }
 }
-
-
-
