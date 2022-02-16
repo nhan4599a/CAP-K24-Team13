@@ -1,5 +1,6 @@
 ﻿using AuthServer.Abstractions;
 using AuthServer.Configurations;
+using AuthServer.Helpers;
 using AuthServer.Identities;
 using AuthServer.Models;
 using AuthServer.ViewModels;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,14 +89,14 @@ namespace AuthServer.Controllers
         [HttpPost]
         [Route("/auth/SignUp")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUp(SignUpModel model)
+        public async Task<IActionResult> SignUp(UserSignUpModel model)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("SignUp-Error", "Input information is invalid");
                 return View(model);
             }
-            var createUserResult = await CreateUserAsync(model);
+            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, Roles.CUSTOMER);
             if (createUserResult.Succeeded)
             {
                 if (AccountConfig.RequireEmailConfirmation)
@@ -177,8 +179,7 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("SignUp-Error", "Input information is invalid");
                 return View();
             }
-            var createUserResult = 
-                await CreateUserAsync(model);
+            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, Roles.CUSTOMER);
             if (createUserResult.Succeeded)
             {
                 var user = createUserResult.User;
@@ -226,7 +227,7 @@ namespace AuthServer.Controllers
             return View();
         }
 
-        [Route("/Auth/Confirmation/{email}")]
+        [HttpGet("/Auth/Confirmation/{email}")]
         public async Task<IActionResult> ConfirmEmail(string email, string token)
         {
             return View();
@@ -258,48 +259,6 @@ namespace AuthServer.Controllers
             });
         }
 
-        private async Task<CreateUserResult> CreateUserAsync(SignUpModel model)
-        {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-            var user = await _signInManager.UserManager.FindByEmailAsync(model.Email);
-            if (user != null)
-            {
-                if (user.UserName == model.Username)
-                    return CreateUserResult.Failed(new IdentityError
-                    {
-                        Code = "UsernameIsAlreadyExisted",
-                        Description = "This username is in used"
-                    });
-                return CreateUserResult.Failed(new IdentityError
-                {
-                    Code = "EmailIsInUsed",
-                    Description = "This email is linked to another account"
-                });
-            }
-            user = new User
-            {
-                Email = model.Email,
-                UserName = model.Username,
-                NormalizedEmail = model.Email.ToUpper(),
-                NormalizedUserName = model.Username.ToUpper(),
-                DoB = model.DoB,
-                FirstName = model.FirstName,
-                LastName = model.LastName
-            };
-            var createAccountResult = await _signInManager.UserManager.CreateAsync(user, model.Password);
-            if (createAccountResult.Succeeded)
-            {
-                await _signInManager.UserManager.AddClaimsAsync(user, new[]
-                {
-                    new Claim(ClaimTypes.Email, model.Email)
-                });
-                var addToRoleResult = await _signInManager.UserManager.AddToRoleAsync(user, "Customer");
-                if (addToRoleResult.Succeeded)
-                    return CreateUserResult.Success(user);
-                return CreateUserResult.Failed(addToRoleResult.Errors);
-            }
-            return CreateUserResult.Failed(createAccountResult.Errors);
-        }
+        
     }
 }

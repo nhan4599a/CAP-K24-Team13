@@ -43,7 +43,7 @@ namespace AuthServer
             services.AddControllersWithViews(options =>
             {
                 options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
-            }).AddFluentValidation<SignUpModel, SignUpModelValidator>()
+            }).AddFluentValidation<UserSignUpModel, SignUpModelValidator>()
             .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>();
             services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
