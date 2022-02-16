@@ -140,3 +140,8 @@ button {
     width: 100%;
     background-color: #2f9db6 !important;
 }
+
+input {
+    width: 100% !important;
+    margin-bottom: 5px !important
+}
