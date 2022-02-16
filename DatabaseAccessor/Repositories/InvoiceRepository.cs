@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories
 {
-
     public class InvoiceRepository : IInvoiceRepository
     {
         private readonly ApplicationDbContext _dbContext;
@@ -25,10 +24,32 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper ?? Mapper.GetInstance();
         }
 
-        public async Task<List<OrderDTO>> GetOrderHistoryAsync(string userId)
+        public async Task<List<OrderItemDTO>> GetOrderHistoryAsync(string userId)
         {
             var invoices = await _dbContext.InvoiceDetails.Where(item => item.Invoice.UserId.ToString() == userId).ToListAsync();
-            return invoices.Select(item => _mapper.MapToOrderUserHistoryDTO(item)).ToList();
+            return invoices.Select(item => _mapper.MapToOrderItemDTO(item)).ToList();
+        }
+
+        public async Task<List<OrderDTO>> GetOrdersOfShopAsync(int shopId)
+        {
+            return await _dbContext.Invoices
+                .AsNoTracking()
+                .Where(item => item.ShopId == shopId).Select(invoice => _mapper.MapToOrderDTO(invoice)).ToListAsync();
+        }
+
+        public async Task<List<OrderDTO>> GetOrdersOfShopWithInTimeAsync(int shopId, DateOnly startDate, DateOnly endDate)
+        {
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            if (startDate > endDate)
+                throw new InvalidOperationException($"{nameof(startDate)} must be less than or equal to {nameof(endDate)}");
+            if (endDate > currentDate)
+                throw new InvalidOperationException($"{nameof(endDate)} must be less than {currentDate:dd/MM/yyyy}");
+            return await _dbContext.Invoices
+                .AsNoTracking()
+                .Where(item => item.ShopId == shopId && item.CreatedAt >= startDate.ToDateTime(TimeOnly.MinValue)
+                    && item.CreatedAt <= endDate.ToDateTime(TimeOnly.MaxValue))
+                .Select(invoice => _mapper.MapToOrderDTO(invoice))
+                .ToListAsync();
         }
 
         public async Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,

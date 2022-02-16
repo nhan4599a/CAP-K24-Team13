@@ -17,7 +17,7 @@ namespace DatabaseAccessor.Models
         public Guid UserId { get; set; }
 
         [Required]
-        public DateTime Created { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [Required]
         public string ShippingAddress { get; set; }
