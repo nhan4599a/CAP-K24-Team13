@@ -1,17 +1,120 @@
 ﻿@section SideBar {
     @await Component.InvokeAsync("SideBar", new { activeItem = "order" });
 }
-
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+         <div class="container-fluid py-1 px-3">
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                   <div class="input-group input-group-outline">
+                      <label class="form-label">Type to search</label>
+                      <input type="text" class="form-control" id="input-search">
+                   </div>
+                </div>
+            </div>      
+         </div>
+    </nav>
+</main>
 <div class="row">
     <div class="col-12">
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="border-radius-lg pt-4 pb-3 bg-gradient-primary-dark shadow">
-                    <h6 class="text-white text-capitalize ps-3">Order management board</h6>
+                    <h6 class="text-white text-capitalize ps-3 ">Order management board</h6>
                 </div>
             </div>
             <div class="card-body px-0 pb-2">
-                <div class="table-responsive p-0"></div>
+                <div class="table-responsive p-0">
+                </div>
+                  <div class="drag-container"></div> 
+                  <div class="board">
+                    <div class="board-column confirm">
+                      <div class="board-column-container">
+                        <div class="board-column-header">Confirm</div>
+                        <div class="board-column-content-wrapper">
+                          <div class="board-column-content">
+                            <div class="board-item">
+                              <div class="board-item-content">
+                                <div id="order-id">
+                                  <a href="">Order Id#</a>
+                                </div>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">View</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="board-column in-process">
+                      <div class="board-column-container">
+                        <div class="board-column-header">In process</div>
+                        <div class="board-column-content-wrapper">
+                          <div class="board-column-content">
+                            <div class="board-item">
+                              <div class="board-item-content">
+                                <div id="order-id">
+                                  <a href="">Order Id#</a>
+                                </div>
+                                <button class="btn btn-primary">View</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="board-column deliveried">
+                      <div class="board-column-container">
+                        <div class="board-column-header">Deliveried</div>
+                        <div class="board-column-content-wrapper">
+                          <div class="board-column-content">
+                            <div class="board-item">
+                              <div class="board-item-content">
+                                <div id="order-id">
+                                  <a href="">Order Id#</a>
+                                </div>
+                                <button class="btn btn-primary">View</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="board-column done">
+                      <div class="board-column-container">
+                        <div class="board-column-header">Done</div>
+                        <div class="board-column-content-wrapper">
+                          <div class="board-column-content">
+                            <div class="board-item">
+                              <div class="board-item-content">
+                                <div id="order-id">
+                                  <a href="">Order Id#</a>
+                                </div>
+                                <button class="btn btn-primary">View</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="board-column canceled">
+                      <div class="board-column-container">
+                        <div class="board-column-header">Canceled</div>
+                        <div class="board-column-content-wrapper">
+                          <div class="board-column-content">
+                            <div class="board-item">
+                              <div class="board-item-content">
+                                <div id="order-id">
+                                  <a href="">Order Id#</a>
+                                </div>
+                                <button class="btn btn-primary">View</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
             </div>
         </div>
     </div>
