@@ -1,6 +1,7 @@
 ﻿@section SideBar {
 @await Component.InvokeAsync("SideBar", new { activeItem = "order" });
 }
+
 <div class="row">
   <div class="col-12">
     <div class="card my-4">
@@ -37,14 +38,6 @@
               <div class="board-column-header">In process</div>
               <div class="board-column-content-wrapper">
                 <div class="board-column-content">
-                  <div class="board-item">
-                    <div class="board-item-content">
-                      <div id="order-id">
-                        <a href="">Order Id#</a>
-                      </div>
-                      <button class="btn btn-primary">View</button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -54,14 +47,7 @@
               <div class="board-column-header">Deliveried</div>
               <div class="board-column-content-wrapper">
                 <div class="board-column-content">
-                  <div class="board-item">
-                    <div class="board-item-content">
-                      <div id="order-id">
-                        <a href="">Order Id#</a>
-                      </div>
-                      <button class="btn btn-primary">View</button>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -71,14 +57,7 @@
               <div class="board-column-header">Done</div>
               <div class="board-column-content-wrapper">
                 <div class="board-column-content">
-                  <div class="board-item">
-                    <div class="board-item-content">
-                      <div id="order-id">
-                        <a href="">Order Id#</a>
-                      </div>
-                      <button class="btn btn-primary">View</button>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -88,14 +67,6 @@
               <div class="board-column-header">Canceled</div>
               <div class="board-column-content-wrapper">
                 <div class="board-column-content">
-                  <div class="board-item">
-                    <div class="board-item-content">
-                      <div id="order-id">
-                        <a href="">Order Id#</a>
-                      </div>
-                      <button class="btn btn-primary">View</button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -105,3 +76,8 @@
     </div>
   </div>
 </div>
+@section Scripts {
+    <script src="/assets/admin/js/internal/kanban.js" type="text/javascript"></script>
+}
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/gh/haltu/muuri@0.9.3/dist/muuri.min.js'></script>

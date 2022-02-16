@@ -39,6 +39,6 @@ itemContainers.forEach(function (container) {
 
 // Init board grid so we can drag those columns around.
 boardGrid = new Muuri('.board', {
-    dragEnabled: true,
+    dragEnabled: false,
     dragHandle: '.board-column-header'
 });
