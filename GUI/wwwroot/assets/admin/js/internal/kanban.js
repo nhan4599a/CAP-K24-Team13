@@ -32,6 +32,10 @@ itemContainers.forEach(function (container) {
         })
         .on('layoutStart', function () {
             boardGrid.refreshItems().layout();
+        })
+        .on('dragEnd', function (item, event) {
+            console.log(item);
+            console.log(event);
         });
 
     columnGrids.push(grid);

@@ -201,6 +201,9 @@ function ratingProduct(userId, productId, star, comment) {
     return axios.post(ratingProductEndpoint, formData);
 }
 
-function getNearByOders(shopId) {
-    return axios.get(`${orderEndpoint}/shop/${shopId}`);
+function changeOrderStatus(orderId, newStatus) {
+    let formData = new FormData();
+    formData.append('invoiceId', orderId);
+    formData.append('newStatus', newStatus);
+    return axios.post(orderEndpoint, formData);
 }
