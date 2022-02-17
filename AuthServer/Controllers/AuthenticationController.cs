@@ -31,14 +31,16 @@ namespace AuthServer.Controllers
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IMailService _mailer;
         private readonly IEventService _events;
+        private readonly UserManager<ApplicationUserManager> _userManager;
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, IEventService eventService, IMailService mailer)
+            ApplicationSignInManager signInManager, IEventService eventService, IMailService mailer,UserManager<ApplicationUserManager> userManager)
         {
             _signInManager = signInManager;
             _interaction = interaction;
             _events = eventService;
             _mailer = mailer;
+            _userManager = userManager;
         }
 
         [Route("/auth/SignIn")]
@@ -186,7 +188,7 @@ namespace AuthServer.Controllers
                 if (AccountConfig.RequireEmailConfirmation && model.Provider != "Google")
                     await SendUserConfirmationEmail(user!);
                 var userLogin = new UserLoginInfo(model.Provider, model.ProviderId, null);
-                var addLoginIdentityResult = 
+                var addLoginIdentityResult =
                     await _signInManager.UserManager.AddLoginAsync(user!, userLogin);
                 if (addLoginIdentityResult.Succeeded)
                 {
@@ -230,7 +232,23 @@ namespace AuthServer.Controllers
         [HttpGet("/Auth/Confirmation/{email}")]
         public async Task<IActionResult> ConfirmEmail(string email, string token)
         {
-            return View();
+            if (email == null || token == null )
+            {
+                return RedirectToAction("index", "home");
+            }
+            var emails = await _userManager.FindByEmailAsync(email);
+            if (emails == null)
+            {
+                ViewBag.ErrorMessage = $"The email {email} is invalid";
+                return View("Email not found!");
+            }
+            var result = await _userManager.ConfirmEmailAsync(emails, token);
+            if(result.Succeeded)
+            {
+                return View();
+            }
+            ViewBag.ErrorTitle = "Email cannot be confirmed";
+            return View("Something Error!");
         }
 
         private async Task SendUserConfirmationEmail(User user)
