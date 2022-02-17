@@ -27,7 +27,7 @@ namespace RatingService.Controllers
             {
                 ProductId = productId
             });
-            return new ApiResult<List<RatingDTO>> { ResponseCode = 200, Data = result };
+            return ApiResult<List<RatingDTO>>.CreateSucceedResult(result);
         }
 
         [HttpPost]

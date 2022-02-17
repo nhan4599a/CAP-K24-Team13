@@ -23,7 +23,8 @@ namespace AuthServer.Helpers
                 NormalizedUserName = model.Username.ToUpper(),
                 DoB = model.DoB,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                PhoneNumber = model.PhoneNumber
             };
             var createAccountResult = await userManager.CreateAsync(user, model.Password);
             if (createAccountResult.Succeeded)

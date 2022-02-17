@@ -39,28 +39,7 @@ namespace ShopProductService.Controllers
                 CategoryName = "category 2",
                 IsDisabled = false,
                 Image = ""
-            },
-            //new CategoryDTO
-            //{
-            //    Id = -3,
-            //    CategoryName = "category 3",
-            //    IsDisabled = false,
-            //    Image = ""
-            //},
-            //new CategoryDTO
-            //{
-            //    Id = -2,
-            //    CategoryName = "category 4",
-            //    IsDisabled = false,
-            //    Image = ""
-            //},
-            //new CategoryDTO
-            //{
-            //    Id = -1,
-            //    CategoryName = "category 5",
-            //    IsDisabled = false,
-            //    Image = ""
-            //}
+            }
         }.Paginate(1, 2);
         
         public CategoryController(IMediator mediator, IFileStorable fileStore)
@@ -154,7 +133,7 @@ namespace ShopProductService.Controllers
                 ShouldBeCascade = action == DeleteAction.Deactivate || shouldBeCascade
             });
             if (!response.Response)
-                return new ApiResult<bool> { ResponseCode = 404, ErrorMessage = response.ErrorMessage, Data = false };
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
             return ApiResult<bool>.CreateSucceedResult(true);
         }
 
