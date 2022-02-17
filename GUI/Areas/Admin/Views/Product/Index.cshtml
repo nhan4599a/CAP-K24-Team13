@@ -1,6 +1,11 @@
 @section SideBar {
     @await Component.InvokeAsync("SideBar", new { activeItem = "products" });
 }
+<style>
+    .card-body{
+        min-height: 650px !important
+    }
+</style>
 <div class="row">   
     <div class="col-12">
         <div class="row">
