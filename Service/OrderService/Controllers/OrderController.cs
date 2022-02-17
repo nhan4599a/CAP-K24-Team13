@@ -20,12 +20,22 @@ namespace OrderHistoryService.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("user/{userId}")]
         public async Task<ApiResult> GetOrderHistory(string userId)
         {
             var result = await _mediator.Send(new GetOrderHistoryByUserIdQuery
             {
                 UserId = userId
+            });
+            return ApiResult<List<OrderItemDTO>>.CreateSucceedResult(result);
+        }
+
+        [HttpGet("shop/{shopId}")]
+        public async Task<ApiResult> GetOrdersOfShop(int shopId)
+        {
+            var result = await _mediator.Send(new GetNearByOrdersOfShopQuery
+            {
+                ShopId = shopId
             });
             return ApiResult<List<OrderDTO>>.CreateSucceedResult(result);
         }

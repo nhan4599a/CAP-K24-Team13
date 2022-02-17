@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-
     public interface IInvoiceRepository : IDisposable
     {
 
-        Task<List<OrderDTO>> GetOrderHistoryAsync(string userId);
+        Task<List<OrderItemDTO>> GetOrderHistoryAsync(string userId);
+
+        Task<List<OrderDTO>> GetOrdersOfShopWithInTimeAsync(int shopId, DateOnly startDate, DateOnly endDate);
+
+        Task<List<OrderDTO>> GetOrdersOfShopAsync(int shopId);
 
         Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
             string shippingPhone, string shippingAddress, string orderNotes);

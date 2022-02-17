@@ -3,6 +3,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using Shared.RequestModels;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CheckoutService.Controllers
 {

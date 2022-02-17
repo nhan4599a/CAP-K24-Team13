@@ -17,13 +17,13 @@ namespace DatabaseAccessor.Configurations
                 .WithMany(e => e.Invoices)
                 .IsRequired();
 
-            builder.HasIndex(e => new { e.UserId, e.Created });
+            builder.HasIndex(e => new { e.UserId, e.CreatedAt });
 
             builder.HasMany(e => e.Details)
                 .WithOne(e => e.Invoice)
                 .IsRequired();
 
-            builder.Property(e => e.Created)
+            builder.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("getdate()");
 
             builder.Property(e => e.Status)

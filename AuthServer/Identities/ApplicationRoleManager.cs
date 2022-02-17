@@ -1,5 +1,7 @@
 ﻿using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace AuthServer.Identities
 {

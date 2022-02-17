@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrderHistoryService.Handlers
 {
-    public class GetOrderHistoryCommandHandler : IRequestHandler<GetOrderHistoryByUserIdQuery, List<OrderDTO>>, IDisposable
+    public class GetOrderHistoryCommandHandler : IRequestHandler<GetOrderHistoryByUserIdQuery, List<OrderItemDTO>>, IDisposable
     {
         private readonly IInvoiceRepository _orderRepository;
 
@@ -18,7 +18,7 @@ namespace OrderHistoryService.Handlers
             _orderRepository = OrderHistoryRepository;
         }
 
-        public async Task<List<OrderDTO>> Handle(GetOrderHistoryByUserIdQuery request, CancellationToken cancellationToken)
+        public async Task<List<OrderItemDTO>> Handle(GetOrderHistoryByUserIdQuery request, CancellationToken cancellationToken)
         {
             return await _orderRepository.GetOrderHistoryAsync(request.UserId);
         }

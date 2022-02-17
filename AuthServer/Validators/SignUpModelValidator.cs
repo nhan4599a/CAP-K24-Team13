@@ -1,17 +1,16 @@
 ﻿using AuthServer.Configurations;
 using AuthServer.Models;
 using FluentValidation;
+using System;
 
 namespace AuthServer.Validators
 {
-    public class SignUpModelValidator : AbstractValidator<SignUpModel>
+    public class SignUpModelValidator : AbstractValidator<UserSignUpModel>
     {
         public SignUpModelValidator()
         {
             RuleFor(model => model.Email).EmailAddress()
                 .WithMessage("Email must be in a valid email format");
-            RuleFor(model => model.RePassword).Must((model, field) => field == model.Password)
-                .WithMessage("Re input password must be equal to password");
             var currentDate = DateOnly.FromDateTime(DateTime.Now);
             var maxAcceptedDate = currentDate.AddYears(-AccountConfig.MinAge);
             var minAcceptedDate = currentDate.AddYears(-AccountConfig.MaxAge);

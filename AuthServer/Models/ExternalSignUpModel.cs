@@ -1,5 +1,6 @@
 ﻿using AspNetCoreSharedComponent.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace AuthServer.Models
 {
@@ -7,7 +8,7 @@ namespace AuthServer.Models
         string RePassword, string Email,
         [ModelBinder(BinderType = typeof(StringToDateOnlyModelBinder))] DateOnly DoB,
         string Provider, string ProviderId, string ReturnUrl, string SessionId, string IdToken)
-        : SignUpModel(FirstName, LastName, Username, Password, RePassword, Email, DoB)
+        : UserSignUpModel(FirstName, LastName, Username, Password, RePassword, Email, DoB)
     {
     }
 }

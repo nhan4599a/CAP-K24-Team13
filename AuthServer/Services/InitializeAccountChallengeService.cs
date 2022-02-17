@@ -1,5 +1,11 @@
 ﻿using AuthServer.Identities;
 using DatabaseAccessor.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shared.Models;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AuthServer.Services
 {
@@ -30,19 +36,19 @@ namespace AuthServer.Services
             {
                 var user = await CreateUserObj("customer_test");
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, "Customer");
+                await userManager.AddToRoleAsync(user, Roles.CUSTOMER);
             }
             if (await userManager.FindByNameAsync("admin_test") == null)
             {
                 var user = await CreateUserObj("admin_test");
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, "Admin");
+                await userManager.AddToRoleAsync(user, Roles.ADMIN);
             }
             if (await userManager.FindByNameAsync("owner_test") == null)
             {
                 var user = await CreateUserObj("owner_test");
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, "ShopOwner");
+                await userManager.AddToRoleAsync(user, Roles.SHOP_OWNER);
             }
         }
 

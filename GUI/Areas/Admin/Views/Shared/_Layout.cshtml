@@ -39,6 +39,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link href="@Url.Content("~/assets/admin/css/pagination.css")" rel="stylesheet" />
     <link href="@Url.Content("~/assets/admin/css/loading.css")" rel="stylesheet" />
+        <link href="@Url.Content("~/assets/admin/css/kanban.css")" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
     <style>
         .tablinks {
@@ -432,8 +433,10 @@
         if (window.location.pathname != "/shopowner/product")
             $('#input-search').parent().remove();
         toastr.options.closeButton = true;
+        if else (window.location.pathname != "/shopowner/order")
+            $('#input-search').parent().remove();
+        toastr.options.closeButton = true;
     </script>
     @RenderSection("Scripts", false)
 </body>
-
 </html>

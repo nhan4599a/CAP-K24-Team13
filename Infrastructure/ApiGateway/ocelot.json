@@ -101,10 +101,20 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/orders/{userId}",
+      "DownstreamPathTemplate": "/api/orders/user/{userId}",
       "DownstreamScheme": "https",
       "ServiceName": "OrderHistoryService",
-      "UpstreamPathTemplate": "/orders/{userId}",
+      "UpstreamPathTemplate": "/orders/user/{userId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/shop/{shopId}",
+      "DownstreamScheme": "https",
+      "ServiceName": "OrderHistoryService",
+      "UpstreamPathTemplate": "/orders/user/{shopId}",
       "UpstreamHttpMethod": [ "GET" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"

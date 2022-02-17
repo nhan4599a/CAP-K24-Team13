@@ -2,6 +2,7 @@
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
 using System.Security.Claims;
 
 namespace AuthServer.Identities

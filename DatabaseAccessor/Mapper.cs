@@ -37,13 +37,20 @@ namespace DatabaseAccessor.Mapping
                         options => options.MapFrom(source => source.Product.Discount))
                     .ForMember(target => target.Image,
                         options => options.MapFrom<SingleImageResolver>());
-                cfg.CreateMap<InvoiceDetail, OrderDTO>()
+                cfg.CreateMap<Invoice, OrderDTO>()
+                    .ForMember(target => target.OrderCode,
+                        options => options.MapFrom(source => source.InvoiceCode))
+                    .ForMember(target => target.CreatedAt,
+                        options => options.MapFrom(source => source.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")))
+                    .ForMember(target => target.CustomerName,
+                        options => options.MapFrom(source => source.FullName));
+                cfg.CreateMap<InvoiceDetail, OrderItemDTO>()
                     .ForMember(target => target.ProductName,
                         option => option.MapFrom(source => source.Product.ProductName))
                     .ForMember(target => target.Images,
                         option => option.MapFrom<SingleImageResolver>())
                     .ForMember(target => target.Created,
-                        option => option.MapFrom(source => source.Invoice.Created));
+                        option => option.MapFrom(source => source.Invoice.CreatedAt));
                 cfg.CreateMap<ProductComment, RatingDTO>()
                     .ForMember(target => target.ProductName,
                         option => option.MapFrom(source => source.Product.ProductName))
@@ -72,7 +79,9 @@ namespace DatabaseAccessor.Mapping
 
         public CartItemDTO MapToCartItemDTO(CartDetail cartItem) => _mapper.Map<CartItemDTO>(cartItem);
 
-        public OrderDTO MapToOrderUserHistoryDTO(InvoiceDetail invoice) => _mapper.Map<OrderDTO>(invoice);
+        public OrderItemDTO MapToOrderItemDTO(InvoiceDetail invoiceDetail) => _mapper.Map<OrderItemDTO>(invoiceDetail);
+
+        public OrderDTO MapToOrderDTO(Invoice invoice) => _mapper.Map<OrderDTO>(invoice);
 
         public RatingDTO MapToRatingDTO(ProductComment rating) => _mapper.Map<RatingDTO>(rating);
     }

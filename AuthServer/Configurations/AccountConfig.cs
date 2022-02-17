@@ -1,10 +1,12 @@
-﻿namespace AuthServer.Configurations
+﻿using System;
+
+namespace AuthServer.Configurations
 {
     public class AccountConfig
     {
         public static bool AllowRememberMe => true;
 
-        public static bool RequireEmailConfirmation => false;
+        public static bool RequireEmailConfirmation => true;
 
         public static bool AccountLockedOutEnabled => true;
 

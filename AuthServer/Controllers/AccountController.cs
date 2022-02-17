@@ -1,7 +1,8 @@
-﻿using AuthServer.Identities;
+using AuthServer.Identities;
 using AuthServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
 {
@@ -9,8 +10,8 @@ namespace AuthServer.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationUserManager _userManager;
-
-        public AccountController(ApplicationUserManager userManager)
+        
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
         {
             _userManager = userManager;
         }
