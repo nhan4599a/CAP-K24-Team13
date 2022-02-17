@@ -7,9 +7,9 @@ namespace GUI.Areas.User.Controllers
 {
     public class UserAccountController : Controller
     {
-        private readonly IOrderHistoryClient _orderHistoryClient;
+        private readonly IOrderClient _orderHistoryClient;
 
-        public UserAccountController(IOrderHistoryClient orderHistoryClient)
+        public UserAccountController(IOrderClient orderHistoryClient)
         {
             _orderHistoryClient = orderHistoryClient;
         }

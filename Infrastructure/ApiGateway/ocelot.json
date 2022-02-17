@@ -103,7 +103,7 @@
     {
       "DownstreamPathTemplate": "/api/orders/user/{userId}",
       "DownstreamScheme": "https",
-      "ServiceName": "OrderHistoryService",
+      "ServiceName": "OrderService",
       "UpstreamPathTemplate": "/orders/user/{userId}",
       "UpstreamHttpMethod": [ "GET" ],
       "LoadBalancerOptions": {
@@ -113,8 +113,8 @@
     {
       "DownstreamPathTemplate": "/api/orders/shop/{shopId}",
       "DownstreamScheme": "https",
-      "ServiceName": "OrderHistoryService",
-      "UpstreamPathTemplate": "/orders/user/{shopId}",
+      "ServiceName": "OrderService",
+      "UpstreamPathTemplate": "/orders/shop/{shopId}",
       "UpstreamHttpMethod": [ "GET" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"

@@ -7,11 +7,14 @@
 }
 @{
     var classifiedOrderList = new Dictionary<InvoiceStatus, List<OrderDTO>>();
+    classifiedOrderList[InvoiceStatus.New] = new List<OrderDTO>();
+    classifiedOrderList[InvoiceStatus.Confirmed] = new List<OrderDTO>();
+    classifiedOrderList[InvoiceStatus.ShipperReceived] = new List<OrderDTO>();
+    classifiedOrderList[InvoiceStatus.Succeed] = new List<OrderDTO>();
+    classifiedOrderList[InvoiceStatus.Canceled] = new List<OrderDTO>();
 
     foreach (var order in Model)
     {
-        if (classifiedOrderList[order.Status] == null)
-            classifiedOrderList[order.Status] = new List<OrderDTO>();
         classifiedOrderList[order.Status].Add(order);
     }
 }
@@ -29,125 +32,65 @@
                 <div class="drag-container"></div>
                 <div class="board">
                     <div class="board-column confirm">
-                        <div class="board-column-container">
+                        <div class="board-column-container" data-status="0">
                             <div class="board-column-header">Confirm</div>
                             <div class="board-column-content-wrapper">
                                 <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.New] ?? new List<OrderDTO>())
+                                    @foreach (var order in classifiedOrderList[InvoiceStatus.New])
                                     {
-                                        <div class="board-item">
-                                            <div class="board-item-content">
-                                                <div id="order-id">
-                                                    <h4>#@order.OrderCode</h4>
-                                                    <h5>@order.CustomerName</h5>
-                                                    <input type="tel" name="phonenumber" placeholder="phonenumber" value="@order.Phone" disabled />
-                                                    <input type="text" name="address" placeholder="address" value="@order.ShippingAddress" disabled />
-                                                </div>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                                    View
-                                                </button>
-                                            </div>
-                                        </div>
+                                        @await Component.InvokeAsync("OrderItem", new { order });
                                     }
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="board-column in-process">
-                        <div class="board-column-container">
+                        <div class="board-column-container" data-status="1">
                             <div class="board-column-header">In process</div>
                             <div class="board-column-content-wrapper">
                                 <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Confirmed] ?? new List<OrderDTO>())
+                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Confirmed])
                                     {
-                                        <div class="board-item">
-                                            <div class="board-item-content">
-                                                <div id="order-id">
-                                                    <h4>#@order.OrderCode</h4>
-                                                    <h5>@order.CustomerName</h5>
-                                                    <input type="tel" name="phonenumber" placeholder="phonenumber" value="@order.Phone" disabled />
-                                                    <input type="text" name="address" placeholder="address" value="@order.ShippingAddress" disabled />
-                                                </div>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                                    View
-                                                </button>
-                                            </div>
-                                        </div>
+                                        @await Component.InvokeAsync("OrderItem", new { order });
                                     }
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="board-column deliveried">
-                        <div class="board-column-container">
+                        <div class="board-column-container" data-status="2">
                             <div class="board-column-header">Deliveried</div>
                             <div class="board-column-content-wrapper">
                                 <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.ShipperReceived] ?? new List<OrderDTO>())
+                                    @foreach (var order in classifiedOrderList[InvoiceStatus.ShipperReceived])
                                     {
-                                        <div class="board-item">
-                                            <div class="board-item-content">
-                                                <div id="order-id">
-                                                    <h4>#@order.OrderCode</h4>
-                                                    <h5>@order.CustomerName</h5>
-                                                    <input type="tel" name="phonenumber" placeholder="phonenumber" value="@order.Phone" disabled />
-                                                    <input type="text" name="address" placeholder="address" value="@order.ShippingAddress" disabled />
-                                                </div>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                                    View
-                                                </button>
-                                            </div>
-                                        </div>
+                                        @await Component.InvokeAsync("OrderItem", new { order });
                                     }
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="board-column done">
-                        <div class="board-column-container">
+                        <div class="board-column-container" data-status="3">
                             <div class="board-column-header">Done</div>
                             <div class="board-column-content-wrapper">
                                 <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Succeed] ?? new List<OrderDTO>())
+                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Succeed])
                                     {
-                                        <div class="board-item">
-                                            <div class="board-item-content">
-                                                <div id="order-id">
-                                                    <h4>#@order.OrderCode</h4>
-                                                    <h5>@order.CustomerName</h5>
-                                                    <input type="tel" name="phonenumber" placeholder="phonenumber" value="@order.Phone" disabled />
-                                                    <input type="text" name="address" placeholder="address" value="@order.ShippingAddress" disabled />
-                                                </div>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                                    View
-                                                </button>
-                                            </div>
-                                        </div>
+                                        @await Component.InvokeAsync("OrderItem", new { order });
                                     }
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="board-column canceled">
-                        <div class="board-column-container">
+                        <div class="board-column-container" data-status="4">
                             <div class="board-column-header">Canceled</div>
                             <div class="board-column-content-wrapper">
                                 <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Canceled] ?? new List<OrderDTO>())
+                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Canceled])
                                     {
-                                        <div class="board-item">
-                                            <div class="board-item-content">
-                                                <div id="order-id">
-                                                    <h4>#@order.OrderCode</h4>
-                                                    <h5>@order.CustomerName</h5>
-                                                    <input type="tel" name="phonenumber" placeholder="phonenumber" value="@order.Phone" disabled />
-                                                    <input type="text" name="address" placeholder="address" value="@order.ShippingAddress" disabled />
-                                                </div>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                                    View
-                                                </button>
-                                            </div>
-                                        </div>
+                                        @await Component.InvokeAsync("OrderItem", new { order });
                                     }
                                 </div>
                             </div>
@@ -159,7 +102,7 @@
     </div>
 </div>
 @section Scripts {
-<script src="@Url.Content("~/assets/admin/js/internal/kanban.js")" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/haltu/muuri@0.9.3/dist/muuri.min.js"></script>
+<script src="@Url.Content("~/assets/admin/js/internal/kanban.js")" type="text/javascript"></script>
 }

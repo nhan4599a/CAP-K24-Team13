@@ -1,11 +1,11 @@
-﻿var dragContainer = document.querySelector('.drag-container');
-var itemContainers = [].slice.call(document.querySelectorAll('.board-column-content'));
-var columnGrids = [];
-var boardGrid;
+﻿let dragContainer = document.querySelector('.drag-container');
+let itemContainers = [].slice.call(document.querySelectorAll('.board-column-content'));
+let columnGrids = [];
+let boardGrid;
 
 // Init the column grids so we can drag those items around.
 itemContainers.forEach(function (container) {
-    var grid = new Muuri(container, {
+    let grid = new Muuri(container, {
         items: '.board-item',
         dragEnabled: true,
         dragSort: function () {
@@ -33,9 +33,8 @@ itemContainers.forEach(function (container) {
         .on('layoutStart', function () {
             boardGrid.refreshItems().layout();
         })
-        .on('dragEnd', function (item, event) {
-            console.log(item);
-            console.log(event);
+        .on('receive', function (data) {
+            let newStatus = $(data.toGrid._element).parent().parent().data('status');
         });
 
     columnGrids.push(grid);
