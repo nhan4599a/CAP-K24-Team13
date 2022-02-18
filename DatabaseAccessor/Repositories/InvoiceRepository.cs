@@ -98,14 +98,15 @@ namespace DatabaseAccessor.Repositories
             {
                 if (invoice.Status >= newStatus)
                     return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
+                
+                if (newStatus - invoice.Status > 1)
+                    return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
             }
             else
             {
                 if (invoice.Status == InvoiceStatus.Succeed)
                     return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
             }
-            if (newStatus - invoice.Status > 1)
-                return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
 
             invoice.Status = newStatus;
             await _dbContext.SaveChangesAsync();

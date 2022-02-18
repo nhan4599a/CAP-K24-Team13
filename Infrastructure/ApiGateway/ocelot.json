@@ -121,6 +121,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/orders/{orderId}",
+      "DownstreamScheme": "https",
+      "ServiceName": "OrderService",
+      "UpstreamPathTemplate": "/orders/{orderId}",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/cart",
       "DownstreamScheme": "https",
       "ServiceName": "ProductService",

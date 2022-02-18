@@ -2,7 +2,8 @@
 let itemContainers = [].slice.call(document.querySelectorAll('.board-column-content'));
 let columnGrids = [];
 let boardGrid;
-
+let currentGrid = null;
+let oldPosition = null;
 // Init the column grids so we can drag those items around.
 itemContainers.forEach(function (container) {
     let grid = new Muuri(container, {
@@ -33,8 +34,28 @@ itemContainers.forEach(function (container) {
         .on('layoutStart', function () {
             boardGrid.refreshItems().layout();
         })
-        .on('receive', function (data) {
-            let newStatus = $(data.toGrid._element).parent().parent().data('status');
+        .on('dragStart', function (item) {
+            console.log(item);
+            console.log(item.getGrid());
+            currentGrid = item.getGrid();
+        })
+        .on('dragEnd', function (item) {
+            let destinationGrid = item.getGrid();
+            if (currentGrid == destinationGrid)
+                return;
+            let newStatus = $(destinationGrid._element).parent().parent().data('status');
+            let orderId = $(item._element).children().children().children('input:first-child').val();
+            changeOrderStatus(orderId, newStatus)
+                .then(() => {
+                    currentGrid = destinationGrid;
+                    toastr.success('Change status successfully');
+                })
+                .catch(error => {
+                    destinationGrid.send(item, currentGrid, currentGrid.getItems().length - 1, {
+                        appendTo: dragContainer
+                    });
+                    toastr.error(error);
+                });
         });
 
     columnGrids.push(grid);

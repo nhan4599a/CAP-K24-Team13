@@ -202,8 +202,9 @@ function ratingProduct(userId, productId, star, comment) {
 }
 
 function changeOrderStatus(orderId, newStatus) {
-    let formData = new FormData();
-    formData.append('invoiceId', orderId);
-    formData.append('newStatus', newStatus);
-    return axios.post(orderEndpoint, formData);
+    return axios.post(`${orderEndpoint}/${orderId}`, newStatus, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
 }

@@ -4,6 +4,8 @@ namespace Shared.DTOs
 {
     public class OrderDTO
     {
+        public int Id { get; set; }
+
         public string OrderCode { get; set; }
 
         public string ShippingAddress { get; set; }

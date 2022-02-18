@@ -14,7 +14,7 @@
             let urlEncodedKeyword = encodeURIComponent(keyword);
             let currentPageSize = getCurrentPageInfo().pageSize;
             window.location.href =
-                `https://localhost:44349/shopowner/product?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=${currentPageSize}`;
+                `https://localhost:3006/shopowner/product?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=${currentPageSize}`;
         }
     });
 
@@ -128,9 +128,9 @@ function onLoadProductsCompleted(paginatedData) {
 
 function moveToPage(keyword, pageNumber, pageSize) {
     if (keyword == '')
-        window.location.href = `https://localhost:44349/shopowner/product?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        window.location.href = `https://localhost:3006/shopowner/product?pageNumber=${pageNumber}&pageSize=${pageSize}`;
     else
-        window.location.href = `https://localhost:44349/shopowner/product?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        window.location.href = `https://localhost:3006/shopowner/product?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
 }
 
 function getCurrentPageInfo() {

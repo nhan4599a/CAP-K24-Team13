@@ -40,8 +40,8 @@ namespace OrderHistoryService.Controllers
             return ApiResult<List<OrderDTO>>.CreateSucceedResult(result);
         }
 
-        [HttpPost]
-        public async Task<ApiResult> ChangeOrderStatus(int invoiceId, InvoiceStatus newStatus)
+        [HttpPost("{invoiceId}")]
+        public async Task<ApiResult> ChangeOrderStatus(int invoiceId, [FromBody] InvoiceStatus newStatus)
         {
             var result = await _mediator.Send(new ChangeOrderStatusCommand
             {
