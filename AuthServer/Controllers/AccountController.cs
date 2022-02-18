@@ -56,5 +56,6 @@ namespace AuthServer.Controllers
             }
             return View();
         }
+
     }
 }
