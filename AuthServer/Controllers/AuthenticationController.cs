@@ -229,16 +229,16 @@ namespace AuthServer.Controllers
         }
 
         [HttpGet("/Auth/Confirmation/{email}")]
-        public async Task<IActionResult> ConfirmEmail(string useId, string token)
+        public async Task<IActionResult> ConfirmEmail(string email, string token)
         {
-            if (useId == null || token == null )
+            if (email == null || token == null )
             {
                 return RedirectToAction("signIn","authentication");
             }
-            var user = await _signInManager.UserManager.FindByEmailAsync(useId);
+            var user = await _signInManager.UserManager.FindByEmailAsync(email);
             if (user == null)
             {
-                ModelState.AddModelError("ConfirmEmail-Error",$"The email {useId} in Valid");
+                ModelState.AddModelError("ConfirmEmail-Error",$"The email {email} in Valid");
                 return View();
             }
             var result = await _signInManager.UserManager.ConfirmEmailAsync(user, token);
@@ -246,7 +246,8 @@ namespace AuthServer.Controllers
             {
                 return View();
             }
-            ModelState.AddModelError("ConfirmEmail-Error", "Email cannot be confirmed");
+            foreach(var error in result.Errors)
+            ModelState.AddModelError("ConfirmEmail-Error", error.Description);
             return View();
         }
 
