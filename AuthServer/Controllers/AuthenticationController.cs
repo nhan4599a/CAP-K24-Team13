@@ -32,6 +32,7 @@ namespace AuthServer.Controllers
         private readonly IMailService _mailer;
         private readonly IEventService _events;
 
+
         public AuthenticationController(IIdentityServerInteractionService interaction,
             ApplicationSignInManager signInManager, IEventService eventService, IMailService mailer)
         {
@@ -186,7 +187,7 @@ namespace AuthServer.Controllers
                 if (AccountConfig.RequireEmailConfirmation && model.Provider != "Google")
                     await SendUserConfirmationEmail(user!);
                 var userLogin = new UserLoginInfo(model.Provider, model.ProviderId, null);
-                var addLoginIdentityResult = 
+                var addLoginIdentityResult =
                     await _signInManager.UserManager.AddLoginAsync(user!, userLogin);
                 if (addLoginIdentityResult.Succeeded)
                 {
@@ -230,6 +231,23 @@ namespace AuthServer.Controllers
         [HttpGet("/Auth/Confirmation/{email}")]
         public async Task<IActionResult> ConfirmEmail(string email, string token)
         {
+            if (email == null || token == null )
+            {
+                return RedirectToAction("signIn","authentication");
+            }
+            var user = await _signInManager.UserManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                ModelState.AddModelError("ConfirmEmail-Error",$"The email {email} in Valid");
+                return View();
+            }
+            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, token);
+            if(result.Succeeded)
+            {
+                return View();
+            }
+            foreach(var error in result.Errors)
+            ModelState.AddModelError("ConfirmEmail-Error", error.Description);
             return View();
         }
 
