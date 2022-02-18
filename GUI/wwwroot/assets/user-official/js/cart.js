@@ -131,7 +131,6 @@ $(document).ready(function () {
                 quantity: $(element).find('.cart-product-qty').html()
             });
         });
-        console.log(productList);
         $('body').append('<form id="checkout-form"></form>');
         let form = $('form#checkout-form').attr('method', 'POST').attr('action', '/checkout');
         for (let i = 0; i < productList.length; i++) {
