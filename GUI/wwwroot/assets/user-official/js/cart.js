@@ -57,7 +57,7 @@ $(document).ready(function () {
             .catch(error => toastr.error(error));
     });
 
-    $('a.btn.btn-outline-primary-2').click(function (e) {
+    $('.summary.summary-cart > a.btn.btn-outline-primary-2').click(function (e) {
         e.preventDefault();
         let selectedItems = [];
         $('.table.table-cart.table-mobile').find('input.form-check-input[type=checkbox]:checked')
@@ -120,6 +120,25 @@ $(document).ready(function () {
                 deleteDropdownCartItem(productId);
             })
             .catch(error => toastr.error(error));
+    });
+
+    $('.dropdown-cart-action > .btn-outline-primary-2').click(function (e) {
+        e.preventDefault();
+        let productList = [];
+        $('.dropdown-cart-products > div.product').each((_, element) => {
+            productList.push({
+                id: $(element).data('product'),
+                quantity: $(element).find('.cart-product-qty').html()
+            });
+        });
+        console.log(productList);
+        $('body').append('<form id="checkout-form"></form>');
+        let form = $('form#checkout-form').attr('method', 'POST').attr('action', '/checkout');
+        for (let i = 0; i < productList.length; i++) {
+            form = form.append(`<input type="hidden" value="${productList[i].id}" name="models[${i}].ProductId" />`)
+                .append(`<input type="hidden" value="${productList[i].quantity}" name="models[${i}].Quantity" />`);
+        }
+        form.submit();
     });
 });
 

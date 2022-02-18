@@ -233,7 +233,7 @@ namespace AuthServer.Controllers
         {
             if (email == null || token == null )
             {
-                return RedirectToAction("signIn","authentication");
+                return RedirectToAction(nameof(SignIn));
             }
             var user = await _signInManager.UserManager.FindByEmailAsync(email);
             if (user == null)

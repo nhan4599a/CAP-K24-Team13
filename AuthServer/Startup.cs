@@ -142,7 +142,7 @@ namespace AuthServer
 
         private void ApplyOptions(DbContextOptionsBuilder builder)
         {
-            var connectionString = "Server=.; Database=ClientAuth; User ID=sa; Password=123456; TrustServerCertificate=True";
+            var connectionString = "Server=.; Database=ClientAuth; User ID=sa; Password=nhan4599; TrustServerCertificate=True";
             var assemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(assemblyName));
         }
