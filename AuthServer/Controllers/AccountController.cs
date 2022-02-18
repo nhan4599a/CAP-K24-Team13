@@ -56,11 +56,11 @@ namespace AuthServer.Controllers
             }
             return View();
         }
-        [Route("/auth/ConfirmEmail")]
-        public async Task<IActionResult> ConfirmEmail()
-        {
-            return View();
-        }
+        //[Route("/auth/ConfirmEmail")]
+        //public async Task<IActionResult> ConfirmEmail()
+        //{
+        //    return View();
+        //}
 
     }
 }
