@@ -31,16 +31,15 @@ namespace AuthServer.Controllers
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IMailService _mailer;
         private readonly IEventService _events;
-        private readonly UserManager<ApplicationUserManager> _userManager;
+
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, IEventService eventService, IMailService mailer,UserManager<ApplicationUserManager> userManager)
+            ApplicationSignInManager signInManager, IEventService eventService, IMailService mailer)
         {
             _signInManager = signInManager;
             _interaction = interaction;
             _events = eventService;
             _mailer = mailer;
-            _userManager = userManager;
         }
 
         [Route("/auth/SignIn")]
@@ -236,18 +235,18 @@ namespace AuthServer.Controllers
             {
                 return RedirectToAction("signIn","authentication");
             }
-            var user = await _userManager.FindByEmailAsync(useId);
+            var user = await _signInManager.UserManager.FindByEmailAsync(useId);
             if (user == null)
             {
-                ViewBag.ErrorMessage = $"The email {useId} is invalid";
+                ModelState.AddModelError("ConfirmEmail-Error",$"The email {useId} in Valid");
                 return View();
             }
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, token);
             if(result.Succeeded)
             {
                 return View();
             }
-            ViewBag.ErrorTitle = "Email cannot be confirmed";
+            ModelState.AddModelError("ConfirmEmail-Error", "Email cannot be confirmed");
             return View();
         }
 
