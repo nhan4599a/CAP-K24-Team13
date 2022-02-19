@@ -12,6 +12,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
@@ -31,7 +32,6 @@ namespace AuthServer.Controllers
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IMailService _mailer;
         private readonly IEventService _events;
-
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
             ApplicationSignInManager signInManager, IEventService eventService, IMailService mailer)
@@ -229,25 +229,26 @@ namespace AuthServer.Controllers
         }
 
         [HttpGet("/Auth/Confirmation/{email}")]
-        public async Task<IActionResult> ConfirmEmail(string email, string token)
+        public async Task<IActionResult> ConfirmEmail(string email, [FromQuery] string token)
         {
-            if (email == null || token == null )
+            if (email == null || token == null)
             {
-                return RedirectToAction(nameof(SignIn));
-            }
-            var user = await _signInManager.UserManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                ModelState.AddModelError("ConfirmEmail-Error",$"The email {email} in Valid");
+                ModelState.AddModelError("ConfirmEmail-Error", $"Something went wrong");
                 return View();
             }
-            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, token);
+            var user = await _signInManager.UserManager.FindByEmailAsync(Base64Decode(email));
+            if (user == null)
+            {
+                ModelState.AddModelError("ConfirmEmail-Error",$"User not found");
+                return View();
+            }
+            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, Base64Decode(token));
             if(result.Succeeded)
             {
                 return View();
             }
             foreach(var error in result.Errors)
-            ModelState.AddModelError("ConfirmEmail-Error", error.Description);
+                ModelState.AddModelError("ConfirmEmail-Error", error.Description);
             return View();
         }
 
@@ -258,25 +259,34 @@ namespace AuthServer.Controllers
             if (string.IsNullOrWhiteSpace(user.Email))
                 throw new ArgumentException($"{nameof(user.Email)} cannot be null or empty");
             var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
-            var message = await GenerateEmailAsync(user.Email, token);
+            var message = GenerateEmailAsync(user.Email, Base64Encode(token));
             _mailer.SendMail(message);
         }
 
-        private static Task<MailRequest> GenerateEmailAsync(string receiver, string token)
+        private static MailRequest GenerateEmailAsync(string receiver, string token)
         {
+            var email = Base64Encode(receiver);
             var body = "Thanks for your registration," +
-                $" this is your email confirmation <a href=\"{$"https://localhost:7265/auth/confirmation/{receiver}?token={token}"}\">link</a>" +
+                $" this is your email confirmation <a href=\"{$"https://localhost:7265/auth/confirmation/{email}?token={token}"}\">link</a>" +
                 $" The link will be expired at {DateTime.UtcNow.AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss tt}";
-            return Task.FromResult<MailRequest>(new()
+            return new MailRequest()
             {
                 Body = body,
                 Sender = "gigamallservice@gmail.com",
                 IsHtmlMessage = true,
                 Receiver = receiver,
                 Subject = "Email confirmation"
-            });
+            };
         }
 
-        
+        private static string Base64Encode(string original)
+        {
+            return Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(original));
+        }
+
+        private static string Base64Decode(string encodedString)
+        {
+            return System.Text.Encoding.ASCII.GetString(Convert.FromBase64String(encodedString));
+        }
     }
 }
