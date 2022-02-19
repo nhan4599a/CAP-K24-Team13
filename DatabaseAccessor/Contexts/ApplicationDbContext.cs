@@ -10,8 +10,7 @@ namespace DatabaseAccessor.Contexts
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     {
-        //private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
-        private static readonly string _connectionString = "Server=.; Database=CAP-K24-Team13; User ID=sa; Password=nhan4599; TrustServerCertificate=True";
+        private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
         public DbSet<ShopCategory> ShopCategories { get; set; }
 
