@@ -1,5 +1,5 @@
 ﻿axios.defaults.timeout = 20000;
-axios.defaults.baseURL = 'https://localhost:3000';
+axios.defaults.baseURL = 'http://ec2-3-94-62-76.compute-1.amazonaws.com:3000';
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
