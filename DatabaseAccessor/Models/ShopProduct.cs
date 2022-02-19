@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
-    [Table("ShopProducts")]
+    [Table("ShopProducts", Schema = "dbo")]
     public class ShopProduct
     {
         public Guid Id { get; set; }

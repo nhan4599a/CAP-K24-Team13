@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
+    [Table("AspNetUsers", Schema = "dbo")]
     public class User : IdentityUser<Guid>
     {
         public string FirstName { get; set; }

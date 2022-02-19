@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
-    [Table("InvoiceDetails")]
+    [Table("InvoiceDetails", Schema = "dbo")]
     public class InvoiceDetail
     {
         public int Id { get; set; }
