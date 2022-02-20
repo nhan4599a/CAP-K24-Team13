@@ -2,12 +2,8 @@
 
 namespace AuthServer
 {
-    public interface IMailService : IDisposable
+    public interface IMailService
     {
-        string MailProvider { get; }
-
-        string MailAddress { get; }
-
         void SendMail(MailRequest mailRequest);
     }
 }

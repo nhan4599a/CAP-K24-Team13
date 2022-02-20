@@ -1,5 +1,6 @@
 ﻿using AuthServer.Abstractions;
 using AuthServer.Configurations;
+using AuthServer.Helpers;
 using AuthServer.Identities;
 using AuthServer.Models;
 using AuthServer.ViewModels;
@@ -10,13 +11,21 @@ using IdentityServer4.Events;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
 {
     [ServiceFilter(typeof(SignInActionFilter))]
+    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         private readonly ApplicationSignInManager _signInManager;
@@ -33,14 +42,12 @@ namespace AuthServer.Controllers
             _mailer = mailer;
         }
 
-        [AllowAnonymous]
         [Route("/auth/SignIn")]
         public IActionResult SignIn()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("/auth/SignIn")]
         [ValidateAntiForgeryToken]
@@ -65,29 +72,32 @@ namespace AuthServer.Controllers
                 ViewBag.LockedOutCancelTime = user!.LockoutEnd!.Value;
                 return View(model);
             }
+            if (user != null && signInResult.IsNotAllowed)
+            {
+                ModelState.AddModelError("SignIn-Error", "Account is have not been confirmed");
+                return View(model);
+            }
             ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
             return View();
         }
 
-        [AllowAnonymous]
         [Route("/auth/SignUp")]
         public IActionResult SignUp()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("/auth/SignUp")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUp(SignUpModel model)
+        public async Task<IActionResult> SignUp(UserSignUpModel model)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("SignUp-Error", "Input information is invalid");
                 return View(model);
             }
-            var createUserResult = await CreateUserAsync(model);
+            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, Roles.CUSTOMER);
             if (createUserResult.Succeeded)
             {
                 if (AccountConfig.RequireEmailConfirmation)
@@ -160,7 +170,6 @@ namespace AuthServer.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("/auth/ExternalConfirmation")]
         [ValidateAntiForgeryToken]
@@ -171,15 +180,14 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("SignUp-Error", "Input information is invalid");
                 return View();
             }
-            var createUserResult = 
-                await CreateUserAsync(model);
+            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, Roles.CUSTOMER);
             if (createUserResult.Succeeded)
             {
                 var user = createUserResult.User;
                 if (AccountConfig.RequireEmailConfirmation && model.Provider != "Google")
                     await SendUserConfirmationEmail(user!);
                 var userLogin = new UserLoginInfo(model.Provider, model.ProviderId, null);
-                var addLoginIdentityResult = 
+                var addLoginIdentityResult =
                     await _signInManager.UserManager.AddLoginAsync(user!, userLogin);
                 if (addLoginIdentityResult.Succeeded)
                 {
@@ -220,6 +228,30 @@ namespace AuthServer.Controllers
             return View();
         }
 
+        [HttpGet("/Auth/Confirmation/{email}")]
+        public async Task<IActionResult> ConfirmEmail(string email, [FromQuery] string token)
+        {
+            if (email == null || token == null)
+            {
+                ModelState.AddModelError("ConfirmEmail-Error", $"Something went wrong");
+                return View();
+            }
+            var user = await _signInManager.UserManager.FindByEmailAsync(Base64Decode(email));
+            if (user == null)
+            {
+                ModelState.AddModelError("ConfirmEmail-Error",$"User not found");
+                return View();
+            }
+            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, Base64Decode(token));
+            if(result.Succeeded)
+            {
+                return View();
+            }
+            foreach(var error in result.Errors)
+                ModelState.AddModelError("ConfirmEmail-Error", error.Description);
+            return View();
+        }
+
         private async Task SendUserConfirmationEmail(User user)
         {
             if (user == null)
@@ -227,64 +259,34 @@ namespace AuthServer.Controllers
             if (string.IsNullOrWhiteSpace(user.Email))
                 throw new ArgumentException($"{nameof(user.Email)} cannot be null or empty");
             var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
-            var message = await GenerateEmailAsync(user.Email, token);
+            var message = GenerateEmailAsync(user.Email, Base64Encode(token));
             _mailer.SendMail(message);
         }
 
-        private Task<MailRequest> GenerateEmailAsync(string receiver, string token)
+        private static MailRequest GenerateEmailAsync(string receiver, string token)
         {
+            var email = Base64Encode(receiver);
             var body = "Thanks for your registration," +
-                " this is your email confirmation link" +
-                $" <a href=\"{$"https://localhost:7265/auth/confirmation?token={token}"}\"></a>." +
+                $" this is your email confirmation <a href=\"{$"https://localhost:7265/auth/confirmation/{email}?token={token}"}\">link</a>" +
                 $" The link will be expired at {DateTime.UtcNow.AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss tt}";
-            return Task.FromResult<MailRequest>(new()
+            return new MailRequest()
             {
                 Body = body,
-                Sender = _mailer.MailAddress,
+                Sender = "gigamallservice@gmail.com",
                 IsHtmlMessage = true,
                 Receiver = receiver,
                 Subject = "Email confirmation"
-            });
+            };
         }
 
-        private async Task<CreateUserResult> CreateUserAsync(SignUpModel model)
+        private static string Base64Encode(string original)
         {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-            var user = await _signInManager.UserManager.FindByEmailAsync(model.Email);
-            if (user != null)
-            {
-                if (user.UserName == model.Username)
-                    return CreateUserResult.Failed(new IdentityError
-                    {
-                        Code = "UsernameIsAlreadyExisted",
-                        Description = "This username is in used"
-                    });
-                return CreateUserResult.Failed(new IdentityError
-                {
-                    Code = "EmailIsInUsed",
-                    Description = "This email is linked to another account"
-                });
-            }
-            user = new User
-            {
-                Email = model.Email,
-                UserName = model.Username,
-                NormalizedEmail = model.Email.ToUpper(),
-                NormalizedUserName = model.Username.ToUpper(),
-                DoB = model.DoB,
-                FirstName = model.FirstName,
-                LastName = model.LastName
-            };
-            var createAccountResult = await _signInManager.UserManager.CreateAsync(user, model.Password);
-            if (createAccountResult.Succeeded)
-            {
-                await _signInManager.UserManager.AddClaimsAsync(user, new[]
-                {
-                    new Claim(ClaimTypes.Email, model.Email)
-                });
-            }
-            return CreateUserResult.Success(user);
+            return Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(original));
+        }
+
+        private static string Base64Decode(string encodedString)
+        {
+            return System.Text.Encoding.ASCII.GetString(Convert.FromBase64String(encodedString));
         }
     }
 }

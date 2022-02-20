@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RatingService.Command;
+using RatingService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RatingService.Controllers
 {
@@ -21,11 +23,11 @@ namespace RatingService.Controllers
         [HttpGet("{productId}")]
         public async Task<ApiResult<List<RatingDTO>>> GetRating(string productId)
         {
-            var result = await _mediator.Send(new GetRatingQuery
+            var result = await _mediator.Send(new GetRatingByProductIdQuery
             {
                 ProductId = productId
             });
-            return new ApiResult<List<RatingDTO>> { ResponseCode = 200, Data = result };
+            return ApiResult<List<RatingDTO>>.CreateSucceedResult(result);
         }
 
         [HttpPost]

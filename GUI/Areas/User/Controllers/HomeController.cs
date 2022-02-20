@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
-    [Authorize]
     public class HomeController : BaseUserController
     {
         private readonly IProductClient _productClient;
@@ -20,7 +19,7 @@ namespace GUI.Areas.User.Controllers
             _shopClient = shopClient;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             //var productsResponse = await _productClient.GetProductsAsync(1, 5);
             //var cartItemCountResponse = await _cartClient.GetCartItemCountAsync("F081C3C0-3314-44D8-1055-08D9DA433EEF");
@@ -42,7 +41,7 @@ namespace GUI.Areas.User.Controllers
             return View(new SearchResultViewModel
             {
                 Products = productResponse.Content.Data,
-                Shops = shopResponse.Content
+                Shops = shopResponse.Content.Data
             });
         }
     }

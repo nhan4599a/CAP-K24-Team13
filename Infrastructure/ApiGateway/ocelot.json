@@ -2,7 +2,7 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/products/",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/products/",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
@@ -12,7 +12,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/products/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/products/{id}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -22,7 +22,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/products/less/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/products/less/{id}",
       "UpstreamHttpMethod": [ "GET" ],
@@ -32,7 +32,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/categories/",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/categories/",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
@@ -42,7 +42,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/categories/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/categories/{id}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -52,7 +52,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/interfaces/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "InterfaceService",
       "UpstreamPathTemplate": "/interfaces/{id}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -62,7 +62,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/shop/search",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/shop/search",
       "UpstreamHttpMethod": [ "GET" ],
@@ -72,7 +72,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/shop/{id}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/shop/{id}",
       "UpstreamHttpMethod": [ "GET" ],
@@ -82,7 +82,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/cart/{userId}/items",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart/{userId}/items",
       "UpstreamHttpMethod": [ "GET" ],
@@ -92,7 +92,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/cart/{userId}/{productId}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart/{userId}/{productId}",
       "UpstreamHttpMethod": [ "DELETE", "OPTIONS" ],
@@ -101,18 +101,38 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/orders/{userId}",
-      "DownstreamScheme": "http",
-      "ServiceName": "OrderHistoryService",
-      "UpstreamPathTemplate": "/orders/{userId}",
+      "DownstreamPathTemplate": "/api/orders/user/{userId}",
+      "DownstreamScheme": "https",
+      "ServiceName": "OrderService",
+      "UpstreamPathTemplate": "/orders/user/{userId}",
       "UpstreamHttpMethod": [ "GET" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
     },
     {
+      "DownstreamPathTemplate": "/api/orders/shop/{shopId}",
+      "DownstreamScheme": "https",
+      "ServiceName": "OrderService",
+      "UpstreamPathTemplate": "/orders/shop/{shopId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/{orderId}",
+      "DownstreamScheme": "https",
+      "ServiceName": "OrderService",
+      "UpstreamPathTemplate": "/orders/{orderId}",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/cart",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart",
       "UpstreamHttpMethod": [ "POST", "PUT", "OPTIONS" ],
@@ -122,7 +142,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/checkout",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "CheckoutService",
       "UpstreamPathTemplate": "/checkout",
       "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
@@ -132,7 +152,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/rating",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "ServiceName": "RatingService",
       "UpstreamPathTemplate": "/rating",
       "UpstreamHttpMethod": [ "POST", "PUT", "OPTIONS" ],

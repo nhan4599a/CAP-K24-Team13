@@ -2,6 +2,6 @@
 {
     public enum InvoiceStatus
     {
-        New, Confirmed, ShipperReceived, Successful, Canceled
+        New, Confirmed, ShipperReceived, Succeed, Canceled
     }
 }

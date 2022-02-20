@@ -53,20 +53,20 @@ namespace ShopProductService.Controllers
         };
 
         [HttpGet("search")]
-        public PaginatedList<ShopDTO> FindShops([FromQuery] SearchRequestModel requestModel)
+        public ApiResult FindShops([FromQuery] SearchRequestModel requestModel)
         {
             var result = FakeShops.Where(shop => shop.Name.ToLower().Contains(requestModel.Keyword.ToLower()))
                 .Paginate(requestModel.PaginationInfo.PageNumber, requestModel.PaginationInfo.PageSize);
-            return result;
+            return ApiResult<PaginatedList<ShopDTO>>.CreateSucceedResult(result);
         }
 
         [HttpGet("{shopId}")]
-        public ApiResult<ShopDTO> GetShopById(int shopId)
+        public ApiResult GetShopById(int shopId)
         {
             var shop = FakeShops.SingleOrDefault(shop => shop.Id == shopId);
             if (shop == null)
-                return new ApiResult<ShopDTO> { ResponseCode = 404, ErrorMessage = "Can't not find shop" };
-            return new ApiResult<ShopDTO> { ResponseCode = 200, Data = shop };
+                return ApiResult.CreateErrorResult(404, "Can't not find shop");
+            return ApiResult<ShopDTO>.CreateSucceedResult(shop);
         }
     }
 }

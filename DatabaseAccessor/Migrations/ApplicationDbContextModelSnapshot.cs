@@ -85,7 +85,7 @@ namespace DatabaseAccessor.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
@@ -121,7 +121,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "Created");
+                    b.HasIndex("UserId", "CreatedAt");
 
                     b.ToTable("Invoices");
                 });

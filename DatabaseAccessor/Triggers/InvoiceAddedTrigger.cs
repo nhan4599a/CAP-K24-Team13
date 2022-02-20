@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Triggers
 {
-    public class InvoiceAddedTrigger : IBeforeSaveTrigger<Invoice>, IDisposable
+    public class InvoiceAddedTrigger : IAfterSaveTrigger<Invoice>, IDisposable
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -17,17 +17,18 @@ namespace DatabaseAccessor.Triggers
             _dbContext = dbContext;
         }
 
-        public Task BeforeSave(ITriggerContext<Invoice> context, CancellationToken cancellationToken)
+        public async Task AfterSave(ITriggerContext<Invoice> context, CancellationToken cancellationToken)
         {
             if (context.ChangeType == ChangeType.Added)
             {
                 var count = _dbContext.Invoices
-                    .Count(invoice => invoice.Created.Date == context.Entity.Created.Date && invoice.ShopId == context.Entity.ShopId);
-                context.Entity.InvoiceCode = context.Entity.ShopId.ToString();
-                context.Entity.InvoiceCode += "-" + context.Entity.Created.Date.ToString("ddMMyyyy") + "-";
-                context.Entity.InvoiceCode += (count + 1).ToString("00000");
+                    .Count(invoice => invoice.CreatedAt.Date == context.Entity.CreatedAt.Date && invoice.ShopId == context.Entity.ShopId);
+                var invoice = await _dbContext.Invoices.FindAsync(new object[] { context.Entity.Id }, cancellationToken: cancellationToken);
+                invoice.InvoiceCode = invoice.ShopId.ToString();
+                invoice.InvoiceCode += invoice.CreatedAt.Date.ToString("ddMMyyyy");
+                invoice.InvoiceCode += count.ToString("00000");
+                await _dbContext.SaveChangesAsync(cancellationToken);
             }
-            return Task.CompletedTask;
         }
 
         public void Dispose()

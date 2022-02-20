@@ -1,5 +1,7 @@
 ﻿using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AuthServer.Models
 {
@@ -29,5 +31,7 @@ namespace AuthServer.Models
                 Errors = errors
             };
         }
+
+        public static CreateUserResult Failed(IEnumerable<IdentityError> errors) => Failed(errors.ToArray());
     }
 }

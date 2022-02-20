@@ -1,5 +1,5 @@
 ﻿axios.defaults.timeout = 20000;
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'https://localhost:3000';
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
@@ -17,6 +17,7 @@ const cartEndpoint = '/cart'
 const interfaceEndpoint = '/interfaces';
 const checkoutEndpoint = '/checkout';
 const ratingProductEndpoint = '/rating';
+const orderEndpoint = '/orders'
 
 function findProducts(keyword, pageNumber, pageSize) {
     if (keyword === null || keyword === '')
@@ -37,7 +38,7 @@ function findProducts(keyword, pageNumber, pageSize) {
 }
 
 function getProductImageUrl(imageFileName) {
-    return `http://localhost:3000${productEndpoint}/images/${imageFileName}`;
+    return `${axios.defaults.baseURL}${productEndpoint}/images/${imageFileName}`;
 }
 
 function getProductImage(imageFileName) {
@@ -85,7 +86,7 @@ function getCategories(pageNumber, pageSize) {
 }
 
 function getCategoryImageUrl(imageFileName) {
-    return `http://localhost:3000${categoryEndpoint}/images/${imageFileName}`;
+    return `${axios.defaults.baseURL}${categoryEndpoint}/images/${imageFileName}`;
 }
 
 function getCategoryImage(imageFileName) {
@@ -132,7 +133,7 @@ function getShopInterface(shopId) {
 }
 
 function getShopInterfaceImageUrl(imageFileName) {
-    return `http://localhost:3000${interfaceEndpoint}/images/${imageFileName}`;
+    return `${axios.defaults.baseURL}${interfaceEndpoint}/images/${imageFileName}`;
 }
 
 function getShopInterfaceImage(imageFileName) {
@@ -198,4 +199,12 @@ function ratingProduct(userId, productId, star, comment) {
     formData.append('Star', star);
     formData.append('Message', comment);
     return axios.post(ratingProductEndpoint, formData);
+}
+
+function changeOrderStatus(orderId, newStatus) {
+    return axios.post(`${orderEndpoint}/${orderId}`, newStatus, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
 }

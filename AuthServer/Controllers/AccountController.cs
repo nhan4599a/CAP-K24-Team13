@@ -1,31 +1,66 @@
-﻿using AuthServer.Identities;
+using AuthServer.Identities;
+using AuthServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly ApplicationUserManager _userManager;
-
-        public AccountController(ApplicationUserManager userManager)
+        
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
         {
             _userManager = userManager;
         }
 
-        [Authorize]
         public IActionResult Information()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         [ActionName("Information")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditInformation()
+        public IActionResult EditInformation()
         {
             return View();
         }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                ModelState.AddModelError("ChangePassword-Error", "Something went wrong");
+                return View();
+            }
+            var changePasswordResult = await _userManager.ChangePasswordAsync(currentUser, model.Password, model.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                foreach (var error in changePasswordResult.Errors)
+                    ModelState.AddModelError("ChangePassword-Error", error.Description);
+            }
+            return View();
+        }
+        //[Route("/auth/ConfirmEmail")]
+        //public async Task<IActionResult> ConfirmEmail()
+        //{
+        //    return View();
+        //}
+
     }
 }

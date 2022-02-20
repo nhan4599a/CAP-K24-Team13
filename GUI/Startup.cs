@@ -77,7 +77,7 @@ namespace GUI
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<ICartClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
-            services.AddRefitClient<IOrderHistoryClient>()
+            services.AddRefitClient<IOrderClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
         }
 

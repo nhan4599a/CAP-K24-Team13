@@ -1,0 +1,16 @@
+﻿@using Shared.DTOs
+@model OrderDTO
+<div class="board-item">
+    <div class="board-item-content">
+        <div id="order-id">
+            <input type="hidden" value="@Model.Id" />
+            <h4>#@Model.OrderCode</h4>
+            <h5>@Model.CustomerName</h5>
+            <input type="tel" name="phonenumber" placeholder="phonenumber" value="@Model.Phone" disabled />
+            <input type="text" name="address" placeholder="address" value="@Model.ShippingAddress" disabled />
+        </div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            View
+        </button>
+    </div>
+</div>

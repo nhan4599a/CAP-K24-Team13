@@ -7,16 +7,16 @@ namespace GUI.Areas.User.Controllers
 {
     public class UserAccountController : Controller
     {
-        private readonly IOrderHistoryClient _orderHistoryClient;
+        private readonly IOrderClient _orderHistoryClient;
 
-        public UserAccountController(IOrderHistoryClient orderHistoryClient)
+        public UserAccountController(IOrderClient orderHistoryClient)
         {
             _orderHistoryClient = orderHistoryClient;
         }
 
         public async Task<IActionResult> Profile()
         {
-            var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory("0B008236-860D-44BB-3328-08D9E8AFEA5C");
+            var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory("C61AF282-818D-43CA-6DA9-08D9E08DBE4D");
             if (!orderHistoryRespone.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             return View(orderHistoryRespone.Content.Data);

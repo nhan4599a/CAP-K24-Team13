@@ -2,14 +2,17 @@
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Shared;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CheckoutService.Handlers
 {
     public class CheckOutCommandHandler : IRequestHandler<CheckOutCommand, CommandResponse<bool>>, IDisposable
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IInvoiceRepository _orderRepository;
 
-        public CheckOutCommandHandler(IOrderRepository orderRepository)
+        public CheckOutCommandHandler(IInvoiceRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }

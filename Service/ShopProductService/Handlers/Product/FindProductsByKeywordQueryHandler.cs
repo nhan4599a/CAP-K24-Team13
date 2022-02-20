@@ -22,7 +22,7 @@ namespace ShopProductService.Handlers.Product
         public async Task<PaginatedList<ProductDTO>> Handle(FindProductsByKeywordQuery request,
             CancellationToken cancellationToken)
         {
-            return await _repository.GetProductsAsync(request.Keyword, request.PaginationInfo, false);
+            return await _repository.GetProductsAsync(request.Keyword, request.PaginationInfo);
         }
 
         public void Dispose()

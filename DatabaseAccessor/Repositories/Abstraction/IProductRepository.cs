@@ -9,13 +9,13 @@ namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface IProductRepository : IDisposable
     {
-        Task<ProductDTO> GetProductAsync(Guid id);
+        Task<ProductWithCommentsDTO> GetProductAsync(Guid id);
 
         Task<MinimalProductDTO> GetMinimalProductAsync(Guid id);
 
-        Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo, bool includeComments);
+        Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo);
 
-        Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo, bool includeComments);
+        Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo);
 
         Task<CommandResponse<Guid>> AddProductAsync(CreateOrEditProductRequestModel requestModel);
 

@@ -11,7 +11,7 @@ namespace DatabaseAccessor.Models
         public string LastName { get; set; }
 
         public DateOnly? DoB { get; set; }
- 
+
         public AccountStatus Status { get; set; }
 
         public virtual IList<Invoice> Invoices { get; set; }

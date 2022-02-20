@@ -10,5 +10,10 @@ namespace Shared.Validations
         {
             return validationRules.Select(validationRule => validationRule.RuleName).Except(ruleNames);
         }
+
+        public static bool Contains(this FileValidationRuleSet validationRules, FileValidationRuleName ruleName)
+        {
+            return validationRules.Any(rule => rule.RuleName == ruleName);
+        }
     }
 }

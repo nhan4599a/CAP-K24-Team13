@@ -1,7 +1,4 @@
-using GUI.Extensions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace GUI.Areas.Admin.Controllers
 {
@@ -15,7 +12,7 @@ namespace GUI.Areas.Admin.Controllers
         }
 
         [ActionName("Index")]
-        public async Task<IActionResult> ListProduct()
+        public IActionResult ListProduct()
         {
             return View();
         }

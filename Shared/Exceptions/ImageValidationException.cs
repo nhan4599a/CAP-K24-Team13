@@ -9,9 +9,11 @@ namespace Shared.Exceptions
 
         public ImageValidationException(FileValidationResult validationResult)
         {
-            if (!validationResult.IsError)
+            if (!validationResult.IsViolatedResult)
                 throw new ArgumentException("ValidationResult is succeed");
             ValidationResult = validationResult;
         }
+
+        public override string Message => $"Following file validation rules are violated [{ValidationResult}]";
     }
 }

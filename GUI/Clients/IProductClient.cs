@@ -11,7 +11,7 @@ namespace GUI.Clients
         Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsAsync(int pageNumber, int? pageSize);
 
         [Get("/products/{productId}")]
-        Task<ApiResponse<ApiResult<ProductDTO>>> GetProductAsync(string productId);
+        Task<ApiResponse<ApiResult<ProductWithCommentsDTO>>> GetProductAsync(string productId);
 
         [Get("/products/less/{productId}")]
         Task<ApiResponse<ApiResult<ProductDTO>>> GetProductInfoInCheckout(string productId);

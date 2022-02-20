@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Shared.DTOs
+﻿namespace Shared.DTOs
 {
     public class ProductDTO : MinimalProductDTO
     {
@@ -15,7 +13,5 @@ namespace Shared.DTOs
         public string[] Images { get; set; }
 
         public bool IsDisabled { get; set; }
-
-        public  List<RatingDTO> Comments { get; set; }
     }
 }

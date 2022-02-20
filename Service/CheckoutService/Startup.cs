@@ -5,6 +5,12 @@ using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 
 namespace CheckoutService
 {
@@ -30,14 +36,14 @@ namespace CheckoutService
                 });
             services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3006").AllowAnyMethod().AllowAnyHeader();
+                    builder.WithOrigins("https://localhost:3006").AllowAnyMethod().AllowAnyHeader();
                 });
             });
             services.AddStackExchangeRedisCache(options =>

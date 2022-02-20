@@ -4,6 +4,11 @@ using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace RatingService
 {
@@ -29,7 +34,7 @@ namespace RatingService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3006").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("https://localhost:3006").AllowAnyHeader().AllowAnyMethod();
                 });
             });
             services.AddMediatR(typeof(Startup));
