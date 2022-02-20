@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -143,6 +144,11 @@ namespace AuthServer
         private void ApplyOptions(DbContextOptionsBuilder builder)
         {
             var connectionString = Configuration["CLIENT_AUTH_CONNECTION_STRING"];
+            string message = $"Connection string: {connectionString}";
+            LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            }).CreateLogger<Startup>().LogInformation(message);
             var assemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(assemblyName));
         }
