@@ -37,9 +37,14 @@ namespace GUI
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+            })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
+                options.RequireHttpsMetadata = false;
                 options.Authority = "http://ec2-52-207-214-39.compute-1.amazonaws.com:7265";
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = "oidc-client";
@@ -90,11 +95,14 @@ namespace GUI
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None,
+                Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
+            });
             app.UseStaticFiles();
 
             app.UseRouting();

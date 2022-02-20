@@ -56,7 +56,7 @@ namespace ShopProductService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("https://localhost:3006").AllowAnyMethod().AllowAnyHeader();
+                    builder.WithOrigins("http://ec2-52-207-214-39.compute-1.amazonaws.com:3006").AllowAnyMethod().AllowAnyHeader();
                 });
             });
             services.AddStackExchangeRedisCache(options =>
@@ -75,12 +75,9 @@ namespace ShopProductService
             }
             else
             {
-                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
 
             app.UseCors("Default");
             app.UseRouting();
