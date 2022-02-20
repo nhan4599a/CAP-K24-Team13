@@ -40,7 +40,7 @@ namespace GUI
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
-                options.Authority = "https://localhost:7265";
+                options.Authority = "http://ec2-52-207-214-39.compute-1.amazonaws.com:7265";
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = "oidc-client";
                 options.ClientSecret = "CapK24Team13";
@@ -117,7 +117,7 @@ namespace GUI
 
         private void ConfigureHttpClient(HttpClient client)
         {
-            client.BaseAddress = new Uri("http://localhost:3000");
+            client.BaseAddress = new Uri("http://ec2-52-207-214-39.compute-1.amazonaws.com:3000");
         }
     }
 }
