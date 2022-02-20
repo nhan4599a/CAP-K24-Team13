@@ -20,14 +20,14 @@ namespace AuthServer.Configurations
                 },
                 RedirectUris = new[]
                 {
-                    "https://localhost:3006/signin-oidc"
+                    "http://ec2-52-207-214-39.compute-1.amazonaws.com:3006/signin-oidc"
                 },
                 AllowedScopes = new[]
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.OfflineAccess,
-                    "product.read", "product.write", "roles"
+                    "product.api", "interface.api", "order.api", "checkout.api", "rating.api", "roles"
                 },
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
@@ -59,7 +59,79 @@ namespace AuthServer.Configurations
                 Description = "Allow the application to access product API",
                 Scopes = new[]
                 {
-                    "product.read", "product.write"
+                    "product.api"
+                },
+                ApiSecrets = new[]
+                {
+                    new Secret("CapK24Team13".Sha256())
+                },
+                UserClaims =
+                {
+                    JwtClaimTypes.Role
+                }
+            },
+            new ApiResource
+            {
+                Name = "interface",
+                DisplayName = "Interface API",
+                Description = "Allow the application to access interface API",
+                Scopes = new[]
+                {
+                    "interface.api"
+                },
+                ApiSecrets = new[]
+                {
+                    new Secret("CapK24Team13".Sha256())
+                },
+                UserClaims =
+                {
+                    JwtClaimTypes.Role
+                }
+            },
+            new ApiResource
+            {
+                Name = "order",
+                DisplayName = "Order API",
+                Description = "Allow the application to access order API",
+                Scopes = new[]
+                {
+                    "order.api"
+                },
+                ApiSecrets = new[]
+                {
+                    new Secret("CapK24Team13".Sha256())
+                },
+                UserClaims =
+                {
+                    JwtClaimTypes.Role
+                }
+            },
+            new ApiResource
+            {
+                Name = "checkout",
+                DisplayName = "Checkout API",
+                Description = "Allow the application to access checkout API",
+                Scopes = new[]
+                {
+                    "checkout.api"
+                },
+                ApiSecrets = new[]
+                {
+                    new Secret("CapK24Team13".Sha256())
+                },
+                UserClaims =
+                {
+                    JwtClaimTypes.Role
+                }
+            },
+            new ApiResource
+            {
+                Name = "rating",
+                DisplayName = "Rating API",
+                Description = "Allow the application to access rating API",
+                Scopes = new[]
+                {
+                    "rating.api"
                 },
                 ApiSecrets = new[]
                 {
@@ -76,15 +148,33 @@ namespace AuthServer.Configurations
         {
             new ApiScope
             {
-                Name = "product.read",
-                DisplayName = "product.read",
-                Description = "Allow application to have read permission on product"
+                Name = "product.api",
+                DisplayName = "product.api",
+                Description = "Allow application to have access permission on product API"
             },
             new ApiScope
             {
-                Name = "product.write",
-                DisplayName = "product.write",
-                Description = "Allow application to have write permission on product"
+                Name = "interface.api",
+                DisplayName = "interface.api",
+                Description = "Allow application to have write permission on interface API"
+            },
+            new ApiScope
+            {
+                Name = "order.api",
+                DisplayName = "order.api",
+                Description = "Allow application to have write permission on order API"
+            },
+            new ApiScope
+            {
+                Name = "checkout.api",
+                DisplayName = "checkout.api",
+                Description = "Allow application to have write permission on checkout API"
+            },
+            new ApiScope
+            {
+                Name = "rating.api",
+                DisplayName = "rating.api",
+                Description = "Allow application to have write permission on rating API"
             }
         };
     }
