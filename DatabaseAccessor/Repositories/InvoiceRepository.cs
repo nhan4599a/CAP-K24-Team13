@@ -98,7 +98,7 @@ namespace DatabaseAccessor.Repositories
             {
                 if (invoice.Status >= newStatus)
                     return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
-                
+
                 if (newStatus - invoice.Status > 1)
                     return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
             }
@@ -111,6 +111,35 @@ namespace DatabaseAccessor.Repositories
             invoice.Status = newStatus;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
+        }
+
+        public async Task<List<OrderDTO>> GetOrdersOfShopByMonthAsync(int shopId)
+        {
+            return await _dbContext.Invoices.AsNoTracking()
+                           .Where(item => item.ShopId == shopId)
+                           .OrderBy(item => item.CreatedAt.Date.Year)
+                           .ThenBy(item => item.CreatedAt.Date.Month)
+                           .Select(invoice => _mapper.MapToOrderDTO(invoice))
+                           .ToListAsync();
+        }
+
+        public async Task<List<OrderDTO>> GetOrdersOfShopByYearAsync(int shopId)
+        {
+            return await _dbContext.Invoices.AsNoTracking()
+                .Where(item => item.ShopId == shopId)
+                .OrderBy(item => item.CreatedAt.Date.Year)
+                .Select(invoice => _mapper.MapToOrderDTO(invoice))
+                .ToListAsync();
+        }
+
+        public async Task<List<OrderDTO>> GetCanceledOrdersOfShopByMonthAsync(int shopId)
+        {
+            return await _dbContext.Invoices.AsNoTracking()
+                .Where(item => item.ShopId == shopId && item.Status == InvoiceStatus.Canceled)
+                .OrderBy(item => item.CreatedAt.Date.Year)
+                .ThenBy(item => item.CreatedAt.Date.Month)
+                .Select(invoice => _mapper.MapToOrderDTO(invoice))
+                .ToListAsync();
         }
 
         public void Dispose()

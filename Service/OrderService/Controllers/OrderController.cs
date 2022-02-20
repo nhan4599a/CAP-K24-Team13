@@ -40,6 +40,27 @@ namespace OrderHistoryService.Controllers
             return ApiResult<List<OrderDTO>>.CreateSucceedResult(result);
         }
 
+        [HttpGet("shop/orders/orders-by-month/{shopId}")]
+        public async Task<ApiResult> GetOrdersOfShopOrderByMonth(int shopId)
+        {
+            var result = await _mediator.Send(new GetOrdersOfShopOrderByMonthQuery { ShopId = shopId });
+            return ApiResult<List<OrderDTO>>.CreateSucceedResult(result);
+        }
+
+        [HttpGet("shop/orders/orders-by-year/{shopId}")]
+        public async Task<ApiResult> GetOrdersOfShopOrderByYear(int shopId)
+        {
+            var result = await _mediator.Send(new GetOrdersOfShopOrderByYearQuery { ShopId = shopId });
+            return ApiResult<List<OrderDTO>>.CreateSucceedResult(result);
+        }
+
+        [HttpGet("shop/orders/canceled-orders-by-month/{shopId}")]
+        public async Task<ApiResult> GetCanceledOrdersOfShopOrderByMonth(int shopId)
+        {
+            var result = await _mediator.Send(new GetCanceledOrdersOfShopOrderByMonthQuery { ShopId = shopId });
+            return ApiResult<List<OrderDTO>>.CreateSucceedResult(result);
+        }
+
         [HttpPost("{invoiceId}")]
         public async Task<ApiResult> ChangeOrderStatus(int invoiceId, [FromBody] InvoiceStatus newStatus)
         {

@@ -16,6 +16,13 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<List<OrderDTO>> GetOrdersOfShopAsync(int shopId);
 
+        Task<List<OrderDTO>> GetOrdersOfShopByMonthAsync(int shopId);
+
+        Task<List<OrderDTO>> GetOrdersOfShopByYearAsync(int shopId);
+
+        Task<List<OrderDTO>> GetCanceledOrdersOfShopByMonthAsync(int shopId);
+
+
         Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
             string shippingPhone, string shippingAddress, string orderNotes);
 
