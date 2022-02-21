@@ -70,7 +70,6 @@ namespace GUI
                     RoleClaimType = "role"
                 };
             });
-            services.AddControllersWithViews();
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 var virtualAreaName = typeof(BaseUserController)
@@ -103,12 +102,12 @@ namespace GUI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseSession();
             app.UseCookiePolicy(new CookiePolicyOptions
             {
-                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None,
-                Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
+                MinimumSameSitePolicy = SameSiteMode.None,
+                Secure = CookieSecurePolicy.Always
             });
+            app.UseSession();
             app.UseStaticFiles();
 
             app.UseRouting();
