@@ -14,12 +14,9 @@ namespace GUI.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        [HttpGet("{responseCode}")]
+        public IActionResult Index(int? responseCode)
         {
-            var responseCode = HttpContext.Session.GetInt32("ResponseCode");
-            _logger.LogInformation("Error, Response Code = " + responseCode);
-            if (responseCode.HasValue)
-                HttpContext.Session.Remove("ResponseCode");
             responseCode = (!responseCode.HasValue || (responseCode != 404 && responseCode != 500)) ? 500 : responseCode;
             return View(responseCode.Value.ToString());
         }

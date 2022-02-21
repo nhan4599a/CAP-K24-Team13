@@ -33,8 +33,6 @@ namespace GUI
         public void ConfigureServices(IServiceCollection services)
         {
             IdentityModelEventSource.ShowPII = true;
-            services.AddDistributedMemoryCache();
-            services.AddSession();
             services.AddControllersWithViews();
             services.AddAuthentication(options =>
             {
@@ -114,7 +112,6 @@ namespace GUI
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseSession();
 
             app.Use(async (context, next) =>
             {
@@ -123,8 +120,7 @@ namespace GUI
                 var responseCode = context.Response.StatusCode;
                 if (responseCode != 200)
                 {
-                    context.Session.SetInt32("ResponseCode", responseCode);
-                    context.Response.Redirect("/Error");
+                    context.Response.Redirect($"/Error/{responseCode}");
                 }
             });
 
