@@ -113,16 +113,16 @@ namespace GUI
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.Use(async (context, next) =>
-            {
-                await next(context);
+            //app.Use(async (context, next) =>
+            //{
+            //    await next(context);
 
-                var responseCode = context.Response.StatusCode;
-                if (responseCode != 200)
-                {
-                    context.Response.Redirect($"/Error/{responseCode}");
-                }
-            });
+            //    var responseCode = context.Response.StatusCode;
+            //    if (responseCode != 200)
+            //    {
+            //        context.Response.Redirect($"/Error/{responseCode}");
+            //    }
+            //});
 
             app.UseEndpoints(endpoints =>
             {
