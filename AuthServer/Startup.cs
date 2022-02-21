@@ -56,7 +56,7 @@ namespace AuthServer
                 {
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
-                    options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
                     options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
                 });
                 //.AddGoogle(options =>
@@ -110,7 +110,6 @@ namespace AuthServer
                 options.Endpoints.EnableAuthorizeEndpoint = true;
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
-                
             })
                 .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
@@ -133,7 +132,7 @@ namespace AuthServer
                 app.UseDeveloperExceptionPage();
             app.UseCookiePolicy(new CookiePolicyOptions
             {
-                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None,
+                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax,
                 Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
             });
             app.UseStaticFiles();
