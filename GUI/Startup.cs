@@ -33,8 +33,9 @@ namespace GUI
         public void ConfigureServices(IServiceCollection services)
         {
             IdentityModelEventSource.ShowPII = true;
-            services.AddControllersWithViews();
+            services.AddDistributedMemoryCache();
             services.AddSession();
+            services.AddControllersWithViews();
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -107,13 +108,13 @@ namespace GUI
                 MinimumSameSitePolicy = SameSiteMode.None,
                 Secure = CookieSecurePolicy.Always
             });
-            app.UseSession();
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
 
             app.Use(async (context, next) =>
             {
