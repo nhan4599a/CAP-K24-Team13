@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Framework;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace GUI.Controllers
 {
+    [Route("/Error")]
     public class ErrorController : Controller
     {
         private readonly ILogger<ErrorController> _logger;
