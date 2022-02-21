@@ -40,7 +40,7 @@ namespace GUI
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SameSite = SameSiteMode.None;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
@@ -103,7 +103,7 @@ namespace GUI
             }
             app.UseCookiePolicy(new CookiePolicyOptions
             {
-                MinimumSameSitePolicy = SameSiteMode.Lax,
+                MinimumSameSitePolicy = SameSiteMode.None,
                 Secure = CookieSecurePolicy.Always
             });
             app.UseStaticFiles();
