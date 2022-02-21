@@ -41,7 +41,8 @@ namespace ShopProductService
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    options.Authority = "https://localhost:7265";
+                    options.RequireHttpsMetadata = false;
+                    options.Authority = "http://ec2-52-207-214-39.compute-1.amazonaws.com:7265";
                     options.Audience = "product";
                 });
             services.AddMediatR(typeof(Startup));
