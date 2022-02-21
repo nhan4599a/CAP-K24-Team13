@@ -34,14 +34,15 @@ namespace GUI
         {
             IdentityModelEventSource.ShowPII = true;
             services.AddControllersWithViews();
+            services.AddSession();
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
-                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -102,6 +103,7 @@ namespace GUI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSession();
             app.UseCookiePolicy(new CookiePolicyOptions
             {
                 MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None,
