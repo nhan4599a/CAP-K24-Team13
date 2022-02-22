@@ -34,7 +34,6 @@ namespace GUI
         {
             IdentityModelEventSource.ShowPII = true;
             services.AddControllersWithViews();
-            services.AddSession();
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -70,7 +69,6 @@ namespace GUI
                     RoleClaimType = "role"
                 };
             });
-            services.AddControllersWithViews();
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 var virtualAreaName = typeof(BaseUserController)
@@ -98,18 +96,13 @@ namespace GUI
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            app.UseSession();
+            app.UseStaticFiles();
+
             app.UseCookiePolicy(new CookiePolicyOptions
             {
-                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None,
-                Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
+                MinimumSameSitePolicy = SameSiteMode.None,
+                Secure = CookieSecurePolicy.Always
             });
-            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -123,8 +116,7 @@ namespace GUI
                 var responseCode = context.Response.StatusCode;
                 if (responseCode != 200)
                 {
-                    context.Session.SetInt32("ResponseCode", responseCode);
-                    context.Response.Redirect("/Error");
+                    context.Response.Redirect($"/Error/{responseCode}");
                 }
             });
 
