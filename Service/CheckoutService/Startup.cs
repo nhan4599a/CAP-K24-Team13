@@ -32,7 +32,7 @@ namespace CheckoutService
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = "http://ec2-52-207-214-39.compute-1.amazonaws.com:7265";
-                    options.Audience = "product";
+                    options.Audience = "checkout";
                 });
             services.AddMediatR(typeof(Startup));
             services.AddScoped<ApplicationDbContext>();

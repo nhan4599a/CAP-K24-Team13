@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using Shared.Models;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("/api/cart")]
     public class CartController : ControllerBase

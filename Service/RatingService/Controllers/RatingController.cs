@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RatingService.Commands;
 using Shared.DTOs;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace RatingService.Controllers
 {
+    [Authorize]
     [Route("api/rating")]
     [ApiController]
     public class RatingController : ControllerBase

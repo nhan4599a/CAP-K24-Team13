@@ -1,5 +1,6 @@
 ﻿using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using Shared.Exceptions;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ShopInterfaceService.Controllers
 {
+    [Authorize]
     [Route("api/interfaces")]
     [ApiController]
     public class ShopInterfaceController : ControllerBase

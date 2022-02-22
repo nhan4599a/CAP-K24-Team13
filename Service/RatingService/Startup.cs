@@ -4,6 +4,7 @@ using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +38,12 @@ namespace RatingService
                     builder.WithOrigins("http://ec2-52-207-214-39.compute-1.amazonaws.com:3006").AllowAnyHeader().AllowAnyMethod();
                 });
             });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+               {
+                   options.Authority = "http://ec2-52-207-214-39.compute-1.amazonaws.com:7265";
+                   options.Audience = "rating";
+               });
             services.AddMediatR(typeof(Startup));
         }
 

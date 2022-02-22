@@ -2,12 +2,15 @@
 using GUI.Areas.User.Models;
 using GUI.Areas.User.ViewModels;
 using GUI.Clients;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
+    [Authorize]
     public class CheckoutController : BaseUserController
     {
         private readonly IProductClient _productClient;
@@ -23,7 +26,8 @@ namespace GUI.Areas.User.Controllers
             List<CheckOutViewModel> productList = new();
             foreach (var model in models)
             {
-                var productResponse = await _productClient.GetProductInfoInCheckout(model.ProductId);
+                var token = await HttpContext.GetTokenAsync("access_token");
+                var productResponse = await _productClient.GetProductInfoInCheckout(token, model.ProductId);
                 if (!productResponse.IsSuccessStatusCode || productResponse.Content.ResponseCode == 404)
                 {
                     ViewBag.HasError = true;

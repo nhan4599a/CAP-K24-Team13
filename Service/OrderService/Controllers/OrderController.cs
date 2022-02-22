@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderHistoryService.Commands;
 using OrderService.Commands;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace OrderHistoryService.Controllers
 {
+    [Authorize]
     [Route("api/orders")]
     [ApiController]
     public class OrderController : Controller
