@@ -10,8 +10,10 @@ using AuthServer.Services;
 using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -56,8 +58,6 @@ namespace AuthServer
                 {
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
-                    options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
-                    options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
                 });
                 //.AddGoogle(options =>
                 //{
@@ -110,7 +110,6 @@ namespace AuthServer
                 options.Endpoints.EnableAuthorizeEndpoint = true;
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
-                
             })
                 .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
@@ -130,11 +129,13 @@ namespace AuthServer
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
-            app.UseCookiePolicy(new CookiePolicyOptions
             {
-                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None,
-                Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
+                app.UseDeveloperExceptionPage();
+            }
+            app.Use(async (context, next) =>
+            {
+                context.SetIdentityServerOrigin("https://cap-k24-team13-auth.com/");
+                await next();
             });
             app.UseStaticFiles();
             app.UseRouting();

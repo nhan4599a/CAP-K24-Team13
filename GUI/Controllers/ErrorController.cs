@@ -1,15 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace GUI.Controllers
 {
+    [Route("/Error")]
     public class ErrorController : Controller
     {
-        public IActionResult Index()
+        private readonly ILogger<ErrorController> _logger;
+
+        public ErrorController(ILogger<ErrorController> logger)
         {
-            var responseCode = HttpContext.Session.GetInt32("ResponseCode");
-            if (responseCode.HasValue)
-                HttpContext.Session.Remove("ResponseCode");
+            _logger = logger;
+        }
+
+        [HttpGet("{responseCode}")]
+        public IActionResult Index(int? responseCode)
+        {
+            _logger.LogInformation($"Error, response code = {responseCode}");
             responseCode = (!responseCode.HasValue || (responseCode != 404 && responseCode != 500)) ? 500 : responseCode;
             return View(responseCode.Value.ToString());
         }

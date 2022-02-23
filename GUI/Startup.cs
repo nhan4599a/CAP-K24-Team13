@@ -34,20 +34,14 @@ namespace GUI
         {
             IdentityModelEventSource.ShowPII = true;
             services.AddControllersWithViews();
-            services.AddSession();
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            })
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.Authority = "http://ec2-52-207-214-39.compute-1.amazonaws.com:7265";
+                options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = "oidc-client";
                 options.ClientSecret = "CapK24Team13";
@@ -70,7 +64,6 @@ namespace GUI
                     RoleClaimType = "role"
                 };
             });
-            services.AddControllersWithViews();
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 var virtualAreaName = typeof(BaseUserController)
@@ -98,22 +91,6 @@ namespace GUI
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            app.Use((context, next) =>
-            {
-                context.Request.Scheme = "https";
-                return next();
-            });
-            app.UseSession();
-            app.UseCookiePolicy(new CookiePolicyOptions
-            {
-                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None,
-                Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
-            });
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -128,8 +105,7 @@ namespace GUI
                 var responseCode = context.Response.StatusCode;
                 if (responseCode != 200)
                 {
-                    context.Session.SetInt32("ResponseCode", responseCode);
-                    context.Response.Redirect("/Error");
+                    context.Response.Redirect($"/Error/{responseCode}");
                 }
             });
 

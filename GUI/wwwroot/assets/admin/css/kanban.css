@@ -136,7 +136,7 @@
     height: 50%;
 }
 
-button {
+#btn-order-details {
     width: 100%;
     background-color: #2f9db6 !important;
 }

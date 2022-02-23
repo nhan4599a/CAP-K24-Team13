@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
+    [Authorize]
     public class HomeController : BaseUserController
     {
         private readonly IProductClient _productClient;

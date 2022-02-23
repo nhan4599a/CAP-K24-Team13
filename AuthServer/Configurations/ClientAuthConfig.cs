@@ -20,7 +20,7 @@ namespace AuthServer.Configurations
                 },
                 RedirectUris = new[]
                 {
-                    "http://ec2-52-207-214-39.compute-1.amazonaws.com:3006/signin-oidc"
+                    "https://cap-k24-team13.com/signin-oidc"
                 },
                 AllowedScopes = new[]
                 {
