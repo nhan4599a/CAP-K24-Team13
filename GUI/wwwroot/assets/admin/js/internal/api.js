@@ -1,6 +1,10 @@
 ﻿axios.defaults.timeout = 20000;
 axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000';
 
+axios.interceptors.request.use(axiosReq => {
+    console.log(axiosReq);
+});
+
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
         return Promise.resolve(axiosResp.data);
