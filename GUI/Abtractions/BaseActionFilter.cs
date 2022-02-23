@@ -1,5 +1,7 @@
 ﻿using GUI.Areas.User.Controllers;
 using GUI.Clients;
+using GUI.Extensions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -18,13 +20,16 @@ namespace GUI.Abtractions
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var controller = context.Controller as Controller;
-            if (controller is not CartController)
+            if (context.HttpContext.User.Identity.IsAuthenticated)
             {
-                var token = await HttpContext.GetTokenAsync("access_token");
-                var cartItemsResponse = await _cartClient.GetCartItemsAsync("324DFA41-D0E8-46CD-1975-08D9EB65B707");
-                if (cartItemsResponse.IsSuccessStatusCode)
-                    controller.ViewData["CartItems"] = cartItemsResponse.Content.Data;
+                var controller = context.Controller as Controller;
+                if (controller is not CartController)
+                {
+                    var token = await context.HttpContext.GetTokenAsync("access_token");
+                    var cartItemsResponse = await _cartClient.GetCartItemsAsync(token, context.HttpContext.User.GetUserId().ToString());
+                    if (cartItemsResponse.IsSuccessStatusCode)
+                        controller.ViewData["CartItems"] = cartItemsResponse.Content.Data;
+                }
             }
             await next();
         }

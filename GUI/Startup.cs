@@ -90,6 +90,11 @@ namespace GUI
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.Use(async (context, next) =>
+            {
+                context.Request.Scheme = "https";
+                await next();
+            });
             app.UseStaticFiles();
 
             app.UseRouting();

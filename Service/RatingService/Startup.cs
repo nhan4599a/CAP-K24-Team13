@@ -35,13 +35,13 @@ namespace RatingService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("http://ec2-52-207-214-39.compute-1.amazonaws.com:3006").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("https://cap-k24-team13.herokuapp.com").AllowAnyHeader().AllowAnyMethod();
                 });
             });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                {
-                   options.Authority = "http://ec2-52-207-214-39.compute-1.amazonaws.com:7265";
+                   options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
                    options.Audience = "rating";
                });
             services.AddMediatR(typeof(Startup));

@@ -17,6 +17,7 @@ namespace GUI.Areas.User.Controllers
         {
             _orderHistoryClient = orderHistoryClient;
         }
+
         public async Task<IActionResult> Profile()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
