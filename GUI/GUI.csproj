@@ -2028,7 +2028,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
     <PackageReference Include="Refit" Version="6.1.15" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.1.15" />

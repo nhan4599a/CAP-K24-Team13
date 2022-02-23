@@ -10,6 +10,7 @@ using AuthServer.Services;
 using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -57,8 +58,6 @@ namespace AuthServer
                 {
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
-                    options.Cookie.SameSite = SameSiteMode.None;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 });
                 //.AddGoogle(options =>
                 //{
@@ -133,13 +132,12 @@ namespace AuthServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseStaticFiles();
-            app.UseCookiePolicy(new CookiePolicyOptions
+            app.Use(async (context, next) =>
             {
-                MinimumSameSitePolicy = SameSiteMode.None,
-                Secure = CookieSecurePolicy.Always
+                context.SetIdentityServerOrigin("https://cap-k24-team13-auth.com/");
+                await next();
             });
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseIdentityServer();

@@ -38,15 +38,10 @@ namespace GUI
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            })
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.Authority = "http://ec2-52-207-214-39.compute-1.amazonaws.com:7265";
+                options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = "oidc-client";
                 options.ClientSecret = "CapK24Team13";
@@ -97,12 +92,6 @@ namespace GUI
                 app.UseDeveloperExceptionPage();
             }
             app.UseStaticFiles();
-
-            app.UseCookiePolicy(new CookiePolicyOptions
-            {
-                MinimumSameSitePolicy = SameSiteMode.None,
-                Secure = CookieSecurePolicy.Always
-            });
 
             app.UseRouting();
 
