@@ -1,5 +1,6 @@
 ﻿using GUI.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 
 namespace GUI.Controllers
 {
@@ -7,11 +8,11 @@ namespace GUI.Controllers
     public class AccessTokenController : ControllerBase
     {
         [Route("/token")]
-        public string GetCurrentUserAccessToken()
+        public ApiResult GetCurrentUserAccessToken()
         {
             if (User.Identity.IsAuthenticated)
-                return string.Empty;
-            return User.GetUserId().ToString();
+                return ApiResult.CreateErrorResult(403, "User is not logged in");
+            return ApiResult<string>.CreateSucceedResult(User.GetUserId().ToString());
         }
     }
 }
