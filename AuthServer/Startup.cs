@@ -14,6 +14,7 @@ using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -132,6 +133,11 @@ namespace AuthServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto
+            });
             app.Use(async (context, next) =>
             {
                 context.SetIdentityServerOrigin("https://cap-k24-team13-auth.herokuapp.com/");

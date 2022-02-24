@@ -43,7 +43,7 @@ namespace CheckoutService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("https://cap-k24-team13.herokuapp.com").AllowAnyMethod().AllowAnyHeader();
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
             services.AddStackExchangeRedisCache(options =>

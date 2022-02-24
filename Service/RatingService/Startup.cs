@@ -35,7 +35,7 @@ namespace RatingService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("https://cap-k24-team13.herokuapp.com").AllowAnyHeader().AllowAnyMethod();
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 });
             });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

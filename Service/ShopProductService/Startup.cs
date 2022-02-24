@@ -41,7 +41,6 @@ namespace ShopProductService
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    options.RequireHttpsMetadata = false;
                     options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
                     options.Audience = "product";
                 });
@@ -57,7 +56,7 @@ namespace ShopProductService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("https://cap-k24-team13.herokuapp.com").AllowAnyMethod().AllowAnyHeader();
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
             services.AddStackExchangeRedisCache(options =>
