@@ -1,22 +1,8 @@
 ﻿axios.defaults.timeout = 20000;
 axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000';
 
-axios.interceptors.request.use(async config => {
-    console.log(config.url);
-    if (config.url != 'https://cap-k24-team13.herokuapp.com/token') {
-        let accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-            accessToken = await getAccessToken();
-            localStorage.setItem('access_token', accessToken);
-        }
-        console.log(config.headers);
-        config.headers.Authorization = `Bearer: ${accessToken}`;
-        console.log(config.headers);
-    }
-    return config;
-});
-
 axios.interceptors.response.use(axiosResp => {
+    console.log(axiosResp);
     if (axiosResp.data instanceof Blob)
         return Promise.resolve(axiosResp.data);
     let resp = axiosResp.data;
@@ -65,24 +51,32 @@ function getProductImage(imageFileName) {
     });
 }
 
-function activateProduct(id, isActivateCommand) {
+async function activateProduct(id, isActivateCommand) {
+    let accessToken = await getAccessToken();
     return axios.delete(
-        `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`
-    );
+        `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`, {
+            headers: {
+                Authorization: `Bearer: ${accessToken}`
+            }
+        });
 }
 
-function addProduct(formData) {
+async function addProduct(formData) {
+    let accessToken = await getAccessToken();
     return axios.post(productEndpoint, formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer: ${accessToken}`
         }
     });
 }
 
-function editProduct(id, formData) {
+async function editProduct(id, formData) {
+    let accessToken = await getAccessToken();
     return axios.put(productEndpoint + `/${id}`, formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer: ${accessToken}`
         }
     });
 }
@@ -113,7 +107,8 @@ function getCategoryImage(imageFileName) {
     });
 }
 
-function activateCategory(activateCommand) {
+async function activateCategory(activateCommand) {
+    let accessToken = await getAccessToken();
     if (!activateCommand)
         throw new Error('activeCommand can not be null');
     if (!activateCommand.id)
@@ -123,22 +118,29 @@ function activateCategory(activateCommand) {
     var action = activateCommand.isActivateCommand ? 1 : 0;
     var cascade = activateCommand.shouldBeCascade ? 1 : 0;
     return axios.delete(
-        `${categoryEndpoint}/${activateCommand.id}?action=${action}&cascade=${cascade}`
-    );
+        `${categoryEndpoint}/${activateCommand.id}?action=${action}&cascade=${cascade}`, {
+            headers: {
+                Authorization: `Bearer: ${accessToken}`
+            }
+        });
 }
 
-function addCategory(formData) {
+async function addCategory(formData) {
+    let accessToken = await getAccessToken();
     return axios.post(categoryEndpoint, formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer: ${accessToken}`
         }
     });
 }
 
-function editCategory(id, formData) {
+async function editCategory(id, formData) {
+    let accessToken = await getAccessToken();
     return axios.put(categoryEndpoint + `/${id}`, formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer: ${accessToken}`
         }
     });
 }
@@ -160,43 +162,63 @@ function getShopInterfaceImage(imageFileName) {
     });
 }
 
-function addShopInterface(shopId, formData) {
+async function addShopInterface(shopId, formData) {
+    let accessToken = await getAccessToken();
     return axios.post(`${interfaceEndpoint}/${shopId}`, formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer: ${accessToken}`
         }
     });
 }
 
-function editShopInterface(shopId, formData) {
+async function editShopInterface(shopId, formData) {
+    let accessToken = await getAccessToken();
     return axios.put(`${interfaceEndpoint}/${shopId}`, formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer: ${accessToken}`
         }
     });
 }
 
-function addProductToCart(userId, productId, quantity) {
+async function addProductToCart(userId, productId, quantity) {
+    let accessToken = await getAccessToken();
     let formData = new FormData();
     formData.append('userId', userId);
     formData.append('productId', productId);
     formData.append('quantity', quantity);
-    return axios.post(`${cartEndpoint}`, formData);
+    return axios.post(`${cartEndpoint}`, formData, {
+        headers: {
+            Authorization: `Bearer: ${accessToken}`
+        }
+    });
 }
 
-function updateCartQuantity(userId, productId, quantity) {
+async function updateCartQuantity(userId, productId, quantity) {
+    let accessToken = await getAccessToken();
     let formData = new FormData();
     formData.append('userId', userId);
     formData.append('productId', productId);
     formData.append('quantity', quantity);
-    return axios.put(`${cartEndpoint}`, formData);
+    return axios.put(`${cartEndpoint}`, formData, {
+        headers: {
+            Authorization: `Bearer: ${accessToken}`
+        }
+    });
 }
 
-function removeProductInCart(userId, productId) {
-    return axios.delete(`${cartEndpoint}/${userId}/${productId}`);
+async function removeProductInCart(userId, productId) {
+    let accessToken = await getAccessToken();
+    return axios.delete(`${cartEndpoint}/${userId}/${productId}`, {
+        headers: {
+            Authorization: `Bearer: ${accessToken}`
+        }
+    });
 }
 
-function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAddress, orderNotes) {
+async function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAddress, orderNotes) {
+    let accessToken = await getAccessToken();
     let formData = new FormData();
     formData.append('requestModel.userId', userId);
     formData.append('requestModel.productIds', productIdList);
@@ -204,26 +226,37 @@ function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAd
     formData.append('requestModel.shippingPhone', shippingPhone);
     formData.append('requestModel.shippingAddress', shippingAddress);
     formData.append('requestModel.orderNotes', orderNotes);
-    return axios.post(checkoutEndpoint, formData);
+    return axios.post(checkoutEndpoint, formData, {
+        headers: {
+            Authorization: `Bearer: ${accessToken}`
+        }
+    });
 }
 
-function ratingProduct(userId, productId, star, comment) {
+async function ratingProduct(userId, productId, star, comment) {
+    let accessToken = await getAccessToken();
     let formData = new FormData();
     formData.append('UserId', userId);
     formData.append('ProductId', productId);
     formData.append('Star', star);
     formData.append('Message', comment);
-    return axios.post(ratingProductEndpoint, formData);
-}
-
-function changeOrderStatus(orderId, newStatus) {
-    return axios.post(`${orderEndpoint}/${orderId}`, newStatus, {
+    return axios.post(ratingProductEndpoint, formData, {
         headers: {
-            "Content-Type": "application/json"
+            Authorization: `Bearer: ${accessToken}`
         }
     });
 }
 
-async function getAccessToken() {
+async function changeOrderStatus(orderId, newStatus) {
+    let accessToken = await getAccessToken();
+    return axios.post(`${orderEndpoint}/${orderId}`, newStatus, {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer: ${accessToken}`
+        }
+    });
+}
+
+function getAccessToken() {
     return axios.get('https://cap-k24-team13.herokuapp.com/token');
 }
