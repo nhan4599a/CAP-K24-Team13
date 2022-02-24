@@ -4,15 +4,16 @@ axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000'
 axios.interceptors.request.use(async config => {
     console.log(config.url);
     if (config.url != 'https://cap-k24-team13.herokuapp.com/token') {
-        console.log(config);
         let accessToken = localStorage.getItem('access_token');
         if (!accessToken) {
             accessToken = await getAccessToken();
             localStorage.setItem('access_token', accessToken);
         }
+        console.log(config.headers);
         config.headers.Authorization = `Bearer: ${accessToken}`;
+        console.log(config.headers);
     }
-    return Promise.resolve(config);
+    return config;
 });
 
 axios.interceptors.response.use(axiosResp => {
