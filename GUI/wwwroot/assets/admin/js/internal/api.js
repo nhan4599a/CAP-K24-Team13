@@ -1,18 +1,18 @@
 ﻿axios.defaults.timeout = 20000;
 axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000';
 
-axios.interceptors.request.use(async config => {
-    if (config.url != 'https://cap-k24-team13.herokuapp.com/token') {
-        console.log(config);
-        let accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-            accessToken = await getAccessToken();
-            localStorage.setItem('access_token', accessToken);
-        }
-        config.headers.Authorization = `Bearer: ${accessToken}`;
-    }
-    return Promise.resolve(config);
-});
+//axios.interceptors.request.use(async config => {
+//    if (config.url != 'https://cap-k24-team13.herokuapp.com/token') {
+//        console.log(config);
+//        let accessToken = localStorage.getItem('access_token');
+//        if (!accessToken) {
+//            accessToken = await getAccessToken();
+//            localStorage.setItem('access_token', accessToken);
+//        }
+//        config.headers.Authorization = `Bearer: ${accessToken}`;
+//    }
+//    return Promise.resolve(config);
+//});
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
