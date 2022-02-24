@@ -2,8 +2,8 @@
 axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000';
 
 axios.interceptors.request.use(async config => {
-    console.log(config);
     if (config.url != 'https://cap-k24-team13.herokuapp.com/token') {
+        console.log(config);
         let accessToken = localStorage.getItem('access_token');
         if (!accessToken) {
             accessToken = await getAccessToken();
