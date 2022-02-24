@@ -56,7 +56,7 @@ async function activateProduct(id, isActivateCommand) {
     return axios.delete(
         `${productEndpoint}/${id}?action=${isActivateCommand ? 1 : 0}`, {
             headers: {
-                Authorization: `Bearer: ${accessToken}`
+                Authorization: `Bearer ${accessToken}`
             }
         });
 }
@@ -66,7 +66,7 @@ async function addProduct(formData) {
     return axios.post(productEndpoint, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -76,7 +76,7 @@ async function editProduct(id, formData) {
     return axios.put(productEndpoint + `/${id}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -120,7 +120,7 @@ async function activateCategory(activateCommand) {
     return axios.delete(
         `${categoryEndpoint}/${activateCommand.id}?action=${action}&cascade=${cascade}`, {
             headers: {
-                Authorization: `Bearer: ${accessToken}`
+                Authorization: `Bearer ${accessToken}`
             }
         });
 }
@@ -130,7 +130,7 @@ async function addCategory(formData) {
     return axios.post(categoryEndpoint, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -140,7 +140,7 @@ async function editCategory(id, formData) {
     return axios.put(categoryEndpoint + `/${id}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -167,7 +167,7 @@ async function addShopInterface(shopId, formData) {
     return axios.post(`${interfaceEndpoint}/${shopId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -177,7 +177,7 @@ async function editShopInterface(shopId, formData) {
     return axios.put(`${interfaceEndpoint}/${shopId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -190,7 +190,7 @@ async function addProductToCart(userId, productId, quantity) {
     formData.append('quantity', quantity);
     return axios.post(`${cartEndpoint}`, formData, {
         headers: {
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -203,7 +203,7 @@ async function updateCartQuantity(userId, productId, quantity) {
     formData.append('quantity', quantity);
     return axios.put(`${cartEndpoint}`, formData, {
         headers: {
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -212,7 +212,7 @@ async function removeProductInCart(userId, productId) {
     let accessToken = await getAccessToken();
     return axios.delete(`${cartEndpoint}/${userId}/${productId}`, {
         headers: {
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -228,7 +228,7 @@ async function checkOut(userId, productIdList, shippingName, shippingPhone, ship
     formData.append('requestModel.orderNotes', orderNotes);
     return axios.post(checkoutEndpoint, formData, {
         headers: {
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -242,7 +242,7 @@ async function ratingProduct(userId, productId, star, comment) {
     formData.append('Message', comment);
     return axios.post(ratingProductEndpoint, formData, {
         headers: {
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -252,7 +252,7 @@ async function changeOrderStatus(orderId, newStatus) {
     return axios.post(`${orderEndpoint}/${orderId}`, newStatus, {
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer: ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
