@@ -134,7 +134,7 @@ namespace AuthServer
             }
             app.Use(async (context, next) =>
             {
-                context.SetIdentityServerOrigin("https://cap-k24-team13-auth.com/");
+                context.SetIdentityServerOrigin("https://cap-k24-team13-auth.herokuapp.com/");
                 await next();
             });
             app.UseStaticFiles();

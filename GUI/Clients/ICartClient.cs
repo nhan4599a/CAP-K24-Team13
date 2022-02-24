@@ -9,6 +9,6 @@ namespace GUI.Clients
     public interface ICartClient
     {
         [Get("/cart/{userId}/items")]
-        Task<ApiResponse<ApiResult<List<CartItemDTO>>>> GetCartItemsAsync(string userId);
+        Task<ApiResponse<ApiResult<List<CartItemDTO>>>> GetCartItemsAsync([Header("Authorization: Bearer")] string token, string userId);
     }
 }

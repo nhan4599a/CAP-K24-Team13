@@ -2,6 +2,7 @@ using AspNetCoreSharedComponent.FileValidations;
 using AspNetCoreSharedComponent.ModelBinders;
 using DatabaseAccessor;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using Shared.Exceptions;
@@ -54,6 +55,7 @@ namespace ShopProductService.Controllers
             _rules.Change(FileValidationRuleName.SingleMaxFileSize, (long)(0.3 * 1024 * 1024));
         }
 
+        [Authorize]
         [HttpPost]
         [ActionName("Add")]
         public async Task<ApiResult> AddCategory([FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
@@ -87,6 +89,7 @@ namespace ShopProductService.Controllers
             return ApiResult<CategoryDTO>.CreateSucceedResult(category);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ApiResult> EditCategory(int id,
             [FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
@@ -120,6 +123,7 @@ namespace ShopProductService.Controllers
             return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(categories);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         [ActionName("Delete")]
         public async Task<ApiResult> DeleteCategory(int id,

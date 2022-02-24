@@ -9,9 +9,9 @@ namespace GUI.Clients
     public interface IOrderClient
     {
         [Get("/orders/user/{userId}")]
-        Task<ApiResponse<ApiResult<List<OrderItemDTO>>>> GetOrderUserHistory(string userId);
+        Task<ApiResponse<ApiResult<List<OrderItemDTO>>>> GetOrderUserHistory([Header("Authorization: Bearer")] string token, string userId);
 
         [Get("/orders/shop/{shopId}")]
-        Task<ApiResponse<ApiResult<List<OrderDTO>>>> GetNearByOrders(int shopId);
+        Task<ApiResponse<ApiResult<List<OrderDTO>>>> GetNearByOrders([Header("Authorization: Bearer")] string token, int shopId);
     }
 }

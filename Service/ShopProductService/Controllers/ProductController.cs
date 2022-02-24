@@ -1,6 +1,7 @@
 using AspNetCoreSharedComponent.FileValidations;
 using DatabaseAccessor;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
@@ -111,6 +112,7 @@ namespace ShopProductService.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ApiResult> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
@@ -131,6 +133,7 @@ namespace ShopProductService.Controllers
             return ApiResult<Guid>.CreateSucceedResult(response.Response);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ApiResult> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
@@ -152,6 +155,7 @@ namespace ShopProductService.Controllers
             return ApiResult<ProductDTO>.CreateSucceedResult(response.Response);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ApiResult> DeleteProduct(string id, [FromQuery] DeleteAction action)
         {

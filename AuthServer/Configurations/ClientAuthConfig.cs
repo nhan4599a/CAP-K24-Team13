@@ -20,7 +20,7 @@ namespace AuthServer.Configurations
                 },
                 RedirectUris = new[]
                 {
-                    "https://cap-k24-team13.com/signin-oidc"
+                    "https://cap-k24-team13.herokuapp.com/signin-oidc"
                 },
                 AllowedScopes = new[]
                 {

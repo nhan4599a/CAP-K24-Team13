@@ -1,6 +1,16 @@
 ﻿axios.defaults.timeout = 20000;
 axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000';
 
+axios.interceptors.request.use(config => {
+    if (config.url )
+    let accessToken = window.localStorage.getItem('access_token');
+    if (!accessToken) {
+        getAccessToken().then(accessToken => {
+            
+        })
+    }
+});
+
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
         return Promise.resolve(axiosResp.data);
@@ -207,4 +217,8 @@ function changeOrderStatus(orderId, newStatus) {
             "Content-Type": "application/json"
         }
     });
+}
+
+function getAccessToken() {
+    return axios.get(`https://cap-k24-team13.herokuapp.com/token`);
 }

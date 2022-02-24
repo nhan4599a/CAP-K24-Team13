@@ -1,5 +1,6 @@
 ﻿using CheckoutService.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using Shared.RequestModels;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace CheckoutService.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("/api/checkout")]
     public class CheckOutController : ControllerBase

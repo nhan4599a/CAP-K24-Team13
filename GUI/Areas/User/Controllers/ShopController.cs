@@ -1,6 +1,7 @@
 ﻿using GUI.Abtractions;
 using GUI.Areas.User.ViewModels;
 using GUI.Clients;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -23,10 +24,11 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index(int id)
         {
+            var token = await HttpContext.GetTokenAsync("access_token");
             var productResponse = await _productClient.GetProductsOfShopAsync(id);
             var informationResponse = await _shopClient.FindInformation(id);
             var shopResponse = await _shopClient.GetShop(id);
-            var categoryResponse = await _categoryClient.GetCategoriesOfShop(id);
+            var categoryResponse = await _categoryClient.GetCategoriesOfShop(token, id);
             if (!productResponse.IsSuccessStatusCode ||
                 !informationResponse.IsSuccessStatusCode ||
                 !categoryResponse.IsSuccessStatusCode ||
