@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Text.Json.Serialization;
 
 namespace OrderHistoryService
 {
@@ -37,7 +36,7 @@ namespace OrderHistoryService
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("https://cap-k24-team13.herokuapp.com").AllowAnyHeader().AllowAnyMethod();
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 });
             });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -68,6 +67,7 @@ namespace OrderHistoryService
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

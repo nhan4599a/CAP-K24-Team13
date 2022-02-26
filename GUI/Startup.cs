@@ -1,11 +1,14 @@
 using GUI.Abtractions;
 using GUI.Attributes;
+using GUI.ClientHandlers;
 using GUI.Clients;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +17,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Refit;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Reflection;
 
@@ -56,6 +60,8 @@ namespace GUI
                 options.Scope.Add("roles");
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
+                options.SignedOutCallbackPath = "/signout-oidc";
+                options.SignedOutRedirectUri = "/";
                 options.ClaimActions.MapJsonKey("role", "role", "role");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -70,17 +76,27 @@ namespace GUI
                     .Name;
                 options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
-            services.AddScoped<BaseActionFilter>();
+            services.AddScoped<BaseActionFilter>()
+                .AddTransient<IHttpContextAccessor, HttpContextAccessor>()
+                .AddTransient<AuthorizationHeaderHandler>();
             services.AddRefitClient<IProductClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
             services.AddRefitClient<IShopClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
             services.AddRefitClient<ICategoryClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
-            services.AddRefitClient<ICartClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
+            services.AddRefitClient<ICartClient>(new RefitSettings
+            {
+                
+            })
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
             services.AddRefitClient<IOrderClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,6 +106,10 @@ namespace GUI
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto
+            });
             app.Use(async (context, next) =>
             {
                 context.Request.Scheme = "https";
@@ -107,7 +127,7 @@ namespace GUI
                 await next(context);
 
                 var responseCode = context.Response.StatusCode;
-                if (responseCode != 200)
+                if (responseCode >= 400 && !IsStatisFileRequest(context.Request.Path))
                 {
                     context.Response.Redirect($"/Error/{responseCode}");
                 }
@@ -129,6 +149,11 @@ namespace GUI
         private void ConfigureHttpClient(HttpClient client)
         {
             client.BaseAddress = new Uri("http://ec2-52-207-214-39.compute-1.amazonaws.com:3000");
+        }
+
+        private static bool IsStatisFileRequest(string path)
+        {
+            return !string.IsNullOrEmpty(Path.GetExtension(path));
         }
     }
 }

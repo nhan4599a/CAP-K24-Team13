@@ -1,17 +1,16 @@
 ﻿axios.defaults.timeout = 20000;
 axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000';
 
-axios.interceptors.request.use(config => {
-    if (config.url )
-    let accessToken = window.localStorage.getItem('access_token');
-    if (!accessToken) {
-        getAccessToken().then(accessToken => {
-            
-        })
+axios.interceptors.request.use(async config => {
+    if (config.url != 'https://cap-k24-team13.herokuapp.com/authentication/token') {
+        let accessToken = await getAccessToken();
+        config.headers.Authorization = `Bearer ${accessToken}`
     }
-});
+    return Promise.resolve(config);
+})
 
 axios.interceptors.response.use(axiosResp => {
+    console.log(axiosResp);
     if (axiosResp.data instanceof Blob)
         return Promise.resolve(axiosResp.data);
     let resp = axiosResp.data;
@@ -122,10 +121,12 @@ function activateCategory(activateCommand) {
     );
 }
 
-function addCategory(formData) {
+async function addCategory(formData) {
+    let accessToken = await getAccessToken();
     return axios.post(categoryEndpoint, formData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${accessToken}`
         }
     });
 }
@@ -220,5 +221,5 @@ function changeOrderStatus(orderId, newStatus) {
 }
 
 function getAccessToken() {
-    return axios.get(`https://cap-k24-team13.herokuapp.com/token`);
+    return axios.get('https://cap-k24-team13.herokuapp.com/authentication/token');
 }

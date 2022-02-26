@@ -430,10 +430,7 @@
     <script src="@Url.Content("~/assets/admin/js/material-dashboard.min.js?v=3.0.0")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-        if (window.location.pathname != "/shopowner/product")
-            $('#input-search').parent().remove();
-        toastr.options.closeButton = true;
-        if else (window.location.pathname != "/shopowner/order")
+        if (window.location.pathname != '/shopowner/product' || window.location.pathname != '/shopowner/order')
             $('#input-search').parent().remove();
         toastr.options.closeButton = true;
     </script>
