@@ -66,6 +66,7 @@ namespace RatingService
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

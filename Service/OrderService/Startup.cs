@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Text.Json.Serialization;
 
 namespace OrderHistoryService
 {
@@ -68,6 +67,7 @@ namespace OrderHistoryService
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

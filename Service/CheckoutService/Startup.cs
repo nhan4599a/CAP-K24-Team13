@@ -68,10 +68,12 @@ namespace CheckoutService
 
             app.UseCors("Default");
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
+
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

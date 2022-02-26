@@ -23,10 +23,10 @@ namespace GUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(CheckOutModel[] models)
         {
+            var token = await HttpContext.GetTokenAsync("access_token");
             List<CheckOutViewModel> productList = new();
             foreach (var model in models)
             {
-                var token = await HttpContext.GetTokenAsync("access_token");
                 var productResponse = await _productClient.GetProductInfoInCheckout(token, model.ProductId);
                 if (!productResponse.IsSuccessStatusCode || productResponse.Content.ResponseCode == 404)
                 {

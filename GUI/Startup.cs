@@ -1,11 +1,13 @@
 using GUI.Abtractions;
 using GUI.Attributes;
+using GUI.ClientHandlers;
 using GUI.Clients;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
@@ -74,17 +76,27 @@ namespace GUI
                     .Name;
                 options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
-            services.AddScoped<BaseActionFilter>();
+            services.AddScoped<BaseActionFilter>()
+                .AddTransient<IHttpContextAccessor, HttpContextAccessor>()
+                .AddTransient<AuthorizationHeaderHandler>();
             services.AddRefitClient<IProductClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
             services.AddRefitClient<IShopClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
             services.AddRefitClient<ICategoryClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
-            services.AddRefitClient<ICartClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
+            services.AddRefitClient<ICartClient>(new RefitSettings
+            {
+                
+            })
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
             services.AddRefitClient<IOrderClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(ConfigureHttpClient)
+                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,7 +142,7 @@ namespace GUI
                 
                 endpoints.MapControllerRoute(
                         name: "User",
-                        pattern: "{controller=Authentication}/{action=Token}/{id?}");
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
 

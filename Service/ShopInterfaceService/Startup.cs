@@ -72,6 +72,7 @@ namespace ShopInterfaceService
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
