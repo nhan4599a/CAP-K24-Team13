@@ -10,7 +10,6 @@ axios.interceptors.request.use(async config => {
 })
 
 axios.interceptors.response.use(axiosResp => {
-    console.log(axiosResp);
     if (axiosResp.data instanceof Blob)
         return Promise.resolve(axiosResp.data);
     let resp = axiosResp.data;
