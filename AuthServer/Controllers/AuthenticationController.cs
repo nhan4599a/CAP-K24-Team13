@@ -109,6 +109,20 @@ namespace AuthServer.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Route("/auth/signout")]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            await _signInManager.SignOutAsync();
+
+            var logoutContext = await _interaction.GetLogoutContextAsync(logoutId);
+
+            if (logoutContext == null)
+                throw new InvalidOperationException("Something went wrong!");
+
+            return Redirect(logoutContext.PostLogoutRedirectUri);
+        }
+
         [HttpPost]
         [Route("/auth/ExternalSignIn")]
         public IActionResult ExternalSignIn(string provider, string returnUrl = "~/")

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
-    [VirtualArea("User")]
     public class ProductController : BaseUserController
     {
         private readonly IProductClient _productClient;

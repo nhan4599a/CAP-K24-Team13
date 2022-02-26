@@ -22,6 +22,10 @@ namespace AuthServer.Configurations
                 {
                     "https://cap-k24-team13.herokuapp.com/signin-oidc"
                 },
+                PostLogoutRedirectUris = new[]
+                {
+                    "https://cap-k24-team13.herokuapp.com/signout-oidc"
+                },
                 AllowedScopes = new[]
                 {
                     IdentityServerConstants.StandardScopes.OpenId,

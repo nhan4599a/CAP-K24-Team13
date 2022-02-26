@@ -29,7 +29,7 @@ namespace AuthServer.Services
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        private async Task InitializeTestUsers(ApplicationUserManager userManager)
+        private static async Task InitializeTestUsers(ApplicationUserManager userManager)
         {
             string password = "CapK24Team13@Default";
             if (await userManager.FindByNameAsync("customer_test") == null)
@@ -90,7 +90,9 @@ namespace AuthServer.Services
                 Email = email,
                 NormalizedEmail = email.ToUpper(),
                 FirstName = "Test",
-                LastName = "Test"
+                LastName = "Test",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true
             });
         }
     }

@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Refit;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Reflection;
 
@@ -57,6 +58,8 @@ namespace GUI
                 options.Scope.Add("roles");
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
+                options.SignedOutCallbackPath = "/signout-oidc";
+                options.SignedOutRedirectUri = "/";
                 options.ClaimActions.MapJsonKey("role", "role", "role");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -112,7 +115,7 @@ namespace GUI
                 await next(context);
 
                 var responseCode = context.Response.StatusCode;
-                if (responseCode != 200)
+                if (responseCode >= 400 && !IsStatisFileRequest(context.Request.Path))
                 {
                     context.Response.Redirect($"/Error/{responseCode}");
                 }
@@ -127,13 +130,18 @@ namespace GUI
                 
                 endpoints.MapControllerRoute(
                         name: "User",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                        pattern: "{controller=Authentication}/{action=Token}/{id?}");
             });
         }
 
         private void ConfigureHttpClient(HttpClient client)
         {
             client.BaseAddress = new Uri("http://ec2-52-207-214-39.compute-1.amazonaws.com:3000");
+        }
+
+        private static bool IsStatisFileRequest(string path)
+        {
+            return !string.IsNullOrEmpty(Path.GetExtension(path));
         }
     }
 }

@@ -13,7 +13,6 @@ using DatabaseAccessor.Models;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -98,7 +97,7 @@ namespace AuthServer
             .AddRoleManager<ApplicationRoleManager>()
             .AddSignInManager<ApplicationSignInManager>()
             .AddPasswordValidator<UserPasswordValidator>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();   
+            .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer(options =>
             {
