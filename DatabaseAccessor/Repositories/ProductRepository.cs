@@ -142,5 +142,21 @@ namespace DatabaseAccessor.Repositories
             _dbContext.Dispose();
             GC.SuppressFinalize(this);
         }
+
+        public async Task<CommandResponse<int>> UpdateQuantityAsync(Guid productId, int quantity)
+        {
+            var product = await FindProductByIdAsync(productId);
+            if (product == null)
+                return CommandResponse<int>.Error("Product is not found", null);
+            if (product.IsDisabled)
+                return CommandResponse<int>.Error("Product is disabled", null);
+            if (product.Category.IsDisabled)
+                return CommandResponse<int>.Error($"Product is belong to " +
+                    $"{product.Category.CategoryName} which was deactivated", null);
+            var newQuantity = quantity + product.Quantity;
+            product.Quantity = newQuantity;
+            await _dbContext.SaveChangesAsync();
+            return CommandResponse<int>.Success(newQuantity);
+        }
     }
 }

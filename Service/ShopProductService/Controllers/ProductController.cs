@@ -23,85 +23,6 @@ namespace ShopProductService.Controllers
 
         private readonly IFileStorable _fileStore;
 
-        private readonly static PaginatedList<ProductDTO> FakeProducts = new List<ProductDTO>
-        {
-            new ProductDTO
-            {
-                Id = "MacBook Pro M1",
-                ProductName = "Macbook Pro M1",
-                CategoryName = "category 1",
-                Price = 20000,
-                Description = "GOLD",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images = new string[]
-                {
-                    "https://futureworld.com.vn/media/catalog/product/cache/374a8abfba56573d9bc051f80221efb2/m/b/mba_gold_m1_2.jpg"
-                }
-            },
-            new ProductDTO
-            {
-                Id = "iphone 13",
-                ProductName = "Iphone 13",
-                CategoryName = "category 2",
-                Price = 20000,
-                Description = "64gb",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images = new string[]
-                {
-                    "https://mega.com.vn/media/product/20113_iphone_13_256gb_white.jpg"
-                }
-            },
-            new ProductDTO
-            {
-                Id = "Nike AIR",
-                ProductName = "Nike AIR",
-                CategoryName = "category 1",
-                Price = 20000,
-                Description = "White",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images =new string[]
-                {
-                    "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e777c881-5b62-4250-92a6-362967f54cca/air-force-1-07-shoe-NMmm1B.png"
-                }
-            },
-            new ProductDTO
-            {
-                Id = "Bitis Hunter",
-                ProductName = "Bitis Hunter",
-                CategoryName = "category 1",
-                Price = 20000,
-                Description = "Back-Orange",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images = new string[]
-                {
-                    "https://product.hstatic.net/1000230642/product/03400cam__6__5022ef5622dc46b1bd893b238de2200f_1024x1024.jpg"
-                }
-            },
-            new ProductDTO
-            {
-                Id = "Converse",
-                ProductName = "ASM Converse",
-                CategoryName = "category 1",
-                Price = 20000,
-                Description = "WHITE",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images = new string[]
-                {
-                    "https://th.bing.com/th/id/OIP.yRbQi9-1aDN-BXHuyD_vZAHaG5?pid=ImgDet&rs=1"
-                }
-            }
-        }.Paginate(1, 5);
-
         public ProductController(IMediator mediator, IFileStorable fileStore)
         {
             _mediator = mediator;
@@ -172,8 +93,6 @@ namespace ShopProductService.Controllers
         [HttpGet("shop/{shopId}")]
         public async Task<ApiResult> GetProductsOfShop(int shopId)
         {
-            if (shopId != 0)
-                return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(FakeProducts);
             var response = await _mediator.Send(new FindProductsByShopIdQuery
             {
                 ShopId = shopId
@@ -218,6 +137,19 @@ namespace ShopProductService.Controllers
             if (product == null)
                 return ApiResult.CreateErrorResult(404, "Product is not found");
             return ApiResult<MinimalProductDTO>.CreateSucceedResult(product);
+        }
+
+        [HttpPost]
+        public async Task<ApiResult> UpdateQuantity(string productID, int quantity)
+        {
+            var newQuantityResponse = await _mediator.Send(new UpdateQuantityCommand
+            {
+                ProductId = Guid.Parse(productID),
+                Quantity = quantity
+            });
+            if (!newQuantityResponse.IsSuccess)
+                return ApiResult.CreateErrorResult(500, newQuantityResponse.ErrorMessage);
+            return ApiResult<int>.CreateSucceedResult(newQuantityResponse.Response);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
