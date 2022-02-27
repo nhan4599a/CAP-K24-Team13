@@ -11,7 +11,7 @@ namespace AuthServer.Controllers
     {
         private readonly ApplicationUserManager _userManager;
         
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
+        public AccountController(ApplicationUserManager userManager)
         {
             _userManager = userManager;
         }
@@ -29,24 +29,27 @@ namespace AuthServer.Controllers
             return View();
         }
 
+        [HttpGet]
+        [ActionName("change-password")]
         public IActionResult ChangePassword()
         {
-            return View();
+            return View("ChangePassword");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ActionName("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View("ChangePassword");
             }
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
                 ModelState.AddModelError("ChangePassword-Error", "Something went wrong");
-                return View();
+                return View("ChangePassword");
             }
             var changePasswordResult = await _userManager.ChangePasswordAsync(currentUser, model.Password, model.NewPassword);
             if (!changePasswordResult.Succeeded)
@@ -54,13 +57,7 @@ namespace AuthServer.Controllers
                 foreach (var error in changePasswordResult.Errors)
                     ModelState.AddModelError("ChangePassword-Error", error.Description);
             }
-            return View();
+            return View("ChangePassword");
         }
-        //[Route("/auth/ConfirmEmail")]
-        //public async Task<IActionResult> ConfirmEmail()
-        //{
-        //    return View();
-        //}
-
     }
 }

@@ -1,13 +1,11 @@
 using GUI.Abtractions;
 using GUI.Attributes;
-using GUI.ClientHandlers;
 using GUI.Clients;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
@@ -60,7 +58,6 @@ namespace GUI
                 options.Scope.Add("roles");
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
-                options.SignedOutCallbackPath = "/signout-oidc";
                 options.SignedOutRedirectUri = "/";
                 options.ClaimActions.MapJsonKey("role", "role", "role");
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -76,23 +73,17 @@ namespace GUI
                     .Name;
                 options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
-            services.AddScoped<BaseActionFilter>()
-                .AddTransient<AuthorizationHeaderHandler>();
+            services.AddScoped<BaseActionFilter>();
             services.AddRefitClient<IProductClient>()
-                .ConfigureHttpClient(ConfigureHttpClient)
-                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
+                .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IShopClient>()
-                .ConfigureHttpClient(ConfigureHttpClient)
-                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
+                .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<ICategoryClient>()
-                .ConfigureHttpClient(ConfigureHttpClient)
-                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
+                .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<ICartClient>()
-                .ConfigureHttpClient(ConfigureHttpClient)
-                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
+                .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IOrderClient>()
-                .ConfigureHttpClient(ConfigureHttpClient)
-                .AddHttpMessageHandler<AuthorizationHeaderHandler>();
+                .ConfigureHttpClient(ConfigureHttpClient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

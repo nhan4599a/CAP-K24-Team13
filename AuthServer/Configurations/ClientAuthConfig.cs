@@ -24,7 +24,7 @@ namespace AuthServer.Configurations
                 },
                 PostLogoutRedirectUris = new[]
                 {
-                    "https://cap-k24-team13.herokuapp.com/signout-oidc"
+                    "https://cap-k24-team13.herokuapp.com/signout-callback-oidc"
                 },
                 AllowedScopes = new[]
                 {

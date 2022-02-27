@@ -104,6 +104,7 @@ namespace AuthServer
                 options.Endpoints.EnableAuthorizeEndpoint = true;
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
+                options.Authentication.CookieLifetime = TimeSpan.FromHours(1);
             })
                 .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
