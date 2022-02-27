@@ -1,8 +1,16 @@
 ﻿$(document).ready(() => {
     var currentPageInfo = getCurrentPageInfo();
     loadCategories(currentPageInfo.pageNumber, currentPageInfo.pageSize);
+    $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
     let classNames = ['active', 'bg-gradient-primary'];
     $('#nav-item-category').addClass(classNames);
+
+    $('#pagesize-select').change(function () {
+        let selectedValue = $(this).val();
+        let pageSize = parseInt(selectedValue);
+        let pageInfo = getCurrentPageInfo();
+        moveToPage(pageInfo.pageNumber, pageSize);
+    });
 });
 
 function loadCategories(pageNumber, pageSize) {
@@ -102,7 +110,7 @@ function onCategoriesLoaded(paginatedData) {
 }
 
 function moveToPage(pageNumber, pageSize) {
-    window.location.href = `https://localhost:44349/category?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    window.location.href = `https://cap-k24-team13.herokuapp.com/shopowner/category?pageNumber=${pageNumber}&pageSize=${pageSize}`;
 }
 
 function getCurrentPageInfo() {
