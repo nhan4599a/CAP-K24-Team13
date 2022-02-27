@@ -8,13 +8,16 @@
         });
         animationLoader.showAnimation(10000);
         let model = buildRequestModel();
-        checkOut(userId, model.productIdList, model.fullname, model.phone, model.shippingAddress, model.orderNotes)
-            .then(() => {
-                animationLoader.hideAnimation(true);
-            })
-            .catch(error => {
-                toastr.error(error);
-                animationLoader.hideAnimation();
+        getUserId()
+            .then(userId => {
+                checkOut(userId, model.productIdList, model.fullname, model.phone, model.shippingAddress, model.orderNotes)
+                    .then(() => {
+                        animationLoader.hideAnimation(true);
+                    })
+                    .catch(error => {
+                        toastr.error(error);
+                        animationLoader.hideAnimation();
+                    });
             });
     });
 });

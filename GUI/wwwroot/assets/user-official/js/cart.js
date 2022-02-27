@@ -1,4 +1,3 @@
-let userId = '324DFA41-D0E8-46CD-1975-08D9EB65B707';
 $(document).ready(function () {
     $('.product > .product-media > .product-action > a.btn-product.btn-cart').click(function (e) {
         e.preventDefault();
@@ -7,19 +6,21 @@ $(document).ready(function () {
         let imageUrl = searchPageProductCartRootElement.children('.product-media').find('a > img').attr('src');
         let name = searchPageProductCartRootElement.find('.product-body > .product-title > a').html();
         let price = searchPageProductCartRootElement.find('.product-body > .product-price > span').html();
-        addProductToCart(userId, productId, 1)
-            .then(() => {
-                toastr.success('Added product to cart');
-                let product = {
-                    id: productId,
-                    name: name,
-                    imageUrl: imageUrl,
-                    price: price,
-                    quantity: 1
-                };
-                updateDropdownCart(product);
-            })
-            .catch(error => toastr.error(error));
+        getUserId().then(userId => {
+            addProductToCart(userId, productId, 1)
+                .then(() => {
+                    toastr.success('Added product to cart');
+                    let product = {
+                        id: productId,
+                        name: name,
+                        imageUrl: imageUrl,
+                        price: price,
+                        quantity: 1
+                    };
+                    updateDropdownCart(product);
+                })
+                .catch(error => toastr.error(error));
+        });
     });
 
     $('.product-details-action > .btn-product.btn-cart').click(function (e) {

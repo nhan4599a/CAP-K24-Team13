@@ -223,3 +223,7 @@ function changeOrderStatus(orderId, newStatus) {
 function getAccessToken() {
     return axios.get('https://cap-k24-team13.herokuapp.com/authentication/token');
 }
+
+function getUserId() {
+    return axios.get('https://cap-k24-team13.herokuapp.com/authentication/id')
+}
