@@ -48,20 +48,25 @@ namespace AuthServer.Controllers
                 return View();
             }
             var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
+            if (user == null)
+            {
+                ModelState.AddModelError("SignIn-Error", "Username or password is incorrect");
+                return View();
+            }
             var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
-            if (user != null && signInResult.Succeeded)
+            if (signInResult.Succeeded)
             {
                 if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     return Redirect(model.ReturnUrl);
                 throw new InvalidOperationException($"\"{model.ReturnUrl}\" is  invalid");
             }
-            if (user != null && signInResult.IsLockedOut)
+            if (signInResult.IsLockedOut)
             {
                 ModelState.AddModelError("SignIn-Error", "Account is locked out");
                 ViewBag.LockedOutCancelTime = user!.LockoutEnd!.Value;
                 return View(model);
             }
-            if (user != null && signInResult.IsNotAllowed)
+            if (signInResult.IsNotAllowed)
             {
                 ModelState.AddModelError("SignIn-Error", "Account is have not been confirmed");
                 return View(model);

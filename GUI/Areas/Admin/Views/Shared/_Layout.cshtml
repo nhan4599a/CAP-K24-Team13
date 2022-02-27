@@ -125,11 +125,8 @@
                             <ul class="dropdown-menu" aria-labelledby="user-dropdown">
                                 <li><a class="dropdown-item" href="#">Profile</a></li>
                                 <li><a class="dropdown-item" href="#">Change Password</a></li>
-                                <li><a class="dropdown-item" href="#" id="btn-signout">Sign out</a></li>
+                                <li><a class="dropdown-item" href="/authentication/signout">Sign out</a></li>
                             </ul>
-                            <form style="display: none" action="/authentication/signout" method="post" id="signout-form">
-                                @Html.AntiForgeryToken()
-                            </form>
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
@@ -440,12 +437,6 @@
         if (window.location.pathname != '/shopowner/product' || window.location.pathname != '/shopowner/order')
             $('#input-search').parent().remove();
         toastr.options.closeButton = true;
-        $(document).ready(function () {
-            $('#btn-signout').click(function (e) {
-                e.preventDefault();
-                $('#signout-form').submit();
-            });
-        });
     </script>
     @RenderSection("Scripts", false)
 </body>

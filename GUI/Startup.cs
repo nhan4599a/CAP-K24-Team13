@@ -77,7 +77,6 @@ namespace GUI
                 options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
             services.AddScoped<BaseActionFilter>()
-                .AddTransient<IHttpContextAccessor, HttpContextAccessor>()
                 .AddTransient<AuthorizationHeaderHandler>();
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient)
@@ -88,10 +87,7 @@ namespace GUI
             services.AddRefitClient<ICategoryClient>()
                 .ConfigureHttpClient(ConfigureHttpClient)
                 .AddHttpMessageHandler<AuthorizationHeaderHandler>();
-            services.AddRefitClient<ICartClient>(new RefitSettings
-            {
-                
-            })
+            services.AddRefitClient<ICartClient>()
                 .ConfigureHttpClient(ConfigureHttpClient)
                 .AddHttpMessageHandler<AuthorizationHeaderHandler>();
             services.AddRefitClient<IOrderClient>()

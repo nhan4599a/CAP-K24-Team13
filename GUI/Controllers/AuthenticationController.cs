@@ -27,9 +27,13 @@ namespace GUI.Controllers
             return ApiResult<string>.CreateSucceedResult(User.GetUserId().ToString());
         }
 
-        public new IActionResult SignOut()
+        public new async Task SignOut()
         {
-            return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+            {
+                RedirectUri = "/"
+            });
         }
     }
 }
