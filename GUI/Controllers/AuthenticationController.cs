@@ -27,9 +27,6 @@ namespace GUI.Controllers
             return ApiResult<string>.CreateSucceedResult(User.GetUserId().ToString());
         }
 
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public new IActionResult SignOut()
         {
             return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
