@@ -1,5 +1,4 @@
-﻿using AuthServer.Abstractions;
-using AuthServer.Configurations;
+﻿using AuthServer.Configurations;
 using AuthServer.Helpers;
 using AuthServer.Identities;
 using AuthServer.Models;
@@ -7,14 +6,12 @@ using DatabaseAccessor.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Shared.Models;
 using System;
 using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
 {
-    [ServiceFilter(typeof(SignInActionFilter))]
     [AllowAnonymous]
     public class AuthenticationController : Controller
     {

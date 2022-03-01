@@ -1,5 +1,4 @@
-﻿using AuthServer.Identities;
-using AuthServer.Models;
+﻿using AuthServer.Models;
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
 using Shared.Models;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Helpers
 {
-    public static class UserHelper
+    public static class IdentityUserExtension
     {
         public static async Task<CreateUserResult> CreateUserAsync(this UserManager<User> userManager, UserSignUpModel model, string role)
         {

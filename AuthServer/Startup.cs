@@ -1,6 +1,6 @@
-﻿using AspNetCoreSharedComponent.ModelBinders.Providers;
+﻿using AspNetCoreSharedComponent.HttpRequest;
+using AspNetCoreSharedComponent.ModelBinders.Providers;
 using AspNetCoreSharedComponent.ModelValidations;
-using AuthServer.Abstractions;
 using AuthServer.Configurations;
 using AuthServer.Factories;
 using AuthServer.Identities;
@@ -46,7 +46,8 @@ namespace AuthServer
             {
                 options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
             }).AddFluentValidation<UserSignUpModel, SignUpModelValidator>()
-            .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>();
+            .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>()
+            .AddFluentValidation<EditUserInformationModel, EditUserInformationModelValidator>();
             services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
@@ -69,7 +70,6 @@ namespace AuthServer
                 Port = 587
             });
             services.AddSingleton<IMailService, GmailService>();
-            services.AddScoped<SignInActionFilter>();
             services.AddScoped<IUserClaimsPrincipalFactory<User>, ApplicationUserClaimsPrincipleFactory>();
             services.AddIdentity<User, Role>(options =>
             {
@@ -142,6 +142,18 @@ namespace AuthServer
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+            app.Use(async (context, next) =>
+            {
+                await next(context);
+
+                var responseCode = context.Response.StatusCode;
+                if (responseCode >= 400 && !context.Request.IsStatisFileRequest())
+                {
+                    context.Response.Redirect($"/Error/{responseCode}");
+                }
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

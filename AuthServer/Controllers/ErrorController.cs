@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace GUI.Controllers
+namespace AuthServer.Controllers
 {
     [Route("/Error")]
     public class ErrorController : Controller

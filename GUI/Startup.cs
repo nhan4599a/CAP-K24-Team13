@@ -1,3 +1,4 @@
+using AspNetCoreSharedComponent.HttpRequest;
 using GUI.Abtractions;
 using GUI.Attributes;
 using GUI.Clients;
@@ -15,7 +16,6 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Refit;
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Reflection;
 
@@ -39,7 +39,10 @@ namespace GUI
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.AccessDeniedPath = "/Error/401";
+            })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
                 options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
@@ -63,7 +66,9 @@ namespace GUI
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = "name",
-                    RoleClaimType = "role"
+                    RoleClaimType = "role",
+                    ValidIssuer = "https://cap-k24-team13-auth.herokuapp.com",
+                    ValidateIssuerSigningKey = false
                 };
             });
             services.Configure<RazorViewEngineOptions>(options =>
@@ -114,7 +119,7 @@ namespace GUI
                 await next(context);
 
                 var responseCode = context.Response.StatusCode;
-                if (responseCode >= 400 && !IsStatisFileRequest(context.Request.Path))
+                if (responseCode >= 400 && !context.Request.IsStatisFileRequest())
                 {
                     context.Response.Redirect($"/Error/{responseCode}");
                 }
@@ -138,9 +143,5 @@ namespace GUI
             client.BaseAddress = new Uri("http://ec2-52-207-214-39.compute-1.amazonaws.com:3000");
         }
 
-        private static bool IsStatisFileRequest(string path)
-        {
-            return !string.IsNullOrEmpty(Path.GetExtension(path));
-        }
     }
 }
