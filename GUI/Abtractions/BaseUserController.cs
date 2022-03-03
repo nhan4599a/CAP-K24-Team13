@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GUI.Abtractions
 {
     [VirtualArea("User")]
-    [ServiceFilter(typeof(BaseActionFilter))]
+    [ServiceFilter(typeof(BaseUserActionFilter))]
     public class BaseUserController : Controller
     {
     }

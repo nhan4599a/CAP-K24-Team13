@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace GUI.Abtractions
 {
-    public class BaseActionFilter : IAsyncActionFilter
+    public class BaseUserActionFilter : IAsyncActionFilter
     {
         private readonly ICartClient _cartClient;
 
-        public BaseActionFilter(ICartClient cartClient)
+        public BaseUserActionFilter(ICartClient cartClient)
         {
             _cartClient = cartClient;
         }

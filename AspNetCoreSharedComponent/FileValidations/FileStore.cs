@@ -1,6 +1,13 @@
-﻿using Shared.Exceptions;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Shared.Exceptions;
 using Shared.Models;
 using Shared.Validations;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AspNetCoreSharedComponent.FileValidations
 {

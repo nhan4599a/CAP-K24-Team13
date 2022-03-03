@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
+using GUI.Abtractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GUI.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "ShopOwner")]
-    [Area("Admin")]
-    public class ProductController : Controller
+    public class ProductController : BaseShopOwnerController
     {
         [ActionName("Add")]
         public IActionResult AddProduct()

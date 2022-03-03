@@ -1,15 +1,13 @@
-﻿using GUI.Clients;
+﻿using GUI.Abtractions;
+using GUI.Clients;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "ShopOwner")]
-    [Area("Admin")]
-    public class OrderController : Controller
+    public class OrderController : BaseShopOwnerController
     {
         private readonly IOrderClient _orderClient;
 

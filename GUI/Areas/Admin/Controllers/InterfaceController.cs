@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using GUI.Abtractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GUI.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "ShopOwner")]
-    [Area("Admin")]
-    public class InterfaceController : Controller
+    public class InterfaceController : BaseShopOwnerController
     {
         public IActionResult Index()
         {

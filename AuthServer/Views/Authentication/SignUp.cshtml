@@ -1,5 +1,6 @@
-﻿<form method="POST">
+﻿<form method="POST" autocomplete="off">
     @Html.AntiForgeryToken()
+    <input autocomplete="false" name="hidden" type="text" style="display: none" />
     <p style="font-family: Lora;">Input your account informantion</p>
     <div class="row mb-4">
         <div class="form-outline">

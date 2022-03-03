@@ -1,4 +1,4 @@
-using AspNetCoreSharedComponent.HttpRequest;
+using AspNetCoreSharedComponent.Middleware;
 using GUI.Abtractions;
 using GUI.Attributes;
 using GUI.Clients;
@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Refit;
 using System;
@@ -35,18 +35,23 @@ namespace GUI
         {
             IdentityModelEventSource.ShowPII = true;
             services.AddControllersWithViews();
+            var configManager = new ConfigurationManager<OpenIdConnectConfiguration>(
+                "https://cap-k24-team13-auth.herokuapp.com/.well-known/openid-configuration",
+                new OpenIdConnectConfigurationRetriever());
+            var openIdConfig = configManager.GetConfigurationAsync().Result;
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.AccessDeniedPath = "/Error/401";
+                options.AccessDeniedPath = "/Error/403";
             })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
                 options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.MetadataAddress = "https://cap-k24-team13-auth.herokuapp.com/.well-known/openid-configuration";
                 options.ClientId = "oidc-client";
                 options.ClientSecret = "CapK24Team13";
                 options.ResponseType = "code";
@@ -61,14 +66,22 @@ namespace GUI
                 options.Scope.Add("roles");
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
-                options.SignedOutRedirectUri = "/";
                 options.ClaimActions.MapJsonKey("role", "role", "role");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = "name",
                     RoleClaimType = "role",
-                    ValidIssuer = "https://cap-k24-team13-auth.herokuapp.com",
-                    ValidateIssuerSigningKey = false
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidIssuers = new[]
+                    {
+                        "https://cap-k24-team13-auth.herokuapp.com/"
+                    },
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKeys = openIdConfig.SigningKeys,
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                    RequireSignedTokens = true
                 };
             });
             services.Configure<RazorViewEngineOptions>(options =>
@@ -78,7 +91,7 @@ namespace GUI
                     .Name;
                 options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
             });
-            services.AddScoped<BaseActionFilter>();
+            services.AddScoped<BaseUserActionFilter>();
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IShopClient>()
@@ -92,12 +105,9 @@ namespace GUI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseExceptionHandler("/Error/500");
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto
@@ -114,16 +124,7 @@ namespace GUI
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.Use(async (context, next) =>
-            {
-                await next(context);
-
-                var responseCode = context.Response.StatusCode;
-                if (responseCode >= 400 && !context.Request.IsStatisFileRequest())
-                {
-                    context.Response.Redirect($"/Error/{responseCode}");
-                }
-            });
+            app.UseGlogalExceptionHandlerMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
@@ -142,6 +143,5 @@ namespace GUI
         {
             client.BaseAddress = new Uri("http://ec2-52-207-214-39.compute-1.amazonaws.com:3000");
         }
-
     }
 }

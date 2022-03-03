@@ -1,5 +1,11 @@
 ﻿using Consul;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Shared;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AspNetCoreSharedComponent.ServiceDiscoveries
 {
