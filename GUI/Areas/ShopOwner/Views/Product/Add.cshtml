@@ -35,8 +35,7 @@
             </div>
             <div class="form-group mb-3">
                 <label class="form-label">Images</label>
-                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px"
-                        action="https://localhost:44302/api/products">
+                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px">
                     <div class="dz-default dz-message" data-dz-message="">
                         <span>Drop images here to upload</span>
                     </div>
@@ -57,7 +56,7 @@
     <script src="https://cdn.tiny.cloud/1/ujug8dr0hmmvp4fgdgm2uam16w1mov8slqh4y5ld7h7hgr6p/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
-    <script src="@Url.Content("~/assets/admin/js/internal/validation.js")"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/internal/validation.js")"></script>
     <script>
         Dropzone.autoDiscover = false;
         toastr.options.closeButton = true;
@@ -107,7 +106,7 @@
                     toastr.error('You must upload at least 2 pictures!', 'Error');
                     return;
                 }
-                let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
+                let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
                 animationLoader.showAnimation();
                 let formData = new FormData();
                 let requestModelObject = buildRequestModel();
@@ -124,7 +123,7 @@
                     toastr.error(error, 'Error');
                 });
             });
-            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation(3500);
             getAllCategories().then(categories => {
                 renderCategoryDropdown(categories.filter(category => !category.isDisabled))

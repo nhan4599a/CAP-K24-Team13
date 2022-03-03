@@ -36,8 +36,7 @@
             <input type="hidden" id="input-oldFilesName" />
             <div class="form-group mb-3">
                 <label class="form-label">Images</label>
-                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px"
-                     action="https://localhost:44302/api/products">
+                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px">
                     <div class="dz-default dz-message" data-dz-message="">
                         <span>Drop images here to upload</span>
                     </div>
@@ -62,7 +61,7 @@
     $(function () {
         let classNames = ['active', 'bg-gradient-primary'];
         $('#nav-item-product').addClass(classNames);
-        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
         animationLoader.showAnimation(3500);
         getAllCategories().then(categories => {
             onLoadedAllCategories(categories.filter(category => !category.isDisabled));
@@ -120,7 +119,7 @@
                 toastr.error('You must upload at least 2 pictures!', 'Error');
                 return;
             }
-            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation();
             let formData = new FormData();
             var requestModelObject = buildRequestModel();

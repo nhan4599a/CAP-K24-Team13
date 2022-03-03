@@ -2,12 +2,11 @@
 using Shared.Extensions;
 using System;
 using System.IO;
-using AspNetCoreHttp = Microsoft.AspNetCore.Http;
 namespace AspNetCoreSharedComponent.HttpContext
 {
-    public static class HttpRequestExtension
+    public static class HttpContextExtension
     {
-        public static bool IsStatisFileRequest(this AspNetCoreHttp.HttpRequest context)
+        public static bool IsStatisFileRequest(this HttpRequest context)
         {
             return !string.IsNullOrEmpty(Path.GetExtension(context.Path));
         }
@@ -15,7 +14,7 @@ namespace AspNetCoreSharedComponent.HttpContext
         public static T GetAndRemove<T>(this ISession session, string key)
         {
             var type = typeof(T);
-            if (!type.IsPrimitive || !(type.IsNumberType() || type == typeof(string)))
+            if (!type.IsNumberType() && !(type == typeof(string)))
             {
                 throw new NotSupportedException("Provided type is not supported right now");
             }

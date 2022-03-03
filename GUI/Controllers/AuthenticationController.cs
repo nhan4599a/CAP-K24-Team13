@@ -39,5 +39,13 @@ namespace GUI.Controllers
             };
             return new SignOutResult(authenticationSchemes, authenticationProperties);
         }
+
+        public ChallengeResult SignIn(string redirectUrl = "/")
+        {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl
+            }, OpenIdConnectDefaults.AuthenticationScheme);
+        }
     }
 }

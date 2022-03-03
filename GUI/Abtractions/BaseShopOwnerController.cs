@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GUI.Abtractions
 {
     [Authorize(Roles = "ShopOwner")]
-    [Area("Admin")]
+    [Area("ShopOwner")]
     public class BaseShopOwnerController : Controller
     {
     }

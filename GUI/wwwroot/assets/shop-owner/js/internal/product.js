@@ -27,7 +27,7 @@
 });
 
 function loadProducts(keyword, pageNumber, pageSize) {
-    let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
+    let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
     findProducts(keyword, pageNumber, pageSize).then((paginatedData) => {
         onLoadProductsCompleted(paginatedData);
@@ -92,7 +92,7 @@ function onLoadProductsCompleted(paginatedData) {
                 $(this).children('span').text(' Activate');
                 $(this).children('i').removeClass().addClass('fas fa-check');
             };
-            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/admin/img/illustrations/loading.json');
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation();
             activateProduct(id, isActivateCommand).then(() => {
                 successCallback();

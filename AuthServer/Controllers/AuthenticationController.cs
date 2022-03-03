@@ -176,7 +176,8 @@ namespace AuthServer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("/auth/reset/{email}")]
-        public async Task<IActionResult> ResetPassword(string newPassword, string reNewPassword, string email,
+        public async Task<IActionResult> ResetPassword([FromForm(Name = "password")] string newPassword,
+            [FromForm(Name = "re-password")] string reNewPassword, string email,
             [FromQuery] string token)
         {
             var user = await _signInManager.UserManager.FindByEmailAsync(StringExtension.FromBase64(email));

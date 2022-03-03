@@ -90,6 +90,7 @@ namespace GUI
                     .GetCustomAttribute<VirtualAreaAttribute>(false)
                     .Name;
                 options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/{{1}}/{{0}}{RazorViewEngine.ViewExtension}");
+                options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/Shared/{{0}}{RazorViewEngine.ViewExtension}");
             });
             services.AddScoped<BaseUserActionFilter>();
             services.AddRefitClient<IProductClient>()
