@@ -24,7 +24,7 @@ namespace AuthServer.Factories
             var identity = await base.GenerateClaimsAsync(user);
             var role = (await _userManager.GetRolesAsync(user))[0];
             identity.AddClaim(new Claim(JwtClaimTypes.Role, role));
-            if (role == Roles.ADMIN)
+            if (role == Roles.SHOP_OWNER)
                 identity.AddClaim(new Claim("ShopId", user.ShopId!.Value.ToString()));
             return identity;
         }

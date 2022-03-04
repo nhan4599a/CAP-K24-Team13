@@ -59,7 +59,7 @@ function buildProductTableRowHtml(product, index) {
                     <span class="text-secondary text-xs font-weight-bold">${product.quantity}</span>
                 </td>
                 <td class="align-middle text-center">
-                    <span class="text-secondary text-xs font-weight-bold">${product.price}đ</span>
+                    <span class="text-secondary text-xs font-weight-bold">${formatPrice(product.price)}đ</span>
                 </td>
                 <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-${!product.isDisabled ? 'success' : 'secondary'}">
@@ -413,4 +413,14 @@ function displayImportQuantityDialog(product, saveCallback) {
         $(this).modal('dispose');
         $(this).remove();
     });
+}
+
+function formatPrice(price) {
+    return new Intl.NumberFormat('en-US', {
+        maximumFractionDigits: 3
+    }).format(price);
+}
+
+function unformatPrice(formattedPrice) {
+    return parseFloat(formattedPrice.replace(/,/g, ''));
 }

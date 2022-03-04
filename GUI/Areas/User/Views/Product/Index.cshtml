@@ -1,6 +1,30 @@
 ﻿@using System.Globalization
 @using GUI.Extensions
 @model Shared.DTOs.ProductWithCommentsDTO
+@section Styles {
+    rating { 
+        border: none;
+        float: left;
+    }
+    .rating > input { display: none; } 
+    .rating > label:before { 
+        margin: 5px;
+        font-size: 1.25em;
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f005";
+    }
+
+    .rating > .half:before { 
+        content: "\f089";
+        position: absolute;
+    }
+
+    .rating > label { 
+        color: #ddd; 
+        float: right; 
+    }
+}
 <main class="main">
     <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
         <div class="container-fluid d-flex align-items-center">
@@ -134,9 +158,20 @@
                                                                         <h4><a href="#">@item.UserName</a></h4>
                                                                         <div class="ratings-container">
                                                                             <div class="ratings">
-                                                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                                                        </div><!-- End .ratings -->
-                                                                    </div><!-- End .rating-container -->
+                                                                                <fieldset class="rating" style="padding: 0 160px">
+                                                                                    <input type="radio" id="star5" name="rating" value="5" />
+                                                                                    <label class="full" for="star5" title="Awesome - 5 stars"></label>
+                                                                                    <input type="radio" id="star4" name="rating" value="4" />
+                                                                                    <label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                                                                    <input type="radio" id="star3" name="rating" value="3" />
+                                                                                    <label class="full" for="star3" title="Meh - 3 stars"></label>
+                                                                                    <input type="radio" id="star2" name="rating" value="2" />
+                                                                                    <label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                                                                                    <input type="radio" id="star1" name="rating" value="1" />
+                                                                                    <label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                                                                                </fieldset>
+                                                                            </div>
+                                                                        </div><!-- End .rating-container -->
                                                                     <span class="review-date">@((DateTime.Now - item.CreatedDate).ToString(""))</span>
                                                                     </div><!-- End .col -->
                                                                 <div class="col">

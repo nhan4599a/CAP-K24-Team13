@@ -179,16 +179,6 @@ function updateDropdownCartTotal(deltaPrice) {
     oldPriceElement.html(formattedNewPrice);
 }
 
-function formatPrice(price) {
-    return new Intl.NumberFormat('en-US', {
-        maximumFractionDigits: 3
-    }).format(price);
-}
-
-function unformatPrice(formattedPrice) {
-    return parseFloat(formattedPrice.replace(/,/g, ''));
-}
-
 function buildSingleProductItem(product) {
     return `<div class="product" data-product="${product.id}">
                 <div class="product-cart-details">
