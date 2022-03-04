@@ -1,10 +1,16 @@
 ﻿<form method="POST">
     @Html.AntiForgeryToken()
-    <p style="font-family: Lora;">Input your account informantion</p>
+    <p style="font-family: Lora;">Input your account information</p>
     <div class="row mb-4">
         <div class="form-outline">
             <input type="email" id="input-email" class="form-control" placeholder="Email" name="Email" />
             <label class="form-label" for="input-email" style="font-family: Lora;">Email</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-outline mb-4">
+            <input type="text" id="input-username" class="form-control" placeholder="Username" name="Username" />
+            <label class="form-label" for="input-username" style="font-family: Lora;">Username</label>
         </div>
     </div>
     <div class="row mb-4">

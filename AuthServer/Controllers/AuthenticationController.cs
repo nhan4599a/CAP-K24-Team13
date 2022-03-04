@@ -169,6 +169,21 @@ namespace AuthServer.Controllers
                 Subject = "Email confirmation"
             };
         }
+        private static MailRequest GenerateEmailAsync(string receiver, string token)
+        {
+            var email = Base64Encode(receiver);
+            var body = "You are receiving this email because we received a password reset request for your account." +
+                 $" This is your link to reset your password <a href=\"{$"https://localhost:7265/auth/confirmation/{email}?token={token}"}\">link</a>" +
+                 $" If you did not request a password reset, no further action is required. Regards!";
+            return new MailRequest()
+            {
+                Body = body,
+                Sender = "gigamallservice@gmail.com",
+                IsHtmlMessage = true,
+                Receiver = receiver,
+                Subject = "Email confirmation"
+            };
+        }
 
         private static string Base64Encode(string original)
         {

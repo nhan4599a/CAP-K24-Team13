@@ -3,9 +3,9 @@
     /* fallback for old browsers */
     background: #fccb90;
     /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, #f9b83b, #eb417c, #1f5b9c, #2fadbc);
+    background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, #e72f6b, #1f5b9c, #2fadbc);
+    background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
 }
 
 @media (min-width: 768px) {
@@ -22,10 +22,9 @@
 }
 
 .btn-hover:hover {
-    background: linear-gradient(to right, #e72f6b, #1f5b9c, #2fadbc);
+    background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
     color: #fff;
     border-color: #000
-
 }
 
 .btn-outline-danger{
