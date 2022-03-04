@@ -1,6 +1,5 @@
 ﻿using GUI.Abtractions;
 using GUI.Clients;
-using GUI.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +19,7 @@ namespace GUI.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
-            var ordersResponse = await _orderClient.GetNearByOrders(token, User.GetShopId().Value);
+            var ordersResponse = await _orderClient.GetNearByOrders(token, 0);
             if (ordersResponse == null || !ordersResponse.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             return View(ordersResponse.Content.Data);

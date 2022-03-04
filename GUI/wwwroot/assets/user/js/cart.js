@@ -32,30 +32,34 @@ $(document).ready(function () {
         let name = productDetailRootElement.find('h1.product-title').html();
         let price = unformatPrice(productDetailRootElement.find('div.product-price > span.new-price').html());
         let imageUrl = $('div#product-zoom-gallery > a.product-gallery-item:first-child').data('image');
-        addProductToCart(userId, productId, quantity)
-            .then(() => {
-                toastr.success('Added product to cart');
-                let product = {
-                    id: productId,
-                    name: name,
-                    price: price,
-                    quantity: quantity,
-                    imageUrl: imageUrl
-                }
-                updateDropdownCart(product);
-            })
-            .catch(error => toastr.error(error));
+        getUserId().then(userId => {
+            addProductToCart(userId, productId, quantity)
+                .then(() => {
+                    toastr.success('Added product to cart');
+                    let product = {
+                        id: productId,
+                        name: name,
+                        price: price,
+                        quantity: quantity,
+                        imageUrl: imageUrl
+                    }
+                    updateDropdownCart(product);
+                })
+                .catch(error => toastr.error(error));
+        });
     });
 
     $('div.dropdown-cart-products > div.product > a.btn-remove').click(function (e) {
         e.preventDefault();
         let productId = $(this).parent().data('product');
-        removeProductInCart(userId, productId)
-            .then(function () {
-                toastr.success('Remove product in cart successfully');
-                deleteDropdownCartItem(productId);
-            })
-            .catch(error => toastr.error(error));
+        getUserId().then(userId => {
+            removeProductInCart(userId, productId)
+                .then(function () {
+                    toastr.success('Remove product in cart successfully');
+                    deleteDropdownCartItem(productId);
+                })
+                .catch(error => toastr.error(error));
+        });
     });
 
     $('.summary.summary-cart > a.btn.btn-outline-primary-2').click(function (e) {
@@ -95,32 +99,36 @@ $(document).ready(function () {
     $('.quantity-col > .cart-product-quantity > .input-group > input').change(function () {
         let currentQuantity = $(this).val();
         let productId = $(this).parent().parent().parent().parent().data('product');
-        updateCartQuantity(userId, productId, currentQuantity)
-            .then(function () {
-                updatePriceByQuantity(productId, currentQuantity);
-                let productItemElement = findProductItem($('div.dropdown-cart-products'), '.product', productId);
-                if (!productItemElement)
-                    return;
-                productItemElement.find('.product-cart-details span.cart-product-qty').html(currentQuantity);
-                let price = unformatPrice(productItemElement.find('.cart-product-info').children('.base-price').html());
-                updateDropdownCartTotal(-price);
-                toastr.success('Update cart successfully');
-            })
-            .catch(error => toastr.error(error));
+        getUserId().then(userId => {
+            updateCartQuantity(userId, productId, currentQuantity)
+                .then(function () {
+                    updatePriceByQuantity(productId, currentQuantity);
+                    let productItemElement = findProductItem($('div.dropdown-cart-products'), '.product', productId);
+                    if (!productItemElement)
+                        return;
+                    productItemElement.find('.product-cart-details span.cart-product-qty').html(currentQuantity);
+                    let price = unformatPrice(productItemElement.find('.cart-product-info').children('.base-price').html());
+                    updateDropdownCartTotal(-price);
+                    toastr.success('Update cart successfully');
+                })
+                .catch(error => toastr.error(error));
+        });
     });
 
     $('.remove-col > button.btn-remove').click(function () {
         let mostParentElement = $(this).parent().parent();
         let productId = mostParentElement.data('product');
-        removeProductInCart(userId, productId)
-            .then(function () {
-                let originalTotalPrice = unformatPrice(mostParentElement.children('.total-col').html());
-                updateCartTotal(-originalTotalPrice);
-                toastr.success('Remove product in cart successfully');
-                mostParentElement.remove();
-                deleteDropdownCartItem(productId);
-            })
-            .catch(error => toastr.error(error));
+        getUserId().then(userId => {
+            removeProductInCart(userId, productId)
+                .then(function () {
+                    let originalTotalPrice = unformatPrice(mostParentElement.children('.total-col').html());
+                    updateCartTotal(-originalTotalPrice);
+                    toastr.success('Remove product in cart successfully');
+                    mostParentElement.remove();
+                    deleteDropdownCartItem(productId);
+                })
+                .catch(error => toastr.error(error));
+        });
     });
 
     $('.dropdown-cart-action > .btn-outline-primary-2').click(function (e) {
@@ -281,11 +289,13 @@ function attachRemoveButtonInDropdownCart() {
     $('div.dropdown-cart-products > div.product > a.btn-remove').click(function (e) {
         e.preventDefault();
         let productId = $(this).parent().data('product');
-        removeProductInCart(userId, productId)
-            .then(function () {
-                toastr.success('Remove product in cart successfully');
-                deleteDropdownCartItem(productId);
-            })
-            .catch(error => toastr.error(error));
+        getUserId().then(userId => {
+            removeProductInCart(userId, productId)
+                .then(function () {
+                    toastr.success('Remove product in cart successfully');
+                    deleteDropdownCartItem(productId);
+                })
+                .catch(error => toastr.error(error));
+        });
     });
 }

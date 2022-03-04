@@ -64,6 +64,7 @@ namespace GUI
                 options.Scope.Add("rating.api");
                 options.Scope.Add("offline_access");
                 options.Scope.Add("roles");
+                options.Scope.Add("shop");
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
                 options.ClaimActions.MapJsonKey("role", "role", "role");

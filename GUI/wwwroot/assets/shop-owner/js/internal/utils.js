@@ -67,12 +67,12 @@ function buildProductTableRowHtml(product, index) {
                     </span>
                 </td>
                 <td class="align-middle">
-                    ${buildActionButtonHtml(product.isDisabled)}
+                    ${buildProductActionButtonHtml(product.isDisabled)}
                 </td>
             </tr>`;
 }
 
-function buildActionButtonHtml(isDisabled) {
+function buildProductActionButtonHtml(isDisabled) {
     if (!isDisabled)
         return `
                 ${buildEditButtonHtml()}
@@ -85,6 +85,23 @@ function buildActionButtonHtml(isDisabled) {
                     name="btn-inport-quantity">
                     <i class="fas fa-pencil-alt"></i>
                     <span> Import quantity</span>
+                </a>`;
+    else
+        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                    name="btn-action">
+                    <i class="fas fa-check"></i>
+                    <span> Activate</span>
+                </a>`;
+}
+
+function buildCategoryActionButtonHtml(isDisabled) {
+    if (!isDisabled)
+        return `
+                ${buildEditButtonHtml()}
+                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                    name="btn-action" style="margin-right: 24px">
+                    <i class="far fa-trash-alt"></i>
+                    <span> Deactivate</span>
                 </a>`;
     else
         return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
@@ -195,7 +212,7 @@ function buildCategoryTableRowHtml(category, index) {
                     </span>
                 </td>
                 <td class="align-middle">
-                    ${buildActionButtonHtml(category.isDisabled)}
+                    ${buildCategoryActionButtonHtml(category.isDisabled)}
                 </td>
             </tr>`;
 }
@@ -400,8 +417,11 @@ function displayImportQuantityDialog(product, saveCallback) {
     });
     $('#quantity').change(function () {
         let value = $(this).val();
-        
         let quantity = parseInt(value);
+        if (quantity == 0) {
+            quantity = 1;
+            $('#quantity').val(1);
+        }
         $('#total-product-quantity').val(oldQuantity + quantity);
     });
     $('#quantity-modal div.modal-footer > button:first-child').click(function () {

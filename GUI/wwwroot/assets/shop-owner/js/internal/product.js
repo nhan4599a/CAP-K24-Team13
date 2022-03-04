@@ -114,7 +114,7 @@ function onLoadProductsCompleted(paginatedData) {
                 .then((newQuantity) => {
                     animationLoader.hideAnimation();
                     toastr.success(`Imported ${importedQuantity} for ${products[index].productName}`, 'Success');
-                    currentRow.children('td:nth-child(4) > span').text(newQuantity);
+                    currentRow.children('td:nth-child(4)').children('span').html(newQuantity);
                 })
                 .catch(error => {
                     animationLoader.hideAnimation();
