@@ -219,6 +219,14 @@ function changeOrderStatus(orderId, newStatus) {
     });
 }
 
+function importQuantityProduct(productId, importedQuantity) {
+    return axios.post(`${productEndpoint}/${productId}/import`, importedQuantity, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}
+
 function getAccessToken() {
     return axios.get('https://cap-k24-team13.herokuapp.com/authentication/token');
 }

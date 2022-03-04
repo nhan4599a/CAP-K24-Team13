@@ -131,7 +131,7 @@ namespace GUI
             {
                 endpoints.MapAreaControllerRoute(
                         name: "ShopOwner",
-                        areaName: "Admin",
+                        areaName: "ShopOwner",
                         pattern: "ShopOwner/{controller=Product}/{action=Index}/{id?}");
                 
                 endpoints.MapControllerRoute(

@@ -4,7 +4,7 @@ using System;
 
 namespace ShopProductService.Commands.Product
 {
-    public class UpdateQuantityCommand : IRequest<CommandResponse<int>>
+    public class ImportProductCommand : IRequest<CommandResponse<int>>
     {
         public Guid ProductId { get; set; }
 

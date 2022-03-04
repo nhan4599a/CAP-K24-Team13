@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AspNetCoreSharedComponent.HttpContext;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using AspNetCoreHttp = Microsoft.AspNetCore.Http;
@@ -33,7 +34,7 @@ namespace AspNetCoreSharedComponent.Middleware
             var responseCode = context.Response.StatusCode;
             _logger.LogInformation(
                 $"Request {context.Request.Method} to {context.Request.Path} has returned {responseCode}");
-            if (responseCode >= 400)
+            if (responseCode >= 400 && !context.Request.IsStatisFileRequest())
             {
                 if (responseCode == 405)
                     responseCode = 404;

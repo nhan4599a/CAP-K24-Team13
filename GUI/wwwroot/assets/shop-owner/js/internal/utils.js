@@ -77,9 +77,14 @@ function buildActionButtonHtml(isDisabled) {
         return `
                 ${buildEditButtonHtml()}
                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                    name="btn-action">
+                    name="btn-action" style="margin-right: 24px">
                     <i class="far fa-trash-alt"></i>
                     <span> Deactivate</span>
+                </a>
+                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                    name="btn-inport-quantity">
+                    <i class="fas fa-pencil-alt"></i>
+                    <span> Import quantity</span>
                 </a>`;
     else
         return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
@@ -220,7 +225,6 @@ function sortList(field, direction, dataList) {
                 return firstValue ? 1 : -1;
             else
                 return 0;
-
         } else {
             if (typeof (firstValue) === 'number')
                 return secondValue - firstValue;
@@ -297,7 +301,7 @@ function displayCascadeQuestionDialog(question, buttonOption = {}, confirmedCall
             $('#question-modal').modal('hide');
             $('#question-modal').trigger('question-answered', [$(this)]);
         });
-    $('#question-modal').on('hidden.bs.modal', function() {
+    $('#question-modal').on('hidden.bs.modal', function () {
         $(this).modal('dispose');
         $(this).remove();
     });
@@ -310,4 +314,86 @@ function displayYesNoQuestion(question, confirmCallback) {
         nonCascadeButtonText: 'Yes',
         cancelButtonText: 'No'
     }, confirmCallback);
+}
+
+function displayImportQuantityDialog(product, saveCallback) {
+    var modalHtml = `<div class="modal fade" id="quantity-modal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit quantity</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="col-12">
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-6 align-items-center col-form-label" for="product-name">Product Name</label>
+                                            <input type="text" class="form-control col-sm-8" name="Product-name" id="product-name" disabled value="${product.productName}" />
+                                        </div>
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-6 align-items-center col-form-label" for="current-product-quantity">Current Product Quantity</label>
+                                            <input type="number" class="form-control col-sm-8" name="current-product-quantity" id="current-product-quantity" disabled value="${product.quantity}" />
+                                        </div>
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-6 align-items-center col-form-label" for="numer-of-products-added">Number of Products Added</label>
+                                            <div class="col-sm-6 mb-2">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="quantity-left-minus quantity btn btn-danger btn-number" data-type="minus" data-field="" style="margin-bottom: 0">
+                                                            <span class="glyphicon glyphicon-minus">-</span>
+                                                        </button>
+                                                    </span>
+                                                    <input type="number" id="quantity" name="quantity" class="form-control input-number" min="1" value="1" style="margin-bottom: 0">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="quantity-right-plus quantity btn btn-success btn-number" data-type="plus" data-field="" style="margin-bottom: 0">
+                                                            <span class="glyphicon glyphicon-plus">+</span>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-6 align-items-center col-form-label" for="total-product-quantity">Total Amount After Adding</label>
+                                            <input type="number" class="form-control col-sm-8" name="total-product-quantity" id="total-product-quantity" disabled />
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn bg-gradient-primary-dark my-shadow text-white"
+                                            data-action="save">
+                                        Save
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-action="cancel">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+    $('body').append(modalHtml);
+    $('#quantity-modal').modal({
+        backdrop: 'static',
+        keyboard: false
+    }).modal('show');
+    $('.quantity-right-plus').click(function (e) {
+        e.preventDefault();
+        let quantity = parseInt($('#quantity').val());
+        $('#quantity').val(quantity + 1);
+    });
+    $('.quantity-left-minus').click(function (e) {
+        e.preventDefault();
+        let quantity = parseInt($('#quantity').val());
+        if (quantity > 0) {
+            $('#quantity').val(quantity - 1);
+        }
+    });
+    $('#quantity-modal div.modal-footer > button:first-child').click(function () {
+        $('#quantity-modal').modal('hide');
+        let importedQuantity = parseInt($('#quantity').val());
+        saveCallback(importedQuantity, importedQuantity);
+    });
+    $('#quantity-modal').on('hidden.bs.modal', function () {
+        $(this).modal('dispose');
+        $(this).remove();
+    });
 }
