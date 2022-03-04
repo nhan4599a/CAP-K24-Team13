@@ -141,7 +141,7 @@
     background-color: #2f9db6 !important;
 }
 
-input {
+.board-item > .board-item-content input {
     width: 100% !important;
     margin-bottom: 5px !important
 }
