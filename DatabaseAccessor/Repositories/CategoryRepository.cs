@@ -41,9 +41,10 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<bool>> AddCategoryAsync(CreateOrEditCategoryRequestModel requestModel)
         {
             var shopCategory = new ShopCategory().AssignByRequestModel(requestModel);
-            if (await _dbContext.ShopCategories.AnyAsync(category => category.ShopId == shopCategory.ShopId && category.CategoryName == category.CategoryName))
+            if (await _dbContext.ShopCategories.AnyAsync(category => category.ShopId == shopCategory.ShopId
+                && category.CategoryName == shopCategory.CategoryName))
             {
-                return CommandResponse<bool>.Error("Category's is already existed", null);
+                return CommandResponse<bool>.Error("Category's name is already existed", null);
             }
             _dbContext.ShopCategories.Add(shopCategory);
             try

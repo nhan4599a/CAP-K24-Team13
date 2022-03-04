@@ -1,0 +1,90 @@
+﻿@section SideBar {
+    @await Component.InvokeAsync("SideBar", new { activeItem = "categories" });
+}
+<h4 class="font-weight-bolder text-center">Add Category</h4>
+<hr />
+<form id="category-form" enctype="multipart/form-data" method="post">
+    <div class="row justify-content-center">
+        <div class="col-5 ">
+            <div class="input-group input-group-outline mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="input-name">
+            </div>
+            @await Component.InvokeAsync("CategorySpecialDropdown")
+            <div class="form-group mb-3">
+                <label class="form-label">Images</label>
+                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px" action="#">
+                    <div class="dz-default dz-message" data-dz-message="">
+                        <span>Drop images here to upload</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Add</button>
+                <button class="btn btn-danger" style="float: right">
+                    <a href="category" class="text-white">Cancel</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <script>
+        Dropzone.autoDiscover = false;
+        $(function () {
+            let acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            const acceptedMaxBytes = 4 * 1024 * 1024;
+            let dropzone = new Dropzone('div#file-section', {
+                maxFilesize: 0.3,
+                paramName: 'files',
+                maxFiles: 1,
+                filesizeBase: 1024,
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                acceptedFiles: acceptedMimeTypes.join(','),
+                addRemoveLinks: true
+            });
+            dropzone.on('addedfile', function (file) {
+                let maxFileNumber = this.options.maxFiles;
+                let maxFileSize = this.options.maxFilesize;
+                let uploadedFileSizeInMb = file.size / (1024 * 1024);
+                if (this.files.length > this.options.maxFiles) {
+                    this.removeFile(file);
+                    toastr.error('Max file number exceeded!', 'File is rejected');
+                } else if (!acceptedMimeTypes.includes(file.type)) {
+                    this.removeFile(file);
+                    toastr.error('You can\'t upload this type of file!', 'File is rejected');
+                } else if (uploadedFileSizeInMb > maxFileSize) {
+                    this.removeFile(file);
+                    toastr.error(`${uploadedFileSizeInMb.toFixed(2)} MB file is too big to upload!`, 'File is rejected');
+                }
+            });
+            let classNames = ['active'];
+            $('#nav-item-category').addClass(classNames).css('background-color','#2f9db6');
+            $('#btn-submit').click(function (e) {
+                e.preventDefault();
+                if (dropzone.files.length < 1) {
+                    toastr.error('You must upload at least 1 pictures!', 'Error');
+                    return;
+                }
+                let name = $('#input-name').val();
+                let special = $('#input-special').val();
+                let formData = new FormData();
+                formData.append('requestModel.categoryName', name);
+                formData.append('requestModel.special', special);
+                formData.append('image', dropzone.files[0]);
+
+                let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+                animationLoader.showAnimation();
+                addCategory(formData).then(() => {
+                    animationLoader.hideAnimation();
+                    window.location.href = "/shopowner/category";
+                }).catch(error => {
+                    animationLoader.hideAnimation();
+                    toastr.error(error, 'Error');
+                });
+            });
+        });
+    </script>
+}

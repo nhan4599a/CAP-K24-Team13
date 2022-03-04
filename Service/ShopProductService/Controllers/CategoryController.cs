@@ -72,7 +72,7 @@ namespace ShopProductService.Controllers
             {
                 RequestModel = requestModel
             });
-            if (!response.Response)
+            if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
             return ApiResult<bool>.CreateSucceedResult(true);
         }
@@ -107,7 +107,7 @@ namespace ShopProductService.Controllers
                 Id = id,
                 RequestModel = requestModel
             });
-            if (!response.Response)
+            if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
             return ApiResult<bool>.CreateSucceedResult(true);
         }
@@ -136,7 +136,7 @@ namespace ShopProductService.Controllers
                 IsActivateCommand = action == DeleteAction.Activate,
                 ShouldBeCascade = action == DeleteAction.Deactivate || shouldBeCascade
             });
-            if (!response.Response)
+            if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
             return ApiResult<bool>.CreateSucceedResult(true);
         }

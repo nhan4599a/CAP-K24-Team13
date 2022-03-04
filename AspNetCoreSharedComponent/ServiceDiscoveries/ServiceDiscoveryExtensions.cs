@@ -3,6 +3,11 @@ using Ocelot.Provider.Consul;
 using Ocelot.Middleware;
 using Consul;
 using Shared;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace AspNetCoreSharedComponent.ServiceDiscoveries
 {

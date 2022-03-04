@@ -39,7 +39,7 @@ namespace DatabaseAccessor.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.CartDetail", b =>
@@ -71,7 +71,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartDetails");
+                    b.ToTable("CartDetails", "CartDetail");
 
                     b.HasCheckConstraint("CK_CartDetail_Quantity", "[Quantity] >= 1");
                 });
@@ -123,7 +123,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("UserId", "CreatedAt");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.InvoiceDetail", b =>
@@ -155,7 +155,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("InvoiceDetails");
+                    b.ToTable("InvoiceDetails", "dbo");
 
                     b.HasCheckConstraint("CK_InvoiceDetail_Price", "[Price] > 0");
 
@@ -189,7 +189,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.ToTable("InvoiceStatusChangedHistories");
+                    b.ToTable("InvoiceStatusChangedHistories", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ProductComment", b =>
@@ -224,7 +224,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProductComments");
+                    b.ToTable("ProductComments", "dbo");
 
                     b.HasCheckConstraint("CK_ProductComments_Star", "[Star] between 1 and 5");
                 });
@@ -287,7 +287,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("CategoryName");
 
-                    b.ToTable("ShopCategories");
+                    b.ToTable("ShopCategories", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopInterface", b =>
@@ -325,7 +325,7 @@ namespace DatabaseAccessor.Migrations
                     b.HasIndex("ShopId")
                         .IsUnique();
 
-                    b.ToTable("ShopInterfaces");
+                    b.ToTable("ShopInterfaces", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
@@ -379,7 +379,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductName");
 
-                    b.ToTable("ShopProducts");
+                    b.ToTable("ShopProducts", "dbo");
 
                     b.HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
 
@@ -446,6 +446,9 @@ namespace DatabaseAccessor.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ShopId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

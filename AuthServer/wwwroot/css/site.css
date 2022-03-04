@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
 .gradient-custom-2 {
     /* fallback for old browsers */
-    background: #fccb90;
+    background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
     /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -23,12 +23,11 @@
 
 .btn-hover:hover {
     background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
-    color: #fff;
+    color: #b9257b;
     border-color: #000
 }
 
-.btn-outline-danger{
-    
+.text-custom {
+    color: #b9257b;
 }
-
 

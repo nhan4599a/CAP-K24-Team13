@@ -1,5 +1,4 @@
 using AspNetCoreSharedComponent.FileValidations;
-using DatabaseAccessor;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +9,6 @@ using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -139,13 +137,13 @@ namespace ShopProductService.Controllers
             return ApiResult<MinimalProductDTO>.CreateSucceedResult(product);
         }
 
-        [HttpPost]
-        public async Task<ApiResult> UpdateQuantity(string productID, int quantity)
+        [HttpPost("{productId}/import")]
+        public async Task<ApiResult> ImportProduct(string productId, [FromBody] int importedQuantity)
         {
-            var newQuantityResponse = await _mediator.Send(new UpdateQuantityCommand
+            var newQuantityResponse = await _mediator.Send(new ImportProductCommand
             {
-                ProductId = Guid.Parse(productID),
-                Quantity = quantity
+                ProductId = Guid.Parse(productId),
+                Quantity = importedQuantity
             });
             if (!newQuantityResponse.IsSuccess)
                 return ApiResult.CreateErrorResult(500, newQuantityResponse.ErrorMessage);

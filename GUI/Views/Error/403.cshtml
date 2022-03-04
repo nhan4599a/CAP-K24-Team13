@@ -7,33 +7,45 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>403 - GIGAMALL</title>
+    <title>403 - Forbidden</title>
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="@Url.Content("~/assets/user-official/images/icons/apple-touch-icon.png")">
-    <link rel="icon" type="image/png" sizes="32x32" href="@Url.Content("~/assets/user-official/images/icons/favicon-32x32.png")">
-    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/assets/user-official/images/icons/favicon-16x16.png")">
-    <link rel="manifest" href="@Url.Content("~/assets/user-official/images/icons/site.html")">
-    <link rel="mask-icon" href="@Url.Content("~/assets/user-official/images/icons/safari-pinned-tab.svg")" color="#666666">
-    <link rel="shortcut icon" href="@Url.Content("~/assets/user-official/images/icons/favicon.ico")">
+    <link rel="apple-touch-icon" sizes="180x180" href="@Url.Content("~/assets/user/images/icons/apple-touch-icon.png")">
+    <link rel="icon" type="image/png" sizes="32x32" href="@Url.Content("~/assets/user/images/icons/favicon-32x32.png")">
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/assets/user/images/icons/favicon-16x16.png")">
+    <link rel="manifest" href="@Url.Content("~/assets/user/images/icons/site.html")">
+    <link rel="mask-icon" href="@Url.Content("~/assets/user/images/icons/safari-pinned-tab.svg")" color="#666666">
+    <link rel="shortcut icon" href="@Url.Content("~/assets/user/images/icons/favicon.ico")">
     <meta name="apple-mobile-web-app-title" content="Molla">
     <meta name="application-name" content="Molla">
     <meta name="msapplication-TileColor" content="#cc9966">
-    <meta name="msapplication-config" content="@Url.Content("~/assets/user-official/images/icons/browserconfig.xml")">
+    <meta name="msapplication-config" content="@Url.Content("~/assets/user/images/icons/browserconfig.xml")">
     <meta name="theme-color" content="#ffffff">
     <!-- Plugins CSS File -->
-    <link rel="stylesheet" href="@Url.Content("~/assets/user-official/css/bootstrap.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/assets/user/css/bootstrap.min.css")">
     <!-- Main CSS File -->
-    <link rel="stylesheet" href="@Url.Content("~/assets/user-official/css/style.css")">
+    <link rel="stylesheet" href="@Url.Content("~/assets/user/css/style.css")">
 </head>
 
 <body>
     <div class="page-wrapper">
-        <div class="error-content text-center" style="background-image: url(@Url.Content("~/assets/user-official/images/backgrounds/error-bg-403.jpg"))">
-            <div class="container" id="text-404">
+        <div class="error-content text-center" style="background-image: url(@Url.Content("~/assets/user/images/backgrounds/error-bg-403.jpg"))">
+            <div class="container">
                 <h1 class="error-title">Error 403</h1><!-- End .error-title -->
-                <p>You don't have a permission to access / on this server. <a href="/">Back to homepage</a></p>
+                <p>
+                    You don't have a permission to access the requested resource on this server. 
+                    <a id="signout">Sign in as another user</a>
+                </p>
             </div><!-- End .container -->
         </div><!-- End .error-content text-center -->
      </div>
+    <script>
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const redirectUrl = params.get('ReturnUrl');
+            if (!redirectUrl)
+                redirectUrl = '/';
+            document.getElementById('signout').href = `/authentication/signout?redirectUrl=${encodeURIComponent(redirectUrl)}`;
+        })();
+    </script>
 </body>
 </html>

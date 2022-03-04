@@ -1,4 +1,4 @@
-﻿using AuthServer.Helpers;
+﻿using AuthServer.Extensions;
 using AuthServer.Identities;
 using AuthServer.Models;
 using Microsoft.AspNetCore.Authorization;

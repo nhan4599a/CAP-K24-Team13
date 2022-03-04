@@ -1,57 +1,48 @@
-﻿<form method="POST">
+﻿@using DatabaseAccessor.Models
+@model User
+<form method="POST" autocomplete="off">
+    <input autocomplete="false" name="hidden" type="text" style="display: none" />
     @Html.AntiForgeryToken()
     <p style="font-family: Lora;">User information</p>
     <div class="row">
         <div class="form-outline mb-4">
-            <input type="text" id="input-username" class="form-control" placeholder="Username" name="Username" />
+            <input type="text" id="input-username" class="form-control" placeholder="Username" value="@Model.UserName" autocomplete="off" disabled />
             <label class="form-label" for="input-username" style="font-family: Lora;">Username</label>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-outline mb-4">
-            <input type="password" id="input-password" class="form-control" placeholder="Password" name="Password" />
-            <label class="form-label" for="input-password" style="font-family: Lora;">Password</label>
         </div>
     </div>
     <div class="row mb-4">
         <div class="col form-outline me-2">
-            <input type="text" id="input-firstname" class="form-control" placeholder="First name" name="FirstName" />
+            <input type="text" id="input-firstname" class="form-control" placeholder="First name" name="FirstName" autocomplete="off" value="@Model.FirstName" />
             <label class="form-label" for="input-firstname" style="font-family: Lora;">Firstname</label>
         </div>
         <div class="col form-outline">
-            <input type="text" id="input-lastname" class="form-control" placeholder="Last name" name="LastName" />
+            <input type="text" id="input-lastname" class="form-control" placeholder="Last name" name="LastName" autocomplete="off" value="@Model.LastName" />
             <label class="form-label" for="input-lastname" style="font-family: Lora;">Lastname</label>
         </div>
     </div>
     <div class="row">
         <div class="form-outline mb-4">
-            <input type="tel" id="input-tel" class="form-control" placeholder="Phone nnumber" name="PhoneNumber" />
+            <input type="tel" id="input-tel" class="form-control" placeholder="Phone nnumber" name="PhoneNumber" autocomplete="off" value="@Model.PhoneNumber" />
             <label class="form-label" for="input-tel" style="font-family: Lora;">Phone number</label>
         </div>
     </div>
     <div class="row mb-4">
         <div class="form-outline">
-            <input type="email" id="input-email" class="form-control" placeholder="Email" name="Email" />
+            <input type="email" id="input-email" class="form-control" placeholder="Email" value="@Model.Email" autocomplete="off" disabled />
             <label class="form-label" for="input-email" style="font-family: Lora;">Email</label>
         </div>
     </div>
     <div class="row">
         <div class="form-outline mb-4">
             <i class="far fa-calendar-alt trailing pe-auto" style="cursor: pointer" onclick="openDatePicker()"></i>
-            <input type="text" id="input-dob" class="form-control form-icon-trailing" placeholder="Day of birth" name="DoB" />
+            <input type="text" id="input-dob" class="form-control form-icon-trailing" placeholder="Day of birth" name="DoB" value="@Model.DoB!.Value.ToString("dd/MM/yyyy")" autocomplete="off" />
             <label class="form-label" for="input-dob" style="font-family: Lora;">Day of birth</label>
         </div>
-    </div>
-    <div class="row">
-        <button class="btn-hover btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Save</button>
     </div>
     <div class="row">
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     </div>
     <div class="row">
-        <div class="d-flex align-items-center justify-content-center pb-4">
-            <p class="mb-0 me-2">Already have an account?</p>
-            <a class="btn btn-outline-danger" href="/auth/signin">Sign In</a>
-        </div>
+        <button class="btn-hover btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Save</button>
     </div>
 </form>

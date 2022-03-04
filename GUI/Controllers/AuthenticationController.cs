@@ -26,9 +26,26 @@ namespace GUI.Controllers
             return ApiResult<string>.CreateSucceedResult(User.GetUserId().ToString());
         }
 
-        public new SignOutResult SignOut()
+        public SignOutResult SignOut(string redirectUrl = "/")
         {
-            return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+            var authenticationSchemes = new[]
+            {
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                OpenIdConnectDefaults.AuthenticationScheme
+            };
+            var authenticationProperties = new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl
+            };
+            return new SignOutResult(authenticationSchemes, authenticationProperties);
+        }
+
+        public ChallengeResult SignIn(string redirectUrl = "/")
+        {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl
+            }, OpenIdConnectDefaults.AuthenticationScheme);
         }
     }
 }

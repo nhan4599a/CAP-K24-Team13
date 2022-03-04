@@ -1,6 +1,7 @@
-﻿using Shared;
+﻿using Microsoft.AspNetCore.Http;
 using Shared.Models;
 using Shared.Validations;
+using System.Threading.Tasks;
 
 namespace AspNetCoreSharedComponent.FileValidations
 {

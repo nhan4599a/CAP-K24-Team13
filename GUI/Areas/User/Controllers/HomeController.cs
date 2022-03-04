@@ -1,6 +1,5 @@
 ﻿using GUI.Abtractions;
 using GUI.Areas.User.ViewModels;
-using GUI.Attributes;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

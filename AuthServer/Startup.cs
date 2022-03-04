@@ -1,6 +1,6 @@
-﻿using AspNetCoreSharedComponent.ModelBinders.Providers;
+﻿using AspNetCoreSharedComponent.Middleware;
+using AspNetCoreSharedComponent.ModelBinders.Providers;
 using AspNetCoreSharedComponent.ModelValidations;
-using AuthServer.Abstractions;
 using AuthServer.Configurations;
 using AuthServer.Factories;
 using AuthServer.Identities;
@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -46,7 +45,10 @@ namespace AuthServer
             {
                 options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
             }).AddFluentValidation<UserSignUpModel, SignUpModelValidator>()
-            .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>();
+            .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>()
+            .AddFluentValidation<EditUserInformationModel, EditUserInformationModelValidator>();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
@@ -60,6 +62,7 @@ namespace AuthServer
                     options.LogoutPath = "/auth/signout";
                 });
             services.AddTransient<MailConfirmationTokenProvider<User>>();
+            services.AddTransient<ResetPasswordTokenProvider<User>>();
             services.AddSingleton(new SmtpClient
             {
                 Credentials = new NetworkCredential(Configuration["GMAIL_USERNAME"], Configuration["GMAIL_PASSWORD"]),
@@ -69,7 +72,6 @@ namespace AuthServer
                 Port = 587
             });
             services.AddSingleton<IMailService, GmailService>();
-            services.AddScoped<SignInActionFilter>();
             services.AddScoped<IUserClaimsPrincipalFactory<User>, ApplicationUserClaimsPrincipleFactory>();
             services.AddIdentity<User, Role>(options =>
             {
@@ -83,6 +85,9 @@ namespace AuthServer
                         new TokenProviderDescriptor(typeof(MailConfirmationTokenProvider<User>)));
                     options.Tokens.EmailConfirmationTokenProvider = "MailConfirmation";
                 }
+                options.Tokens.ProviderMap.Add("ResetPassword",
+                    new TokenProviderDescriptor(typeof(ResetPasswordTokenProvider<User>)));
+                options.Tokens.PasswordResetTokenProvider = "ResetPassword";
                 options.Lockout.MaxFailedAccessAttempts = AccountConfig.MaxFailedAccessAttempts;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountConfig.LockOutTime);
             }).AddUserStore<ApplicationUserStore>()
@@ -121,13 +126,8 @@ namespace AuthServer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto
@@ -142,6 +142,10 @@ namespace AuthServer
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+            app.UseSession();
+
+            app.UseGlogalExceptionHandlerMiddleware();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

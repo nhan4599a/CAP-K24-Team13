@@ -1,6 +1,30 @@
 ﻿@using System.Globalization
 @using GUI.Extensions
 @model Shared.DTOs.ProductWithCommentsDTO
+@section Styles {
+    rating { 
+        border: none;
+        float: left;
+    }
+    .rating > input { display: none; } 
+    .rating > label:before { 
+        margin: 5px;
+        font-size: 1.25em;
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f005";
+    }
+
+    .rating > .half:before { 
+        content: "\f089";
+        position: absolute;
+    }
+
+    .rating > label { 
+        color: #ddd; 
+        float: right; 
+    }
+}
 <main class="main">
     <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
         <div class="container-fluid d-flex align-items-center">
@@ -21,7 +45,7 @@
                             <div class="col-md-6 col-lg-7">
                                 <div class="product-gallery">
                                     <figure class="product-main-image">
-                                        <img id="product-zoom" src="@Url.ProductImageUrl(Model.Images[0])" data-zoom-image="@Url.Content("~/assets/user-official/images/products/single/fullwidth/3-big.jpg")" alt="product image">
+                                        <img id="product-zoom" src="@Url.ProductImageUrl(Model.Images[0])" data-zoom-image="@Url.Content("~/assets/user/images/products/single/fullwidth/3-big.jpg")" alt="product image">
                                     </figure><!-- End .product-main-image -->
                                     <div id="product-zoom-gallery" class="product-image-gallery max-col-6">
                                         @foreach (var item in Model.Images)
@@ -52,16 +76,16 @@
 
                                         <div class="product-nav product-nav-thumbs">
                                             <a href="#" class="active">
-                                                <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/1-thumb.jpg")" alt="product desc">
+                                                <img src="@Url.Content("~/assets/user/images/products/single/fullwidth/1-thumb.jpg")" alt="product desc">
                                             </a>
                                             <a href="#">
-                                                <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/2-thumb.jpg")" alt="product desc">
+                                                <img src="@Url.Content("~/assets/user/images/products/single/fullwidth/2-thumb.jpg")" alt="product desc">
                                             </a>
                                             <a href="#">
-                                                <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/3-thumb.jpg")" alt="product desc">
+                                                <img src="@Url.Content("~/assets/user/images/products/single/fullwidth/3-thumb.jpg")" alt="product desc">
                                             </a>
                                             <a href="#">
-                                                <img src="@Url.Content("~/assets/user-official/images/products/single/fullwidth/4-thumb.jpg")" alt="product desc">
+                                                <img src="@Url.Content("~/assets/user/images/products/single/fullwidth/4-thumb.jpg")" alt="product desc">
                                             </a>
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .details-filter-row -->
@@ -134,9 +158,20 @@
                                                                         <h4><a href="#">@item.UserName</a></h4>
                                                                         <div class="ratings-container">
                                                                             <div class="ratings">
-                                                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                                                        </div><!-- End .ratings -->
-                                                                    </div><!-- End .rating-container -->
+                                                                                <fieldset class="rating" style="padding: 0 160px">
+                                                                                    <input type="radio" id="star5" name="rating" value="5" />
+                                                                                    <label class="full" for="star5" title="Awesome - 5 stars"></label>
+                                                                                    <input type="radio" id="star4" name="rating" value="4" />
+                                                                                    <label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                                                                    <input type="radio" id="star3" name="rating" value="3" />
+                                                                                    <label class="full" for="star3" title="Meh - 3 stars"></label>
+                                                                                    <input type="radio" id="star2" name="rating" value="2" />
+                                                                                    <label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                                                                                    <input type="radio" id="star1" name="rating" value="1" />
+                                                                                    <label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                                                                                </fieldset>
+                                                                            </div>
+                                                                        </div><!-- End .rating-container -->
                                                                     <span class="review-date">@((DateTime.Now - item.CreatedDate).ToString(""))</span>
                                                                     </div><!-- End .col -->
                                                                 <div class="col">
@@ -166,7 +201,7 @@
                                 <div class="product product-sm">
                                     <figure class="product-media">
                                         <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user-official/images/products/single/sidebar/1.jpg")" alt="Product image" class="product-image">
+                                            <img src="@Url.Content("~/assets/user/images/products/single/sidebar/1.jpg")" alt="Product image" class="product-image">
                                         </a>
                                     </figure>
                                     <div class="product-body">
@@ -182,7 +217,7 @@
                                 <div class="product product-sm">
                                     <figure class="product-media">
                                         <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user-official/images/products/single/sidebar/2.jpg")" alt="Product image" class="product-image">
+                                            <img src="@Url.Content("~/assets/user/images/products/single/sidebar/2.jpg")" alt="Product image" class="product-image">
                                         </a>
                                     </figure>
                                     <div class="product-body">
@@ -195,7 +230,7 @@
                                 <div class="product product-sm">
                                     <figure class="product-media">
                                         <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user-official/images/products/single/sidebar/3.jpg")" alt="Product image" class="product-image">
+                                            <img src="@Url.Content("~/assets/user/images/products/single/sidebar/3.jpg")" alt="Product image" class="product-image">
                                         </a>
                                     </figure>
                                     <div class="product-body">
@@ -208,7 +243,7 @@
                                 <div class="product product-sm">
                                     <figure class="product-media">
                                         <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user-official/images/products/single/sidebar/4.jpg")" alt="Product image" class="product-image">
+                                            <img src="@Url.Content("~/assets/user/images/products/single/sidebar/4.jpg")" alt="Product image" class="product-image">
                                         </a>
                                     </figure>
                                     <div class="product-body">
@@ -225,7 +260,7 @@
                             <div class="banner-sidebar-title">ad box 280 x 280</div><!-- End .ad-title -->
                             <div class="banner-sidebar banner-overlay">
                                 <a href="#">
-                                    <img src="@Url.Content("~/assets/user-official/images/blog/sidebar/banner.jpg")" alt="banner">
+                                    <img src="@Url.Content("~/assets/user/images/blog/sidebar/banner.jpg")" alt="banner">
                                 </a>
                             </div><!-- End .banner-ad -->
                         </div><!-- End .widget -->
@@ -236,5 +271,5 @@
     </div><!-- End .page-content -->
 </main><!-- End .main -->
 @section Scripts {
-<script src="@Url.Content("~/assets/user-official/js/product-detail.js")"></script>
+<script src="@Url.Content("~/assets/user/js/product-detail.js")"></script>
 }

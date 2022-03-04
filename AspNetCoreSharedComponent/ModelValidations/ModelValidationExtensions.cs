@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace AspNetCoreSharedComponent.ModelValidations
 {
