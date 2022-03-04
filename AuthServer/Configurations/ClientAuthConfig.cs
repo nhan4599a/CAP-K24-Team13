@@ -31,7 +31,7 @@ namespace AuthServer.Configurations
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.OfflineAccess,
-                    "product.api", "interface.api", "order.api", "checkout.api", "rating.api", "roles"
+                    "product.api", "interface.api", "order.api", "checkout.api", "rating.api", "roles", "shop"
                 },
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
@@ -50,6 +50,15 @@ namespace AuthServer.Configurations
                 UserClaims =
                 {
                     JwtClaimTypes.Role
+                }
+            },
+            new IdentityResource
+            {
+                Name = "shop",
+                DisplayName = "Shop",
+                UserClaims =
+                {
+                    "ShopId"
                 }
             }
         };
@@ -71,7 +80,7 @@ namespace AuthServer.Configurations
                 },
                 UserClaims =
                 {
-                    JwtClaimTypes.Role
+                    JwtClaimTypes.Role, "ShopId"
                 }
             },
             new ApiResource
@@ -89,7 +98,7 @@ namespace AuthServer.Configurations
                 },
                 UserClaims =
                 {
-                    JwtClaimTypes.Role
+                    JwtClaimTypes.Role, "ShopId"
                 }
             },
             new ApiResource
@@ -107,7 +116,7 @@ namespace AuthServer.Configurations
                 },
                 UserClaims =
                 {
-                    JwtClaimTypes.Role
+                    JwtClaimTypes.Role, "ShopId"
                 }
             },
             new ApiResource
@@ -125,7 +134,7 @@ namespace AuthServer.Configurations
                 },
                 UserClaims =
                 {
-                    JwtClaimTypes.Role
+                    JwtClaimTypes.Role, "ShopId"
                 }
             },
             new ApiResource
@@ -143,7 +152,7 @@ namespace AuthServer.Configurations
                 },
                 UserClaims =
                 {
-                    JwtClaimTypes.Role
+                    JwtClaimTypes.Role, "ShopId"
                 }
             }
         };
