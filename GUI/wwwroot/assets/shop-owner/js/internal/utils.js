@@ -118,6 +118,13 @@ function buildEditButtonHtml() {
             </a>`;
 }
 
+function buildEditQuantityButtonHtml() {
+    return `<a href="#" class="text-secondary font-weight-bold text-xs"
+                data-toggle="tooltip" data-original-title="Edit quantity" style="margin-right: 24px" name="btn-quantity">
+                <i class="far fa-pencil"></i><span> Edit quantity</span>
+            </a>`;
+}
+
 function renderPagination(paginationObject) {
     let paginationHtml = '';
     if (paginationObject.hasPreviousPage)
@@ -213,6 +220,8 @@ function buildCategoryTableRowHtml(category, index) {
                 </td>
                 <td class="align-middle">
                     ${buildCategoryActionButtonHtml(category.isDisabled)}
+                </td>
+                <td>
                 </td>
             </tr>`;
 }
@@ -319,6 +328,78 @@ function displayCascadeQuestionDialog(question, buttonOption = {}, confirmedCall
             $('#question-modal').trigger('question-answered', [$(this)]);
         });
     $('#question-modal').on('hidden.bs.modal', function () {
+        $(this).modal('dispose');
+        $(this).remove();
+    });
+}
+
+function displaySaveDialog(quatity, buttonOption = {}, confirmedCallback) {
+    if (!buttonOption.saveButtonText)
+        buttonOption.saveButtonText = "Save";
+    if (!buttonOption.cancelButtonText)
+        buttonOption.cancelButtonText = 'Cancel';
+    var modalHtml = `<div class="modal fade" id="quatity-modal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Edit quantity</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="col-12">
+                                        <div class="form-row">
+                                            <label class="col-sm-3 align-items-center col-form-label" for="product-name">Product Name</label>
+                                            <input type="text" class="form-control col-sm-8" name="Product-name" id="product-name" disabled />
+                                        </div>
+                                        <div class="form-row">
+                                            <label class="col-sm-3 align-items-center col-form-label" for="current-product-quantity">Current Product Quantity</label>
+                                            <input type="number" class="form-control col-sm-8" name="current-product-quantity" id="current-product-quantity" disabled />
+                                        </div>
+                                        <div class="form-row">
+                                            <label class="col-sm-3 align-items-center col-form-label" for="numer-of-products-added">Number of Products Added</label>
+                                            <div class="col-sm-6 mb-2">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                                <button type="button" class="quantity-left-minus quantity btn btn-danger btn-number" data-type="minus" data-field="">
+                                                    <span class="glyphicon glyphicon-minus">-</span>
+                                                </button>
+                                                </span>
+                                                <input type="number" id="quantity" name="quantity" class="form-control input-number" value="" min="1" max="">
+                                                <span class="input-group-btn">
+                                                <button type="button" class="quantity-right-plus quantity btn btn-success btn-number" data-type="plus" data-field="">
+                                                    <span class="glyphicon glyphicon-plus">+</span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <label class="col-sm-3 align-items-center col-form-label" for="total-product-quantity">Total Amount After Adding</label>
+                                            <input type="number" class="form-control col-sm-8" name="total-product-quantity" id="total-product-quantity" disabled />
+                                        </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        ${buttonOption.shouldShowSaveButton ?
+                                            `<button type="button"
+                                                class="btn bg-gradient-primary-dark my-shadow text-white"
+                                                data-action="save">
+                                                ${buttonOption.saveButtonText}
+                                            </button>` : ''}
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            data-action="cancel">
+                                            ${buttonOption.cancelButtonText}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+    $('body').append(modalHtml);
+    $('#quatity-modal').modal({
+        backdrop: 'static',
+        keyboard: false
+    }).modal('show');
+    $('#quatity-modal').on('hidden.bs.modal', function () {
         $(this).modal('dispose');
         $(this).remove();
     });
