@@ -1,21 +1,22 @@
 ﻿@using AuthServer.Models
 @using Microsoft.AspNetCore.Authentication
 @model SignInModel
-<form method="POST">
+<form method="POST" autocomplete="off">
+    <input autocomplete="false" name="hidden" type="text" style="display: none" />
     @Html.AntiForgeryToken()
     <p style="font-family: Lora;">Please login to your account</p>
     <div class="form-outline mb-4">
-        <input type="text" id="input-username" class="form-control" placeholder="Username" name="Username" value="@Model?.Username" />
+        <input type="text" id="input-username" class="form-control" placeholder="Username" name="Username" value="@Model?.Username" autocomplete="off" />
         <label class="form-label" for="input-username" style="font-family: Lora;">Username</label>
     </div>
 
     <div class="form-outline mb-4">
-        <input type="password" id="input-password" class="form-control" placeholder="Password" name="Password" value="@Model?.Password" />
+        <input type="password" id="input-password" class="form-control" placeholder="Password" name="Password" value="@Model?.Password" autocomplete="off" />
         <label class="form-label" for="input-password" style="font-family: Lora;">Password</label>
     </div>
 
     <div class="text-center pt-1 mb-3 pb-1">
-        <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Sign In</button>
+        <button class="btn-hover btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Sign In</button>
         <a class="text-muted" href="/auth/forgot" style="font-family: Lora;">Forgot password?</a>
     </div>
     <div>

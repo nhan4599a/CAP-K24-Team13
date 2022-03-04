@@ -6,11 +6,12 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace AuthServer.Helpers
+namespace AuthServer.Extensions
 {
     public static class IdentityUserExtension
     {
-        public static async Task<CreateUserResult> CreateUserAsync(this UserManager<User> userManager, UserSignUpModel model, string role)
+        public static async Task<CreateUserResult> CreateUserAsync(this UserManager<User> userManager,
+            UserSignUpModel model, string role)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

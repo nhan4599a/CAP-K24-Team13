@@ -354,7 +354,7 @@ function displayImportQuantityDialog(product, saveCallback) {
                                         </div>
                                         <div class="form-row mb-3">
                                             <label class="col-sm-6 align-items-center col-form-label" for="total-product-quantity">Total Amount After Adding</label>
-                                            <input type="number" class="form-control col-sm-8" name="total-product-quantity" id="total-product-quantity" disabled />
+                                            <input type="number" class="form-control col-sm-8" name="total-product-quantity" id="total-product-quantity" value="${product.quantity + 1}" disabled />
                                         </div>
                                     </form>
                                 </div>
@@ -375,17 +375,34 @@ function displayImportQuantityDialog(product, saveCallback) {
         backdrop: 'static',
         keyboard: false
     }).modal('show');
+    let oldQuantity = parseInt($('#current-product-quantity').val());
+    $('#quantity').keypress(function (e) {
+        let charCode = (e.which) ? e.which : e.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    });
     $('.quantity-right-plus').click(function (e) {
         e.preventDefault();
         let quantity = parseInt($('#quantity').val());
         $('#quantity').val(quantity + 1);
+        $('#quantity').change();
     });
     $('.quantity-left-minus').click(function (e) {
         e.preventDefault();
         let quantity = parseInt($('#quantity').val());
-        if (quantity > 0) {
+        if (!quantity)
+            quantity = 1;
+        if (quantity > 1) {
             $('#quantity').val(quantity - 1);
+            $('#quantity').change();
         }
+    });
+    $('#quantity').change(function () {
+        let value = $(this).val();
+        
+        let quantity = parseInt(value);
+        $('#total-product-quantity').val(oldQuantity + quantity);
     });
     $('#quantity-modal div.modal-footer > button:first-child').click(function () {
         $('#quantity-modal').modal('hide');

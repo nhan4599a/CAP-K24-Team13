@@ -153,6 +153,8 @@ namespace DatabaseAccessor.Repositories
             if (product.Category.IsDisabled)
                 return CommandResponse<int>.Error($"Product is belong to " +
                     $"{product.Category.CategoryName} which was deactivated", null);
+            if (quantity <= 0)
+                return CommandResponse<int>.Error("Quantity must greater than 0", null);
             var newQuantity = quantity + product.Quantity;
             product.Quantity = newQuantity;
             await _dbContext.SaveChangesAsync();

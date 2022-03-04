@@ -105,14 +105,16 @@ function onLoadProductsCompleted(paginatedData) {
     });
     $('a[name=btn-inport-quantity]').click(function (e) {
         e.preventDefault();
-        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
+        let currentRow = $(this).parent().parent();
+        let index = parseInt(currentRow.children('td:nth-child(2)').text()) - 1;
         displayImportQuantityDialog(products[index], function (importedQuantity) {
             let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation();
             importQuantityProduct(products[index].id, importedQuantity)
-                .then(() => {
+                .then((newQuantity) => {
                     animationLoader.hideAnimation();
                     toastr.success(`Imported ${importedQuantity} for ${products[index].productName}`, 'Success');
+                    currentRow.children('td:nth-child(4) > span').text(newQuantity);
                 })
                 .catch(error => {
                     animationLoader.hideAnimation();

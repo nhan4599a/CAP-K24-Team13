@@ -31,5 +31,15 @@ namespace GUI.Extensions
             }
             return principal.FindFirstValue(ClaimTypes.Email);
         }
+
+        public static int? GetShopId(this ClaimsPrincipal principal)
+        {
+            if (principal == null)
+            {
+                throw new ArgumentNullException(nameof(principal));
+            }
+            var stringValue = principal.FindFirstValue("ShopId");
+            return stringValue == null ? null : int.Parse(stringValue);
+        }
     }
 }

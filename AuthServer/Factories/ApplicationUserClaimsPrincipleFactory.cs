@@ -3,6 +3,7 @@ using DatabaseAccessor.Models;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Shared.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -23,6 +24,8 @@ namespace AuthServer.Factories
             var identity = await base.GenerateClaimsAsync(user);
             var role = (await _userManager.GetRolesAsync(user))[0];
             identity.AddClaim(new Claim(JwtClaimTypes.Role, role));
+            if (role == Roles.ADMIN)
+                identity.AddClaim(new Claim("ShopId", user.ShopId!.Value.ToString()));
             return identity;
         }
     }
