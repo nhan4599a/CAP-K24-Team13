@@ -2,6 +2,9 @@
 @using Shared.Models
 @using System.Collections
 @model List<OrderDTO>
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/assets/shop-owner/css/kanban.css")" /> 
+}
 @section SideBar {
     @await Component.InvokeAsync("SideBar", new { activeItem = "orders" });
 }
