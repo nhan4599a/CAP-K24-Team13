@@ -1,7 +1,6 @@
 ﻿using AspNetCoreSharedComponent.HttpContext;
 using AuthServer.Configurations;
 using AuthServer.Extensions;
-using AuthServer.Helpers;
 using AuthServer.Identities;
 using AuthServer.Models;
 using DatabaseAccessor.Models;

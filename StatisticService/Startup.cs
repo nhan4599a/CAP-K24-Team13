@@ -1,15 +1,13 @@
 ﻿using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
-using DatabaseAccessor.Repositories;
-using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RatingService
+namespace StatisticService
 {
     public class Startup
     {
@@ -24,24 +22,23 @@ namespace RatingService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<IRatingRepository, RatingRepository>();
             services.RegisterOcelotService(Configuration);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
+                    options.Audience = "statistic";
+                });
+            services.AddMediatR(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-               .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-               {
-                   options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
-                   options.Audience = "rating";
-               });
-            services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,15 +48,14 @@ namespace RatingService
 
             app.UseCors("Default");
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                        name: "Default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                        name: "default",
+                        pattern: "{controller=Product}/{action=Index}/{id?}");
             });
         }
     }

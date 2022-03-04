@@ -8,13 +8,13 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AspNetCoreSharedComponent\AspNetCoreSharedComponent.csproj" />
-    <ProjectReference Include="..\..\DatabaseAccessor\DatabaseAccessor.csproj" />
-    <ProjectReference Include="..\..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\AspNetCoreSharedComponent\AspNetCoreSharedComponent.csproj" />
+    <ProjectReference Include="..\DatabaseAccessor\DatabaseAccessor.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
 </Project>
