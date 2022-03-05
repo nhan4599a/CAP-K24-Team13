@@ -10,19 +10,20 @@ using System.Threading.Tasks;
 namespace GUI.Areas.User.Controllers
 {
     [Authorize]
-    public class UserAccountController : Controller
+    [Route("/order-history")]
+    public class OrderHistoryController : Controller
     {
         private readonly IOrderClient _orderHistoryClient;
 
-        private readonly ILogger<UserAccountController> _logger;
+        private readonly ILogger<OrderHistoryController> _logger;
 
-        public UserAccountController(IOrderClient orderHistoryClient, ILoggerFactory loggerFactory)
+        public OrderHistoryController(IOrderClient orderHistoryClient, ILoggerFactory loggerFactory)
         {
             _orderHistoryClient = orderHistoryClient;
-            _logger = loggerFactory.CreateLogger<UserAccountController>();
+            _logger = loggerFactory.CreateLogger<OrderHistoryController>();
         }
 
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Index()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
             _logger.LogInformation("Token: " + token);

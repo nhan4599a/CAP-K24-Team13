@@ -232,5 +232,9 @@ function getAccessToken() {
 }
 
 function getUserId() {
-    return axios.get('https://cap-k24-team13.herokuapp.com/authentication/id')
+    return axios.get('https://cap-k24-team13.herokuapp.com/authentication/id');
+}
+
+function getShopId() {
+    return axios.get('https://cap-k24-team13.herokuapp.com/authentication/shop');
 }

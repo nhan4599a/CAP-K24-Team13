@@ -14,7 +14,7 @@ namespace GUI.Controllers
         public async Task<ApiResult> GetCurrentUserAccessToken()
         {
             if (!User.Identity.IsAuthenticated)
-                return ApiResult.CreateErrorResult(403, "User is not logged in");
+                return ApiResult.CreateErrorResult(401, "User is not logged in");
             return ApiResult<string>.CreateSucceedResult(await HttpContext.GetTokenAsync("access_token"));
         }
 
@@ -22,8 +22,18 @@ namespace GUI.Controllers
         public ApiResult GetCurrentUserId()
         {
             if (!User.Identity.IsAuthenticated)
-                return ApiResult.CreateErrorResult(403, "User is not logged in");
+                return ApiResult.CreateErrorResult(401, "User is not logged in");
             return ApiResult<string>.CreateSucceedResult(User.GetUserId().ToString());
+        }
+
+        [ActionName("shop")]
+        public ApiResult GetCurrentShopId()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return ApiResult.CreateErrorResult(401, "User is not logged in");
+            if (!User.IsInRole(Roles.SHOP_OWNER))
+                return ApiResult.CreateErrorResult(403, "User is not shop owner");
+            return ApiResult<int>.CreateSucceedResult(User.GetShopId().Value);
         }
 
         public SignOutResult SignOut(string redirectUrl = "/")
