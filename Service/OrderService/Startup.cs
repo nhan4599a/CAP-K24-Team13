@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace OrderHistoryService
 {
@@ -23,8 +24,7 @@ namespace OrderHistoryService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                .AddNewtonsoftJson();
+            services.AddControllers();
             services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.RegisterOcelotService(Configuration);
             services.AddDbContext<ApplicationDbContext>();
@@ -40,7 +40,10 @@ namespace OrderHistoryService
                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                {
                    options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
-                   options.Audience = "order";
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateAudience = false
+                   };
                });
             services.AddMediatR(typeof(Startup));
         }
@@ -58,9 +61,7 @@ namespace OrderHistoryService
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                        name: "Default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

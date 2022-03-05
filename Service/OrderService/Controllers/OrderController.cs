@@ -43,12 +43,12 @@ namespace OrderHistoryService.Controllers
         }
 
         [HttpPost("{invoiceId}")]
-        public async Task<ApiResult> ChangeOrderStatus(int invoiceId, [FromBody] InvoiceStatus newStatus)
+        public async Task<ApiResult> ChangeOrderStatus(int invoiceId, [FromBody] int newStatusInt)
         {
             var result = await _mediator.Send(new ChangeOrderStatusCommand
             {
                 InvoiceId = invoiceId,
-                NewStatus = newStatus
+                NewStatus = (InvoiceStatus)newStatusInt
             });
             if (!result.IsSuccess)
                 return ApiResult.CreateErrorResult(500, result.ErrorMessage);

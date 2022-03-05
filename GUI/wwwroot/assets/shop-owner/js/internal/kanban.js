@@ -1,12 +1,11 @@
-﻿let dragContainer = document.querySelector('.drag-container');
-let itemContainers = [].slice.call(document.querySelectorAll('.board-column-content'));
-let columnGrids = [];
-let boardGrid;
-let currentGrid = null;
-let oldPosition = null;
+﻿var dragContainer = document.querySelector('.drag-container');
+var itemContainers = [].slice.call(document.querySelectorAll('.board-column-content'));
+var columnGrids = [];
+var boardGrid;
+var currentGrid = null;
 // Init the column grids so we can drag those items around.
 itemContainers.forEach(function (container) {
-    let grid = new Muuri(container, {
+    var grid = new Muuri(container, {
         items: '.board-item',
         dragEnabled: true,
         dragSort: function () {
@@ -24,19 +23,15 @@ itemContainers.forEach(function (container) {
     })
         .on('dragInit', function (item) {
             item.getElement().style.width = item.getWidth() + 'px';
-            item.getElement().style.height = item.getHeight() + 'px';
+            //item.getElement().style.height = item.getHeight() + 'px';
         })
         .on('dragReleaseEnd', function (item) {
-            item.getElement().style.width = '';
-            item.getElement().style.height = '';
             item.getGrid().refreshItems([item]);
         })
         .on('layoutStart', function () {
             boardGrid.refreshItems().layout();
         })
         .on('dragStart', function (item) {
-            console.log(item);
-            console.log(item.getGrid());
             currentGrid = item.getGrid();
         })
         .on('dragEnd', function (item) {
@@ -51,7 +46,7 @@ itemContainers.forEach(function (container) {
                     toastr.success('Change status successfully');
                 })
                 .catch(error => {
-                    destinationGrid.send(item, currentGrid, currentGrid.getItems().length - 1, {
+                    destinationGrid.send(item, currentGrid, 0, {
                         appendTo: dragContainer
                     });
                     toastr.error(error);

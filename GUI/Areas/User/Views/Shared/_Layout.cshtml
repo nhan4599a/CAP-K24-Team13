@@ -104,7 +104,7 @@
                                                 <a href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/information", "returnUrl")">My Account</a>
                                                 <a href="#">My Purchase</a>
                                                 <a href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/change-password", "returnUrl")">Change Password</a>
-                                                <a href="/authentication/signout">Sign out</a>
+                                                <a href="#" id="signout">Sign out</a>
                                             </div>
                                         </div>
                                     }
@@ -1083,6 +1083,7 @@
         $(document).ready(function () {
             const redirectUrl = window.location.pathname;
             $('li.login > a').attr('href', `/authentication/signin?redirectUrl=${encodeURIComponent(redirectUrl)}`);
+            $('#signout').attr('href', `/authentication/signout?redirectUrl=${encodeURIComponent(redirectUrl)}`);
         })
     </script>
     @RenderSection("Scripts", false)

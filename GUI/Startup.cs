@@ -68,6 +68,7 @@ namespace GUI
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
                 options.ClaimActions.MapJsonKey("role", "role", "role");
+                options.ClaimActions.MapJsonKey("ShopId", "ShopId");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = "name",

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Shared.RequestModels;
 using ShopInterfaceService.Validation;
 
@@ -45,7 +46,10 @@ namespace ShopInterfaceService
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
-                    options.Audience = "interface";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
                 });
             services.AddMediatR(typeof(Startup));
         }
@@ -57,15 +61,12 @@ namespace ShopInterfaceService
 
             app.UseCors("Default");
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                        name: "Default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

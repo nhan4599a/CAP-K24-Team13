@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace StatisticService
 {
@@ -27,7 +28,10 @@ namespace StatisticService
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
-                    options.Audience = "statistic";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
                 });
             services.AddMediatR(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>();
@@ -53,9 +57,7 @@ namespace StatisticService
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Product}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }
