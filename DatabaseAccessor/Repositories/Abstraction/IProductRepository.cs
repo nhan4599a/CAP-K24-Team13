@@ -9,22 +9,24 @@ namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface IProductRepository : IDisposable
     {
-        Task<ProductWithCommentsDTO> GetProductAsync(Guid id);
+        Task<ProductWithCommentsDTO> GetProductAsync(Guid productId);
 
-        Task<MinimalProductDTO> GetMinimalProductAsync(Guid id);
+        Task<MinimalProductDTO> GetMinimalProductAsync(Guid productId);
 
-        Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo);
+        Task<PaginatedList<ProductDTO>> FindProductsAsync(string keyword, PaginationInfo paginationInfo);
 
         Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo);
 
         Task<CommandResponse<Guid>> AddProductAsync(CreateOrEditProductRequestModel requestModel);
 
-        Task<CommandResponse<bool>> ActivateProductAsync(Guid id, bool isActivateCommand);
+        Task<CommandResponse<bool>> ActivateProductAsync(Guid productId, bool isActivateCommand);
 
-        Task<CommandResponse<ProductDTO>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel);
+        Task<CommandResponse<ProductDTO>> EditProductAsync(Guid productId, CreateOrEditProductRequestModel requestModel);
 
         Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo pagination);
 
-        Task<CommandResponse<int>> UpdateQuantityAsync(Guid productId, int quantity);
+        Task<PaginatedList<ProductDTO>> FindProductsOfShopAsync(int shopId, string keyword, PaginationInfo paginationInfo);
+
+        Task<CommandResponse<int>> ImportProductQuantityAsync(Guid productId, int quantity);
     }
 }

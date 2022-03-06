@@ -3,7 +3,6 @@ using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
@@ -12,13 +11,13 @@ namespace DatabaseAccessor.Repositories.Abstraction
     {
         Task<CategoryDTO> GetCategoryAsync(int id);
 
-        Task<PaginatedList<CategoryDTO>> GetAllCategoryAsync(PaginationInfo paginationInfo);
+        Task<PaginatedList<CategoryDTO>> GetAllCategoriesAsync(PaginationInfo paginationInfo);
 
-        Task<CommandResponse<bool>> AddCategoryAsync(CreateOrEditCategoryRequestModel requestModel);
+        Task<CommandResponse<bool>> AddCategoryAsync(int shopId, CreateOrEditCategoryRequestModel requestModel);
 
-        Task<CommandResponse<bool>> EditCategoryAsync(int id, CreateOrEditCategoryRequestModel requestModel);
+        Task<CommandResponse<bool>> EditCategoryAsync(int categoryId, CreateOrEditCategoryRequestModel requestModel);
 
-        Task<CommandResponse<bool>> ActivateCategoryAsync(int id, bool isActivateCommand, bool shouldBeCascade);
+        Task<CommandResponse<bool>> ActivateCategoryAsync(int categoryId, bool isActivateCommand, bool shouldBeCascade);
 
         Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo);
     }

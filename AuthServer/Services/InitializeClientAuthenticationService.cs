@@ -42,22 +42,6 @@ namespace AuthServer.Services
                 }
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
-            if (!dbContext.ApiResources.Any())
-            {
-                foreach (var apiResource in ClientAuthConfig.ApiResources)
-                {
-                    dbContext.ApiResources.Add(apiResource.ToEntity());
-                }
-                await dbContext.SaveChangesAsync(cancellationToken);
-            }
-            if (!dbContext.ApiScopes.Any())
-            {
-                foreach (var apiScope in ClientAuthConfig.ApiScopes)
-                {
-                    dbContext.ApiScopes.Add(apiScope.ToEntity());
-                }
-                await dbContext.SaveChangesAsync(cancellationToken);
-            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

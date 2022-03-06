@@ -4,7 +4,7 @@ using Shared.Models;
 
 namespace ShopProductService.Commands.Product
 {
-    public class FindAllProductQuery : IRequest<PaginatedList<ProductDTO>>
+    public abstract class FindProductsQuery : IRequest<PaginatedList<ProductDTO>>
     {
         public PaginationInfo PaginationInfo { get; set; } = PaginationInfo.Default;
     }

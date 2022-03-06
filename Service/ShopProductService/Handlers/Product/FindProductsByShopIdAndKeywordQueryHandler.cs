@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Product
 {
-    public class FindProductsByKeywordQueryHandler : 
-        IRequestHandler<FindProductsByKeywordQuery, PaginatedList<ProductDTO>>, IDisposable
+    public class FindProductsByShopIdAndKeywordQueryHandler :
+        IRequestHandler<FindProductsByShopIdAndKeywordQuery, PaginatedList<ProductDTO>>, IDisposable
     {
         private readonly IProductRepository _repository;
 
-        public FindProductsByKeywordQueryHandler(IProductRepository repository)
+        public FindProductsByShopIdAndKeywordQueryHandler(IProductRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<PaginatedList<ProductDTO>> Handle(FindProductsByKeywordQuery request,
+        public async Task<PaginatedList<ProductDTO>> Handle(FindProductsByShopIdAndKeywordQuery request,
             CancellationToken cancellationToken)
         {
-            return await _repository.FindProductsAsync(request.Keyword, request.PaginationInfo);
+            return await _repository.FindProductsOfShopAsync(request.ShopId, request.Keyword, request.PaginationInfo);
         }
 
         public void Dispose()

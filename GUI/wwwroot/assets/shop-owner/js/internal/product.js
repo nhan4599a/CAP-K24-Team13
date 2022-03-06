@@ -29,12 +29,14 @@
 function loadProducts(keyword, pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
-    findProducts(keyword, pageNumber, pageSize).then((paginatedData) => {
-        onLoadProductsCompleted(paginatedData);
-        animationLoader.hideAnimation();
-    }).catch(() => {
-        animationLoader.hideAnimation();
-        toastr.error('Failed to load list of products', 'Error');
+    getShopId().then(shopId => {
+        findProducts(shopId, keyword, pageNumber, pageSize).then((paginatedData) => {
+            onLoadProductsCompleted(paginatedData);
+            animationLoader.hideAnimation();
+        }).catch(() => {
+            animationLoader.hideAnimation();
+            toastr.error('Failed to load list of products', 'Error');
+        });
     });
 }
 
@@ -157,7 +159,7 @@ function getCurrentPageInfo() {
     let queryObj = url.searchParams;
     let currentPageNumber = queryObj.get('pageNumber') ? parseInt(queryObj.get('pageNumber')) : 1;
     let currentPageSize = queryObj.get('pageSize') ? parseInt(queryObj.get('pageSize')) : 5;
-    let currentKeyword = queryObj.get('keyword') ? queryObj.get('keyword') : '';
+    let currentKeyword = queryObj.get('keyword') ? queryObj.get('keyword') : null;
     return {
         pageNumber: currentPageNumber,
         pageSize: currentPageSize,

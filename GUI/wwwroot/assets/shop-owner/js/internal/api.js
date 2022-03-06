@@ -2,12 +2,12 @@
 axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000';
 
 axios.interceptors.request.use(async config => {
-    if (config.url != 'https://cap-k24-team13.herokuapp.com/authentication/token') {
+    if (config.url.startsWith('https://cap-k24-team13.herokuapp.com/')) {
         let accessToken = await getAccessToken();
         config.headers.Authorization = `Bearer ${accessToken}`
     }
     return Promise.resolve(config);
-})
+});
 
 axios.interceptors.response.use(axiosResp => {
     if (axiosResp.data instanceof Blob)
@@ -25,24 +25,19 @@ const cartEndpoint = '/cart'
 const interfaceEndpoint = '/interfaces';
 const checkoutEndpoint = '/checkout';
 const ratingProductEndpoint = '/rating';
-const orderEndpoint = '/orders'
+const orderEndpoint = '/orders';
 
-function findProducts(keyword, pageNumber, pageSize) {
-    if (keyword === null || keyword === '')
-        return axios.get(productEndpoint + '/search', {
-            params: {
-                'paginationInfo.pageNumber': pageNumber,
-                'paginationInfo.pageSize': pageSize
-            }
-        });
-    else
-        return axios.get(productEndpoint + '/search', {
-            params: {
-                keyword: encodeURIComponent(keyword),
-                'paginationInfo.pageNumber': pageNumber,
-                'paginationInfo.pageSize:': pageSize || 5
-            }
-        });
+function findProducts(shopId, keyword, pageNumber, pageSize) {
+    const acctualEndpoint = productEndpoint + (shopId ? `/shop/${shopId}/` : '/') + 'search';
+    const params = {
+        'paginationInfo.pageNumber': pageNumber,
+        'paginationInfo.pageSize': pageSize || 5
+    };
+    if (keyword)
+        params.keyword = encodeURIComponent(keyword);
+    return axios.get(acctualEndpoint, {
+        params
+    });
 }
 
 function getProductImageUrl(imageFileName) {
@@ -72,20 +67,22 @@ function addProduct(formData) {
     });
 }
 
-function editProduct(id, formData) {
-    return axios.put(productEndpoint + `/${id}`, formData, {
+function editProduct(productId, formData) {
+    return axios.put(`${productEndpoint}/${productId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     });
 }
 
-function getAllCategories() {
-    return axios.get(categoryEndpoint).then(paginatedResponse => paginatedResponse.data);
+function getAllCategories(shopId) {
+    const actualEndpoint = categoryEndpoint + (shopId ? `/shop/${shopId}` : '');
+    return axios.get(actualEndpoint).then(paginatedResponse => paginatedResponse.data);
 }
 
-function getCategories(pageNumber, pageSize) {
-    return axios.get(categoryEndpoint, {
+function getCategories(shopId, pageNumber, pageSize) {
+    const actualEndpoint = categoryEndpoint + (shopId ? `/shop/${shopId}` : '');
+    return axios.get(actualEndpoint, {
         params: {
             pageNumber: pageNumber,
             pageSize: pageSize || 5
@@ -120,18 +117,16 @@ function activateCategory(activateCommand) {
     );
 }
 
-async function addCategory(formData) {
-    let accessToken = await getAccessToken();
-    return axios.post(categoryEndpoint, formData, {
+function addCategory(shopId, formData) {
+    return axios.post(`${categoryEndpoint}/shop/${shopId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`
         }
     });
 }
 
-function editCategory(id, formData) {
-    return axios.put(categoryEndpoint + `/${id}`, formData, {
+function editCategory(categoryId, formData) {
+    return axios.put(`${categoryEndpoint}/${categoryId}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -176,7 +171,7 @@ function addProductToCart(userId, productId, quantity) {
     formData.append('userId', userId);
     formData.append('productId', productId);
     formData.append('quantity', quantity);
-    return axios.post(`${cartEndpoint}`, formData);
+    return axios.post(cartEndpoint, formData);
 }
 
 function updateCartQuantity(userId, productId, quantity) {
@@ -184,7 +179,7 @@ function updateCartQuantity(userId, productId, quantity) {
     formData.append('userId', userId);
     formData.append('productId', productId);
     formData.append('quantity', quantity);
-    return axios.put(`${cartEndpoint}`, formData);
+    return axios.put(cartEndpoint, formData);
 }
 
 function removeProductInCart(userId, productId) {

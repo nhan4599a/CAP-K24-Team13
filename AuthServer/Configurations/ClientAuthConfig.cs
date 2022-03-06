@@ -31,7 +31,7 @@ namespace AuthServer.Configurations
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.OfflineAccess,
-                    "product.api", "interface.api", "order.api", "checkout.api", "rating.api", "roles", "shop"
+                    "roles", "shop"
                 },
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
@@ -60,134 +60,6 @@ namespace AuthServer.Configurations
                 {
                     "ShopId"
                 }
-            }
-        };
-
-        public static IEnumerable<ApiResource> ApiResources => new[]
-        {
-            new ApiResource
-            {
-                Name = "product",
-                DisplayName = "Product API",
-                Description = "Allow the application to access product API",
-                Scopes = new[]
-                {
-                    "product.api"
-                },
-                ApiSecrets = new[]
-                {
-                    new Secret("CapK24Team13".Sha256())
-                },
-                UserClaims =
-                {
-                    JwtClaimTypes.Role, "ShopId"
-                }
-            },
-            new ApiResource
-            {
-                Name = "interface",
-                DisplayName = "Interface API",
-                Description = "Allow the application to access interface API",
-                Scopes = new[]
-                {
-                    "interface.api"
-                },
-                ApiSecrets = new[]
-                {
-                    new Secret("CapK24Team13".Sha256())
-                },
-                UserClaims =
-                {
-                    JwtClaimTypes.Role, "ShopId"
-                }
-            },
-            new ApiResource
-            {
-                Name = "order",
-                DisplayName = "Order API",
-                Description = "Allow the application to access order API",
-                Scopes = new[]
-                {
-                    "order.api"
-                },
-                ApiSecrets = new[]
-                {
-                    new Secret("CapK24Team13".Sha256())
-                },
-                UserClaims =
-                {
-                    JwtClaimTypes.Role, "ShopId"
-                }
-            },
-            new ApiResource
-            {
-                Name = "checkout",
-                DisplayName = "Checkout API",
-                Description = "Allow the application to access checkout API",
-                Scopes = new[]
-                {
-                    "checkout.api"
-                },
-                ApiSecrets = new[]
-                {
-                    new Secret("CapK24Team13".Sha256())
-                },
-                UserClaims =
-                {
-                    JwtClaimTypes.Role, "ShopId"
-                }
-            },
-            new ApiResource
-            {
-                Name = "rating",
-                DisplayName = "Rating API",
-                Description = "Allow the application to access rating API",
-                Scopes = new[]
-                {
-                    "rating.api"
-                },
-                ApiSecrets = new[]
-                {
-                    new Secret("CapK24Team13".Sha256())
-                },
-                UserClaims =
-                {
-                    JwtClaimTypes.Role, "ShopId"
-                }
-            }
-        };
-
-        public static IEnumerable<ApiScope> ApiScopes => new[]
-        {
-            new ApiScope
-            {
-                Name = "product.api",
-                DisplayName = "product.api",
-                Description = "Allow application to have access permission on product API"
-            },
-            new ApiScope
-            {
-                Name = "interface.api",
-                DisplayName = "interface.api",
-                Description = "Allow application to have write permission on interface API"
-            },
-            new ApiScope
-            {
-                Name = "order.api",
-                DisplayName = "order.api",
-                Description = "Allow application to have write permission on order API"
-            },
-            new ApiScope
-            {
-                Name = "checkout.api",
-                DisplayName = "checkout.api",
-                Description = "Allow application to have write permission on checkout API"
-            },
-            new ApiScope
-            {
-                Name = "rating.api",
-                DisplayName = "rating.api",
-                Description = "Allow application to have write permission on rating API"
             }
         };
     }

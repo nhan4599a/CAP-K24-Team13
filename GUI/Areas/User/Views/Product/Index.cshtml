@@ -5,29 +5,33 @@
 <style>
     .rating {
         display: flex;
-        flex-direction: row-reverse;
         justify-content: center
     }
 
         .rating > label {
             position: relative;
             width: 1em;
-            font-size: 6vw;
+            font-size: 1vw;
             color: #FFD600;
         }
 
             .rating > label.selected {
-                opacity: 0
+                opacity: 1
             }
 
             .rating > label.unselected {
-                opacity: 1
+                opacity: 0.4
             }
 
             .rating > label::before {
                 content: "\2605";
                 position: absolute;
                 opacity: 0
+            }
+
+            .rating > label:before,
+            .rating > label ~ label:before {
+                opacity: 1 !important
             }
 </style>
 }
@@ -149,7 +153,7 @@
                                             <div class="card-header" id="product-review-heading">
                                                 <h2 class="card-title">
                                                     <a role="button" data-toggle="collapse" href="#product-accordion-review" aria-expanded="true" aria-controls="product-accordion-review">
-                                                        Reviews (2)
+                                                        Reviews (@Model.Comments.Count)
                                                     </a>
                                                 </h2>
                                             </div><!-- End .card-header -->
@@ -160,35 +164,23 @@
                                                         {
                                                             <div class="review">
                                                                 <div class="row no-gutters">
-                                                                    <div class="col-auto">
+                                                                    <div class="col-auto" style="width: 150px">
                                                                         <h4><a href="#">@item.UserName</a></h4>
                                                                         <div class="ratings-container">
-                                                                            <div class="ratings">
-                                                                                <div class="rating">
-                                                                                    @*<input value="5" id="5">
-                                                                                        <label for="5">☆</label>
-                                                                                        <input value="4" id="4">
-                                                                                        <label for="4">☆</label>
-                                                                                        <input value="3" id="3">
-                                                                                        <label for="3">☆</label>
-                                                                                        <input value="2" id="2">
-                                                                                        <label for="2">☆</label>
-                                                                                        <input value="1" id="1">
-                                                                                        <label for="1">☆</label>*@
-                                                                                    @for (var i = 1; i <= item.Star; i++)
-                                                                                    {
-                                                                                        <label class="selected">☆</label>
-                                                                                    }
-                                                                                    @for (var i = item.Star + 1; i <= 5; i++)
-                                                                                    {
-                                                                                        <label class="unselected">☆</label>
-                                                                                    }
-                                                                                </div>
+                                                                            <div class="rating">
+                                                                                @for (var i = 1; i <= item.Star; i++)
+                                                                                {
+                                                                                    <label class="selected">☆</label>
+                                                                                }
+                                                                                @for (var i = item.Star + 1; i <= 5; i++)
+                                                                                {
+                                                                                    <label class="unselected">☆</label>
+                                                                                }
                                                                             </div>
                                                                         </div><!-- End .rating-container -->
-                                                                    <span class="review-date">@((DateTime.Now - item.CreatedDate).ToString(""))</span>
+                                                                        <span class="review-date">@((DateTime.Now - item.CreatedDate).ToString("c"))</span>
                                                                     </div><!-- End .col -->
-                                                                <div class="col">
+                                                                    <div class="col">
                                                                         <div class="review-content">
                                                                             <p>@item.Message</p>
                                                                         </div>

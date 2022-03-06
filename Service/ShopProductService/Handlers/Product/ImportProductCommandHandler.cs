@@ -19,7 +19,7 @@ namespace ShopProductService.Handlers.Product
 
         public async Task<CommandResponse<int>> Handle(ImportProductCommand request, CancellationToken cancellationToken)
         {
-            return await _repository.UpdateQuantityAsync(request.ProductId, request.Quantity);
+            return await _repository.ImportProductQuantityAsync(request.ProductId, request.Quantity);
         }
 
         public void Dispose()

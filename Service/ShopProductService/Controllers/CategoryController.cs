@@ -1,6 +1,5 @@
 using AspNetCoreSharedComponent.FileValidations;
 using AspNetCoreSharedComponent.ModelBinders;
-using DatabaseAccessor;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,6 @@ using Shared.Models;
 using Shared.RequestModels;
 using Shared.Validations;
 using ShopProductService.Commands.Category;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -24,24 +22,6 @@ namespace ShopProductService.Controllers
         private readonly IFileStorable _fileStore;
 
         private readonly FileValidationRuleSet _rules;
-
-        private readonly static PaginatedList<CategoryDTO> FakeCategories = new List<CategoryDTO>
-        {
-            new CategoryDTO
-            {
-                Id = -5,
-                CategoryName = "category 1",
-                IsDisabled = false,
-                Image = ""
-            },
-            new CategoryDTO
-            {
-                Id = -4,
-                CategoryName = "category 2",
-                IsDisabled = false,
-                Image = ""
-            }
-        }.Paginate(1, 2);
         
         public CategoryController(IMediator mediator, IFileStorable fileStore)
         {
@@ -56,9 +36,9 @@ namespace ShopProductService.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        [ActionName("Add")]
-        public async Task<ApiResult> AddCategory([FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
+        [HttpPost("shop/{shopId}")]
+        public async Task<ApiResult> AddCategory(int shopId, 
+            [FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
         {
             try
             {
@@ -70,6 +50,7 @@ namespace ShopProductService.Controllers
             }
             var response = await _mediator.Send(new AddCategoryCommand
             {
+                ShopId = shopId,
                 RequestModel = requestModel
             });
             if (!response.IsSuccess)
@@ -77,12 +58,12 @@ namespace ShopProductService.Controllers
             return ApiResult<bool>.CreateSucceedResult(true);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ApiResult> GetCategory(int id)
+        [HttpGet("{categoryId}")]
+        public async Task<ApiResult> GetCategory(int categoryId)
         {
             var category = await _mediator.Send(new FindCategoryByIdQuery
             {
-                Id = id
+                Id = categoryId
             });
             if (category == null)
                 return ApiResult.CreateErrorResult(404, "Category is not found");
@@ -90,13 +71,14 @@ namespace ShopProductService.Controllers
         }
 
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<ApiResult> EditCategory(int id,
+        [HttpPut("{categoryId}")]
+        public async Task<ApiResult> EditCategory(int categoryId,
             [FromForm(Name = "requestModel")] CreateOrEditCategoryRequestModel requestModel)
         {
             try
             {
-                requestModel.ImagePath = await _fileStore.EditFileAsync(requestModel.ImagePath, Request.Form.Files[0], rules: _rules);
+                requestModel.ImagePath = await _fileStore.EditFileAsync(requestModel.ImagePath,
+                    Request.Form.Files[0], rules: _rules);
             }
             catch (ImageValidationException ex)
             {
@@ -104,7 +86,7 @@ namespace ShopProductService.Controllers
             }
             var response = await _mediator.Send(new EditCategoryCommand
             {
-                Id = id,
+                Id = categoryId,
                 RequestModel = requestModel
             });
             if (!response.IsSuccess)
@@ -113,26 +95,35 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet]
-        [ActionName("Index")]
-        public async Task<ApiResult> ListCategory([FromQuery] PaginationInfo paginationInfo)
+        public async Task<ApiResult> GetAllCategories([FromQuery] PaginationInfo paginationInfo)
         {
-            var categories = await _mediator.Send(new FindAllCategoryQuery
+            var categories = await _mediator.Send(new FindAllCategoriesQuery
             {
                 PaginationInfo = paginationInfo
             });
             return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(categories);
         }
 
+        [HttpGet("shop/{shopId}")]
+        public async Task<ApiResult> GetCategoriesOfShop(int shopId, [FromQuery] PaginationInfo paginationInfo)
+        {
+            var categories = await _mediator.Send(new FindCategoriesByShopIdQuery
+            {
+                ShopId = shopId,
+                PaginationInfo = paginationInfo
+            });
+            return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(categories);
+        }
+
         [Authorize]
-        [HttpDelete("{id}")]
-        [ActionName("Delete")]
-        public async Task<ApiResult> DeleteCategory(int id,
-            [FromQuery] DeleteAction action, 
+        [HttpDelete("{categoryId}")]
+        public async Task<ApiResult> DeleteCategory(int categoryId,
+            [FromQuery] DeleteAction action,
             [FromQuery(Name = "cascade")][ModelBinder(BinderType = typeof(IntToBoolModelBinder))] bool shouldBeCascade)
         {
             var response = await _mediator.Send(new ActivateCategoryCommand
             {
-                Id = id,
+                Id = categoryId,
                 IsActivateCommand = action == DeleteAction.Activate,
                 ShouldBeCascade = action == DeleteAction.Deactivate || shouldBeCascade
             });
@@ -141,14 +132,12 @@ namespace ShopProductService.Controllers
             return ApiResult<bool>.CreateSucceedResult(true);
         }
 
-        [HttpGet("shop/{id}")]
-        public async Task<ApiResult> GetCategoriesOfShop(int id)
+        [HttpGet("shop/{shopId}")]
+        public async Task<ApiResult> GetCategoriesOfShop(int shopId)
         {
-            if (id != 0)
-                return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(FakeCategories);
             var result = await _mediator.Send(new FindCategoriesByShopIdQuery
             {
-                ShopId = id
+                ShopId = shopId
             });
             return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(result);
         }
@@ -159,7 +148,7 @@ namespace ShopProductService.Controllers
         {
             var fileResponse = _fileStore.GetFile(image);
             if (!fileResponse.IsExisted)
-                return StatusCode(404);
+                return NotFound();
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
     }

@@ -296,15 +296,15 @@ namespace TestShopProductService
         public async void TestFindAllProductSuccess()
         {
             var paginatedList = new PaginatedList<ProductDTO>(new List<ProductDTO>(), 1, 10, 0);
-            var requestModel = new SearchRequestModel { Keyword = string.Empty, PaginationInfo = new PaginationInfo() };
+            var requestModel = new SearchRequestModel { Keyword = string.Empty, PageSize = 5, PageNumber = 1 };
             var mediatorMock = new Mock<IMediator>();
             mediatorMock
-                .Setup(e => e.Send(It.IsAny<FindAllProductQuery>(), CancellationToken.None))
+                .Setup(e => e.Send(It.IsAny<FindAllProductsQuery>(), CancellationToken.None))
                 .ReturnsAsync(paginatedList);
 
             var controller = new ProductController(mediatorMock.Object, null);
 
-            var result = await controller.ListProduct(requestModel);
+            var result = await controller.FindProducts(requestModel);
 
             Assert.NotNull(result);
             Assert.Equal(200, result.ResponseCode);
@@ -320,7 +320,7 @@ namespace TestShopProductService
         public async void TestFindProductsByKeywordSuccess()
         {
             var paginatedList = new PaginatedList<ProductDTO>(new List<ProductDTO>(), 1, 10, 0);
-            var requestModel = new SearchRequestModel { Keyword = "abc", PaginationInfo = new PaginationInfo() };
+            var requestModel = new SearchRequestModel { Keyword = "abc", PageSize = 5, PageNumber = 1 };
             var mediatorMock = new Mock<IMediator>();
             mediatorMock
                 .Setup(e => e.Send(It.IsAny<FindProductsByKeywordQuery>(), CancellationToken.None))
@@ -328,7 +328,7 @@ namespace TestShopProductService
 
             var controller = new ProductController(mediatorMock.Object, null);
 
-            var result = await controller.ListProduct(requestModel);
+            var result = await controller.FindProducts(requestModel);
 
             Assert.NotNull(result);
             Assert.Equal(200, result.ResponseCode);

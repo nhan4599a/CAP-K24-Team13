@@ -1,6 +1,6 @@
 ﻿namespace ShopProductService.Commands.Product
 {
-    public class FindProductsByKeywordQuery : FindProductsQuery
+    public class FindProductsByShopIdAndKeywordQuery : FindProductsByShopIdQuery
     {
         public string Keyword { get; set; }
     }

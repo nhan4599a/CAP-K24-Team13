@@ -24,17 +24,17 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper ?? Mapper.GetInstance();
         }
 
-        public async Task<ProductWithCommentsDTO> GetProductAsync(Guid id)
+        public async Task<ProductWithCommentsDTO> GetProductAsync(Guid productId)
         {
-            return _mapper.MapToProductWithCommentsDTO(await FindProductByIdAsync(id));
+            return _mapper.MapToProductWithCommentsDTO(await FindProductByIdAsync(productId));
         }
 
-        public async Task<MinimalProductDTO> GetMinimalProductAsync(Guid id)
+        public async Task<MinimalProductDTO> GetMinimalProductAsync(Guid productId)
         {
-            return _mapper.MapToMinimalProductDTO(await FindProductByIdAsync(id));
+            return _mapper.MapToMinimalProductDTO(await FindProductByIdAsync(productId));
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> FindProductsAsync(string keyword, PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
                 .Where(product => product.ProductName.Contains(keyword)
@@ -46,7 +46,7 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking()
-                .Include(e => e.Category)
+                .Include(product => product.Category)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -83,9 +83,9 @@ namespace DatabaseAccessor.Repositories
             }
         }
 
-        public async Task<CommandResponse<bool>> ActivateProductAsync(Guid id, bool isActivateCommand)
+        public async Task<CommandResponse<bool>> ActivateProductAsync(Guid productId, bool isActivateCommand)
         {
-            var product = await FindProductByIdAsync(id);
+            var product = await FindProductByIdAsync(productId);
             if (product == null)
                 return CommandResponse<bool>.Error("Product is not found", null);
             if (isActivateCommand && !product.IsDisabled)
@@ -100,9 +100,10 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(isActivateCommand);
         }
 
-        public async Task<CommandResponse<ProductDTO>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel)
+        public async Task<CommandResponse<ProductDTO>> EditProductAsync(Guid productId,
+            CreateOrEditProductRequestModel requestModel)
         {
-            var product = await FindProductByIdAsync(id);
+            var product = await FindProductByIdAsync(productId);
             if (product == null)
                 return CommandResponse<ProductDTO>.Error("Product is not found", null);
             if (product.IsDisabled)
@@ -121,29 +122,7 @@ namespace DatabaseAccessor.Repositories
             }
         }
 
-        private async Task<ShopProduct> FindProductByIdAsync(Guid id)
-        {
-            return await _dbContext.ShopProducts.FindAsync(id);
-        }
-
-        public async Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo paginationInfo)
-        {
-            var result = await _dbContext.ShopProducts
-                .AsNoTracking()
-                .Include(e => e.Category)
-                .Where(product => product.Category.ShopId == shopId)
-                .Select(product => _mapper.MapToProductDTO(product))
-                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
-            return result;
-        }
-
-        public void Dispose()
-        {
-            _dbContext.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
-        public async Task<CommandResponse<int>> UpdateQuantityAsync(Guid productId, int quantity)
+        public async Task<CommandResponse<int>> ImportProductQuantityAsync(Guid productId, int quantity)
         {
             var product = await FindProductByIdAsync(productId);
             if (product == null)
@@ -159,6 +138,41 @@ namespace DatabaseAccessor.Repositories
             product.Quantity = newQuantity;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<int>.Success(newQuantity);
+        }
+
+        public async Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo paginationInfo)
+        {
+            var result = await _dbContext.ShopProducts
+                .AsNoTracking()
+                .Include(product => product.Category)
+                .Where(product => product.Category.ShopId == shopId)
+                .Select(product => _mapper.MapToProductDTO(product))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+            return result;
+        }
+
+        public async Task<PaginatedList<ProductDTO>> FindProductsOfShopAsync(int shopId, string keyword, PaginationInfo paginationInfo)
+        {
+            var result = await _dbContext.ShopProducts
+                .AsNoTracking()
+                .Include(product => product.Category)
+                .Where(product => product.Category.ShopId == shopId &&
+                    (product.ProductName.Contains(keyword)
+                        || product.Category.CategoryName.Contains(keyword)))
+                .Select(product => _mapper.MapToProductDTO(product))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+            return result;
+        }
+
+        private async Task<ShopProduct> FindProductByIdAsync(Guid id)
+        {
+            return await _dbContext.ShopProducts.FindAsync(id);
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

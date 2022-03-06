@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
+using StatisticService.Commands;
+using System.Threading.Tasks;
 
 namespace StatisticService.Controllers
 {
@@ -16,9 +18,14 @@ namespace StatisticService.Controllers
         }
 
         [HttpGet("orders")]
-        public async ApiResult StatisticOrder(StatisticStrategy strategy, OrderStatusField field)
+        public async Task<ApiResult> StatisticOrder(StatisticStrategy strategy, OrderStatusField field)
         {
-
+            var result = await _mediator.Send(new OrderStatisticCommand
+            {
+                Strategy = strategy,
+                Field = field
+            });
+            return ApiResult<StatisticResult>.CreateSucceedResult(result);
         }
     }
 }

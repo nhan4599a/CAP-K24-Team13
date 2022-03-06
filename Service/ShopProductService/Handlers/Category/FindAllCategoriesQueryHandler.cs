@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Category
 {
-    public class FindAllCategoryQueryHandler : 
-        IRequestHandler<FindAllCategoryQuery, PaginatedList<CategoryDTO>>, IDisposable
+    public class FindAllCategoriesQueryHandler : 
+        IRequestHandler<FindAllCategoriesQuery, PaginatedList<CategoryDTO>>, IDisposable
     {
         private readonly ICategoryRepository _repository;
 
-        public FindAllCategoryQueryHandler(ICategoryRepository repository)
+        public FindAllCategoriesQueryHandler(ICategoryRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<PaginatedList<CategoryDTO>> Handle(FindAllCategoryQuery request,
+        public async Task<PaginatedList<CategoryDTO>> Handle(FindAllCategoriesQuery request,
             CancellationToken cancellationToken)
         {
-            return await _repository.GetAllCategoryAsync(request.PaginationInfo);
+            return await _repository.GetAllCategoriesAsync(request.PaginationInfo);
         }
 
         public void Dispose()

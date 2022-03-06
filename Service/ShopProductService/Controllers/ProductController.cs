@@ -33,7 +33,8 @@ namespace ShopProductService.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ApiResult> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+        public async Task<ApiResult> AddProduct(
+            [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
             try
             {
@@ -53,8 +54,9 @@ namespace ShopProductService.Controllers
         }
 
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<ApiResult> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+        [HttpPut("{productId}")]
+        public async Task<ApiResult> EditProduct(string productId, 
+            [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
             try
             {
@@ -66,7 +68,7 @@ namespace ShopProductService.Controllers
             }
             var response = await _mediator.Send(new EditProductCommand
             {
-                Id = Guid.Parse(id),
+                Id = Guid.Parse(productId),
                 RequestModel = requestModel
             });
             if (!response.IsSuccess)
@@ -75,12 +77,12 @@ namespace ShopProductService.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ApiResult> DeleteProduct(string id, [FromQuery] DeleteAction action)
+        [HttpDelete("{productId}")]
+        public async Task<ApiResult> DeleteProduct(string productId, [FromQuery] DeleteAction action)
         {
             var response = await _mediator.Send(new ActivateProductCommand
             {
-                Id = Guid.Parse(id),
+                Id = Guid.Parse(productId),
                 IsActivateCommand = action == DeleteAction.Activate,
             });
             if (!response.IsSuccess)
@@ -88,48 +90,76 @@ namespace ShopProductService.Controllers
             return ApiResult<bool>.CreateSucceedResult(response.Response);
         }
 
-        [HttpGet("shop/{shopId}")]
-        public async Task<ApiResult> GetProductsOfShop(int shopId)
+        [HttpGet("shop/{shopId}/search")]
+        public async Task<ApiResult> GetProductsOfShop(int shopId, [FromQuery] SearchRequestModel requestModel)
         {
-            var response = await _mediator.Send(new FindProductsByShopIdQuery
-            {
-                ShopId = shopId
-            });
+            IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrWhiteSpace(requestModel.Keyword)
+                ? new FindProductsByShopIdQuery
+                {
+                    ShopId = shopId,
+                    PaginationInfo = new PaginationInfo
+                    {
+                        PageNumber = requestModel.PageNumber,
+                        PageSize = requestModel.PageSize
+                    }
+                }
+                : new FindProductsByShopIdAndKeywordQuery
+                {
+                    ShopId = shopId,
+                    Keyword = requestModel.Keyword,
+                    PaginationInfo = new PaginationInfo
+                    {
+                        PageNumber = requestModel.PageNumber,
+                        PageSize = requestModel.PageSize
+                    }
+                };
+            var response = await _mediator.Send(request);
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(response);
         }
 
         [HttpGet("search")]
-        public async Task<ApiResult> ListProduct([FromQuery] SearchRequestModel requestModel)
+        public async Task<ApiResult> FindProducts([FromQuery] SearchRequestModel requestModel)
         {
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
-                ? new FindAllProductQuery { PaginationInfo = requestModel.PaginationInfo }
+                ? new FindAllProductsQuery
+                { 
+                    PaginationInfo = new PaginationInfo
+                    {
+                        PageNumber = requestModel.PageNumber,
+                        PageSize = requestModel.PageSize
+                    }
+                }
                 : new FindProductsByKeywordQuery
                 {
                     Keyword = requestModel.Keyword,
-                    PaginationInfo = requestModel.PaginationInfo
+                    PaginationInfo = new PaginationInfo
+                    {
+                        PageNumber = requestModel.PageNumber,
+                        PageSize = requestModel.PageSize
+                    }
                 };
             var productList = await _mediator.Send(request);
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productList);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ApiResult> GetSingleProduct(string id)
+        [HttpGet("{productId}")]
+        public async Task<ApiResult> GetSingleProduct(string productId)
         {
             var product = await _mediator.Send(new FindProductByIdQuery
             {
-                Id = Guid.Parse(id)
+                Id = Guid.Parse(productId)
             });
             if (product == null)
                 return ApiResult.CreateErrorResult(404, "Product is not found");
             return ApiResult<ProductWithCommentsDTO>.CreateSucceedResult((ProductWithCommentsDTO) product);
         }
 
-        [HttpGet("less/{id}")]
-        public async Task<ApiResult> GetMinimalSingleProduct(string id)
+        [HttpGet("less/{productId}")]
+        public async Task<ApiResult> GetMinimalSingleProduct(string productId)
         {
             var product = await _mediator.Send(new FindProductByIdQuery
             {
-                Id = Guid.Parse(id),
+                Id = Guid.Parse(productId),
                 IsMinimal = true
             });
             if (product == null)
@@ -137,6 +167,7 @@ namespace ShopProductService.Controllers
             return ApiResult<MinimalProductDTO>.CreateSucceedResult(product);
         }
 
+        [Authorize]
         [HttpPost("{productId}/import")]
         public async Task<ApiResult> ImportProduct(string productId, [FromBody] int importedQuantity)
         {

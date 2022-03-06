@@ -57,7 +57,7 @@ namespace ShopProductService.Controllers
         public ApiResult FindShops([FromQuery] SearchRequestModel requestModel)
         {
             var result = FakeShops.Where(shop => shop.Name.ToLower().Contains(requestModel.Keyword.ToLower()))
-                .Paginate(requestModel.PaginationInfo.PageNumber, requestModel.PaginationInfo.PageSize);
+                .Paginate(requestModel.PageNumber, requestModel.PageSize);
             return ApiResult<PaginatedList<ShopDTO>>.CreateSucceedResult(result);
         }
 

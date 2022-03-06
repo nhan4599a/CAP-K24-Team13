@@ -16,12 +16,14 @@
 function loadCategories(pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation();
-    getCategories(pageNumber, pageSize).then((paginatedData) => {
-        onCategoriesLoaded(paginatedData);
-        animationLoader.hideAnimation();
-    }).catch(() => {
-        animationLoader.hideAnimation();
-        toastr.error('Failed to load categories', 'Error');
+    getShopId().then(shopId => {
+        getCategories(shopId, pageNumber, pageSize).then((paginatedData) => {
+            onCategoriesLoaded(paginatedData);
+            animationLoader.hideAnimation();
+        }).catch(() => {
+            animationLoader.hideAnimation();
+            toastr.error('Failed to load categories', 'Error');
+        });
     });
 }
 

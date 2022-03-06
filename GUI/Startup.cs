@@ -57,11 +57,6 @@ namespace GUI
                 options.ResponseType = "code";
                 options.UsePkce = true;
                 options.ResponseMode = "query";
-                options.Scope.Add("product.api");
-                options.Scope.Add("interface.api");
-                options.Scope.Add("checkout.api");
-                options.Scope.Add("order.api");
-                options.Scope.Add("rating.api");
                 options.Scope.Add("offline_access");
                 options.Scope.Add("roles");
                 options.Scope.Add("shop");
