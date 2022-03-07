@@ -7,7 +7,7 @@ namespace ShopProductService.Validations
     {
         public SearchProductRequestModelValidator()
         {
-            RuleFor(e => e.PageNumber).GreaterThanOrEqualTo(1);
+            RuleFor(e => e.PageNumber).GreaterThanOrEqualTo(1).When(e => e.PageSize >= 1);
         }
     }
 }
