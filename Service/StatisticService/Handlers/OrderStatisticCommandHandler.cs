@@ -19,12 +19,9 @@ namespace StatisticService.Handlers
     {
         private readonly IInvoiceRepository _repository;
 
-        private readonly ILogger<OrderStatisticCommandHandler> _logger;
-
-        public OrderStatisticCommandHandler(IInvoiceRepository repository, ILoggerFactory loggerFactory)
+        public OrderStatisticCommandHandler(IInvoiceRepository repository)
         {
             _repository = repository;
-            _logger = loggerFactory.CreateLogger<OrderStatisticCommandHandler>();
         }
 
         public Task<StatisticResult<Invoice>> Handle(OrderStatisticCommand request, CancellationToken cancellationToken)
@@ -63,7 +60,6 @@ namespace StatisticService.Handlers
                     lowestDate = group.Key;
                 }
                 var statisticDateResult = new StatisticDateResult(request.Strategy, group.Key.ToDateOnly());
-                _logger.LogInformation("Added actual key {0}", statisticDateResult);
                 statisticResultItems.Add(statisticDateResult, new StatisticResultItem
                 {
                     Data = new StatisticResultItemData
@@ -77,36 +73,32 @@ namespace StatisticService.Handlers
                     ActualIncome = actualIncome
                 });
             }
-            _logger.LogInformation("Actual keys: {0}", statisticResultItems.Keys.Count);
             if (request.Strategy == StatisticStrategy.ByDay)
             {
-                _logger.LogInformation("Statistic by day");
                 for (int i = 1; i <= DateTime.Now.Day; i++)
                 {
                     var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, currentMonth, i));
                     var statisticDateResult = new StatisticDateResult(request.Strategy, dateOnlyObj);
                     var addResult = statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
-                    _logger.LogInformation("Add key {0}: {1}", statisticDateResult.ToString(), addResult);
                 }
             }
             else
             {
-                _logger.LogInformation("Statistic by month");
                 for (int i = 1; i <= DateTime.Now.Month; i++)
                 {
                     var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, i, 1));
                     var statisticDateResult = new StatisticDateResult(request.Strategy, dateOnlyObj);
                     var addResult = statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
-                    _logger.LogInformation("Add key {0}: {1}", statisticDateResult.ToString(), addResult);
                 }
+            }
+            var finallyResultItems = new Dictionary<string, StatisticResultItem>();
+            foreach (var keyValuePair in statisticResultItems)
+            {
+                finallyResultItems.Add(keyValuePair.Key.ToString(), keyValuePair.Value);
             }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
             {
-                Details = statisticResultItems
-                    .ToDictionary(
-                        e => e.Key.ToString(),
-                        e => e.Value
-                    ),
+                Details = finallyResultItems,
                 HighestIncome = highestIncome,
                 LowestIncome = lowestIncome
             };

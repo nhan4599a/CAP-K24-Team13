@@ -42,10 +42,6 @@ namespace StatisticService
             services.AddMediatR(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-            services.AddSingleton(LoggerFactory.Create(builder =>
-            {
-                builder.AddConsole();
-            }));
             services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {
