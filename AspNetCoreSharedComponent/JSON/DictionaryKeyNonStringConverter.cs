@@ -38,7 +38,9 @@ namespace AspNetCoreSharedComponent.JSON
                 if (!typeToConvert.IsGenericType) return false;
                 if (typeToConvert.GenericTypeArguments[0] == typeof(string)) return false;
                 _logger.LogInformation("typeToConvert: {0}", typeToConvert.FullName);
-                return typeToConvert.GetInterface("IDictionary") != null;
+                var @interface = typeToConvert.GetInterface("IDictionary");
+                _logger.LogInformation("canConvert: {0}", @interface != null);
+                return @interface != null;
             }
 
             public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
