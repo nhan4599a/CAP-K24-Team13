@@ -3,8 +3,6 @@ using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Shared;
 using Shared.Models;
 using StatisticService.Commands;
 using System;
@@ -39,7 +37,8 @@ namespace StatisticService.Handlers
             var lowestIncome = double.MaxValue;
             DateTime? highestDate = null;
             DateTime? lowestDate = null;
-            var statisticResultItems = new SortedDictionary<string, StatisticResultItem>();
+            var statisticResultItems = 
+                new SortedDictionary<StatisticDateResult, StatisticResultItem>(StatisticDateResult.DefaultComparer);
             foreach (var group in groupingResult)
             {
                 var invoiceList = group.ToList();
@@ -59,7 +58,7 @@ namespace StatisticService.Handlers
                     lowestDate = group.Key;
                 }
                 var statisticDateResult = new StatisticDateResult(request.Strategy, group.Key.ToDateOnly());
-                statisticResultItems.Add(statisticDateResult.ToString(), new StatisticResultItem
+                statisticResultItems.Add(statisticDateResult, new StatisticResultItem
                 {
                     Data = new StatisticResultItemData
                     {
@@ -78,7 +77,7 @@ namespace StatisticService.Handlers
                 {
                     var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, currentMonth, i));
                     var statisticDateResult = new StatisticDateResult(request.Strategy, dateOnlyObj);
-                    statisticResultItems.TryAdd(statisticDateResult.ToString(), new StatisticResultItem());
+                    statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
                 }
             }
             else
@@ -87,12 +86,12 @@ namespace StatisticService.Handlers
                 {
                     var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, i, 1));
                     var statisticDateResult = new StatisticDateResult(request.Strategy, dateOnlyObj);
-                    statisticResultItems.TryAdd(statisticDateResult.ToString(), new StatisticResultItem());
+                    statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
                 }
             }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
             {
-                Details = statisticResultItems.ToDictionary(e => e.Key, e => e.Value),
+                Details = statisticResultItems.ToDictionary(e => e.Key.ToString(), e => e.Value),
                 HighestIncome = highestIncome,
                 LowestIncome = lowestIncome
             };

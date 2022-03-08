@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace Shared.Models
@@ -12,7 +11,7 @@ namespace Shared.Models
 
         public DateOnly Result { get; set; }
 
-        public static Comparer DefaultComparer => new Comparer();
+        public static Comparer DefaultComparer => new();
 
         public StatisticDateResult(StatisticStrategy strategy, DateOnly dateOnly)
         {
@@ -28,7 +27,7 @@ namespace Shared.Models
 
         public override int GetHashCode()
         {
-            return Result.GetHashCode();
+            return ToString().GetHashCode();
         }
 
         public int CompareTo(StatisticDateResult obj)
@@ -36,21 +35,11 @@ namespace Shared.Models
             return Result.CompareTo(obj.Result);
         }
 
-        public class Comparer : EqualityComparer<StatisticDateResult>, IComparer<StatisticDateResult>
+        public class Comparer : IComparer<StatisticDateResult>
         {
             public int Compare(StatisticDateResult x, StatisticDateResult y)
             {
                 return x.CompareTo(y);
-            }
-
-            public override bool Equals(StatisticDateResult x, StatisticDateResult y)
-            {
-                return x.CompareTo(y) == 0;
-            }
-
-            public override int GetHashCode([DisallowNull] StatisticDateResult obj)
-            {
-                return obj.GetHashCode();
             }
         }
     }
