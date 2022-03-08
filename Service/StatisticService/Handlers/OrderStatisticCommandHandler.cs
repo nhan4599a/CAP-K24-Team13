@@ -4,6 +4,7 @@ using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Shared;
 using Shared.Models;
 using StatisticService.Commands;
 using System;
@@ -41,7 +42,8 @@ namespace StatisticService.Handlers
             var lowestIncome = double.MaxValue;
             DateTime? highestDate = null;
             DateTime? lowestDate = null;
-            var statisticResultItems = new SortedDictionary<StatisticDateResult, StatisticResultItem>();
+            var statisticResultItems = 
+                new SortedDictionary<StatisticDateResult, StatisticResultItem>(StatisticDateResult.DefaultComparer);
             foreach (var group in groupingResult)
             {
                 var invoiceList = group.ToList();
@@ -100,7 +102,11 @@ namespace StatisticService.Handlers
             }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
             {
-                Details = statisticResultItems.ToDictionary(e => e.Key.ToString(), e => e.Value),
+                Details = statisticResultItems
+                    .ToDictionary(
+                        e => e.Key.ToString(),
+                        e => e.Value
+                    ),
                 HighestIncome = highestIncome,
                 LowestIncome = lowestIncome
             };

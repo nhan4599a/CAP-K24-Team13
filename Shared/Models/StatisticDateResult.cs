@@ -5,12 +5,14 @@ using System.Text.Json.Serialization;
 
 namespace Shared.Models
 {
-    public class StatisticDateResult : EqualityComparer<StatisticDateResult>, IComparable<StatisticDateResult>
+    public class StatisticDateResult : IComparable<StatisticDateResult>
     {
         [JsonIgnore]
         public StatisticStrategy DateResultType { get; set; }
 
         public DateOnly Result { get; set; }
+
+        public static Comparer DefaultComparer => new Comparer();
 
         public StatisticDateResult(StatisticStrategy strategy, DateOnly dateOnly)
         {
@@ -34,14 +36,22 @@ namespace Shared.Models
             return Result.CompareTo(obj.Result);
         }
 
-        public override bool Equals(StatisticDateResult x, StatisticDateResult y)
+        public class Comparer : EqualityComparer<StatisticDateResult>, IComparer<StatisticDateResult>
         {
-            return x.CompareTo(y) == 0;
-        }
+            public int Compare(StatisticDateResult x, StatisticDateResult y)
+            {
+                return x.CompareTo(y);
+            }
 
-        public override int GetHashCode([DisallowNull] StatisticDateResult obj)
-        {
-            return obj.GetHashCode();
+            public override bool Equals(StatisticDateResult x, StatisticDateResult y)
+            {
+                return x.CompareTo(y) == 0;
+            }
+
+            public override int GetHashCode([DisallowNull] StatisticDateResult obj)
+            {
+                return obj.GetHashCode();
+            }
         }
     }
 }
