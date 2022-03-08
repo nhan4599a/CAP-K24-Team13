@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -10,8 +9,6 @@ namespace AspNetCoreSharedComponent.JSON
 {
     public class DictionaryKeyNonStringConverter<TKey> : JsonConverter<IDictionary<TKey, object>>
     {
-        private ILogger? _logger;
-
         public override IDictionary<TKey, object>? Read(ref Utf8JsonReader reader,
             Type typeToConvert, JsonSerializerOptions options)
         {
@@ -20,27 +17,14 @@ namespace AspNetCoreSharedComponent.JSON
 
         public override void Write(Utf8JsonWriter writer, IDictionary<TKey, object> value, JsonSerializerOptions options)
         {
-            _logger?.LogInformation("Writing json");
             var convertedDictionary = new Dictionary<string, object>(value.Count);
             foreach (var (k, v) in value) convertedDictionary[k!.ToString()!] = v;
             JsonSerializer.Serialize(writer, convertedDictionary, options);
             convertedDictionary.Clear();
         }
 
-        private void SetLogger(ILogger logger)
-        {
-            _logger = logger;
-        }
-
         public class Factory : JsonConverterFactory
         {
-            private readonly ILogger _logger;
-
-            public Factory(ILogger logger)
-            {
-                _logger = logger;
-            }
-
             public override bool CanConvert(Type typeToConvert)
             {
                 if (!typeToConvert.IsGenericType) return false;
@@ -59,7 +43,6 @@ namespace AspNetCoreSharedComponent.JSON
                     null,
                     null,
                     CultureInfo.CurrentCulture)!;
-                ((DictionaryKeyNonStringConverter<TKey>)converter).SetLogger(_logger);
                 return converter;
             }
         }

@@ -6,7 +6,7 @@ namespace Shared.Models
     {
         public StatisticStrategy StatisticBy { get; set; }
 
-        public SortedDictionary<StatisticDateResult, StatisticResultItem> Details { get; set; }
+        public Dictionary<string, StatisticResultItem> Details { get; set; }
 
         public double HighestIncome { get; set; }
 

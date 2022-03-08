@@ -95,7 +95,7 @@ namespace StatisticService.Handlers
             }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
             {
-                Details = statisticResultItems,
+                Details = statisticResultItems.ToDictionary(e => e.Key.ToString(), e => e.Value),
                 HighestIncome = highestIncome,
                 LowestIncome = lowestIncome
             };
