@@ -73,24 +73,16 @@ namespace StatisticService.Handlers
             {
                 for (int i = 1; i <= DateTime.Now.Day; i++)
                 {
-                    try
-                    {
-                        var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, currentMonth, i));
-                        statisticResultItems.Add(new StatisticDateResult(request.Strategy, dateOnlyObj), new StatisticResultItem());
-                    }
-                    catch (ArgumentException) { }
+                    var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, currentMonth, i));
+                    statisticResultItems.TryAdd(new StatisticDateResult(request.Strategy, dateOnlyObj), new StatisticResultItem());
                 }
             }
             else
             {
                 for (int i = 1; i <= DateTime.Now.Month; i++)
                 {
-                    try
-                    {
-                        var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, i, 1));
-                        statisticResultItems.Add(new StatisticDateResult(request.Strategy, dateOnlyObj), new StatisticResultItem());
-                    }
-                    catch (ArgumentException) { }
+                    var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, i, 1));
+                    statisticResultItems.TryAdd(new StatisticDateResult(request.Strategy, dateOnlyObj), new StatisticResultItem());
                 }
             }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
