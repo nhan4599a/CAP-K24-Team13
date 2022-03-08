@@ -26,12 +26,22 @@ namespace StatisticService.Handlers
         {
             var currentYear = DateTime.Now.Year;
             var currentMonth = DateTime.Now.Month;
-            var invoices = _repository.DbContext.Invoices
-                .Include(e => e.Details)
-                .Where(invoice => invoice.CreatedAt.Year == currentYear);
+            IQueryable<Invoice> invoices;
             if (request.Strategy == StatisticStrategy.ByDay)
-                invoices = invoices.Where(invoice => invoice.CreatedAt.Month == currentMonth);
-            var groupingResult = invoices.GroupBy(invoice => invoice.CreatedAt);
+            {
+                invoices = _repository.DbContext.Invoices
+                    .FromSqlInterpolated(
+                        $"SELECT Invoices.* FROM Invoices, InvoiceDetails WHERE Invoices.Id = InvoiceDetails.InvoiceId AND YEAR(Invoices.CreatedAt) = {currentYear} AND MONTH(Invoices.CreatedAt) = {currentMonth}"
+                    );
+            }
+            else
+            {
+                invoices = _repository.DbContext.Invoices
+                    .FromSqlInterpolated(
+                        $"SELECT Invoices.* FROM Invoices, InvoiceDetails WHERE Invoices.Id = InvoiceDetails.InvoiceId AND YEAR(Invoices.CreatedAt) = {currentYear}"
+                    );
+            }
+            var groupingResult = invoices.GroupBy(invoice => invoice.CreatedAt).AsNoTracking();
             var statisticResultItems = new List<StatisticResultItem>();
             var highestIncome = 0d;
             var lowestIncome = double.MaxValue;
