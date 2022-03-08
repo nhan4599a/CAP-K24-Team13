@@ -79,7 +79,7 @@ namespace StatisticService.Handlers
                 {
                     var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, currentMonth, i));
                     var statisticDateResult = new StatisticDateResult(request.Strategy, dateOnlyObj);
-                    var addResult = statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
+                    statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
                 }
             }
             else
@@ -88,13 +88,13 @@ namespace StatisticService.Handlers
                 {
                     var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, i, 1));
                     var statisticDateResult = new StatisticDateResult(request.Strategy, dateOnlyObj);
-                    var addResult = statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
+                    statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
                 }
             }
             var finallyResultItems = new Dictionary<string, StatisticResultItem>();
             foreach (var keyValuePair in statisticResultItems)
             {
-                finallyResultItems.Add(keyValuePair.Key.ToString(), keyValuePair.Value);
+                finallyResultItems.TryAdd(keyValuePair.Key.ToString(), keyValuePair.Value);
             }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
             {
