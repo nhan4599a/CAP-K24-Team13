@@ -27,9 +27,11 @@ namespace StatisticService.Handlers
             var currentYear = DateTime.Now.Year;
             var currentMonth = DateTime.Now.Month;
             var invoices = _repository.DbContext.Invoices
-                .AsNoTracking().Where(invoice => invoice.CreatedAt.Year == currentYear);
+                .AsNoTracking()
+                .GroupBy(invoice => invoice.CreatedAt)
+                .Where(invoice => invoice.Key.Year == currentYear);
             if (request.Strategy == StatisticStrategy.ByDay)
-                invoices = invoices.Where(invoice => invoice.CreatedAt.Month == currentMonth);
+                invoices = invoices.Where(invoice => invoice.Key.Month == currentMonth);
             //var lowestIncome = double.MaxValue;
             //var highestDate = DateTime.Now;
             //var lowestDate = DateTime.Now;
