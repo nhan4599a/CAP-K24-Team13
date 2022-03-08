@@ -20,7 +20,7 @@ namespace StatisticService.Handlers
 
         private readonly ILogger<OrderStatisticCommandHandler> _logger;
 
-        public OrderStatisticCommandHandler(IInvoiceRepository repository, LoggerFactory loggerFactory)
+        public OrderStatisticCommandHandler(IInvoiceRepository repository, ILoggerFactory loggerFactory)
         {
             _repository = repository;
             _logger = loggerFactory.CreateLogger<OrderStatisticCommandHandler>();
