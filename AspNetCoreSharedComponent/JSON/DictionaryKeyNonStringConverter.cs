@@ -10,13 +10,8 @@ namespace AspNetCoreSharedComponent.JSON
 {
     public class DictionaryKeyNonStringConverter<TKey> : JsonConverter<IDictionary<TKey, object>>
     {
-        private readonly ILogger _logger;
+        private ILogger? _logger;
 
-        public DictionaryKeyNonStringConverter(ILogger logger)
-        {
-            _logger = logger;
-        }
-            
         public override IDictionary<TKey, object>? Read(ref Utf8JsonReader reader,
             Type typeToConvert, JsonSerializerOptions options)
         {
@@ -25,11 +20,16 @@ namespace AspNetCoreSharedComponent.JSON
 
         public override void Write(Utf8JsonWriter writer, IDictionary<TKey, object> value, JsonSerializerOptions options)
         {
-            _logger.LogInformation("Writing json");
+            _logger?.LogInformation("Writing json");
             var convertedDictionary = new Dictionary<string, object>(value.Count);
             foreach (var (k, v) in value) convertedDictionary[k!.ToString()!] = v;
             JsonSerializer.Serialize(writer, convertedDictionary, options);
             convertedDictionary.Clear();
+        }
+
+        private void SetLogger(ILogger logger)
+        {
+            _logger = logger;
         }
 
         public class Factory : JsonConverterFactory
@@ -57,8 +57,9 @@ namespace AspNetCoreSharedComponent.JSON
                     converterType,
                     BindingFlags.Instance | BindingFlags.Public,
                     null,
-                    _logger,
+                    null,
                     CultureInfo.CurrentCulture)!;
+                ((DictionaryKeyNonStringConverter<TKey>)converter).SetLogger(_logger);
                 return converter;
             }
         }
