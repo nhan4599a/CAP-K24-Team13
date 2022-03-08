@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -25,10 +26,18 @@ namespace AspNetCoreSharedComponent.JSON
 
         public class Factory : JsonConverterFactory
         {
+            private readonly ILogger<Factory> _logger;
+
+            public Factory(ILoggerFactory loggerFactory)
+            {
+                _logger = loggerFactory.CreateLogger<Factory>();
+            }
+
             public override bool CanConvert(Type typeToConvert)
             {
                 if (!typeToConvert.IsGenericType) return false;
                 if (typeToConvert.GenericTypeArguments[0] == typeof(string)) return false;
+                _logger.LogInformation("typeToConvert: {0}", typeToConvert.FullName);
                 return typeToConvert.GetInterface("IDictionary") != null;
             }
 
