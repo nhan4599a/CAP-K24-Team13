@@ -39,8 +39,7 @@ namespace StatisticService.Handlers
             var lowestIncome = double.MaxValue;
             DateTime? highestDate = null;
             DateTime? lowestDate = null;
-            var statisticResultItems = 
-                new SortedDictionary<StatisticDateResult, StatisticResultItem>(StatisticDateResult.DefaultComparer);
+            var statisticResultItems = new SortedDictionary<string, StatisticResultItem>();
             foreach (var group in groupingResult)
             {
                 var invoiceList = group.ToList();
@@ -60,7 +59,7 @@ namespace StatisticService.Handlers
                     lowestDate = group.Key;
                 }
                 var statisticDateResult = new StatisticDateResult(request.Strategy, group.Key.ToDateOnly());
-                statisticResultItems.Add(statisticDateResult, new StatisticResultItem
+                statisticResultItems.Add(statisticDateResult.ToString(), new StatisticResultItem
                 {
                     Data = new StatisticResultItemData
                     {
@@ -79,7 +78,7 @@ namespace StatisticService.Handlers
                 {
                     var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, currentMonth, i));
                     var statisticDateResult = new StatisticDateResult(request.Strategy, dateOnlyObj);
-                    statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
+                    statisticResultItems.TryAdd(statisticDateResult.ToString(), new StatisticResultItem());
                 }
             }
             else
@@ -88,17 +87,12 @@ namespace StatisticService.Handlers
                 {
                     var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, i, 1));
                     var statisticDateResult = new StatisticDateResult(request.Strategy, dateOnlyObj);
-                    statisticResultItems.TryAdd(statisticDateResult, new StatisticResultItem());
+                    statisticResultItems.TryAdd(statisticDateResult.ToString(), new StatisticResultItem());
                 }
-            }
-            var finallyResultItems = new Dictionary<string, StatisticResultItem>();
-            foreach (var keyValuePair in statisticResultItems)
-            {
-                finallyResultItems.TryAdd(keyValuePair.Key.ToString(), keyValuePair.Value);
             }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
             {
-                Details = finallyResultItems,
+                Details = statisticResultItems.ToDictionary(e => e.Key, e => e.Value),
                 HighestIncome = highestIncome,
                 LowestIncome = lowestIncome
             };
