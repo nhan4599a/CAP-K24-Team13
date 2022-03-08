@@ -28,6 +28,7 @@ namespace StatisticService.Handlers
             var currentMonth = DateTime.Now.Month;
             var invoices = _repository.DbContext.Invoices
                 .AsNoTracking()
+                .Include(e => e.Details)
                 .Where(invoice => invoice.CreatedAt.Year == currentYear);
             if (request.Strategy == StatisticStrategy.ByDay)
                 invoices = invoices.Where(invoice => invoice.CreatedAt.Month == currentMonth);
