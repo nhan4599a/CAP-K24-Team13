@@ -34,17 +34,17 @@ namespace StatisticService.Handlers
             var groupingResult = invoices.ToList().GroupBy(invoice => invoice.CreatedAt);
             var highestIncome = 0d;
             var lowestIncome = double.MaxValue;
-            var highestDate = DateTime.Now;
-            var lowestDate = DateTime.Now;
-            var statisticResultItems = new List<StatisticResultItem>();
+            DateTime? highestDate = null;
+            DateTime? lowestDate = null;
+            var statisticResultItems = new SortedDictionary<StatisticDateResult, StatisticResultItem>();
             foreach (var group in groupingResult)
             {
                 var invoiceList = group.ToList();
                 var newInvoiceList = group.Where(invoice => invoice.Status == InvoiceStatus.New).ToList();
                 var confirmedInvoiceList = group.Where(invoice => invoice.Status == InvoiceStatus.Confirmed).ToList();
-                var estimatedIncome = group.Where(invoice => invoice.Status <= InvoiceStatus.Confirmed)
+                var estimatedIncome = group.Sum(invoice => invoice.Details.Sum(detail => detail.Price));
+                var actualIncome = group.Where(invoice => invoice.Status == InvoiceStatus.Succeed)
                         .Sum(invoice => invoice.Details.Sum(detail => detail.Price));
-                var actualIncome = confirmedInvoiceList.Sum(invoice => invoice.Details.Sum(detail => detail.Price));
                 if (actualIncome > highestIncome)
                 {
                     highestIncome = actualIncome;
@@ -55,7 +55,7 @@ namespace StatisticService.Handlers
                     lowestIncome = actualIncome;
                     lowestDate = group.Key;
                 }
-                statisticResultItems.Add(new StatisticResultItem
+                statisticResultItems.Add(new StatisticDateResult(request.Strategy, group.Key.ToDateOnly()), new StatisticResultItem
                 {
                     Data = new StatisticResultItemData
                     {
@@ -68,14 +68,40 @@ namespace StatisticService.Handlers
                     ActualIncome = actualIncome
                 });
             }
+            if (request.Strategy == StatisticStrategy.ByDay)
+            {
+                for (int i = 1; i <= DateTime.Now.Day; i++)
+                {
+                    try
+                    {
+                        var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, currentMonth, i));
+                        statisticResultItems.Add(new StatisticDateResult(request.Strategy, dateOnlyObj), new StatisticResultItem());
+                    }
+                    catch (ArgumentException) { }
+                }
+            }
+            else
+            {
+                for (int i = 1; i <= DateTime.Now.Month; i++)
+                {
+                    try
+                    {
+                        var dateOnlyObj = DateOnly.FromDateTime(new DateTime(currentYear, i, 1));
+                        statisticResultItems.Add(new StatisticDateResult(request.Strategy, dateOnlyObj), new StatisticResultItem());
+                    }
+                    catch (ArgumentException) { }
+                }
+            }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
             {
-                Details = statisticResultItems.ToArray(),
+                Details = statisticResultItems,
                 HighestIncome = highestIncome,
-                LowestIncome = lowestIncome,
-                HighestDate = new StatisticDateResult(request.Strategy, highestDate.ToDateOnly()),
-                LowestDate = new StatisticDateResult(request.Strategy, lowestDate.ToDateOnly())
+                LowestIncome = lowestIncome
             };
+            if (highestDate.HasValue)
+                statisticResult.HighestDate = new StatisticDateResult(request.Strategy, highestDate.Value.ToDateOnly());
+            if (lowestDate.HasValue)
+                statisticResult.LowestDate = new StatisticDateResult(request.Strategy, lowestDate.Value.ToDateOnly());
             return Task.FromResult(statisticResult);
         }
 

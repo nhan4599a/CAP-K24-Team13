@@ -1,10 +1,12 @@
-﻿namespace Shared.Models
+﻿using System.Collections.Generic;
+
+namespace Shared.Models
 {
     public class StatisticResult<T>
     {
         public StatisticStrategy StatisticBy { get; set; }
 
-        public StatisticResultItem[] Details { get; set; }
+        public SortedDictionary<StatisticDateResult, StatisticResultItem> Details { get; set; }
 
         public double HighestIncome { get; set; }
 

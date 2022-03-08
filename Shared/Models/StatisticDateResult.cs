@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Shared.Models
 {
-    public class StatisticDateResult
+    public class StatisticDateResult : IComparable<StatisticDateResult>
     {
         [JsonIgnore]
         public StatisticStrategy DateResultType { get; set; }
@@ -20,6 +20,16 @@ namespace Shared.Models
         {
             string format = DateResultType == StatisticStrategy.ByDay ? "dd/MM/yyyy" : "MM/yyyy";
             return Result.ToString(format);
+        }
+
+        public override int GetHashCode()
+        {
+            return Result.GetHashCode();
+        }
+
+        public int CompareTo(StatisticDateResult obj)
+        {
+            return Result.CompareTo(obj.Result);
         }
     }
 }
