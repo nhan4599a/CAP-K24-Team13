@@ -31,5 +31,7 @@ namespace Shared.Models
         {
             return Result.CompareTo(obj.Result);
         }
+
+        public static explicit operator string(StatisticDateResult statisticDateResult) => statisticDateResult.ToString();
     }
 }
