@@ -60,7 +60,9 @@ namespace StatisticService.Handlers
                     lowestIncome = actualIncome;
                     lowestDate = group.Key;
                 }
-                statisticResultItems.Add(new StatisticDateResult(request.Strategy, group.Key.ToDateOnly()), new StatisticResultItem
+                var statisticDateResult = new StatisticDateResult(request.Strategy, group.Key.ToDateOnly());
+                _logger.LogInformation("Added actual key {0}", statisticDateResult);
+                statisticResultItems.Add(statisticDateResult, new StatisticResultItem
                 {
                     Data = new StatisticResultItemData
                     {
