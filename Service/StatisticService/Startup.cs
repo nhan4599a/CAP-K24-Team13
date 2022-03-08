@@ -17,21 +17,22 @@ namespace StatisticService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration
         {
             Configuration = configuration;
-            LoggerFactory = loggerFactory;
         }
 
         public IConfiguration Configuration { get; }
 
-        public ILoggerFactory LoggerFactory { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
             services.AddControllers()
-                .AddJsonPropertyToStringSerializer<StatisticDateResult>(LoggerFactory.CreateLogger(typeof(Startup).FullName!));
+                .AddJsonPropertyToStringSerializer<StatisticDateResult>(loggerFactory.CreateLogger(typeof(Startup).FullName!));
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
