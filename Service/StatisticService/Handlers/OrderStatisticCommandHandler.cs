@@ -75,6 +75,7 @@ namespace StatisticService.Handlers
                     ActualIncome = actualIncome
                 });
             }
+            _logger.LogInformation("Actual keys: {0}", statisticResultItems.Keys.Count);
             if (request.Strategy == StatisticStrategy.ByDay)
             {
                 _logger.LogInformation("Statistic by day");

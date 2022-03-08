@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace Shared.Models
 {
-    public class StatisticDateResult : IComparable<StatisticDateResult>
+    public class StatisticDateResult : EqualityComparer<StatisticDateResult>, IComparable<StatisticDateResult>
     {
         [JsonIgnore]
         public StatisticStrategy DateResultType { get; set; }
@@ -30,6 +32,16 @@ namespace Shared.Models
         public int CompareTo(StatisticDateResult obj)
         {
             return Result.CompareTo(obj.Result);
+        }
+
+        public override bool Equals(StatisticDateResult x, StatisticDateResult y)
+        {
+            return x.CompareTo(y) == 0;
+        }
+
+        public override int GetHashCode([DisallowNull] StatisticDateResult obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }
