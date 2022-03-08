@@ -2,6 +2,8 @@
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
+using DatabaseAccessor.Repositories;
+using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +40,7 @@ namespace StatisticService
                 });
             services.AddMediatR(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {
