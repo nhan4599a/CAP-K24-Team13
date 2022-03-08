@@ -1,4 +1,5 @@
-﻿using AspNetCoreSharedComponent.ServiceDiscoveries;
+﻿using AspNetCoreSharedComponent.JSON;
+using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using MediatR;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Models;
 
 namespace StatisticService
 {
@@ -22,7 +24,8 @@ namespace StatisticService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonPropertyToStringSerializer<StatisticDateResult>();
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>

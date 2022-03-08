@@ -148,7 +148,7 @@ function onLoadProductsCompleted(paginatedData) {
 }
 
 function moveToPage(keyword, pageNumber, pageSize) {
-    if (keyword == '')
+    if (!keyword)
         window.location.href = `https://cap-k24-team13.herokuapp.com/shopowner/product?pageNumber=${pageNumber}&pageSize=${pageSize}`;
     else
         window.location.href = `https://cap-k24-team13.herokuapp.com/shopowner/product?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;

@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using DatabaseAccessor.Contexts;
+using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-    public interface IProductRepository : IDisposable
+    public interface IProductRepository : IEFCoreRepository<ApplicationDbContext>
     {
         Task<ProductWithCommentsDTO> GetProductAsync(Guid productId);
 

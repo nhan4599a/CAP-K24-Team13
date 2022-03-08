@@ -2,7 +2,7 @@
 axios.defaults.baseURL = 'http://ec2-52-207-214-39.compute-1.amazonaws.com:3000';
 
 axios.interceptors.request.use(async config => {
-    if (config.url.startsWith('https://cap-k24-team13.herokuapp.com/')) {
+    if (!config.url.startsWith('https://cap-k24-team13.herokuapp.com/')) {
         let accessToken = await getAccessToken();
         config.headers.Authorization = `Bearer ${accessToken}`
     }
@@ -28,10 +28,12 @@ const ratingProductEndpoint = '/rating';
 const orderEndpoint = '/orders';
 
 function findProducts(shopId, keyword, pageNumber, pageSize) {
+    if (shopId === 0)
+        shopId = '0';
     const acctualEndpoint = productEndpoint + (shopId ? `/shop/${shopId}/` : '/') + 'search';
     const params = {
-        'paginationInfo.pageNumber': pageNumber,
-        'paginationInfo.pageSize': pageSize || 5
+        pageNumber: pageNumber,
+        pageSize: pageSize || 5
     };
     if (keyword)
         params.keyword = encodeURIComponent(keyword);

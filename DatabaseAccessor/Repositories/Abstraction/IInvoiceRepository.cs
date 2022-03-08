@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using DatabaseAccessor.Contexts;
+using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using System;
@@ -7,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-    public interface IInvoiceRepository : IDisposable
+    public interface IInvoiceRepository : IEFCoreRepository<ApplicationDbContext>
     {
-
         Task<List<OrderItemDTO>> GetOrderHistoryAsync(string userId);
 
         Task<List<OrderDTO>> GetOrdersOfShopWithInTimeAsync(int shopId, DateOnly startDate, DateOnly endDate);

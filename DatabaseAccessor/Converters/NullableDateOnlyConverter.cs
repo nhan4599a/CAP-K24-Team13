@@ -5,7 +5,7 @@ namespace DatabaseAccessor.Converters
 {
     public class NullableDateOnlyConverter : ValueConverter<DateOnly?, DateTime?>
     {
-        public NullableDateOnlyConverter() : base(dateOnly => dateOnly.ToDateTime(), dateTime => dateTime.FromDateTime()) 
+        public NullableDateOnlyConverter() : base(dateOnly => dateOnly.ToDateTime(), dateTime => dateTime.ToDateTime()) 
         { }
     }
 }

@@ -1,13 +1,13 @@
-﻿using Shared;
+﻿using DatabaseAccessor.Contexts;
+using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
-using System;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-    public interface ICategoryRepository  : IDisposable
+    public interface ICategoryRepository  : IEFCoreRepository<ApplicationDbContext>
     {
         Task<CategoryDTO> GetCategoryAsync(int id);
 

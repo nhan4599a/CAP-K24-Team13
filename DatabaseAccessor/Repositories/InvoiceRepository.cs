@@ -18,6 +18,8 @@ namespace DatabaseAccessor.Repositories
         private readonly ApplicationDbContext _dbContext;
         private readonly Mapper _mapper;
 
+        public ApplicationDbContext DbContext => _dbContext;
+
         public InvoiceRepository(ApplicationDbContext context, Mapper mapper)
         {
             _dbContext = context;

@@ -1,7 +1,11 @@
-﻿namespace StatisticService.Commands
+﻿using DatabaseAccessor.Models;
+using MediatR;
+using Shared.Models;
+
+namespace StatisticService.Commands
 {
-    public class OrderStatisticCommand : StatisticCommand
+    public class OrderStatisticCommand : IRequest<StatisticResult<Invoice>>
     {
-        public OrderStatusField Field { get; set; }
+        public StatisticStrategy Strategy { get; set; }
     }
 }

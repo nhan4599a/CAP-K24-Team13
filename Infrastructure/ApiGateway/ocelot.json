@@ -159,6 +159,16 @@
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/statistic/orders",
+      "DownstreamScheme": "http",
+      "ServiceName": "StatisticService",
+      "UpstreamPathTemplate": "/statistic/orders",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
     }
   ],
   "GlobalConfiguration": {
