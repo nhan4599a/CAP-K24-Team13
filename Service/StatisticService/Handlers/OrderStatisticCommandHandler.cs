@@ -2,6 +2,7 @@
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Shared.Models;
 using StatisticService.Commands;
 using System;
@@ -25,10 +26,12 @@ namespace StatisticService.Handlers
         {
             var currentYear = DateTime.Now.Year;
             var currentMonth = DateTime.Now.Month;
-            var groupingResult = _repository.DbContext.Invoices
-                .Where(invoice => invoice.CreatedAt.Year == currentYear &&
-                    (request.Strategy != StatisticStrategy.ByDay || invoice.CreatedAt.Month == currentMonth))
-                .GroupBy(invoice => invoice.CreatedAt);
+            var invoices = _repository.DbContext.Invoices
+                .Include(e => e.Details)
+                .Where(invoice => invoice.CreatedAt.Year == currentYear);
+            if (request.Strategy == StatisticStrategy.ByDay)
+                invoices = invoices.Where(invoice => invoice.CreatedAt.Month == currentMonth);
+            var groupingResult = invoices.GroupBy(invoice => invoice.CreatedAt);
             var statisticResultItems = new List<StatisticResultItem>();
             var highestIncome = 0d;
             var lowestIncome = double.MaxValue;
