@@ -1,5 +1,4 @@
-﻿using Shared.Abstraction;
-using System;
+﻿using System;
 using System.Text.Json.Serialization;
 
 namespace Shared.Models
@@ -32,12 +31,5 @@ namespace Shared.Models
         {
             return Result.CompareTo(obj.Result);
         }
-
-        public string ConvertTo()
-        {
-            return (string)this;
-        }
-
-        public static implicit operator string(StatisticDateResult statisticDateResult) => statisticDateResult.ToString();
     }
 }

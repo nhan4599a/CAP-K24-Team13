@@ -1,12 +1,11 @@
-﻿using Shared.Abstraction;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace AspNetCoreSharedComponent.JSON
 {
-    public class DictionaryKeyNonStringConverter<TKey> : JsonConverter<IDictionary<TKey, object>> where TKey : IConvertable<TKey>
+    public class DictionaryKeyNonStringConverter<TKey> : JsonConverter<IDictionary<TKey, object>>
     {
         public override IDictionary<TKey, object>? Read(ref Utf8JsonReader reader,
             Type typeToConvert, JsonSerializerOptions options)
@@ -16,7 +15,10 @@ namespace AspNetCoreSharedComponent.JSON
 
         public override void Write(Utf8JsonWriter writer, IDictionary<TKey, object> value, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            var convertedDictionary = new Dictionary<string, object>(value.Count);
+            foreach (var (k, v) in value) convertedDictionary[k!.ToString()!] = v;
+            JsonSerializer.Serialize(writer, convertedDictionary, options);
+            convertedDictionary.Clear();
         }
     }
 }
