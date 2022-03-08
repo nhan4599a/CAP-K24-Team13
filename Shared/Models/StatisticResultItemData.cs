@@ -9,8 +9,8 @@ namespace Shared.Models
         [JsonPropertyName("newOrders")]
         public int NewInvoiceCount { get; set; }
 
-        [JsonPropertyName("confirmedOrders")]
-        public int ConfirmedInvoiceCount { get; set; }
+        [JsonPropertyName("succeedOrders")]
+        public int SucceedInvoiceCount { get; set; }
 
         [JsonPropertyName("canceledOrders")]
         public int CanceledInvoiceCount { get; set; }

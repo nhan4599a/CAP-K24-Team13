@@ -42,7 +42,7 @@ namespace StatisticService.Handlers
             {
                 var invoiceList = group.ToList();
                 var newInvoiceList = group.Where(invoice => invoice.Status == InvoiceStatus.New).ToList();
-                var confirmedInvoiceList = group.Where(invoice => invoice.Status == InvoiceStatus.Confirmed).ToList();
+                var confirmedInvoiceList = group.Where(invoice => invoice.Status == InvoiceStatus.Succeed).ToList();
                 var estimatedIncome = group.Sum(invoice => invoice.Details.Sum(detail => detail.Price));
                 var actualIncome = group.Where(invoice => invoice.Status == InvoiceStatus.Succeed)
                         .Sum(invoice => invoice.Details.Sum(detail => detail.Price));
@@ -62,7 +62,7 @@ namespace StatisticService.Handlers
                     {
                         Total = invoiceList.Count,
                         NewInvoiceCount = newInvoiceList.Count,
-                        ConfirmedInvoiceCount = confirmedInvoiceList.Count,
+                        SucceedInvoiceCount = confirmedInvoiceList.Count,
                         CanceledInvoiceCount = invoiceList.Count(invoice => invoice.Status == InvoiceStatus.Canceled)
                     },
                     EstimatedIncome = estimatedIncome,
@@ -87,7 +87,7 @@ namespace StatisticService.Handlers
             }
             var statisticResult = new StatisticResult<Invoice>(request.Strategy)
             {
-                Details = statisticResultItems.ToDictionary(e => e.Key.ToString(), e => e.Value),
+                Details = statisticResultItems.ToDictionary(e => e.Key.ToString(), e => e.Value, StringComparer.OrdinalIgnoreCase),
                 HighestIncome = highestIncome,
                 LowestIncome = lowestIncome
             };
