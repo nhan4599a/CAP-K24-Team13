@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace AspNetCoreSharedComponent.JSON
 {
     public class DictionaryKeyNonStringConverter<TKey> : JsonConverter<IDictionary<TKey, object>>
-    {
-        public override bool CanConvert(Type typeToConvert)
-        {
-            if (!typeToConvert.IsGenericType) return false;
-            if (typeToConvert.GenericTypeArguments[0] == typeof(string)) return false;
-            return typeToConvert.GetInterface("IDictionary") != null;
-        }
-
+    {   
         public override IDictionary<TKey, object>? Read(ref Utf8JsonReader reader,
             Type typeToConvert, JsonSerializerOptions options)
         {
@@ -26,6 +21,29 @@ namespace AspNetCoreSharedComponent.JSON
             foreach (var (k, v) in value) convertedDictionary[k!.ToString()!] = v;
             JsonSerializer.Serialize(writer, convertedDictionary, options);
             convertedDictionary.Clear();
+        }
+
+        public class Factory : JsonConverterFactory
+        {
+            public override bool CanConvert(Type typeToConvert)
+            {
+                if (!typeToConvert.IsGenericType) return false;
+                if (typeToConvert.GenericTypeArguments[0] == typeof(string)) return false;
+                return typeToConvert.GetInterface("IDictionary") != null;
+            }
+
+            public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+            {
+                var converterType = typeof(DictionaryKeyNonStringConverter<>)
+                   .MakeGenericType(typeToConvert.GenericTypeArguments[0], typeToConvert.GenericTypeArguments[1]);
+                var converter = (JsonConverter)Activator.CreateInstance(
+                    converterType,
+                    BindingFlags.Instance | BindingFlags.Public,
+                    null,
+                    null,
+                    CultureInfo.CurrentCulture)!;
+                return converter;
+            }
         }
     }
 }

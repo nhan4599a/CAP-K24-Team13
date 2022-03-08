@@ -9,7 +9,7 @@ namespace AspNetCoreSharedComponent.JSON
             builder.AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Insert(0, new JsonPropertyToStringConverter<T>());
-                options.JsonSerializerOptions.Converters.Insert(0, new DictionaryKeyNonStringConverter<T>());
+                options.JsonSerializerOptions.Converters.Insert(0, new DictionaryKeyNonStringConverter<T>.Factory());
             });
             return builder;
         }
