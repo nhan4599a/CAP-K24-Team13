@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "Service\Ord
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RatingService", "Service\RatingService\RatingService.csproj", "{C6622A56-C176-4A68-981A-64994B016B63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatisticService", "StatisticService\StatisticService.csproj", "{77D712DC-CCE4-49A0-89A1-80AC5D319D06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatisticService", "Service\StatisticService\StatisticService.csproj", "{77D712DC-CCE4-49A0-89A1-80AC5D319D06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
