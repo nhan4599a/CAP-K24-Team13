@@ -34,7 +34,7 @@ namespace AspNetCoreSharedComponent.JSON
 
             public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
             {
-                var converterType = typeof(DictionaryKeyNonStringConverter<TKey>)
+                var converterType = typeof(DictionaryKeyNonStringConverter<>)
                    .MakeGenericType(typeToConvert.GenericTypeArguments[0]);
                 var converter = (JsonConverter)Activator.CreateInstance(
                     converterType,
