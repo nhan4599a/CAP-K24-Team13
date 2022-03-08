@@ -7,7 +7,7 @@ namespace Shared.Models
     public class StatisticDateResult : IComparable<StatisticDateResult>
     {
         [JsonIgnore]
-        public StatisticStrategy DateResultType { get; set; }
+        public StatisticStrategy Strategy { get; set; }
 
         public DateOnly Result { get; set; }
 
@@ -15,13 +15,13 @@ namespace Shared.Models
 
         public StatisticDateResult(StatisticStrategy strategy, DateOnly dateOnly)
         {
-            DateResultType = strategy;
+            Strategy = strategy;
             Result = dateOnly;
         }
 
         public override string ToString()
         {
-            string format = DateResultType == StatisticStrategy.ByDay ? "dd/MM/yyyy" : "MM/yyyy";
+            string format = Strategy == StatisticStrategy.ByDay ? "dd/MM/yyyy" : "MM/yyyy";
             return Result.ToString(format);
         }
 

@@ -6,13 +6,13 @@ namespace Shared.Models
     {
         public int Total { get; set; }
 
-        [JsonPropertyName("newOrders")]
+        [JsonPropertyName("new")]
         public int NewInvoiceCount { get; set; }
 
-        [JsonPropertyName("succeedOrders")]
+        [JsonPropertyName("succeed")]
         public int SucceedInvoiceCount { get; set; }
 
-        [JsonPropertyName("canceledOrders")]
+        [JsonPropertyName("canceled")]
         public int CanceledInvoiceCount { get; set; }
     }
 }
