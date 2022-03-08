@@ -26,11 +26,11 @@ namespace AspNetCoreSharedComponent.JSON
 
         public class Factory : JsonConverterFactory
         {
-            private readonly ILogger<Factory> _logger;
+            private readonly ILogger _logger;
 
-            public Factory(ILoggerFactory loggerFactory)
+            public Factory(ILogger logger)
             {
-                _logger = loggerFactory.CreateLogger<Factory>();
+                _logger = logger;
             }
 
             public override bool CanConvert(Type typeToConvert)

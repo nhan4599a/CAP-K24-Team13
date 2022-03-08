@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Models;
 
@@ -16,18 +17,21 @@ namespace StatisticService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
+            LoggerFactory = loggerFactory;
         }
 
         public IConfiguration Configuration { get; }
+
+        public ILoggerFactory LoggerFactory { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddJsonPropertyToStringSerializer<StatisticDateResult>();
+                .AddJsonPropertyToStringSerializer<StatisticDateResult>(LoggerFactory.CreateLogger(typeof(Startup).FullName!));
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
