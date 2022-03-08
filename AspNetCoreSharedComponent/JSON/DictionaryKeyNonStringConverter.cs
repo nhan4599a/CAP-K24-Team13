@@ -7,6 +7,13 @@ namespace AspNetCoreSharedComponent.JSON
 {
     public class DictionaryKeyNonStringConverter<TKey> : JsonConverter<IDictionary<TKey, object>>
     {
+        public override bool CanConvert(Type typeToConvert)
+        {
+            if (!typeToConvert.IsGenericType) return false;
+            if (typeToConvert.GenericTypeArguments[0] == typeof(string)) return false;
+            return typeToConvert.GetInterface("IDictionary") != null;
+        }
+
         public override IDictionary<TKey, object>? Read(ref Utf8JsonReader reader,
             Type typeToConvert, JsonSerializerOptions options)
         {
