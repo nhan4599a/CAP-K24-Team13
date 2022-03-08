@@ -27,12 +27,8 @@ namespace StatisticService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder.AddConsole();
-            });
             services.AddControllers()
-                .AddJsonPropertyToStringSerializer<StatisticDateResult>(loggerFactory.CreateLogger(typeof(Startup).FullName!));
+                .AddJsonPropertyToStringSerializer<StatisticDateResult>();
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -46,6 +42,10 @@ namespace StatisticService
             services.AddMediatR(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddSingleton(LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            }));
             services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {

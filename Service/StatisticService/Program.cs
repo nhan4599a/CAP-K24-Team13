@@ -17,9 +17,9 @@ namespace StatisticService
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .ConfigureLogging(options =>
+                .ConfigureLogging(builder =>
                 {
-                    options.AddConsole();
+                    builder.AddConsole();
                 });
     }
 }

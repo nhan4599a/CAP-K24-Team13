@@ -5,7 +5,7 @@ namespace AspNetCoreSharedComponent.JSON
 {
     public static class MvcJsonExtension
     {
-        public static IMvcBuilder AddJsonPropertyToStringSerializer<T>(this IMvcBuilder builder, ILogger logger)
+        public static IMvcBuilder AddJsonPropertyToStringSerializer<T>(this IMvcBuilder builder)
         {
             builder.AddJsonOptions(options =>
             {
