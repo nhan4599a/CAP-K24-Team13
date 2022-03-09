@@ -1,5 +1,4 @@
-﻿using DatabaseAccessor.Models;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using StatisticService.Commands;
