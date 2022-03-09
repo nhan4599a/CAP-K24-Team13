@@ -9,11 +9,11 @@ namespace Shared.Models
         [JsonIgnore]
         public StatisticStrategy Strategy { get; set; }
 
-        public DateOnly Result { get; set; }
+        public DateTime Result { get; set; }
 
         public static Comparer DefaultComparer => new();
 
-        public StatisticDateResult(StatisticStrategy strategy, DateOnly dateOnly)
+        public StatisticDateResult(StatisticStrategy strategy, DateTime dateOnly)
         {
             Strategy = strategy;
             Result = dateOnly;

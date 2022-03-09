@@ -4,7 +4,7 @@ using Shared.Models;
 
 namespace StatisticService.Commands
 {
-    public class OrderStatisticCommand : IRequest<StatisticResult<Invoice>>
+    public class OrderStatisticCommand : IRequest<StatisticResult>
     {
         public StatisticStrategy Strategy { get; set; }
     }

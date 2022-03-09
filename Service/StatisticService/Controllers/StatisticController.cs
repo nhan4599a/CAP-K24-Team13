@@ -26,7 +26,7 @@ namespace StatisticService.Controllers
             {
                 Strategy = strategy
             });
-            return ApiResult<StatisticResult<Invoice>>.CreateSucceedResult(result);
+            return ApiResult<StatisticResult>.CreateSucceedResult(result);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using DatabaseAccessor.Models;
-using DatabaseAccessor.Repositories.Abstraction;
+﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Shared.Models;
 using StatisticService.Commands;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StatisticService.Handlers
 {
-    public class OrderStatisticCommandHandler : IRequestHandler<OrderStatisticCommand, StatisticResult<Invoice>>, IDisposable
+    public class OrderStatisticCommandHandler : IRequestHandler<OrderStatisticCommand, StatisticResult>, IDisposable
     {
         private readonly IInvoiceRepository _repository;
 
@@ -18,7 +17,7 @@ namespace StatisticService.Handlers
             _repository = repository;
         }
 
-        public Task<StatisticResult<Invoice>> Handle(OrderStatisticCommand request, CancellationToken cancellationToken)
+        public Task<StatisticResult> Handle(OrderStatisticCommand request, CancellationToken cancellationToken)
         {
             return _repository.StatisticAsync(request.Strategy);
         }
