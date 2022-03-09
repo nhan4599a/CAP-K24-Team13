@@ -127,7 +127,7 @@ namespace DatabaseAccessor.Repositories
                 .Where(invoice => invoice.CreatedAt.Year == currentYear && (
                     strategy != StatisticStrategy.ByDay || invoice.CreatedAt.Month == currentMonth
                 ))
-                .GroupBy(invoice => new { invoice.Status, invoice.CreatedAt });
+                .GroupBy(invoice => invoice);
             var highestIncome = 0d;
             var lowestIncome = double.MaxValue;
             DateTime? highestDate = null;
