@@ -1,4 +1,5 @@
 ﻿using DatabaseAccessor.Contexts;
+using DatabaseAccessor.Models;
 using Shared;
 using Shared.DTOs;
 using Shared.Models;
@@ -20,6 +21,8 @@ namespace DatabaseAccessor.Repositories.Abstraction
             string shippingPhone, string shippingAddress, string orderNotes);
 
         Task<CommandResponse<bool>> ChangeOrderStatusAsync(int invoiceId, InvoiceStatus newStatus);
+
+        Task<StatisticResult<Invoice>> StatisticAsync(StatisticStrategy strategy);
     }
 
 }
