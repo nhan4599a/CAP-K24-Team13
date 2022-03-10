@@ -1,3 +1,4 @@
+using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using OrderService.Commands;
+using OrderService.Validations;
 
 namespace OrderService
 {
@@ -24,7 +27,8 @@ namespace OrderService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation<FindInvoiceQuery, FindInvoiceQueryValidator>();
             services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.RegisterOcelotService(Configuration);
             services.AddDbContext<ApplicationDbContext>();
