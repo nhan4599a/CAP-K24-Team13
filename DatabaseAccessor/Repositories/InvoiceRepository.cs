@@ -176,7 +176,7 @@ namespace DatabaseAccessor.Repositories
             return builder.Result;
         }
         
-        public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(string key, object value,
+        public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(string key, string value,
             PaginationInfo paginationInfo)
         {
             try

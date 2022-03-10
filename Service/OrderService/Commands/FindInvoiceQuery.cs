@@ -11,7 +11,7 @@ namespace OrderService.Commands
 
         public string? Key { get; set; }
 
-        public object? Value { get; set; }
+        public string? Value { get; set; }
 
         public int PageNumber { get; set; } = PaginationInfo.Default.PageNumber;
 

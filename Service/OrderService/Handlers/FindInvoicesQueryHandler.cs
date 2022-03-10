@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace OrderService.Handlers
 {
-    public class FindInvoiceQueryHandler : IRequestHandler<FindInvoiceQuery, CommandResponse<PaginatedList<InvoiceDTO>>>,
+    public class FindInvoicesQueryHandler : IRequestHandler<FindInvoiceQuery, CommandResponse<PaginatedList<InvoiceDTO>>>,
         IDisposable
     {
         private readonly IInvoiceRepository _repository;
 
-        public FindInvoiceQueryHandler(IInvoiceRepository repository)
+        public FindInvoicesQueryHandler(IInvoiceRepository repository)
         {
             _repository = repository;
         }
 
         public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> Handle(FindInvoiceQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.FindInvoicesAsync(request.Key, request.Value!.ToString(), new PaginationInfo
+            return await _repository.FindInvoicesAsync(request.Key, request.Value!, new PaginationInfo
             {
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize
