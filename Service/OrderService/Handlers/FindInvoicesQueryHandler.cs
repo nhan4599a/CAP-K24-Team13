@@ -22,7 +22,7 @@ namespace OrderService.Handlers
 
         public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> Handle(FindInvoiceQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.FindInvoicesAsync(request.Key, request.Value!, new PaginationInfo
+            return await _repository.FindInvoicesAsync(request.ShopId, request.Key, request.Value!, new PaginationInfo
             {
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize

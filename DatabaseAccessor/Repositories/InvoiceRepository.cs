@@ -5,10 +5,12 @@ using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
+using Shared.Extensions;
 using Shared.Linq;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -176,27 +178,47 @@ namespace DatabaseAccessor.Repositories
             return builder.Result;
         }
         
-        public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(string key, string value,
-            PaginationInfo paginationInfo)
+        public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(int shopId, string key,
+            string value, PaginationInfo paginationInfo)
         {
-            try
+            var field = typeof(Invoice).GetProperty(key);
+            if (field == null)
+                return CommandResponse<PaginatedList<InvoiceDTO>>.Error("Key not existed. Is it a typo?", null);
+            var result = _dbContext.Invoices.AsNoTracking().Include(e => e.Details)
+                .Where(invoice => invoice.ShopId == shopId);
+            if (field.PropertyType == typeof(string) 
+                    || field.PropertyType.IsNumberType() 
+                    || field.PropertyType.FullName == "System.DateTime")
             {
-                var field = typeof(Invoice).GetProperty(key);
-                if (field == null)
-                    throw new ArgumentException("Key not existed. Is it a typo ?");
-                if (field.PropertyType != typeof(string))
-                    throw new ArgumentException($"Currently, only string type is supported. Provided type is {field.PropertyType.FullName}");
-                var result = await _dbContext.Invoices
-                    .AsNoTracking()
-                    .Include(e => e.Details)
-                    .Where<Invoice, string>(key, "Contains", value)
-                    .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
-                    .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
-                return CommandResponse<PaginatedList<InvoiceDTO>>.Success(result);
-            } catch (Exception e)
-            {
-                return CommandResponse<PaginatedList<InvoiceDTO>>.Error(e.Message, e);
+                try
+                {
+                    if (field.PropertyType.IsNumberType())
+                    {
+                        object numberValue = field.PropertyType
+                            .GetMethod("Parse", new[] { typeof(string) }).Invoke(null, new[] { value });
+                        result = result.Where(key, Operator.Equal, numberValue, field.PropertyType);
+                    }
+                    if (field.PropertyType.FullName == "System.DateTime")
+                    {
+                        object dateValue = DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
+                        result = result.Where(key, Operator.Equal, dateValue, field.PropertyType);
+                    }
+                    else
+                        result = result.Where<Invoice, string>(key, "Contains", value);
+                } catch (Exception e)
+                {
+                    return CommandResponse<PaginatedList<InvoiceDTO>>.Error(e.Message, e);
+                }
             }
+            else
+            {
+                return CommandResponse<PaginatedList<InvoiceDTO>>.Error(
+                    $"Provided type {field.PropertyType.FullName} is not supported", null);
+            }
+            var returnResult = await result
+                .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+            return CommandResponse<PaginatedList<InvoiceDTO>>.Success(returnResult);
         }
 
         public void Dispose()

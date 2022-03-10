@@ -15,7 +15,8 @@ namespace Shared.Linq
             var propertyType = ((PropertyInfo)member.Member).PropertyType;
             if (propertyType != typeof(TField))
                 throw new ArgumentException(
-                    $"Type of {fieldName} is {propertyType.FullName} does not match TField, TField is {typeof(TField).FullName}");
+                    $"Type of {fieldName} is {propertyType.FullName} does not match TField," +
+                    $" TField is {typeof(TField).FullName}");
             Type[] types = args.Select(arg => arg.GetType()).ToArray();
             MethodInfo method = typeof(TField).GetMethod(methodName, types);
             if (method == null)
@@ -28,5 +29,40 @@ namespace Shared.Linq
             var whereClause = Expression.Lambda<Func<TEntity, bool>>(call, param);
             return entities.Where(whereClause);
         }
+
+        public static IQueryable<TEntity> Where<TEntity>(
+            this IQueryable<TEntity> entities, string fieldName, Operator @operator, object arg, Type type)
+        {
+
+            ParameterExpression param = Expression.Parameter(typeof(TEntity));
+            MemberExpression member = Expression.Property(param, fieldName);
+            var propertyType = ((PropertyInfo)member.Member).PropertyType;
+            if (propertyType != type)
+                throw new ArgumentException(
+                    $"Type of {fieldName} is {propertyType.FullName} does not match provided type," +
+                    $" Provided type is {type.FullName}");
+            if (arg.GetType() != type)
+                throw new ArgumentException(
+                    $"Type of arg is {arg.GetType().FullName} does not match provided type," +
+                    $" arg type is {type.FullName}");
+            ConstantExpression constant = Expression.Constant(arg);
+            Expression equalExpression = @operator switch
+            {
+                Operator.Equal => Expression.Equal(member, constant),
+                Operator.LessThan => Expression.LessThan(member, constant),
+                Operator.GreaterThan => Expression.GreaterThan(member, constant),
+                Operator.LessThanOrEqual => Expression.LessThanOrEqual(member, constant),
+                Operator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(member, constant),
+                Operator.NotEqual => Expression.NotEqual(member, constant),
+                _ => throw new NotImplementedException()
+            };
+            var whereClause = Expression.Lambda<Func<TEntity, bool>>(equalExpression, param);
+            return entities.Where(whereClause);
+        }
+    }
+
+    public enum Operator
+    {
+        Equal, LessThan, GreaterThan, LessThanOrEqual, GreaterThanOrEqual, NotEqual
     }
 }
