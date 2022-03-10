@@ -20,7 +20,8 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<CommandResponse<bool>> ChangeOrderStatusAsync(int invoiceId, InvoiceStatus newStatus);
 
-        Task<PaginatedList<InvoiceDTO>> FindInvoicesAsync(string key, object value, PaginationInfo paginationInfo);
+        Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(string key, object value,
+            PaginationInfo paginationInfo);
 
         Task<StatisticResult> StatisticAsync(StatisticStrategy strategy);
     }

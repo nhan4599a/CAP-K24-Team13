@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using Shared;
 using Shared.DTOs;
 using Shared.Models;
 
 namespace OrderService.Commands
 {
-    public class FindInvoiceQuery : IRequest<PaginatedList<InvoiceDTO>>
+    public class FindInvoiceQuery : IRequest<CommandResponse<PaginatedList<InvoiceDTO>>>
     {
         public int ShopId { get; set; }
 

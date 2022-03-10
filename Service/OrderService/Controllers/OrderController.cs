@@ -59,8 +59,10 @@ namespace OrderService.Controllers
         public async Task<ApiResult> FindOrderById(int shopId, [FromQuery] FindInvoiceQuery query)
         {
             query.ShopId = shopId;
-            var result = await _mediator.Send(query);
-            return ApiResult<PaginatedList<InvoiceDTO>>.CreateSucceedResult(result);
+            var response = await _mediator.Send(query);
+            if (!response.IsSuccess)
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult<PaginatedList<InvoiceDTO>>.CreateSucceedResult(response.Response);
         }
     }
 }

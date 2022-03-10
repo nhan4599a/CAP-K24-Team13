@@ -1,6 +1,7 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using OrderService.Commands;
+using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OrderService.Handlers
 {
-    public class FindInvoiceQueryHandler : IRequestHandler<FindInvoiceQuery, PaginatedList<InvoiceDTO>>,
+    public class FindInvoiceQueryHandler : IRequestHandler<FindInvoiceQuery, CommandResponse<PaginatedList<InvoiceDTO>>>,
         IDisposable
     {
         private readonly IInvoiceRepository _repository;
@@ -19,7 +20,7 @@ namespace OrderService.Handlers
             _repository = repository;
         }
 
-        public async Task<PaginatedList<InvoiceDTO>> Handle(FindInvoiceQuery request, CancellationToken cancellationToken)
+        public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> Handle(FindInvoiceQuery request, CancellationToken cancellationToken)
         {
             return await _repository.FindInvoicesAsync(request.Key, request.Value, new PaginationInfo
             {

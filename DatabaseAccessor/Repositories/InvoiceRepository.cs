@@ -176,19 +176,26 @@ namespace DatabaseAccessor.Repositories
             }
             return builder.Result;
         }
-
-        public async Task<PaginatedList<InvoiceDTO>> FindInvoicesAsync(string key, object value,
+        
+        public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(string key, object value,
             PaginationInfo paginationInfo)
         {
-            var members = typeof(Invoice).GetMember(key);
-            if (members.Length == 0)
-                throw new ArgumentException("Key not existed. Is it a typo ?");
-            if (members[0].GetType() != typeof(string))
-                throw new ArgumentException("Currently, only string type is supported");
-            return await _dbContext.Invoices
-                .Where<Invoice, string>(key, "Contains", value)
-                .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
-                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+            try
+            {
+                var members = typeof(Invoice).GetMember(key);
+                if (members.Length == 0)
+                    throw new ArgumentException("Key not existed. Is it a typo ?");
+                if (members[0].GetType() != typeof(string))
+                    throw new ArgumentException("Currently, only string type is supported");
+                var result = await _dbContext.Invoices
+                    .Where<Invoice, string>(key, "Contains", value)
+                    .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
+                    .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+                return CommandResponse<PaginatedList<InvoiceDTO>>.Success(result);
+            } catch (Exception e)
+            {
+                return CommandResponse<PaginatedList<InvoiceDTO>>.Error(e.Message, e);
+            }
         }
 
         public void Dispose()
