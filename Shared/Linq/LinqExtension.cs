@@ -25,8 +25,8 @@ namespace Shared.Linq
                 );
             ConstantExpression[] constants = args.Select(arg => Expression.Constant(arg)).ToArray();
             Expression call = Expression.Call(member, method, constants);
-            var whereClause = Expression.Lambda<Func<TEntity, bool>>(call, param).Compile();
-            return (IQueryable<TEntity>) entities.Where(whereClause);
+            var whereClause = Expression.Lambda<Func<TEntity, bool>>(call, param);
+            return entities.Where(whereClause);
         }
     }
 }

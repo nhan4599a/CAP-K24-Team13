@@ -56,7 +56,7 @@ namespace OrderService.Controllers
 
         [AllowAnonymous]
         [HttpGet("shop/{shopId}/search")]
-        public async Task<ApiResult> FindOrderById(int shopId, [FromQuery] FindInvoiceQuery query)
+        public async Task<ApiResult> FindOrders(int shopId, [FromQuery] FindInvoiceQuery query)
         {
             query.ShopId = shopId;
             var response = await _mediator.Send(query);
