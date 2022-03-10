@@ -17,7 +17,12 @@ namespace Shared.Linq
                 throw new ArgumentException(
                     $"Type of {fieldName} is {propertyType.FullName} does not match TField, TField is {typeof(TField).FullName}");
             Type[] types = args.Select(arg => arg.GetType()).ToArray();
-            MethodInfo method = typeof(TField).GetMethod(methodName, types)!;
+            MethodInfo method = typeof(TField).GetMethod(methodName, types);
+            if (method == null)
+                throw new ArgumentException(
+                    $"Method {methodName} does not found in class {typeof(TField).FullName}" +
+                    $" with arguments types [{string.Join(",", types.Select(type => type.FullName))}]"
+                );
             ConstantExpression[] constants = args.Select(arg => Expression.Constant(arg)).ToArray();
             Expression call = Expression.Call(member, method, constants);
             var whereClause = Expression.Lambda<Func<TEntity, bool>>(call, param).Compile();
