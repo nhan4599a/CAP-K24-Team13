@@ -1,15 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OrderHistoryService.Commands;
-using OrderService;
 using OrderService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OrderHistoryService.Controllers
+namespace OrderService.Controllers
 {
     [Authorize]
     [Route("api/orders")]
@@ -56,9 +54,10 @@ namespace OrderHistoryService.Controllers
             return ApiResult<bool>.CreateSucceedResult(result.Response);
         }
 
-        [HttpGet("search")]
-        public async Task<ApiResult> FindOrderById([FromQuery] FindInvoiceQuery query)
+        [HttpGet("shop/{shopId}/search")]
+        public async Task<ApiResult> FindOrderById(int shopId, [FromQuery] FindInvoiceQuery query)
         {
+            query.ShopId = shopId;
             var result = await _mediator.Send(query);
             if (result == null)
                 return ApiResult.CreateErrorResult(404, "Invoice not found");

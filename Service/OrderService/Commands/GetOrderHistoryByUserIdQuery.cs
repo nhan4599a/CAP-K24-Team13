@@ -2,7 +2,7 @@
 using Shared.DTOs;
 using System.Collections.Generic;
 
-namespace OrderHistoryService.Commands
+namespace OrderService.Commands
 {
     public class GetOrderHistoryByUserIdQuery : IRequest<List<OrderItemDTO>>
     {

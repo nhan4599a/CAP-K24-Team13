@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using RatingService;
 
-namespace OrderHistoryService
+namespace OrderService
 {
     public class Program
     {

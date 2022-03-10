@@ -121,6 +121,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/orders/shop/{shopId}/search",
+      "DownstreamScheme": "http",
+      "ServiceName": "OrderService",
+      "UpstreamPathTemplate": "/orders/shop/{shopId}/search",
+      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/orders/{orderId}",
       "DownstreamScheme": "http",
       "ServiceName": "OrderService",
