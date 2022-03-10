@@ -182,11 +182,11 @@ namespace DatabaseAccessor.Repositories
         {
             try
             {
-                var members = typeof(Invoice).GetMember(key);
-                if (members.Length == 0)
+                var field = typeof(Invoice).GetProperty(key);
+                if (field == null)
                     throw new ArgumentException("Key not existed. Is it a typo ?");
-                if (members[0].GetType() != typeof(string))
-                    throw new ArgumentException($"Currently, only string type is supported. Provided type is {members[0].GetType().FullName}");
+                if (field.PropertyType != typeof(string))
+                    throw new ArgumentException($"Currently, only string type is supported. Provided type is {field.PropertyType.FullName}");
                 var result = await _dbContext.Invoices
                     .Where<Invoice, string>(key, "Contains", value)
                     .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
