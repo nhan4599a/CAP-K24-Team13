@@ -54,13 +54,12 @@ namespace OrderService.Controllers
             return ApiResult<bool>.CreateSucceedResult(result.Response);
         }
 
+        [AllowAnonymous]
         [HttpGet("shop/{shopId}/search")]
         public async Task<ApiResult> FindOrderById(int shopId, [FromQuery] FindInvoiceQuery query)
         {
             query.ShopId = shopId;
             var result = await _mediator.Send(query);
-            if (result == null)
-                return ApiResult.CreateErrorResult(404, "Invoice not found");
             return ApiResult<PaginatedList<InvoiceDTO>>.CreateSucceedResult(result);
         }
     }
