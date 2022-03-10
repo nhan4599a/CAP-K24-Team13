@@ -12,8 +12,10 @@ namespace Shared.Linq
         {
             ParameterExpression param = Expression.Parameter(typeof(TEntity));
             MemberExpression member = Expression.Property(param, fieldName);
-            if (member.Member.GetType() != typeof(TField))
-                throw new ArgumentException("Type of selected field does not match TEntity");
+            var propertyType = ((PropertyInfo)member.Member).PropertyType;
+            if (propertyType != typeof(TField))
+                throw new ArgumentException(
+                    $"Type of {fieldName} is {propertyType.FullName} does not match TField, TField is {typeof(TField).FullName}");
             MethodInfo method = typeof(TField).GetMethod(methodName)!;
             ConstantExpression[] constants = args.Select(arg => Expression.Constant(arg)).ToArray();
             Expression call = Expression.Call(member, method, constants);
