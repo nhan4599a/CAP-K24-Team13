@@ -1,5 +1,4 @@
-﻿using DatabaseAccessor.Models;
-using MediatR;
+﻿using MediatR;
 using Shared.Models;
 
 namespace StatisticService.Commands

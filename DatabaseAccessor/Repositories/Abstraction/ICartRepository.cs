@@ -1,13 +1,13 @@
-﻿using DatabaseAccessor.Contexts;
-using Shared;
+﻿using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-    public interface ICartRepository : IEFCoreRepository<ApplicationDbContext>
+    public interface ICartRepository : IDisposable
     {
         Task<CommandResponse<bool>> AddProductToCartAsync(AddOrEditQuantityCartItemRequestModel requestModel);
 

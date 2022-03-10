@@ -1,15 +1,16 @@
 ﻿using DatabaseAccessor.Contexts;
-using DatabaseAccessor.Converters;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
+using Shared.Linq;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories
@@ -18,8 +19,6 @@ namespace DatabaseAccessor.Repositories
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly Mapper _mapper;
-
-        public ApplicationDbContext DbContext => _dbContext;
 
         public InvoiceRepository(ApplicationDbContext context, Mapper mapper)
         {
@@ -178,6 +177,20 @@ namespace DatabaseAccessor.Repositories
             return builder.Result;
         }
 
+        public async Task<PaginatedList<InvoiceDTO>> FindInvoicesAsync(string key, object value,
+            PaginationInfo paginationInfo)
+        {
+            var members = typeof(Invoice).GetMember(key);
+            if (members.Length == 0)
+                throw new ArgumentException("Key not existed. Is it a typo ?");
+            if (members[0].GetType() != typeof(string))
+                throw new ArgumentException("Currently, only string type is supported");
+            return await _dbContext.Invoices
+                .Where<Invoice, string>(key, "Contains", value)
+                .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();
@@ -185,4 +198,3 @@ namespace DatabaseAccessor.Repositories
         }
     }
 }
-

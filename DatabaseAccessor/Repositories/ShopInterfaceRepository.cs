@@ -16,8 +16,6 @@ namespace DatabaseAccessor.Repositories
         private readonly ApplicationDbContext _dbContext;
         private readonly Mapper _mapper;
 
-        public ApplicationDbContext DbContext => _dbContext;
-
         public ShopInterfaceRepository(ApplicationDbContext dbContext, Mapper mapper)
         {
             _dbContext = dbContext;

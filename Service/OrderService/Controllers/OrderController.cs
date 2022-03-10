@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderHistoryService.Commands;
+using OrderService;
 using OrderService.Commands;
 using Shared.DTOs;
 using Shared.Models;
@@ -53,6 +54,15 @@ namespace OrderHistoryService.Controllers
             if (!result.IsSuccess)
                 return ApiResult.CreateErrorResult(500, result.ErrorMessage);
             return ApiResult<bool>.CreateSucceedResult(result.Response);
+        }
+
+        [HttpGet("search")]
+        public async Task<ApiResult> FindOrderById([FromQuery] FindInvoiceQuery query)
+        {
+            var result = await _mediator.Send(query);
+            if (result == null)
+                return ApiResult.CreateErrorResult(404, "Invoice not found");
+            return ApiResult<PaginatedList<InvoiceDTO>>.CreateSucceedResult(result);
         }
     }
 }

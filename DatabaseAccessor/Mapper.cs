@@ -2,6 +2,7 @@ using AutoMapper;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Resolvers;
 using Shared.DTOs;
+using System.Linq;
 
 namespace DatabaseAccessor.Mapping
 {
@@ -56,7 +57,9 @@ namespace DatabaseAccessor.Mapping
                         option => option.MapFrom(source => source.Product.ProductName))
                     .ForMember(target => target.UserName,
                         option => option.MapFrom(source => source.User.UserName));
-
+                cfg.CreateMap<Invoice, InvoiceDTO>()
+                    .ForMember(target => target.TotalPrice,
+                        options => options.MapFrom(source => source.Details.Sum(detail => detail.Price * detail.Quantity)));
             });
             _mapper = config.CreateMapper();
         }
@@ -84,5 +87,7 @@ namespace DatabaseAccessor.Mapping
         public OrderDTO MapToOrderDTO(Invoice invoice) => _mapper.Map<OrderDTO>(invoice);
 
         public RatingDTO MapToRatingDTO(ProductComment rating) => _mapper.Map<RatingDTO>(rating);
+
+        public InvoiceDTO MapToInvoiceDTO(Invoice invoice) => _mapper.Map<InvoiceDTO>(invoice);
     }
 }

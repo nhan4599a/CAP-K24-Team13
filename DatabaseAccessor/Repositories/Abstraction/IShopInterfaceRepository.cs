@@ -1,12 +1,12 @@
-using DatabaseAccessor.Contexts;
 using Shared;
 using Shared.DTOs;
 using Shared.RequestModels;
+using System;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-    public interface IShopInterfaceRepository : IEFCoreRepository<ApplicationDbContext>
+    public interface IShopInterfaceRepository : IDisposable
     {
         Task<CommandResponse<ShopInterfaceDTO>> EditShopInterfaceAsync(int shopId,
             CreateOrEditInterfaceRequestModel requestModel);

@@ -18,8 +18,6 @@ namespace DatabaseAccessor.Repositories
         private readonly ApplicationDbContext _dbContext;
         private readonly Mapper _mapper;
 
-        public ApplicationDbContext DbContext => _dbContext;
-
         public CartRepository(ApplicationDbContext dbContext, Mapper mapper)
         {
             _dbContext = dbContext;

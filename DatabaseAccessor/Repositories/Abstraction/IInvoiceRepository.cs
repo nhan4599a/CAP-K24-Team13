@@ -1,5 +1,4 @@
-﻿using DatabaseAccessor.Contexts;
-using Shared;
+﻿using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using System;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-    public interface IInvoiceRepository : IEFCoreRepository<ApplicationDbContext>
+    public interface IInvoiceRepository : IDisposable
     {
         Task<List<OrderItemDTO>> GetOrderHistoryAsync(string userId);
 
@@ -21,7 +20,8 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<CommandResponse<bool>> ChangeOrderStatusAsync(int invoiceId, InvoiceStatus newStatus);
 
+        Task<PaginatedList<InvoiceDTO>> FindInvoicesAsync(string key, object value, PaginationInfo paginationInfo);
+
         Task<StatisticResult> StatisticAsync(StatisticStrategy strategy);
     }
-
 }

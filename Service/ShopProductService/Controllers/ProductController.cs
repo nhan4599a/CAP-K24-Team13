@@ -122,7 +122,7 @@ namespace ShopProductService.Controllers
         {
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
                 ? new FindAllProductsQuery
-                { 
+                {
                     PaginationInfo = new PaginationInfo
                     {
                         PageNumber = requestModel.PageNumber,
