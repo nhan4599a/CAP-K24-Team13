@@ -4,10 +4,13 @@ using Shared.Models;
 
 namespace OrderService.Commands
 {
-    public record class FindInvoiceQuery(string Key, object Value)
-        : IRequest<PaginatedList<InvoiceDTO>>
+    public class FindInvoiceQuery : IRequest<PaginatedList<InvoiceDTO>>
     {
         public int ShopId { get; set; }
+
+        public string? Key { get; set; }
+
+        public object? Value { get; set; }
 
         public int PageNumber { get; set; } = PaginationInfo.Default.PageNumber;
 
