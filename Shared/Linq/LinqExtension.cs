@@ -16,7 +16,8 @@ namespace Shared.Linq
             if (propertyType != typeof(TField))
                 throw new ArgumentException(
                     $"Type of {fieldName} is {propertyType.FullName} does not match TField, TField is {typeof(TField).FullName}");
-            MethodInfo method = typeof(TField).GetMethod(methodName)!;
+            Type[] types = args.Select(arg => arg.GetType()).ToArray();
+            MethodInfo method = typeof(TField).GetMethod(methodName, types)!;
             ConstantExpression[] constants = args.Select(arg => Expression.Constant(arg)).ToArray();
             Expression call = Expression.Call(member, method, constants);
             var whereClause = Expression.Lambda<Func<TEntity, bool>>(call, param).Compile();
