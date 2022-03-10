@@ -186,7 +186,7 @@ namespace DatabaseAccessor.Repositories
                 if (members.Length == 0)
                     throw new ArgumentException("Key not existed. Is it a typo ?");
                 if (members[0].GetType() != typeof(string))
-                    throw new ArgumentException("Currently, only string type is supported");
+                    throw new ArgumentException($"Currently, only string type is supported. Provided type is {members[0].GetType().FullName}");
                 var result = await _dbContext.Invoices
                     .Where<Invoice, string>(key, "Contains", value)
                     .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
