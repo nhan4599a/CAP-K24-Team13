@@ -188,6 +188,7 @@ namespace DatabaseAccessor.Repositories
                     throw new ArgumentException($"Currently, only string type is supported. Provided type is {field.PropertyType.FullName}");
                 var result = await _dbContext.Invoices
                     .AsNoTracking()
+                    .Include(e => e.Details)
                     .Where<Invoice, string>(key, "Contains", value)
                     .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
                     .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
