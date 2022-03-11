@@ -6,11 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Shared;
 using Shared.DTOs;
 using Shared.Extensions;
-using Shared.Linq;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -204,8 +202,19 @@ namespace DatabaseAccessor.Repositories
                     }
                     if (field.PropertyType.FullName == "System.DateTime")
                     {
-                        object dateValue = DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
-                        result = result.Where($"{key}.Date", Operator.Equal, dateValue, field.PropertyType);
+                        if (DateTimeExtension.TryParseExact(value, "dd/MM/yyyy", out DateTime dateTime))
+                        {
+                            result = result.Where($"{key}.Date", Operator.Equal, dateTime.Date, field.PropertyType);
+                        }
+                        else if (DateTimeExtension.TryParseExact(value, "MM/yyyy", out dateTime))
+                        {
+                            result = result.Where($"{key}.Month", Operator.Equal, dateTime.Month, field.PropertyType)
+                                .Where($"{key}.Year", Operator.Equal, dateTime.Year, field.PropertyType);
+                        }
+                        else if (DateTimeExtension.TryParseExact(value, "yyyy", out dateTime))
+                        {
+                            result = result.Where($"{key}.Year", Operator.Equal, dateTime.Year, field.PropertyType);
+                        }
                     }
                     else
                         result = result.Where<Invoice, string>(key, "Contains", value);
