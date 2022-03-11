@@ -25,7 +25,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/products/less/{id}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
@@ -65,7 +65,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/shop/search",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
@@ -75,7 +75,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/shop/{id}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
@@ -85,7 +85,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/cart/{userId}/items",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
@@ -105,7 +105,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "OrderService",
       "UpstreamPathTemplate": "/orders/user/{userId}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
@@ -115,7 +115,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "OrderService",
       "UpstreamPathTemplate": "/orders/shop/{shopId}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
@@ -125,7 +125,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "OrderService",
       "UpstreamPathTemplate": "/orders/shop/{shopId}/search",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
@@ -175,7 +175,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "StatisticService",
       "UpstreamPathTemplate": "/statistic/shop/{shopId}/orders",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
