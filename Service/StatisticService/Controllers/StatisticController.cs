@@ -17,12 +17,13 @@ namespace StatisticService.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("orders")]
-        public async Task<ApiResult> StatisticOrder(
+        [HttpGet("shop/{shopId}/orders")]
+        public async Task<ApiResult> StatisticOrder(int shopId,
             [FromQuery(Name = "strategy")] StatisticStrategy strategy = StatisticStrategy.ByMonth)
         {
             var result = await _mediator.Send(new OrderStatisticCommand
             {
+                ShopId = shopId,
                 Strategy = strategy
             });
             return ApiResult<StatisticResult>.CreateSucceedResult(result);

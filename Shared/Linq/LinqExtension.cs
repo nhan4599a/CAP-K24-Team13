@@ -2,20 +2,21 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Shared.Linq
 {
     public static class LinqExtension
     {
         public static IQueryable<TEntity> Where<TEntity, TField>(
-            this IQueryable<TEntity> entities, string fieldName, string methodName, params object[] args)
+            this IQueryable<TEntity> entities, string field, string methodName, params object[] args)
         {
             ParameterExpression param = Expression.Parameter(typeof(TEntity));
-            MemberExpression member = Expression.Property(param, fieldName);
-            var propertyType = ((PropertyInfo)member.Member).PropertyType;
+            var member = param.BuildMemberExpression(field);
+            var propertyType = member.Type;
             if (propertyType != typeof(TField))
                 throw new ArgumentException(
-                    $"Type of {fieldName} is {propertyType.FullName} does not match TField," +
+                    $"Type of {field} is {propertyType.FullName} does not match TField," +
                     $" TField is {typeof(TField).FullName}");
             Type[] types = args.Select(arg => arg.GetType()).ToArray();
             MethodInfo method = typeof(TField).GetMethod(methodName, types);
@@ -31,15 +32,14 @@ namespace Shared.Linq
         }
 
         public static IQueryable<TEntity> Where<TEntity>(
-            this IQueryable<TEntity> entities, string fieldName, Operator @operator, object arg, Type type)
+            this IQueryable<TEntity> entities, string field, Operator @operator, object arg, Type type)
         {
-
             ParameterExpression param = Expression.Parameter(typeof(TEntity));
-            MemberExpression member = Expression.Property(param, fieldName);
-            var propertyType = ((PropertyInfo)member.Member).PropertyType;
+            MemberExpression member = param.BuildMemberExpression(field);
+            var propertyType = member.Type;
             if (propertyType != type)
                 throw new ArgumentException(
-                    $"Type of {fieldName} is {propertyType.FullName} does not match provided type," +
+                    $"Type of {field} is {propertyType.FullName} does not match provided type," +
                     $" Provided type is {type.FullName}");
             if (arg.GetType() != type)
                 throw new ArgumentException(
@@ -58,6 +58,29 @@ namespace Shared.Linq
             };
             var whereClause = Expression.Lambda<Func<TEntity, bool>>(equalExpression, param);
             return entities.Where(whereClause);
+        }
+
+        private static MemberExpression BuildMemberExpression(this Expression expression, string field)
+        {
+            if (!IsValidField(field))
+                throw new ArgumentException($"\"{field}\" is not a valid field");
+            var fieldNames = field.Contains('.') ? new[] { field } : field.Split(".");
+            MemberExpression member = Expression.Property(expression, fieldNames[0]);
+            for (int i = 1; i < fieldNames.Length; i++)
+                member = Expression.Property(member, fieldNames[i]);
+            return member;
+        }
+
+        public static Type GetExpressionType(this Type type, string field)
+        {
+            if (!IsValidField(field))
+                throw new ArgumentException($"\"{field}\" is not a valid field");
+            return Expression.Parameter(type).BuildMemberExpression(field).Type;
+        }
+
+        private static bool IsValidField(string field)
+        {
+            return Regex.IsMatch(field, @"^([[:alpha:]]+\d*\.?)+([[:alpha:]]\d*)+$");
         }
     }
 

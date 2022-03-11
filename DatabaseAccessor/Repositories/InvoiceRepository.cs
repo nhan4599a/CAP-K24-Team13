@@ -29,7 +29,9 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<List<OrderItemDTO>> GetOrderHistoryAsync(string userId)
         {
-            var invoices = await _dbContext.InvoiceDetails.Where(item => item.Invoice.UserId.ToString() == userId).ToListAsync();
+            var invoices = await _dbContext.InvoiceDetails
+                .AsNoTracking()
+                .Where(item => item.Invoice.UserId.ToString() == userId).ToListAsync();
             return invoices.Select(item => _mapper.MapToOrderItemDTO(item)).ToList();
         }
 
@@ -116,13 +118,14 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
-        public async Task<StatisticResult> StatisticAsync(StatisticStrategy strategy)
+        public async Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy)
         {
             var builder = new StatisticResult.Builder(strategy);
             if (strategy == StatisticStrategy.ByDay)
             {
                 var dbStatisticResult = await _dbContext.Invoices
                     .AsNoTracking()
+                    .Where(invoice => invoice.ShopId == shopId)
                     .GroupBy(invoice => invoice.CreatedAt.Date)
                     .Where(group => group.Key.Year == DateTime.Now.Year && group.Key.Month == DateTime.Now.Month)
                     .Select(group => new
@@ -151,6 +154,7 @@ namespace DatabaseAccessor.Repositories
             {
                 var dbStatisticResult = await _dbContext.Invoices
                     .AsNoTracking()
+                    .Where(invoice => invoice.ShopId == shopId)
                     .GroupBy(invoice => new { invoice.CreatedAt.Month, invoice.CreatedAt.Year })
                     .Where(group => group.Key.Year == DateTime.Now.Year)
                     .Select(group => new
@@ -201,9 +205,7 @@ namespace DatabaseAccessor.Repositories
                     if (field.PropertyType.FullName == "System.DateTime")
                     {
                         object dateValue = DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
-                        object nextDate = ((DateTime)dateValue).AddDays(1);
-                        result = result.Where(key, Operator.GreaterThanOrEqual, dateValue, field.PropertyType)
-                            .Where(key, Operator.LessThan, nextDate, field.PropertyType);
+                        result = result.Where($"{key}.Date", Operator.GreaterThanOrEqual, dateValue, field.PropertyType);
                     }
                     else
                         result = result.Where<Invoice, string>(key, "Contains", value);

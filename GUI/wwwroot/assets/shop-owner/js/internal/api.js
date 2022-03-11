@@ -26,6 +26,7 @@ const interfaceEndpoint = '/interfaces';
 const checkoutEndpoint = '/checkout';
 const ratingProductEndpoint = '/rating';
 const orderEndpoint = '/orders';
+const statisticEndpoint = '/statistic';
 
 function findProducts(shopId, keyword, pageNumber, pageSize) {
     if (shopId === 0)
@@ -220,6 +221,14 @@ function importQuantityProduct(productId, importedQuantity) {
     return axios.post(`${productEndpoint}/${productId}/import`, importedQuantity, {
         headers: {
             "Content-Type": "application/json"
+        }
+    });
+}
+
+function getStatisticOfShop(shopId, strategy) {
+    return axios.get(`${statisticEndpoint}/shop/${shopId}/orders`, {
+        params: {
+            strategy
         }
     });
 }

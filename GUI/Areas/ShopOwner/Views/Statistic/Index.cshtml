@@ -15,8 +15,14 @@
                 </div>
             </div>
             <div class="card-body px-0 pb-2">
-                <div class="table-responsive p-0"></div>
+                <div class="table-responsive p-0">
+                    <canvas id="statistic-chart"></canvas>
+                </div>
             </div>
         </div>
     </div>
 </div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/internal/statistic.js")"></script>
+}

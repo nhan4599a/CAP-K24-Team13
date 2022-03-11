@@ -171,10 +171,10 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/statistic/orders",
+      "DownstreamPathTemplate": "/api/statistic/shop/{shopId}/orders",
       "DownstreamScheme": "http",
       "ServiceName": "StatisticService",
-      "UpstreamPathTemplate": "/statistic/orders",
+      "UpstreamPathTemplate": "/statistic/shop/{shopId}/orders",
       "UpstreamHttpMethod": [ "GET" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"

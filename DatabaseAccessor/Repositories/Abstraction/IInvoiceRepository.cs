@@ -23,6 +23,6 @@ namespace DatabaseAccessor.Repositories.Abstraction
         Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(int shopId, string key, string value,
             PaginationInfo paginationInfo);
 
-        Task<StatisticResult> StatisticAsync(StatisticStrategy strategy);
+        Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy);
     }
 }
