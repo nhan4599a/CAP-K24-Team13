@@ -1,5 +1,5 @@
 ﻿$(document).ready(() => {
-    const chart = null;
+    let chart = null;
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation();
     getShopId()
@@ -8,7 +8,7 @@
                 .then(statisticResult => {
                     animationLoader.hideAnimation();
                     const context = document.getElementById('statistic-chart').getContext('2d');
-                    const data = Object.entries(statisticResult)
+                    const data = Object.entries(statisticResult.details)
                         .map(keyValuePair => {
                             return {
                                 date: keyValuePair[0],
@@ -23,11 +23,15 @@
                             datasets: [
                                 {
                                     label: 'Actual Income',
-                                    data: data.map(obj => obj.actualIncome)
+                                    data: data.map(obj => obj.actualIncome),
+                                    borderColor: '#4bc0c0',
+                                    backgroundColor: ''
                                 },
                                 {
                                     label: 'Estimated Income',
-                                    data: data.map(obj => obj.estimatedIncome)
+                                    data: data.map(obj => obj.estimatedIncome),
+                                    borderColor: '#ff6384',
+                                    backgroundColor: ''
                                 }
                             ]
                         },
