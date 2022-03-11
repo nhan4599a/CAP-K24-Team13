@@ -208,12 +208,12 @@ namespace DatabaseAccessor.Repositories
                         }
                         else if (DateTimeExtension.TryParseExact(value, "MM/yyyy", out dateTime))
                         {
-                            result = result.Where($"{key}.Month", Operator.Equal, dateTime.Month, field.PropertyType)
-                                .Where($"{key}.Year", Operator.Equal, dateTime.Year, field.PropertyType);
+                            result = result.Where($"{key}.Month", Operator.Equal, dateTime.Month, typeof(int))
+                                .Where($"{key}.Year", Operator.Equal, dateTime.Year, typeof(int));
                         }
                         else if (DateTimeExtension.TryParseExact(value, "yyyy", out dateTime))
                         {
-                            result = result.Where($"{key}.Year", Operator.Equal, dateTime.Year, field.PropertyType);
+                            result = result.Where($"{key}.Year", Operator.Equal, dateTime.Year, typeof(int));
                         }
                     }
                     else
