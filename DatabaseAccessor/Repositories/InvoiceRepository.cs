@@ -215,6 +215,11 @@ namespace DatabaseAccessor.Repositories
                         {
                             result = result.Where($"{key}.Year", Operator.Equal, dateTime.Year, typeof(int));
                         }
+                        else
+                        {
+                            return CommandResponse<PaginatedList<InvoiceDTO>>
+                                .Error("Provided datetime value is not supported", null);
+                        }
                     }
                     else
                         result = result.Where<Invoice, string>(key, "Contains", value);
