@@ -71,16 +71,9 @@ namespace Shared.Linq
             return member;
         }
 
-        public static Type GetExpressionType(this Type type, string field)
-        {
-            if (!IsValidField(field))
-                throw new ArgumentException($"\"{field}\" is not a valid field");
-            return Expression.Parameter(type).BuildMemberExpression(field).Type;
-        }
-
         private static bool IsValidField(string field)
         {
-            return Regex.IsMatch(field, @"^([[:alpha:]]+\d*\.?)+([[:alpha:]]\d*)+$");
+            return Regex.IsMatch(field, @"^([a-zA-Z_]+\d*\.?)+([a-zA-Z_]\d*)+$");
         }
     }
 
