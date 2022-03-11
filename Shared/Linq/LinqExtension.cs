@@ -64,7 +64,7 @@ namespace Shared.Linq
         {
             if (!IsValidField(field))
                 throw new ArgumentException($"\"{field}\" is not a valid field");
-            var fieldNames = field.Contains('.') ? new[] { field } : field.Split(".");
+            var fieldNames = !field.Contains('.') ? new[] { field } : field.Split(".");
             MemberExpression member = Expression.Property(expression, fieldNames[0]);
             for (int i = 1; i < fieldNames.Length; i++)
                 member = Expression.Property(member, fieldNames[i]);
