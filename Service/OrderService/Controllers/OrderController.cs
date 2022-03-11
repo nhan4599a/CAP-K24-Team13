@@ -54,6 +54,7 @@ namespace OrderService.Controllers
             return ApiResult<bool>.CreateSucceedResult(result.Response);
         }
 
+        [AllowAnonymous]
         [HttpGet("shop/{shopId}/search")]
         public async Task<ApiResult> FindOrders(int shopId, [FromQuery] FindInvoiceQuery query)
         {
