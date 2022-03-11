@@ -205,7 +205,7 @@ namespace DatabaseAccessor.Repositories
                     if (field.PropertyType.FullName == "System.DateTime")
                     {
                         object dateValue = DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
-                        result = result.Where($"{key}.Date", Operator.GreaterThanOrEqual, dateValue, field.PropertyType);
+                        result = result.Where($"{key}.Date", Operator.Equal, dateValue, field.PropertyType);
                     }
                     else
                         result = result.Where<Invoice, string>(key, "Contains", value);
