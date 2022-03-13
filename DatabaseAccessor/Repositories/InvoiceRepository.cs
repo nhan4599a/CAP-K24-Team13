@@ -30,6 +30,7 @@ namespace DatabaseAccessor.Repositories
         {
             var invoices = await _dbContext.InvoiceDetails
                 .AsNoTracking()
+                .Include(e => e.Invoice)
                 .Include(e => e.Product)
                 .Where(item => item.Invoice.UserId.ToString() == userId).ToListAsync();
             return invoices.Select(item => _mapper.MapToOrderItemDTO(item)).ToList();

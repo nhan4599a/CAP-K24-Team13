@@ -50,7 +50,7 @@ namespace DatabaseAccessor.Mapping
                         option => option.MapFrom(source => source.Product.ProductName))
                     .ForMember(target => target.Images,
                         option => option.MapFrom<SingleImageResolver>())
-                    .ForMember(target => target.Created,
+                    .ForMember(target => target.CreatedAt,
                         option => option.MapFrom(source => source.Invoice.CreatedAt));
                 cfg.CreateMap<ProductComment, RatingDTO>()
                     .ForMember(target => target.ProductName,

@@ -12,7 +12,7 @@ namespace Shared.DTOs
 
         public int Quantity { get; set; }   
 
-        public DateTime Created { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public int Price { get; set; }   
 
