@@ -22,10 +22,10 @@ namespace Shared.Models
             SortedDictionary<StatisticDateResult, StatisticResultItem> items)
         {
             StatisticBy = strategy;
-            HighestIncome = items.Max(item => item.Value.ActualIncome);
-            LowestIncome = items.Min(item => item.Value.ActualIncome);
-            HighestDate = items.First(item => item.Value.ActualIncome == HighestIncome).Key;
-            LowestDate = items.First(item => item.Value.ActualIncome == LowestIncome).Key;
+            HighestIncome = items.Max(item => item.Value.Income);
+            LowestIncome = items.Min(item => item.Value.Income);
+            HighestDate = items.First(item => item.Value.Income == HighestIncome).Key;
+            LowestDate = items.First(item => item.Value.Income == LowestIncome).Key;
             if (StatisticBy == StatisticStrategy.ByDay)
             {
                 for (int i = 1; i <= DateTime.Now.Day; i++)

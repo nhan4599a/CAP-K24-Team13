@@ -10,6 +10,7 @@ using Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories
@@ -29,6 +30,7 @@ namespace DatabaseAccessor.Repositories
         {
             var invoices = await _dbContext.InvoiceDetails
                 .AsNoTracking()
+                .Include(e => e.Product)
                 .Where(item => item.Invoice.UserId.ToString() == userId).ToListAsync();
             return invoices.Select(item => _mapper.MapToOrderItemDTO(item)).ToList();
         }
@@ -131,9 +133,8 @@ namespace DatabaseAccessor.Repositories
                         group.Key,
                         Value = new StatisticResultItem
                         {
-                            EstimatedIncome = group.SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
-                            ActualIncome = group.Where(e => e.Status == InvoiceStatus.Succeed)
-                                    .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
+                            Income = group.Where(e => e.Status == InvoiceStatus.Succeed)
+                                        .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
                             Data = new StatisticResultItemData
                             {
                                 Total = group.Count(),
@@ -160,9 +161,8 @@ namespace DatabaseAccessor.Repositories
                         group.Key,
                         Value = new StatisticResultItem
                         {
-                            EstimatedIncome = group.SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
-                            ActualIncome = group.Where(e => e.Status == InvoiceStatus.Succeed)
-                                    .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
+                            Income = group.Where(e => e.Status == InvoiceStatus.Succeed)
+                                        .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
                             Data = new StatisticResultItemData
                             {
                                 Total = group.Count(),
@@ -188,7 +188,8 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<PaginatedList<InvoiceDTO>>.Error("Key not existed. Is it a typo?", null);
             var result = _dbContext.Invoices.AsNoTracking().Include(e => e.Details)
                 .Where(invoice => invoice.ShopId == shopId);
-            if (field.PropertyType == typeof(string) 
+            if (field.PropertyType == typeof(string)
+                    || field.PropertyType.IsEnum
                     || field.PropertyType.IsNumberType() 
                     || field.PropertyType.FullName == "System.DateTime")
             {
@@ -200,7 +201,7 @@ namespace DatabaseAccessor.Repositories
                             .GetMethod("Parse", new[] { typeof(string) }).Invoke(null, new[] { value });
                         result = result.Where(key, Operator.Equal, numberValue, field.PropertyType);
                     }
-                    if (field.PropertyType.FullName == "System.DateTime")
+                    else if (field.PropertyType.FullName == "System.DateTime")
                     {
                         if (DateTimeExtension.TryParseExact(value, "dd/MM/yyyy", out DateTime dateTime))
                         {
@@ -220,6 +221,13 @@ namespace DatabaseAccessor.Repositories
                             return CommandResponse<PaginatedList<InvoiceDTO>>
                                 .Error("Provided datetime value is not supported", null);
                         }
+                    }
+                    else if (field.PropertyType.IsEnum)
+                    {
+                        var enumObj = Convert.ChangeType(Regex.IsMatch(value, @"^\d+$")
+                            ? Enum.ToObject(field.PropertyType, byte.Parse(value))
+                            : Enum.Parse(field.PropertyType, value, true), field.PropertyType);
+                        result = result.Where(key, Operator.Equal, enumObj, field.PropertyType);
                     }
                     else
                         result = result.Where<Invoice, string>(key, "Contains", value);
