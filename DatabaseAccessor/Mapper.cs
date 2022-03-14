@@ -39,8 +39,6 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.Image,
                         options => options.MapFrom<SingleImageResolver>());
                 cfg.CreateMap<Invoice, OrderDTO>()
-                    .ForMember(target => target.OrderCode,
-                        options => options.MapFrom(source => source.InvoiceCode))
                     .ForMember(target => target.CreatedAt,
                         options => options.MapFrom(source => source.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")))
                     .ForMember(target => target.CustomerName,

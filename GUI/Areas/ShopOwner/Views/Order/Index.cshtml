@@ -1,22 +1,8 @@
 ﻿@using Shared.DTOs
 @using Shared.Models
 @using System.Collections
-@model List<OrderDTO>
 @section SideBar {
     @await Component.InvokeAsync("SideBar", new { activeItem = "orders" });
-}
-@{
-    var classifiedOrderList = new Dictionary<InvoiceStatus, List<OrderDTO>>();
-    classifiedOrderList[InvoiceStatus.New] = new List<OrderDTO>();
-    classifiedOrderList[InvoiceStatus.Confirmed] = new List<OrderDTO>();
-    classifiedOrderList[InvoiceStatus.ShipperReceived] = new List<OrderDTO>();
-    classifiedOrderList[InvoiceStatus.Succeed] = new List<OrderDTO>();
-    classifiedOrderList[InvoiceStatus.Canceled] = new List<OrderDTO>();
-
-    foreach (var order in Model)
-    {
-        classifiedOrderList[order.Status].Add(order);
-    }
 }
 <div class="row">
     <div class="col-12">
@@ -40,12 +26,7 @@
                         <div class="board-column-container" data-status="0">
                             <div class="board-column-header">Confirm</div>
                             <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.New])
-                                    {
-                                        @await Component.InvokeAsync("OrderItem", new { order });
-                                    }
-                                </div>
+                                <div class="board-column-content"></div>
                             </div>
                         </div>
                     </div>
@@ -53,12 +34,7 @@
                         <div class="board-column-container" data-status="1">
                             <div class="board-column-header">In process</div>
                             <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Confirmed])
-                                    {
-                                        @await Component.InvokeAsync("OrderItem", new { order });
-                                    }
-                                </div>
+                                <div class="board-column-content"></div>
                             </div>
                         </div>
                     </div>
@@ -66,12 +42,7 @@
                         <div class="board-column-container" data-status="2">
                             <div class="board-column-header">Deliveried</div>
                             <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.ShipperReceived])
-                                    {
-                                        @await Component.InvokeAsync("OrderItem", new { order });
-                                    }
-                                </div>
+                                <div class="board-column-content"></div>
                             </div>
                         </div>
                     </div>
@@ -79,12 +50,7 @@
                         <div class="board-column-container" data-status="3">
                             <div class="board-column-header">Done</div>
                             <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Succeed])
-                                    {
-                                        @await Component.InvokeAsync("OrderItem", new { order });
-                                    }
-                                </div>
+                                <div class="board-column-content"></div>
                             </div>
                         </div>
                     </div>
@@ -92,12 +58,7 @@
                         <div class="board-column-container" data-status="4">
                             <div class="board-column-header">Canceled</div>
                             <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach (var order in classifiedOrderList[InvoiceStatus.Canceled])
-                                    {
-                                        @await Component.InvokeAsync("OrderItem", new { order });
-                                    }
-                                </div>
+                                <div class="board-column-content"></div>
                             </div>
                         </div>
                     </div>
