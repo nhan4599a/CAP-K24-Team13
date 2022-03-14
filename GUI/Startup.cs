@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -123,7 +122,7 @@ namespace GUI
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseGlogalExceptionHandlerMiddleware();
+            app.UseGlogalExceptionHandlerMiddleware(true);
 
             app.UseEndpoints(endpoints =>
             {

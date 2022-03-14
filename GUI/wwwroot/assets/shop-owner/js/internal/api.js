@@ -233,6 +233,10 @@ function getStatisticOfShop(shopId, strategy) {
     });
 }
 
+function getRecentOrdersOfShop(shopId) {
+    return axios.get(`${orderEndpoint}/shop/${shopId}`);
+}
+
 function getAccessToken() {
     return axios.get('https://cap-k24-team13.herokuapp.com/authentication/token');
 }

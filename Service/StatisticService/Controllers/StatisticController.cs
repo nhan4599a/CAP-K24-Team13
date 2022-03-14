@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using StatisticService.Commands;
@@ -8,6 +9,7 @@ namespace StatisticService.Controllers
 {
     [ApiController]
     [Route("/api/statistic")]
+    [Authorize]
     public class StatisticController : ControllerBase
     {
         private readonly IMediator _mediator;

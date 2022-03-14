@@ -36,6 +36,34 @@ namespace AuthServer.Configurations
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
                 AllowOfflineAccess = true
+            },
+            new Client
+            {
+                ClientId = "oidc-client-team5",
+                ClientName = "OIDC client Team5",
+                AllowedGrantTypes = GrantTypes.Code,
+                ClientSecrets = new[]
+                {
+                    new Secret("CapK24Team5".Sha256())
+                },
+                RedirectUris = new[]
+                {
+                    "https://emallsolution-admin.herokuapp.com/signin-oidc"
+                },
+                PostLogoutRedirectUris = new[]
+                {
+                    "https://emallsolution-admin.herokuapp.com/signout-callback-oidc"
+                },
+                AllowedScopes = new[]
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    "roles", "shop"
+                },
+                RequirePkce = true,
+                AllowPlainTextPkce = false,
+                AllowOfflineAccess = true
             }
         };
 

@@ -15,18 +15,14 @@ namespace GUI.Areas.User.Controllers
     {
         private readonly IOrderClient _orderHistoryClient;
 
-        private readonly ILogger<OrderHistoryController> _logger;
-
-        public OrderHistoryController(IOrderClient orderHistoryClient, ILoggerFactory loggerFactory)
+        public OrderHistoryController(IOrderClient orderHistoryClient)
         {
             _orderHistoryClient = orderHistoryClient;
-            _logger = loggerFactory.CreateLogger<OrderHistoryController>();
         }
 
         public async Task<IActionResult> Index()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
-            _logger.LogInformation("Token: " + token);
             var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory(token, User.GetUserId().ToString());
             if (!orderHistoryRespone.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
