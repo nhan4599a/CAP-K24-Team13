@@ -35,28 +35,28 @@ namespace Shared.Models
             LowestDate = items.MinBy(item => item.Value.Income).Key;
             if (StatisticBy == StatisticStrategy.ByDay)
             {
-                while (Range.Range.Start.AddDays(1) < Range.Range.End)
+                while ((Range.Range.Start = Range.Range.Start.AddDays(1)) < Range.Range.End)
                 {
                     items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
                 }
             }
             else if (StatisticBy == StatisticStrategy.ByMonth)
             {
-                while (Range.Range.Start.AddMonths(1) < Range.Range.End)
+                while ((Range.Range.Start = Range.Range.Start.AddMonths(1)) < Range.Range.End)
                 {
                     items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
                 }
             }
             else if (StatisticBy == StatisticStrategy.ByQuarter)
             {
-                while (Range.Range.Start.AddMonths(3) < Range.Range.End)
+                while ((Range.Range.Start = Range.Range.Start.AddMonths(3)) < Range.Range.End)
                 {
                     items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
                 }
             }
             else
             {
-                while (Range.Range.Start.AddYears(1) < Range.Range.End)
+                while ((Range.Range.Start = Range.Range.Start.AddYears(1)) < Range.Range.End)
                 {
                     items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
                 }

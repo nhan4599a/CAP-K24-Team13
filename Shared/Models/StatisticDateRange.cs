@@ -71,9 +71,9 @@ namespace Shared.Models
 
         public class Result
         {
-            public DateTime Start { get; init; }
+            public DateTime Start { get; set; }
 
-            public DateTime End { get; init; }
+            public DateTime End { get; set; }
 
             public Result(DateTime start, DateTime end)
             {
