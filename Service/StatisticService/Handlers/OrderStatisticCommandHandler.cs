@@ -19,7 +19,7 @@ namespace StatisticService.Handlers
 
         public Task<StatisticResult> Handle(OrderStatisticCommand request, CancellationToken cancellationToken)
         {
-            return _repository.StatisticAsync(request.ShopId, request.Strategy);
+            return _repository.StatisticAsync(request.ShopId, request.Strategy, request.Range);
         }
 
         public void Dispose()

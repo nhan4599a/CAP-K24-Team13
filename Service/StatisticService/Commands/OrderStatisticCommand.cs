@@ -8,5 +8,7 @@ namespace StatisticService.Commands
         public int ShopId { get; set; }
 
         public StatisticStrategy Strategy { get; set; }
+
+        public StatisticDateRange? Range { get; set; }
     }
 }

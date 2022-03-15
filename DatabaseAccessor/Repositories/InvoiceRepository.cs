@@ -119,16 +119,15 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
-        public async Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy)
+        public async Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy, 
+            StatisticDateRange range)
         {
             var builder = new StatisticResult.Builder(strategy);
+            var invoices = GetInvoicesInTime(shopId, range.Range.Start, range.Range.End);
             if (strategy == StatisticStrategy.ByDay)
             {
-                var dbStatisticResult = await _dbContext.Invoices
-                    .AsNoTracking()
-                    .Where(invoice => invoice.ShopId == shopId)
+                var dbStatisticResult = await invoices
                     .GroupBy(invoice => invoice.CreatedAt.Date)
-                    .Where(group => group.Key.Year == DateTime.Now.Year && group.Key.Month == DateTime.Now.Month)
                     .Select(group => new
                     {
                         group.Key,
@@ -150,13 +149,10 @@ namespace DatabaseAccessor.Repositories
                     builder.AddItem(group.Key, group.Value);
                 });
             }
-            else
+            else if (strategy == StatisticStrategy.ByMonth)
             {
-                var dbStatisticResult = await _dbContext.Invoices
-                    .AsNoTracking()
-                    .Where(invoice => invoice.ShopId == shopId)
+                var dbStatisticResult = await invoices
                     .GroupBy(invoice => new { invoice.CreatedAt.Month, invoice.CreatedAt.Year })
-                    .Where(group => group.Key.Year == DateTime.Now.Year)
                     .Select(group => new
                     {
                         group.Key,
@@ -178,7 +174,57 @@ namespace DatabaseAccessor.Repositories
                     builder.AddItem(group.Key.Month, group.Key.Year, group.Value);
                 });
             }
-            return builder.Result;
+            else if (strategy == StatisticStrategy.ByQuarter)
+            {
+                var dbStatisticResult = await invoices
+                    .GroupBy(invoice => new { Quarter = Math.Ceiling(invoice.CreatedAt.Month / 3d), invoice.CreatedAt.Year })
+                    .Select(group => new
+                    {
+                        group.Key,
+                        Value = new StatisticResultItem
+                        {
+                            Income = group.Where(e => e.Status == InvoiceStatus.Succeed)
+                                        .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
+                            Data = new StatisticResultItemData
+                            {
+                                Total = group.Count(),
+                                NewInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.New),
+                                SucceedInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Succeed),
+                                CanceledInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Canceled)
+                            }
+                        }
+                    }).ToListAsync();
+                dbStatisticResult.ForEach(group =>
+                {
+                    builder.AddItem((int)group.Key.Quarter, group.Key.Year, group.Value);
+                });
+            }
+            else
+            {
+                var dbStatisticResult = await invoices
+                                    .GroupBy(invoice => invoice.CreatedAt.Year)
+                                    .Select(group => new
+                                    {
+                                        group.Key,
+                                        Value = new StatisticResultItem
+                                        {
+                                            Income = group.Where(e => e.Status == InvoiceStatus.Succeed)
+                                                        .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
+                                            Data = new StatisticResultItemData
+                                            {
+                                                Total = group.Count(),
+                                                NewInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.New),
+                                                SucceedInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Succeed),
+                                                CanceledInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Canceled)
+                                            }
+                                        }
+                                    }).ToListAsync();
+                dbStatisticResult.ForEach(group =>
+                {
+                    builder.AddItem(group.Key, group.Value);
+                });
+            }
+            return builder.Build(range);
         }
         
         public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(int shopId, string key,
@@ -246,6 +292,14 @@ namespace DatabaseAccessor.Repositories
                 .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return CommandResponse<PaginatedList<InvoiceDTO>>.Success(returnResult);
+        }
+
+        private IQueryable<Invoice> GetInvoicesInTime(int shopId, DateTime startDate, DateTime endDate)
+        {
+            return _dbContext.Invoices
+                    .AsNoTracking()
+                    .Where(invoice => invoice.ShopId == shopId)
+                    .Where(invoice => invoice.CreatedAt.Date >= startDate && invoice.CreatedAt.Date <= endDate);
         }
 
         public void Dispose()

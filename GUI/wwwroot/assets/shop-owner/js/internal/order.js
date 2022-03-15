@@ -14,6 +14,14 @@
                         $(`.board-column.${orderStatusClassList[content]} .board-column-content`)
                             .html(columnContents[content]);
                     }
+                    $.getScript('/assets/shop-owner/js/internal/kanban.js')
+                        .then(() => {
+                            animationLoader.hideAnimation();
+                        });
+                })
+                .catch(error => {
+                    animationLoader.hideAnimation();
+                    toastr.error(error, 'Error!');
                 });
         });
 });

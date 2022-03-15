@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Shared.Models
 {
     public class StatisticResult
     {
         public StatisticStrategy StatisticBy { get; set; }
+
+        public StatisticDateRange Range { get; set; }
 
         public IDictionary<string, StatisticResultItem> Details { get; set; }
 
@@ -18,28 +21,44 @@ namespace Shared.Models
 
         public StatisticDateResult LowestDate { get; set; }
 
-        protected StatisticResult(StatisticStrategy strategy,
+        [JsonPropertyName("user")]
+        public int UsersCount { get; set; }
+
+        protected StatisticResult(StatisticStrategy strategy, StatisticDateRange range,
             SortedDictionary<StatisticDateResult, StatisticResultItem> items)
         {
             StatisticBy = strategy;
+            Range = range;
             HighestIncome = items.Max(item => item.Value.Income);
             LowestIncome = items.Min(item => item.Value.Income);
-            HighestDate = items.First(item => item.Value.Income == HighestIncome).Key;
-            LowestDate = items.First(item => item.Value.Income == LowestIncome).Key;
+            HighestDate = items.MaxBy(item => item.Value.Income).Key;
+            LowestDate = items.MinBy(item => item.Value.Income).Key;
             if (StatisticBy == StatisticStrategy.ByDay)
             {
-                for (int i = 1; i <= DateTime.Now.Day; i++)
+                while (Range.Range.Start.AddDays(1) < Range.Range.End)
                 {
-                    var dateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i);
-                    items.TryAdd(new StatisticDateResult(strategy, dateTime), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
+                }
+            }
+            else if (StatisticBy == StatisticStrategy.ByMonth)
+            {
+                while (Range.Range.Start.AddMonths(1) < Range.Range.End)
+                {
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
+                }
+            }
+            else if (StatisticBy == StatisticStrategy.ByQuarter)
+            {
+                while (Range.Range.Start.AddMonths(3) < Range.Range.End)
+                {
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
                 }
             }
             else
             {
-                for (int i = 1; i <= DateTime.Now.Month; i++)
+                while (Range.Range.Start.AddYears(1) < Range.Range.End)
                 {
-                    var dateTime = new DateTime(DateTime.Now.Year, i, 1);
-                    items.TryAdd(new StatisticDateResult(strategy, dateTime), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
                 }
             }
             Details = items.ToDictionary(e => e.Key.ToString(), e => e.Value);
@@ -51,11 +70,6 @@ namespace Shared.Models
 
             private SortedDictionary<StatisticDateResult, StatisticResultItem> _details;
 
-            public StatisticResult Result
-            {
-                get => new(Strategy, _details);
-            }
-
             public Builder(StatisticStrategy strategy)
             {
                 Strategy = strategy;
@@ -64,18 +78,38 @@ namespace Shared.Models
 
             public Builder AddItem(DateTime key, StatisticResultItem item)
             {
+                if (Strategy != StatisticStrategy.ByDay)
+                {
+                    throw new NotSupportedException(
+                        $"This method does not supported for statistic {Strategy} strategy");
+                }
                 _details.Add(new StatisticDateResult(Strategy, key), item);
                 return this;
             }
 
             public Builder AddItem(int month, int year, StatisticResultItem item)
             {
-                if (Strategy == StatisticStrategy.ByDay)
+                if (Strategy != StatisticStrategy.ByMonth)
                 {
                     throw new NotSupportedException(
                         $"This method does not supported for statistic {Strategy} strategy");
                 }
                 return AddItem(new DateTime(year, month, 1), item);
+            }
+
+            public Builder AddItem(int year, StatisticResultItem item)
+            {
+                if (Strategy != StatisticStrategy.ByQuarter)
+                {
+                    throw new NotSupportedException(
+                        $"This method does not supported for statistic {Strategy} strategy");
+                }
+                return AddItem(new DateTime(year, 1, 1), item);
+            }
+
+            public StatisticResult Build(StatisticDateRange range)
+            {
+                return new(Strategy, range, _details);
             }
         }
     }

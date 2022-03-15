@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using StatisticService.Commands;
+using System;
 using System.Threading.Tasks;
 
 namespace StatisticService.Controllers
 {
     [ApiController]
     [Route("/api/statistic")]
-    [Authorize]
+    //[Authorize]
     public class StatisticController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -21,14 +22,27 @@ namespace StatisticService.Controllers
 
         [HttpGet("shop/{shopId}/orders")]
         public async Task<ApiResult> StatisticOrder(int shopId,
-            [FromQuery(Name = "strategy")] StatisticStrategy strategy = StatisticStrategy.ByMonth)
+            [FromQuery(Name = "strategy")] StatisticStrategy strategy,
+            [FromQuery(Name = "start")] string start,
+            [FromQuery(Name = "end")] string end)
         {
-            var result = await _mediator.Send(new OrderStatisticCommand
+            var parseResult = StatisticDateRange.TryCreate(strategy, start, end, out StatisticDateRange range);
+            if (!parseResult.IsSucceed)
+                return ApiResult.CreateErrorResult(400, parseResult.Exception.Message);
+            try
             {
-                ShopId = shopId,
-                Strategy = strategy
-            });
-            return ApiResult<StatisticResult>.CreateSucceedResult(result);
+                var result = await _mediator.Send(new OrderStatisticCommand
+                {
+                    ShopId = shopId,
+                    Strategy = strategy,
+                    Range = range
+                });
+                return ApiResult<StatisticResult>.CreateSucceedResult(result);
+            }
+            catch (Exception e)
+            {
+                return ApiResult.CreateErrorResult(500, e.Message);
+            }
         }
     }
 }

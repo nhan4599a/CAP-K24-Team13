@@ -8,8 +8,4 @@
     <Compile Remove="Models\CartItem.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Linq\" />
-  </ItemGroup>
-
 </Project>

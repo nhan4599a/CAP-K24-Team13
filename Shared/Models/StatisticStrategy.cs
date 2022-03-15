@@ -2,6 +2,6 @@
 {
     public enum StatisticStrategy
     {
-        ByDay, ByMonth
+        ByDay, ByMonth, ByQuarter, ByYear
     }
 }
