@@ -55,7 +55,7 @@ namespace Shared.Models
                 {
                     int quarter = DateTimeExtension.GetQuarter(Range.Start.Month);
                     items.TryAdd(new StatisticDateResult(strategy, 
-                        DateTimeExtension.StartOfMonth(quarter, Range.Start.Month)), null);
+                        DateTimeExtension.StartOfMonth(quarter, Range.Start.Year)), null);
                 }
             }
             else
