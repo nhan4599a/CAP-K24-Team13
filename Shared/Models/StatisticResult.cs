@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -52,7 +53,9 @@ namespace Shared.Models
             {
                 while ((Range.Start = Range.Start.AddMonths(3)) < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), null);
+                    int quarter = DateTimeExtension.GetQuarter(Range.Start.Month);
+                    items.TryAdd(new StatisticDateResult(strategy, 
+                        DateTimeExtension.StartOfMonth(quarter, Range.Start.Month)), null);
                 }
             }
             else

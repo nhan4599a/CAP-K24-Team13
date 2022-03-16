@@ -34,6 +34,11 @@ namespace Shared.Extensions
             return EndOfMonth(12, year);
         }
 
+        public static int GetQuarter(int month)
+        {
+            return (int)Math.Ceiling(month / 3d);
+        }
+
         public static int DayOfMonth(int month, int year)
         {
             if (month < 1 || month > 12)
