@@ -55,6 +55,8 @@ namespace Shared.Models
                     return;
                 }
             }
+            throw new
+                ArgumentException($"Combination of {nameof(start)} and {nameof(end)} is invalid for strategy {Strategy}");
         }
 
         public static ParseResult TryCreate(StatisticStrategy strategy, string start, string end, out StatisticDateRange range)
