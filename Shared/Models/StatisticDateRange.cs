@@ -1,10 +1,12 @@
 ﻿using Shared.Extensions;
 using System;
+using System.Text.Json.Serialization;
 
 namespace Shared.Models
 {
     public class StatisticDateRange
     {
+        [JsonIgnore]
         public StatisticStrategy Strategy { get; set; }
 
         public Result Range { get; init; }
@@ -57,6 +59,8 @@ namespace Shared.Models
 
         public static ParseResult TryCreate(StatisticStrategy strategy, string start, string end, out StatisticDateRange range)
         {
+            if (string.IsNullOrWhiteSpace(end))
+                end = new StatisticDateResult(strategy, DateTime.Now).ToString();
             try
             {
                 range = new StatisticDateRange(strategy, start, end);
@@ -78,7 +82,7 @@ namespace Shared.Models
             public Result(DateTime start, DateTime end)
             {
                 if (end < start)
-                    throw new ArgumentException();
+                    throw new ArgumentException($"{nameof(start)} must be less than or equal to {nameof(end)}");
                 Start = start;
                 End = end;
             }

@@ -9,7 +9,7 @@ namespace Shared.Models
     {
         public StatisticStrategy StatisticBy { get; set; }
 
-        public StatisticDateRange Range { get; set; }
+        public StatisticDateRange.Result Range { get; set; }
 
         public IDictionary<string, StatisticResultItem> Details { get; set; }
 
@@ -24,7 +24,7 @@ namespace Shared.Models
         [JsonPropertyName("user")]
         public int UsersCount { get; set; }
 
-        protected StatisticResult(StatisticStrategy strategy, StatisticDateRange range,
+        protected StatisticResult(StatisticStrategy strategy, StatisticDateRange.Result range,
             SortedDictionary<StatisticDateResult, StatisticResultItem> items)
         {
             StatisticBy = strategy;
@@ -35,30 +35,31 @@ namespace Shared.Models
             LowestDate = items.MinBy(item => item.Value.Income).Key;
             if (StatisticBy == StatisticStrategy.ByDay)
             {
-                while ((Range.Range.Start = Range.Range.Start.AddDays(1)) < Range.Range.End)
+                int tempCount = 0;
+                while ((Range.Start = Range.Start.AddDays(tempCount++)) < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), new StatisticResultItem());
                 }
             }
             else if (StatisticBy == StatisticStrategy.ByMonth)
             {
-                while ((Range.Range.Start = Range.Range.Start.AddMonths(1)) < Range.Range.End)
+                while ((Range.Start = Range.Start.AddMonths(1)) < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), new StatisticResultItem());
                 }
             }
             else if (StatisticBy == StatisticStrategy.ByQuarter)
             {
-                while ((Range.Range.Start = Range.Range.Start.AddMonths(3)) < Range.Range.End)
+                while ((Range.Start = Range.Start.AddMonths(3)) < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), new StatisticResultItem());
                 }
             }
             else
             {
-                while ((Range.Range.Start = Range.Range.Start.AddYears(1)) < Range.Range.End)
+                while ((Range.Start = Range.Start.AddYears(1)) < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Range.Start), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), new StatisticResultItem());
                 }
             }
             Details = items.ToDictionary(e => e.Key.ToString(), e => e.Value);
@@ -89,7 +90,7 @@ namespace Shared.Models
 
             public Builder AddItem(int month, int year, StatisticResultItem item)
             {
-                if (Strategy != StatisticStrategy.ByMonth)
+                if (Strategy != StatisticStrategy.ByMonth && Strategy != StatisticStrategy.ByQuarter)
                 {
                     throw new NotSupportedException(
                         $"This method does not supported for statistic {Strategy} strategy");
@@ -99,7 +100,7 @@ namespace Shared.Models
 
             public Builder AddItem(int year, StatisticResultItem item)
             {
-                if (Strategy != StatisticStrategy.ByQuarter)
+                if (Strategy != StatisticStrategy.ByYear)
                 {
                     throw new NotSupportedException(
                         $"This method does not supported for statistic {Strategy} strategy");
@@ -109,7 +110,7 @@ namespace Shared.Models
 
             public StatisticResult Build(StatisticDateRange range)
             {
-                return new(Strategy, range, _details);
+                return new(Strategy, range.Range, _details);
             }
         }
     }
