@@ -33,7 +33,7 @@ namespace Shared.Models
 
         public int CompareTo(StatisticDateResult obj)
         {
-            return ToString().CompareTo(obj.ToString());
+            return Result.CompareTo(obj.Result);
         }
 
         public class Comparer : IComparer<StatisticDateResult>
