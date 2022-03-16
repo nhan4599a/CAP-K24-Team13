@@ -21,8 +21,14 @@ namespace Shared.Models
 
         public override string ToString()
         {
-            string format = Strategy == StatisticStrategy.ByDay ? "dd/MM/yyyy" :
-                (Strategy == StatisticStrategy.ByYear ? "yyyy" : "MM/yyyy");
+            string format = Strategy switch
+            {
+                StatisticStrategy.ByDay => "dd/MM/yyyy",
+                StatisticStrategy.ByMonth => "MM/yyyy",
+                StatisticStrategy.ByQuarter => "M/yyyy",
+                StatisticStrategy.ByYear => "yyyy",
+                _ => throw new NotImplementedException()
+            };
             return Result.ToString(format);
         }
 

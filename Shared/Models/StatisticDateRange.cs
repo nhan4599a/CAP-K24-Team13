@@ -24,8 +24,8 @@ namespace Shared.Models
             }
             else if (strategy == StatisticStrategy.ByMonth)
             {
-                if (DateTimeExtension.TryParseExact(start, "MM/yyyy", out DateTime startDate) &&
-                        DateTimeExtension.TryParseExact(end, "MM/yyyy", out DateTime endDate))
+                if (DateTimeExtension.TryParseExact(start, "M/yyyy", out DateTime startDate) &&
+                        DateTimeExtension.TryParseExact(end, "M/yyyy", out DateTime endDate))
                 {
                     Range = new Result(startDate, DateTimeExtension.EndOfMonth(endDate.Month, endDate.Year));
                     return;
@@ -33,8 +33,8 @@ namespace Shared.Models
             }
             else if (strategy == StatisticStrategy.ByQuarter)
             {
-                if (DateTimeExtension.TryParseExact(start, "MM/yyyy", out DateTime startDate) &&
-                        DateTimeExtension.TryParseExact(end, "MM/yyyy", out DateTime endDate))
+                if (DateTimeExtension.TryParseExact(start, "M/yyyy", out DateTime startDate) &&
+                        DateTimeExtension.TryParseExact(end, "M/yyyy", out DateTime endDate))
                 {
                     if (startDate.Month < 1 || startDate.Month > 4 || endDate.Month < 1 || endDate.Month > 4)
                         throw new ArgumentException("Provided range is not a valid quarter");
