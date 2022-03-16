@@ -80,32 +80,17 @@ namespace Shared.Models
 
             public Builder AddItem(DateTime key, StatisticResultItem item)
             {
-                if (Strategy != StatisticStrategy.ByDay)
-                {
-                    throw new NotSupportedException(
-                        $"This method does not supported for statistic {Strategy} strategy");
-                }
                 _details.Add(new StatisticDateResult(Strategy, key), item);
                 return this;
             }
 
             public Builder AddItem(int month, int year, StatisticResultItem item)
             {
-                if (Strategy != StatisticStrategy.ByMonth && Strategy != StatisticStrategy.ByQuarter)
-                {
-                    throw new NotSupportedException(
-                        $"This method does not supported for statistic {Strategy} strategy");
-                }
                 return AddItem(new DateTime(year, month, 1), item);
             }
 
             public Builder AddItem(int year, StatisticResultItem item)
             {
-                if (Strategy != StatisticStrategy.ByYear)
-                {
-                    throw new NotSupportedException(
-                        $"This method does not supported for statistic {Strategy} strategy");
-                }
                 return AddItem(new DateTime(year, 1, 1), item);
             }
 
