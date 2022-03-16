@@ -230,63 +230,67 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(int shopId, string key,
             string value, PaginationInfo paginationInfo)
         {
-            var field = typeof(Invoice).GetProperty(key);
-            if (field == null)
-                return CommandResponse<PaginatedList<InvoiceDTO>>.Error("Key not existed. Is it a typo?", null);
             var result = _dbContext.Invoices.AsNoTracking().Include(e => e.Details)
                 .Where(invoice => invoice.ShopId == shopId);
-            if (field.PropertyType == typeof(string)
-                    || field.PropertyType.IsEnum
-                    || field.PropertyType.IsNumberType() 
-                    || field.PropertyType.FullName == "System.DateTime")
+            if (!string.IsNullOrWhiteSpace(key))
             {
-                try
+                var field = typeof(Invoice).GetProperty(key);
+                if (field == null)
+                    return CommandResponse<PaginatedList<InvoiceDTO>>.Error("Key not existed. Is it a typo?", null);
+                if (field.PropertyType == typeof(string)
+                        || field.PropertyType.IsEnum
+                        || field.PropertyType.IsNumberType()
+                        || field.PropertyType.FullName == "System.DateTime")
                 {
-                    if (field.PropertyType.IsNumberType())
+                    try
                     {
-                        object numberValue = field.PropertyType
-                            .GetMethod("Parse", new[] { typeof(string) }).Invoke(null, new[] { value });
-                        result = result.Where(key, Operator.Equal, numberValue, field.PropertyType);
-                    }
-                    else if (field.PropertyType.FullName == "System.DateTime")
-                    {
-                        if (DateTimeExtension.TryParseExact(value, "dd/MM/yyyy", out DateTime dateTime))
+                        if (field.PropertyType.IsNumberType())
                         {
-                            result = result.Where($"{key}.Date", Operator.Equal, dateTime.Date, field.PropertyType);
+                            object numberValue = field.PropertyType
+                                .GetMethod("Parse", new[] { typeof(string) }).Invoke(null, new[] { value });
+                            result = result.Where(key, Operator.Equal, numberValue, field.PropertyType);
                         }
-                        else if (DateTimeExtension.TryParseExact(value, "MM/yyyy", out dateTime))
+                        else if (field.PropertyType.FullName == "System.DateTime")
                         {
-                            result = result.Where($"{key}.Month", Operator.Equal, dateTime.Month, typeof(int))
-                                .Where($"{key}.Year", Operator.Equal, dateTime.Year, typeof(int));
+                            if (DateTimeExtension.TryParseExact(value, "dd/MM/yyyy", out DateTime dateTime))
+                            {
+                                result = result.Where($"{key}.Date", Operator.Equal, dateTime.Date, field.PropertyType);
+                            }
+                            else if (DateTimeExtension.TryParseExact(value, "M/yyyy", out dateTime))
+                            {
+                                result = result.Where($"{key}.Month", Operator.Equal, dateTime.Month, typeof(int))
+                                    .Where($"{key}.Year", Operator.Equal, dateTime.Year, typeof(int));
+                            }
+                            else if (DateTimeExtension.TryParseExact(value, "yyyy", out dateTime))
+                            {
+                                result = result.Where($"{key}.Year", Operator.Equal, dateTime.Year, typeof(int));
+                            }
+                            else
+                            {
+                                return CommandResponse<PaginatedList<InvoiceDTO>>
+                                    .Error("Provided datetime value is not supported", null);
+                            }
                         }
-                        else if (DateTimeExtension.TryParseExact(value, "yyyy", out dateTime))
+                        else if (field.PropertyType.IsEnum)
                         {
-                            result = result.Where($"{key}.Year", Operator.Equal, dateTime.Year, typeof(int));
+                            var enumObj = Convert.ChangeType(Regex.IsMatch(value, @"^\d+$")
+                                ? Enum.ToObject(field.PropertyType, byte.Parse(value))
+                                : Enum.Parse(field.PropertyType, value, true), field.PropertyType);
+                            result = result.Where(key, Operator.Equal, enumObj, field.PropertyType);
                         }
                         else
-                        {
-                            return CommandResponse<PaginatedList<InvoiceDTO>>
-                                .Error("Provided datetime value is not supported", null);
-                        }
+                            result = result.Where<Invoice, string>(key, "Contains", value);
                     }
-                    else if (field.PropertyType.IsEnum)
+                    catch (Exception e)
                     {
-                        var enumObj = Convert.ChangeType(Regex.IsMatch(value, @"^\d+$")
-                            ? Enum.ToObject(field.PropertyType, byte.Parse(value))
-                            : Enum.Parse(field.PropertyType, value, true), field.PropertyType);
-                        result = result.Where(key, Operator.Equal, enumObj, field.PropertyType);
+                        return CommandResponse<PaginatedList<InvoiceDTO>>.Error(e.Message, e);
                     }
-                    else
-                        result = result.Where<Invoice, string>(key, "Contains", value);
-                } catch (Exception e)
-                {
-                    return CommandResponse<PaginatedList<InvoiceDTO>>.Error(e.Message, e);
                 }
-            }
-            else
-            {
-                return CommandResponse<PaginatedList<InvoiceDTO>>.Error(
-                    $"Provided type {field.PropertyType.FullName} is not supported", null);
+                else
+                {
+                    return CommandResponse<PaginatedList<InvoiceDTO>>.Error(
+                        $"Provided type {field.PropertyType.FullName} is not supported", null);
+                }
             }
             var returnResult = await result
                 .Select(invoice => _mapper.MapToInvoiceDTO(invoice))

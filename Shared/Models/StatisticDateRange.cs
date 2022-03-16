@@ -61,8 +61,6 @@ namespace Shared.Models
 
         public static ParseResult TryCreate(StatisticStrategy strategy, string start, string end, out StatisticDateRange range)
         {
-            if (string.IsNullOrWhiteSpace(end))
-                end = new StatisticDateResult(strategy, DateTime.Now).ToString();
             try
             {
                 range = new StatisticDateRange(strategy, start, end);
