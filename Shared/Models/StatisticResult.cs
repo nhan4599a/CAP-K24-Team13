@@ -34,35 +34,39 @@ namespace Shared.Models
             LowestIncome = items.Min(item => item.Value.Income);
             HighestDate = items.MaxBy(item => item.Value.Income).Key;
             LowestDate = items.MinBy(item => item.Value.Income).Key;
+            var startDate = Range.Start;
             if (StatisticBy == StatisticStrategy.ByDay)
             {
-                while (Range.Start < Range.End)
+                while (startDate < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), null);
-                    Range.Start = Range.Start.AddDays(1);
+                    items.TryAdd(new StatisticDateResult(strategy, startDate), null);
+                    startDate = startDate.AddDays(1);
                 }
             }
             else if (StatisticBy == StatisticStrategy.ByMonth)
             {
-                while ((Range.Start = Range.Start.AddMonths(1)) < Range.End)
+                while (startDate < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), null);
+                    items.TryAdd(new StatisticDateResult(strategy, startDate), null);
+                    startDate = startDate.AddMonths(1);
                 }
             }
             else if (StatisticBy == StatisticStrategy.ByQuarter)
             {
-                while ((Range.Start = Range.Start.AddMonths(3)) < Range.End)
+                while (startDate < Range.End)
                 {
-                    int quarter = DateTimeExtension.GetQuarter(Range.Start.Month);
+                    int quarter = DateTimeExtension.GetQuarter(startDate.Month);
                     items.TryAdd(new StatisticDateResult(strategy, 
-                        DateTimeExtension.StartOfMonth(quarter, Range.Start.Year)), null);
+                        DateTimeExtension.StartOfMonth(quarter, startDate.Year)), null);
+                    startDate = startDate.AddMonths(3);
                 }
             }
             else
             {
-                while ((Range.Start = Range.Start.AddYears(1)) < Range.End)
+                while (startDate < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), null);
+                    items.TryAdd(new StatisticDateResult(strategy, startDate), null);
+                    startDate = startDate.AddYears(1);
                 }
             }
             Details = items.ToDictionary(e => e.Key.ToString(), e => e.Value);
