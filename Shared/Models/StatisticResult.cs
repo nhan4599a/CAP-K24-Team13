@@ -35,31 +35,31 @@ namespace Shared.Models
             LowestDate = items.MinBy(item => item.Value.Income).Key;
             if (StatisticBy == StatisticStrategy.ByDay)
             {
-                int tempCount = 0;
-                while ((Range.Start = Range.Start.AddDays(tempCount++)) < Range.End)
+                while (Range.Start < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), null);
+                    Range.Start = Range.Start.AddDays(1);
                 }
             }
             else if (StatisticBy == StatisticStrategy.ByMonth)
             {
                 while ((Range.Start = Range.Start.AddMonths(1)) < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), null);
                 }
             }
             else if (StatisticBy == StatisticStrategy.ByQuarter)
             {
                 while ((Range.Start = Range.Start.AddMonths(3)) < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), null);
                 }
             }
             else
             {
                 while ((Range.Start = Range.Start.AddYears(1)) < Range.End)
                 {
-                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), new StatisticResultItem());
+                    items.TryAdd(new StatisticDateResult(strategy, Range.Start), null);
                 }
             }
             Details = items.ToDictionary(e => e.Key.ToString(), e => e.Value);
@@ -74,7 +74,8 @@ namespace Shared.Models
             public Builder(StatisticStrategy strategy)
             {
                 Strategy = strategy;
-                _details = new SortedDictionary<StatisticDateResult, StatisticResultItem>(StatisticDateResult.DefaultComparer);
+                _details = 
+                    new SortedDictionary<StatisticDateResult, StatisticResultItem>(StatisticDateResult.DefaultComparer);
             }
 
             public Builder AddItem(DateTime key, StatisticResultItem item)
