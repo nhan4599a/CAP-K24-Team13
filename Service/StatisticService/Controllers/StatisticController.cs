@@ -10,7 +10,7 @@ namespace StatisticService.Controllers
 {
     [ApiController]
     [Route("/api/statistic")]
-    //[Authorize]
+    [Authorize]
     public class StatisticController : ControllerBase
     {
         private readonly IMediator _mediator;

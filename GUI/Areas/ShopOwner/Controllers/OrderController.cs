@@ -5,7 +5,14 @@ namespace GUI.Areas.Admin.Controllers
 {
     public class OrderController : BaseShopOwnerController
     {
-        public IActionResult Index()
+        [ActionName("Index")]
+        public IActionResult Kanban()
+        {
+            return View();
+        }
+
+        [ActionName("sell-history")]
+        public IActionResult SellHistory()
         {
             return View();
         }

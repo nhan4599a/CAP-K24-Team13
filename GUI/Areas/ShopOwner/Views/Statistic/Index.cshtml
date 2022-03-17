@@ -1,14 +1,21 @@
 ﻿@section SideBar {
     @await Component.InvokeAsync("SideBar", new { activeItem = "statistic" });
 }
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/assets/shop-owner/css/year-picker.css")" rel="stylesheet" />
+}
 <div class="row">
     <div class="col-12">
         <div class="row justify-content-end">
             <div class="col-md-2">
+                @await Component.InvokeAsync("OrderStatisticStrategyDropdown")
+            </div>
+            <div class="col-md-2">
                 @await Component.InvokeAsync("OrderStatisticViewModeDropdown")
             </div>
             <div class="col-md-2">
-                @await Component.InvokeAsync("OrderStatisticStrategyDropdown")
+                <button class="btn" id="view-statistic"></button>
             </div>
         </div>
         <div class="card my-4">
@@ -27,5 +34,7 @@
 </div>
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.js"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/year-picker.js")"></script>
     <script src="@Url.Content("~/assets/shop-owner/js/internal/statistic.js")"></script>
 }
