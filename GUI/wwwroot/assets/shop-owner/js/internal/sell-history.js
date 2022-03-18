@@ -1,6 +1,6 @@
 ﻿$(document).ready(() => {
     let currentPageInfo = getCurrentPageInfo();
-    loadProducts(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
+    loadInvoices(currentPageInfo.key, currentPageInfo.value, currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
     let searchTextField = $('#input-search');
     if (currentPageInfo.keyword) {
@@ -26,7 +26,7 @@
     });
 });
 
-function loadProducts(key, value, pageNumber, pageSize) {
+function loadInvoices(key, value, pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
     getShopId().then(shopId => {
