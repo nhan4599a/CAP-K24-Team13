@@ -41,8 +41,8 @@ function loadProducts(key, value, pageNumber, pageSize) {
 }
 
 function onLoadInvoicesCompleted(paginatedData) {
-    let products = paginatedData.data;
-    renderProductTable(products);
+    let invoices = paginatedData.data;
+    renderInvoiceTable(invoices);
     renderPagination({
         hasPreviousPage: paginatedData.hasPreviousPage,
         hasNextPage: paginatedData.hasNextPage,

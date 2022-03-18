@@ -62,13 +62,13 @@ function buildInvoiceTableHtml(invoices) {
                         </th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                             style="padding-left: 24px!important">
-                            Name
+                            Invoice Code
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Quantity
+                            PhoneNumber
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Price
+                            Created At
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Status
@@ -122,13 +122,13 @@ function buildInvoiceTableRowHtml(invoice, index) {
                     <span class="text-secondary text-xs font-weight-bold">${invoice.invoiceCode}</span>
                 </td>
                 <td class="align-middle text-center">
-                    <span class="text-secondary text-xs font-weight-bold">${invoice.phone}</span>
+                    <span class="text-secondary text-xs font-weight-bold">${invoice.phoneNumber}</span>
                 </td>
                 <td class="align-middle text-center">
-                    <span class="text-secondary text-xs font-weight-bold"></span>
+                    <span class="text-secondary text-xs font-weight-bold">${invoice.status}</span>
                 </td>
                 <td class="align-middle text-center text-sm">
-                    
+                    ${invoice.createdAt}
                 </td>
                 <td class="align-middle">
                     <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
