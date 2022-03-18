@@ -49,6 +49,7 @@ namespace ShopProductService
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IFileStorable, FileStore>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddSwaggerGen();

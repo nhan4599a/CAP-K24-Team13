@@ -23,6 +23,7 @@ namespace ShopProductService.Handlers.Product
             return await _repository.ActivateProductAsync(request.Id, request.IsActivateCommand);
         }
 
+
         public void Dispose()
         {
             _repository.Dispose();
