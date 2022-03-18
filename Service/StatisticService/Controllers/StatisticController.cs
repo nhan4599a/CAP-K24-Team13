@@ -29,20 +29,28 @@ namespace StatisticService.Controllers
             var parseResult = StatisticDateRange.TryCreate(strategy, start, end, out StatisticDateRange range);
             if (!parseResult.IsSucceed)
                 return ApiResult.CreateErrorResult(400, parseResult.Exception.Message);
-            try
+            //try
+            //{
+            //    var result = await _mediator.Send(new OrderStatisticCommand
+            //    {
+            //        ShopId = shopId,
+            //        Strategy = strategy,
+            //        Range = range
+            //    });
+            //    return ApiResult<StatisticResult>.CreateSucceedResult(result);
+            //}
+            //catch (Exception e)
+            //{
+            //    return ApiResult.CreateErrorResult(500, e.Message);
+            //}
+
+            var result = await _mediator.Send(new OrderStatisticCommand
             {
-                var result = await _mediator.Send(new OrderStatisticCommand
-                {
-                    ShopId = shopId,
-                    Strategy = strategy,
-                    Range = range
-                });
-                return ApiResult<StatisticResult>.CreateSucceedResult(result);
-            }
-            catch (Exception e)
-            {
-                return ApiResult.CreateErrorResult(500, e.Message);
-            }
+                ShopId = shopId,
+                Strategy = strategy,
+                Range = range
+            });
+            return ApiResult<StatisticResult>.CreateSucceedResult(result);
         }
     }
 }

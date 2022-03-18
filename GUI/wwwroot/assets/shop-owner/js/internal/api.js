@@ -225,16 +225,33 @@ function importQuantityProduct(productId, importedQuantity) {
     });
 }
 
-function getStatisticOfShop(shopId, strategy) {
+function getStatisticOfShop(shopId, strategy, start, end) {
     return axios.get(`${statisticEndpoint}/shop/${shopId}/orders`, {
         params: {
-            strategy
+            strategy,
+            start,
+            end
         }
     });
 }
 
 function getRecentOrdersOfShop(shopId) {
     return axios.get(`${orderEndpoint}/shop/${shopId}`);
+}
+
+function findInvoices(shopId, key, value, pageNumber, pageSize) {
+    const acctualEndpoint = `${orderEndpoint}/shop/${shopId}/search`;
+    const params = {
+        pageNumber: pageNumber,
+        pageSize: pageSize || 5
+    };
+    if (key && value) {
+        params.key = encodeURIComponent(key);
+        params.value = encodeURIComponent(value);
+    }
+    return axios.get(acctualEndpoint, {
+        params
+    });
 }
 
 function getAccessToken() {

@@ -6,10 +6,52 @@
     }
 }
 
+function renderInvoiceTable(invoices) {
+    if (invoices.length == 0) {
+        $('.table-responsive.p-0').html('<p style="text-align: center">There is no product to show!</p>');
+    } else {
+        $('.table-responsive.p-0').html(buildInvoiceTableHtml(invoices));
+    }
+}
+
 function buildProductTableHtml(products) {
     let tableRowHtml = '';
     products.forEach((product, index) => {
         tableRowHtml += buildProductTableRowHtml(product, index);
+    });
+    return `<table class="table align-items-center mb-0">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                            style="width: 50px; min-width: 50px !important;">
+                            #
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                            style="padding-left: 24px!important">
+                            Name
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Quantity
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Price
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Status
+                        </th>
+                        <th class="text-secondary opacity-7">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRowHtml}
+                </tbody>
+            </table>`;
+}
+
+function buildInvoiceTableHtml(invoices) {
+    let tableRowHtml = '';
+    invoices.forEach((invoice, index) => {
+        tableRowHtml += buildInvoiceTableRowHtml(invoice, index);
     });
     return `<table class="table align-items-center mb-0">
                 <thead>
@@ -68,6 +110,31 @@ function buildProductTableRowHtml(product, index) {
                 </td>
                 <td class="align-middle">
                     ${buildProductActionButtonHtml(product.isDisabled)}
+                </td>
+            </tr>`;
+}
+
+
+function buildInvoiceTableRowHtml(invoice, index) {
+    return `<tr>
+                <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${invoice.invoiceCode}</span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${invoice.phone}</span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold"></span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                    
+                </td>
+                <td class="align-middle">
+                    <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+                        <i class="fas fa-check"></i>
+                        <span> Detail</span>
+                    </a>
                 </td>
             </tr>`;
 }
