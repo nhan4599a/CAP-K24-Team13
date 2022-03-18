@@ -8,7 +8,7 @@
 
 function renderInvoiceTable(invoices) {
     if (invoices.length == 0) {
-        $('.table-responsive.p-0').html('<p style="text-align: center">There is no product to show!</p>');
+        $('.table-responsive.p-0').html('<p style="text-align: center">There is no invoice to show!</p>');
     } else {
         $('.table-responsive.p-0').html(buildInvoiceTableHtml(invoices));
     }
