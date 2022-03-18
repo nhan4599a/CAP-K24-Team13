@@ -30,8 +30,8 @@ namespace Shared.Models
         {
             StatisticBy = strategy;
             Range = range;
-            HighestIncome = items.Max(item => item.Value.Income);
-            LowestIncome = items.Min(item => item.Value.Income);
+            HighestIncome = items.Count > 0 ? items.Max(item => item.Value.Income) : 0;
+            LowestIncome = items.Count > 0 ? items.Min(item => item.Value.Income) : 0;
             HighestDate = items.MaxBy(item => item.Value.Income).Key;
             LowestDate = items.MinBy(item => item.Value.Income).Key;
             var startDate = Range.Start;
