@@ -17,7 +17,8 @@ namespace DatabaseAccessor.Configurations
                 .WithMany(e => e.Invoices)
                 .IsRequired();
 
-            builder.HasIndex(e => new { e.UserId, e.CreatedAt });
+            builder.HasIndex(e => e.UserId);
+            builder.HasIndex(e => e.CreatedAt);
 
             builder.HasMany(e => e.Details)
                 .WithOne(e => e.Invoice)

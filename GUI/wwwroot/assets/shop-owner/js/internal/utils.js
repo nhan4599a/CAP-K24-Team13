@@ -116,6 +116,7 @@ function buildProductTableRowHtml(product, index) {
 
 
 function buildInvoiceTableRowHtml(invoice, index) {
+    let statusList = ['New', 'Confirmed', 'Shipper Received', 'Succeed', 'Canceled'];
     return `<tr>
                 <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
                 <td class="align-middle text-center">
@@ -125,10 +126,10 @@ function buildInvoiceTableRowHtml(invoice, index) {
                     <span class="text-secondary text-xs font-weight-bold">${invoice.phoneNumber}</span>
                 </td>
                 <td class="align-middle text-center">
-                    <span class="text-secondary text-xs font-weight-bold">${invoice.status}</span>
+                    <span class="text-secondary text-xs font-weight-bold">${formatDateTime(invoice.createdAt)}</span>
                 </td>
                 <td class="align-middle text-center text-sm">
-                    ${invoice.createdAt}
+                    ${statusList[invoice.status]}
                 </td>
                 <td class="align-middle">
                     <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
@@ -137,6 +138,17 @@ function buildInvoiceTableRowHtml(invoice, index) {
                     </a>
                 </td>
             </tr>`;
+}
+
+function formatDateTime(dateStr) {
+    let dateObj = new Date(dateStr);
+    let day = dateObj.getDate().toString().padStart(2, '0');
+    let month = dateObj.getMonth().toString().padStart(2, '0');
+    let year = dateObj.getFullYear();
+    let hour = dateObj.getHours().toString().padStart(2, '0');
+    let minute = (dateObj.getMinutes() + 1).toString().padStart(2, '0');
+    let second = dateObj.getSeconds().toString().padStart(2, '0');
+    return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
 }
 
 function buildProductActionButtonHtml(isDisabled) {

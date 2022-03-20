@@ -25,9 +25,13 @@ namespace RatingService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<IRatingRepository, RatingRepository>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
             services.RegisterOcelotService(Configuration);
             services.AddDbContext<ApplicationDbContext>();
+            services.AddTransient<IRatingRepository, RatingRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {

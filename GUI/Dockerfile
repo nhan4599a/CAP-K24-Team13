@@ -9,6 +9,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["GUI/GUI.csproj", "GUI/"]
+COPY ["DatabaseAccessor/DatabaseAccessor.csproj", "DatabaseAccessor/"]
 COPY ["AspNetCoreSharedComponent/AspNetCoreSharedComponent.csproj", "AspNetCoreSharedComponent/"]
 COPY ["Shared/Shared.csproj", "Shared/"]
 RUN dotnet restore "GUI/GUI.csproj"
@@ -22,4 +23,6 @@ RUN dotnet publish "GUI.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV TEAM13_CONNECTION_STRING=${TEAM13_CONNECTION_STRING}
+ENV REDIS_CONNECTION_STRING=${REDIS_CONNECTION_STRING}
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet GUI.dll

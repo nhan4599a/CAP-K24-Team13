@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
 
 namespace CheckoutService
 {
@@ -27,6 +26,10 @@ namespace CheckoutService
         {
             services.AddControllers();
             services.RegisterOcelotService(Configuration);
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
@@ -46,11 +49,6 @@ namespace CheckoutService
                 {
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
-            });
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.ConfigurationOptions.Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD");
-                options.ConfigurationOptions.ClientName = "localhost:4600";
             });
         }
 

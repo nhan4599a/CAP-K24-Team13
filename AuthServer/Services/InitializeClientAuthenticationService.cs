@@ -1,6 +1,8 @@
 ﻿using AuthServer.Configurations;
+using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,6 +44,8 @@ namespace AuthServer.Services
                 }
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
+            await dbContext.ApiResources
+                .AddAsync(new ApiResource(IdentityServerConstants.LocalApi.ScopeName).ToEntity(), cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

@@ -1,4 +1,5 @@
 using AspNetCoreSharedComponent.Middleware;
+using DatabaseAccessor.Contexts;
 using GUI.Abtractions;
 using GUI.Attributes;
 using GUI.Clients;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,8 @@ using Refit;
 using System;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace GUI
 {
@@ -35,6 +39,13 @@ namespace GUI
         {
             IdentityModelEventSource.ShowPII = true;
             services.AddControllersWithViews();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
+            services.AddDataProtection()
+                .PersistKeysToDbContext<ApplicationDbContext>();
+            services.AddDbContext<ApplicationDbContext>();
             var configManager = new ConfigurationManager<OpenIdConnectConfiguration>(
                 "https://cap-k24-team13-auth.herokuapp.com/.well-known/openid-configuration",
                 new OpenIdConnectConfigurationRetriever());
@@ -79,6 +90,24 @@ namespace GUI
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
                     RequireSignedTokens = true
+                };
+                options.Events.OnTokenValidated = context =>
+                {
+                    var idToken = context.ProtocolMessage.IdToken;
+                    ((ClaimsIdentity)context.Principal.Identity).AddClaim(new Claim("id_token", idToken));
+                    return Task.FromResult(0);
+                };
+                options.Events.OnRedirectToIdentityProvider = context =>
+                {
+                    if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Logout)
+                    {
+                        var idToken = context.HttpContext.User.FindFirst("id_token").Value;
+                        if (idToken != null)
+                        {
+                            context.ProtocolMessage.IdTokenHint = idToken;
+                        }
+                    }
+                    return Task.FromResult(0);
                 };
             });
             services.Configure<RazorViewEngineOptions>(options =>

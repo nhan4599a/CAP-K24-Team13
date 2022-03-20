@@ -12,6 +12,7 @@ using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,7 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
+using static IdentityServer4.IdentityServerConstants;
 
 namespace AuthServer
 {
@@ -45,9 +47,13 @@ namespace AuthServer
             {
                 options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
             }).AddFluentValidation<UserSignUpModel, SignUpModelValidator>()
-            .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>()
             .AddFluentValidation<EditUserInformationModel, EditUserInformationModelValidator>();
-            services.AddDistributedMemoryCache();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
+            services.AddDataProtection()
+                .PersistKeysToDbContext<ApplicationDbContext>();
             services.AddSession();
             services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
@@ -61,6 +67,15 @@ namespace AuthServer
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
                 });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(LocalApi.PolicyName, policy =>
+                {
+                    policy.AddAuthenticationSchemes(LocalApi.AuthenticationScheme);
+                    policy.RequireAuthenticatedUser();
+                    //policy.RequireRole(Roles.ADMIN);
+                });
+            });
             services.AddTransient<MailConfirmationTokenProvider<User>>();
             services.AddTransient<ResetPasswordTokenProvider<User>>();
             services.AddSingleton(new SmtpClient
@@ -123,6 +138,7 @@ namespace AuthServer
                 .AddDeveloperSigningCredential();
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
+            services.AddLocalApiAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

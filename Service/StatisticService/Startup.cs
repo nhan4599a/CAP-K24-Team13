@@ -28,6 +28,10 @@ namespace StatisticService
         {
             services.AddControllers()
                 .AddJsonPropertyToStringSerializer<StatisticDateResult>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>

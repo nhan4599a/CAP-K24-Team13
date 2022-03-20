@@ -28,9 +28,13 @@ namespace ShopInterfaceService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.RegisterOcelotService(Configuration);
             services.AddControllers()
                 .AddFluentValidation<CreateOrEditInterfaceRequestModel, CreateOrEditInterfaceRequestModelValidator>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
+            services.RegisterOcelotService(Configuration);
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<IFileStorable, FileStore>();
             services.AddScoped<IShopInterfaceRepository, ShopInterfaceRepository>();

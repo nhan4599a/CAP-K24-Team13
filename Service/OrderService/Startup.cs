@@ -29,9 +29,13 @@ namespace OrderService
         {
             services.AddControllers()
                 .AddFluentValidation<FindInvoiceQuery, FindInvoiceQueryValidator>();
-            services.AddTransient<IInvoiceRepository, InvoiceRepository>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
             services.RegisterOcelotService(Configuration);
             services.AddDbContext<ApplicationDbContext>();
+            services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {

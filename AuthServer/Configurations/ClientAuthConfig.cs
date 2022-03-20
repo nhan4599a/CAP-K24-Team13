@@ -31,7 +31,7 @@ namespace AuthServer.Configurations
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.OfflineAccess,
-                    "roles", "shop"
+                    "roles", "shop", IdentityServerConstants.LocalApi.ScopeName
                 },
                 RequirePkce = true,
                 AllowPlainTextPkce = false,

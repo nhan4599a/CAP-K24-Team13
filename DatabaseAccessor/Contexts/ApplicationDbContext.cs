@@ -2,13 +2,14 @@
 using DatabaseAccessor.Converters;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Triggers;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace DatabaseAccessor.Contexts
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>, IDataProtectionKeyContext
     {
         private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
@@ -29,6 +30,8 @@ namespace DatabaseAccessor.Contexts
         public DbSet<Cart> Carts { get; set; }
 
         public DbSet<CartDetail> CartDetails { get; set; }
+
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 

@@ -119,7 +119,6 @@ namespace AuthServer.Controllers
 
             return Redirect(logoutContext.PostLogoutRedirectUri);
         }
-
         
         [HttpGet("/Auth/Confirmation/{email}")]
         public async Task<IActionResult> ConfirmEmail(string email, [FromQuery] string token)

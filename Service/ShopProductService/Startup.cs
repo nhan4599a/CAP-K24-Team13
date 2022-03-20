@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Shared.RequestModels;
 using ShopProductService.Validations;
-using System;
 
 namespace ShopProductService
 {
@@ -36,6 +35,10 @@ namespace ShopProductService
             }).AddFluentValidation<CreateOrEditCategoryRequestModel, AddOrEditCategoryRequestModelValidator>()
             .AddFluentValidation<CreateOrEditProductRequestModel, AddOrEditProductRequestModelValidator>()
             .AddFluentValidation<SearchRequestModel, SearchProductRequestModelValidator>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
             services.RegisterOcelotService(Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -59,11 +62,6 @@ namespace ShopProductService
                 {
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
-            });
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.ConfigurationOptions.Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD");
-                options.ConfigurationOptions.ClientName = "localhost:4600";
             });
         }
 
