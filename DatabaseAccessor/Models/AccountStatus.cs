@@ -2,6 +2,6 @@
 {
     public enum AccountStatus
     {
-        Available, Unvailable
+        Available, Banned
     }
 }

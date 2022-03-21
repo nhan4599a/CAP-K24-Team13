@@ -16,7 +16,7 @@ $(document).ready(() => {
         let strategy = $(this).val();
         $('.row .col-12 .row.justify-content-end:nth-child(2)').remove();
         if (strategy == 0) {
-            $(this).parent().parent().after(`<div class="row justify-content-end">
+            $(this).parent().parent().after(`<div class="row justify-content-end mb-2">
                                                 <div class="col-md-2">
                                                     <div class="form-outline">
                                                         <input type="text" id="input-start" class="form-control" placeholder="Start date" onfocus="openStartDatePicker();" />
@@ -32,7 +32,7 @@ $(document).ready(() => {
             $('#input-start').val(getDateObj(currentPageInfo.start) ? currentPageInfo.start : '');
             $('#input-end').val(getDateObj(currentPageInfo.end) ? currentPageInfo.end : '');
         } else if (strategy == 1) {
-            $(this).parent().parent().after(`<div class="row justify-content-end">
+            $(this).parent().parent().after(`<div class="row justify-content-end mb-2">
                                                 <div class="col-md-2">
                                                     <select class="form-select" id="select-start-month">
                                                         <option value="1">January</option>
@@ -78,7 +78,7 @@ $(document).ready(() => {
             $('#input-start-year').val(currentPageInfo.start ? (currentPageInfo.start.split('/')[1] || currentYear) : currentYear);
             $('#input-end-year').val(currentPageInfo.end ? (currentPageInfo.end.split('/')[1] || currentYear) : currentYear);
         } else if (strategy == 2) {
-            $(this).parent().parent().after(`<div class="row justify-content-end">
+            $(this).parent().parent().after(`<div class="row justify-content-end mb-2">
                                                 <div class="col-md-2">
                                                     <select class="form-select" id="select-start-quarter">
                                                         <option value="1">1</option>
@@ -108,7 +108,7 @@ $(document).ready(() => {
             $('#input-start-year').val(currentPageInfo.start ? (currentPageInfo.start.split('/')[1] || currentYear) : currentYear);
             $('#input-end-year').val(currentPageInfo.end ? (currentPageInfo.end.split('/')[1] || currentYear) : currentYear);
         } else if (strategy == 3) {
-            $(this).parent().parent().after(`<div class="row justify-content-end">
+            $(this).parent().parent().after(`<div class="row justify-content-end mb-2">
                                                 <div class="col-md-2">
                                                     <input type="text" id="input-start-year" class="form-control" value="${currentYear}" placeholder="Start year" />
                                                 </div>

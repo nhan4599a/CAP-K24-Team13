@@ -11,7 +11,6 @@ namespace DatabaseAccessor.Configurations
             builder.Property(e => e.FirstName).IsRequired().HasMaxLength(200);
             builder.Property(e => e.LastName).IsRequired().HasMaxLength(200);
             builder.Property(e => e.Status).HasDefaultValue(AccountStatus.Available);
-            builder.Property(e => e.IsLockedOutByReported).HasDefaultValue(false);
         }
     }
 }

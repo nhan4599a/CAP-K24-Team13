@@ -3,6 +3,7 @@ using AuthServer.Extensions;
 using AuthServer.Identities;
 using AuthServer.Models;
 using DatabaseAccessor.Contexts;
+using DatabaseAccessor.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,26 +63,6 @@ namespace AuthServer.Controllers
                 .CreateSucceedResult(new CreateShopOwnerAccountResult(internalCreateUserResult.User!.Id, username));
         }
 
-        [HttpPost("deactivate/{userId}")]
-        public async Task<ApiResult> DeactivateUser(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null)
-                return ApiResult.CreateErrorResult(404, "User does not existed");
-
-            if (user.Status == DatabaseAccessor.Models.AccountStatus.Unvailable)
-                return ApiResult.CreateErrorResult(400, "User is already deactivated");
-
-            _dbContext.Attach(user);
-
-            user.Status = DatabaseAccessor.Models.AccountStatus.Unvailable;
-
-            await _dbContext.SaveChangesAsync();
-
-            return ApiResult.SucceedResult;
-        }
-
         [HttpGet("report")]
         public async Task<ApiResult> GetAllReport([FromQuery] PaginationInfo paginationInfo)
         {
@@ -107,7 +88,7 @@ namespace AuthServer.Controllers
                     ? null : DateTimeOffset.Now.AddDays(14);
                 _dbContext.Attach(result.Response.Item1);
                 await _userManager.SetLockoutEndDateAsync(result.Response.Item1, dateTimeOffset);
-                result.Response.Item1.IsLockedOutByReported = true;
+                result.Response.Item1.Status = AccountStatus.Banned;
                 await _dbContext.SaveChangesAsync();
             }
             else

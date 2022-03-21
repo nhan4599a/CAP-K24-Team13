@@ -55,14 +55,10 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
                 return View();
             }
-            if (user.Status == AccountStatus.Unvailable)
+            if (user.Status == AccountStatus.Banned && user.LockoutEnd == null)
             {
-                ModelState.AddModelError("SignIn-Error", "Your account is deactivated by admin!");
-                return View();
-            }
-            if (user.IsLockedOutByReported && user.LockoutEnd == null)
-            {
-                ModelState.AddModelError("SignIn-Error", "Look like your account is locked out forever!. Contact admin for more detail");
+                ModelState.AddModelError("SignIn-Error", 
+                    "Look like your account is locked out permanently. Contact admin for more detail");
                 return View();
             }
             var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
@@ -72,7 +68,7 @@ namespace AuthServer.Controllers
                     return Redirect(model.ReturnUrl);
                 throw new InvalidOperationException($"\"{model.ReturnUrl}\" is invalid");
             }
-            if (signInResult.IsLockedOut)
+            if (signInResult.IsLockedOut || user.Status == AccountStatus.Banned)
             {
                 ModelState.AddModelError("SignIn-Error", $"Account is locked out. It will be unlocked at {user.LockoutEnd}");
                 return View(model);
