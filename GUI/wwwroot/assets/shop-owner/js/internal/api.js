@@ -27,6 +27,7 @@ const checkoutEndpoint = '/checkout';
 const ratingProductEndpoint = '/rating';
 const orderEndpoint = '/orders';
 const statisticEndpoint = '/statistic';
+const reportEndpoint = '/report';
 
 function findProducts(shopId, keyword, pageNumber, pageSize) {
     if (shopId === 0)
@@ -252,6 +253,18 @@ function findInvoices(shopId, key, value, pageNumber, pageSize) {
     return axios.get(acctualEndpoint, {
         params
     });
+}
+
+function report(invoiceId, userId) {
+    return axios.post(`${reportEndpoint}/${invoiceId}`, userId, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}
+
+function approveReport(reportId) {
+    return axios.post(`https://cap-k24-team13-auth.herokuapp.com/api/report/${reportId}`);
 }
 
 function getAccessToken() {

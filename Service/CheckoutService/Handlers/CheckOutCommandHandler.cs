@@ -1,7 +1,7 @@
 ﻿using CheckoutService.Commands;
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using Shared;
+using Shared.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

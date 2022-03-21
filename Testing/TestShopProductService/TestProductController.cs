@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;

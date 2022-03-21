@@ -57,6 +57,8 @@ namespace GUI
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 options.AccessDeniedPath = "/Error/403";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.SlidingExpiration = false;
             })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -90,24 +92,6 @@ namespace GUI
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
                     RequireSignedTokens = true
-                };
-                options.Events.OnTokenValidated = context =>
-                {
-                    var idToken = context.ProtocolMessage.IdToken;
-                    ((ClaimsIdentity)context.Principal.Identity).AddClaim(new Claim("id_token", idToken));
-                    return Task.FromResult(0);
-                };
-                options.Events.OnRedirectToIdentityProvider = context =>
-                {
-                    if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Logout)
-                    {
-                        var idToken = context.HttpContext.User.FindFirst("id_token").Value;
-                        if (idToken != null)
-                        {
-                            context.ProtocolMessage.IdTokenHint = idToken;
-                        }
-                    }
-                    return Task.FromResult(0);
                 };
             });
             services.Configure<RazorViewEngineOptions>(options =>

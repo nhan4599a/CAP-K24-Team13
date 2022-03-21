@@ -16,10 +16,16 @@ namespace DatabaseAccessor.Models
 
         public AccountStatus Status { get; set; }
 
+        public bool IsLockedOutByReported { get; set; }
+
         public int? ShopId { get; set; }
 
         public virtual IList<Invoice> Invoices { get; set; }
 
         public virtual Cart Cart { get; set; }
+
+        public virtual IList<Report> Reports { get; set; }
+
+        public virtual IList<Report> AffectedReports { get; set; }
     }
 }

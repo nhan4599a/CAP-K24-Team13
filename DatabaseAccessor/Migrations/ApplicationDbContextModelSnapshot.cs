@@ -231,6 +231,46 @@ namespace DatabaseAccessor.Migrations
                     b.HasCheckConstraint("CK_ProductComments_Star", "[Star] between 1 and 5");
                 });
 
+            modelBuilder.Entity("DatabaseAccessor.Models.Report", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AffectedInvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("AffectedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<Guid>("ReporterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffectedInvoiceId")
+                        .IsUnique();
+
+                    b.HasIndex("ReporterId");
+
+                    b.HasIndex("AffectedUserId", "CreatedAt");
+
+                    b.ToTable("Reports", "dbo");
+                });
+
             modelBuilder.Entity("DatabaseAccessor.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -418,6 +458,11 @@ namespace DatabaseAccessor.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("IsLockedOutByReported")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -453,7 +498,9 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -687,6 +734,33 @@ namespace DatabaseAccessor.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DatabaseAccessor.Models.Report", b =>
+                {
+                    b.HasOne("DatabaseAccessor.Models.Invoice", "AffectedInvoice")
+                        .WithOne("Report")
+                        .HasForeignKey("DatabaseAccessor.Models.Report", "AffectedInvoiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.User", "AffectedUser")
+                        .WithMany("AffectedReports")
+                        .HasForeignKey("AffectedUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.User", "Reporter")
+                        .WithMany("Reports")
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AffectedInvoice");
+
+                    b.Navigation("AffectedUser");
+
+                    b.Navigation("Reporter");
+                });
+
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
                 {
                     b.HasOne("DatabaseAccessor.Models.ShopCategory", "Category")
@@ -758,6 +832,8 @@ namespace DatabaseAccessor.Migrations
                 {
                     b.Navigation("Details");
 
+                    b.Navigation("Report");
+
                     b.Navigation("StatusChangedHistory");
                 });
 
@@ -777,9 +853,13 @@ namespace DatabaseAccessor.Migrations
 
             modelBuilder.Entity("DatabaseAccessor.Models.User", b =>
                 {
+                    b.Navigation("AffectedReports");
+
                     b.Navigation("Cart");
 
                     b.Navigation("Invoices");
+
+                    b.Navigation("Reports");
                 });
 #pragma warning restore 612, 618
         }

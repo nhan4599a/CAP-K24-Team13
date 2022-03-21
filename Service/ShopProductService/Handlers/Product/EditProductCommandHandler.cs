@@ -1,7 +1,7 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using ShopProductService.Commands.Product;
 using System;
 using System.Threading;

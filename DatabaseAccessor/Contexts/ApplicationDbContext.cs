@@ -31,6 +31,8 @@ namespace DatabaseAccessor.Contexts
 
         public DbSet<CartDetail> CartDetails { get; set; }
 
+        public DbSet<Report> Reports { get; set; }
+
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
@@ -90,6 +92,7 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new InvoiceStatusChangedHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new CartDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportConfiguration());
         }
     }
 }

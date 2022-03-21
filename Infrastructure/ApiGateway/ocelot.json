@@ -179,6 +179,16 @@
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/report/{invoiceId}",
+      "DownstreamScheme": "http",
+      "ServiceName": "ReportService",
+      "UpstreamPathTemplate": "/report/{invoiceId}",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
     }
   ],
   "GlobalConfiguration": {

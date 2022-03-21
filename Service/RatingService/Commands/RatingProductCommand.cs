@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Shared;
+using Shared.Models;
 using Shared.RequestModels;
 
 namespace RatingService.Commands

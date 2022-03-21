@@ -20,16 +20,14 @@ namespace AuthServer.Controllers
         private readonly ApplicationSignInManager _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IMailService _mailer;
-        private readonly IEventService _events;
 
         private const string SignInParamsKey = "SIGN_IN_PARAMS_KEY";
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, IEventService eventService, IMailService mailer)
+            ApplicationSignInManager signInManager, IMailService mailer)
         {
             _signInManager = signInManager;
             _interaction = interaction;
-            _events = eventService;
             _mailer = mailer;
         }
 
@@ -48,13 +46,23 @@ namespace AuthServer.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("SignIn-Error", "Username or password is invalid");
+                ModelState.AddModelError("SignIn-Error", "Username and/or password is invalid");
                 return View();
             }
             var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
             if (user == null)
             {
-                ModelState.AddModelError("SignIn-Error", "Username or password is incorrect");
+                ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
+                return View();
+            }
+            if (user.Status == AccountStatus.Unvailable)
+            {
+                ModelState.AddModelError("SignIn-Error", "Your account is deactivated by admin!");
+                return View();
+            }
+            if (user.IsLockedOutByReported && user.LockoutEnd == null)
+            {
+                ModelState.AddModelError("SignIn-Error", "Look like your account is locked out forever!. Contact admin for more detail");
                 return View();
             }
             var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
@@ -62,12 +70,11 @@ namespace AuthServer.Controllers
             {
                 if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     return Redirect(model.ReturnUrl);
-                throw new InvalidOperationException($"\"{model.ReturnUrl}\" is  invalid");
+                throw new InvalidOperationException($"\"{model.ReturnUrl}\" is invalid");
             }
             if (signInResult.IsLockedOut)
             {
-                ModelState.AddModelError("SignIn-Error", "Account is locked out");
-                ViewBag.LockedOutCancelTime = user!.LockoutEnd!.Value;
+                ModelState.AddModelError("SignIn-Error", $"Account is locked out. It will be unlocked at {user.LockoutEnd}");
                 return View(model);
             }
             if (signInResult.IsNotAllowed)
@@ -116,6 +123,11 @@ namespace AuthServer.Controllers
 
             if (logoutContext == null)
                 throw new InvalidOperationException("Something went wrong!");
+
+            if (string.IsNullOrWhiteSpace(logoutContext.PostLogoutRedirectUri))
+            {
+                return View("SignOutRedirect");
+            }
 
             return Redirect(logoutContext.PostLogoutRedirectUri);
         }

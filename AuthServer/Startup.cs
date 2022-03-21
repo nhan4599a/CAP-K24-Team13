@@ -10,7 +10,10 @@ using AuthServer.Services;
 using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
+using DatabaseAccessor.Repositories;
+using DatabaseAccessor.Repositories.Abstraction;
 using IdentityServer4.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -60,6 +63,7 @@ namespace AuthServer
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
             services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
+            services.AddScoped<IReportRepository, ReportRepository>();
             services.AddDbContext<ApplicationDbContext>();
             services.AddAuthentication()
                 .AddCookie(options =>
@@ -124,7 +128,9 @@ namespace AuthServer
                 options.Endpoints.EnableAuthorizeEndpoint = true;
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
-                options.Authentication.CookieLifetime = TimeSpan.FromHours(1);
+                options.Authentication.CookieLifetime = TimeSpan.FromMinutes(30);
+                options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
+                options.Authentication.CookieSlidingExpiration = false;
             })
                 .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
@@ -139,6 +145,7 @@ namespace AuthServer
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
             services.AddLocalApiAuthentication();
+            services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

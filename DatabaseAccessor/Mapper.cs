@@ -58,6 +58,12 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<Invoice, InvoiceDTO>()
                     .ForMember(target => target.TotalPrice,
                         options => options.MapFrom(source => source.Details.Sum(detail => detail.Price * detail.Quantity)));
+
+                cfg.CreateMap<Report, ReportDTO>()
+                    .ForMember(target => target.Reporter,
+                        options => options.MapFrom(source => source.Reporter.UserName))
+                    .ForMember(target => target.AffectedUser,
+                        options => options.MapFrom(source => source.AffectedUser.UserName));
             });
             _mapper = config.CreateMapper();
         }
@@ -87,5 +93,7 @@ namespace DatabaseAccessor.Mapping
         public RatingDTO MapToRatingDTO(ProductComment rating) => _mapper.Map<RatingDTO>(rating);
 
         public InvoiceDTO MapToInvoiceDTO(Invoice invoice) => _mapper.Map<InvoiceDTO>(invoice);
+
+        public ReportDTO MapToReportDTO(Report report) => _mapper.Map<ReportDTO>(report);
     }
 }
