@@ -77,8 +77,6 @@ namespace GUI.Extensions
 
         public static string ShopImageUrl(this IUrlHelper _, string imageUrl)
         {
-            if (imageUrl.StartsWith("http") || imageUrl.StartsWith("data:"))
-                return imageUrl;
             return $"http://ec2-52-207-214-39.compute-1.amazonaws.com:3000/interfaces/images/{imageUrl}";
         }
     }

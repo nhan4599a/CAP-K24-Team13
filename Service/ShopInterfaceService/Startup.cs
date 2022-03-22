@@ -1,5 +1,4 @@
 using AspNetCoreSharedComponent.FileValidations;
-using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
@@ -11,8 +10,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Shared.RequestModels;
-using ShopInterfaceService.Validation;
 
 namespace ShopInterfaceService
 {
@@ -28,8 +25,7 @@ namespace ShopInterfaceService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                .AddFluentValidation<CreateOrEditInterfaceRequestModel, CreateOrEditInterfaceRequestModelValidator>();
+            services.AddControllers();
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration["REDIS_CONNECTION_STRING"];

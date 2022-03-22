@@ -31,17 +31,9 @@
         <div id="bg-500" class="error-content mt-2" style="background-image: url(@Url.Content("~/assets/user/images/backgrounds/loi-500.png")); background-size: inherit;">
             <div class="container text-center">
             	<h1 class="error-title">Error 500</h1><!-- End .error-title -->
-            	<p>Something went wrong. Click this link to try again <a href="#" id="retry-link">Try again</a></p>
+            	<p>Something went wrong. Click this link to back to homepage <a href="/">Back to homepage</a></p>
             </div><!-- End .container -->
         </div><!-- End .error-content text-center -->
     </div>
-    <script>
-        (funtion () {
-            let url = new URL(window.location.href);
-            let errorSource = url.searchParams.get('source');
-            if (errorSource)
-                document.getElementById('retry-link').href = errorSource;
-        })();
-    </script>
 </body>
 </html>

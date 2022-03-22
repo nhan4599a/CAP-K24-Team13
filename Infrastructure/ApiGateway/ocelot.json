@@ -51,31 +51,11 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/interfaces/{id}",
+      "DownstreamPathTemplate": "/api/interfaces/{shopId}",
       "DownstreamScheme": "http",
       "ServiceName": "InterfaceService",
-      "UpstreamPathTemplate": "/interfaces/{id}",
+      "UpstreamPathTemplate": "/interfaces/{shopId}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
-      "LoadBalancerOptions": {
-        "Type": "LeastConnection"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/shop/search",
-      "DownstreamScheme": "http",
-      "ServiceName": "ProductService",
-      "UpstreamPathTemplate": "/shop/search",
-      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
-      "LoadBalancerOptions": {
-        "Type": "LeastConnection"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/shop/{id}",
-      "DownstreamScheme": "http",
-      "ServiceName": "ProductService",
-      "UpstreamPathTemplate": "/shop/{id}",
-      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }

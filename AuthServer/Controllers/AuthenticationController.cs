@@ -31,7 +31,7 @@ namespace AuthServer.Controllers
             _mailer = mailer;
         }
 
-        [Route("/auth/SignIn")]
+        [Route("/Auth/SignIn")]
         public IActionResult SignIn()
         {
             var paramString = Request.QueryString.ToString();
@@ -40,7 +40,7 @@ namespace AuthServer.Controllers
         }
 
         [HttpPost]
-        [Route("/auth/SignIn")]
+        [Route("/Auth/SignIn")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(SignInModel model)
         {
@@ -61,7 +61,7 @@ namespace AuthServer.Controllers
                     "Look like your account is locked out permanently. Contact admin for more detail");
                 return View();
             }
-            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
+            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, AccountConfig.AccountLockedOutEnabled);
             if (signInResult.Succeeded)
             {
                 if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
@@ -82,14 +82,14 @@ namespace AuthServer.Controllers
             return View();
         }
 
-        [Route("/auth/SignUp")]
+        [Route("/Auth/SignUp")]
         public IActionResult SignUp()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("/auth/SignUp")]
+        [Route("/Auth/SignUp")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp(UserSignUpModel model)
         {
@@ -110,7 +110,7 @@ namespace AuthServer.Controllers
             return View(model);
         }
 
-        [Route("/auth/signout")]
+        [Route("/Auth/SignOut")]
         public async Task<IActionResult> SignOut(string logoutId)
         {
             await _signInManager.SignOutAsync();
@@ -153,14 +153,14 @@ namespace AuthServer.Controllers
         }
 
         [HttpGet]
-        [Route("/auth/forgot")]
+        [Route("/Auth/Forgot")]
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("/auth/forgot")]
+        [Route("/Auth/Forgot")]
         public async Task<IActionResult> ForgotPassword(string email)
         {
             var user = await _signInManager.UserManager.FindByEmailAsync(email);
@@ -173,7 +173,7 @@ namespace AuthServer.Controllers
             return View("ForgotPasswordNotification");
         }
 
-        [Route("/auth/reset/{email}")]
+        [Route("/Auth/Reset/{email}")]
         public IActionResult ResetPassword()
         {
             return View();
@@ -181,7 +181,7 @@ namespace AuthServer.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("/auth/reset/{email}")]
+        [Route("/Auth/Reset/{email}")]
         public async Task<IActionResult> ResetPassword([FromForm(Name = "password")] string newPassword,
             [FromForm(Name = "re-password")] string reNewPassword, string email,
             [FromQuery] string token)

@@ -20,8 +20,6 @@ using Refit;
 using System;
 using System.Net.Http;
 using System.Reflection;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace GUI
 {
@@ -58,7 +56,7 @@ namespace GUI
             {
                 options.AccessDeniedPath = "/Error/403";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                options.SlidingExpiration = false;
+                options.SlidingExpiration = true;
             })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -106,7 +104,10 @@ namespace GUI
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IShopClient>()
-                .ConfigureHttpClient(ConfigureHttpClient);
+                .ConfigureHttpClient(options =>
+                {
+                    options.BaseAddress = new Uri("https://emallsolution-backendapi.herokuapp.com/api");
+                });
             services.AddRefitClient<ICategoryClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<ICartClient>()
@@ -118,7 +119,6 @@ namespace GUI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-            app.UseExceptionHandler("/Error/500");
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto
@@ -135,7 +135,7 @@ namespace GUI
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseGlogalExceptionHandlerMiddleware(true);
+            app.UseGlogalExceptionHandlerMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

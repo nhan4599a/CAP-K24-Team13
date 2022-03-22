@@ -1,4 +1,5 @@
-﻿﻿@{
+﻿@using GUI.Extensions
+﻿@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -149,16 +150,21 @@
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                         <div class="input-group input-group-outline">
-                            <label class="form-label">Type here...</label>
-                            <input type="text" class="form-control">
+                            <label class="form-label">Type to search</label>
+                            <input type="text" class="form-control" id="input-search">
                         </div>
                     </div>
                     <ul class="navbar-nav justify-content-end">
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                        <li class="nav-item d-flex align-items-center dropstart">
+                            <a href="#" class="nav-link text-body font-weight-bold px-0 dropdown-toggle" id="user-dropdown" data-bs-toggle="dropdown">
                                 <i class="fa fa-user me-sm-1"></i>
-                                <span class="d-sm-inline d-none">Sign In</span>
+                                <span class="d-sm-inline d-none">@User.Identity.Name</span>
                             </a>
+                            <ul class="dropdown-menu" aria-labelledby="user-dropdown">
+                                <li><a class="dropdown-item" href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/information", "returnUrl")">Profile</a></li>
+                                <li><a class="dropdown-item" href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/change-password", "returnUrl")">Change Password</a></li>
+                                <li><a class="dropdown-item" href="/authentication/signout">Sign out</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
@@ -184,14 +190,14 @@
                     <div class="col-1">
                         <div class="avatar avatar-xl position-relative">
                             <button id="button-img">
-                                <img src="data:image/jpeg;base64,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">
+                                <img id="shop-avatar" />
                             </button>
                         </div>
                     </div>
                     <div class="col-8 my-auto">
                         <div class="h-100">
-                            <h5 class="mb-1">Nguyen Kim</h5>
-                            <p class="mb-0 font-weight-normal text-sm">Store</p>
+                            <h5 class="mb-1" id="shop-name"></h5>
+                            <p class="mb-0 font-weight-normal text-sm">Shop</p>
                         </div>
                     </div>
                     <div class="col-3">
@@ -205,27 +211,27 @@
                     <div class="row justify-content-between mb-3">
                         <div class="col-12 col-xl-6">
                             <div class="form-group">
-                                <h6 class="mb-3">Store Description</h6>
-                                <input class="form-control" type="text" id="input-description" name="input-description" />
+                                <h6 class="mb-3">Shop Description</h6>
+                                <input class="form-control" type="text" id="input-description" name="input-description" disabled />
                             </div>
                         </div>
                         <div class="col-12 col-xl-6">
-                            <h6 class="mb-3">Shop information</h6>
+                            <h6 class="mb-3">Shop Information</h6>
                             <div class="input-group input-group-outline mb-3">
                                 <label class="form-label" for="input-name">Name</label>
-                                <input type="text" class="form-control" id="input-name" name="input-name" />
+                                <input type="text" class="form-control" id="input-name" disabled />
                             </div>
                             <div class="input-group input-group-outline mb-3">
                                 <label class="form-label" for="input-phone">Phone</label>
-                                <input type="text" class="form-control" id="input-phone" name="input-phone" />
+                                <input type="text" class="form-control" id="input-phone" disabled />
                             </div>
                             <div class="input-group input-group-outline mb-3">
                                 <label class="form-label" for="input-email">Email</label>
-                                <input type="text" class="form-control" id="input-email" name="input-email" />
+                                <input type="text" class="form-control" id="input-email" disabled />
                             </div>
                             <div class="input-group input-group-outline mb-3">
                                 <label class="form-label" for="input-address">Address</label>
-                                <input type="text" class="form-control" id="input-address" name="input-address" />
+                                <input type="text" class="form-control" id="input-address" disabled />
                             </div>
                         </div>
                     </div>
@@ -420,16 +426,6 @@
             });
             $('a.btn[name=btn-clear]').click(function () {
                 displayYesNoQuestion('Are you sure?', () => {
-                    $('#input-name').val('');
-                    $('#input-phone').val('');
-                    $('#input-email').val('');
-                    $('#input-address').val('');
-
-                    $('#input-name').parent().removeClass('is-filled');
-                    $('#input-phone').parent().removeClass('is-filled');
-                    $('#input-email').parent().removeClass('is-filled');
-                    $('#input-address').parent().removeClass('is-filled');
-
                     dropzone.files.forEach(function (file) {
                         dropzone.removeFile(file);
                     });
@@ -444,6 +440,7 @@
                 let successCallback = () => {
                     localStorage.removeItem('shop-interface.edit-mode');
                     localStorage.removeItem('shop-interface.editting');
+                    localStorage.removeItem('shop-interface.information');
                     animationLoader.hideAnimation();
                     setTimeout(() => window.location = '/shopowner/interface', 500);
                 };
@@ -491,19 +488,21 @@
         }
 
         function loadEdittingShopInterface(shopInterface, dropzone) {
-            $('#input-name').val(shopInterface.shopName);
-            $('#input-phone').val(shopInterface.shopPhoneNumber);
-            $('#input-email').val(shopInterface.shopEmail);
-            $('#input-address').val(shopInterface.shopAddress);
-            $('#input-description').val(shopInterface.shopDescription);
+            var shopInformation = JSON.parse(localStorage.getItem('shop-interface.information'));
+            if (shopInformation) {
+                $('#input-description').val(shopInformation.description);
+                $('#input-name').val(shopInformation.shopName);
+                $('#input-phone').val(shopInformation.phone);
+                $('#input-email').val(shopInformation.email);
+                $('#input-address').val(shopInformation.shopAddress);
+                $('#shop-name').text(shopInformation.shopName);
+            }
             shopInterface.images.forEach(imageUrl => getShopInterfaceImage(imageUrl).then(blob => {
                 let file = new File([blob], blob.name, { type: blob.type });
                 dropzone.addFile(file);
             }));
-            $('#input-name').parent().addClass('is-filled');
-            $('#input-phone').parent().addClass('is-filled');
-            $('#input-email').parent().addClass('is-filled');
-            $('#input-address').parent().addClass('is-filled');
+            if (shopInterface.avatar)
+                $('#shop-avatar').attr('src', getShopInterfaceImageUrl(shopInterface.avatar));
         }
     </script>
 </body>

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using GUI.Extensions
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -101,18 +102,18 @@
         .d-grid {
             display: grid;
         }
-        
+
         #image-carousel .carousel-inner .carousel-item img {
             width: 1134px;
             height: 562px;
         }
 
-        #edit-mode{
+        #edit-mode {
             text-align: left !important;
             padding: 1px
         }
 
-        #edit:hover{
+        #edit:hover {
             color: #2f9db6 !important
         }
     </style>
@@ -138,16 +139,21 @@
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                         <div class="input-group input-group-outline">
-                            <label class="form-label">Type here...</label>
-                            <input type="text" class="form-control">
+                            <label class="form-label">Type to search</label>
+                            <input type="text" class="form-control" id="input-search">
                         </div>
                     </div>
-                    <ul class="navbar-nav  justify-content-end">
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                    <ul class="navbar-nav justify-content-end">
+                        <li class="nav-item d-flex align-items-center dropstart">
+                            <a href="#" class="nav-link text-body font-weight-bold px-0 dropdown-toggle" id="user-dropdown" data-bs-toggle="dropdown">
                                 <i class="fa fa-user me-sm-1"></i>
-                                <span class="d-sm-inline d-none">Sign In</span>
+                                <span class="d-sm-inline d-none">@User.Identity.Name</span>
                             </a>
+                            <ul class="dropdown-menu" aria-labelledby="user-dropdown">
+                                <li><a class="dropdown-item" href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/information", "returnUrl")">Profile</a></li>
+                                <li><a class="dropdown-item" href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/change-password", "returnUrl")">Change Password</a></li>
+                                <li><a class="dropdown-item" href="/authentication/signout">Sign out</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
@@ -172,12 +178,12 @@
                 <div class="row gx-4 mb-2">
                     <div class="col-auto">
                         <div class="avatar avatar-xl position-relative">
-                            <button id="button-img"><img src="https://vcdn-kinhdoanh.vnecdn.net/2020/01/21/12-4646-1579596787.png"></button>
+                            <button id="button-img"><img id="shop-avatar"></button>
                         </div>
                     </div>
                     <div class="col-auto my-auto">
                         <div class="h-100">
-                            <h5 class="mb-1">Nguyen Kim</h5>
+                            <h5 class="mb-1" id="shop-name"></h5>
                         </div>
                         <div class="col-md-4 text-end" id="edit-mode">
                             <a href="/shopowner/interface/edit">
@@ -191,7 +197,7 @@
                     <div class="col-12 col-xl-4">
                         <div class="card card-plain" style="height: 97% !important">
                             <div class="card-header pb-0 p-3">
-                                <h6 class="mb-0">Store Description</h6>
+                                <h6 class="mb-0">Shop Description</h6>
                             </div>
                             <div class="card-body p-2">
                                 <textarea class="form-control" id="input-description" disabled></textarea>
@@ -361,24 +367,37 @@
             let animationLoader = new AnimationLoader('#loading-container > #animation-container', '~/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation();
             getShopId().then(shopId => {
-                Promise.all([getShopInterface(0), findProducts(shopId, undefined, 1, 8), getAllCategories()])
+                Promise.all([getShopInformation(shopId), getShopInterface(shopId), findProducts(shopId, undefined, 1, 8), getAllCategories()])
                 .then(responses => {
-                    onInterfaceGot(responses[0]);
-                    onProductGot(responses[1]);
-                    onCategoryGot(responses[2].filter(category => !category.isDisabled));
+                    onInformationGot(response[0]);
+                    onInterfaceGot(responses[1]);
+                    onProductGot(responses[2]);
+                    onCategoryGot(responses[3].filter(category => !category.isDisabled));
                     animationLoader.hideAnimation();
                 })
                 .catch(() => {
                     animationLoader.hideAnimation();
                     toastr.error('Something went wrong', 'Error');
                 });
-            })
+            });
         });
+
+        function onInformationGot(shopInformation) {
+            if (shopInformation) {
+                $('#input-description').val(shopInformation.description);
+                $('#input-name').val(shopInformation.shopName);
+                $('#input-phone').val(shopInformation.phone);
+                $('#input-email').val(shopInformation.email);
+                $('#input-address').val(shopInformation.shopAddress);
+                $('#shop-name').text(shopInformation.shopName);
+                localStorage.setItem('shop-interface.information', JSON.stringify(shopInformation));
+            }
+        }
 
         function onInterfaceGot(shopInterface) {
             localStorage.setItem('shop-interface.edit-mode', !shopInterface ? 'add' : 'edit');
             if (shopInterface) {
-                loadShopInterface(shopInterface);
+                loadShopInterfaceImages(shopInterface);
                 localStorage.setItem('shop-interface.editting', JSON.stringify(shopInterface));
             }
         }
@@ -431,21 +450,21 @@
             let lastIndex = categories.length - 1;
             categories.forEach((category, index) => {
                 categoriesHtml += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                                    <div class="card card-blog card-plain">
-                                        <div class="card-header p-0 mt-n4 mx-3">
-                                            <a class="d-grid shadow-xl border-radius-xl" style="height: 234px">
-                                                <img src="${getCategoryImageUrl(category.image)}?${Date.now() / 1000}"
-                                                    alt="${category.categoryName}"
-                                                    class="img-fluid" style="align-self: center" />
-                                            </a>
+                                        <div class="card card-blog card-plain">
+                                            <div class="card-header p-0 mt-n4 mx-3">
+                                                <a class="d-grid shadow-xl border-radius-xl" style="height: 234px">
+                                                    <img src="${getCategoryImageUrl(category.image)}?${Date.now() / 1000}"
+                                                        alt="${category.categoryName}"
+                                                        class="img-fluid" style="align-self: center" />
+                                                </a>
+                                            </div>
+                                            <div class="card-body p-3">
+                                                <a href="#" style="text-align: center">
+                                                    <h5>${category.categoryName}</h5>
+                                                </a>
+                                            </div>
                                         </div>
-                                        <div class="card-body p-3">
-                                            <a href="#" style="text-align: center">
-                                                <h5>${category.categoryName}</h5>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>`;
+                                    </div>`;
                 if (index == lastIndex || index == temp) {
                     tempArr.push(`<div class="row mb-3">
                                     ${categoriesHtml}
@@ -458,12 +477,7 @@
             $('div.card.card-body > .row:not(.gx-4) > .col-12.mt-1 > div.tab-page > div:last-child').append(tempArr.join(''));
         }
 
-        function loadShopInterface(shopInterface) {
-            $('#input-description').val(shopInterface.shopDescription);
-            $('#input-name').val(shopInterface.shopName);
-            $('#input-phone').val(shopInterface.shopPhoneNumber);
-            $('#input-email').val(shopInterface.shopEmail);
-            $('#input-address').val(shopInterface.shopAddress);
+        function loadShopInterfaceImages(shopInterface) {
             let carouselItemsHtml = '';
             let carouselIndicatorsHtml = '';
             shopInterface.images.forEach((imageFileName, i) => {
@@ -502,6 +516,8 @@
                 slide: true,
                 interval: 3500
             }).carousel();
+            if (shopInterface.avatar)
+                $('#shop-avatar').attr('src', getShopInterfaceImageUrl(shopInterface.avatar));
         }
     </script>
 </body>

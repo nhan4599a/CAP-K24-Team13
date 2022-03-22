@@ -130,7 +130,7 @@ namespace AuthServer
                 options.Endpoints.EnableIntrospectionEndpoint = true;
                 options.Authentication.CookieLifetime = TimeSpan.FromMinutes(30);
                 options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
-                options.Authentication.CookieSlidingExpiration = false;
+                options.Authentication.CookieSlidingExpiration = true;
             })
                 .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>

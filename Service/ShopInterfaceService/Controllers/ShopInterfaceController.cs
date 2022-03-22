@@ -1,6 +1,7 @@
 ﻿using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using Shared.Exceptions;
@@ -84,15 +85,19 @@ namespace ShopInterfaceService.Controllers
 
             var result = await _mediator.Send(command);
 
+            if (!result.IsSuccess)
+                return ApiResult.CreateErrorResult(500, result.ErrorMessage);
+            
             return ApiResult<ShopInterfaceDTO>.CreateSucceedResult(result.Response);
         }
 
+        [AllowAnonymous]
         [HttpGet("images/{imageId}")]
-        public IActionResult Index(string imageId)
+        public IActionResult Image(string imageId)
         {
             var fileResponse = _fileStore.GetFile(imageId);
             if (!fileResponse.IsExisted)
-                return StatusCode(404);
+                return StatusCode(StatusCodes.Status404NotFound);
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
     }
