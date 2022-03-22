@@ -26,7 +26,7 @@ namespace DatabaseAccessor.Configurations
                 .HasDefaultValue(false);
 
             builder.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("getdate()");
+                .HasDefaultValueSql("getdate() + '7:0:0'");
 
             builder.Property(e => e.Discount)
                 .HasDefaultValue(0);

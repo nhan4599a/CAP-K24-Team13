@@ -25,7 +25,7 @@ namespace DatabaseAccessor.Configurations
                 .IsRequired();
 
             builder.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("getdate()");
+                .HasDefaultValueSql("getdate() + '7:0:0'");
 
             builder.Property(e => e.Status)
                 .HasDefaultValue(InvoiceStatus.New);
