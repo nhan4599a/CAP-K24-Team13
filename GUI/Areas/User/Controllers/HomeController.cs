@@ -3,6 +3,7 @@ using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -11,6 +12,7 @@ namespace GUI.Areas.User.Controllers
     {
         private readonly IProductClient _productClient;
         private readonly IShopClient _shopClient;
+        private readonly IShopInterfaceClient _interfaceClient;
 
         public HomeController(IProductClient productClient, IShopClient shopClient)
         {
@@ -37,6 +39,15 @@ namespace GUI.Areas.User.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             ViewBag.Keyword = keyword;
             ViewBag.PageSize = pageSize;
+            var shopAvatarResponse = await _interfaceClient.GetShopAvatar(shopResponse.Content.Data.Select(item => item.Id).ToList());
+            if (shopAvatarResponse.IsSuccessStatusCode)
+            {
+                for (int i = 0; i < pageSize; i++)
+                {
+                    var shopId = shopResponse.Content.Data[i].Id;
+                    shopResponse.Content.Data[i].Avatar = shopAvatarResponse.Content.Data[shopId];
+                }
+            }
             return View(new SearchResultViewModel
             {
                 Products = productResponse.Content.Data,

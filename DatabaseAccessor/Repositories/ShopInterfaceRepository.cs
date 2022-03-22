@@ -7,6 +7,8 @@ using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories
@@ -51,6 +53,15 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<ShopInterfaceDTO>.Error(ex.Message, ex);
             }
             return CommandResponse<ShopInterfaceDTO>.Success(_mapper.MapToShopInterfaceDTO(shopInterface));
+        }
+
+        public async Task<Dictionary<int, string>> GetShopAvatar(int[] shopId)
+        {
+            return await _dbContext.ShopInterfaces
+                .AsNoTracking()
+                .Select(e => new { e.ShopId, e.Avatar })
+                .Where(e => shopId.Contains(e.ShopId))
+                .ToDictionaryAsync(e => e.ShopId, e => e.Avatar);
         }
 
         public void Dispose()

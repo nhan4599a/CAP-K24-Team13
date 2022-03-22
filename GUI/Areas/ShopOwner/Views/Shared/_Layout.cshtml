@@ -115,6 +115,11 @@
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                        <div class="input-group ps-3" id="search-field-section">
+                            <div class="col-md-2">
+                                @await Component.InvokeAsync("OrderSearchByFieldDropdown")
+                            </div>
+                        </div>
                         <div class="input-group input-group-outline">
                             <label class="form-label">Type to search</label>
                             <input type="text" class="form-control" id="input-search">
@@ -198,8 +203,12 @@
     <script src="@Url.Content("~/assets/shop-owner/js/material-dashboard.min.js?v=3.0.0")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-        if (window.location.pathname != '/shopowner/product' && window.location.pathname != '/shopowner/order')
+        if (window.location.pathname.includes('/product')) {
+            $('#search-field-section').remove();
+        } else if (!window.location.pathname.includes('/order')) {
+            $('#search-field-section').remove();
             $('#input-search').parent().remove();
+        }
         toastr.options.closeButton = true;
     </script>
     @RenderSection("Scripts", false)

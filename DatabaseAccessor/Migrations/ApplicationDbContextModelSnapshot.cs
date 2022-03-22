@@ -251,6 +251,9 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<int?>("Punishment")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ReporterId")
                         .HasColumnType("uniqueidentifier");
 
@@ -334,38 +337,19 @@ namespace DatabaseAccessor.Migrations
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopInterface", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ShopId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShopId"), 1L, 1);
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Images")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShopAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShopName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopId")
-                        .IsUnique();
+                    b.HasKey("ShopId");
 
                     b.ToTable("ShopInterfaces", "dbo");
                 });
@@ -457,11 +441,6 @@ namespace DatabaseAccessor.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsLockedOutByReported")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("LastName")
                         .IsRequired()

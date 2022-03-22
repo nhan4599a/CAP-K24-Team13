@@ -2,6 +2,7 @@ using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
@@ -12,5 +13,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
             CreateOrEditInterfaceRequestModel requestModel);
 
         Task<CommandResponse<ShopInterfaceDTO>> FindShopInterfaceByShopIdAsync(int shopId);
+
+        Task<Dictionary<int, string>> GetShopAvatar(int[] shopId);
     }
 }

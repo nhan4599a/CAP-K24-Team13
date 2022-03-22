@@ -114,6 +114,8 @@ namespace GUI
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IOrderClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
+            services.AddRefitClient<IShopInterfaceClient>()
+                .ConfigureHttpClient(ConfigureHttpClient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

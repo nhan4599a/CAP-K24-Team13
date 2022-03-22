@@ -5,10 +5,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DatabaseAccessor.Migrations
 {
-    public partial class FullDbV2 : Migration
+    public partial class FullInitialDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "CartDetail");
+
+            migrationBuilder.EnsureSchema(
+                name: "dbo");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -31,7 +37,8 @@ namespace DatabaseAccessor.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DoB = table.Column<DateTime>(type: "date", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    ShopId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -53,7 +60,22 @@ namespace DatabaseAccessor.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DataProtectionKeys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FriendlyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Xml = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DataProtectionKeys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ShopCategories",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -71,21 +93,17 @@ namespace DatabaseAccessor.Migrations
 
             migrationBuilder.CreateTable(
                 name: "ShopInterfaces",
+                schema: "dbo",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ShopId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ShopId = table.Column<int>(type: "int", nullable: false),
-                    ShopAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShopEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShopName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShopPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShopDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Images = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShopInterfaces", x => x.Id);
+                    table.PrimaryKey("PK_ShopInterfaces", x => x.ShopId);
                 });
 
             migrationBuilder.CreateTable(
@@ -195,16 +213,41 @@ namespace DatabaseAccessor.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Carts",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Carts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Invoices",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InvoiceCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    ShopId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -219,6 +262,7 @@ namespace DatabaseAccessor.Migrations
 
             migrationBuilder.CreateTable(
                 name: "ShopProducts",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -230,7 +274,8 @@ namespace DatabaseAccessor.Migrations
                     Discount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     IsDisabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    ShopId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -241,13 +286,106 @@ namespace DatabaseAccessor.Migrations
                     table.ForeignKey(
                         name: "FK_ShopProducts_ShopCategories_CategoryId",
                         column: x => x.CategoryId,
+                        principalSchema: "dbo",
                         principalTable: "ShopCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
+                name: "InvoiceStatusChangedHistories",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InvoiceId = table.Column<int>(type: "int", nullable: false),
+                    OldStatus = table.Column<int>(type: "int", nullable: false),
+                    NewStatus = table.Column<int>(type: "int", nullable: false),
+                    ChangedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InvoiceStatusChangedHistories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InvoiceStatusChangedHistories_Invoices_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalSchema: "dbo",
+                        principalTable: "Invoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reports",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Punishment = table.Column<int>(type: "int", nullable: true),
+                    ReporterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AffectedUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AffectedInvoiceId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reports_AspNetUsers_AffectedUserId",
+                        column: x => x.AffectedUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Reports_AspNetUsers_ReporterId",
+                        column: x => x.ReporterId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Reports_Invoices_AffectedInvoiceId",
+                        column: x => x.AffectedInvoiceId,
+                        principalSchema: "dbo",
+                        principalTable: "Invoices",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartDetails",
+                schema: "CartDetail",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    ShopId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartDetails", x => x.Id);
+                    table.CheckConstraint("CK_CartDetails_CK_CartDetail_Quantity", "[Quantity] >= 1");
+                    table.ForeignKey(
+                        name: "FK_CartDetails_Carts_CartId",
+                        column: x => x.CartId,
+                        principalSchema: "dbo",
+                        principalTable: "Carts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartDetails_ShopProducts_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "dbo",
+                        principalTable: "ShopProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "InvoiceDetails",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -265,12 +403,14 @@ namespace DatabaseAccessor.Migrations
                     table.ForeignKey(
                         name: "FK_InvoiceDetails_Invoices_InvoiceId",
                         column: x => x.InvoiceId,
+                        principalSchema: "dbo",
                         principalTable: "Invoices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_InvoiceDetails_ShopProducts_ProductId",
                         column: x => x.ProductId,
+                        principalSchema: "dbo",
                         principalTable: "ShopProducts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -278,17 +418,16 @@ namespace DatabaseAccessor.Migrations
 
             migrationBuilder.CreateTable(
                 name: "ProductComments",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReferenceId = table.Column<int>(type: "int", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Star = table.Column<int>(type: "int", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    ParentId = table.Column<int>(type: "int", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -301,18 +440,9 @@ namespace DatabaseAccessor.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductComments_ProductComments_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "ProductComments",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ProductComments_ProductComments_ReferenceId",
-                        column: x => x.ReferenceId,
-                        principalTable: "ProductComments",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_ProductComments_ShopProducts_ProductId",
                         column: x => x.ProductId,
+                        principalSchema: "dbo",
                         principalTable: "ShopProducts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -358,60 +488,100 @@ namespace DatabaseAccessor.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartDetails_CartId",
+                schema: "CartDetail",
+                table: "CartDetails",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartDetails_ProductId",
+                schema: "CartDetail",
+                table: "CartDetails",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_UserId",
+                schema: "dbo",
+                table: "Carts",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_InvoiceDetails_InvoiceId",
+                schema: "dbo",
                 table: "InvoiceDetails",
                 column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvoiceDetails_ProductId",
+                schema: "dbo",
                 table: "InvoiceDetails",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoices_UserId_Created",
+                name: "IX_Invoices_CreatedAt",
+                schema: "dbo",
                 table: "Invoices",
-                columns: new[] { "UserId", "Created" });
+                column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductComments_ParentId",
-                table: "ProductComments",
-                column: "ParentId",
-                unique: true,
-                filter: "[ParentId] IS NOT NULL");
+                name: "IX_Invoices_UserId",
+                schema: "dbo",
+                table: "Invoices",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InvoiceStatusChangedHistories_InvoiceId",
+                schema: "dbo",
+                table: "InvoiceStatusChangedHistories",
+                column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductComments_ProductId",
+                schema: "dbo",
                 table: "ProductComments",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductComments_ReferenceId",
-                table: "ProductComments",
-                column: "ReferenceId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductComments_UserId",
+                schema: "dbo",
                 table: "ProductComments",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reports_AffectedInvoiceId",
+                schema: "dbo",
+                table: "Reports",
+                column: "AffectedInvoiceId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_AffectedUserId_CreatedAt",
+                schema: "dbo",
+                table: "Reports",
+                columns: new[] { "AffectedUserId", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_ReporterId",
+                schema: "dbo",
+                table: "Reports",
+                column: "ReporterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShopCategories_CategoryName",
+                schema: "dbo",
                 table: "ShopCategories",
                 column: "CategoryName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShopInterfaces_ShopId",
-                table: "ShopInterfaces",
-                column: "ShopId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ShopProducts_CategoryId",
+                schema: "dbo",
                 table: "ShopProducts",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShopProducts_ProductName",
+                schema: "dbo",
                 table: "ShopProducts",
                 column: "ProductName");
         }
@@ -434,28 +604,53 @@ namespace DatabaseAccessor.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "InvoiceDetails");
+                name: "CartDetails",
+                schema: "CartDetail");
 
             migrationBuilder.DropTable(
-                name: "ProductComments");
+                name: "DataProtectionKeys");
 
             migrationBuilder.DropTable(
-                name: "ShopInterfaces");
+                name: "InvoiceDetails",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "InvoiceStatusChangedHistories",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "ProductComments",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Reports",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "ShopInterfaces",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Invoices");
+                name: "Carts",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "ShopProducts");
+                name: "ShopProducts",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Invoices",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "ShopCategories",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "ShopCategories");
         }
     }
 }

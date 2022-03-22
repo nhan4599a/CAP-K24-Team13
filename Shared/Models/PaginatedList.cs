@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Shared.Models
@@ -51,5 +52,9 @@ namespace Shared.Models
         public static PaginatedList<T> All(List<T> data) => new(data, 1, data.Count, data.Count);
 
         public IEnumerator<T> GetEnumerator() => Data.GetEnumerator();
+
+        public IEnumerable<TValue> Select<TValue>(Func<T, TValue> selector) => Data.Select(selector);
+
+        public T this[int i] => Data[i];
 	}
 }

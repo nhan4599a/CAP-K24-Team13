@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseAccessor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220107123248_FullDbV3")]
-    partial class FullDbV3
+    [Migration("20220322120103_FullInitialDb")]
+    partial class FullInitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,24 +24,94 @@ namespace DatabaseAccessor.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("DatabaseAccessor.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Carts", "dbo");
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.CartDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("ShopId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartDetails", "CartDetail");
+
+                    b.HasCheckConstraint("CK_CartDetail_Quantity", "[Quantity] >= 1");
+                });
+
             modelBuilder.Entity("DatabaseAccessor.Models.Invoice", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("InvoiceCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShippingAddress")
+                    b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ShopId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
@@ -53,16 +123,19 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "Created");
+                    b.HasIndex("CreatedAt");
 
-                    b.ToTable("Invoices");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Invoices", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.InvoiceDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -86,18 +159,49 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("InvoiceDetails");
+                    b.ToTable("InvoiceDetails", "dbo");
 
                     b.HasCheckConstraint("CK_InvoiceDetail_Price", "[Price] > 0");
 
                     b.HasCheckConstraint("CK_InvoiceDetail_Quantity", "[Quantity] between 1 and 10");
                 });
 
+            modelBuilder.Entity("DatabaseAccessor.Models.InvoiceStatusChangedHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("ChangedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NewStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OldStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("InvoiceStatusChangedHistories", "dbo");
+                });
+
             modelBuilder.Entity("DatabaseAccessor.Models.ProductComment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -112,9 +216,6 @@ namespace DatabaseAccessor.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ReferenceId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("Star")
                         .HasColumnType("int");
 
@@ -125,13 +226,54 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("ReferenceId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProductComments");
+                    b.ToTable("ProductComments", "dbo");
 
                     b.HasCheckConstraint("CK_ProductComments_Star", "[Star] between 1 and 5");
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.Report", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AffectedInvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("AffectedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<int?>("Punishment")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ReporterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffectedInvoiceId")
+                        .IsUnique();
+
+                    b.HasIndex("ReporterId");
+
+                    b.HasIndex("AffectedUserId", "CreatedAt");
+
+                    b.ToTable("Reports", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.Role", b =>
@@ -166,7 +308,8 @@ namespace DatabaseAccessor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -191,44 +334,26 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("CategoryName");
 
-                    b.ToTable("ShopCategories");
+                    b.ToTable("ShopCategories", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopInterface", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ShopId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShopId"), 1L, 1);
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Images")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShopAddress")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ShopId");
 
-                    b.Property<string>("ShopDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShopName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopId")
-                        .IsUnique();
-
-                    b.ToTable("ShopInterfaces");
+                    b.ToTable("ShopInterfaces", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
@@ -273,13 +398,16 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
+                    b.Property<int>("ShopId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ProductName");
 
-                    b.ToTable("ShopProducts");
+                    b.ToTable("ShopProducts", "dbo");
 
                     b.HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
 
@@ -347,8 +475,13 @@ namespace DatabaseAccessor.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("ShopId")
                         .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -368,6 +501,25 @@ namespace DatabaseAccessor.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Xml")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataProtectionKeys");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -473,6 +625,36 @@ namespace DatabaseAccessor.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DatabaseAccessor.Models.Cart", b =>
+                {
+                    b.HasOne("DatabaseAccessor.Models.User", "User")
+                        .WithOne("Cart")
+                        .HasForeignKey("DatabaseAccessor.Models.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.CartDetail", b =>
+                {
+                    b.HasOne("DatabaseAccessor.Models.Cart", "Cart")
+                        .WithMany("Details")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.ShopProduct", "Product")
+                        .WithMany("CartDetails")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("DatabaseAccessor.Models.Invoice", b =>
                 {
                     b.HasOne("DatabaseAccessor.Models.User", "User")
@@ -503,6 +685,17 @@ namespace DatabaseAccessor.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("DatabaseAccessor.Models.InvoiceStatusChangedHistory", b =>
+                {
+                    b.HasOne("DatabaseAccessor.Models.Invoice", "Invoice")
+                        .WithMany("StatusChangedHistory")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+                });
+
             modelBuilder.Entity("DatabaseAccessor.Models.ProductComment", b =>
                 {
                     b.HasOne("DatabaseAccessor.Models.ShopProduct", "Product")
@@ -511,21 +704,42 @@ namespace DatabaseAccessor.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DatabaseAccessor.Models.ProductComment", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ReferenceId");
-
                     b.HasOne("DatabaseAccessor.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Parent");
-
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.Report", b =>
+                {
+                    b.HasOne("DatabaseAccessor.Models.Invoice", "AffectedInvoice")
+                        .WithOne("Report")
+                        .HasForeignKey("DatabaseAccessor.Models.Report", "AffectedInvoiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.User", "AffectedUser")
+                        .WithMany("AffectedReports")
+                        .HasForeignKey("AffectedUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.User", "Reporter")
+                        .WithMany("Reports")
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AffectedInvoice");
+
+                    b.Navigation("AffectedUser");
+
+                    b.Navigation("Reporter");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
@@ -590,14 +804,18 @@ namespace DatabaseAccessor.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DatabaseAccessor.Models.Invoice", b =>
+            modelBuilder.Entity("DatabaseAccessor.Models.Cart", b =>
                 {
                     b.Navigation("Details");
                 });
 
-            modelBuilder.Entity("DatabaseAccessor.Models.ProductComment", b =>
+            modelBuilder.Entity("DatabaseAccessor.Models.Invoice", b =>
                 {
-                    b.Navigation("Children");
+                    b.Navigation("Details");
+
+                    b.Navigation("Report");
+
+                    b.Navigation("StatusChangedHistory");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopCategory", b =>
@@ -607,6 +825,8 @@ namespace DatabaseAccessor.Migrations
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
                 {
+                    b.Navigation("CartDetails");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Invoices");
@@ -614,7 +834,13 @@ namespace DatabaseAccessor.Migrations
 
             modelBuilder.Entity("DatabaseAccessor.Models.User", b =>
                 {
+                    b.Navigation("AffectedReports");
+
+                    b.Navigation("Cart");
+
                     b.Navigation("Invoices");
+
+                    b.Navigation("Reports");
                 });
 #pragma warning restore 612, 618
         }

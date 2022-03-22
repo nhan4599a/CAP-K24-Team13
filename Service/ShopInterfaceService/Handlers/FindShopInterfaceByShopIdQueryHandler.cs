@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace ShopInterfaceService.Handlers
 {
-    public class FindShopInterfaceByShopIdCommandHandler : 
-        IRequestHandler<FindShopInterfaceByShopIdCommand, CommandResponse<ShopInterfaceDTO>>
+    public class FindShopInterfaceByShopIdQueryHandler : 
+        IRequestHandler<FindShopInterfaceByShopIdQuery, CommandResponse<ShopInterfaceDTO>>
     {
         private readonly IShopInterfaceRepository _repository;
 
-        public FindShopInterfaceByShopIdCommandHandler(IShopInterfaceRepository repository)
+        public FindShopInterfaceByShopIdQueryHandler(IShopInterfaceRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<CommandResponse<ShopInterfaceDTO>> Handle(FindShopInterfaceByShopIdCommand request,
+        public async Task<CommandResponse<ShopInterfaceDTO>> Handle(FindShopInterfaceByShopIdQuery request,
             CancellationToken cancellationToken)
         {
             return await _repository.FindShopInterfaceByShopIdAsync(request.ShopId);
