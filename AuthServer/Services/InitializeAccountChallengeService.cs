@@ -47,6 +47,7 @@ namespace AuthServer.Services
             if (await userManager.FindByNameAsync("owner_test") == null)
             {
                 var user = await CreateUserObj("owner_test");
+                user.ShopId = 0;
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(user, Roles.SHOP_OWNER);
             }

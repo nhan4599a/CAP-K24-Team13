@@ -30,6 +30,7 @@ namespace AspNetCoreSharedComponent.Middleware
                 _logger.LogInformation(
                     $"Request {context.Request.Method} " +
                     $"to {context.Request.Path} has resulted in an error. Message is: {e.Message}");
+                _logger.LogError(e.StackTrace);
                 context.Response.Redirect("/Error/500");
             }
             var responseCode = context.Response.StatusCode;

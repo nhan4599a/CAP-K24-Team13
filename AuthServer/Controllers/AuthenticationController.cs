@@ -74,13 +74,13 @@ namespace AuthServer.Controllers
             if (signInResult.IsLockedOut || user.Status == AccountStatus.Banned)
             {
                 ModelState.AddModelError("SignIn-Error", 
-                    $"Account is locked out. It will be unlocked at {user.LockoutEnd?.AddHours(7):dd/MM/yyyy HH:mm:ss}");
-                return View(model);
+                    $"Account is locked out. It will be unlocked at {user.LockoutEnd!.Value.AddHours(7):dd/MM/yyyy HH:mm:ss}");
+                return View();
             }
             if (signInResult.IsNotAllowed)
             {
                 ModelState.AddModelError("SignIn-Error", "Account is have not been confirmed");
-                return View(model);
+                return View();
             }
             ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
             return View();
