@@ -91,7 +91,7 @@
                                     @item.Quantity
                                 </td>
                                 <td id="date-col">
-                                    @item.CreatedAt.ToString("dd/MM/yyyy hh:mm:ss tt")
+                                    @item.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
                                 </td>
                                 <td id="price-col">
                                     @((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))

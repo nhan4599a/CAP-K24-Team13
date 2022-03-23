@@ -8,6 +8,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Shared.Models;
 using System;
 using System.Threading.Tasks;
@@ -20,15 +21,17 @@ namespace AuthServer.Controllers
         private readonly ApplicationSignInManager _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IMailService _mailer;
+        private readonly IDistributedCache _cache;
 
         private const string SignInParamsKey = "SIGN_IN_PARAMS_KEY";
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, IMailService mailer)
+            ApplicationSignInManager signInManager, IMailService mailer, IDistributedCache cache)
         {
             _signInManager = signInManager;
             _interaction = interaction;
             _mailer = mailer;
+            _cache = cache;
         }
 
         [Route("/Auth/SignIn")]
@@ -70,7 +73,8 @@ namespace AuthServer.Controllers
             }
             if (signInResult.IsLockedOut || user.Status == AccountStatus.Banned)
             {
-                ModelState.AddModelError("SignIn-Error", $"Account is locked out. It will be unlocked at {user.LockoutEnd}");
+                ModelState.AddModelError("SignIn-Error", 
+                    $"Account is locked out. It will be unlocked at {user.LockoutEnd?.AddHours(7):dd/MM/yyyy HH:mm:ss}");
                 return View(model);
             }
             if (signInResult.IsNotAllowed)
@@ -224,7 +228,7 @@ namespace AuthServer.Controllers
             var email = receiver.ToBase64();
             var body = "Thanks for your registration," +
                 $" this is your email confirmation <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}"}\">link</a>" +
-                $" The link will be expired at {DateTime.UtcNow.AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss tt}";
+                $" The link will be expired at {DateTime.UtcNow.AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}";
             return new MailRequest()
             {
                 Body = body,
@@ -251,7 +255,7 @@ namespace AuthServer.Controllers
             var email = receiver.ToBase64();
             var body = "You are receiving this email because we received a password reset request for your account." +
                  $" This is your link to reset your password <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/reset/{email}?token={token.ToBase64()}"}\">link</a>. " +
-                 $" This link will be expired at {DateTime.UtcNow.AddMinutes(10):dddd, MMMM d, yyyy; HH:mm:ss tt}" +
+                 $" This link will be expired at {DateTime.UtcNow.AddMinutes(10):dddd, MMMM d, yyyy; HH:mm:ss}" +
                  $" If you did not request a password reset, no further action is required. Regards!";
             return new MailRequest()
             {
