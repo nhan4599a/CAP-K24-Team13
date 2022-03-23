@@ -92,7 +92,7 @@ namespace ShopInterfaceService.Controllers
             return ApiResult<ShopInterfaceDTO>.CreateSucceedResult(result.Response);
         }
 
-        [HttpGet("avatar/{shopId*}")]
+        [HttpGet("avatar/{*shopId}")]
         public async Task<ApiResult> GetAvatar(params int[] shopId)
         {
             var result = await _mediator.Send(new GetShopAvatarQuery
