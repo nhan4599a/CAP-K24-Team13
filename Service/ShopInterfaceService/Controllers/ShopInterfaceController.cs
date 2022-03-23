@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace ShopInterfaceService.Controllers
 {
-    [Authorize]
     [Route("api/interfaces")]
     [ApiController]
     public class ShopInterfaceController : ControllerBase
@@ -31,6 +30,7 @@ namespace ShopInterfaceService.Controllers
             rules.Change(FileValidationRuleName.MinFileCount, 1);
         }
 
+        [Authorize]
         [HttpPost("{shopId}")]
         public async Task<ApiResult> CreateShopInterface(int shopId, 
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
@@ -53,6 +53,7 @@ namespace ShopInterfaceService.Controllers
             return ApiResult.SucceedResult;
         }
 
+        [Authorize]
         [HttpPut("{shopId}")]
         public async Task<ApiResult> EditShopInterface(int shopId,
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
@@ -102,7 +103,6 @@ namespace ShopInterfaceService.Controllers
             return ApiResult<Dictionary<int, string>>.CreateSucceedResult(result);
         }
 
-        [AllowAnonymous]
         [HttpGet("images/{imageId}")]
         public IActionResult Image(string imageId)
         {

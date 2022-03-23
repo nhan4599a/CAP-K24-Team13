@@ -21,17 +21,15 @@ namespace AuthServer.Controllers
         private readonly ApplicationSignInManager _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IMailService _mailer;
-        private readonly IDistributedCache _cache;
 
         private const string SignInParamsKey = "SIGN_IN_PARAMS_KEY";
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, IMailService mailer, IDistributedCache cache)
+            ApplicationSignInManager signInManager, IMailService mailer)
         {
             _signInManager = signInManager;
             _interaction = interaction;
             _mailer = mailer;
-            _cache = cache;
         }
 
         [Route("/Auth/SignIn")]
@@ -64,7 +62,7 @@ namespace AuthServer.Controllers
                     "Look like your account is locked out permanently. Contact admin for more detail");
                 return View();
             }
-            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, AccountConfig.AccountLockedOutEnabled);
+            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
             if (signInResult.Succeeded)
             {
                 if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))

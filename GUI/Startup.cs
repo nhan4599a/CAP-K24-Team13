@@ -56,7 +56,7 @@ namespace GUI
             {
                 options.AccessDeniedPath = "/Error/403";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                options.SlidingExpiration = true;
+                options.SlidingExpiration = false;
             })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {

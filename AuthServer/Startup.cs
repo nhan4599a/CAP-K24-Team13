@@ -129,7 +129,7 @@ namespace AuthServer
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
                 options.Authentication.CookieLifetime = TimeSpan.FromMinutes(30);
-                options.Authentication.CookieSlidingExpiration = true;
+                options.Authentication.CookieSlidingExpiration = false;
                 options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
             })
                 .AddAspNetIdentity<User>()
@@ -143,11 +143,6 @@ namespace AuthServer
                 })
                 .AddDeveloperSigningCredential();
             services.AddLocalApiAuthentication();
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                options.SlidingExpiration = true;
-            });
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
             services.AddMediatR(typeof(Startup));
