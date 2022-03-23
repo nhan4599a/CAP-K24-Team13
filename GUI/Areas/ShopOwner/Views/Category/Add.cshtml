@@ -77,12 +77,14 @@
 
                 let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
                 animationLoader.showAnimation();
-                addCategory(formData).then(() => {
-                    animationLoader.hideAnimation();
-                    window.location.href = "/shopowner/category";
-                }).catch(error => {
-                    animationLoader.hideAnimation();
-                    toastr.error(error, 'Error');
+                getShopId().then(shopId => {
+                    addCategory(shopId, formData).then(() => {
+                        animationLoader.hideAnimation();
+                        window.location.href = "/shopowner/category";
+                    }).catch(error => {
+                        animationLoader.hideAnimation();
+                        toastr.error(error, 'Error');
+                    });
                 });
             });
         });

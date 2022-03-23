@@ -93,7 +93,8 @@ namespace AuthServer.Services
                 FirstName = "Test",
                 LastName = "Test",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
+                DoB = DateOnly.MinValue
             });
         }
     }

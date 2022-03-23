@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using Shared.Models
+@model dynamic
 @{
     var activeItem = Model.ActiveItem;
 }
@@ -14,61 +15,122 @@
         </a>
     </div>
     <hr class="horizontal light mt-0 mb-2">
-    <div class="collapse navbar-collapse w-auto max-height-vh-100" id="sidenav-collapse-main">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link text-white @(activeItem == "profile" ? "active bg-gradient-primary" : "")" href="interface">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">person</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Profile</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <hr class="horizontal light mt-0 mb-2">
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white @(activeItem == "categories" ? "active bg-gradient-primary" : "")" href="category">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">dashboard</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Categories</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white @(activeItem == "products" ? "active bg-gradient-primary" : "")" href="product">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">table_view</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Products</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white @(activeItem == "orders" ? "active bg-gradient-primary" : "")" href="order">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">table_view</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Manage Order</span>
-                </a>
-            </li>
-            <li class="nav-item"> 
-                <a class="nav-link text-white @(activeItem == "sell-history" ? "active bg-gradient-primary" : "")" href="order/sell-history">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">table_view</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Sell History</span>
-                </a>
-            </li>
-            <li class="nav-item"> 
-                <a class="nav-link text-white @(activeItem == "statistic" ? "active bg-gradient-primary" : "")" href="statistic">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">table_view</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Statistic</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+    @if (User.IsInRole(Roles.SHOP_OWNER))
+    {
+        <div class="collapse navbar-collapse w-auto max-height-vh-100" id="sidenav-collapse-main">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "profile" ? "active bg-gradient-primary" : "")" href="interface">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">person</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <hr class="horizontal light mt-0 mb-2">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "categories" ? "active bg-gradient-primary" : "")" href="category">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">dashboard</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Categories</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "products" ? "active bg-gradient-primary" : "")" href="product">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "orders" ? "active bg-gradient-primary" : "")" href="order">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Manage Order</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "sell-history" ? "active bg-gradient-primary" : "")" href="order/sell-history">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Sell History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "statistic" ? "active bg-gradient-primary" : "")" href="statistic">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Statistic</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    }
+    else if (User.IsInRole(Roles.ADMIN))
+    {
+        <div class="collapse navbar-collapse w-auto max-height-vh-100" id="sidenav-collapse-main">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "profile" ? "active bg-gradient-primary" : "")" href="interface">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">person</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <hr class="horizontal light mt-0 mb-2">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "reports" ? "active bg-gradient-primary" : "")" href="report">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">dashboard</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Reports</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "products" ? "active bg-gradient-primary" : "")" href="product">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "orders" ? "active bg-gradient-primary" : "")" href="order">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Manage Order</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "sell-history" ? "active bg-gradient-primary" : "")" href="order/sell-history">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Sell History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white @(activeItem == "statistic" ? "active bg-gradient-primary" : "")" href="statistic">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Statistic</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    }
     <div class="sidenav-footer position-absolute w-100 bottom-0 ">
         <div class="mx-3">
             <a class="btn bg-gradient-primary mt-4 w-100"

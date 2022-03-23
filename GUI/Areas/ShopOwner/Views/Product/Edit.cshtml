@@ -63,13 +63,15 @@
         $('#nav-item-product').addClass(classNames);
         let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
         animationLoader.showAnimation(3500);
-        getAllCategories().then(categories => {
-            onLoadedAllCategories(categories.filter(category => !category.isDisabled));
-            animationLoader.hideAnimation();
-        }).catch(() => {
-            console.log('error');
-            animationLoader.hideAnimation();
-            toastr.error('Failed to load categories', 'Error');
+        getShopId().then(shopId => {
+            getAllCategories(shopId).then(categories => {
+                onLoadedAllCategories(categories.filter(category => !category.isDisabled));
+                animationLoader.hideAnimation();
+            }).catch(() => {
+                console.log('error');
+                animationLoader.hideAnimation();
+                toastr.error('Failed to load categories', 'Error');
+            });
         });
     });
 

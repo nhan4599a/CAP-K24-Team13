@@ -35,7 +35,7 @@
     <div class="row">
         <div class="form-outline mb-4">
             <i class="far fa-calendar-alt trailing pe-auto" style="cursor: pointer" onclick="openDatePicker()"></i>
-            <input type="text" id="input-dob" class="form-control form-icon-trailing" placeholder="Day of birth" name="DoB" value="@Model.DoB!.Value.ToString("dd/MM/yyyy")" autocomplete="off" />
+            <input type="text" id="input-dob" class="form-control form-icon-trailing" placeholder="Day of birth" name="DoB" value="@Model.DoB?.ToString("dd/MM/yyyy")" autocomplete="off" />
             <label class="form-label" for="input-dob" style="font-family: Lora;">Day of birth</label>
         </div>
     </div>

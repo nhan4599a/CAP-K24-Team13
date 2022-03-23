@@ -364,7 +364,7 @@
                     }
                 });
             });
-            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '~/assets/shop-owner/img/illustrations/loading.json');
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation();
             getShopId().then(shopId => {
                 Promise.all([getShopInformation(shopId), getShopInterface(shopId), findProducts(shopId, undefined, 1, 8), getAllCategories()])

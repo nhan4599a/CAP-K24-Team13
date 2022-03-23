@@ -130,6 +130,7 @@ namespace GUI
                 context.Request.Scheme = "https";
                 await next();
             });
+            app.UseHsts();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -145,7 +146,12 @@ namespace GUI
                         name: "ShopOwner",
                         areaName: "ShopOwner",
                         pattern: "ShopOwner/{controller=Product}/{action=Index}/{id?}");
-                
+
+                endpoints.MapAreaControllerRoute(
+                        name: "Admin",
+                        areaName: "Admin",
+                        pattern: "Admin/{controller}/{action}/{id?}");
+
                 endpoints.MapControllerRoute(
                         name: "User",
                         pattern: "{controller=Home}/{action=Index}/{id?}");

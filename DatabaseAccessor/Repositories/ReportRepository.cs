@@ -28,6 +28,7 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.Reporter)
                 .Include(e => e.AffectedUser)
+                .AsSplitQuery()
                 .Select(report => _mapper.MapToReportDTO(report))
                 .OrderBy(report => report.Status)
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
@@ -77,6 +78,19 @@ namespace DatabaseAccessor.Repositories
             report.Status = ReportStatus.Approved;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<(User, AccountPunishmentBehavior)>.Success(new (report.AffectedUser, punishment));
+        }
+
+        public Task<PaginatedList<ReportDTO>> GetReports(PaginationInfo paginationInfo)
+        {
+            return _dbContext.Reports
+                .AsNoTracking()
+                .Include(e => e.Reporter)
+                .Include(e => e.AffectedUser)
+                .AsSplitQuery()
+                .OrderBy(report => report.CreatedAt)
+                .ThenBy(report => report.Status)
+                .Select(report => _mapper.MapToReportDTO(report))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
         public void Dispose()

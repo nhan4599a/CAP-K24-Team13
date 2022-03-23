@@ -435,7 +435,7 @@
             $('a.btn[name=btn-save]').click(function () {
                 let editMode = localStorage.getItem('shop-interface.edit-mode');
                 
-                let animationLoader = new AnimationLoader('#loading-container > #animation-container', '~/assets/shop-owner/img/illustrations/loading.json');
+                let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
                 animationLoader.showAnimation();
                 let successCallback = () => {
                     localStorage.removeItem('shop-interface.edit-mode');

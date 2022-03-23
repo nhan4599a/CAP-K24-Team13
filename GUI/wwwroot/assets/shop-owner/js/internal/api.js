@@ -27,7 +27,7 @@ const checkoutEndpoint = '/checkout';
 const ratingProductEndpoint = '/rating';
 const orderEndpoint = '/orders';
 const statisticEndpoint = '/statistic';
-const reportEndpoint = '/report';
+const reportEndpoint = '/reports';
 
 function findProducts(shopId, keyword, pageNumber, pageSize) {
     if (shopId === 0)

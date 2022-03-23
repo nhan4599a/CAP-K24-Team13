@@ -1,5 +1,19 @@
 ﻿$(document).ready(function () {
     const orderStatusClassList = ['confirm', 'in-process', 'deliveried', 'done', 'canceled'];
+    $('#input-search').keypress(function (e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            let value = $(this).val().trim();
+            if (!value) {
+                toastr.error('You must enter the keyword', 'Error!');
+            } else {
+                let key = $('#invoice-search-by').val();
+                let urlEncodedValue = encodeURIComponent(value);
+                window.location.href =
+                    `https://cap-k24-team13.herokuapp.com/shopowner/order/sell-history?key=${key}&value=${urlEncodedValue}`;
+            }
+        }
+    });
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
     getShopId()

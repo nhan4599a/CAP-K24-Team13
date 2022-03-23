@@ -66,6 +66,11 @@
             display: block;
         }
     </style>
+    <style>
+        .header-dropdown>a::after {
+            content: none
+        }
+    </style>
     @RenderSection("Styles", false)
 </head>
 
@@ -98,7 +103,7 @@
                                     </li>
                                     @if (User.Identity.IsAuthenticated)
                                     {
-                                        <div class="dropdown pe-3">
+                                        <li class="dropdown">
                                             <a href="#my-account">@User.Identity.Name</a>
                                             <div class="dropdown-content">
                                                 <a href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/information", "returnUrl")">My Account</a>
@@ -106,7 +111,7 @@
                                                 <a href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/change-password", "returnUrl")">Change Password</a>
                                                 <a href="#" id="signout">Sign out</a>
                                             </div>
-                                        </div>
+                                        </li>
                                     }
                                     else
                                     {
@@ -150,7 +155,7 @@
                             <div class="dropdown cart-dropdown">
                                 <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                     <i class="icon-shopping-cart"></i>
-                                    <span class="cart-count">@cartItems?.Count</span>
+                                    <span class="cart-count">@(cartItems == null ? 0 : cartItems.Count)</span>
                                     <span class="cart-txt">Cart</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -160,7 +165,7 @@
                                             <div class="product" style="flex-direction: column; align-items: center; padding: 2.4rem;">
                                                 <i class="fas fa-times fa-5x" style="margin: auto"></i>
                                                 <h4 class="product-title">
-                                                    There are no products in cart 
+                                                    You are not signed in
                                                 </h4>
                                             </div>
                                         }
@@ -1084,7 +1089,7 @@
             const redirectUrl = window.location.pathname;
             $('li.login > a').attr('href', `/authentication/signin?redirectUrl=${encodeURIComponent(redirectUrl)}`);
             $('#signout').attr('href', `/authentication/signout?redirectUrl=${encodeURIComponent(redirectUrl)}`);
-        })
+        });
     </script>
     @RenderSection("Scripts", false)
 </body>

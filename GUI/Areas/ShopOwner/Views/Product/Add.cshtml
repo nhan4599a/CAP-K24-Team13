@@ -125,12 +125,14 @@
             });
             let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation(3500);
-            getAllCategories().then(categories => {
-                renderCategoryDropdown(categories.filter(category => !category.isDisabled))
-                animationLoader.hideAnimation();
-            }).catch(() => {
-                animationLoader.hideAnimation();
-                toastr.error('Failed to load list categories', 'Error');
+            getShopId().then(shopId => {
+                getAllCategories(shopId).then(categories => {
+                    renderCategoryDropdown(categories.filter(category => !category.isDisabled))
+                    animationLoader.hideAnimation();
+                }).catch(() => {
+                    animationLoader.hideAnimation();
+                    toastr.error('Failed to load list categories', 'Error');
+                });
             });
         });
         function buildRequestModel() {

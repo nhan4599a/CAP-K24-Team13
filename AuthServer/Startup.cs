@@ -129,8 +129,8 @@ namespace AuthServer
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
                 options.Authentication.CookieLifetime = TimeSpan.FromMinutes(30);
-                options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
                 options.Authentication.CookieSlidingExpiration = true;
+                options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
             })
                 .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
@@ -142,9 +142,14 @@ namespace AuthServer
                     options.ConfigureDbContext = ApplyOptions;
                 })
                 .AddDeveloperSigningCredential();
+            services.AddLocalApiAuthentication();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.SlidingExpiration = true;
+            });
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
-            services.AddLocalApiAuthentication();
             services.AddMediatR(typeof(Startup));
         }
 
@@ -160,6 +165,7 @@ namespace AuthServer
                 context.SetIdentityServerOrigin("https://cap-k24-team13-auth.herokuapp.com/");
                 await next();
             });
+            app.UseHsts();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

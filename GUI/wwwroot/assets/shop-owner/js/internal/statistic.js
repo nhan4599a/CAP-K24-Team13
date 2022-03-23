@@ -27,7 +27,9 @@ $(document).ready(() => {
                                                         <input type="text" id="input-end" class="form-control" placeholder="End date" onfocus="openEndDatePicker();" />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-2"></div>
+                                                <div class="col-md-2">
+                                                    <button class="btn" style="visibility: hidden">placeholder</button>
+                                                </div>
                                             </div>`);
             $('#input-start').val(getDateObj(currentPageInfo.start) ? currentPageInfo.start : '');
             $('#input-end').val(getDateObj(currentPageInfo.end) ? currentPageInfo.end : '');
@@ -71,7 +73,9 @@ $(document).ready(() => {
                                                 <div class="col-md-2">
                                                     <input type="text" id="input-end-year" class="form-control" placeholder="End year" />
                                                 </div>
-                                                <div class="col-md-2"></div>
+                                                <div class="col-md-2">
+                                                    <button class="btn" style="visibility: hidden">placeholder</button>
+                                                </div>
                                             </div>`);
             $('#select-start-month').val(currentPageInfo.start ? (currentPageInfo.start.split('/')[0] || 0) : 0);
             $('#select-end-month').val(currentPageInfo.end ? (currentPageInfo.end.split('/')[0] || 0) : 0);
@@ -101,7 +105,9 @@ $(document).ready(() => {
                                                 <div class="col-md-2">
                                                     <input type="text" id="input-end-year" class="form-control" placeholder="End year" />
                                                 </div>
-                                                <div class="col-md-2"></div>
+                                                <div class="col-md-2">
+                                                    <button class="btn" style="visibility: hidden">placeholder</button>
+                                                </div>
                                             </div>`);
             $('#select-start-month').val(currentPageInfo.start ? (currentPageInfo.start.split('/')[0] || 0) : 0);
             $('#select-end-month').val(currentPageInfo.end ? (currentPageInfo.end.split('/')[0] || 0) : 0);
@@ -115,7 +121,9 @@ $(document).ready(() => {
                                                 <div class="col-md-2">
                                                     <input type="text" id="input-end-year" class="form-control" value="${currentYear}" placeholder="End year" />
                                                 </div>
-                                                <div class="col-md-2"></div>
+                                                <div class="col-md-2">
+                                                    <button class="btn" style="visibility: hidden">placeholder</button>
+                                                </div>
                                             </div>`);
             $('#input-start-year').val(currentPageInfo.start || currentYear);
             $('#input-end-year').val(currentPageInfo.end || currentYear);
