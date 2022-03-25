@@ -378,7 +378,7 @@
                 .catch((e) => {
                     animationLoader.hideAnimation();
                     console.log(e);
-                    toastr.error('Something went wrong', 'Error');
+                    toastr.error(e, 'Error');
                 });
             });
         });

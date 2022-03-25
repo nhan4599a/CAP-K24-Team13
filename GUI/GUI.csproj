@@ -6,13 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Areas\assets\**" />
-    <Compile Remove="Models\**" />
     <Content Remove="Areas\assets\**" />
-    <Content Remove="Models\**" />
     <EmbeddedResource Remove="Areas\assets\**" />
-    <EmbeddedResource Remove="Models\**" />
     <None Remove="Areas\assets\**" />
-    <None Remove="Models\**" />
   </ItemGroup>
 
   <ItemGroup>

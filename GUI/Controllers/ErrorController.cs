@@ -10,5 +10,11 @@ namespace GUI.Controllers
         {
             return View(resultCode.ToString());
         }
+
+        [HttpGet("throw")]
+        public IActionResult Throw()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

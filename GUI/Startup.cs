@@ -71,6 +71,7 @@ namespace GUI
                 options.Scope.Add("offline_access");
                 options.Scope.Add("roles");
                 options.Scope.Add("shop");
+                options.Scope.Add("IdentityServerApi");
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
                 options.ClaimActions.MapJsonKey("role", "role", "role");
@@ -101,9 +102,10 @@ namespace GUI
                 options.ViewLocationFormats.Add($"/Areas/{virtualAreaName}/Views/Shared/{{0}}{RazorViewEngine.ViewExtension}");
             });
             services.AddScoped<BaseUserActionFilter>();
+            services.AddScoped<IShopClient, ShopClientImpl>();
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
-            services.AddRefitClient<IShopClient>()
+            services.AddRefitClient<IExternalShopClient>()
                 .ConfigureHttpClient(options =>
                 {
                     options.BaseAddress = new Uri("https://emallsolution-backendapi.herokuapp.com/api");

@@ -1,0 +1,161 @@
+﻿@using GUI.Extensions
+@using Shared.DTOs
+@model List<ShopDTO>
+@section Styles {
+<style>
+    .container .card {
+        position: relative;
+        width: 197px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.05);
+        margin: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(10px);
+    }
+
+        .container .card .content {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: 0.5s;
+        }
+
+        .container .card:hover .content {
+            transform: translateY(-25px);
+        }
+
+        .container .card .content .imgBx {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+        }
+
+            .container .card .content .imgBx img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .container .card .content .contentBx h3 {
+            color: #c96;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            font-size: 18px;
+            text-align: center;
+            margin: 20px 0 10px;
+            line-height: 1.1em;
+        }
+
+            .container .card .content .contentBx h3 span {
+                font-size: 12px;
+                font-weight: 300;
+                text-transform: initial;
+            }
+
+        .container .card .sci {
+            position: absolute;
+            bottom: 15px;
+            display: flex;
+        }
+
+            .container .card .sci li {
+                list-style: none;
+                margin: 0 10px;
+                transform: translateY(40px);
+                transition: 0.5s;
+                opacity: 0;
+            }
+
+        .container .card:hover .sci li {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+
+        .container .card .sci li a {
+            color: #c96;
+            font-size: 20px;
+        }
+
+    .btn-view-shop {
+        background-color: #c96;
+        color: #fff
+    }
+
+        .btn-view-shop:hover {
+            background-color: #a6c76c;
+            color: #fff
+        }
+
+</style>
+}
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('/assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">TRADEMARK</h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Page</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Trademark</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="form-group has-search">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input type="text" class="form-control" placeholder="Search by name" id="input-search">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var shop in Model)
+                {
+                    <div class="card">
+                        <div class="content">
+                            <div class="imgBx">
+                                <img src="@Url.ShopImageUrl(shop.Avatar)">
+                            </div>
+                            <div class="contentBx">
+                                <h3>
+                                    @shop.ShopName
+                                    <br>
+                                    @if (shop.Floor.StartsWith("L"))
+                                    {
+                                        <span>@shop.Floor-@shop.Position</span>
+                                    }
+                                    else
+                                    {
+                                        <span>L@shop.Floor-@shop.Position</span>
+                                    }
+                                </h3>
+                            </div>
+                        </div>
+                        <ul class="sci">
+                            <li>
+                                <button class="btn btn-view-shop">View Shop</button>
+                            </li>
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div><!-- End .page-content -->
+</main>

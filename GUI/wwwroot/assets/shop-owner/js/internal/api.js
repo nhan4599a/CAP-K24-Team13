@@ -10,13 +10,20 @@ axios.interceptors.request.use(async config => {
 });
 
 axios.interceptors.response.use(axiosResp => {
-    if (axiosResp.data instanceof Blob)
-        return Promise.resolve(axiosResp.data);
-    let resp = axiosResp.data;
-    if (resp.responseCode != 200) {
-        return Promise.reject(resp.errorMessage);
+    if (axiosResp.request.responseURL.includes('backendapi')) {
+        if (!axiosResp.data.isSuccessed) {
+            return Promise.reject(axiosResp.data.message);
+        }
+        return Promise.resolve(axiosResp.data.resultObj);
+    } else {
+        if (axiosResp.data instanceof Blob)
+            return Promise.resolve(axiosResp.data);
+        let resp = axiosResp.data;
+        if (resp.responseCode != 200) {
+            return Promise.reject(resp.errorMessage);
+        }
+        return Promise.resolve(resp.data);
     }
-    return Promise.resolve(resp.data);
 }, error => Promise.reject(error));
 
 const productEndpoint = '/products';

@@ -124,7 +124,7 @@ namespace AuthServer.Controllers
 
             if (string.IsNullOrWhiteSpace(logoutContext.PostLogoutRedirectUri))
             {
-                return View("SignOutRedirect");
+                return View("SignedOut");
             }
 
             return Redirect(logoutContext.PostLogoutRedirectUri);

@@ -9,7 +9,6 @@ namespace AspNetCoreSharedComponent.Middleware
     public class GlobalExceptionHandlerMiddleware
     {
         private readonly AspNetCoreHttp.RequestDelegate _next;
-
         private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
 
         public GlobalExceptionHandlerMiddleware(AspNetCoreHttp.RequestDelegate next,
@@ -24,6 +23,15 @@ namespace AspNetCoreSharedComponent.Middleware
             try
             {
                 await _next(context);
+                var responseCode = context.Response.StatusCode;
+                _logger.LogInformation(
+                    $"Request {context.Request.Method} to {context.Request.Path} has returned {responseCode}");
+                if (ShouldRedirect(context))
+                {
+                    if (responseCode == 405)
+                        responseCode = 404;
+                    context.Response.Redirect($"/Error/{responseCode}");
+                }
             }
             catch (Exception e)
             {
@@ -31,17 +39,18 @@ namespace AspNetCoreSharedComponent.Middleware
                     $"Request {context.Request.Method} " +
                     $"to {context.Request.Path} has resulted in an error. Message is: {e.Message}");
                 _logger.LogError(e.StackTrace);
-                context.Response.Redirect("/Error/500");
+                if (!context.Request.Path.Value!.StartsWith("/api"))
+                {
+                    context.Response.Redirect("/Error/500");
+                }
             }
-            var responseCode = context.Response.StatusCode;
-            _logger.LogInformation(
-                $"Request {context.Request.Method} to {context.Request.Path} has returned {responseCode}");
-            if (responseCode >= 400 && !context.Request.IsStatisFileRequest())
-            {
-                if (responseCode == 405)
-                    responseCode = 404;
-                context.Response.Redirect($"/Error/{responseCode}");
-            }
+        }
+
+        private bool ShouldRedirect(AspNetCoreHttp.HttpContext httpContext)
+        {
+            var responseCode = httpContext.Response.StatusCode;
+            return responseCode >= 400 && !httpContext.Request.IsStatisFileRequest()
+                && !httpContext.Request.Path.Value!.StartsWith("/api");
         }
     }
 }

@@ -3,7 +3,6 @@ using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -14,10 +13,11 @@ namespace GUI.Areas.User.Controllers
         private readonly IShopClient _shopClient;
         private readonly IShopInterfaceClient _interfaceClient;
 
-        public HomeController(IProductClient productClient, IShopClient shopClient)
+        public HomeController(IProductClient productClient, IShopClient shopClient, IShopInterfaceClient interfaceClient)
         {
             _productClient = productClient;
             _shopClient = shopClient;
+            _interfaceClient = interfaceClient;
         }
 
         public IActionResult Index()
@@ -39,19 +39,10 @@ namespace GUI.Areas.User.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             ViewBag.Keyword = keyword;
             ViewBag.PageSize = pageSize;
-            var shopAvatarResponse = await _interfaceClient.GetShopAvatar(shopResponse.Content.Data.Select(item => item.Id).ToList());
-            if (shopAvatarResponse.IsSuccessStatusCode)
-            {
-                for (int i = 0; i < pageSize; i++)
-                {
-                    var shopId = shopResponse.Content.Data[i].Id;
-                    shopResponse.Content.Data[i].Avatar = shopAvatarResponse.Content.Data[shopId];
-                }
-            }
             return View(new SearchResultViewModel
             {
                 Products = productResponse.Content.Data,
-                Shops = shopResponse.Content.Data
+                Shops = shopResponse.Content.ToInternal()
             });
         }
     }

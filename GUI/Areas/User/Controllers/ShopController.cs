@@ -1,7 +1,6 @@
 ﻿using GUI.Abtractions;
 using GUI.Areas.User.ViewModels;
 using GUI.Clients;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -35,7 +34,7 @@ namespace GUI.Areas.User.Controllers
             {
                 Products = productResponse.Content.Data,
                 Categories = categoryResponse.Content.Data,
-                Shop = shopResponse.Content.Data
+                Shop = shopResponse.Content.ResultObj
             });
         }
     }

@@ -132,16 +132,6 @@ namespace ShopProductService.Controllers
             return ApiResult<bool>.CreateSucceedResult(true);
         }
 
-        [HttpGet("shop/{shopId}")]
-        public async Task<ApiResult> GetCategoriesOfShop(int shopId)
-        {
-            var result = await _mediator.Send(new FindCategoriesByShopIdQuery
-            {
-                ShopId = shopId
-            });
-            return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(result);
-        }
-
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet("images/{image}")]
         public IActionResult GetImage(string image)

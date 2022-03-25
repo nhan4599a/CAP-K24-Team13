@@ -37,8 +37,8 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<ProductDTO>> FindProductsAsync(string keyword, PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
-                .Where(product => product.ProductName.Contains(keyword)
-                        || product.Category.CategoryName.Contains(keyword))
+                .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
+                        || EF.Functions.Like(product.Category.CategoryName, $"%{keyword}%"))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }

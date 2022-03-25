@@ -1,0 +1,27 @@
+﻿@section SideBar {
+    @await Component.InvokeAsync("SideBar", new { activeItem = "customers" })
+}
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-md-2 offset-md-5">
+                @await Component.InvokeAsync("PageSizeSelectDropdown")
+            </div>
+        </div>
+        <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="border-radius-lg pt-4 pb-3 bg-gradient-primary-dark shadow">
+                    <h6 class="text-white text-capitalize ps-3">Reports table</h6>
+                </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                <div class="table-responsive p-0"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pagination"></div>
+@section Scripts {
+    <script src="@Url.Content("~/assets/shop-owner/js/internal/utils.js")"></script>
+    <script src="@Url.Content("~/assets/admin/js/report.js")"></script>
+}
