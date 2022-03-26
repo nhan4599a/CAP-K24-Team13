@@ -20,7 +20,7 @@ $(document).ready(function () {
                     updateDropdownCart(product);
                 })
                 .catch(error => toastr.error(error));
-        });
+        }).catch(() => toastr.error('You must signed in before you can add product to cart'));
     });
 
     $('.product-details-action > .btn-product.btn-cart').click(function (e) {
@@ -46,7 +46,7 @@ $(document).ready(function () {
                     updateDropdownCart(product);
                 })
                 .catch(error => toastr.error(error));
-        });
+        }).catch(() => toastr.error('You must signed in before you can add product to cart'));
     });
 
     $('div.dropdown-cart-products > div.product > a.btn-remove').click(function (e) {
