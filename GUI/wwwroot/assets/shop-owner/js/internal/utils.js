@@ -14,6 +14,14 @@ function renderInvoiceTable(invoices) {
     }
 }
 
+function renderReportTable(reports) {
+    if (reports.length == 0) {
+        $('.table-responsive.p-0').html('<p style="text-align: center">There is no invoice to show!</p>');
+    } else {
+        $('.table-responsive.p-0').html(buildInvoiceTableHtml(reports));
+    }
+}
+
 function buildProductTableHtml(products) {
     let tableRowHtml = '';
     products.forEach((product, index) => {
@@ -65,7 +73,45 @@ function buildInvoiceTableHtml(invoices) {
                             Invoice Code
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            PhoneNumber
+                            Phone Number
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Created At
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Status
+                        </th>
+                        <th class="text-secondary opacity-7">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRowHtml}
+                </tbody>
+            </table>`;
+}
+
+function buildReportTableHtml(reports) {
+    let tableRowHtml = '';
+    reports.forEach((report, index) => {
+        tableRowHtml += buildReportTableRowHtml(report, index);
+    });
+    return `<table class="table align-items-center mb-0">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                            style="width: 50px; min-width: 50px !important;">
+                            #
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                            style="width: 50px; min-width: 50px !important;">
+                            Id
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                            style="padding-left: 24px!important">
+                            Reporter
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Affectee
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Created At
@@ -139,6 +185,35 @@ function buildInvoiceTableRowHtml(invoice, index) {
                 </td>
             </tr>`;
 }
+
+function buildReportTableRowHtml(report, index) {
+    let statusList = ['New', 'Approved'];
+    return `<tr>
+                <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${report.id}</span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${report.reporter}</span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${report.affectedUser}</span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${formatDateTime(report.createdAt)}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                    ${statusList[report.status]}
+                </td>
+                <td class="align-middle">
+                    <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+                        <i class="fas fa-check"></i>
+                        <span> Approve</span>
+                    </a>
+                </td>
+            </tr>`;
+}
+
 
 function formatDateTime(dateStr) {
     let dateObj = new Date(dateStr);

@@ -161,6 +161,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/reports",
+      "DownstreamScheme": "http",
+      "ServiceName": "ReportService",
+      "UpstreamPathTemplate": "/reports",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/reports/{invoiceId}",
       "DownstreamScheme": "http",
       "ServiceName": "ReportService",

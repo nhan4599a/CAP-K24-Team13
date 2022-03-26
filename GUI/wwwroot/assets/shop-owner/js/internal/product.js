@@ -31,7 +31,7 @@ function loadProducts(keyword, pageNumber, pageSize) {
     animationLoader.showAnimation(3500);
     getShopId().then(shopId => {
         findProducts(shopId, keyword, pageNumber, pageSize).then((paginatedData) => {
-            onLoadInvoicesCompleted(paginatedData);
+            onLoadProductsCompleted(paginatedData);
             animationLoader.hideAnimation();
         }).catch(() => {
             animationLoader.hideAnimation();
@@ -40,7 +40,7 @@ function loadProducts(keyword, pageNumber, pageSize) {
     });
 }
 
-function onLoadInvoicesCompleted(paginatedData) {
+function onLoadProductsCompleted(paginatedData) {
     let products = paginatedData.data;
     renderProductTable(products);
     renderPagination({

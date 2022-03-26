@@ -270,12 +270,21 @@ function report(invoiceId, userId) {
     });
 }
 
-function getShopInformation(shopId) {
-    return axios.get(`https://emallsolution-backendapi.herokuapp.com/api/shops/${shopId}`);
-}
-
 function approveReport(reportId) {
     return axios.post(`https://cap-k24-team13-auth.herokuapp.com/api/report/${reportId}`);
+}
+
+function getReports(pageNumber, pageSize) {
+    return axios.get(reportEndpoint, {
+        params: {
+            pageNumber: pageNumber,
+            pageSize: pageSize
+        }
+    });
+}
+
+function getShopInformation(shopId) {
+    return axios.get(`https://emallsolution-backendapi.herokuapp.com/api/shops/${shopId}`);
 }
 
 function getAccessToken() {
