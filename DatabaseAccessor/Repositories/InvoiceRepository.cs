@@ -3,7 +3,6 @@ using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using Shared.DTOs;
 using Shared.Extensions;
 using Shared.Models;
@@ -134,20 +133,19 @@ namespace DatabaseAccessor.Repositories
             if (strategy == StatisticStrategy.ByDay)
             {
                 var dbStatisticResult = await invoices
-                    .GroupBy(invoice => invoice.CreatedAt.Date)
+                    .GroupBy(invoice => invoice.ChangedDate.Date)
                     .Select(group => new
                     {
                         group.Key,
                         Value = new StatisticResultItem
                         {
-                            Income = group.Where(e => e.Status == InvoiceStatus.Succeed)
-                                        .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
+                            Income = group.Where(e => e.NewStatus == InvoiceStatus.Succeed)
+                                        .SelectMany(e => e.Invoice.Details).Sum(detail => detail.Price * detail.Quantity),
                             Data = new StatisticResultItemData
                             {
-                                Total = group.Count(),
-                                NewInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.New),
-                                SucceedInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Succeed),
-                                CanceledInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Canceled)
+                                NewInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.New),
+                                SucceedInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.Succeed),
+                                CanceledInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.Canceled)
                             }
                         }
                     }).ToListAsync();
@@ -159,20 +157,19 @@ namespace DatabaseAccessor.Repositories
             else if (strategy == StatisticStrategy.ByMonth)
             {
                 var dbStatisticResult = await invoices
-                    .GroupBy(invoice => new { invoice.CreatedAt.Month, invoice.CreatedAt.Year })
+                    .GroupBy(invoice => new { invoice.ChangedDate.Month, invoice.ChangedDate.Year })
                     .Select(group => new
                     {
                         group.Key,
                         Value = new StatisticResultItem
                         {
-                            Income = group.Where(e => e.Status == InvoiceStatus.Succeed)
-                                        .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
+                            Income = group.Where(e => e.NewStatus == InvoiceStatus.Succeed)
+                                        .SelectMany(e => e.Invoice.Details).Sum(detail => detail.Price * detail.Quantity),
                             Data = new StatisticResultItemData
                             {
-                                Total = group.Count(),
-                                NewInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.New),
-                                SucceedInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Succeed),
-                                CanceledInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Canceled)
+                                NewInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.New),
+                                SucceedInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.Succeed),
+                                CanceledInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.Canceled)
                             }
                         }
                     }).ToListAsync();
@@ -184,20 +181,19 @@ namespace DatabaseAccessor.Repositories
             else if (strategy == StatisticStrategy.ByQuarter)
             {
                 var dbStatisticResult = await invoices
-                    .GroupBy(invoice => new { Quarter = Math.Ceiling(invoice.CreatedAt.Month / 3d), invoice.CreatedAt.Year })
+                    .GroupBy(invoice => new { Quarter = Math.Ceiling(invoice.ChangedDate.Month / 3d), invoice.ChangedDate.Year })
                     .Select(group => new
                     {
                         group.Key,
                         Value = new StatisticResultItem
                         {
-                            Income = group.Where(e => e.Status == InvoiceStatus.Succeed)
-                                        .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
+                            Income = group.Where(e => e.NewStatus == InvoiceStatus.Succeed)
+                                        .SelectMany(e => e.Invoice.Details).Sum(detail => detail.Price * detail.Quantity),
                             Data = new StatisticResultItemData
                             {
-                                Total = group.Count(),
-                                NewInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.New),
-                                SucceedInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Succeed),
-                                CanceledInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Canceled)
+                                NewInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.New),
+                                SucceedInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.Succeed),
+                                CanceledInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.Canceled)
                             }
                         }
                     }).ToListAsync();
@@ -209,20 +205,19 @@ namespace DatabaseAccessor.Repositories
             else
             {
                 var dbStatisticResult = await invoices
-                                    .GroupBy(invoice => invoice.CreatedAt.Year)
+                                    .GroupBy(invoice => invoice.ChangedDate.Year)
                                     .Select(group => new
                                     {
                                         group.Key,
                                         Value = new StatisticResultItem
                                         {
-                                            Income = group.Where(e => e.Status == InvoiceStatus.Succeed)
-                                                        .SelectMany(e => e.Details).Sum(detail => detail.Price * detail.Quantity),
+                                            Income = group.Where(e => e.NewStatus == InvoiceStatus.Succeed)
+                                                        .SelectMany(e => e.Invoice.Details).Sum(detail => detail.Price * detail.Quantity),
                                             Data = new StatisticResultItemData
                                             {
-                                                Total = group.Count(),
-                                                NewInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.New),
-                                                SucceedInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Succeed),
-                                                CanceledInvoiceCount = group.Count(invoice => invoice.Status == InvoiceStatus.Canceled)
+                                                NewInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.New),
+                                                SucceedInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.Succeed),
+                                                CanceledInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.Canceled)
                                             }
                                         }
                                     }).ToListAsync();
@@ -305,12 +300,12 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<PaginatedList<InvoiceDTO>>.Success(returnResult);
         }
 
-        private IQueryable<Invoice> GetInvoicesInTime(int shopId, DateTime startDate, DateTime endDate)
+        private IQueryable<InvoiceStatusChangedHistory> GetInvoicesInTime(int shopId, DateTime startDate, DateTime endDate)
         {
-            return _dbContext.Invoices
+            return _dbContext.InvoiceStatusChangedHistories
                     .AsNoTracking()
-                    .Where(invoice => invoice.ShopId == shopId)
-                    .Where(invoice => invoice.CreatedAt.Date >= startDate && invoice.CreatedAt.Date <= endDate);
+                    .Where(history => history.Invoice.ShopId == shopId)
+                    .Where(history => history.ChangedDate.Date >= startDate && history.ChangedDate.Date <= endDate);
         }
 
         public async Task<InvoiceDetailDTO> GetInvoiceDetailAsync(string invoiceCode)

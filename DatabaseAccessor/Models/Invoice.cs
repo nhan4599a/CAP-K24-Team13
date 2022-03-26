@@ -38,7 +38,7 @@ namespace DatabaseAccessor.Models
 
         public virtual IList<InvoiceDetail> Details { get; set; } = new List<InvoiceDetail>();
 
-        public virtual IList<InvoiceStatusChangedHistory> StatusChangedHistory { get; set; }
+        public virtual IList<InvoiceStatusChangedHistory> StatusChangedHistories { get; set; }
 
         public virtual Report Report { get; set; }
     }

@@ -10,27 +10,37 @@ namespace DatabaseAccessor.Triggers
     {
         public Task BeforeSave(ITriggerContext<Invoice> context, CancellationToken cancellationToken)
         {
-            if (context.ChangeType == ChangeType.Modified && context.Entity.Status != context.UnmodifiedEntity.Status)
+            if (context.ChangeType == ChangeType.Modified || context.ChangeType == ChangeType.Added)
             {
-                context.Entity.StatusChangedHistory.Add(new InvoiceStatusChangedHistory
+                if (context.ChangeType == ChangeType.Added)
                 {
-                    OldStatus = context.UnmodifiedEntity.Status,
-                    NewStatus = context.Entity.Status
-                });
-
-                if (context.Entity.Status == InvoiceStatus.Confirmed && context.UnmodifiedEntity.Status == InvoiceStatus.New)
-                {
-                    foreach (var detail in context.Entity.Details)
+                    context.Entity.StatusChangedHistories.Add(new InvoiceStatusChangedHistory
                     {
-                        detail.Product.Quantity -= detail.Quantity;
-                    }
+                        OldStatus = null,
+                        NewStatus = InvoiceStatus.New
+                    });
                 }
-
-                if (context.Entity.Status == InvoiceStatus.Canceled)
+                else
                 {
-                    foreach (var detail in context.Entity.Details)
+                    context.Entity.StatusChangedHistories.Add(new InvoiceStatusChangedHistory
                     {
-                        detail.Product.Quantity += detail.Quantity;
+                        OldStatus = context.UnmodifiedEntity.Status,
+                        NewStatus = context.Entity.Status
+                    });
+                    if (context.Entity.Status == InvoiceStatus.Confirmed && context.UnmodifiedEntity.Status == InvoiceStatus.New)
+                    {
+                        foreach (var detail in context.Entity.Details)
+                        {
+                            detail.Product.Quantity -= detail.Quantity;
+                        }
+                    }
+
+                    if (context.Entity.Status == InvoiceStatus.Canceled)
+                    {
+                        foreach (var detail in context.Entity.Details)
+                        {
+                            detail.Product.Quantity += detail.Quantity;
+                        }
                     }
                 }
             }

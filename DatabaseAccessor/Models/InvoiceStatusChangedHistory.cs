@@ -11,7 +11,7 @@ namespace DatabaseAccessor.Models
 
         public int InvoiceId { get; set; }
 
-        public InvoiceStatus OldStatus { get; set; }
+        public InvoiceStatus? OldStatus { get; set; }
 
         public InvoiceStatus NewStatus { get; set; }
 

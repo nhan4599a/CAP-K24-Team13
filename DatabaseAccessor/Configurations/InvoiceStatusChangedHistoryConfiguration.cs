@@ -16,7 +16,7 @@ namespace DatabaseAccessor.Configurations
                 .HasDefaultValueSql("getdate() + '7:0:0'");
 
             builder.HasOne(e => e.Invoice)
-                .WithMany(e => e.StatusChangedHistory)
+                .WithMany(e => e.StatusChangedHistories)
                 .HasForeignKey(e => e.InvoiceId);
         }
     }

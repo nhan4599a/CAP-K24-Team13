@@ -4,8 +4,6 @@ namespace Shared.Models
 {
     public class StatisticResultItemData
     {
-        public int Total { get; set; }
-
         [JsonPropertyName("new")]
         public int NewInvoiceCount { get; set; }
 

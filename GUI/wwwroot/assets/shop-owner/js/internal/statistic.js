@@ -197,7 +197,6 @@ function switchChartViewMode(chart, context, viewMode, data) {
         .map(keyValuePair => ({
             date: keyValuePair[0],
             income: !keyValuePair[1] ? 0 : keyValuePair[1].income,
-            total: !keyValuePair[1] ? 0 : keyValuePair[1].data.total,
             new: !keyValuePair[1] ? 0 : keyValuePair[1].data.new,
             succeed: !keyValuePair[1] ? 0 : keyValuePair[1].data.succeed,
             canceled: !keyValuePair[1] ? 0 : keyValuePair[1].data.canceled

@@ -25,7 +25,7 @@ namespace DatabaseAccessor.Contexts
 
         public DbSet<ProductComment> ProductComments { get; set; }
 
-        public DbSet<InvoiceStatusChangedHistory> InvoiceStatusChangedHistory { get; set; }
+        public DbSet<InvoiceStatusChangedHistory> InvoiceStatusChangedHistories { get; set; }
 
         public DbSet<Cart> Carts { get; set; }
 
