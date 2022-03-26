@@ -37,7 +37,7 @@ namespace DatabaseAccessor.Configurations
             builder.HasIndex(e => e.ProductName);
 
             builder.HasCheckConstraint("CK_ShopProducts_Price", "[Price] >= 0")
-                .HasCheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 1")
+                .HasCheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 0")
                 .HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
         }
     }

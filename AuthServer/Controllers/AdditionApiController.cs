@@ -40,7 +40,7 @@ namespace AuthServer.Controllers
         }
 
         [HttpPost("shop-owner-register")]
-        public async Task<ApiResult> ShopOwnerRegister(ShopOwnerSignUpModel model)
+        public async Task<ApiResult> ShopOwnerRegister([FromForm] ShopOwnerSignUpModel model)
         {
             var count = 0;
             var username = GenerateShopOwnerUsername(model, count++);
@@ -48,7 +48,14 @@ namespace AuthServer.Controllers
             var internalCreateUserResult = await _userManager.CreateUserAsync(model, username, password);
             while (!internalCreateUserResult.Succeeded)
             {
-                username = GenerateShopOwnerUsername(model, count);
+                if (internalCreateUserResult.Errors.Any(error => error.Code.Contains("password", StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    password = GenerateShopOwnerPassword();
+                }
+                else
+                {
+                    username = GenerateShopOwnerUsername(model, count);
+                }
                 internalCreateUserResult = await _userManager.CreateUserAsync(model, username, password);
             }
             _mailer.SendMail(new MailRequest

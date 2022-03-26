@@ -39,17 +39,17 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.Image,
                         options => options.MapFrom<SingleImageResolver>());
                 cfg.CreateMap<Invoice, OrderDTO>()
-                    .ForMember(target => target.CreatedAt,
-                        options => options.MapFrom(source => source.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")))
                     .ForMember(target => target.CustomerName,
                         options => options.MapFrom(source => source.FullName));
                 cfg.CreateMap<InvoiceDetail, OrderItemDTO>()
                     .ForMember(target => target.ProductName,
                         option => option.MapFrom(source => source.Product.ProductName))
-                    .ForMember(target => target.Images,
+                    .ForMember(target => target.Image,
                         option => option.MapFrom<SingleImageResolver>())
                     .ForMember(target => target.CreatedAt,
-                        option => option.MapFrom(source => source.Invoice.CreatedAt));
+                        option => option.MapFrom(source => source.Invoice.CreatedAt))
+                    .ForMember(target => target.Status,
+                        option => option.MapFrom(source => source.Invoice.Status));
                 cfg.CreateMap<ProductComment, RatingDTO>()
                     .ForMember(target => target.ProductName,
                         option => option.MapFrom(source => source.Product.ProductName))

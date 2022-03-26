@@ -1,5 +1,6 @@
 ﻿@using GUI.Extensions
 @using System.Globalization
+@using Shared.Models
 @model List<Shared.DTOs.OrderItemDTO>
 @section Styles {
 <style>
@@ -76,7 +77,7 @@
                                 <td>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <img src="@Url.ProductImageUrl(item.Images)">
+                                            <img src="@Url.ProductImageUrl(item.Image)">
                                         </div>
                                         <div class="col-md-10">
                                             <a href="/product/index/@item.ProductId">
@@ -95,6 +96,9 @@
                                 </td>
                                 <td id="price-col">
                                     @((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))
+                                </td>
+                                <td id="status-col">
+                                    @item.Status.GetDescription()
                                 </td>
                                 <td>
                                     <button class="btn btn-primary">Rate & comment</button>

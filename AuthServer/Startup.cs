@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Models;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -77,7 +78,7 @@ namespace AuthServer
                 {
                     policy.AddAuthenticationSchemes(LocalApi.AuthenticationScheme);
                     policy.RequireAuthenticatedUser();
-                    //policy.RequireRole(Roles.ADMIN);
+                    policy.RequireRole(Roles.ADMIN);
                 });
             });
             services.AddTransient<MailConfirmationTokenProvider<User>>();
@@ -128,7 +129,7 @@ namespace AuthServer
                 options.Endpoints.EnableAuthorizeEndpoint = true;
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
-                options.Authentication.CookieLifetime = TimeSpan.FromMinutes(30);
+                options.Authentication.CookieLifetime = TimeSpan.FromHours(2);
                 options.Authentication.CookieSlidingExpiration = false;
                 options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
             })
@@ -145,6 +146,11 @@ namespace AuthServer
             services.AddLocalApiAuthentication();
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
+                options.SlidingExpiration = false;
+            });
             services.AddMediatR(typeof(Startup));
         }
 
@@ -161,14 +167,17 @@ namespace AuthServer
                 await next();
             });
             app.UseHsts();
+
+            app.UseIdentityServer();
+
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseIdentityServer();
-            app.UseAuthorization();
-            app.UseSession();
 
             app.UseGlogalExceptionHandlerMiddleware();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
@@ -182,6 +191,5 @@ namespace AuthServer
             var assemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(assemblyName));
         }
-
     }
 }

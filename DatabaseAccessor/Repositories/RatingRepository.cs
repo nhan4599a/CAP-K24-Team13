@@ -46,10 +46,12 @@ namespace DatabaseAccessor.Repositories
             if (product == null)
                 return CommandResponse<bool>.Error("Invalid Product", null);
             var bought = await _dbContext.InvoiceDetails
+                .AsNoTracking()
                 .AnyAsync(detail => detail.ProductId.ToString() == requestModel.ProductId 
-                    && detail.Invoice.UserId.ToString() == requestModel.UserId);
+                    && detail.Invoice.UserId.ToString() == requestModel.UserId
+                    && detail.Invoice.Status == InvoiceStatus.Succeed);
             if (!bought)
-                return CommandResponse<bool>.Error("You are not buying", null);
+                return CommandResponse<bool>.Error("User have not bought yet", null);
             _dbContext.ProductComments.Add(new ProductComment
             {
                 UserId = Guid.Parse(requestModel.UserId),

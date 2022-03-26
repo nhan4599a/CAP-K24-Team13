@@ -1,4 +1,5 @@
 ﻿using Shared.Models;
+using System;
 
 namespace Shared.DTOs
 {
@@ -14,7 +15,7 @@ namespace Shared.DTOs
 
         public string Phone { get; set; }
 
-        public string CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public InvoiceStatus Status { get; set; }
     }

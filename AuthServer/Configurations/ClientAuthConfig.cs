@@ -35,7 +35,11 @@ namespace AuthServer.Configurations
                 },
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
-                AllowOfflineAccess = true
+                AllowOfflineAccess = true,
+                UserSsoLifetime = 7200,
+                AccessTokenLifetime = 7200,
+                RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                RefreshTokenExpiration = TokenExpiration.Absolute
             },
             new Client
             {
@@ -63,7 +67,11 @@ namespace AuthServer.Configurations
                 },
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
-                AllowOfflineAccess = true
+                AllowOfflineAccess = true,
+                UserSsoLifetime = 7200,
+                AccessTokenLifetime = 7200,
+                RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                RefreshTokenExpiration = TokenExpiration.Absolute
             }
         };
 
@@ -94,6 +102,11 @@ namespace AuthServer.Configurations
         public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
             new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
+        };
+
+        public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
+        {
+            new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
         };
     }
 }

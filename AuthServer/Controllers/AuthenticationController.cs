@@ -4,13 +4,17 @@ using AuthServer.Extensions;
 using AuthServer.Identities;
 using AuthServer.Models;
 using DatabaseAccessor.Models;
+using IdentityServer4;
+using IdentityServer4.Events;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Shared.Models;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
@@ -21,15 +25,17 @@ namespace AuthServer.Controllers
         private readonly ApplicationSignInManager _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IMailService _mailer;
+        private readonly IEventService _event;
 
         private const string SignInParamsKey = "SIGN_IN_PARAMS_KEY";
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, IMailService mailer)
+            ApplicationSignInManager signInManager, IMailService mailer, IEventService @event)
         {
             _signInManager = signInManager;
             _interaction = interaction;
             _mailer = mailer;
+            _event = @event;
         }
 
         [Route("/Auth/SignIn")]
@@ -51,6 +57,12 @@ namespace AuthServer.Controllers
                 return View();
             }
             var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            if (context == null)
+            {
+                ModelState.AddModelError("SignIn-Error", "Something went wrong!");
+                return View();
+            }
             if (user == null)
             {
                 ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
@@ -62,12 +74,14 @@ namespace AuthServer.Controllers
                     "Look like your account is locked out permanently. Contact admin for more detail");
                 return View();
             }
-            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
+            var signInResult =  await 
+                _signInManager.PasswordSignInAsync(user, model.Password, true, AccountConfig.AccountLockedOutEnabled);
             if (signInResult.Succeeded)
             {
-                if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    return Redirect(model.ReturnUrl);
-                throw new InvalidOperationException($"\"{model.ReturnUrl}\" is invalid");
+                await _event.RaiseAsync(
+                    new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName, clientId: context.Client.ClientId)
+                );
+                return Redirect(model.ReturnUrl);
             }
             if (signInResult.IsLockedOut || user.Status == AccountStatus.Banned)
             {
@@ -115,12 +129,16 @@ namespace AuthServer.Controllers
         [Route("/Auth/SignOut")]
         public async Task<IActionResult> SignOut(string logoutId)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var userName = User.Identity!.Name;
             await _signInManager.SignOutAsync();
 
             var logoutContext = await _interaction.GetLogoutContextAsync(logoutId);
 
             if (logoutContext == null)
                 throw new InvalidOperationException("Something went wrong!");
+
+            await _event.RaiseAsync(new UserLogoutSuccessEvent(userId, userName));
 
             if (string.IsNullOrWhiteSpace(logoutContext.PostLogoutRedirectUri))
             {

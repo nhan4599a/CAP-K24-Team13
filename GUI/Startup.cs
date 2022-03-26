@@ -55,7 +55,7 @@ namespace GUI
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 options.AccessDeniedPath = "/Error/403";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
                 options.SlidingExpiration = false;
             })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
@@ -137,10 +137,10 @@ namespace GUI
 
             app.UseRouting();
 
+            app.UseGlogalExceptionHandlerMiddleware();
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseGlogalExceptionHandlerMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
