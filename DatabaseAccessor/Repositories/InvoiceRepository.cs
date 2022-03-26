@@ -115,7 +115,14 @@ namespace DatabaseAccessor.Repositories
             }
 
             invoice.Status = newStatus;
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return CommandResponse<bool>.Error(e.Message, e);
+            }
             return CommandResponse<bool>.Success(true);
         }
 
@@ -304,6 +311,16 @@ namespace DatabaseAccessor.Repositories
                     .AsNoTracking()
                     .Where(invoice => invoice.ShopId == shopId)
                     .Where(invoice => invoice.CreatedAt.Date >= startDate && invoice.CreatedAt.Date <= endDate);
+        }
+
+        public async Task<InvoiceDetailDTO> GetInvoiceDetailAsync(string invoiceCode)
+        {
+            var result = await _dbContext.Invoices
+                .AsNoTracking()
+                .Include(e => e.Details)
+                .FirstOrDefaultAsync(invoice => invoice.InvoiceCode == invoiceCode);
+
+            return _mapper.MapToInvoiceDetailDTO(result);
         }
 
         public void Dispose()

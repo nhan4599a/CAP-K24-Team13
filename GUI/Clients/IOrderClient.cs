@@ -10,5 +10,8 @@ namespace GUI.Clients
     {
         [Get("/orders/user/{userId}")]
         Task<ApiResponse<ApiResult<List<OrderItemDTO>>>> GetOrderUserHistory([Authorize("Bearer")] string token, string userId);
+
+        [Get("/orders/{invoiceCode}")]
+        Task<ApiResponse<ApiResult<InvoiceDetailDTO>>> GetOrderDetail([Authorize("Bearer")] string token, string invoiceCode);
     }
 }

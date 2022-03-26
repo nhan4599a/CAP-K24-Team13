@@ -16,9 +16,9 @@ function renderInvoiceTable(invoices) {
 
 function renderReportTable(reports) {
     if (reports.length == 0) {
-        $('.table-responsive.p-0').html('<p style="text-align: center">There is no invoice to show!</p>');
+        $('.table-responsive.p-0').html('<p style="text-align: center">There is no report to show!</p>');
     } else {
-        $('.table-responsive.p-0').html(buildInvoiceTableHtml(reports));
+        $('.table-responsive.p-0').html(buildReportTableHtml(reports));
     }
 }
 
@@ -160,7 +160,6 @@ function buildProductTableRowHtml(product, index) {
             </tr>`;
 }
 
-
 function buildInvoiceTableRowHtml(invoice, index) {
     let statusList = ['New', 'Confirmed', 'Shipper Received', 'Succeed', 'Canceled'];
     return `<tr>
@@ -178,7 +177,7 @@ function buildInvoiceTableRowHtml(invoice, index) {
                     ${statusList[invoice.status]}
                 </td>
                 <td class="align-middle">
-                    <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+                    <a href="/invoice/index/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
                         <i class="fas fa-check"></i>
                         <span> Detail</span>
                     </a>
@@ -618,7 +617,7 @@ function buildOrderItem(order) {
                         <input type="tel" name="phonenumber" placeholder="phonenumber" value="${order.phone}" disabled />
                         <input type="text" name="address" placeholder="address" value="${order.shippingAddress}" disabled />
                     </div>
-                    <button id="btn-order-details" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                    <button id="btn-order-details" type="button" class="btn btn-primary">
                         View
                     </button>
                 </div>

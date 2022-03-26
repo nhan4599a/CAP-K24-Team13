@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 
 namespace Shared.Models
 {
@@ -21,9 +20,6 @@ namespace Shared.Models
         public StatisticDateResult HighestDate { get; set; }
 
         public StatisticDateResult LowestDate { get; set; }
-
-        [JsonPropertyName("user")]
-        public int UsersCount { get; set; }
 
         protected StatisticResult(StatisticStrategy strategy, StatisticDateRange.Result range,
             SortedDictionary<StatisticDateResult, StatisticResultItem> items)

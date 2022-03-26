@@ -14,8 +14,5 @@ namespace Shared.Models
 
         [JsonPropertyName("canceled")]
         public int CanceledInvoiceCount { get; set; }
-
-        [JsonPropertyName("user")]
-        public int UsersCount { get; set; }
     }
 }
