@@ -29,8 +29,8 @@ namespace DatabaseAccessor.Repositories
                 .Include(e => e.Reporter)
                 .Include(e => e.AffectedUser)
                 .AsSplitQuery()
-                .Select(report => _mapper.MapToReportDTO(report))
                 .OrderBy(report => report.Status)
+                .Select(report => _mapper.MapToReportDTO(report))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
