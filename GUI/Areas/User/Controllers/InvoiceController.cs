@@ -16,7 +16,7 @@ namespace GUI.Areas.User.Controllers
             _orderClient = orderClient;
         }
 
-        [HttpGet("{invoiceCode}")]
+        [HttpGet("/Invoice/{invoiceCode}")]
         public async Task<IActionResult> Index(string invoiceCode)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
