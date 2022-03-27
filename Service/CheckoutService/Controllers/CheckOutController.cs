@@ -2,9 +2,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,17 +19,33 @@ namespace CheckoutService.Controllers
     {
         private readonly IMediator _mediator;
 
-        public CheckOutController(IMediator mediator)
+        private readonly ILogger<CheckOutController> _logger;
+
+        public CheckOutController(IMediator mediator, ILoggerFactory loggerFactory)
         {
             _mediator = mediator;
+            _logger = loggerFactory.CreateLogger<CheckOutController>();
         }
 
         [HttpPost]
         public async Task<ApiResult> CheckOut([FromForm(Name = "requestModel")] CheckOutRequestModel requestModel)
         {
-            var userId = Guid.Parse(requestModel.UserId);
-            var productIds = requestModel.ProductIds.Select(id => Guid.Parse(id)).ToList();
+            Guid userId = Guid.Empty;
+            var productIds = new List<Guid>();
             var shippingAddress = requestModel.ShippingAddress;
+            _logger.LogInformation($"Number of products: {requestModel.ProductIds.Count}");
+            foreach (var productId in requestModel.ProductIds)
+            {
+                _logger.LogInformation($"Product Id: {productId}");
+            }
+            try
+            {
+                userId = Guid.Parse(requestModel.UserId);
+                productIds = requestModel.ProductIds.Select(id => Guid.Parse(id)).ToList();
+            } catch (Exception e)
+            {
+                return ApiResult.CreateErrorResult(400, e.Message);
+            }
             var result = await _mediator.Send(new CheckOutCommand(userId, productIds, requestModel.ShippingName,
                 requestModel.ShippingPhone, shippingAddress, requestModel.OrderNotes));
             if (result.IsSuccess)
