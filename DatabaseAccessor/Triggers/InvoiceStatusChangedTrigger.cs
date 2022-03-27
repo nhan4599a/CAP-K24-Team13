@@ -33,7 +33,7 @@ namespace DatabaseAccessor.Triggers
 
         public Task BeforeSave(ITriggerContext<Invoice> context, CancellationToken cancellationToken)
         {
-            if (context.ChangeType == ChangeType.Modified)
+            if (context.ChangeType == ChangeType.Modified && context.UnmodifiedEntity.Status != context.Entity.Status)
             {
                 context.Entity.StatusChangedHistories.Add(new InvoiceStatusChangedHistory
                 {
