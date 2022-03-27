@@ -118,12 +118,15 @@ namespace DatabaseAccessor.Repositories
             }
 
             invoice.Status = newStatus;
-            foreach (var detail in invoice.Details)
+            if (newStatus == InvoiceStatus.Confirmed)
             {
-                if (detail.Product.IsDisabled)
-                    return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not available now", null);
-                if (detail.Product.Quantity < detail.Quantity)
-                    return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not in sufficient quantity", null);
+                foreach (var detail in invoice.Details)
+                {
+                    if (detail.Product.IsDisabled)
+                        return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not available now", null);
+                    if (detail.Product.Quantity < detail.Quantity)
+                        return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not in sufficient quantity", null);
+                }
             }
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
