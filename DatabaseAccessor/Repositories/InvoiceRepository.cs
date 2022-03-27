@@ -114,14 +114,7 @@ namespace DatabaseAccessor.Repositories
             }
 
             invoice.Status = newStatus;
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return CommandResponse<bool>.Error(e.Message, e);
-            }
+            await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
 

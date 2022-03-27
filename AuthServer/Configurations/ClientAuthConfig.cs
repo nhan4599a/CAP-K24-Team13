@@ -52,11 +52,13 @@ namespace AuthServer.Configurations
                 },
                 RedirectUris = new[]
                 {
-                    "https://emallsolution-admin.herokuapp.com/signin-oidc"
+                    "https://emallsolution-admin.herokuapp.com/signin-oidc",
+                    "https://localhost:44382/signin-oidc"
                 },
                 PostLogoutRedirectUris = new[]
                 {
-                    "https://emallsolution-admin.herokuapp.com/signout-callback-oidc"
+                    "https://emallsolution-admin.herokuapp.com/signout-callback-oidc",
+                    "https://localhost:44382/signout-callback-oidc"
                 },
                 AllowedScopes = new[]
                 {
