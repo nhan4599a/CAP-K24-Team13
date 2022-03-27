@@ -30,15 +30,10 @@ namespace CheckoutService.Controllers
             Guid userId = Guid.Empty;
             var productIds = new List<Guid>();
             var shippingAddress = requestModel.ShippingAddress;
-            System.IO.File.AppendAllText("/home/ec2-user/products.txt", "Number of products: " + requestModel.ProductIds.Count + Environment.NewLine);
-            foreach (var productId in requestModel.ProductIds)
-            {
-                System.IO.File.AppendAllText("/home/ec2-user/products.txt", "Product Id: " + productId + Environment.NewLine);
-            }
             try
             {
                 userId = Guid.Parse(requestModel.UserId);
-                productIds = requestModel.ProductIds.Select(id => Guid.Parse(id)).ToList();
+                productIds = requestModel.ProductIds.Split(",").Select(id => Guid.Parse(id)).ToList();
             } catch (Exception e)
             {
                 return ApiResult.CreateErrorResult(400, e.Message);
