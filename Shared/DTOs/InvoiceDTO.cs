@@ -16,6 +16,8 @@ namespace Shared.DTOs
         public InvoiceStatus Status { get; set; }
 
         public double TotalPrice { get; set; }
+
+        public bool IsReported { get; set; }
     }
 }
 

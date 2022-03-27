@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -28,6 +27,5 @@ namespace GUI.Areas.User.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             return View(orderHistoryRespone.Content.Data);
         }
-       
     }
 }

@@ -262,8 +262,8 @@ function findInvoices(shopId, key, value, pageNumber, pageSize) {
     });
 }
 
-function report(invoiceId, userId) {
-    return axios.post(`${reportEndpoint}/${invoiceId}`, userId, {
+function reportInvoice(invoiceCode, userId) {
+    return axios.post(`${reportEndpoint}/${invoiceCode}`, userId, {
         headers: {
             "Content-Type": "application/json"
         }

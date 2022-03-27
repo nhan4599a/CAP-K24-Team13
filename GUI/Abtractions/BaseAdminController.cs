@@ -4,7 +4,7 @@ using Shared.Models;
 
 namespace GUI.Abtractions
 {
-    [Authorize]
+    [Authorize(Roles = Roles.ADMIN)]
     [Area(Roles.ADMIN)]
     public class BaseAdminController : Controller
     {

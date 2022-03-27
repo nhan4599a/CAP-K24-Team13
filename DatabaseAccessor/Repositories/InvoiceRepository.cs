@@ -232,7 +232,7 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(int shopId, string key,
             string value, PaginationInfo paginationInfo)
         {
-            var result = _dbContext.Invoices.AsNoTracking().Include(e => e.Details)
+            var result = _dbContext.Invoices.AsNoTracking().Include(e => e.Details).Include(e => e.Report)
                 .Where(invoice => invoice.ShopId == shopId);
             if (!string.IsNullOrWhiteSpace(key))
             {

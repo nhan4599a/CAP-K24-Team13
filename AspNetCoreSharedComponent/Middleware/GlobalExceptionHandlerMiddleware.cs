@@ -1,4 +1,6 @@
 ﻿using AspNetCoreSharedComponent.HttpContext;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -24,6 +26,8 @@ namespace AspNetCoreSharedComponent.Middleware
             {
                 await _next(context);
                 var responseCode = context.Response.StatusCode;
+                var endpoint = context.GetEndpoint()?.Metadata.GetMetadata<ControllerActionDescriptor>();
+                _logger.LogInformation($"Controller: {endpoint?.ControllerName}, Action: {endpoint?.ActionName}");
                 _logger.LogInformation(
                     $"Request {context.Request.Method} to {context.Request.Path} has returned {responseCode}");
                 if (ShouldRedirect(context))

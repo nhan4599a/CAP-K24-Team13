@@ -181,6 +181,7 @@ function buildInvoiceTableRowHtml(invoice, index) {
                         <i class="fas fa-check"></i>
                         <span> Detail</span>
                     </a>
+                    ${buildInvoiceActionButtonHtml(invoice.isReported)}
                 </td>
             </tr>`;
 }
@@ -262,6 +263,15 @@ function buildCategoryActionButtonHtml(isDisabled) {
                     <i class="fas fa-check"></i>
                     <span> Activate</span>
                 </a>`;
+}
+
+function buildInvoiceActionButtonHtml(isReported) {
+    if (!isReported)
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+                    <i class="fas fa-check"></i>
+                    <span> Report</span>
+                </a>`;
+    return '';
 }
 
 function buildEditButtonHtml() {

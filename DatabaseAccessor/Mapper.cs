@@ -59,7 +59,9 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.TotalPrice,
                         options => options.MapFrom(source => source.Details.Sum(detail => detail.Price * detail.Quantity)))
                     .ForMember(target => target.PhoneNumber,
-                        options => options.MapFrom(source => source.Phone));
+                        options => options.MapFrom(source => source.Phone))
+                    .ForMember(target => target.IsReported,
+                        options => options.MapFrom(source => source.Report != null));
 
                 cfg.CreateMap<Report, ReportDTO>()
                     .ForMember(target => target.Reporter,

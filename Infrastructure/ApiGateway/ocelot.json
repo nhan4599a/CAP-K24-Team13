@@ -115,7 +115,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "OrderService",
       "UpstreamPathTemplate": "/orders/{orderId}",
-      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }

@@ -137,6 +137,7 @@ namespace AuthServer
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = ApplyOptions;
+                    options.TokenCleanupInterval = 7200;
                 })
                 .AddConfigurationStore(options =>
                 {

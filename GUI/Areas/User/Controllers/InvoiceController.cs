@@ -1,4 +1,5 @@
-﻿using GUI.Clients;
+﻿using GUI.Abtractions;
+using GUI.Clients;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
-    public class InvoiceController : Controller
+    public class InvoiceController : BaseUserController
     {
         private readonly IOrderClient _orderClient;
 
@@ -24,6 +25,8 @@ namespace GUI.Areas.User.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             if (orderDetailResponse.Content.ResponseCode == 403)
                 return StatusCode(StatusCodes.Status403Forbidden);
+            if (orderDetailResponse.Content.ResponseCode == 404)
+                return StatusCode(StatusCodes.Status404NotFound);
             return View(orderDetailResponse.Content.Data);
         }
     }
