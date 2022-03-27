@@ -68,6 +68,8 @@ namespace DatabaseAccessor.Repositories
             foreach (var cartItem in products)
             {
                 var actualProduct = await _dbContext.ShopProducts.FindAsync(cartItem.ProductId);
+                if (actualProduct.IsDisabled)
+                    return CommandResponse<bool>.Error($"The product {actualProduct.ProductName} is not available now", null);
                 if (!invoices.ContainsKey(cartItem.ShopId))
                 {
                     invoices.Add(cartItem.ShopId, new Invoice
@@ -85,6 +87,8 @@ namespace DatabaseAccessor.Repositories
                     Price = actualProduct.Price,
                     Quantity = cartItem.Quantity
                 });
+                if (actualProduct.Quantity < cartItem.Quantity)
+                    return CommandResponse<bool>.Error($"Sorry, the product {actualProduct.ProductName} is not in sufficient quantity", null);
                 cart.Details.Remove(cartItem);
             }
             _dbContext.Invoices.AddRange(invoices.Values);
@@ -114,6 +118,13 @@ namespace DatabaseAccessor.Repositories
             }
 
             invoice.Status = newStatus;
+            foreach (var detail in invoice.Details)
+            {
+                if (detail.Product.IsDisabled)
+                    return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not available now", null);
+                if (detail.Product.Quantity < detail.Quantity)
+                    return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not in sufficient quantity", null);
+            }
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
