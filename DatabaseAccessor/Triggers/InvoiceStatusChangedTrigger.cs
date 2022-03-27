@@ -16,7 +16,6 @@ namespace DatabaseAccessor.Triggers
                 {
                     context.Entity.StatusChangedHistories.Add(new InvoiceStatusChangedHistory
                     {
-                        OldStatus = null,
                         NewStatus = InvoiceStatus.New
                     });
                 }
