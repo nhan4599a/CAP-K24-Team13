@@ -19,12 +19,9 @@ namespace CheckoutService.Controllers
     {
         private readonly IMediator _mediator;
 
-        private readonly ILogger<CheckOutController> _logger;
-
         public CheckOutController(IMediator mediator, ILoggerFactory loggerFactory)
         {
             _mediator = mediator;
-            _logger = loggerFactory.CreateLogger<CheckOutController>();
         }
 
         [HttpPost]
@@ -33,10 +30,10 @@ namespace CheckoutService.Controllers
             Guid userId = Guid.Empty;
             var productIds = new List<Guid>();
             var shippingAddress = requestModel.ShippingAddress;
-            _logger.LogInformation($"Number of products: {requestModel.ProductIds.Count}");
+            System.IO.File.AppendAllText("/home/ec2-user/products.txt", "Number of products: " + requestModel.ProductIds.Count + Environment.NewLine);
             foreach (var productId in requestModel.ProductIds)
             {
-                _logger.LogInformation($"Product Id: {productId}");
+                System.IO.File.AppendAllText("/home/ec2-user/products.txt", "Product Id: " + productId + Environment.NewLine);
             }
             try
             {
