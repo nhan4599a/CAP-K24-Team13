@@ -5,6 +5,7 @@ using OrderService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -66,6 +67,7 @@ namespace OrderService.Controllers
             return ApiResult<PaginatedList<InvoiceDTO>>.CreateSucceedResult(response.Response);
         }
 
+        [AllowAnonymous]
         [HttpGet("{invoiceCode}")]
         public async Task<ApiResult> GetOrderDetail(string invoiceCode)
         {
@@ -75,8 +77,9 @@ namespace OrderService.Controllers
             });
             if (response == null)
                 return ApiResult.CreateErrorResult(404, "Invoice not found");
-            if (User.FindFirstValue("shopId") != response.ShopId.ToString())
-                return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
+            System.IO.File.AppendAllLines("/home/ec2-user/user.txt", User.Claims.Select(e => $"type: {e.Type}; value: {e.Value}"));
+            //if (User.FindFirstValue("shopId") != response.ShopId.ToString())
+            //    return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
             return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(response);
         }
     }
