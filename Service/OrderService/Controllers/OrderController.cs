@@ -66,8 +66,7 @@ namespace OrderService.Controllers
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
             return ApiResult<PaginatedList<InvoiceDTO>>.CreateSucceedResult(response.Response);
         }
-
-        [AllowAnonymous]
+        
         [HttpGet("{invoiceCode}")]
         public async Task<ApiResult> GetOrderDetail(string invoiceCode)
         {
@@ -78,8 +77,8 @@ namespace OrderService.Controllers
             if (response == null)
                 return ApiResult.CreateErrorResult(404, "Invoice not found");
             System.IO.File.AppendAllLines("/home/ec2-user/user.txt", User.Claims.Select(e => $"type: {e.Type}; value: {e.Value}"));
-            //if (User.FindFirstValue("shopId") != response.ShopId.ToString())
-            //    return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
+            if (User.FindFirstValue("shopId") != response.ShopId.ToString())
+                return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
             return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(response);
         }
     }

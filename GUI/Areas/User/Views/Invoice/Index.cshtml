@@ -1,15 +1,10 @@
 ﻿@using Shared.DTOs
 @{
-    Layout = "~/Areas/ShopOwner/Views/Shared/_Layout";
+    Layout = "/Areas/ShopOwner/Views/Shared/_Layout.cshtml";
 }
 @model InvoiceDetailDTO
 <div class="row">
     <div class="col-12">
-        <div class="row justify-content-end">
-            <div class="col-md-2 mb-2">
-                @await Component.InvokeAsync("PageSizeSelectDropdown")
-            </div>
-        </div>
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="border-radius-lg pt-4 pb-3 bg-gradient-primary-dark shadow">

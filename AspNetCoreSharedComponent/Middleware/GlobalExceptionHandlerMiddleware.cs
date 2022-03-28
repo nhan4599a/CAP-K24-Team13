@@ -50,7 +50,7 @@ namespace AspNetCoreSharedComponent.Middleware
             }
         }
 
-        private bool ShouldRedirect(AspNetCoreHttp.HttpContext httpContext)
+        private static bool ShouldRedirect(AspNetCoreHttp.HttpContext httpContext)
         {
             var responseCode = httpContext.Response.StatusCode;
             return responseCode >= 400 && !httpContext.Request.IsStatisFileRequest()

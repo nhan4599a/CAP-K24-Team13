@@ -73,8 +73,6 @@ namespace AuthServer
                     options.ExpireTimeSpan = TimeSpan.FromHours(2);
                     options.SlidingExpiration = false;
                     options.Cookie.HttpOnly = true;
-                    options.LoginPath = "/auth/signin";
-                    options.LogoutPath = "/auth/signout";
                 });
             services.AddAuthorization(options =>
             {
@@ -103,6 +101,7 @@ namespace AuthServer
                 options.SignIn.RequireConfirmedAccount = AccountConfig.RequireEmailConfirmation;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredLength = 8;
+                options.User.RequireUniqueEmail = true;
                 if (AccountConfig.RequireEmailConfirmation)
                 {
                     options.Tokens.ProviderMap.Add("MailConfirmation",
@@ -119,7 +118,6 @@ namespace AuthServer
             .AddRoleStore<ApplicationRoleStore>()
             .AddRoleManager<ApplicationRoleManager>()
             .AddSignInManager<ApplicationSignInManager>()
-            .AddUserValidator<ApplicationUserValidator>()
             .AddPasswordValidator<UserPasswordValidator>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -148,7 +146,8 @@ namespace AuthServer
                 {
                     options.ConfigureDbContext = ApplyOptions;
                 })
-                .AddDeveloperSigningCredential();
+                .AddDeveloperSigningCredential()
+                .AddProfileService<ApplicationUserProfileService>();
             services.AddLocalApiAuthentication();
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
