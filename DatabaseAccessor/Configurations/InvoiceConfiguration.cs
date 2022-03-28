@@ -19,6 +19,7 @@ namespace DatabaseAccessor.Configurations
 
             builder.HasIndex(e => e.UserId);
             builder.HasIndex(e => e.CreatedAt);
+            builder.HasIndex(e => e.InvoiceCode);
 
             builder.HasMany(e => e.Details)
                 .WithOne(e => e.Invoice)

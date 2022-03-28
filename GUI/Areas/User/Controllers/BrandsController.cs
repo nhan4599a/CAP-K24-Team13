@@ -2,7 +2,6 @@
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Refit;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers

@@ -178,7 +178,7 @@
                                                                                 }
                                                                             </div>
                                                                         </div><!-- End .rating-container -->
-                                                                        <span class="review-date">@((DateTime.Now - item.CreatedDate).ToString("c"))</span>
+                                                                        <span class="review-date">@((DateTime.Now.AddHours(7) - item.CreatedDate).ToString("c"))</span>
                                                                     </div><!-- End .col -->
                                                                     <div class="col">
                                                                         <div class="review-content">

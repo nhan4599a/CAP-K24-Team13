@@ -11,7 +11,7 @@ namespace AuthServer.Extensions
     public static class IdentityUserExtension
     {
         public static async Task<CreateUserResult> CreateUserAsync(this UserManager<User> userManager,
-            UserSignUpModel model, string role)
+            UserSignUpModel model, string role, int? shopId = null)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -24,7 +24,8 @@ namespace AuthServer.Extensions
                 DoB = model.DoB,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = model.PhoneNumber,
+                ShopId = shopId
             };
             var createAccountResult = await userManager.CreateAsync(user, model.Password);
             if (createAccountResult.Succeeded)
@@ -53,7 +54,7 @@ namespace AuthServer.Extensions
                 model.Email,
                 model.PhoneNumber,
                 model.DoB
-            ), Roles.SHOP_OWNER);
+            ), Roles.SHOP_OWNER, model.ShopId);
         }
     }
 }

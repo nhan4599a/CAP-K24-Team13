@@ -2,7 +2,7 @@
 
 namespace AuthServer.Models
 {
-    public record ShopOwnerSignUpModel(string FirstName, string LastName, string PhoneNumber, string Location, string Email, DateOnly DoB)
+    public record ShopOwnerSignUpModel(int ShopId, string FirstName, string LastName, string PhoneNumber, string Email, DateOnly DoB)
     {
     }
 }

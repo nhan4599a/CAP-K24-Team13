@@ -177,7 +177,7 @@ function buildInvoiceTableRowHtml(invoice, index) {
                     ${statusList[invoice.status]}
                 </td>
                 <td class="align-middle">
-                    <a href="/invoice/index/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+                    <a href="/invoice/detail/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip">
                         <i class="fas fa-check"></i>
                         <span> Detail</span>
                     </a>

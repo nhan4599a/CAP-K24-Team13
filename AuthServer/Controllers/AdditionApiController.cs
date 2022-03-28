@@ -17,7 +17,6 @@ using static IdentityServer4.IdentityServerConstants;
 
 namespace AuthServer.Controllers
 {
-    [Authorize(LocalApi.PolicyName)]
     [ApiController]
     [Route("/api")]
     public class AdditionApiController : ControllerBase

@@ -12,6 +12,7 @@ using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
+using IdentityServer4;
 using IdentityServer4.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -66,9 +67,12 @@ namespace AuthServer
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddDbContext<ApplicationDbContext>();
-            services.AddAuthentication()
-                .AddCookie(options =>
+            services.AddAuthentication(DefaultCheckSessionCookieName)
+                .AddCookie(DefaultCheckSessionCookieName, options =>
                 {
+                    options.ExpireTimeSpan = TimeSpan.FromHours(2);
+                    options.SlidingExpiration = false;
+                    options.Cookie.HttpOnly = true;
                     options.LoginPath = "/auth/signin";
                     options.LogoutPath = "/auth/signout";
                 });
@@ -115,6 +119,7 @@ namespace AuthServer
             .AddRoleStore<ApplicationRoleStore>()
             .AddRoleManager<ApplicationRoleManager>()
             .AddSignInManager<ApplicationSignInManager>()
+            .AddUserValidator<ApplicationUserValidator>()
             .AddPasswordValidator<UserPasswordValidator>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -147,11 +152,6 @@ namespace AuthServer
             services.AddLocalApiAuthentication();
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromHours(2);
-                options.SlidingExpiration = false;
-            });
             services.AddMediatR(typeof(Startup));
         }
 
