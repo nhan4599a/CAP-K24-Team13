@@ -319,8 +319,10 @@ namespace DatabaseAccessor.Repositories
         {
             var result = await _dbContext.Invoices
                 .AsNoTracking()
+                .Include(e => e.Report)
                 .Include(e => e.Details)
                 .ThenInclude(e => e.Product)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(invoice => invoice.InvoiceCode == invoiceCode);
 
             return _mapper.MapToInvoiceDetailDTO(result);
