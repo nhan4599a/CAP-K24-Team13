@@ -53,7 +53,11 @@ namespace ReportService.Controllers
             }
             try
             {
-                await _userClient.ApplyBan(accessToken.Split(" ")[1], result.Response.Item1, result.Response.Item2);
+                var response = await _userClient.ApplyBan(accessToken.Split(" ")[1], result.Response.Item1, result.Response.Item2);
+                if (!response.IsSuccessStatusCode || response.Content.ResponseCode != 200)
+                {
+                    return ApiResult.CreateErrorResult(500, response.Content!.ErrorMessage);
+                }
                 return ApiResult.SucceedResult;
             }
             catch (Exception e)

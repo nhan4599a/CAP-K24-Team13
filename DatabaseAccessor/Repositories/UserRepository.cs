@@ -22,12 +22,13 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper;
         }
 
-        public async Task<PaginatedList<UserDTO>> GetAllUsersAsync(PaginationInfo paginationInfo)
+        public async Task<PaginatedList<UserDTO>> GetAllUsersAsync(PaginationInfo paginationInfo, bool customer)
         {
             return await _dbContext.Users
                 .AsNoTracking()
                 .Include(e => e.UserRoles)
                 .ThenInclude(e => e.Role)
+                .Where(e => !customer || e.UserRoles[0].Role.Name == Roles.CUSTOMER)
                 .Select(e => _mapper.MapToUserDTO(e))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }

@@ -56,7 +56,7 @@ namespace ReportService
             services.AddRefitClient<IUserClient>()
                 .ConfigureHttpClient(options =>
                 {
-                    options.BaseAddress = new Uri("http://localhost:3008");
+                    options.BaseAddress = new Uri("http://ec2-52-207-214-39.compute-1.amazonaws.com:3008");
                 });
         }
 

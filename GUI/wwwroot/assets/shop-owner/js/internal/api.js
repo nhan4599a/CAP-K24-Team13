@@ -35,6 +35,7 @@ const ratingProductEndpoint = '/rating';
 const orderEndpoint = '/orders';
 const statisticEndpoint = '/statistic';
 const reportEndpoint = '/reports';
+const userEndpoint = '/users'
 
 function findProducts(shopId, keyword, pageNumber, pageSize) {
     if (shopId === 0)
@@ -262,8 +263,8 @@ function findInvoices(shopId, key, value, pageNumber, pageSize) {
     });
 }
 
-function reportInvoice(invoiceCode, userId) {
-    return axios.post(`${reportEndpoint}/${invoiceCode}`, userId, {
+function reportInvoice(invoiceId, userId) {
+    return axios.post(`${reportEndpoint}/${invoiceId}`, userId, {
         headers: {
             "Content-Type": "application/json"
         }
@@ -276,6 +277,15 @@ function approveReport(reportId) {
 
 function getReports(pageNumber, pageSize) {
     return axios.get(reportEndpoint, {
+        params: {
+            pageNumber: pageNumber,
+            pageSize: pageSize
+        }
+    });
+}
+
+function getUsers(pageNumber, pageSize) {
+    return axios.get(userEndpoint, {
         params: {
             pageNumber: pageNumber,
             pageSize: pageSize

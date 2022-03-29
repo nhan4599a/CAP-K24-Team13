@@ -17,9 +17,9 @@ namespace ReportService.Handlers
             _repository = repository;
         }
 
-        public Task<CommandResponse<int>> Handle(CreateReportCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResponse<int>> Handle(CreateReportCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _repository.CreateReportAsync(request.InvoiceId, request.ReporterId);
         }
 
         public void Dispose()

@@ -7,7 +7,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface IUserRepository : IDisposable
     {
-        Task<PaginatedList<UserDTO>> GetAllUsersAsync(PaginationInfo paginationInfo);
+        Task<PaginatedList<UserDTO>> GetAllUsersAsync(PaginationInfo paginationInfo, bool customer);
 
         Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, AccountPunishmentBehavior behavior);
     }
