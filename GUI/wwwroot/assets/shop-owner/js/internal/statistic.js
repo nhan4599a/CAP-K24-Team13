@@ -248,7 +248,7 @@ function switchChartViewMode(chart, context, viewMode, data) {
                         label: 'New orders',
                         data: result.map(obj => obj.new),
                         borderColor: 'rgb(75, 192, 192)',
-                        backgroundColor: 'rgb(176, 212, 212)'
+                        backgroundColor: 'rgba(90, 139, 191, 1)'
                     },
                     {
                         label: 'Succeed Income',
@@ -258,7 +258,10 @@ function switchChartViewMode(chart, context, viewMode, data) {
                     },
                     {
                         label: 'Canceled Income',
-                        data: result.map(obj => obj.canceled)
+                        data: result.map(obj => obj.canceled),
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgb(224, 155, 170)'
+
                     }
                 ]
             },
