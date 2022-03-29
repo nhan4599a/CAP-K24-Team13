@@ -9,10 +9,10 @@ using AuthServer.Providers;
 using AuthServer.Services;
 using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
+using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
-using IdentityServer4;
 using IdentityServer4.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -59,21 +59,16 @@ namespace AuthServer
             });
             services.AddDataProtection()
                 .PersistKeysToDbContext<ApplicationDbContext>();
-            services.AddSession();
-            services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
+            services.AddScoped<UserStore<User, Role, ApplicationDbContext,
+                Guid, IdentityUserClaim<Guid>, UserRole, IdentityUserLogin<Guid>, IdentityUserToken<Guid>, 
+                IdentityRoleClaim<Guid>>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
             services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddDbContext<ApplicationDbContext>();
-            services.AddAuthentication(DefaultCheckSessionCookieName)
-                .AddCookie(DefaultCheckSessionCookieName, options =>
-                {
-                    options.ExpireTimeSpan = TimeSpan.FromHours(2);
-                    options.SlidingExpiration = false;
-                    options.Cookie.HttpOnly = true;
-                });
+            services.AddSingleton(Mapper.GetInstance());
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(LocalApi.PolicyName, policy =>
@@ -132,8 +127,6 @@ namespace AuthServer
                 options.Endpoints.EnableAuthorizeEndpoint = true;
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
-                options.Authentication.CookieLifetime = TimeSpan.FromHours(2);
-                options.Authentication.CookieSlidingExpiration = false;
                 options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
             })
                 .AddAspNetIdentity<User>()
@@ -152,6 +145,16 @@ namespace AuthServer
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
             services.AddMediatR(typeof(Startup));
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
+                options.SlidingExpiration = false;
+            });
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

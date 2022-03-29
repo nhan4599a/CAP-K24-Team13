@@ -7,7 +7,8 @@ using System.Security.Claims;
 
 namespace AuthServer.Identities
 {
-    public class ApplicationUserStore : UserStore<User, Role, ApplicationDbContext, Guid>
+    public class ApplicationUserStore : UserStore<User, Role, ApplicationDbContext, Guid, IdentityUserClaim<Guid>,
+        UserRole, IdentityUserLogin<Guid>, IdentityUserToken<Guid>, IdentityRoleClaim<Guid>>
     {
         public ApplicationUserStore(ApplicationDbContext context, IdentityErrorDescriber? describer = null)
             : base(context, describer)
@@ -32,9 +33,9 @@ namespace AuthServer.Identities
             };
         }
 
-        protected override IdentityUserRole<Guid> CreateUserRole(User user, Role role)
+        protected override UserRole CreateUserRole(User user, Role role)
         {
-            return new IdentityUserRole<Guid>
+            return new UserRole
             {
                 RoleId = role.Id,
                 UserId = user.Id

@@ -5,6 +5,6 @@ namespace OrderService.Commands
 {
     public class GetInvoiceByInvoiceCodeQuery : IRequest<InvoiceDetailDTO>
     {
-        public string InvoiceCode { get; set; }
+        public string? InvoiceCode { get; set; }
     }
 }

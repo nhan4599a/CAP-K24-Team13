@@ -1,6 +1,7 @@
 ﻿using DatabaseAccessor.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.Models;
 
 namespace DatabaseAccessor.Configurations
 {
@@ -11,6 +12,11 @@ namespace DatabaseAccessor.Configurations
             builder.Property(e => e.FirstName).IsRequired().HasMaxLength(200);
             builder.Property(e => e.LastName).IsRequired().HasMaxLength(200);
             builder.Property(e => e.Status).HasDefaultValue(AccountStatus.Available);
+            builder.HasMany(e => e.UserRoles)
+                .WithOne(e => e.User)
+                .HasForeignKey(e => e.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

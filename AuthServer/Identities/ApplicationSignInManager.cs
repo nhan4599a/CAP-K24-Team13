@@ -13,7 +13,7 @@ namespace AuthServer.Identities
             IUserClaimsPrincipalFactory<User> principalFactory, IOptions<IdentityOptions> options, 
             ILogger<SignInManager<User>> logger, IAuthenticationSchemeProvider schemeProvider,
             IUserConfirmation<User> userConfirmation)
-            : base(userManager, contextAccessor, principalFactory,options, logger, schemeProvider, userConfirmation)
+            : base(userManager, contextAccessor, principalFactory, options, logger, schemeProvider, userConfirmation)
         { }
     }
 }

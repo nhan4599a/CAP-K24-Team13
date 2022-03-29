@@ -3,7 +3,7 @@ using AuthServer.Extensions;
 using AuthServer.Identities;
 using AuthServer.Models;
 using DatabaseAccessor.Contexts;
-using DatabaseAccessor.Models;
+using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,6 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static IdentityServer4.IdentityServerConstants;
 
 namespace AuthServer.Controllers
 {
@@ -29,13 +28,16 @@ namespace AuthServer.Controllers
 
         private readonly IMediator _mediator;
 
+        private readonly IUserRepository _repository;
+
         public AdditionApiController(ApplicationUserManager userManager,
-            ApplicationDbContext dbContext, IMailService mailer, IMediator mediator)
+            ApplicationDbContext dbContext, IMailService mailer, IMediator mediator, IUserRepository repository)
         {
             _userManager = userManager;
             _dbContext = dbContext;
             _mailer = mailer;
             _mediator = mediator;
+            _repository = repository;
         }
 
         [HttpPost("shop-owner-register")]
@@ -110,6 +112,18 @@ namespace AuthServer.Controllers
                 });
             }
             return ApiResult.SucceedResult;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("users")]
+        public async Task<ApiResult> GetAllUsers([FromQuery] GetAllUsersModel model)
+        {
+            var result = await _repository.GetAllUsersAsync(new PaginationInfo
+            {
+                PageNumber = model.PageNumber,
+                PageSize = model.PageSize
+            });
+            return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);
         }
 
         [NonAction]

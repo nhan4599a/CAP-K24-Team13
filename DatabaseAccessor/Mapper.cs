@@ -2,6 +2,8 @@ using AutoMapper;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Resolvers;
 using Shared.DTOs;
+using Shared.Models;
+using System;
 using System.Linq;
 
 namespace DatabaseAccessor.Mapping
@@ -73,6 +75,18 @@ namespace DatabaseAccessor.Mapping
                     .IncludeBase<Invoice, InvoiceDTO>()
                     .ForMember(target => target.Products,
                         options => options.MapFrom(source => source.Details));
+
+                cfg.CreateMap<User, UserDTO>()
+                    .ForMember(target => target.BirthDay,
+                        options => options.MapFrom(source => source.DoB))
+                    .ForMember(target => target.IsConfirmed,
+                        options => options.MapFrom(source => source.EmailConfirmed))
+                    .ForMember(target => target.IsLockedOut,
+                        options => options.MapFrom(source => source.LockoutEnd < DateTimeOffset.Now))
+                    .ForMember(target => target.IsAvailable,
+                        options => options.MapFrom(source => source.Status == AccountStatus.Available))
+                    .ForMember(target => target.Role,
+                        options => options.MapFrom(source => source.UserRoles[0].Role.Name));
             });
             _mapper = config.CreateMapper();
         }
@@ -106,5 +120,7 @@ namespace DatabaseAccessor.Mapping
         public ReportDTO MapToReportDTO(Report report) => _mapper.Map<ReportDTO>(report);
 
         public InvoiceDetailDTO MapToInvoiceDetailDTO(Invoice invoice) => _mapper.Map<InvoiceDetailDTO>(invoice);
+
+        public UserDTO MapToUserDTO(User user) => _mapper.Map<UserDTO>(user);
     }
 }

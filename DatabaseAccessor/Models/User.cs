@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,5 +26,7 @@ namespace DatabaseAccessor.Models
         public virtual IList<Report> Reports { get; set; }
 
         public virtual IList<Report> AffectedReports { get; set; }
+
+        public virtual IList<UserRole> UserRoles { get; set; }
     }
 }
