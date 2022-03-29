@@ -20,7 +20,8 @@ namespace UserService.Background
         public async Task DoJob()
         {
             await _dbContext.Users
-                .Where(user => user.LockoutEnd != null && user.LockoutEnd < DateTimeOffset.Now)
+                .Where(user => user.LockoutEnd != null && user.LockoutEnd < DateTimeOffset.Now
+                    && user.Status == AccountStatus.Banned)
                 .BatchUpdateAsync(new User { Status = AccountStatus.Available });
         }
     }

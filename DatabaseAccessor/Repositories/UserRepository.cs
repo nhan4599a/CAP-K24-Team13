@@ -28,7 +28,7 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.UserRoles)
                 .ThenInclude(e => e.Role)
-                .Where(e => !customer || e.UserRoles[0].Role.Name == Roles.CUSTOMER)
+                .Where(e => !customer || e.UserRoles.Any(userRole => userRole.Role.Name == Roles.CUSTOMER))
                 .Select(e => _mapper.MapToUserDTO(e))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -52,6 +52,8 @@ namespace DatabaseAccessor.Repositories
                 AccountPunishmentBehavior.LockedOutPermanently => null,
                 _ => throw new NotSupportedException()
             };
+
+            user.Status = AccountStatus.Banned;
 
             await _dbContext.SaveChangesAsync();
 
