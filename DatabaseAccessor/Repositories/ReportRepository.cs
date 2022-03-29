@@ -56,16 +56,16 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<int>.Success(report.Id);
         }
 
-        public async Task<CommandResponse<(User, AccountPunishmentBehavior)>> ApproveReportAsync(int reportId)
+        public async Task<CommandResponse<(string, AccountPunishmentBehavior)>> ApproveReportAsync(int reportId)
         {
             var report = await _dbContext.Reports.FindAsync(reportId);
             if (report == null)
             {
-                return CommandResponse<(User, AccountPunishmentBehavior)>.Error("Report doesn't existed", null);
+                return CommandResponse<(string, AccountPunishmentBehavior)>.Error("Report doesn't existed", null);
             }
             if (report.Status == ReportStatus.Approved)
             {
-                return CommandResponse<(User, AccountPunishmentBehavior)>.Error("Report is already approved", null);
+                return CommandResponse<(string, AccountPunishmentBehavior)>.Error("Report is already approved", null);
             }
             int reportCount = await _dbContext.Reports.Where(e => e.AffectedUserId == report.AffectedUserId).CountAsync();
             var punishment = reportCount switch
@@ -77,7 +77,7 @@ namespace DatabaseAccessor.Repositories
             report.Punishment = punishment;
             report.Status = ReportStatus.Approved;
             await _dbContext.SaveChangesAsync();
-            return CommandResponse<(User, AccountPunishmentBehavior)>.Success(new (report.AffectedUser, punishment));
+            return CommandResponse<(string, AccountPunishmentBehavior)>.Success(new (report.AffectedUser.Id.ToString(), punishment));
         }
 
         public Task<PaginatedList<ReportDTO>> GetReports(PaginationInfo paginationInfo)

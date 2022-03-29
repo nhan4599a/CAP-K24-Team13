@@ -38,12 +38,6 @@ namespace AuthServer.Services
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(user, Roles.CUSTOMER);
             }
-            if (await userManager.FindByNameAsync("admin_test") == null)
-            {
-                var user = await CreateUserObj("admin_test");
-                await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, Roles.ADMIN);
-            }
             if (await userManager.FindByNameAsync("owner_test") == null)
             {
                 var user = await CreateUserObj("owner_test");
@@ -51,32 +45,52 @@ namespace AuthServer.Services
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(user, Roles.SHOP_OWNER);
             }
+            if (await userManager.FindByNameAsync("admin_team13") == null)
+            {
+                var user = await CreateUserObj("admin_team13");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, Roles.ADMIN_TEAM_13);
+            }
+            if (await userManager.FindByNameAsync("admin_team5") == null)
+            {
+                var user = await CreateUserObj("admin_team5");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, Roles.ADMIN_TEAM_5);
+            }
         }
 
         private static async Task InitializeRoles(ApplicationRoleManager roleManager)
         {
-            if (await roleManager.FindByNameAsync("Customer") == null)
+            if (await roleManager.FindByNameAsync(Roles.CUSTOMER) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = "Customer",
-                    NormalizedName = "CUSTOMER"
+                    Name = Roles.CUSTOMER,
+                    NormalizedName = Roles.CUSTOMER.ToUpper()
                 });
             }
-            if (await roleManager.FindByNameAsync("Admin") == null)
+            if (await roleManager.FindByNameAsync(Roles.SHOP_OWNER) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
+                    Name = Roles.SHOP_OWNER,
+                    NormalizedName = Roles.SHOP_OWNER.ToUpper()
                 });
             }
-            if (await roleManager.FindByNameAsync("ShopOwner") == null)
+            if (await roleManager.FindByNameAsync(Roles.ADMIN_TEAM_13) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = "ShopOwner",
-                    NormalizedName = "SHOP_OWNER"
+                    Name = Roles.ADMIN_TEAM_13,
+                    NormalizedName = Roles.ADMIN_TEAM_13.ToUpper()
+                });
+            }
+            if (await roleManager.FindByNameAsync(Roles.ADMIN_TEAM_5) == null)
+            {
+                await roleManager.CreateAsync(new Role
+                {
+                    Name = Roles.ADMIN_TEAM_5,
+                    NormalizedName = Roles.ADMIN_TEAM_5.ToUpper()
                 });
             }
         }

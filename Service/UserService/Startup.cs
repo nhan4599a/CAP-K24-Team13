@@ -1,15 +1,22 @@
-﻿using AspNetCoreSharedComponent.ModelValidations;
+﻿using System;
+using System.Net;
+using System.Net.Mail;
+using AspNetCoreSharedComponent.Mail;
+using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
+using Hangfire;
+using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using UserService.Background;
 using UserService.Commands;
 using UserService.Validations;
 
@@ -54,6 +61,29 @@ namespace UserService
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+            services.AddSingleton(new SmtpClient
+            {
+                Credentials = new NetworkCredential(Configuration["GMAIL_USERNAME"], Configuration["GMAIL_PASSWORD"]),
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = true,
+                Host = "smtp.gmail.com",
+                Port = 587
+            });
+            services.AddSingleton<IMailService, GmailService>();
+            services.AddHangfire(config => config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration["HANGFIRE_CONNECTION_STRING"], new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            services.AddHangfireServer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +93,9 @@ namespace UserService
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            RecurringJob
+                .AddOrUpdate<AccountStatusUpdateBackgroundJob>("UpdateAccountStatus", job => job.DoJob(), Cron.Minutely());
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,9 +1,9 @@
-﻿using AuthServer.Events;
-using AuthServer.Models;
+﻿using AspNetCoreSharedComponent.Mail.Events;
+using Shared.Models;
 using System;
 using System.Net.Mail;
 
-namespace AuthServer.Services
+namespace AspNetCoreSharedComponent.Mail
 {
     public class GmailService : IMailService
     {

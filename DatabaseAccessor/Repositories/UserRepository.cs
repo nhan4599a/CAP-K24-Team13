@@ -32,6 +32,31 @@ namespace DatabaseAccessor.Repositories
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
+        public async Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, AccountPunishmentBehavior behavior)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+
+            if (user == null)
+                return CommandResponse<bool>.Error("User not found", null);
+
+            if (user.LockoutEnd >= DateTimeOffset.Now)
+                return CommandResponse<bool>.Error("User is already ban", null);
+
+            if (behavior == AccountPunishmentBehavior.SendAlertEmail)
+                return CommandResponse<bool>.Error("Behavior is not supported", new NotSupportedException());
+
+            user.LockoutEnd = behavior switch
+            {
+                AccountPunishmentBehavior.LockedOut => DateTimeOffset.Now.AddDays(14),
+                AccountPunishmentBehavior.LockedOutPermanently => null,
+                _ => throw new NotSupportedException()
+            };
+
+            await _dbContext.SaveChangesAsync();
+
+            return CommandResponse<bool>.Success(true);
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();

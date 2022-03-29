@@ -1,13 +1,9 @@
-﻿using AuthServer.Commands;
+﻿using AspNetCoreSharedComponent.Mail;
 using AuthServer.Extensions;
 using AuthServer.Identities;
 using AuthServer.Models;
 using DatabaseAccessor.Contexts;
-using DatabaseAccessor.Repositories.Abstraction;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.DTOs;
 using Shared.Models;
 using System;
 using System.Linq;
@@ -22,22 +18,12 @@ namespace AuthServer.Controllers
     {
         private readonly ApplicationUserManager _userManager;
 
-        private readonly ApplicationDbContext _dbContext;
-
         private readonly IMailService _mailer;
 
-        private readonly IMediator _mediator;
-
-        private readonly IUserRepository _repository;
-
-        public AdditionApiController(ApplicationUserManager userManager,
-            ApplicationDbContext dbContext, IMailService mailer, IMediator mediator, IUserRepository repository)
+        public AdditionApiController(ApplicationUserManager userManager, IMailService mailer)
         {
             _userManager = userManager;
-            _dbContext = dbContext;
             _mailer = mailer;
-            _mediator = mediator;
-            _repository = repository;
         }
 
         [HttpPost("shop-owner-register")]
@@ -69,61 +55,6 @@ namespace AuthServer.Controllers
             });
             return ApiResult<CreateShopOwnerAccountResult>
                 .CreateSucceedResult(new CreateShopOwnerAccountResult(internalCreateUserResult.User!.Id, username));
-        }
-
-        [HttpGet("report")]
-        public async Task<ApiResult> GetAllReport([FromQuery] PaginationInfo paginationInfo)
-        {
-            var result = await _mediator.Send(new GetAllReportsQuery
-            {
-                PaginationInfo = paginationInfo
-            });
-            return ApiResult<PaginatedList<ReportDTO>>.CreateSucceedResult(result);
-        }
-
-        [HttpPost("report/{reportId}")]
-        public async Task<ApiResult> ApproveReport(int reportId)
-        {
-            var result = await _mediator.Send(new ApproveReportCommand
-            {
-                ReportId = reportId
-            });
-            if (result.IsSuccess)
-                return ApiResult.CreateErrorResult(400, result.ErrorMessage);
-            if (result.Response.Item2 != AccountPunishmentBehavior.SendAlertEmail)
-            {
-                DateTimeOffset? dateTimeOffset = result.Response.Item2 == AccountPunishmentBehavior.LockedOutPermanently
-                    ? null : DateTimeOffset.Now.AddDays(14);
-                _dbContext.Attach(result.Response.Item1);
-                await _userManager.SetLockoutEndDateAsync(result.Response.Item1, dateTimeOffset);
-                result.Response.Item1.Status = AccountStatus.Banned;
-                await _dbContext.SaveChangesAsync();
-            }
-            else
-            {
-                _mailer.SendMail(new MailRequest
-                {
-                    Sender = "gigamallservice@gmail.com",
-                    Receiver = result.Response.Item1.Email,
-                    IsHtmlMessage = false,
-                    Subject = "Alert",
-                    Body = $"Look like you are reported. Your account will be locked out in 14 days if you violated rule again." +
-                    $" If you continue after punished, your account will be ban permanently"
-                });
-            }
-            return ApiResult.SucceedResult;
-        }
-
-        [AllowAnonymous]
-        [HttpGet("users")]
-        public async Task<ApiResult> GetAllUsers([FromQuery] GetAllUsersModel model)
-        {
-            var result = await _repository.GetAllUsersAsync(new PaginationInfo
-            {
-                PageNumber = model.PageNumber,
-                PageSize = model.PageSize
-            });
-            return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);
         }
 
         [NonAction]

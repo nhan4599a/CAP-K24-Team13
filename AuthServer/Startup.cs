@@ -1,4 +1,5 @@
-﻿using AspNetCoreSharedComponent.Middleware;
+﻿using AspNetCoreSharedComponent.Mail;
+using AspNetCoreSharedComponent.Middleware;
 using AspNetCoreSharedComponent.ModelBinders.Providers;
 using AspNetCoreSharedComponent.ModelValidations;
 using AuthServer.Configurations;
@@ -9,12 +10,8 @@ using AuthServer.Providers;
 using AuthServer.Services;
 using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
-using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
-using DatabaseAccessor.Repositories;
-using DatabaseAccessor.Repositories.Abstraction;
 using IdentityServer4.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -66,16 +63,14 @@ namespace AuthServer
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
             services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
-            services.AddScoped<IReportRepository, ReportRepository>();
             services.AddDbContext<ApplicationDbContext>();
-            services.AddSingleton(Mapper.GetInstance());
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(LocalApi.PolicyName, policy =>
                 {
                     policy.AddAuthenticationSchemes(LocalApi.AuthenticationScheme);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireRole(Roles.ADMIN);
+                    policy.RequireRole(Roles.ADMIN_TEAM_13);
                 });
             });
             services.AddTransient<MailConfirmationTokenProvider<User>>();
@@ -144,7 +139,6 @@ namespace AuthServer
             services.AddLocalApiAuthentication();
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
-            services.AddMediatR(typeof(Startup));
 
             services.ConfigureApplicationCookie(options =>
             {
