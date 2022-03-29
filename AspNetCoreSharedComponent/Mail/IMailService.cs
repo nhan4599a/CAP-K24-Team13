@@ -1,6 +1,6 @@
-﻿using AuthServer.Models;
+﻿using Shared.Models;
 
-namespace AuthServer
+namespace AspNetCoreSharedComponent.Mail
 {
     public interface IMailService
     {

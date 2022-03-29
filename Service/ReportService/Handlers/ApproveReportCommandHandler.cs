@@ -1,15 +1,15 @@
-﻿using AuthServer.Commands;
-using DatabaseAccessor.Models;
-using DatabaseAccessor.Repositories.Abstraction;
+﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
+using ReportService.Commands;
 using Shared.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AuthServer.Handlers
+namespace ReportService.Handlers
 {
-    public class ApproveReportCommandHandler : IRequestHandler<ApproveReportCommand, CommandResponse<(User, AccountPunishmentBehavior)>>,
+    public class ApproveReportCommandHandler 
+        : IRequestHandler<ApproveReportCommand, CommandResponse<(string, AccountPunishmentBehavior)>>,
         IDisposable
     {
         private readonly IReportRepository _repository;
@@ -19,7 +19,7 @@ namespace AuthServer.Handlers
             _repository = repository;
         }
 
-        public async Task<CommandResponse<(User, AccountPunishmentBehavior)>> Handle(ApproveReportCommand request,
+        public async Task<CommandResponse<(string, AccountPunishmentBehavior)>> Handle(ApproveReportCommand request,
             CancellationToken cancellationToken)
         {
             return await _repository.ApproveReportAsync(request.ReportId);

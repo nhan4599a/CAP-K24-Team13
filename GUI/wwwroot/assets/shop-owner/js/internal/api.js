@@ -271,7 +271,7 @@ function reportInvoice(invoiceCode, userId) {
 }
 
 function approveReport(reportId) {
-    return axios.post(`https://cap-k24-team13-auth.herokuapp.com/api/report/${reportId}`);
+    return axios.post(`${reportEndpoint}/approve/${reportId}`);
 }
 
 function getReports(pageNumber, pageSize) {

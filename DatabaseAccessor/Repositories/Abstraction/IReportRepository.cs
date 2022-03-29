@@ -1,5 +1,4 @@
-﻿using DatabaseAccessor.Models;
-using Shared.DTOs;
+﻿using Shared.DTOs;
 using Shared.Models;
 using System;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         public Task<CommandResponse<int>> CreateReportAsync(int invoiceId, Guid reporter);
 
-        public Task<CommandResponse<(User, AccountPunishmentBehavior)>> ApproveReportAsync(int reportId);
+        public Task<CommandResponse<(string, AccountPunishmentBehavior)>> ApproveReportAsync(int reportId);
 
         public Task<PaginatedList<ReportDTO>> GetReports(PaginationInfo paginationInfo);
     }

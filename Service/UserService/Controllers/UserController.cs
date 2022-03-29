@@ -1,8 +1,11 @@
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using Shared.Models;
+using System;
 using System.Threading.Tasks;
+using UserService.Background;
 using UserService.Commands;
 
 namespace UserService.Controllers
@@ -13,9 +16,12 @@ namespace UserService.Controllers
     {
         private readonly IMediator _mediator;
 
-        public UserController(IMediator mediator)
+        private readonly IBackgroundJobClient _backgroundJobs;
+
+        public UserController(IMediator mediator, IBackgroundJobClient backgroundJobs)
         {
             _mediator = mediator;
+            _backgroundJobs = backgroundJobs;
         }
 
         [HttpGet]
@@ -23,6 +29,28 @@ namespace UserService.Controllers
         {
             var result = await _mediator.Send(query);
             return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);
+        }
+
+        [HttpPost("ban/{userId}")]
+        public async Task<ApiResult> ApplyBan(string userId, [FromBody] int behaviorInt)
+        {
+            var behavior = (AccountPunishmentBehavior)behaviorInt;
+            var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
+            if (!parseResult)
+                return ApiResult.CreateErrorResult(400, "userId is invalid");
+            if (behavior == AccountPunishmentBehavior.SendAlertEmail)
+            {
+                _backgroundJobs.Enqueue<SendAlertEmailBackgroundJob>(job => job.SendEmail(userId));
+                return ApiResult.SucceedResult;
+            }
+            var response = await _mediator.Send(new BanUserCommand
+            {
+                UserId = parsedUserId,
+                Behavior = behavior
+            });
+            if (!response.IsSuccess)
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult.SucceedResult;
         }
     }
 }

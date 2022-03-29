@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Net.Mail;
 
-namespace AuthServer.Events
+namespace AspNetCoreSharedComponent.Mail.Events
 {
     public class MailSentAsyncEventArgs : AsyncCompletedEventArgs
     {

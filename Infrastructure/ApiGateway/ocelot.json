@@ -181,6 +181,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/reports/approve/{reportId}",
+      "DownstreamScheme": "http",
+      "ServiceName": "ReportService",
+      "UpstreamPathTemplate": "/reports/approve/{reportId}",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/users",
       "DownstreamScheme": "http",
       "ServiceName": "UserService",

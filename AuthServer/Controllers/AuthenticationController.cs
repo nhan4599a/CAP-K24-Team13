@@ -1,4 +1,5 @@
 ﻿using AspNetCoreSharedComponent.HttpContext;
+using AspNetCoreSharedComponent.Mail;
 using AuthServer.Configurations;
 using AuthServer.Extensions;
 using AuthServer.Identities;
