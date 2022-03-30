@@ -48,7 +48,7 @@ namespace DatabaseAccessor.Repositories
 
             user.LockoutEnd = behavior switch
             {
-                AccountPunishmentBehavior.LockedOut => DateTimeOffset.Now.AddDays(14),
+                AccountPunishmentBehavior.LockedOut => DateTimeOffset.Now.AddMinutes(2),
                 AccountPunishmentBehavior.LockedOutPermanently => null,
                 _ => throw new NotSupportedException()
             };

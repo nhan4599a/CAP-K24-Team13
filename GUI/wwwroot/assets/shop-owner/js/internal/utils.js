@@ -23,7 +23,8 @@ function renderReportTable(reports) {
 }
 
 function renderCustomerTable(customers) {
-    if (reports.length == 0) {
+    console.log(customers);
+    if (customers.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no customer to show!</p>');
     } else {
         $('.table-responsive.p-0').html(buildCustomerTableHtml(customers));
@@ -233,7 +234,7 @@ function buildInvoiceTableRowHtml(invoice, index) {
 }
 
 function buildReportTableRowHtml(report, index) {
-    let statusList = ['New', 'Approved'];
+    let statusList = ['Wating for approve', 'Approved'];
     return `<tr>
                 <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
                 <td class="align-middle text-center">
@@ -252,14 +253,10 @@ function buildReportTableRowHtml(report, index) {
                     ${statusList[report.status]}
                 </td>
                 <td class="align-middle">
-                    <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
-                        <i class="fas fa-check"></i>
-                        <span> Approve</span>
-                    </a>
+                    ${buildReportActionButtonHtml(report.status)}
                 </td>
             </tr>`;
 }
-
 
 function buildCustomerTableRowHtml(customer, index) {
     return `<tr>
@@ -280,10 +277,7 @@ function buildCustomerTableRowHtml(customer, index) {
                     ${customer.isLockedOut ? 'Locked out' : (customer.isAvailable ? 'Available' : 'Banned')}
                 </td>
                 <td class="align-middle">
-                    <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
-                        <i class="fas fa-check"></i>
-                        <span> Unban</span>
-                    </a>
+                    ${buildCustomerActionButtonHtml(customer)}
                 </td>
             </tr>`;
 }
@@ -343,6 +337,24 @@ function buildInvoiceActionButtonHtml(isReported) {
         return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
                     <i class="fas fa-check"></i>
                     <span> Report</span>
+                </a>`;
+    return '';
+}
+
+function buildReportActionButtonHtml(isApproved) {
+    if (!isApproved)
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+                    <i class="fas fa-check"></i>
+                    <span> Approve</span>
+                </a>`;
+    return '';
+}
+
+function buildCustomerActionButtonHtml(customer) {
+    if (!customer.isLockedOut && !customer.isAvailable)
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+                    <i class="fas fa-check"></i>
+                    <span> Unban</span>
                 </a>`;
     return '';
 }

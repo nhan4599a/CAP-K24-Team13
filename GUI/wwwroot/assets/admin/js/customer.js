@@ -37,7 +37,7 @@ function loadCustomers(pageNumber, pageSize) {
     }).catch(() => {
         animationLoader.hideAnimation();
         toastr.error('Failed to load list of customers', 'Error');
-    });
+    }); 
 }
 
 function onLoadCustomersCompleted(paginatedData) {
