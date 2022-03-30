@@ -148,6 +148,9 @@ namespace AuthServer
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(2);
+                options.Cookie.Expiration = TimeSpan.FromHours(2);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
         }
 

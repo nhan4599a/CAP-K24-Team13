@@ -118,6 +118,13 @@ namespace GUI
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IShopInterfaceClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+                options.Cookie.Expiration = TimeSpan.FromHours(2);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -141,6 +148,8 @@ namespace GUI
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
