@@ -201,6 +201,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/users/{userId}",
+      "DownstreamScheme": "http",
+      "ServiceName": "UserService",
+      "UpstreamPathTemplate": "/users/{userId}",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/users/ban/{userId}",
       "DownstreamScheme": "http",
       "ServiceName": "UserService",
