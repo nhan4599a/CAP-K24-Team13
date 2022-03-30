@@ -22,6 +22,14 @@ function renderReportTable(reports) {
     }
 }
 
+function renderCustomerTable(customers) {
+    if (reports.length == 0) {
+        $('.table-responsive.p-0').html('<p style="text-align: center">There is no customer to show!</p>');
+    } else {
+        $('.table-responsive.p-0').html(buildCustomerTableHtml(customers));
+    }
+}
+
 function buildProductTableHtml(products) {
     let tableRowHtml = '';
     products.forEach((product, index) => {
@@ -128,6 +136,44 @@ function buildReportTableHtml(reports) {
             </table>`;
 }
 
+function buildCustomerTableHtml(customers) {
+    let tableRowHtml = '';
+    customers.forEach((customer, index) => {
+        tableRowHtml += buildCustomerTableRowHtml(customer, index);
+    });
+    return `<table class="table align-items-center mb-0">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                            style="width: 50px; min-width: 50px !important;">
+                            #
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                            style="width: 50px; min-width: 50px !important;">
+                            Id
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                            style="padding-left: 24px!important">
+                            Name
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Phone number
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Email
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Status
+                        </th>
+                        <th class="text-secondary opacity-7">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRowHtml}
+                </tbody>
+            </table>`;
+}
+
 function buildProductTableRowHtml(product, index) {
     return `<tr>
                 <td style="display: none" id="prod-id">${product.id}</td>
@@ -214,6 +260,33 @@ function buildReportTableRowHtml(report, index) {
             </tr>`;
 }
 
+
+function buildCustomerTableRowHtml(customer, index) {
+    return `<tr>
+                <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${customer.id}</span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${customer.fullName}</span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${customer.phoneNumber}</span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">${customer.email}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                    ${customer.isLockedOut ? 'Locked out' : (customer.isAvailable ? 'Available' : 'Banned')}
+                </td>
+                <td class="align-middle">
+                    <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+                        <i class="fas fa-check"></i>
+                        <span> Unban</span>
+                    </a>
+                </td>
+            </tr>`;
+}
 
 function formatDateTime(dateStr) {
     let dateObj = new Date(dateStr);

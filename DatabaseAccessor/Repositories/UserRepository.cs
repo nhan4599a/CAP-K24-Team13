@@ -60,6 +60,30 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
+        public async Task<CommandResponse<bool>> UnbanAsync(Guid userId)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+
+            if (user == null)
+                return CommandResponse<bool>.Error("User is not found", null);
+
+            if (user.LockoutEnd < DateTimeOffset.Now || user.Status == AccountStatus.Available)
+                return CommandResponse<bool>.Error("User does not need to unban", null);
+
+            user.LockoutEnd = null;
+            user.Status = AccountStatus.Available;
+
+            await _dbContext.SaveChangesAsync();
+
+            return CommandResponse<bool>.Success(true);
+        }
+
+        public async Task<UserDTO> GetUserByIdAsync(Guid userId)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+            return _mapper.MapToUserDTO(user);
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();

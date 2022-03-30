@@ -7,7 +7,22 @@
         let selectedValue = $(this).val();
         let pageSize = parseInt(selectedValue);
         let pageInfo = getCurrentPageInfo();
-        moveToPage(pageInfo.keyword, pageInfo.pageNumber, pageSize);
+        moveToPage(pageInfo.pageNumber, pageSize);
+    });
+
+    $('a[name=btn-action]').click(function (e) {
+        e.preventDefault();
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+        animationLoader.showAnimation();
+        let reportId = $(this).parent().parent().children().eq(1).children().text();
+        approveReport(reportId)
+            .then(() => {
+                animationLoader.hideAnimation();
+                toastr.success('Approve report successfully');
+            }).catch(error => {
+                animationLoader.hideAnimation();
+                toastr.error(error);
+            });
     });
 });
 
@@ -35,18 +50,18 @@ function onLoadReportsCompleted(paginatedData) {
     $('#previous-page').click((e) => {
         e.preventDefault();
         let currentPageInfo = getCurrentPageInfo();
-        moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
+        moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
     });
     $('#next-page').click((e) => {
         e.preventDefault();
         let currentPageInfo = getCurrentPageInfo();
-        moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
+        moveToPage(currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
     });
     $('a.pagination-item').click(function (e) {
         e.preventDefault();
         let pageNumber = $(this).text();
         let currentPageInfo = getCurrentPageInfo();
-        moveToPage(currentPageInfo.keyword, pageNumber, currentPageInfo.pageSize);
+        moveToPage(pageNumber, currentPageInfo.pageSize);
     });
 }
 

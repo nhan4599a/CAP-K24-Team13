@@ -6,6 +6,7 @@ using ReportService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ReportService.Controllers
@@ -26,8 +27,12 @@ namespace ReportService.Controllers
         }
 
         [HttpPost("{invoiceId}")]
-        public async Task<ApiResult> CreateReport(int invoiceId, [FromBody] Guid reporter)
+        public async Task<ApiResult> CreateReport(int invoiceId)
         {
+            var reporterString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parseResult = Guid.TryParse(reporterString, out Guid reporter);
+            if (!parseResult)
+                return ApiResult.CreateErrorResult(400, "can not determine who are you");
             var response = await _mediator.Send(new CreateReportCommand
             {
                 InvoiceId = invoiceId,

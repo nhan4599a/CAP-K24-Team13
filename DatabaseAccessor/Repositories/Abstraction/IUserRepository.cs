@@ -9,6 +9,10 @@ namespace DatabaseAccessor.Repositories.Abstraction
     {
         Task<PaginatedList<UserDTO>> GetAllUsersAsync(PaginationInfo paginationInfo, bool customer);
 
+        Task<UserDTO> GetUserByIdAsync(Guid userId);
+
         Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, AccountPunishmentBehavior behavior);
+
+        Task<CommandResponse<bool>> UnbanAsync(Guid userId);
     }
 }

@@ -31,13 +31,28 @@ namespace UserService.Controllers
             return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);
         }
 
+        [HttpGet("{userId}")]
+        public async Task<ApiResult> GetUser(string userId)
+        {
+            var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
+            if (!parseResult)
+                return ApiResult.CreateErrorResult(400, "UserId is invalid");
+            var result = await _mediator.Send(new GetUserByIdQuery
+            {
+                UserId = parsedUserId
+            });
+            if (result == null)
+                return ApiResult.CreateErrorResult(404, "User not found");
+            return ApiResult<UserDTO>.CreateSucceedResult(result);
+        }
+
         [HttpPost("ban/{userId}")]
         public async Task<ApiResult> ApplyBan(string userId, [FromBody] int behaviorInt)
         {
             var behavior = (AccountPunishmentBehavior)behaviorInt;
             var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
             if (!parseResult)
-                return ApiResult.CreateErrorResult(400, "userId is invalid");
+                return ApiResult.CreateErrorResult(400, "UserId is invalid");
             if (behavior == AccountPunishmentBehavior.SendAlertEmail)
             {
                 _backgroundJobs.Enqueue<SendAlertEmailBackgroundJob>(job => job.SendEmail(userId));
@@ -47,6 +62,21 @@ namespace UserService.Controllers
             {
                 UserId = parsedUserId,
                 Behavior = behavior
+            });
+            if (!response.IsSuccess)
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult.SucceedResult;
+        }
+
+        [HttpPost("unban/{userId}")]
+        public async Task<ApiResult> Unban(string userId)
+        {
+            var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
+            if (!parseResult)
+                return ApiResult.CreateErrorResult(400, "UserId is invalid");
+            var response = await _mediator.Send(new UnbanUserCommand
+            {
+                UserId = parsedUserId
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);

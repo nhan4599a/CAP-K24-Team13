@@ -199,6 +199,26 @@
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/ban/{userId}",
+      "DownstreamScheme": "http",
+      "ServiceName": "UserService",
+      "UpstreamPathTemplate": "/users/ban/{userId}",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/unban/{userId}",
+      "DownstreamScheme": "http",
+      "ServiceName": "UserService",
+      "UpstreamPathTemplate": "/users/unban/{userId}",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
     }
   ],
   "GlobalConfiguration": {

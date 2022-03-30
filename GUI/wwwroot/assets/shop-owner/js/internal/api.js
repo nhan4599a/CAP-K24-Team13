@@ -263,12 +263,8 @@ function findInvoices(shopId, key, value, pageNumber, pageSize) {
     });
 }
 
-function reportInvoice(invoiceId, userId) {
-    return axios.post(`${reportEndpoint}/${invoiceId}`, userId, {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
+function reportInvoice(invoiceId) {
+    return axios.post(`${reportEndpoint}/${invoiceId}`);
 }
 
 function approveReport(reportId) {
@@ -284,13 +280,18 @@ function getReports(pageNumber, pageSize) {
     });
 }
 
-function getUsers(pageNumber, pageSize) {
+function getCustomers(pageNumber, pageSize) {
     return axios.get(userEndpoint, {
         params: {
             pageNumber: pageNumber,
-            pageSize: pageSize
+            pageSize: pageSize,
+            customer: true
         }
     });
+}
+
+function unbanUser(userId) {
+    return axios.post(`${userEndpoint}/unban/${userId}`);
 }
 
 function getShopInformation(shopId) {
