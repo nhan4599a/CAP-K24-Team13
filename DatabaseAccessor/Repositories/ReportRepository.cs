@@ -60,7 +60,6 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<(string, AccountPunishmentBehavior)>> ApproveReportAsync(int reportId)
         {
             var report = await _dbContext.Reports.FindAsync(reportId);
-            var transaction = await _dbContext.Database.BeginTransactionAsync();
             if (report == null)
             {
                 return CommandResponse<(string, AccountPunishmentBehavior)>.Error("Report doesn't existed", null);
