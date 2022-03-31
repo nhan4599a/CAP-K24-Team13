@@ -53,6 +53,7 @@ namespace DatabaseAccessor.Repositories
                 {
                     ProductId = Guid.Parse(requestModel.ProductId),
                     Quantity = requestModel.Quantity,
+                    ShopId = product.ShopId
                 });
             else
                 cartDetail.Quantity += requestModel.Quantity;
