@@ -65,7 +65,7 @@ namespace UserService.Controllers
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            BackgroundJob.Schedule<AccountStatusUpdateBackgroundJob>(job => job.DoJob(userId), TimeSpan.FromMinutes(30));
+            BackgroundJob.Schedule<AccountStatusUpdateBackgroundJob>(job => job.DoJob(userId), TimeSpan.FromSeconds(30));
             return ApiResult.SucceedResult;
         }
 
