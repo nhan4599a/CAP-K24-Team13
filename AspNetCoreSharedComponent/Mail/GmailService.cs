@@ -1,4 +1,5 @@
 ﻿using AspNetCoreSharedComponent.Mail.Events;
+using Microsoft.Extensions.Logging;
 using Shared.Models;
 using System;
 using System.Net.Mail;
@@ -9,11 +10,14 @@ namespace AspNetCoreSharedComponent.Mail
     {
         private readonly SmtpClient _smtpClient;
 
+        private readonly ILogger<GmailService> _logger;
+
         public event EventHandler<MailSentAsyncEventArgs>? MailSent;
 
-        public GmailService(SmtpClient smtpClient)
+        public GmailService(SmtpClient smtpClient, ILoggerFactory loggerFactory)
         {
             _smtpClient = smtpClient;
+            _logger = loggerFactory.CreateLogger<GmailService>();
         }
 
         public void SendMail(MailRequest mailRequest)
@@ -43,6 +47,7 @@ namespace AspNetCoreSharedComponent.Mail
         protected virtual void OnMailSent(MailSentAsyncEventArgs args)
         {
             args.MailMessage?.Dispose();
+            _logger.LogInformation($"Canceled: {args.Cancelled}, Error: {args.Error}");
             MailSent?.Invoke(this, args);
         }
     }
