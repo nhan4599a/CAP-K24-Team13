@@ -46,7 +46,10 @@ namespace AspNetCoreSharedComponent.Mail
 
         protected virtual void OnMailSent(MailSentAsyncEventArgs args)
         {
+            _logger.LogInformation($"Username: {_smtpClient.Credentials.GetCredential("smtp.gmail.com", 587, "smtp").UserName}");
+            _logger.LogInformation($"Password: {_smtpClient.Credentials.GetCredential("smtp.gmail.com", 587, "smtp").Password}");
             args.MailMessage?.Dispose();
+            _logger.LogInformation($"Canceled: {args.Cancelled}, Error: {args.Error}");
             _logger.LogInformation($"Canceled: {args.Cancelled}, Error: {args.Error}");
             MailSent?.Invoke(this, args);
         }
