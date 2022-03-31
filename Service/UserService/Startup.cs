@@ -91,9 +91,15 @@ namespace UserService
         {
             app.UseCors("Default");
             app.UseStaticFiles();
-            app.UseHangfireDashboard();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseHangfireDashboard(options: new DashboardOptions
+            {
+                Authorization = new[]
+                {
+                    new HangfireDashboardActionFilter()
+                }
+            });
             app.UseAuthorization();
 
             RecurringJob
