@@ -1,9 +1,6 @@
 ﻿using DatabaseAccessor.Contexts;
-using DatabaseAccessor.Models;
-using EFCore.BulkExtensions;
 using Shared.Models;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace UserService.Background
@@ -17,13 +14,18 @@ namespace UserService.Background
             _dbContext = dbContext;
         }
 
-        public async Task DoJob()
+        public async Task DoJob(string userId)
         {
-            await _dbContext.Users
-                .Where(user => user.LockoutEnd != null && user.LockoutEnd < DateTimeOffset.Now
-                    && user.Status == AccountStatus.Banned)
-                .BatchUpdateAsync(new User { Status = AccountStatus.Available });
-            await _dbContext.SaveChangesAsync();
+            var parseResult = Guid.TryParse(userId, out Guid guid);
+            if (parseResult)
+            {
+                var user = await _dbContext.Users.FindAsync(guid);
+                if (user != null)
+                {
+                    user.Status = AccountStatus.Available;
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
         }
     }
 }

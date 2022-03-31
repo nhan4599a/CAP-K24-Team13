@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Mail;
-using AspNetCoreSharedComponent.Mail;
+﻿using AspNetCoreSharedComponent.Mail;
 using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
@@ -16,7 +13,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using UserService.Background;
+using System;
+using System.Net;
+using System.Net.Mail;
 using UserService.Commands;
 using UserService.Validations;
 
@@ -101,9 +100,6 @@ namespace UserService
                 }
             });
             app.UseAuthorization();
-
-            RecurringJob
-                .AddOrUpdate<AccountStatusUpdateBackgroundJob>("UpdateAccountStatus", job => job.DoJob(), Cron.Minutely());
 
             app.UseEndpoints(endpoints =>
             {
