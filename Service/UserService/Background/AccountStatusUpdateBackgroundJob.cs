@@ -23,6 +23,7 @@ namespace UserService.Background
                 .Where(user => user.LockoutEnd != null && user.LockoutEnd < DateTimeOffset.Now
                     && user.Status == AccountStatus.Banned)
                 .BatchUpdateAsync(new User { Status = AccountStatus.Available });
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
