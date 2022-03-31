@@ -211,7 +211,7 @@ function buildProductTableRowHtml(product, index) {
 function buildInvoiceTableRowHtml(invoice, index) {
     let statusList = ['New', 'Confirmed', 'Shipper Received', 'Succeed', 'Canceled'];
     return `<tr>
-                <td style="display: none">${invoice.id}<td>
+                <td style="display: none">${invoice.id}</td>
                 <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${invoice.invoiceCode}</span>
@@ -226,7 +226,7 @@ function buildInvoiceTableRowHtml(invoice, index) {
                     ${statusList[invoice.status]}
                 </td>
                 <td class="align-middle">
-                    <a href="/invoice/detail/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip">
+                    <a href="/invoice/detail/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip">
                         <i class="fas fa-check"></i>
                         <span> Detail</span>
                     </a>
@@ -336,7 +336,7 @@ function buildCategoryActionButtonHtml(isDisabled) {
 
 function buildInvoiceActionButtonHtml(isReported) {
     if (!isReported)
-        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
                     <i class="fas fa-check"></i>
                     <span> Report</span>
                 </a>`;
@@ -345,7 +345,7 @@ function buildInvoiceActionButtonHtml(isReported) {
 
 function buildReportActionButtonHtml(isApproved) {
     if (!isApproved)
-        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
                     <i class="fas fa-check"></i>
                     <span> Approve</span>
                 </a>`;
@@ -354,7 +354,7 @@ function buildReportActionButtonHtml(isApproved) {
 
 function buildCustomerActionButtonHtml(customer) {
     if (!customer.isLockedOut && !customer.isAvailable)
-        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
                     <i class="fas fa-check"></i>
                     <span> Unban</span>
                 </a>`;

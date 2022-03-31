@@ -130,31 +130,12 @@ $(document).ready(function () {
                 .catch(error => toastr.error(error));
         });
     });
-
-    $('.dropdown-cart-action > .btn-outline-primary-2').click(function (e) {
-        e.preventDefault();
-        let productList = [];
-        $('.dropdown-cart-products > div.product').each((_, element) => {
-            productList.push({
-                id: $(element).data('product'),
-                quantity: $(element).find('.cart-product-qty').html()
-            });
-        });
-        $('body').append('<form id="checkout-form"></form>');
-        let form = $('form#checkout-form').attr('method', 'POST').attr('action', '/checkout');
-        for (let i = 0; i < productList.length; i++) {
-            form = form.append(`<input type="hidden" value="${productList[i].id}" name="models[${i}].ProductId" />`)
-                .append(`<input type="hidden" value="${productList[i].quantity}" name="models[${i}].Quantity" />`);
-        }
-        form.submit();
-    });
 });
 
 function updatePriceByQuantity(productId, quantity) {
     let cartItemElement = findProductItem($('table.table.table-cart'), 'tr', productId);
     if (!cartItemElement)
         return;
-    console.log(cartItemElement);
     let originalPrice = unformatPrice(cartItemElement.children('.price-col').html());
     let originalOldTotalPrice = unformatPrice(cartItemElement.children('.total-col').html());
     let originalNewTotalPrice = originalPrice * quantity;
@@ -176,15 +157,16 @@ function updateDropdownCartTotal(deltaPrice) {
     if (typeof deltaPrice != 'number')
         deltaPrice = parseInt(deltaPrice);
     let cartTotalElement = $('div.dropdown-cart-total');
-    if (cartTotalElement.length == 0) {
-        $('div.dropdown-cart-action').before(buildDropdownCartTotal(deltaPrice));
-        return;
+    if (!cartTotalElement.children('.cart-total-price').text()) {
+        cartTotalElement.children('span').eq(0).text('Total');
+        cartTotalElement.children('.cart-total-price').text(formatPrice(deltaPrice));
+    } else {
+        let oldPriceElement = cartTotalElement.children('.cart-total-price');
+        let originalOldPrice = unformatPrice(oldPriceElement.html());
+        let originalNewPrice = originalOldPrice + deltaPrice;
+        let formattedNewPrice = formatPrice(originalNewPrice);
+        oldPriceElement.html(formattedNewPrice);
     }
-    let oldPriceElement = $('div.dropdown-cart-total').children('.cart-total-price');
-    let originalOldPrice = unformatPrice(oldPriceElement.html());
-    let originalNewPrice = originalOldPrice + deltaPrice;
-    let formattedNewPrice = formatPrice(originalNewPrice);
-    oldPriceElement.html(formattedNewPrice);
 }
 
 function buildSingleProductItem(product) {
@@ -194,7 +176,9 @@ function buildSingleProductItem(product) {
                         <a href="/product/index/${product.id}">${product.name}</a>
                     </h4>
                     <span class="cart-product-info">
-                        <span class="cart-product-qty">${product.quantity}</span> x ${formatPrice(product.price)}
+                        <span class="cart-product-qty">${product.quantity}</span>
+                        x
+                        <span class="base-price">${formatPrice(product.price)}</span>
                     </span>
                 </div>
                 <figure class="product-image-container">
@@ -230,9 +214,18 @@ function updateDropdownCart(product) {
     let rootDropdownCartElement = $('div.dropdown-cart-products');
     let productItemElement = findProductItem(rootDropdownCartElement, '.product', product.id);
     if (productItemElement == null) {
-        rootDropdownCartElement.find('.product').remove();
-        rootDropdownCartElement.find('.dropdown-cart-action').before(buildSingleProductItem(product));
+        rootDropdownCartElement.find('.product').filter((_, element) => !$(element).attr('data-product')).remove();
+        rootDropdownCartElement.find('.dropdown-cart-total').before(buildSingleProductItem(product));
         attachRemoveButtonInDropdownCart();
+        if ($('.dropdown-cart-action .btn-outline-primary-2').length == 0) {
+            $('.dropdown-cart-action .btn-primary').after(`<a class="btn btn-outline-primary-2" href="#">
+                                                                <span>Checkout</span>
+                                                                <i class="icon-long-arrow-right"></i>
+                                                            </a>`);
+            $('.dropdown-cart-action .btn-primary').attr('style', '');
+            $('.dropdown-cart-action .btn-primary').parent().attr('style', '');
+            attachCheckOutButtonEvent();
+        }
         $('.cart-count').html(parseInt(currentCartCountValue) + 1);
     }
     else {
@@ -250,12 +243,10 @@ function deleteDropdownCartItem(productId) {
     if (productItemElement == null)
         return;
     let cartCountValue = parseInt($('.cart-count').html());
-    console.log(cartCountValue);
     if (!cartCountValue || cartCountValue == 0)
         return;
     $('.cart-count').html(cartCountValue - 1);
     if (productElementCount == 1) {
-        console.log('should build empty dropdown cart');
         rootDropdownCartElement.html(buildEmptyDropdownCart());
         return;
     }
@@ -270,6 +261,10 @@ function buildEmptyDropdownCart() {
                 <h4 class="product-title" style="padding-left: 20px;">
                     There are no products in cart
                 </h4>
+            </div>
+            <div class="dropdown-cart-total">
+                <span></span>
+                <span class="cart-total-price"></span>
             </div>
             <div class="dropdown-cart-action" style="display: block">
                 <a href="/cart" class="btn btn-primary" style="display: block;">
@@ -294,8 +289,27 @@ function attachRemoveButtonInDropdownCart() {
                 .then(function () {
                     toastr.success('Remove product in cart successfully');
                     deleteDropdownCartItem(productId);
-                })
-                .catch(error => toastr.error(error));
+                }).catch(error => toastr.error(error));
         });
+    });
+}
+
+function attachCheckOutButtonEvent() {
+    $('.dropdown-cart-action > .btn-outline-primary-2').click(function (e) {
+        e.preventDefault();
+        let productList = [];
+        $('.dropdown-cart-products > div.product').each((_, element) => {
+            productList.push({
+                id: $(element).data('product'),
+                quantity: $(element).find('.cart-product-qty').html()
+            });
+        });
+        $('body').append('<form id="checkout-form"></form>');
+        let form = $('form#checkout-form').attr('method', 'POST').attr('action', '/checkout');
+        for (let i = 0; i < productList.length; i++) {
+            form = form.append(`<input type="hidden" value="${productList[i].id}" name="models[${i}].ProductId" />`)
+                .append(`<input type="hidden" value="${productList[i].quantity}" name="models[${i}].Quantity" />`);
+        }
+        form.submit();
     });
 }

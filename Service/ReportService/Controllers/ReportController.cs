@@ -38,37 +38,42 @@ namespace ReportService.Controllers
                 InvoiceId = invoiceId,
                 ReporterId = reporter
             });
-            if (response.IsSuccess)
+            if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(400, response.ErrorMessage);
             return ApiResult.SucceedResult;
         }
 
         [HttpPost("approve/{reportId}")]
-        public async Task<ApiResult> ApproveReport([FromHeader] string accessToken, int reportId)
+        public async Task<ApiResult> ApproveReport(int reportId)
         {
+            var accessToken = Request.Headers.Authorization.ToString();
+            if (!accessToken.StartsWith("Bearer "))
+            {
+                return ApiResult.CreateErrorResult(401, "Access token is invalid");
+            }
             var result = await _mediator.Send(new ApproveReportCommand
             {
                 ReportId = reportId
             });
             if (!result.IsSuccess)
                 return ApiResult.CreateErrorResult(500, result.ErrorMessage);
-            if (!accessToken.StartsWith("Bearer "))
+            //try
+            //{
+            //}
+            //catch (Exception e)
+            //{
+            //    return ApiResult.CreateErrorResult(500, e.Message);
+            //}
+
+            var response = await _userClient.ApplyBan(accessToken.Split(" ")[1], result.Response.Item1, result.Response.Item2);
+            if (!response.IsSuccessStatusCode || response.Content.ResponseCode != 200)
             {
-                return ApiResult.CreateErrorResult(500, "Access token is invalid");
+                return ApiResult.CreateErrorResult(500,
+                    !response.IsSuccessStatusCode
+                    ? await response.RequestMessage!.Content!.ReadAsStringAsync()
+                    : response.Content.ErrorMessage);
             }
-            try
-            {
-                var response = await _userClient.ApplyBan(accessToken.Split(" ")[1], result.Response.Item1, result.Response.Item2);
-                if (!response.IsSuccessStatusCode || response.Content.ResponseCode != 200)
-                {
-                    return ApiResult.CreateErrorResult(500, response.Content!.ErrorMessage);
-                }
-                return ApiResult.SucceedResult;
-            }
-            catch (Exception e)
-            {
-                return ApiResult.CreateErrorResult(500, e.Message);
-            }
+            return ApiResult.SucceedResult;
         }
 
         [HttpGet]

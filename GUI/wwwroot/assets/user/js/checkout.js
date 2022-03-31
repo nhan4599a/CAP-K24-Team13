@@ -38,7 +38,7 @@ function buildRequestModel() {
     return {
         fullname: fullname,
         phone: phone,
-        shippingAddress: streetaddress + ward + district + townCity,
+        shippingAddress: streetaddress + ' ' + ward + ' ' + district + ' ' + townCity,
         orderNotes: orderNotes,
         productIdList: productList
     };

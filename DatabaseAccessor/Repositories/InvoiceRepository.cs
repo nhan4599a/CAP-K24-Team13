@@ -78,7 +78,8 @@ namespace DatabaseAccessor.Repositories
                         Phone = shippingPhone,
                         FullName = shippingName,
                         ShippingAddress = shippingAddress,
-                        Note = orderNotes
+                        Note = orderNotes,
+                        ShopId = cartItem.ShopId
                     });
                 }
                 invoices[cartItem.ShopId].Details.Add(new InvoiceDetail

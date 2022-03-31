@@ -177,6 +177,10 @@
                                                     There are no products in cart 
                                                 </h4>
                                             </div>
+                                            <div class="dropdown-cart-total">
+                                                <span></span>
+                                                <span class="cart-total-price"></span>
+                                            </div>
                                             <div class="dropdown-cart-action" style="display: block">
                                                 <a href="/cart" class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto">View Cart</a>
                                             </div>
@@ -192,7 +196,8 @@
                                                         </h4>
                                                         <span class="cart-product-info">
                                                             <span class="cart-product-qty">@item.Quantity</span>
-                                                            x <span class="base-price">@item.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                            x 
+                                                            <span class="base-price">@item.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
                                                         </span>
                                                     </div><!-- End .product-cart-details -->
                                                     <figure class="product-image-container">
