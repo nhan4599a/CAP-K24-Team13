@@ -53,6 +53,7 @@ namespace DatabaseAccessor.Repositories
                 AffectedUserId = affectedInvoice.UserId
             };
             _dbContext.Reports.Add(report);
+            await _dbContext.SaveChangesAsync();
             return CommandResponse<int>.Success(report.Id);
         }
 

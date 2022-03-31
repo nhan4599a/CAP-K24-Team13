@@ -38,7 +38,7 @@ namespace ReportService.Controllers
                 InvoiceId = invoiceId,
                 ReporterId = reporter
             });
-            if (response.IsSuccess)
+            if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(400, response.ErrorMessage);
             return ApiResult.SucceedResult;
         }

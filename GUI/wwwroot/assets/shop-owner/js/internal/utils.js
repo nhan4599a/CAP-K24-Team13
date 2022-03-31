@@ -226,7 +226,7 @@ function buildInvoiceTableRowHtml(invoice, index) {
                     ${statusList[invoice.status]}
                 </td>
                 <td class="align-middle">
-                    <a href="/invoice/detail/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip">
+                    <a href="/invoice/detail/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip">
                         <i class="fas fa-check"></i>
                         <span> Detail</span>
                     </a>
@@ -336,7 +336,7 @@ function buildCategoryActionButtonHtml(isDisabled) {
 
 function buildInvoiceActionButtonHtml(isReported) {
     if (!isReported)
-        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
                     <i class="fas fa-check"></i>
                     <span> Report</span>
                 </a>`;
