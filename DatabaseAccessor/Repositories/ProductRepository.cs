@@ -3,7 +3,6 @@ using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
@@ -71,6 +70,7 @@ namespace DatabaseAccessor.Repositories
             {
                 return CommandResponse<Guid>.Error("Product's name is already existed", null);
             }
+            shopProduct.ShopId = category.ShopId;
             _dbContext.ShopProducts.Add(shopProduct);
             try
             {
@@ -110,7 +110,13 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<ProductDTO>.Error("Product is disabled", null);
             if (product.Category.IsDisabled)
                 return CommandResponse<ProductDTO>.Error($"Product is belong to {product.Category.CategoryName} which was deactivated", null);
+            var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
+            if (category == null)
+                return CommandResponse<ProductDTO>.Error($"Category is not found", null);
+            if (category.IsDisabled)
+                return CommandResponse<ProductDTO>.Error($"Category is disabled", null);
             product.AssignByRequestModel(requestModel);
+            product.ShopId = category.ShopId;
             try
             {
                 await _dbContext.SaveChangesAsync();
