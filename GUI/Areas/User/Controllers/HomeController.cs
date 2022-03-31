@@ -22,12 +22,6 @@ namespace GUI.Areas.User.Controllers
 
         public IActionResult Index()
         {
-            //var productsResponse = await _productClient.GetProductsAsync(1, 5);
-            //var cartItemCountResponse = await _cartClient.GetCartItemCountAsync("F081C3C0-3314-44D8-1055-08D9DA433EEF");
-            //if (!productsResponse.IsSuccessStatusCode)
-            //    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            //ViewBag.CartItemCount = cartItemCountResponse.IsSuccessStatusCode ? cartItemCountResponse.Content : 0;
-            //return View(productsResponse.Content.Data);
             return View();
         }
 

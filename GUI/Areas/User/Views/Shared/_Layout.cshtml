@@ -1,9 +1,10 @@
 ﻿@using GUI.Areas.User.ViewModels
 @using GUI.Extensions
+@using Shared
 @using Shared.DTOs
 @using System.Globalization
 @{
-    var cartItems = (List<CartItemDTO>)ViewData["CartItems"];
+    var cartItems = (List<CartItemDTO>)ViewData[SystemConstant.Common.CART_ITEMS_KEY];
 }
 <!DOCTYPE html>
 <html lang="en">

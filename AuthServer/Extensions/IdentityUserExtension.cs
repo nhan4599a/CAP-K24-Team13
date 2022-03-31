@@ -1,6 +1,7 @@
 ﻿using AuthServer.Models;
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
+using Shared;
 using Shared.Models;
 using System;
 using System.Security.Claims;
@@ -54,7 +55,7 @@ namespace AuthServer.Extensions
                 model.Email,
                 model.PhoneNumber,
                 model.DoB
-            ), Roles.SHOP_OWNER, model.ShopId);
+            ), SystemConstant.Roles.SHOP_OWNER, model.ShopId);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace GUI.ViewComponents
     {
         public Task<IViewComponentResult> InvokeAsync(string activeItem)
         {
-            return Task.FromResult<IViewComponentResult>(View(new { ActiveItem = activeItem }));
+            return Task.FromResult<IViewComponentResult>(View(model: activeItem));
         }
     }
 }

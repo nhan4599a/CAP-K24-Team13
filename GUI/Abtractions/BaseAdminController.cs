@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Models;
+using Shared;
 
 namespace GUI.Abtractions
 {
-    [Authorize(Roles = Roles.ADMIN_TEAM_13)]
+    [Authorize(Roles = SystemConstant.Roles.ADMIN_TEAM_13)]
     [Area("Admin")]
     public class BaseAdminController : Controller
     {

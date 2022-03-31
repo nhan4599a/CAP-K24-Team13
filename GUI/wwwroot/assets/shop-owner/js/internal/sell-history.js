@@ -24,6 +24,24 @@
         let pageInfo = getCurrentPageInfo();
         moveToPage(pageInfo.key, pageInfo.value, pageInfo.pageNumber, pageSize);
     });
+
+    $('a[name=btn-action]').click(function (e) {
+        e.preventDefault();
+        let source = $(this);
+        let invoiceCode = source.parent().parent().children('td').eq(0).text().trim();
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+        animationLoader.showAnimation();
+        $(this).css('display', 'none');
+        reportInvoice(invoiceCode).then(() => {
+            toastr.success('Report was sent to admin');
+            animationLoader.hideAnimation();
+            source.remove();
+        }).catch(error => {
+            toastr.error(error);
+            animationLoader.hideAnimation();
+            source.css('display', 'initial');
+        });
+    });
 });
 
 function loadInvoices(key, value, pageNumber, pageSize) {
@@ -64,24 +82,6 @@ function onLoadInvoicesCompleted(paginatedData) {
         let pageNumber = $(this).text();
         let currentPageInfo = getCurrentPageInfo();
         moveToPage(currentPageInfo.key, currentPageInfo.value, pageNumber, currentPageInfo.pageSize);
-    });
-    $('a[name=btn-action]').click(function (e) {
-        e.preventDefault();
-        let invoiceCode = $(this).parent().parent().children('td').eq(1).text();
-        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
-        animationLoader.showAnimation();
-        $(this).css('display', 'none');
-        getUserId().then(userId => {
-            reportInvoice(invoiceCode, userId).then(() => {
-                toastr.success('Report was sent to admin');
-                animationLoader.hideAnimation();
-                $(this).remove();
-            }).catch(error => {
-                toastr.error(error);
-                animationLoader.hideAnimation();
-                $(this).css('display', 'initial');
-            });
-        });
     });
 }
 

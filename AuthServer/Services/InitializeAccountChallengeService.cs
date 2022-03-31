@@ -2,7 +2,7 @@
 using DatabaseAccessor.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Shared.Models;
+using Shared;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,61 +36,61 @@ namespace AuthServer.Services
             {
                 var user = await CreateUserObj("customer_test");
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, Roles.CUSTOMER);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.CUSTOMER);
             }
             if (await userManager.FindByNameAsync("owner_test") == null)
             {
                 var user = await CreateUserObj("owner_test");
-                user.ShopId = 0;
+                user.ShopId = 1;
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, Roles.SHOP_OWNER);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.SHOP_OWNER);
             }
             if (await userManager.FindByNameAsync("admin_team13") == null)
             {
                 var user = await CreateUserObj("admin_team13");
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, Roles.ADMIN_TEAM_13);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.ADMIN_TEAM_13);
             }
             if (await userManager.FindByNameAsync("admin_team5") == null)
             {
                 var user = await CreateUserObj("admin_team5");
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, Roles.ADMIN_TEAM_5);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.ADMIN_TEAM_5);
             }
         }
 
         private static async Task InitializeRoles(ApplicationRoleManager roleManager)
         {
-            if (await roleManager.FindByNameAsync(Roles.CUSTOMER) == null)
+            if (await roleManager.FindByNameAsync(SystemConstant.Roles.CUSTOMER) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = Roles.CUSTOMER,
-                    NormalizedName = Roles.CUSTOMER.ToUpper()
+                    Name = SystemConstant.Roles.CUSTOMER,
+                    NormalizedName = SystemConstant.Roles.CUSTOMER.ToUpper()
                 });
             }
-            if (await roleManager.FindByNameAsync(Roles.SHOP_OWNER) == null)
+            if (await roleManager.FindByNameAsync(SystemConstant.Roles.SHOP_OWNER) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = Roles.SHOP_OWNER,
-                    NormalizedName = Roles.SHOP_OWNER.ToUpper()
+                    Name = SystemConstant.Roles.SHOP_OWNER,
+                    NormalizedName = SystemConstant.Roles.SHOP_OWNER.ToUpper()
                 });
             }
-            if (await roleManager.FindByNameAsync(Roles.ADMIN_TEAM_13) == null)
+            if (await roleManager.FindByNameAsync(SystemConstant.Roles.ADMIN_TEAM_13) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = Roles.ADMIN_TEAM_13,
-                    NormalizedName = Roles.ADMIN_TEAM_13.ToUpper()
+                    Name = SystemConstant.Roles.ADMIN_TEAM_13,
+                    NormalizedName = SystemConstant.Roles.ADMIN_TEAM_13.ToUpper()
                 });
             }
-            if (await roleManager.FindByNameAsync(Roles.ADMIN_TEAM_5) == null)
+            if (await roleManager.FindByNameAsync(SystemConstant.Roles.ADMIN_TEAM_5) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = Roles.ADMIN_TEAM_5,
-                    NormalizedName = Roles.ADMIN_TEAM_5.ToUpper()
+                    Name = SystemConstant.Roles.ADMIN_TEAM_5,
+                    NormalizedName = SystemConstant.Roles.ADMIN_TEAM_5.ToUpper()
                 });
             }
         }

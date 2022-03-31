@@ -2,6 +2,7 @@
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
+using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using System;
@@ -28,7 +29,7 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.UserRoles)
                 .ThenInclude(e => e.Role)
-                .Where(e => !customer || e.UserRoles.Any(userRole => userRole.Role.Name == Roles.CUSTOMER))
+                .Where(e => !customer || e.UserRoles.Any(userRole => userRole.Role.Name == SystemConstant.Roles.CUSTOMER))
                 .Select(e => _mapper.MapToUserDTO(e))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }

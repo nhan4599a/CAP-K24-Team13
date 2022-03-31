@@ -73,6 +73,7 @@ function buildInvoiceTableHtml(invoices) {
     return `<table class="table align-items-center mb-0">
                 <thead>
                     <tr>
+                        <th style="display: none"></th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                             style="width: 50px; min-width: 50px !important;">
                             #
@@ -210,6 +211,7 @@ function buildProductTableRowHtml(product, index) {
 function buildInvoiceTableRowHtml(invoice, index) {
     let statusList = ['New', 'Confirmed', 'Shipper Received', 'Succeed', 'Canceled'];
     return `<tr>
+                <td style="display: none">${invoice.id}<td>
                 <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${invoice.invoiceCode}</span>

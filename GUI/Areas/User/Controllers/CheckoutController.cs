@@ -5,6 +5,7 @@ using GUI.Clients;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace GUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(CheckOutModel[] models)
         {
-            var token = await HttpContext.GetTokenAsync("access_token");
+            var token = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
             List<CheckOutViewModel> productList = new();
             foreach (var model in models)
             {

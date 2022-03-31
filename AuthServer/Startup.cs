@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared;
 using Shared.Models;
 using System;
 using System.Net;
@@ -70,7 +71,7 @@ namespace AuthServer
                 {
                     policy.AddAuthenticationSchemes(LocalApi.AuthenticationScheme);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireRole(Roles.ADMIN_TEAM_13);
+                    policy.RequireRole(SystemConstant.Roles.ADMIN_TEAM_13);
                 });
             });
             services.AddTransient<MailConfirmationTokenProvider<User>>();

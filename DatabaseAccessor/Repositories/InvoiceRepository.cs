@@ -240,6 +240,7 @@ namespace DatabaseAccessor.Repositories
             string value, PaginationInfo paginationInfo)
         {
             var result = _dbContext.Invoices.AsNoTracking().Include(e => e.Details).Include(e => e.Report)
+                .AsSplitQuery()
                 .Where(invoice => invoice.ShopId == shopId);
             if (!string.IsNullOrWhiteSpace(key))
             {

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Shared;
 using Shared.Models;
 using System;
 using System.Security.Claims;
@@ -113,7 +114,7 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("SignUp-Error", "Input information is invalid");
                 return View(model);
             }
-            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, Roles.CUSTOMER);
+            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, SystemConstant.Roles.CUSTOMER);
             if (createUserResult.Succeeded)
             {
                 if (AccountConfig.RequireEmailConfirmation)

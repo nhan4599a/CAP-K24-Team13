@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -21,7 +22,7 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var token = await HttpContext.GetTokenAsync("access_token");
+            var token = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
             var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory(token, User.GetUserId().ToString());
             if (!orderHistoryRespone.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);

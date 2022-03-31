@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using Shared.Models;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace GUI.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return ApiResult.CreateErrorResult(401, "User is not logged in");
-            return ApiResult<string>.CreateSucceedResult(await HttpContext.GetTokenAsync("access_token"));
+            return ApiResult<string>.CreateSucceedResult(await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY));
         }
 
         [ActionName("id")]
@@ -31,7 +32,7 @@ namespace GUI.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return ApiResult.CreateErrorResult(401, "User is not logged in");
-            if (!User.IsInRole(Roles.SHOP_OWNER))
+            if (!User.IsInRole(SystemConstant.Roles.SHOP_OWNER))
                 return ApiResult.CreateErrorResult(403, "User is not shop owner");
             return ApiResult<int>.CreateSucceedResult(User.GetShopId().Value);
         }

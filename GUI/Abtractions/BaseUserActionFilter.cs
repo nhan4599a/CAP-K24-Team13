@@ -4,6 +4,7 @@ using GUI.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Shared;
 using System.Threading.Tasks;
 
 namespace GUI.Abtractions
@@ -24,10 +25,11 @@ namespace GUI.Abtractions
                 var controller = context.Controller as Controller;
                 if (controller is not CartController)
                 {
-                    var token = await context.HttpContext.GetTokenAsync("access_token");
-                    var cartItemsResponse = await _cartClient.GetCartItemsAsync(token, context.HttpContext.User.GetUserId().ToString());
+                    var token = await context.HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
+                    var cartItemsResponse = 
+                        await _cartClient.GetCartItemsAsync(token, context.HttpContext.User.GetUserId().ToString());
                     if (cartItemsResponse.IsSuccessStatusCode)
-                        controller.ViewData["CartItems"] = cartItemsResponse.Content.Data;
+                        controller.ViewData[SystemConstant.Common.CART_ITEMS_KEY] = cartItemsResponse.Content.Data;
                 }
             }
             await next();

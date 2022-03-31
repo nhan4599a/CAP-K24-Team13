@@ -3,6 +3,7 @@ using GUI.Clients;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -19,7 +20,7 @@ namespace GUI.Areas.User.Controllers
         [HttpGet("/Invoice/Detail/{invoiceCode}")]
         public async Task<IActionResult> Index(string invoiceCode)
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var accessToken = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
             var orderDetailResponse = await _orderClient.GetOrderDetail(accessToken, invoiceCode);
             if (!orderDetailResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
