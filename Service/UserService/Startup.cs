@@ -90,6 +90,8 @@ namespace UserService
         public void Configure(IApplicationBuilder app)
         {
             app.UseCors("Default");
+            app.UseStaticFiles();
+            app.UseHangfireDashboard();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -100,6 +102,7 @@ namespace UserService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
         }
     }
