@@ -57,19 +57,20 @@ namespace ReportService.Controllers
             });
             if (!result.IsSuccess)
                 return ApiResult.CreateErrorResult(500, result.ErrorMessage);
-            try
+            //try
+            //{
+            //}
+            //catch (Exception e)
+            //{
+            //    return ApiResult.CreateErrorResult(500, e.Message);
+            //}
+
+            var response = await _userClient.ApplyBan(accessToken.Split(" ")[1], result.Response.Item1, result.Response.Item2);
+            if (!response.IsSuccessStatusCode || response.Content.ResponseCode != 200)
             {
-                var response = await _userClient.ApplyBan(accessToken.Split(" ")[1], result.Response.Item1, result.Response.Item2);
-                if (!response.IsSuccessStatusCode || response.Content.ResponseCode != 200)
-                {
-                    return ApiResult.CreateErrorResult(500, response.Content!.ErrorMessage);
-                }
-                return ApiResult.SucceedResult;
+                return ApiResult.CreateErrorResult(500, response.Content?.ErrorMessage);
             }
-            catch (Exception e)
-            {
-                return ApiResult.CreateErrorResult(500, e.Message);
-            }
+            return ApiResult.SucceedResult;
         }
 
         [HttpGet]
