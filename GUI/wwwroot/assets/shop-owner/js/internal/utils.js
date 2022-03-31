@@ -211,7 +211,7 @@ function buildProductTableRowHtml(product, index) {
 function buildInvoiceTableRowHtml(invoice, index) {
     let statusList = ['New', 'Confirmed', 'Shipper Received', 'Succeed', 'Canceled'];
     return `<tr>
-                <td style="display: none">${invoice.id}<td>
+                <td style="display: none">${invoice.id}</td>
                 <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${invoice.invoiceCode}</span>

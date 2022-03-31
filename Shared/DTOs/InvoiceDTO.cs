@@ -5,6 +5,8 @@ namespace Shared.DTOs
 {
     public class InvoiceDTO
     {
+        public int Id { get; set; }
+
         public string InvoiceCode { get; set; }
 
         public string FullName { get; set; }
