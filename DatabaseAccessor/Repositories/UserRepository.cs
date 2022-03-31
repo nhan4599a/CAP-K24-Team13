@@ -49,7 +49,7 @@ namespace DatabaseAccessor.Repositories
 
             user.LockoutEnd = behavior switch
             {
-                AccountPunishmentBehavior.LockedOut => DateTimeOffset.Now.AddSeconds(30),
+                AccountPunishmentBehavior.LockedOut => DateTimeOffset.Now.Add(SystemConstant.Authentication.DEFAULT_BAN_TIME_SPAN),
                 AccountPunishmentBehavior.LockedOutPermanently => null,
                 _ => throw new NotSupportedException()
             };

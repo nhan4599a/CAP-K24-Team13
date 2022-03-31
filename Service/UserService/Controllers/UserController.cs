@@ -1,6 +1,7 @@
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using System;
@@ -65,7 +66,11 @@ namespace UserService.Controllers
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            BackgroundJob.Schedule<AccountStatusUpdateBackgroundJob>(job => job.DoJob(userId), TimeSpan.FromSeconds(30));
+            if (behavior == AccountPunishmentBehavior.LockedOut)
+            {
+                BackgroundJob.Schedule<AccountStatusUpdateBackgroundJob>(
+                    job => job.DoJob(userId), SystemConstant.Authentication.DEFAULT_BAN_TIME_SPAN);
+            }
             return ApiResult.SucceedResult;
         }
 

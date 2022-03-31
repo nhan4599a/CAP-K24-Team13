@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 
 namespace Shared
 {
@@ -25,6 +26,8 @@ namespace Shared
         public static class Authentication
         {
             public const string ACCESS_TOKEN_KEY = "access_token";
+
+            public static readonly TimeSpan DEFAULT_BAN_TIME_SPAN = TimeSpan.FromSeconds(30);
         }
 
         public static class Common

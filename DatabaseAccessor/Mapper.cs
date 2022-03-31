@@ -84,7 +84,7 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.FullName,
                         options => options.MapFrom(source => $"{source.FirstName} {source.LastName}"))
                     .ForMember(target => target.IsLockedOut,
-                        options => options.MapFrom(source => source.LockoutEnd < DateTimeOffset.Now
+                        options => options.MapFrom(source => source.LockoutEnd > DateTimeOffset.Now
                             && source.Status == AccountStatus.Available))
                     .ForMember(target => target.IsAvailable,
                         options => options.MapFrom(source => source.Status == AccountStatus.Available))
