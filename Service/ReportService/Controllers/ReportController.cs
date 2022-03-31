@@ -70,7 +70,7 @@ namespace ReportService.Controllers
             {
                 return ApiResult.CreateErrorResult(500,
                     !response.IsSuccessStatusCode
-                    ? response.Error!.Message
+                    ? response.Error!.Content
                     : response.Content.ErrorMessage);
             }
             return ApiResult.SucceedResult;
