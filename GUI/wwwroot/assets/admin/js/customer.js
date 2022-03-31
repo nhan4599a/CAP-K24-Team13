@@ -9,23 +9,6 @@
         let pageInfo = getCurrentPageInfo();
         moveToPage(pageInfo.pageNumber, pageSize);
     });
-
-    $('a[name=btn-action]').click(function (e) {
-        e.preventDefault();
-        let eventSource = $(this);
-        let userId = eventSource.parent().parent().children().eq(1).children().text().trim();
-        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
-        animationLoader.showAnimation();
-        unbanUser(userId)
-            .then(() => {
-                animationLoader.hideAnimation();
-                toastr.success('User unban successfully');
-                eventSource.parent().remove();
-            }).catch(error => {
-                animationLoader.hideAnimation();
-                toastr.error(error);
-            });
-    });
 });
 
 function loadCustomers(pageNumber, pageSize) {
@@ -64,6 +47,23 @@ function onLoadCustomersCompleted(paginatedData) {
         let pageNumber = $(this).text();
         let currentPageInfo = getCurrentPageInfo();
         moveToPage(pageNumber, currentPageInfo.pageSize);
+    });
+
+    $('a[name=btn-action]').click(function (e) {
+        e.preventDefault();
+        let eventSource = $(this);
+        let userId = eventSource.parent().parent().children().eq(1).children().text().trim();
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+        animationLoader.showAnimation();
+        unbanUser(userId)
+            .then(() => {
+                animationLoader.hideAnimation();
+                toastr.success('User unban successfully');
+                eventSource.parent().remove();
+            }).catch(error => {
+                animationLoader.hideAnimation();
+                toastr.error(error);
+            });
     });
 }
 

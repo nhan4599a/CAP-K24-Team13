@@ -9,21 +9,6 @@
         let pageInfo = getCurrentPageInfo();
         moveToPage(pageInfo.pageNumber, pageSize);
     });
-
-    $('a[name=btn-action]').click(function (e) {
-        e.preventDefault();
-        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
-        animationLoader.showAnimation();
-        let reportId = $(this).parent().parent().children().eq(1).children().text();
-        approveReport(reportId)
-            .then(() => {
-                animationLoader.hideAnimation();
-                toastr.success('Approve report successfully');
-            }).catch(error => {
-                animationLoader.hideAnimation();
-                toastr.error(error);
-            });
-    });
 });
 
 function loadReports(pageNumber, pageSize) {
@@ -62,6 +47,21 @@ function onLoadReportsCompleted(paginatedData) {
         let pageNumber = $(this).text();
         let currentPageInfo = getCurrentPageInfo();
         moveToPage(pageNumber, currentPageInfo.pageSize);
+    });
+
+    $('a[name=btn-action]').click(function (e) {
+        e.preventDefault();
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+        animationLoader.showAnimation();
+        let reportId = $(this).parent().parent().children().eq(1).children().text();
+        approveReport(reportId)
+            .then(() => {
+                animationLoader.hideAnimation();
+                toastr.success('Approve report successfully');
+            }).catch(error => {
+                animationLoader.hideAnimation();
+                toastr.error(error);
+            });
     });
 }
 

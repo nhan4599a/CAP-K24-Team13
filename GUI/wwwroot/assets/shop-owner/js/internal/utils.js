@@ -345,7 +345,7 @@ function buildInvoiceActionButtonHtml(isReported) {
 
 function buildReportActionButtonHtml(isApproved) {
     if (!isApproved)
-        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
                     <i class="fas fa-check"></i>
                     <span> Approve</span>
                 </a>`;
@@ -354,7 +354,7 @@ function buildReportActionButtonHtml(isApproved) {
 
 function buildCustomerActionButtonHtml(customer) {
     if (!customer.isLockedOut && !customer.isAvailable)
-        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action">
+        return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
                     <i class="fas fa-check"></i>
                     <span> Unban</span>
                 </a>`;

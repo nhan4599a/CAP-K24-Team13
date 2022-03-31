@@ -44,18 +44,18 @@ namespace ReportService.Controllers
         }
 
         [HttpPost("approve/{reportId}")]
-        public async Task<ApiResult> ApproveReport([FromHeader] string accessToken, int reportId)
+        public async Task<ApiResult> ApproveReport([FromHeader(Name = "Authorization")] string accessToken, int reportId)
         {
+            if (!accessToken.StartsWith("Bearer "))
+            {
+                return ApiResult.CreateErrorResult(401, "Access token is invalid");
+            }
             var result = await _mediator.Send(new ApproveReportCommand
             {
                 ReportId = reportId
             });
             if (!result.IsSuccess)
                 return ApiResult.CreateErrorResult(500, result.ErrorMessage);
-            if (!accessToken.StartsWith("Bearer "))
-            {
-                return ApiResult.CreateErrorResult(500, "Access token is invalid");
-            }
             try
             {
                 var response = await _userClient.ApplyBan(accessToken.Split(" ")[1], result.Response.Item1, result.Response.Item2);
