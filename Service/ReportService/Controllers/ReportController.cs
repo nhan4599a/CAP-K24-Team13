@@ -44,8 +44,9 @@ namespace ReportService.Controllers
         }
 
         [HttpPost("approve/{reportId}")]
-        public async Task<ApiResult> ApproveReport([FromHeader(Name = "Authorization")] string accessToken, int reportId)
+        public async Task<ApiResult> ApproveReport(int reportId)
         {
+            var accessToken = Request.Headers.Authorization.ToString();
             if (!accessToken.StartsWith("Bearer "))
             {
                 return ApiResult.CreateErrorResult(401, "Access token is invalid");
