@@ -4,10 +4,10 @@ using System;
 
 namespace UserService.Commands
 {
-    public class BanUserCommand : IRequest<CommandResponse<bool>>
+    public class AssignToShopOwnerCommand : IRequest<CommandResponse<bool>>
     {
         public Guid UserId { get; set; }
 
-        public uint? DayCount { get; set; }
+        public int ShopId { get; set; }
     }
 }

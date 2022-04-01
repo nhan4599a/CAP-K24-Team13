@@ -11,8 +11,6 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         public Task<CommandResponse<int>> CreateReportAsync(int invoiceId, Guid reporter);
 
-        public Task<CommandResponse<(string, AccountPunishmentBehavior)>> ApproveReportAsync(int reportId);
-
         public Task<PaginatedList<ReportDTO>> GetReports(PaginationInfo paginationInfo);
     }
 }

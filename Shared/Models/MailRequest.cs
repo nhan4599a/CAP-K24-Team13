@@ -1,16 +1,8 @@
-﻿using System;
-
-namespace Shared.Models
+﻿namespace Shared.Models
 {
     public class MailRequest
     {
-        public string Sender { get; set; }
-
         public string Receiver { get; set; }
-
-        public string[] Cc { get; set; } = Array.Empty<string>();
-
-        public string[] Bcc { get; set; } = Array.Empty<string>();
 
         public string Subject { get; set; }
 

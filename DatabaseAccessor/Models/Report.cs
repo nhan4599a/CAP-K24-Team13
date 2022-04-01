@@ -11,10 +11,6 @@ namespace DatabaseAccessor.Models
 
         public DateTime CreatedAt { get; set; }
 
-        public ReportStatus Status { get; set; }
-
-        public AccountPunishmentBehavior? Punishment { get; set; }
-
         public Guid ReporterId { get; set; }
 
         public Guid AffectedUserId { get; set; }

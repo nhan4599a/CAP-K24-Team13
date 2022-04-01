@@ -1,7 +1,6 @@
 ﻿using DatabaseAccessor.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Shared.Models;
 
 namespace DatabaseAccessor.Configurations
 {
@@ -30,9 +29,6 @@ namespace DatabaseAccessor.Configurations
 
             builder.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("getdate() + '7:0:0'");
-
-            builder.Property(e => e.Status)
-                .HasDefaultValue(ReportStatus.New);
 
             builder.HasIndex(e => e.ReporterId);
             builder.HasIndex(e => new { e.AffectedUserId, e.CreatedAt });

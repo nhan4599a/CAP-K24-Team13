@@ -55,15 +55,20 @@ function onLoadCustomersCompleted(paginatedData) {
         let userId = eventSource.parent().parent().children().eq(1).children().text().trim();
         let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
         animationLoader.showAnimation();
-        unbanUser(userId)
-            .then(() => {
-                animationLoader.hideAnimation();
-                toastr.success('User unban successfully');
-                eventSource.parent().remove();
-            }).catch(error => {
-                animationLoader.hideAnimation();
-                toastr.error(error);
-            });
+        if (eventSource.children('span').text().toLowerCase().includes('unban')) {
+            unbanUser(userId)
+                .then(() => {
+                    animationLoader.hideAnimation();
+                    toastr.succ5ess('User unban successfully');
+                    eventSource.children('span').text(' Ban');
+                    eventSource.parent().parent().children().eq(6).children().text('Available');
+                }).catch(error => {
+                    animationLoader.hideAnimation();
+                    toastr.error(error);
+                });
+        } else {
+            banUser(userId, )
+        }
     });
 }
 

@@ -1,12 +1,9 @@
-using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using System;
 using System.Threading.Tasks;
-using UserService.Background;
 using UserService.Commands;
 
 namespace UserService.Controllers
@@ -17,12 +14,9 @@ namespace UserService.Controllers
     {
         private readonly IMediator _mediator;
 
-        private readonly IBackgroundJobClient _backgroundJobs;
-
-        public UserController(IMediator mediator, IBackgroundJobClient backgroundJobs)
+        public UserController(IMediator mediator)
         {
             _mediator = mediator;
-            _backgroundJobs = backgroundJobs;
         }
 
         [HttpGet]
@@ -48,29 +42,20 @@ namespace UserService.Controllers
         }
 
         [HttpPost("ban/{userId}")]
-        public async Task<ApiResult> ApplyBan(string userId, [FromBody] int behaviorInt)
+        public async Task<ApiResult> ApplyBan(string userId, uint? dayCount)
         {
-            var behavior = (AccountPunishmentBehavior)behaviorInt;
             var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
             if (!parseResult)
                 return ApiResult.CreateErrorResult(400, "UserId is invalid");
-            if (behavior == AccountPunishmentBehavior.SendAlertEmail)
-            {
-                _backgroundJobs.Enqueue<SendAlertEmailBackgroundJob>(job => job.SendEmail(userId));
-                return ApiResult.SucceedResult;
-            }
+            if (dayCount != null && dayCount == 0)
+                return ApiResult.CreateErrorResult(400, "Day count must be greater than zero");
             var response = await _mediator.Send(new BanUserCommand
             {
                 UserId = parsedUserId,
-                Behavior = behavior
+                DayCount = dayCount
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            if (behavior == AccountPunishmentBehavior.LockedOut)
-            {
-                BackgroundJob.Schedule<AccountStatusUpdateBackgroundJob>(
-                    job => job.DoJob(userId), SystemConstant.Authentication.DEFAULT_BAN_TIME_SPAN);
-            }
             return ApiResult.SucceedResult;
         }
 
@@ -83,6 +68,22 @@ namespace UserService.Controllers
             var response = await _mediator.Send(new UnbanUserCommand
             {
                 UserId = parsedUserId
+            });
+            if (!response.IsSuccess)
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult.SucceedResult;
+        }
+
+        [HttpPost("{userId}/assign/{shopId}")]
+        public async Task<ApiResult> AssignToShopOwner(string userId, int shopId)
+        {
+            var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
+            if (!parseResult)
+                return ApiResult.CreateErrorResult(400, "UserId is invalid");
+            var response = await _mediator.Send(new AssignToShopOwnerCommand
+            {
+                UserId = parsedUserId,
+                ShopId = shopId
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);

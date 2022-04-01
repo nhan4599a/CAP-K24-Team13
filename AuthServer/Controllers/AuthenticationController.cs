@@ -24,13 +24,13 @@ namespace AuthServer.Controllers
     {
         private readonly ApplicationSignInManager _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
-        private readonly IMailService _mailer;
+        private readonly MailHelper _mailer;
         private readonly IEventService _event;
 
         private const string SignInParamsKey = "SIGN_IN_PARAMS_KEY";
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, IMailService mailer, IEventService @event)
+            ApplicationSignInManager signInManager, MailHelper mailer, IEventService @event)
         {
             _signInManager = signInManager;
             _interaction = interaction;
@@ -236,7 +236,7 @@ namespace AuthServer.Controllers
                 throw new ArgumentException($"{nameof(user.Email)} cannot be null or empty");
             var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
             var message = GenerateEmailConfirmationMailAsync(user.Email, token);
-            _mailer.SendMail(message);
+            await _mailer.SendEmail(message);
         }
 
         private static MailRequest GenerateEmailConfirmationMailAsync(string receiver, string token)
@@ -248,7 +248,6 @@ namespace AuthServer.Controllers
             return new MailRequest()
             {
                 Body = body,
-                Sender = "gigamallservice@gmail.com",
                 IsHtmlMessage = true,
                 Receiver = receiver,
                 Subject = "Email confirmation"
@@ -263,7 +262,7 @@ namespace AuthServer.Controllers
                 throw new ArgumentException($"{nameof(user.Email)} cannot be null or empty");
             var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
             var message = GenerateResetPasswordMailAsync(user.Email, token);
-            _mailer.SendMail(message);
+            await _mailer.SendEmail(message);
         }
 
         private static MailRequest GenerateResetPasswordMailAsync(string receiver, string token)
@@ -276,7 +275,6 @@ namespace AuthServer.Controllers
             return new MailRequest()
             {
                 Body = body,
-                Sender = "gigamallservice@gmail.com",
                 IsHtmlMessage = true,
                 Receiver = receiver,
                 Subject = "Reset password"

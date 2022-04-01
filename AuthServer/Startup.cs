@@ -22,10 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared;
-using Shared.Models;
 using System;
-using System.Net;
-using System.Net.Mail;
 using System.Reflection;
 using static IdentityServer4.IdentityServerConstants;
 
@@ -76,15 +73,7 @@ namespace AuthServer
             });
             services.AddTransient<MailConfirmationTokenProvider<User>>();
             services.AddTransient<ResetPasswordTokenProvider<User>>();
-            services.AddSingleton(new SmtpClient
-            {
-                Credentials = new NetworkCredential(Configuration["GMAIL_USERNAME"], Configuration["GMAIL_PASSWORD"]),
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                EnableSsl = true,
-                Host = "smtp.gmail.com",
-                Port = 587
-            });
-            services.AddSingleton<IMailService, GmailService>();
+            services.AddScoped(_ => new MailHelper(Configuration["SEND_GRID_API_KEY"], Configuration["SENDER_EMAIL"]));
             services.AddScoped<IUserClaimsPrincipalFactory<User>, ApplicationUserClaimsPrincipleFactory>();
             services.AddIdentity<User, Role>(options =>
             {

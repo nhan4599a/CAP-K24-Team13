@@ -17,7 +17,6 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index([FromQuery] string keyword)
         {
-
             var shopsResponse = await 
                 (string.IsNullOrWhiteSpace(keyword) 
                     ? _shopClient.GetAllShops() 

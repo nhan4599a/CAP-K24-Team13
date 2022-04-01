@@ -181,16 +181,6 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/reports/approve/{reportId}",
-      "DownstreamScheme": "http",
-      "ServiceName": "ReportService",
-      "UpstreamPathTemplate": "/reports/approve/{reportId}",
-      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
-      "LoadBalancerOptions": {
-        "Type": "LeastConnection"
-      }
-    },
-    {
       "DownstreamPathTemplate": "/api/users",
       "DownstreamScheme": "http",
       "ServiceName": "UserService",
@@ -205,6 +195,16 @@
       "DownstreamScheme": "http",
       "ServiceName": "UserService",
       "UpstreamPathTemplate": "/users/{userId}",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/{userId}/assign/{shopId}",
+      "DownstreamScheme": "http",
+      "ServiceName": "UserService",
+      "UpstreamPathTemplate": "/users/{userId}/assign/{shopId}",
       "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"

@@ -126,10 +126,6 @@ function buildReportTableHtml(reports) {
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Created At
                         </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Status
-                        </th>
-                        <th class="text-secondary opacity-7">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -163,6 +159,9 @@ function buildCustomerTableHtml(customers) {
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Email
+                        </th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            Report Count
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Status
@@ -226,7 +225,7 @@ function buildInvoiceTableRowHtml(invoice, index) {
                     ${statusList[invoice.status]}
                 </td>
                 <td class="align-middle">
-                    <a href="/invoice/detail/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip">
+                    <a href="/invoice/detail/${invoice.invoiceCode}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" target="_blank">
                         <i class="fas fa-check"></i>
                         <span> Detail</span>
                     </a>
@@ -236,7 +235,6 @@ function buildInvoiceTableRowHtml(invoice, index) {
 }
 
 function buildReportTableRowHtml(report, index) {
-    let statusList = ['Wating for approve', 'Approved'];
     return `<tr>
                 <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
                 <td class="align-middle text-center">
@@ -250,12 +248,6 @@ function buildReportTableRowHtml(report, index) {
                 </td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${formatDateTime(report.createdAt)}</span>
-                </td>
-                <td class="align-middle text-center text-sm">
-                    ${statusList[report.status]}
-                </td>
-                <td class="align-middle">
-                    ${buildReportActionButtonHtml(report.status)}
                 </td>
             </tr>`;
 }
@@ -275,6 +267,7 @@ function buildCustomerTableRowHtml(customer, index) {
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${customer.email}</span>
                 </td>
+                <td class="align-middle text-center">${customer.reportCount}</td>
                 <td class="align-middle text-center text-sm">
                     ${customer.isLockedOut ? 'Locked out' : (customer.isAvailable ? 'Available' : 'Banned')}
                 </td>
@@ -358,7 +351,10 @@ function buildCustomerActionButtonHtml(customer) {
                     <i class="fas fa-check"></i>
                     <span> Unban</span>
                 </a>`;
-    return '';
+    return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
+                <i class="fas fa-check"></i>
+                <span> Unban</span>
+            </a>`;
 }
 
 function buildEditButtonHtml() {

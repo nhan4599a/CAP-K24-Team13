@@ -29,7 +29,6 @@ namespace DatabaseAccessor.Repositories
                 .Include(e => e.Reporter)
                 .Include(e => e.AffectedUser)
                 .AsSplitQuery()
-                .OrderBy(report => report.Status)
                 .Select(report => _mapper.MapToReportDTO(report))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -56,31 +55,6 @@ namespace DatabaseAccessor.Repositories
             await _dbContext.SaveChangesAsync();
             return CommandResponse<int>.Success(report.Id);
         }
-
-        public async Task<CommandResponse<(string, AccountPunishmentBehavior)>> ApproveReportAsync(int reportId)
-        {
-            var report = await _dbContext.Reports.FindAsync(reportId);
-            if (report == null)
-            {
-                return CommandResponse<(string, AccountPunishmentBehavior)>.Error("Report doesn't existed", null);
-            }
-            if (report.Status == ReportStatus.Approved)
-            {
-                return CommandResponse<(string, AccountPunishmentBehavior)>.Error("Report is already approved", null);
-            }
-            int reportCount = await _dbContext.Reports.Where(e => e.AffectedUserId == report.AffectedUserId).CountAsync();
-            var punishment = reportCount switch
-            {
-                1 => AccountPunishmentBehavior.SendAlertEmail,
-                2 => AccountPunishmentBehavior.LockedOut,
-                _ => AccountPunishmentBehavior.LockedOutPermanently
-            };
-            report.Punishment = punishment;
-            report.Status = ReportStatus.Approved;
-            await _dbContext.SaveChangesAsync();
-            return CommandResponse<(string, AccountPunishmentBehavior)>.Success(new (report.AffectedUser.Id.ToString(), punishment));
-        }
-
         public Task<PaginatedList<ReportDTO>> GetReports(PaginationInfo paginationInfo)
         {
             return _dbContext.Reports
@@ -89,7 +63,6 @@ namespace DatabaseAccessor.Repositories
                 .Include(e => e.AffectedUser)
                 .AsSplitQuery()
                 .OrderBy(report => report.CreatedAt)
-                .ThenBy(report => report.Status)
                 .Select(report => _mapper.MapToReportDTO(report))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }

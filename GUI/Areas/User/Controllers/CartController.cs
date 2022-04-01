@@ -20,6 +20,7 @@ namespace GUI.Areas.User.Controllers
         {
             _cartClient = cartClient;
         }
+
         public async Task<IActionResult> Index()
         {
             var token = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);

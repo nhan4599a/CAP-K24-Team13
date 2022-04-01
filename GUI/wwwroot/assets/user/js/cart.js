@@ -217,15 +217,6 @@ function updateDropdownCart(product) {
         rootDropdownCartElement.find('.product').filter((_, element) => !$(element).attr('data-product')).remove();
         rootDropdownCartElement.find('.dropdown-cart-total').before(buildSingleProductItem(product));
         attachRemoveButtonInDropdownCart();
-        if ($('.dropdown-cart-action .btn-outline-primary-2').length == 0) {
-            $('.dropdown-cart-action .btn-primary').after(`<a class="btn btn-outline-primary-2" href="#">
-                                                                <span>Checkout</span>
-                                                                <i class="icon-long-arrow-right"></i>
-                                                            </a>`);
-            $('.dropdown-cart-action .btn-primary').attr('style', '');
-            $('.dropdown-cart-action .btn-primary').parent().attr('style', '');
-            attachCheckOutButtonEvent();
-        }
         $('.cart-count').html(parseInt(currentCartCountValue) + 1);
     }
     else {
@@ -291,25 +282,5 @@ function attachRemoveButtonInDropdownCart() {
                     deleteDropdownCartItem(productId);
                 }).catch(error => toastr.error(error));
         });
-    });
-}
-
-function attachCheckOutButtonEvent() {
-    $('.dropdown-cart-action > .btn-outline-primary-2').click(function (e) {
-        e.preventDefault();
-        let productList = [];
-        $('.dropdown-cart-products > div.product').each((_, element) => {
-            productList.push({
-                id: $(element).data('product'),
-                quantity: $(element).find('.cart-product-qty').html()
-            });
-        });
-        $('body').append('<form id="checkout-form"></form>');
-        let form = $('form#checkout-form').attr('method', 'POST').attr('action', '/checkout');
-        for (let i = 0; i < productList.length; i++) {
-            form = form.append(`<input type="hidden" value="${productList[i].id}" name="models[${i}].ProductId" />`)
-                .append(`<input type="hidden" value="${productList[i].quantity}" name="models[${i}].Quantity" />`);
-        }
-        form.submit();
     });
 }

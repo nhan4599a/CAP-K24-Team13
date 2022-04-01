@@ -9,9 +9,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Refit;
-using ReportService.Clients;
-using System;
 
 namespace ReportService
 {
@@ -53,11 +50,6 @@ namespace ReportService
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
-            services.AddRefitClient<IUserClient>()
-                .ConfigureHttpClient(options =>
-                {
-                    options.BaseAddress = new Uri("http://ec2-52-207-214-39.compute-1.amazonaws.com:3008");
-                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

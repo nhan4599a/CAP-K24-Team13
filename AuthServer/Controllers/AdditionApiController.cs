@@ -18,9 +18,9 @@ namespace AuthServer.Controllers
     {
         private readonly ApplicationUserManager _userManager;
 
-        private readonly IMailService _mailer;
+        private readonly MailHelper _mailer;
 
-        public AdditionApiController(ApplicationUserManager userManager, IMailService mailer)
+        public AdditionApiController(ApplicationUserManager userManager, MailHelper mailer)
         {
             _userManager = userManager;
             _mailer = mailer;
@@ -45,9 +45,8 @@ namespace AuthServer.Controllers
                 }
                 internalCreateUserResult = await _userManager.CreateUserAsync(model, username, password);
             }
-            _mailer.SendMail(new MailRequest
+            await _mailer.SendEmail(new MailRequest
             {
-                Sender = "gigamallservice@gmail.com",
                 Receiver = model.Email,
                 IsHtmlMessage = false,
                 Subject = "Shop owner password",

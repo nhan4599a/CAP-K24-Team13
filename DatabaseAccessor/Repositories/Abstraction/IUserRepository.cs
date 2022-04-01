@@ -11,8 +11,10 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<UserDTO> GetUserByIdAsync(Guid userId);
 
-        Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, AccountPunishmentBehavior behavior);
+        Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, uint? dayCount);
 
         Task<CommandResponse<bool>> UnbanAsync(Guid userId);
+
+        Task<CommandResponse<bool>> AssignShopOwnerAsync(Guid userId, int shopId);
     }
 }

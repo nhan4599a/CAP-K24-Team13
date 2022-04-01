@@ -29,12 +29,14 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.UserRoles)
                 .ThenInclude(e => e.Role)
+                .Include(e => e.AffectedReports)
                 .Where(e => !customer || e.UserRoles.Any(userRole => userRole.Role.Name == SystemConstant.Roles.CUSTOMER))
+                .AsSplitQuery()
                 .Select(e => _mapper.MapToUserDTO(e))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
-        public async Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, AccountPunishmentBehavior behavior)
+        public async Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, uint? dayCount)
         {
             var user = await _dbContext.Users.FindAsync(userId);
 
@@ -44,15 +46,7 @@ namespace DatabaseAccessor.Repositories
             if (user.LockoutEnd >= DateTimeOffset.Now)
                 return CommandResponse<bool>.Error("User is already ban", null);
 
-            if (behavior == AccountPunishmentBehavior.SendAlertEmail)
-                return CommandResponse<bool>.Error("Behavior is not supported", new NotSupportedException());
-
-            user.LockoutEnd = behavior switch
-            {
-                AccountPunishmentBehavior.LockedOut => DateTimeOffset.Now.Add(SystemConstant.Authentication.DEFAULT_BAN_TIME_SPAN),
-                AccountPunishmentBehavior.LockedOutPermanently => null,
-                _ => throw new NotSupportedException()
-            };
+            user.LockoutEnd = dayCount.HasValue ? DateTimeOffset.Now.AddDays((double)dayCount) : null;
 
             user.Status = AccountStatus.Banned;
 
@@ -83,6 +77,18 @@ namespace DatabaseAccessor.Repositories
         {
             var user = await _dbContext.Users.FindAsync(userId);
             return _mapper.MapToUserDTO(user);
+        }
+
+        public async Task<CommandResponse<bool>> AssignShopOwnerAsync(Guid userId, int shopId)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+            if (user.UserRoles[0].Role.Name == SystemConstant.Roles.SHOP_OWNER)
+                return CommandResponse<bool>.Error("User is already shop owner", null);
+            if (user.ShopId != null)
+                return CommandResponse<bool>.Error("User is already belong to another shop", null);
+            user.ShopId = shopId;
+            await _dbContext.SaveChangesAsync();
+            return CommandResponse<bool>.Success(true);
         }
 
         public void Dispose()

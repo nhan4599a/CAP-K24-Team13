@@ -212,12 +212,8 @@
                                                 <span>Total</span>
                                                 <span class="cart-total-price">@cartItems.Sum(item => item.Quantity * item.Price).ToString("N0", CultureInfo.InvariantCulture)</span>
                                             </div>
-                                            <div class="dropdown-cart-action">
-                                                <a class="btn btn-primary" href="/cart">View Cart</a>
-                                                <a class="btn btn-outline-primary-2" href="#">
-                                                    <span>Checkout</span>
-                                                    <i class="icon-long-arrow-right"></i>
-                                                </a>
+                                            <div class="dropdown-cart-action" style="display: block">
+                                                <a class="btn btn-primary" href="/cart" style="display: block; margin-left: auto; margin-right: auto">View Cart</a>
                                             </div>
                                         }
                                     </div>

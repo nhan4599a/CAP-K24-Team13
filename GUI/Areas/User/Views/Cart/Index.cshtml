@@ -127,3 +127,16 @@
         </div><!-- End .cart -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+@if (TempData.ContainsKey("CheckingOut-Error"))
+{
+    var errorProductNames = TempData["CheckingOut-Error"] as List<string>;
+
+    <p class="error-product-name" style="display: none">@string.Join(", ", errorProductNames)</p>
+
+    <script>
+        $(document).ready(() => {
+            toastr.error(`Product(s) ${$('.error-product-name').text()} is not in sufficient quantity`);
+            $('.error-product-name').remove();
+        });
+    </script>
+}

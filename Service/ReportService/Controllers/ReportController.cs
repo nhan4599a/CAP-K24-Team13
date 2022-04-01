@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReportService.Clients;
 using ReportService.Commands;
 using Shared.DTOs;
 using Shared.Models;
@@ -18,12 +17,9 @@ namespace ReportService.Controllers
     {
         private readonly IMediator _mediator;
 
-        private readonly IUserClient _userClient;
-
-        public ReportController(IMediator mediator, IUserClient userClient)
+        public ReportController(IMediator mediator)
         {
             _mediator = mediator;
-            _userClient = userClient;
         }
 
         [HttpPost("{invoiceId}")]
@@ -41,38 +37,6 @@ namespace ReportService.Controllers
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(400, response.ErrorMessage);
             return ApiResult.SucceedResult;
-        }
-
-        [HttpPost("approve/{reportId}")]
-        public async Task<ApiResult> ApproveReport(int reportId)
-        {
-            var accessToken = Request.Headers.Authorization.ToString();
-            if (!accessToken.StartsWith("Bearer "))
-            {
-                return ApiResult.CreateErrorResult(401, "Access token is invalid");
-            }
-            var result = await _mediator.Send(new ApproveReportCommand
-            {
-                ReportId = reportId
-            });
-            if (!result.IsSuccess)
-                return ApiResult.CreateErrorResult(500, result.ErrorMessage);
-            try
-            {
-                var response = await _userClient.ApplyBan(accessToken.Split(" ")[1], result.Response.Item1, (int)result.Response.Item2);
-                if (!response.IsSuccessStatusCode || response.Content.ResponseCode != 200)
-                {
-                    return ApiResult.CreateErrorResult(500,
-                        !response.IsSuccessStatusCode
-                        ? response.Error.Message
-                        : response.Content.ErrorMessage);
-                }
-                return ApiResult.SucceedResult;
-            }
-            catch (Exception e)
-            {
-                return ApiResult.CreateErrorResult(500, e.Message);
-            }
         }
 
         [HttpGet]

@@ -11,10 +11,6 @@ namespace Shared.DTOs
 
         public string AffectedUser { get; set; }
 
-        public ReportStatus Status { get; set; }
-
         public DateTime CreatedAt { get; set; }
-
-        public AccountPunishmentBehavior? Punishment { get; set; }
     }
 }

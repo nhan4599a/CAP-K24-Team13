@@ -267,10 +267,6 @@ function reportInvoice(invoiceId) {
     return axios.post(`${reportEndpoint}/${invoiceId}`);
 }
 
-function approveReport(reportId) {
-    return axios.post(`${reportEndpoint}/approve/${reportId}`);
-}
-
 function getReports(pageNumber, pageSize) {
     return axios.get(reportEndpoint, {
         params: {
@@ -292,6 +288,17 @@ function getCustomers(pageNumber, pageSize) {
 
 function unbanUser(userId) {
     return axios.post(`${userEndpoint}/unban/${userId}`);
+}
+
+function banUser(userId, dayCount) {
+    if (dayCount) {
+        return axios.post(`${userEndpoint}/ban/${userId}`, dayCount, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
+    return axios.post(`${userEndpoint}/ban/${userId}`);
 }
 
 function getShopInformation(shopId) {

@@ -89,7 +89,9 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.IsAvailable,
                         options => options.MapFrom(source => source.Status == AccountStatus.Available))
                     .ForMember(target => target.Role,
-                        options => options.MapFrom(source => source.UserRoles[0].Role.Name));
+                        options => options.MapFrom(source => source.UserRoles[0].Role.Name))
+                    .ForMember(target => target.ReportCount,
+                        options => options.MapFrom(source => source.AffectedReports.Count));
             });
             _mapper = config.CreateMapper();
         }
