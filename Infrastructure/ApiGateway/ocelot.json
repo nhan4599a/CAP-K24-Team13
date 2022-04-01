@@ -205,7 +205,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "UserService",
       "UpstreamPathTemplate": "/users/{userId}/assign/{shopId}",
-      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
