@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
-    [Table("ShopCategories")]
+    [Table("ShopCategories", Schema = "dbo")]
     public class ShopCategory
     {
         public int Id { get; set; }

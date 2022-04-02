@@ -1,6 +1,5 @@
 ﻿using Shared.Models;
 using System;
-using System.Collections.Generic;
 
 namespace Shared.DTOs
 {
@@ -10,24 +9,17 @@ namespace Shared.DTOs
 
         public string InvoiceCode { get; set; }
 
-        public Guid UserId { get; set; }
-
-        public DateTime Created { get; set; }
-
-        public string ShippingAddress { get; set; }
-
         public string FullName { get; set; }
 
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
 
-        public string Note { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public InvoiceStatus Status { get; set; }
 
-        public int ShopId { get; set; }
+        public double TotalPrice { get; set; }
 
-        public IList<InvoiceDetailDTO>? Details { get; set; } = new List<InvoiceDetailDTO>();
-
-        public IList<InvoiceStatusChangedHistoryDTO>? StatusChangedHistory { get; set; }
+        public bool IsReported { get; set; }
     }
 }
+

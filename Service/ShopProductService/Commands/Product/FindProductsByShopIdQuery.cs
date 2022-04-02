@@ -1,13 +1,7 @@
-﻿using MediatR;
-using Shared.DTOs;
-using Shared.Models;
-
-namespace ShopProductService.Commands.Product
+﻿namespace ShopProductService.Commands.Product
 {
-    public class FindProductsByShopIdQuery : IRequest<PaginatedList<ProductDTO>>
+    public class FindProductsByShopIdQuery : FindProductsQuery
     {
         public int ShopId { get; set; }
-
-        public PaginationInfo PaginationInfo { get; set; } = PaginationInfo.Default;
     }
 }

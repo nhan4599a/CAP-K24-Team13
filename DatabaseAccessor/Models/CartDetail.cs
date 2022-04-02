@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
-    [Table("CartDetails")]
+    [Table("CartDetails", Schema = "dbo")]
     public class CartDetail
     {
         public int Id { get; set; }

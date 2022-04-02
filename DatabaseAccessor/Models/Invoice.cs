@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
-    [Table("Invoices")]
+    [Table("Invoices", Schema = "dbo")]
     public class Invoice
     {
         public int Id { get; set; }
@@ -38,6 +38,8 @@ namespace DatabaseAccessor.Models
 
         public virtual IList<InvoiceDetail> Details { get; set; } = new List<InvoiceDetail>();
 
-        public virtual IList<InvoiceStatusChangedHistory> StatusChangedHistory { get; set; }
+        public virtual IList<InvoiceStatusChangedHistory> StatusChangedHistories { get; set; } = new List<InvoiceStatusChangedHistory>();
+
+        public virtual Report Report { get; set; }
     }
 }

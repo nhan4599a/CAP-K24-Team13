@@ -1,0 +1,90 @@
+﻿@using Shared.DTOs
+@{
+    Layout = "/Areas/ShopOwner/Views/Shared/_Layout.cshtml";
+}
+@model InvoiceDetailDTO
+<div class="row">
+    <div class="col-12">
+        <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="border-radius-lg pt-4 pb-3 bg-gradient-primary-dark shadow">
+                    <h6 class="text-white text-capitalize ps-3">Invoices table</h6>
+                </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                <div class="table-responsive p-0">
+                    <div class="container">
+                        <div class="row justify-content-center border">
+                            <table class="table">
+                                <colgroup>
+                                    <col width="400" span="1">
+                                    <col width="auto" span="2">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#Order Code</th>
+                                        <th scope="col">#@Model.InvoiceCode</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Customer Name</th>
+                                        <td>@Model.FullName</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Phone Number</th>
+                                        <td>@Model.PhoneNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Address</th>
+                                        <td>@Model.ShippingAddress</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Total Products</th>
+                                        <td>@Model.Products.Count</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Total Price</th>
+                                        <td>
+                                            <table class="table">
+                                                <thead>
+                                                    <tr class="justify-content-left">
+                                                        <th>#</th>
+                                                        <th>Product Name</th>
+                                                        <th>Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @for (int i = 0; i < Model.Products.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <th scope="row">@i</th>
+                                                            <td>@Model.Products[i].ProductName</td>
+                                                            <td>@Model.Products[i].Price.ToString("N0")</td>
+                                                            <td>@Model.Products[i].Quantity</td>
+                                                            <td>@((Model.Products[i].Quantity * Model.Products[i].Price).ToString("N0"))</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Payment Methods</th>
+                                        <td>COD</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Total order value</th>
+                                        <td><strong>@Model.TotalPrice.ToString("N0")</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

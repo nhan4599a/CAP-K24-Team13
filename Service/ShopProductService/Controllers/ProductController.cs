@@ -1,6 +1,6 @@
 using AspNetCoreSharedComponent.FileValidations;
-using DatabaseAccessor;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
@@ -9,7 +9,6 @@ using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -22,85 +21,6 @@ namespace ShopProductService.Controllers
 
         private readonly IFileStorable _fileStore;
 
-        private readonly static PaginatedList<ProductDTO> FakeProducts = new List<ProductDTO>
-        {
-            new ProductDTO
-            {
-                Id = "MacBook Pro M1",
-                ProductName = "Macbook Pro M1",
-                CategoryName = "category 1",
-                Price = 20000,
-                Description = "GOLD",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images = new string[]
-                {
-                    "https://futureworld.com.vn/media/catalog/product/cache/374a8abfba56573d9bc051f80221efb2/m/b/mba_gold_m1_2.jpg"
-                }
-            },
-            new ProductDTO
-            {
-                Id = "iphone 13",
-                ProductName = "Iphone 13",
-                CategoryName = "category 2",
-                Price = 20000,
-                Description = "64gb",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images = new string[]
-                {
-                    "https://mega.com.vn/media/product/20113_iphone_13_256gb_white.jpg"
-                }
-            },
-            new ProductDTO
-            {
-                Id = "Nike AIR",
-                ProductName = "Nike AIR",
-                CategoryName = "category 1",
-                Price = 20000,
-                Description = "White",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images =new string[]
-                {
-                    "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e777c881-5b62-4250-92a6-362967f54cca/air-force-1-07-shoe-NMmm1B.png"
-                }
-            },
-            new ProductDTO
-            {
-                Id = "Bitis Hunter",
-                ProductName = "Bitis Hunter",
-                CategoryName = "category 1",
-                Price = 20000,
-                Description = "Back-Orange",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images = new string[]
-                {
-                    "https://product.hstatic.net/1000230642/product/03400cam__6__5022ef5622dc46b1bd893b238de2200f_1024x1024.jpg"
-                }
-            },
-            new ProductDTO
-            {
-                Id = "Converse",
-                ProductName = "ASM Converse",
-                CategoryName = "category 1",
-                Price = 20000,
-                Description = "WHITE",
-                IsDisabled = false,
-                Quantity = 10,
-                Discount = 0,
-                Images = new string[]
-                {
-                    "https://th.bing.com/th/id/OIP.yRbQi9-1aDN-BXHuyD_vZAHaG5?pid=ImgDet&rs=1"
-                }
-            }
-        }.Paginate(1, 5);
-
         public ProductController(IMediator mediator, IFileStorable fileStore)
         {
             _mediator = mediator;
@@ -111,8 +31,10 @@ namespace ShopProductService.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
-        public async Task<ApiResult> AddProduct([FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+        public async Task<ApiResult> AddProduct(
+            [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
             try
             {
@@ -131,8 +53,10 @@ namespace ShopProductService.Controllers
             return ApiResult<Guid>.CreateSucceedResult(response.Response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ApiResult> EditProduct(string id, [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+        [Authorize]
+        [HttpPut("{productId}")]
+        public async Task<ApiResult> EditProduct(string productId, 
+            [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
         {
             try
             {
@@ -144,7 +68,7 @@ namespace ShopProductService.Controllers
             }
             var response = await _mediator.Send(new EditProductCommand
             {
-                Id = Guid.Parse(id),
+                Id = Guid.Parse(productId),
                 RequestModel = requestModel
             });
             if (!response.IsSuccess)
@@ -152,12 +76,13 @@ namespace ShopProductService.Controllers
             return ApiResult<ProductDTO>.CreateSucceedResult(response.Response);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ApiResult> DeleteProduct(string id, [FromQuery] DeleteAction action)
+        [Authorize]
+        [HttpDelete("{productId}")]
+        public async Task<ApiResult> DeleteProduct(string productId, [FromQuery] DeleteAction action)
         {
             var response = await _mediator.Send(new ActivateProductCommand
             {
-                Id = Guid.Parse(id),
+                Id = Guid.Parse(productId),
                 IsActivateCommand = action == DeleteAction.Activate,
             });
             if (!response.IsSuccess)
@@ -165,55 +90,95 @@ namespace ShopProductService.Controllers
             return ApiResult<bool>.CreateSucceedResult(response.Response);
         }
 
-        [HttpGet("shop/{shopId}")]
-        public async Task<ApiResult> GetProductsOfShop(int shopId)
+        [HttpGet("shop/{shopId}/search")]
+        public async Task<ApiResult> GetProductsOfShop(int shopId, [FromQuery] SearchRequestModel requestModel)
         {
-            if (shopId != 0)
-                return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(FakeProducts);
-            var response = await _mediator.Send(new FindProductsByShopIdQuery
-            {
-                ShopId = shopId
-            });
+            IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrWhiteSpace(requestModel.Keyword)
+                ? new FindProductsByShopIdQuery
+                {
+                    ShopId = shopId,
+                    PaginationInfo = new PaginationInfo
+                    {
+                        PageNumber = requestModel.PageNumber,
+                        PageSize = requestModel.PageSize
+                    }
+                }
+                : new FindProductsByShopIdAndKeywordQuery
+                {
+                    ShopId = shopId,
+                    Keyword = requestModel.Keyword,
+                    PaginationInfo = new PaginationInfo
+                    {
+                        PageNumber = requestModel.PageNumber,
+                        PageSize = requestModel.PageSize
+                    }
+                };
+            var response = await _mediator.Send(request);
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(response);
         }
 
         [HttpGet("search")]
-        public async Task<ApiResult> ListProduct([FromQuery] SearchRequestModel requestModel)
+        public async Task<ApiResult> FindProducts([FromQuery] SearchRequestModel requestModel)
         {
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
-                ? new FindAllProductQuery { PaginationInfo = requestModel.PaginationInfo }
+                ? new FindAllProductsQuery
+                {
+                    PaginationInfo = new PaginationInfo
+                    {
+                        PageNumber = requestModel.PageNumber,
+                        PageSize = requestModel.PageSize
+                    }
+                }
                 : new FindProductsByKeywordQuery
                 {
                     Keyword = requestModel.Keyword,
-                    PaginationInfo = requestModel.PaginationInfo
+                    PaginationInfo = new PaginationInfo
+                    {
+                        PageNumber = requestModel.PageNumber,
+                        PageSize = requestModel.PageSize
+                    }
                 };
             var productList = await _mediator.Send(request);
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productList);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ApiResult> GetSingleProduct(string id)
+        [HttpGet("{productId}")]
+        public async Task<ApiResult> GetSingleProduct(string productId)
         {
             var product = await _mediator.Send(new FindProductByIdQuery
             {
-                Id = Guid.Parse(id)
+                Id = Guid.Parse(productId)
             });
             if (product == null)
                 return ApiResult.CreateErrorResult(404, "Product is not found");
             return ApiResult<ProductWithCommentsDTO>.CreateSucceedResult((ProductWithCommentsDTO) product);
         }
 
-        [HttpGet("less/{id}")]
-        public async Task<ApiResult> GetMinimalSingleProduct(string id)
+        [HttpGet("less/{productId}")]
+        public async Task<ApiResult> GetMinimalSingleProduct(string productId)
         {
             var product = await _mediator.Send(new FindProductByIdQuery
             {
-                Id = Guid.Parse(id),
+                Id = Guid.Parse(productId),
                 IsMinimal = true
             });
             if (product == null)
                 return ApiResult.CreateErrorResult(404, "Product is not found");
             return ApiResult<MinimalProductDTO>.CreateSucceedResult(product);
+        }
+
+        [Authorize]
+        [HttpPost("{productId}/import")]
+        public async Task<ApiResult> ImportProduct(string productId, [FromBody] int importedQuantity)
+        {
+            var newQuantityResponse = await _mediator.Send(new ImportProductCommand
+            {
+                ProductId = Guid.Parse(productId),
+                Quantity = importedQuantity
+            });
+            if (!newQuantityResponse.IsSuccess)
+                return ApiResult.CreateErrorResult(500, newQuantityResponse.ErrorMessage);
+            return ApiResult<int>.CreateSucceedResult(newQuantityResponse.Response);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

@@ -17,14 +17,16 @@ namespace DatabaseAccessor.Configurations
                 .WithMany(e => e.Invoices)
                 .IsRequired();
 
-            builder.HasIndex(e => new { e.UserId, e.CreatedAt });
+            builder.HasIndex(e => e.UserId);
+            builder.HasIndex(e => e.CreatedAt);
+            builder.HasIndex(e => e.InvoiceCode);
 
             builder.HasMany(e => e.Details)
                 .WithOne(e => e.Invoice)
                 .IsRequired();
 
             builder.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("getdate()");
+                .HasDefaultValueSql("getdate() + '7:0:0'");
 
             builder.Property(e => e.Status)
                 .HasDefaultValue(InvoiceStatus.New);

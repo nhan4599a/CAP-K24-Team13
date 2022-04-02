@@ -1,0 +1,527 @@
+﻿@using GUI.Extensions
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="https://cap-k24-team13.herokuapp.com/shopowner/" />
+    <link rel="apple-touch-icon" sizes="76x76" href="@Url.Content("~/assets/shop-owner/img/apple-icon.png")">
+    <link rel="icon" type="image/png" href="@Url.Content("~/assets/shop-owner/img/favicon.png")">
+    <title>
+        E-Mall Management - Profile
+    </title>
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+    <!-- Nucleo Icons -->
+    <link href="@Url.Content("~/assets/shop-owner/css/nucleo-icons.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/assets/shop-owner/css/nucleo-svg.css")" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- CSS Files -->
+    <link href="@Url.Content("~/assets/shop-owner/css/loading.css")" rel="stylesheet" />
+    <link id="pagestyle" href="@Url.Content("~/assets/shop-owner/css/material-dashboard.css?v=3.0.0")" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <style>
+        #button-img {
+            display: inline-block;
+            height: 50%;
+            padding: 0;
+            margin: 0;
+            vertical-align: top;
+            width: 50%;
+        }
+
+        .container-fluid h5 {
+            word-wrap: break-word;
+            overflow: hidden;
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+        }
+
+        .container-fluid p {
+            word-wrap: break-word;
+            overflow: hidden;
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+    </style>
+    <style>
+        textarea {
+            width: 100%;
+            height: 100%;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            resize: none;
+        }
+    </style>
+    <style>
+        .row-2 {
+            margin-top: 30px;
+        }
+    </style>
+    <style>
+        .tab-page > :not(.active) {
+            display: none;
+        }
+    </style>
+    <style>
+        input {
+            width: 100%
+        }
+    </style>
+    <style>
+        .col-md-4 {
+            width: 100% !important
+        }
+    </style>
+    <style>
+        .col-xl-4 {
+            flex: 0 0 auto;
+            width: 50%;
+        }
+
+        .ms-sm-auto {
+            margin-right: auto !important;
+            margin-left: 0 !important
+        }
+
+        .d-grid {
+            display: grid;
+        }
+
+        #image-carousel .carousel-inner .carousel-item img {
+            width: 1134px;
+            height: 562px;
+        }
+
+        #edit-mode {
+            text-align: left !important;
+            padding: 1px
+        }
+
+        #edit:hover {
+            color: #2f9db6 !important
+        }
+    </style>
+</head>
+
+<body class="g-sidenav-show bg-gray-200">
+    <div id="loading-container"></div>
+    @await Component.InvokeAsync("SideBar", new { activeItem = "profile" })
+    <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
+        <!-- Navbar -->
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+             navbar-scroll="true">
+            <div class="container-fluid py-1 px-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                        <li class="breadcrumb-item text-sm">
+                            <a class="opacity-5 text-dark" href="javascript:;">Pages</a>
+                        </li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Profile</li>
+                    </ol>
+                    <h6 class="font-weight-bolder mb-0">Profile</h6>
+                </nav>
+                <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                        <div class="input-group input-group-outline">
+                            <label class="form-label">Type to search</label>
+                            <input type="text" class="form-control" id="input-search">
+                        </div>
+                    </div>
+                    <ul class="navbar-nav justify-content-end">
+                        <li class="nav-item d-flex align-items-center dropstart">
+                            <a href="#" class="nav-link text-body font-weight-bold px-0 dropdown-toggle" id="user-dropdown" data-bs-toggle="dropdown">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <span class="d-sm-inline d-none">@User.Identity.Name</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="user-dropdown">
+                                <li><a class="dropdown-item" href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/information", "returnUrl")">Profile</a></li>
+                                <li><a class="dropdown-item" href="@Context.RedirectWithCurrentUrl("https://cap-k24-team13-auth.herokuapp.com/account/change-password", "returnUrl")">Change Password</a></li>
+                                <li><a class="dropdown-item" href="/authentication/signout">Sign out</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                                <div class="sidenav-toggler-inner">
+                                    <i class="sidenav-toggler-line"></i>
+                                    <i class="sidenav-toggler-line"></i>
+                                    <i class="sidenav-toggler-line"></i>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="container-fluid px-2 px-md-4">
+            <div class="page-header min-height-300 border-radius-xl mt-4"
+                 style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
+                <span class="mask bg-gradient-primary opacity-6"></span>
+            </div>
+            <div class="card card-body mx-3 mx-md-4 mt-n6">
+                <div class="row gx-4 mb-2">
+                    <div class="col-auto">
+                        <div class="avatar avatar-xl position-relative">
+                            <button id="button-img"><img id="shop-avatar"></button>
+                        </div>
+                    </div>
+                    <div class="col-auto my-auto">
+                        <div class="h-100">
+                            <h5 class="mb-1" id="shop-name"></h5>
+                        </div>
+                        <div class="col-md-4 text-end" id="edit-mode">
+                            <a href="/shopowner/interface/edit">
+                                <i class="fas fa-user-edit text-secondary text-sm" id="edit" data-bs-toggle="tooltip">&ensp;Edit mode</i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xl-4">
+                        <div class="card card-plain" style="height: 97% !important">
+                            <div class="card-header pb-0 p-3">
+                                <h6 class="mb-0">Shop Description</h6>
+                            </div>
+                            <div class="card-body p-2">
+                                <textarea class="form-control" id="input-description" disabled></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-4">
+                        <div class="card card-plain" style="height: 90% !important">
+                            <div class="card-header pb-0 p-3">
+                                <div class="row">
+                                    <div class="col-md-8 d-flex align-items-center">
+                                        <h6 class="mb-0">Profile Information</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-2" style="padding-left: 1rem !important">
+                                <hr class="horizontal gray-light my-0">
+                                <div class="row align-items-center mb-2">
+                                    <div class="col-2">
+                                        <label for="input-name" style="margin: 0px">Name:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-name" disabled />
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-2">
+                                    <div class="col-2">
+                                        <label for="input-name" style="margin: 0px">Phone:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-phone" disabled />
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-2">
+                                    <div class="col-2">
+                                        <label for="input-name" style="margin: 0px">Email:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-email" disabled />
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-2">
+                                    <div class="col-2">
+                                        <label for="input-name" style="margin: 0px">Address:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-address" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="image-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
+                        <div class="carousel-indicators"></div>
+                        <div class="carousel-inner"></div>
+                    </div>
+                    <div class="col-12 mt-1">
+                        <div class="col-lg-4 col-md-6 ms-sm-auto me-sm-0 mx-auto mt-1">
+                            <div class="nav-wrapper position-relative end-0">
+                                <ul class="nav nav-pills nav-fill p-1 tab-button" style="cursor: pointer;" tab-content-selector=".tab-page">
+                                    <li class="nav-item">
+                                        <a class="tablinks nav-link mb-0 px-0 py-1 active" tab-index="1">
+                                            <span class="ms-1">Products</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="tablinks nav-link mb-0 px-0 py-1" tab-index="2">
+                                            <span class="ms-1">Categories</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tab-page">
+                            <div tab-page="1" class="active">
+                                <div class="mb-5 ps-3 mt-2">
+                                    <h6 class="mb-1">Products</h6>
+                                    <p class="text-sm">All products</p>
+                                </div>
+                            </div>
+                            <div tab-page="2">
+                                <div class="mb-5 ps-3 mt-2">
+                                    <h6 class="mb-1">Categories</h6>
+                                    <p class="text-sm">All categories</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer py-4  ">
+            <div class="container-fluid">
+                <div class="row align-items-center justify-content-lg-between">
+                    <div class="col-lg-6 mb-lg-0 mb-4">
+                        <div class="copyright text-center text-sm text-muted text-lg-start">
+                            ©
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script>,
+                            made with <i class="fa fa-heart"></i> by
+                            <a href="#" class="font-weight-bold" target="_blank">
+                                Team 13
+                            </a>
+                            for a better management.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!--   Core JS Files   -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/core/popper.min.js")"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/core/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/plugins/perfect-scrollbar.min.js")"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/plugins/smooth-scrollbar.min.js")"></script>
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+            var options = {
+                damping: '0.5'
+            }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.8.1/lottie.min.js" integrity="sha512-V1YyTKZJrzJNhcKthpNAaohFXBnu5K9j7Qiz6gv1knFuf13TW/3vpgVVhJu9fvbdW8lb5J6czIhD4fWK2iHKXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/internal/api.js")"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/internal/animation.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="@Url.Content("~/assets/shop-owner/js/material-dashboard.min.js?v=3.0.0")"></script>
+    <script>
+        toastr.options.closeButton = true;
+        $(function() {
+            var tabButtons = $('.tab-button');
+            var oldTabIndex = parseInt(tabButtons.children().children('.active').attr('tab-index'));
+            tabButtons.children().click(function () {
+                var newTabIndex = parseInt($(this).children().attr('tab-index'));
+                if (newTabIndex !== oldTabIndex) {
+                    $(this).parent().children(':not(.moving-tab)').children().removeClass('active');
+                    $(this).children().addClass('active');
+                    $(this).parent().children('div.moving-tab').children().attr('tab-index', newTabIndex);
+                    tabButtons.trigger('onActiveTabIndexChanged', [newTabIndex]);
+                    oldTabIndex = newTabIndex;
+                }
+            });
+            tabButtons.on('onActiveTabIndexChanged', function (e, tabIndex) {
+                var tabContentSelector = $(this).attr('tab-content-selector');
+                var tabPages = $(tabContentSelector);
+                tabPages.children().removeClass('active');
+                tabPages.children().each((index, element) => {
+                    if (parseInt($(element).attr('tab-page')) === tabIndex) {
+                        // we have found the should be active tab page so we will break this out
+                        $(element).addClass('active');
+
+                        // return false to break the each function
+                        return false;
+                    }
+                });
+            });
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+            animationLoader.showAnimation();
+            getShopId().then(shopId => {
+                Promise.all([getShopInformation(shopId), getShopInterface(shopId), findProducts(shopId, undefined, 1, 8), getAllCategories(shopId)])
+                .then(responses => {
+                    onInformationGot(responses[0]);
+                    onInterfaceGot(responses[1]);
+                    onProductGot(responses[2]);
+                    onCategoryGot(responses[3].filter(category => !category.isDisabled));
+                    animationLoader.hideAnimation();
+                })
+                .catch((e) => {
+                    animationLoader.hideAnimation();
+                    console.log(e);
+                    toastr.error(e, 'Error');
+                });
+            });
+        });
+
+        function onInformationGot(shopInformation) {
+            if (shopInformation) {
+                $('#input-description').val(shopInformation.description);
+                $('#input-name').val(shopInformation.shopName);
+                $('#input-phone').val(shopInformation.phone);
+                $('#input-email').val(shopInformation.email);
+                $('#input-address').val(shopInformation.shopAddress);
+                $('#shop-name').text(shopInformation.shopName);
+                localStorage.setItem('shop-interface.information', JSON.stringify(shopInformation));
+            }
+        }
+
+        function onInterfaceGot(shopInterface) {
+            localStorage.setItem('shop-interface.edit-mode', !shopInterface ? 'add' : 'edit');
+            if (shopInterface) {
+                loadShopInterfaceImages(shopInterface);
+                localStorage.setItem('shop-interface.editting', JSON.stringify(shopInterface));
+            }
+        }
+
+        function onProductGot(products) {
+            let temp = 3;
+            let productsHtml = '';
+            let tempArr = [];
+            let lastIndex = products.data.length - 1;
+            products.data.forEach((product, index) => {
+                productsHtml += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                                    <div class="card card-blog card-plain">
+                                        <div class="card-header p-0 mt-n4 mx-3">
+                                            <a class="d-grid shadow-xl border-radius-xl" style="height: 234px">
+                                                <img src="${getProductImageUrl(product.images[0])}"
+                                                    alt="${product.productName}"
+                                                    class="img-fluid" style="align-self: center" />
+                                            </a>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <p class="mb-0 text-sm">${product.categoryName}</p>
+                                            <a href="#">
+                                                <h5>${product.productName}</h5>
+                                            </a>
+                                            <p class="mb-2 text-sm">${product.description}</p>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <button type="button" class="btn btn-outline-primary btn-sm mb-0">
+                                                    View details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                if (index == lastIndex || index == temp) {
+                    tempArr.push(`<div class="row mb-3">
+                                    ${productsHtml}
+                                </div>`);
+                    productsHtml = '';
+                    if (index == temp)
+                        temp += 4;
+                }
+            });
+            $('div.card.card-body > .row:not(.gx-4) > .col-12.mt-1 > div.tab-page > div:first-child').append(tempArr.join(''));
+        }
+
+        function onCategoryGot(categories) {
+            let temp = 3;
+            let categoriesHtml = '';
+            let tempArr = [];
+            let lastIndex = categories.length - 1;
+            categories.forEach((category, index) => {
+                categoriesHtml += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                                        <div class="card card-blog card-plain">
+                                            <div class="card-header p-0 mt-n4 mx-3">
+                                                <a class="d-grid shadow-xl border-radius-xl" style="height: 234px">
+                                                    <img src="${getCategoryImageUrl(category.image)}?${Date.now() / 1000}"
+                                                        alt="${category.categoryName}"
+                                                        class="img-fluid" style="align-self: center" />
+                                                </a>
+                                            </div>
+                                            <div class="card-body p-3">
+                                                <a href="#" style="text-align: center">
+                                                    <h5>${category.categoryName}</h5>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                if (index == lastIndex || index == temp) {
+                    tempArr.push(`<div class="row mb-3">
+                                    ${categoriesHtml}
+                                </div>`);
+                    categoriesHtml = '';
+                    if (index == temp)
+                        temp += 4;
+                }
+            });
+            $('div.card.card-body > .row:not(.gx-4) > .col-12.mt-1 > div.tab-page > div:last-child').append(tempArr.join(''));
+        }
+
+        function loadShopInterfaceImages(shopInterface) {
+            let carouselItemsHtml = '';
+            let carouselIndicatorsHtml = '';
+            shopInterface.images.forEach((imageFileName, i) => {
+                if (i === 0) {
+                    carouselIndicatorsHtml += `<button type="button" data-bs-target="#image-carousel"
+                                                    data-bs-slide-to="0" class="active" aria-current="true"
+                                                    aria-label="Slide 1">
+                                                </button>`;
+                    carouselItemsHtml += `<div class="carousel-item active">
+                                                <img src="${getShopInterfaceImageUrl(imageFileName)}"
+                                                    class="d-block w-100" alt="image" />
+                                            </div>`;
+                } else {
+                    carouselIndicatorsHtml += `<button type="button" data-bs-target="#image-carousel"
+                                                    data-bs-slide-to="${i}" aria-label="Slide ${i + 1}">
+                                                </button>`;
+                    carouselItemsHtml += `<div class="carousel-item">
+                                                <img src="${getShopInterfaceImageUrl(imageFileName)}"
+                                                    class="d-block w-100" alt="image" />
+                                            </div>`;
+                }
+            });
+            $('#image-carousel .carousel-indicators').html(carouselIndicatorsHtml);
+            $('#image-carousel .carousel-inner').html(carouselItemsHtml);
+            if (shopInterface.images.length > 1)
+                $('#image-carousel').append(`
+                        <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#image-carousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>`);
+            $('#image-carousel').carousel({
+                slide: true,
+                interval: 3500
+            }).carousel();
+            if (shopInterface.avatar)
+                $('#shop-avatar').attr('src', getShopInterfaceImageUrl(shopInterface.avatar));
+        }
+    </script>
+</body>
+
+</html>

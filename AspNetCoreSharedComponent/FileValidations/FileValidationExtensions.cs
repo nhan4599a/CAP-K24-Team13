@@ -1,4 +1,9 @@
-﻿using Shared.Validations;
+﻿using Microsoft.AspNetCore.Http;
+using Shared.Validations;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace AspNetCoreSharedComponent.FileValidations
 {

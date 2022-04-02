@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
 {
-    [Table("InvoiceStatusChangedHistories")]
+    [Table("InvoiceStatusChangedHistories", Schema = "dbo")]
     public class InvoiceStatusChangedHistory
     {
         public int Id { get; set; }
 
         public int InvoiceId { get; set; }
 
-        public InvoiceStatus OldStatus { get; set; }
+        public InvoiceStatus? OldStatus { get; set; }
 
         public InvoiceStatus NewStatus { get; set; }
 

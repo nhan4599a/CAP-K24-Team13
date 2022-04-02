@@ -2,6 +2,9 @@ using AutoMapper;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Resolvers;
 using Shared.DTOs;
+using Shared.Models;
+using System;
+using System.Linq;
 
 namespace DatabaseAccessor.Mapping
 {
@@ -38,25 +41,57 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.Image,
                         options => options.MapFrom<SingleImageResolver>());
                 cfg.CreateMap<Invoice, OrderDTO>()
-                    .ForMember(target => target.OrderCode,
-                        options => options.MapFrom(source => source.InvoiceCode))
-                    .ForMember(target => target.CreatedAt,
-                        options => options.MapFrom(source => source.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")))
                     .ForMember(target => target.CustomerName,
                         options => options.MapFrom(source => source.FullName));
                 cfg.CreateMap<InvoiceDetail, OrderItemDTO>()
                     .ForMember(target => target.ProductName,
                         option => option.MapFrom(source => source.Product.ProductName))
-                    .ForMember(target => target.Images,
+                    .ForMember(target => target.Image,
                         option => option.MapFrom<SingleImageResolver>())
-                    .ForMember(target => target.Created,
-                        option => option.MapFrom(source => source.Invoice.CreatedAt));
+                    .ForMember(target => target.CreatedAt,
+                        option => option.MapFrom(source => source.Invoice.CreatedAt))
+                    .ForMember(target => target.Status,
+                        option => option.MapFrom(source => source.Invoice.Status));
                 cfg.CreateMap<ProductComment, RatingDTO>()
                     .ForMember(target => target.ProductName,
                         option => option.MapFrom(source => source.Product.ProductName))
                     .ForMember(target => target.UserName,
                         option => option.MapFrom(source => source.User.UserName));
+                cfg.CreateMap<Invoice, InvoiceDTO>()
+                    .ForMember(target => target.TotalPrice,
+                        options => options.MapFrom(source => source.Details.Sum(detail => detail.Price * detail.Quantity)))
+                    .ForMember(target => target.PhoneNumber,
+                        options => options.MapFrom(source => source.Phone))
+                    .ForMember(target => target.IsReported,
+                        options => options.MapFrom(source => source.Report != null));
 
+                cfg.CreateMap<Report, ReportDTO>()
+                    .ForMember(target => target.Reporter,
+                        options => options.MapFrom(source => source.Reporter.UserName))
+                    .ForMember(target => target.AffectedUser,
+                        options => options.MapFrom(source => source.AffectedUser.UserName));
+
+                cfg.CreateMap<Invoice, InvoiceDetailDTO>()
+                    .IncludeBase<Invoice, InvoiceDTO>()
+                    .ForMember(target => target.Products,
+                        options => options.MapFrom(source => source.Details));
+
+                cfg.CreateMap<User, UserDTO>()
+                    .ForMember(target => target.BirthDay,
+                        options => options.MapFrom(source => source.DoB))
+                    .ForMember(target => target.IsConfirmed,
+                        options => options.MapFrom(source => source.EmailConfirmed))
+                    .ForMember(target => target.FullName,
+                        options => options.MapFrom(source => $"{source.FirstName} {source.LastName}"))
+                    .ForMember(target => target.IsLockedOut,
+                        options => options.MapFrom(source => source.LockoutEnd > DateTimeOffset.Now
+                            && source.Status == AccountStatus.Available))
+                    .ForMember(target => target.IsAvailable,
+                        options => options.MapFrom(source => source.Status == AccountStatus.Available))
+                    .ForMember(target => target.Role,
+                        options => options.MapFrom(source => source.UserRoles[0].Role.Name))
+                    .ForMember(target => target.ReportCount,
+                        options => options.MapFrom(source => source.AffectedReports.Count));
             });
             _mapper = config.CreateMapper();
         }
@@ -84,5 +119,13 @@ namespace DatabaseAccessor.Mapping
         public OrderDTO MapToOrderDTO(Invoice invoice) => _mapper.Map<OrderDTO>(invoice);
 
         public RatingDTO MapToRatingDTO(ProductComment rating) => _mapper.Map<RatingDTO>(rating);
+
+        public InvoiceDTO MapToInvoiceDTO(Invoice invoice) => _mapper.Map<InvoiceDTO>(invoice);
+
+        public ReportDTO MapToReportDTO(Report report) => _mapper.Map<ReportDTO>(report);
+
+        public InvoiceDetailDTO MapToInvoiceDetailDTO(Invoice invoice) => _mapper.Map<InvoiceDetailDTO>(invoice);
+
+        public UserDTO MapToUserDTO(User user) => _mapper.Map<UserDTO>(user);
     }
 }

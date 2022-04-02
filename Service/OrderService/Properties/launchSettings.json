@@ -8,13 +8,13 @@
     }
   },
   "profiles": {
-    "IIS Express": {
+    "OrderService": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:3002",
+      "applicationUrl": "http://localhost:3002",
       "dotnetRunMessage": true
     }
   }

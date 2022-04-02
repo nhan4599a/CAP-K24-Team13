@@ -1,94 +1,107 @@
-﻿using AuthServer.Abstractions;
+﻿using AspNetCoreSharedComponent.Mail;
 using AuthServer.Configurations;
-using AuthServer.Helpers;
+using AuthServer.Extensions;
 using AuthServer.Identities;
 using AuthServer.Models;
-using AuthServer.ViewModels;
 using DatabaseAccessor.Models;
-using IdentityModel;
-using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AuthServer.Controllers
 {
-    [ServiceFilter(typeof(SignInActionFilter))]
     [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         private readonly ApplicationSignInManager _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
-        private readonly IMailService _mailer;
-        private readonly IEventService _events;
+        private readonly MailHelper _mailer;
+        private readonly IEventService _event;
+
+        private const string SignInParamsKey = "SIGN_IN_PARAMS_KEY";
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, IEventService eventService, IMailService mailer)
+            ApplicationSignInManager signInManager, MailHelper mailer, IEventService @event)
         {
             _signInManager = signInManager;
             _interaction = interaction;
-            _events = eventService;
             _mailer = mailer;
+            _event = @event;
         }
 
-        [Route("/auth/SignIn")]
+        [Route("/Auth/SignIn")]
         public IActionResult SignIn()
         {
+            var paramString = Request.QueryString.ToString();
+            TempData[SignInParamsKey] = paramString!;
             return View();
         }
 
         [HttpPost]
-        [Route("/auth/SignIn")]
+        [Route("/Auth/SignIn")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(SignInModel model)
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("SignIn-Error", "Username or password is invalid");
+                ModelState.AddModelError("SignIn-Error", "Username and/or password is invalid");
                 return View();
             }
             var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
-            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, AccountConfig.AccountLockedOutEnabled);
-            if (user != null && signInResult.Succeeded)
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            if (context == null)
             {
-                if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    return Redirect(model.ReturnUrl);
-                throw new InvalidOperationException($"\"{model.ReturnUrl}\" is  invalid");
+                ModelState.AddModelError("SignIn-Error", "Something went wrong!");
+                return View();
             }
-            if (user != null && signInResult.IsLockedOut)
+            if (user == null)
             {
-                ModelState.AddModelError("SignIn-Error", "Account is locked out");
-                ViewBag.LockedOutCancelTime = user!.LockoutEnd!.Value;
-                return View(model);
+                ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
+                return View();
             }
-            if (user != null && signInResult.IsNotAllowed)
+            if (user.Status == AccountStatus.Banned && user.LockoutEnd == null)
+            {
+                ModelState.AddModelError("SignIn-Error", 
+                    "Look like your account is locked out permanently. Contact admin for more detail");
+                return View();
+            }
+            var signInResult =  await 
+                _signInManager.PasswordSignInAsync(user, model.Password, true, AccountConfig.AccountLockedOutEnabled);
+            if (signInResult.Succeeded)
+            {
+                await _event.RaiseAsync(
+                    new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName, clientId: context.Client.ClientId)
+                );
+                return Redirect(model.ReturnUrl);
+            }
+            if (signInResult.IsLockedOut || user.Status == AccountStatus.Banned)
+            {
+                ModelState.AddModelError("SignIn-Error", 
+                    $"Account is locked out. It will be unlocked at {user.LockoutEnd!.Value.AddHours(7):dd/MM/yyyy HH:mm:ss}");
+                return View();
+            }
+            if (signInResult.IsNotAllowed)
             {
                 ModelState.AddModelError("SignIn-Error", "Account is have not been confirmed");
-                return View(model);
+                return View();
             }
             ModelState.AddModelError("SignIn-Error", "Username and/or password is incorrect");
             return View();
         }
 
-        [Route("/auth/SignUp")]
+        [Route("/Auth/SignUp")]
         public IActionResult SignUp()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("/auth/SignUp")]
+        [Route("/Auth/SignUp")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp(UserSignUpModel model)
         {
@@ -97,137 +110,40 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("SignUp-Error", "Input information is invalid");
                 return View(model);
             }
-            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, Roles.CUSTOMER);
+            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model);
             if (createUserResult.Succeeded)
             {
                 if (AccountConfig.RequireEmailConfirmation)
                     await SendUserConfirmationEmail(createUserResult.User!);
-                return RedirectToAction("SignIn");
+                return View("WaitingForConfirmEmail");
             }
             foreach (var error in createUserResult.Errors)
                 ModelState.AddModelError("SignUp-Error", error.Description);
             return View(model);
         }
 
-        [HttpPost]
-        [Route("/auth/ExternalSignIn")]
-        public IActionResult ExternalSignIn(string provider, string returnUrl = "~/")
+        [Route("/Auth/SignOut")]
+        public async Task<IActionResult> SignOut(string logoutId)
         {
-            if (Request.QueryString.Value != null)
-                returnUrl = Request.QueryString.Value![11..];
-            if (!Url.IsLocalUrl(returnUrl) && !_interaction.IsValidReturnUrl(returnUrl))
-            {
-                throw new InvalidOperationException($"\"{returnUrl}\" is invalid!");
-            }
-            var props = new AuthenticationProperties
-            {
-                RedirectUri = Url.Action(nameof(ExternalSignInCallback)),
-                Items =
-                {
-                    { "returnUrl", returnUrl },
-                    { "provider", provider }
-                }
-            };
-            return Challenge(props, provider);
-        }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var userName = User.Identity!.Name;
+            await _signInManager.SignOutAsync();
 
-        public async Task<IActionResult> ExternalSignInCallback()
-        {
-            var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
-            if (!result!.Succeeded)
-            {
-                throw new Exception("External sign-in failed!");
-            }
-            var providerName = result.Properties.Items["provider"];
-            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
-            if (providerName == null)
-            {
-                throw new Exception("Can't not find SignIn provider!");
-            }
-            var providerUserClaim = result.Principal.FindFirst(JwtClaimTypes.Subject) ??
-                result.Principal.FindFirst(ClaimTypes.NameIdentifier) ??
-                throw new Exception("External user id not found!");
-            var providerUserId = providerUserClaim.Value;
-            var identityResult = await _signInManager.ExternalLoginSignInAsync(providerName, providerUserId, false, true);
-            if (identityResult.Succeeded)
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                var email = result.Principal.HasClaim(claim => claim.Type == ClaimTypes.Email) ?
-                    result.Principal.FindFirst(ClaimTypes.Email)!.Value : null;
-                var sessionIdClaim = result.Principal.Claims.FirstOrDefault(claim => claim.Type == JwtClaimTypes.SessionId);
-                var idToken = result.Properties.GetTokenValue("id_token");
-                var model = new ExternalSignInCreateAccountViewModel(providerName, providerUserId)
-                {
-                    Email = email,
-                    ReturnUrl = returnUrl,
-                    SessionId = sessionIdClaim != null ? sessionIdClaim.Value : "",
-                    IdToken = idToken ?? ""
-                };
-                return View("ExternalConfirmation", model);
-            }
-        }
+            var logoutContext = await _interaction.GetLogoutContextAsync(logoutId);
 
-        [HttpPost]
-        [Route("/auth/ExternalConfirmation")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExternalConfirmation(ExternalSignUpModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("SignUp-Error", "Input information is invalid");
-                return View();
-            }
-            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, Roles.CUSTOMER);
-            if (createUserResult.Succeeded)
-            {
-                var user = createUserResult.User;
-                if (AccountConfig.RequireEmailConfirmation && model.Provider != "Google")
-                    await SendUserConfirmationEmail(user!);
-                var userLogin = new UserLoginInfo(model.Provider, model.ProviderId, null);
-                var addLoginIdentityResult =
-                    await _signInManager.UserManager.AddLoginAsync(user!, userLogin);
-                if (addLoginIdentityResult.Succeeded)
-                {
-                    var additionalClaims = new List<Claim>();
-                    if (!string.IsNullOrWhiteSpace(model.SessionId))
-                        additionalClaims.Add(new Claim(JwtClaimTypes.SessionId, model.SessionId));
-                    additionalClaims.Add(new Claim("name", model.Username));
-                    var props = new AuthenticationProperties();
-                    if (!string.IsNullOrWhiteSpace(model.IdToken))
-                        props.StoreTokens(
-                            new[] { new AuthenticationToken { Name = "id_token", Value = model.IdToken } }
-                        );
-                    var issuer = new IdentityServerUser(user!.Id.ToString())
-                    {
-                        DisplayName = user!.UserName,
-                        IdentityProvider = model.Provider,
-                        AdditionalClaims = additionalClaims
-                    };
-                    await HttpContext.SignInAsync(issuer, props);
-                    await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
-                    var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-                    if (context != null)
-                        await _events.RaiseAsync(new UserLoginSuccessEvent(
-                            model.Provider, model.ProviderId, user!.Id.ToString(),
-                            user!.UserName, true, context.Client.ClientId)
-                        );
-                    if (!string.IsNullOrWhiteSpace(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                        return Redirect(model.ReturnUrl);
-                    throw new InvalidOperationException($"\"{model.ReturnUrl}\" is  invalid");
-                }
-                else
-                {
-                    ModelState.AddModelError("SignUp-Error", "Something went wrong!");
-                }
-            }
-            foreach (var error in createUserResult.Errors)
-                ModelState.AddModelError("SignUp-Error", error.Description);
-            return View();
-        }
+            if (logoutContext == null)
+                throw new InvalidOperationException("Something went wrong!");
 
+            await _event.RaiseAsync(new UserLogoutSuccessEvent(userId, userName));
+
+            if (string.IsNullOrWhiteSpace(logoutContext.PostLogoutRedirectUri))
+            {
+                return View("SignedOut");
+            }
+
+            return Redirect(logoutContext.PostLogoutRedirectUri);
+        }
+        
         [HttpGet("/Auth/Confirmation/{email}")]
         public async Task<IActionResult> ConfirmEmail(string email, [FromQuery] string token)
         {
@@ -236,19 +152,75 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("ConfirmEmail-Error", $"Something went wrong");
                 return View();
             }
-            var user = await _signInManager.UserManager.FindByEmailAsync(Base64Decode(email));
+            var user = await _signInManager.UserManager.FindByEmailAsync(StringExtension.FromBase64(email));
             if (user == null)
             {
                 ModelState.AddModelError("ConfirmEmail-Error",$"User not found");
                 return View();
             }
-            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, Base64Decode(token));
+            var result = await _signInManager.UserManager.ConfirmEmailAsync(user, StringExtension.FromBase64(token));
             if(result.Succeeded)
             {
+                return Redirect($"/Auth/SignIn{TempData[SignInParamsKey]}");
+            }
+            await SendUserConfirmationEmail(user);
+            ModelState.AddModelError("ConfirmEmail-Error", "Your token is invalid, we re-sent an email to you again");
+            return View();
+        }
+
+        [HttpGet]
+        [Route("/Auth/Forgot")]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("/Auth/Forgot")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                ModelState.AddModelError("ForgotPassword-Error", "Email does not linked to any account");
                 return View();
             }
-            foreach(var error in result.Errors)
-                ModelState.AddModelError("ConfirmEmail-Error", error.Description);
+            await SendResetPasswordEmail(user);
+            return View("ForgotPasswordNotification");
+        }
+
+        [Route("/Auth/Reset/{email}")]
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("/Auth/Reset/{email}")]
+        public async Task<IActionResult> ResetPassword([FromForm(Name = "password")] string newPassword,
+            [FromForm(Name = "re-password")] string reNewPassword, string email,
+            [FromQuery] string token)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(StringExtension.FromBase64(email));
+            if (user == null)
+            {
+                ModelState.AddModelError("ResetPassword-Error", "Something went wrong!");
+                return View();
+            }
+            if (newPassword != reNewPassword)
+            {
+                ModelState.AddModelError("ResetPassword-Error", "Password does not match!");
+                return View();
+            }
+            var resetPasswordResult = 
+                await _signInManager.UserManager.ResetPasswordAsync(user, StringExtension.FromBase64(token), newPassword);
+            if (resetPasswordResult.Succeeded)
+            {
+                return Redirect($"/auth/signin{TempData[SignInParamsKey]}");
+            }
+            foreach (var error in resetPasswordResult.Errors)
+                ModelState.AddModelError("ResetPassword-Error", error.Description);
             return View();
         }
 
@@ -259,34 +231,50 @@ namespace AuthServer.Controllers
             if (string.IsNullOrWhiteSpace(user.Email))
                 throw new ArgumentException($"{nameof(user.Email)} cannot be null or empty");
             var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
-            var message = GenerateEmailAsync(user.Email, Base64Encode(token));
-            _mailer.SendMail(message);
+            var message = GenerateEmailConfirmationMailAsync(user.Email, token);
+            await _mailer.SendEmail(message);
         }
 
-        private static MailRequest GenerateEmailAsync(string receiver, string token)
+        private static MailRequest GenerateEmailConfirmationMailAsync(string receiver, string token)
         {
-            var email = Base64Encode(receiver);
+            var email = receiver.ToBase64();
             var body = "Thanks for your registration," +
-                $" this is your email confirmation <a href=\"{$"https://localhost:7265/auth/confirmation/{email}?token={token}"}\">link</a>" +
-                $" The link will be expired at {DateTime.UtcNow.AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss tt}";
+                $" this is your email confirmation <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}"}\">link</a>" +
+                $" The link will be expired at {DateTime.UtcNow.AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}";
             return new MailRequest()
             {
                 Body = body,
-                Sender = "gigamallservice@gmail.com",
                 IsHtmlMessage = true,
                 Receiver = receiver,
                 Subject = "Email confirmation"
             };
         }
 
-        private static string Base64Encode(string original)
+        private async Task SendResetPasswordEmail(User user)
         {
-            return Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(original));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            if (string.IsNullOrWhiteSpace(user.Email))
+                throw new ArgumentException($"{nameof(user.Email)} cannot be null or empty");
+            var token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
+            var message = GenerateResetPasswordMailAsync(user.Email, token);
+            await _mailer.SendEmail(message);
         }
 
-        private static string Base64Decode(string encodedString)
+        private static MailRequest GenerateResetPasswordMailAsync(string receiver, string token)
         {
-            return System.Text.Encoding.ASCII.GetString(Convert.FromBase64String(encodedString));
+            var email = receiver.ToBase64();
+            var body = "You are receiving this email because we received a password reset request for your account." +
+                 $" This is your link to reset your password <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/reset/{email}?token={token.ToBase64()}"}\">link</a>. " +
+                 $" This link will be expired at {DateTime.UtcNow.AddMinutes(10):dddd, MMMM d, yyyy; HH:mm:ss}" +
+                 $" If you did not request a password reset, no further action is required. Regards!";
+            return new MailRequest()
+            {
+                Body = body,
+                IsHtmlMessage = true,
+                Receiver = receiver,
+                Subject = "Reset password"
+            };
         }
     }
 }

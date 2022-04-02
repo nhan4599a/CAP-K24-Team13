@@ -3,7 +3,6 @@ using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
@@ -24,21 +23,21 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper ?? Mapper.GetInstance();
         }
 
-        public async Task<ProductWithCommentsDTO> GetProductAsync(Guid id)
+        public async Task<ProductWithCommentsDTO> GetProductAsync(Guid productId)
         {
-            return _mapper.MapToProductWithCommentsDTO(await FindProductByIdAsync(id));
+            return _mapper.MapToProductWithCommentsDTO(await FindProductByIdAsync(productId));
         }
 
-        public async Task<MinimalProductDTO> GetMinimalProductAsync(Guid id)
+        public async Task<MinimalProductDTO> GetMinimalProductAsync(Guid productId)
         {
-            return _mapper.MapToMinimalProductDTO(await FindProductByIdAsync(id));
+            return _mapper.MapToMinimalProductDTO(await FindProductByIdAsync(productId));
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetProductsAsync(string keyword, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> FindProductsAsync(string keyword, PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
-                .Where(product => product.ProductName.Contains(keyword)
-                        || product.Category.CategoryName.Contains(keyword))
+                .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
+                        || EF.Functions.Like(product.Category.CategoryName, $"%{keyword}%"))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -46,7 +45,7 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking()
-                .Include(e => e.Category)
+                .Include(product => product.Category)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -71,6 +70,7 @@ namespace DatabaseAccessor.Repositories
             {
                 return CommandResponse<Guid>.Error("Product's name is already existed", null);
             }
+            shopProduct.ShopId = category.ShopId;
             _dbContext.ShopProducts.Add(shopProduct);
             try
             {
@@ -83,9 +83,9 @@ namespace DatabaseAccessor.Repositories
             }
         }
 
-        public async Task<CommandResponse<bool>> ActivateProductAsync(Guid id, bool isActivateCommand)
+        public async Task<CommandResponse<bool>> ActivateProductAsync(Guid productId, bool isActivateCommand)
         {
-            var product = await FindProductByIdAsync(id);
+            var product = await FindProductByIdAsync(productId);
             if (product == null)
                 return CommandResponse<bool>.Error("Product is not found", null);
             if (isActivateCommand && !product.IsDisabled)
@@ -100,16 +100,23 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(isActivateCommand);
         }
 
-        public async Task<CommandResponse<ProductDTO>> EditProductAsync(Guid id, CreateOrEditProductRequestModel requestModel)
+        public async Task<CommandResponse<ProductDTO>> EditProductAsync(Guid productId,
+            CreateOrEditProductRequestModel requestModel)
         {
-            var product = await FindProductByIdAsync(id);
+            var product = await FindProductByIdAsync(productId);
             if (product == null)
                 return CommandResponse<ProductDTO>.Error("Product is not found", null);
             if (product.IsDisabled)
                 return CommandResponse<ProductDTO>.Error("Product is disabled", null);
             if (product.Category.IsDisabled)
                 return CommandResponse<ProductDTO>.Error($"Product is belong to {product.Category.CategoryName} which was deactivated", null);
+            var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
+            if (category == null)
+                return CommandResponse<ProductDTO>.Error($"Category is not found", null);
+            if (category.IsDisabled)
+                return CommandResponse<ProductDTO>.Error($"Category is disabled", null);
             product.AssignByRequestModel(requestModel);
+            product.ShopId = category.ShopId;
             try
             {
                 await _dbContext.SaveChangesAsync();
@@ -121,20 +128,51 @@ namespace DatabaseAccessor.Repositories
             }
         }
 
-        private async Task<ShopProduct> FindProductByIdAsync(Guid id)
+        public async Task<CommandResponse<int>> ImportProductQuantityAsync(Guid productId, int quantity)
         {
-            return await _dbContext.ShopProducts.FindAsync(id);
+            var product = await FindProductByIdAsync(productId);
+            if (product == null)
+                return CommandResponse<int>.Error("Product is not found", null);
+            if (product.IsDisabled)
+                return CommandResponse<int>.Error("Product is disabled", null);
+            if (product.Category.IsDisabled)
+                return CommandResponse<int>.Error($"Product is belong to " +
+                    $"{product.Category.CategoryName} which was deactivated", null);
+            if (quantity <= 0)
+                return CommandResponse<int>.Error("Quantity must greater than 0", null);
+            var newQuantity = quantity + product.Quantity;
+            product.Quantity = newQuantity;
+            await _dbContext.SaveChangesAsync();
+            return CommandResponse<int>.Success(newQuantity);
         }
 
         public async Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo paginationInfo)
         {
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
-                .Include(e => e.Category)
+                .Include(product => product.Category)
                 .Where(product => product.Category.ShopId == shopId)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return result;
+        }
+
+        public async Task<PaginatedList<ProductDTO>> FindProductsOfShopAsync(int shopId, string keyword, PaginationInfo paginationInfo)
+        {
+            var result = await _dbContext.ShopProducts
+                .AsNoTracking()
+                .Include(product => product.Category)
+                .Where(product => product.Category.ShopId == shopId &&
+                    (product.ProductName.Contains(keyword)
+                        || product.Category.CategoryName.Contains(keyword)))
+                .Select(product => _mapper.MapToProductDTO(product))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+            return result;
+        }
+
+        private async Task<ShopProduct> FindProductByIdAsync(Guid id)
+        {
+            return await _dbContext.ShopProducts.FindAsync(id);
         }
 
         public void Dispose()

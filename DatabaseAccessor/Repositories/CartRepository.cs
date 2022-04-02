@@ -3,8 +3,8 @@ using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using Shared.RequestModels;
 using System;
 using System.Collections.Generic;
@@ -53,6 +53,7 @@ namespace DatabaseAccessor.Repositories
                 {
                     ProductId = Guid.Parse(requestModel.ProductId),
                     Quantity = requestModel.Quantity,
+                    ShopId = product.ShopId
                 });
             else
                 cartDetail.Quantity += requestModel.Quantity;

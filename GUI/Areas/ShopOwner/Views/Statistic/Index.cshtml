@@ -1,0 +1,40 @@
+﻿@section SideBar {
+    @await Component.InvokeAsync("SideBar", new { activeItem = "statistic" });
+}
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/assets/shop-owner/css/year-picker.css")" rel="stylesheet" />
+}
+<div class="row">
+    <div class="col-12">
+        <div class="row justify-content-end mb-2">
+            <div class="col-md-2">
+                @await Component.InvokeAsync("OrderStatisticStrategyDropdown")
+            </div>
+            <div class="col-md-2">
+                @await Component.InvokeAsync("OrderStatisticViewModeDropdown")
+            </div>
+            <div class="col-md-2">
+                <button class="btn" id="view-statistic">View statistic</button>
+            </div>
+        </div>
+        <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="border-radius-lg pt-4 pb-3 bg-gradient-primary-dark shadow">
+                    <h6 class="text-white text-capitalize ps-3">Statistic table</h6>
+                </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                <div class="table-responsive p-0">
+                    <canvas id="statistic-chart" width="400" heigth="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.js"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/year-picker.js")"></script>
+    <script src="@Url.Content("~/assets/shop-owner/js/internal/statistic.js")"></script>
+}

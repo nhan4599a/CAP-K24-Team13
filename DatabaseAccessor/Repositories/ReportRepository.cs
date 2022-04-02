@@ -1,11 +1,12 @@
 ﻿using DatabaseAccessor.Contexts;
+using DatabaseAccessor.Mapping;
+using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTOs;
+using Shared.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories
@@ -13,71 +14,63 @@ namespace DatabaseAccessor.Repositories
     public class ReportRepository : IReportRepository
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly Mapper _mapper;
 
-        public ReportRepository(ApplicationDbContext dbContext)
+        public ReportRepository(ApplicationDbContext dbContext, Mapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        public async Task<SaleReportDTO> GetSaleReportByDate(DateTime date, int shopId)
+        public async Task<PaginatedList<ReportDTO>> GetAllReportsAsync(PaginationInfo paginationInfo)
         {
-            var invoices = await _dbContext.Invoices.Where(x => x.CreatedAt.Date == date.Date && x.ShopId == shopId).ToListAsync();
-
-            var result = new SaleReportDTO();
-
-            foreach (var invoice in invoices)
-            {
-                var productInvoice = await _dbContext.InvoiceDetails.Where(x => x.InvoiceId == invoice.Id).ToListAsync();
-
-                foreach (var item in productInvoice)
-                {
-                    var productReport = new ProductReportDTO()
-                    {
-
-                        Date = date.Date,
-                        Price = item.Price,
-                        Quantity = item.Quantity,
-                        ProductId = item.ProductId,
-                        ProductName = (await _dbContext.ShopProducts.FirstOrDefaultAsync(x => x.Id == item.ProductId)).ProductName,
-                        Subtotal = item.Price * item.Quantity
-                    };
-                    result.ProductsList.Add(productReport);
-                    result.Total += productReport.Subtotal;
-                }
-            }
-            return result;
+            return await _dbContext.Reports
+                .AsNoTracking()
+                .Include(e => e.Reporter)
+                .Include(e => e.AffectedUser)
+                .AsSplitQuery()
+                .Select(report => _mapper.MapToReportDTO(report))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
-        public async Task<SaleReportDTO> GetSaleReportByMonth(DateTime date, int shopId)
+        public async Task<CommandResponse<int>> CreateReportAsync(int invoiceId, Guid reporter)
         {
-            var invoices = await _dbContext.Invoices.Where(x =>
-                                                              x.CreatedAt.Date.Year == date.Date.Year
-                                                            && x.CreatedAt.Month == date.Month
-                                                            && x.ShopId == shopId).ToListAsync();
-
-            var result = new SaleReportDTO();
-
-            foreach (var invoice in invoices)
+            var report = await _dbContext.Reports.FirstOrDefaultAsync(e => e.AffectedInvoiceId == invoiceId);
+            if (report != null)
             {
-                var productInvoice = await _dbContext.InvoiceDetails.Where(x => x.InvoiceId == invoice.Id).ToListAsync();
-
-                foreach (var item in productInvoice)
-                {
-                    var productReport = new ProductReportDTO()
-                    {
-
-                        Date = date.Date,
-                        Price = item.Price,
-                        Quantity = item.Quantity,
-                        ProductId = item.ProductId,
-                        ProductName = (await _dbContext.ShopProducts.FirstOrDefaultAsync(x => x.Id == item.ProductId)).ProductName,
-                        Subtotal = item.Price * item.Quantity
-                    };
-                    result.ProductsList.Add(productReport);
-                    result.Total += productReport.Subtotal;
-                }
+                return CommandResponse<int>.Error("Report is already created", null);
             }
-            return result;
+            var affectedInvoice = await _dbContext.Invoices.FindAsync(invoiceId);
+            if (affectedInvoice == null)
+            {
+                return CommandResponse<int>.Error("Invoice does not existed", null);
+            }
+            report = new Report
+            {
+                AffectedInvoiceId = invoiceId,
+                ReporterId = reporter,
+                AffectedUserId = affectedInvoice.UserId
+            };
+            _dbContext.Reports.Add(report);
+            await _dbContext.SaveChangesAsync();
+            return CommandResponse<int>.Success(report.Id);
+        }
+        public Task<PaginatedList<ReportDTO>> GetReports(PaginationInfo paginationInfo)
+        {
+            return _dbContext.Reports
+                .AsNoTracking()
+                .Include(e => e.Reporter)
+                .Include(e => e.AffectedUser)
+                .AsSplitQuery()
+                .OrderBy(report => report.CreatedAt)
+                .Select(report => _mapper.MapToReportDTO(report))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

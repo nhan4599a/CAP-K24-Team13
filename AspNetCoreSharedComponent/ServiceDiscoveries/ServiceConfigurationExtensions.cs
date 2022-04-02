@@ -1,4 +1,6 @@
-﻿using Shared;
+﻿using Microsoft.Extensions.Configuration;
+using Shared;
+using System;
 
 namespace AspNetCoreSharedComponent.ServiceDiscoveries
 {

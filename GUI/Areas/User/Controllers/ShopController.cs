@@ -14,7 +14,7 @@ namespace GUI.Areas.User.Controllers
         private readonly ICategoryClient _categoryClient;
 
         public ShopController(IProductClient productClient, IShopClient shopClient,
-            ICategoryClient categoryClient, ICartClient cartClient)
+            ICategoryClient categoryClient)
         {
             _productClient = productClient;
             _shopClient = shopClient;
@@ -24,20 +24,17 @@ namespace GUI.Areas.User.Controllers
         public async Task<IActionResult> Index(int id)
         {
             var productResponse = await _productClient.GetProductsOfShopAsync(id);
-            var informationResponse = await _shopClient.FindInformation(id);
             var shopResponse = await _shopClient.GetShop(id);
             var categoryResponse = await _categoryClient.GetCategoriesOfShop(id);
             if (!productResponse.IsSuccessStatusCode ||
-                !informationResponse.IsSuccessStatusCode ||
                 !categoryResponse.IsSuccessStatusCode ||
                 !shopResponse.IsSuccessStatusCode)
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             return View(new ShopDetailViewModel
             {
                 Products = productResponse.Content.Data,
-                Information = informationResponse.Content.Data,
                 Categories = categoryResponse.Content.Data,
-                Shop = shopResponse.Content.Data
+                Shop = shopResponse.Content.ResultObj
             });
         }
     }

@@ -72,14 +72,12 @@ namespace GUI.Extensions
 
         public static string ProductImageUrl(this IUrlHelper _, string imageUrl)
         {
-            return $"https://localhost:3000/products/images/{imageUrl}";
+            return $"http://ec2-52-207-214-39.compute-1.amazonaws.com:3000/products/images/{imageUrl}";
         }
 
         public static string ShopImageUrl(this IUrlHelper _, string imageUrl)
         {
-            if (imageUrl.StartsWith("http") || imageUrl.StartsWith("data:"))
-                return imageUrl;
-            return $"https://localhost:3000/interfaces/images/{imageUrl}";
+            return $"http://ec2-52-207-214-39.compute-1.amazonaws.com:3000/interfaces/images/{imageUrl}";
         }
     }
 }

@@ -2,7 +2,7 @@
 using DatabaseAccessor.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Shared.Models;
+using Shared;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,53 +29,69 @@ namespace AuthServer.Services
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        private async Task InitializeTestUsers(ApplicationUserManager userManager)
+        private static async Task InitializeTestUsers(ApplicationUserManager userManager)
         {
             string password = "CapK24Team13@Default";
             if (await userManager.FindByNameAsync("customer_test") == null)
             {
                 var user = await CreateUserObj("customer_test");
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, Roles.CUSTOMER);
-            }
-            if (await userManager.FindByNameAsync("admin_test") == null)
-            {
-                var user = await CreateUserObj("admin_test");
-                await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, Roles.ADMIN);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.CUSTOMER);
             }
             if (await userManager.FindByNameAsync("owner_test") == null)
             {
                 var user = await CreateUserObj("owner_test");
+                user.ShopId = 1;
+                user.Id = Guid.Parse("751e9157-b88e-4e5c-46d3-08da12252e89");
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(user, Roles.SHOP_OWNER);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.SHOP_OWNER);
+            }
+            if (await userManager.FindByNameAsync("admin_team13") == null)
+            {
+                var user = await CreateUserObj("admin_team13");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.ADMIN_TEAM_13);
+            }
+            if (await userManager.FindByNameAsync("admin_team5") == null)
+            {
+                var user = await CreateUserObj("admin_team5");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.ADMIN_TEAM_5);
             }
         }
 
         private static async Task InitializeRoles(ApplicationRoleManager roleManager)
         {
-            if (await roleManager.FindByNameAsync("Customer") == null)
+            if (await roleManager.FindByNameAsync(SystemConstant.Roles.CUSTOMER) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = "Customer",
-                    NormalizedName = "CUSTOMER"
+                    Name = SystemConstant.Roles.CUSTOMER,
+                    NormalizedName = SystemConstant.Roles.CUSTOMER.ToUpper()
                 });
             }
-            if (await roleManager.FindByNameAsync("Admin") == null)
+            if (await roleManager.FindByNameAsync(SystemConstant.Roles.SHOP_OWNER) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
+                    Name = SystemConstant.Roles.SHOP_OWNER,
+                    NormalizedName = SystemConstant.Roles.SHOP_OWNER.ToUpper()
                 });
             }
-            if (await roleManager.FindByNameAsync("ShopOwner") == null)
+            if (await roleManager.FindByNameAsync(SystemConstant.Roles.ADMIN_TEAM_13) == null)
             {
                 await roleManager.CreateAsync(new Role
                 {
-                    Name = "ShopOwner",
-                    NormalizedName = "SHOP_OWNER"
+                    Name = SystemConstant.Roles.ADMIN_TEAM_13,
+                    NormalizedName = SystemConstant.Roles.ADMIN_TEAM_13.ToUpper()
+                });
+            }
+            if (await roleManager.FindByNameAsync(SystemConstant.Roles.ADMIN_TEAM_5) == null)
+            {
+                await roleManager.CreateAsync(new Role
+                {
+                    Name = SystemConstant.Roles.ADMIN_TEAM_5,
+                    NormalizedName = SystemConstant.Roles.ADMIN_TEAM_5.ToUpper()
                 });
             }
         }
@@ -90,7 +106,10 @@ namespace AuthServer.Services
                 Email = email,
                 NormalizedEmail = email.ToUpper(),
                 FirstName = "Test",
-                LastName = "Test"
+                LastName = "Test",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                DoB = DateOnly.MinValue
             });
         }
     }

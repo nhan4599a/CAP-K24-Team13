@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using Shared;
 using Shared.DTOs;
+using Shared.Models;
 using Shared.RequestModels;
 
 namespace ShopInterfaceService.Commands

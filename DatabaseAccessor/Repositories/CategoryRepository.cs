@@ -19,31 +19,33 @@ namespace DatabaseAccessor.Repositories
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly Mapper _mapper;
-        
+
         public CategoryRepository(ApplicationDbContext dbContext, Mapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
 
-        public async Task<CategoryDTO> GetCategoryAsync(int id)
+        public async Task<CategoryDTO> GetCategoryAsync(int categoryId)
         {
-            return _mapper.MapToCategoryDTO(await FindCategoryByIdAsync(id));
+            return _mapper.MapToCategoryDTO(await FindCategoryByIdAsync(categoryId));
         }
 
-        public async Task<PaginatedList<CategoryDTO>> GetAllCategoryAsync(PaginationInfo paginationInfo)
+        public async Task<PaginatedList<CategoryDTO>> GetAllCategoriesAsync(PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopCategories.AsNoTracking()
                 .Select(category => _mapper.MapToCategoryDTO(category))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
-        public async Task<CommandResponse<bool>> AddCategoryAsync(CreateOrEditCategoryRequestModel requestModel)
+        public async Task<CommandResponse<bool>> AddCategoryAsync(int shopId, CreateOrEditCategoryRequestModel requestModel)
         {
             var shopCategory = new ShopCategory().AssignByRequestModel(requestModel);
-            if (await _dbContext.ShopCategories.AnyAsync(category => category.ShopId == shopCategory.ShopId && category.CategoryName == category.CategoryName))
+            shopCategory.ShopId = shopId;
+            if (await _dbContext.ShopCategories.AnyAsync(category => category.ShopId == shopCategory.ShopId
+                && category.CategoryName == shopCategory.CategoryName))
             {
-                return CommandResponse<bool>.Error("Category's is already existed", null);
+                return CommandResponse<bool>.Error("Category's name is already existed", null);
             }
             _dbContext.ShopCategories.Add(shopCategory);
             try
@@ -57,9 +59,9 @@ namespace DatabaseAccessor.Repositories
             }
         }
 
-        public async Task<CommandResponse<bool>> EditCategoryAsync(int id, CreateOrEditCategoryRequestModel requestModel)
+        public async Task<CommandResponse<bool>> EditCategoryAsync(int categoryId, CreateOrEditCategoryRequestModel requestModel)
         {
-            var category = await FindCategoryByIdAsync(id);
+            var category = await FindCategoryByIdAsync(categoryId);
             if (category == null || category.IsDisabled)
                 return CommandResponse<bool>.Error("Category is not found or already disabled", null);
             category.AssignByRequestModel(requestModel);
@@ -68,10 +70,10 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
-        public async Task<CommandResponse<bool>> ActivateCategoryAsync(int id,
+        public async Task<CommandResponse<bool>> ActivateCategoryAsync(int categoryId,
             bool isActivateCommand, bool shouldBeCascade)
         {
-            var category = await FindCategoryByIdAsync(id);
+            var category = await FindCategoryByIdAsync(categoryId);
             if (category == null)
                 return CommandResponse<bool>.Error("Category is not found", null);
             if (isActivateCommand && !category.IsDisabled)
@@ -89,9 +91,9 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
-        private async Task<ShopCategory> FindCategoryByIdAsync(int id)
+        private async Task<ShopCategory> FindCategoryByIdAsync(int categoryId)
         {
-            return await _dbContext.ShopCategories.FindAsync(id);
+            return await _dbContext.ShopCategories.FindAsync(categoryId);
         }
 
         public async Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo)

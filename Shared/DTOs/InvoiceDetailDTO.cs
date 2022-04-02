@@ -1,17 +1,13 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Shared.DTOs
 {
-    public class InvoiceDetailDTO
+    public class InvoiceDetailDTO : InvoiceDTO
     {
-        public int Id { get; set; }
+        public int ShopId { get; set; }
 
-        public int InvoiceId { get; set; }
+        public string ShippingAddress { get; set; }
 
-        public Guid ProductId { get; set; }
-
-        public int Quantity { get; set; }
-
-        public double Price { get; set; }
+        public List<OrderItemDTO> Products { get; set; }
     }
 }

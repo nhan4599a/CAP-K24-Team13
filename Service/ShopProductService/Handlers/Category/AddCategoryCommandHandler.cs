@@ -1,6 +1,6 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using Shared;
+using Shared.Models;
 using ShopProductService.Commands.Category;
 using System;
 using System.Threading;
@@ -19,7 +19,7 @@ namespace ShopProductService.Handlers.Category
 
         public async Task<CommandResponse<bool>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
-            return await _repository.AddCategoryAsync(request.RequestModel);
+            return await _repository.AddCategoryAsync(request.ShopId, request.RequestModel);
         }
 
         public void Dispose()

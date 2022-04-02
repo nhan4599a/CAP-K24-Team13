@@ -4,8 +4,10 @@ namespace Shared.RequestModels
 {
     public class SearchRequestModel
     {
-        public string Keyword { get; set; } = string.Empty;
+        public string Keyword { get; set; }
 
-        public PaginationInfo PaginationInfo { get; set; } = PaginationInfo.Default;
+        public int PageNumber { get; set; } = PaginationInfo.Default.PageNumber;
+
+        public int PageSize { get; set; } = PaginationInfo.Default.PageSize;
     }
 }

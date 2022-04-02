@@ -11,6 +11,9 @@ namespace AuthServer.Validators
         {
             RuleFor(model => model.Email).EmailAddress()
                 .WithMessage("Email must be in a valid email format");
+            RuleFor(model => model.PhoneNumber)
+                .Matches(@"0\d{9}")
+                .WithMessage("Phone must be in a valid phone format");
             var currentDate = DateOnly.FromDateTime(DateTime.Now);
             var maxAcceptedDate = currentDate.AddYears(-AccountConfig.MinAge);
             var minAcceptedDate = currentDate.AddYears(-AccountConfig.MaxAge);

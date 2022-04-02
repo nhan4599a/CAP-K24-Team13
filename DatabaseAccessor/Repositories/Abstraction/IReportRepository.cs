@@ -1,16 +1,16 @@
 ﻿using Shared.DTOs;
+using Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
 {
-    public interface IReportRepository
+    public interface IReportRepository : IDisposable
     {
-        Task<SaleReportDTO> GetSaleReportByDate(DateTime date, int shopId);
+        public Task<PaginatedList<ReportDTO>> GetAllReportsAsync(PaginationInfo paginationInfo);
 
-        Task<SaleReportDTO> GetSaleReportByMonth(DateTime date, int shopId);
+        public Task<CommandResponse<int>> CreateReportAsync(int invoiceId, Guid reporter);
+
+        public Task<PaginatedList<ReportDTO>> GetReports(PaginationInfo paginationInfo);
     }
 }

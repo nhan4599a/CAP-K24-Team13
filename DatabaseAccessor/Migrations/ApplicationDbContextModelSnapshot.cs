@@ -17,7 +17,7 @@ namespace DatabaseAccessor.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -39,7 +39,7 @@ namespace DatabaseAccessor.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.CartDetail", b =>
@@ -71,7 +71,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartDetails");
+                    b.ToTable("CartDetails", "dbo");
 
                     b.HasCheckConstraint("CK_CartDetail_Quantity", "[Quantity] >= 1");
                 });
@@ -88,14 +88,14 @@ namespace DatabaseAccessor.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getdate() + '7:0:0'");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InvoiceCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -121,9 +121,13 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "CreatedAt");
+                    b.HasIndex("CreatedAt");
 
-                    b.ToTable("Invoices");
+                    b.HasIndex("InvoiceCode");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Invoices", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.InvoiceDetail", b =>
@@ -155,7 +159,7 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("InvoiceDetails");
+                    b.ToTable("InvoiceDetails", "dbo");
 
                     b.HasCheckConstraint("CK_InvoiceDetail_Price", "[Price] > 0");
 
@@ -174,7 +178,7 @@ namespace DatabaseAccessor.Migrations
                     b.Property<DateTime>("ChangedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getdate() + '7:0:0'");
 
                     b.Property<int>("InvoiceId")
                         .HasColumnType("int");
@@ -182,14 +186,14 @@ namespace DatabaseAccessor.Migrations
                     b.Property<int>("NewStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("OldStatus")
+                    b.Property<int?>("OldStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("InvoiceId");
 
-                    b.ToTable("InvoiceStatusChangedHistories");
+                    b.ToTable("InvoiceStatusChangedHistories", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ProductComment", b =>
@@ -204,7 +208,7 @@ namespace DatabaseAccessor.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getdate() + '7:0:0'");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
@@ -224,9 +228,44 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProductComments");
+                    b.ToTable("ProductComments", "dbo");
 
                     b.HasCheckConstraint("CK_ProductComments_Star", "[Star] between 1 and 5");
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.Report", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AffectedInvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("AffectedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate() + '7:0:0'");
+
+                    b.Property<Guid>("ReporterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffectedInvoiceId")
+                        .IsUnique();
+
+                    b.HasIndex("ReporterId");
+
+                    b.HasIndex("AffectedUserId", "CreatedAt");
+
+                    b.ToTable("Reports", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.Role", b =>
@@ -287,45 +326,26 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("CategoryName");
 
-                    b.ToTable("ShopCategories");
+                    b.ToTable("ShopCategories", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopInterface", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ShopId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShopId"), 1L, 1);
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Images")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShopAddress")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ShopId");
 
-                    b.Property<string>("ShopDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShopName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopId")
-                        .IsUnique();
-
-                    b.ToTable("ShopInterfaces");
+                    b.ToTable("ShopInterfaces", "dbo");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
@@ -340,7 +360,7 @@ namespace DatabaseAccessor.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getdate() + '7:0:0'");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -379,13 +399,13 @@ namespace DatabaseAccessor.Migrations
 
                     b.HasIndex("ProductName");
 
-                    b.ToTable("ShopProducts");
+                    b.ToTable("ShopProducts", "dbo");
 
                     b.HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
 
                     b.HasCheckConstraint("CK_ShopProducts_Price", "[Price] >= 0");
 
-                    b.HasCheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 1");
+                    b.HasCheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 0");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.User", b =>
@@ -447,8 +467,13 @@ namespace DatabaseAccessor.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("ShopId")
                         .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -468,6 +493,25 @@ namespace DatabaseAccessor.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Xml")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataProtectionKeys");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -547,11 +591,15 @@ namespace DatabaseAccessor.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -571,6 +619,15 @@ namespace DatabaseAccessor.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.UserRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasDiscriminator().HasValue("UserRole");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.Cart", b =>
@@ -636,7 +693,7 @@ namespace DatabaseAccessor.Migrations
             modelBuilder.Entity("DatabaseAccessor.Models.InvoiceStatusChangedHistory", b =>
                 {
                     b.HasOne("DatabaseAccessor.Models.Invoice", "Invoice")
-                        .WithMany("StatusChangedHistory")
+                        .WithMany("StatusChangedHistories")
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -661,6 +718,33 @@ namespace DatabaseAccessor.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.Report", b =>
+                {
+                    b.HasOne("DatabaseAccessor.Models.Invoice", "AffectedInvoice")
+                        .WithOne("Report")
+                        .HasForeignKey("DatabaseAccessor.Models.Report", "AffectedInvoiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.User", "AffectedUser")
+                        .WithMany("AffectedReports")
+                        .HasForeignKey("AffectedUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.User", "Reporter")
+                        .WithMany("Reports")
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AffectedInvoice");
+
+                    b.Navigation("AffectedUser");
+
+                    b.Navigation("Reporter");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
@@ -701,21 +785,6 @@ namespace DatabaseAccessor.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.HasOne("DatabaseAccessor.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DatabaseAccessor.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("DatabaseAccessor.Models.User", null)
@@ -723,6 +792,25 @@ namespace DatabaseAccessor.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.UserRole", b =>
+                {
+                    b.HasOne("DatabaseAccessor.Models.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.Cart", b =>
@@ -734,7 +822,14 @@ namespace DatabaseAccessor.Migrations
                 {
                     b.Navigation("Details");
 
-                    b.Navigation("StatusChangedHistory");
+                    b.Navigation("Report");
+
+                    b.Navigation("StatusChangedHistories");
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopCategory", b =>
@@ -753,9 +848,15 @@ namespace DatabaseAccessor.Migrations
 
             modelBuilder.Entity("DatabaseAccessor.Models.User", b =>
                 {
+                    b.Navigation("AffectedReports");
+
                     b.Navigation("Cart");
 
                     b.Navigation("Invoices");
+
+                    b.Navigation("Reports");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

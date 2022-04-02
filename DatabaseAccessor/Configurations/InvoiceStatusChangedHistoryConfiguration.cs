@@ -13,10 +13,10 @@ namespace DatabaseAccessor.Configurations
                 .HasIdentityOptions(0, 1);
 
             builder.Property(e => e.ChangedDate)
-                .HasDefaultValueSql("getdate()");
+                .HasDefaultValueSql("getdate() + '7:0:0'");
 
             builder.HasOne(e => e.Invoice)
-                .WithMany(e => e.StatusChangedHistory)
+                .WithMany(e => e.StatusChangedHistories)
                 .HasForeignKey(e => e.InvoiceId);
         }
     }

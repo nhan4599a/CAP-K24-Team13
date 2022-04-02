@@ -1,5 +1,4 @@
 ﻿using GUI.Abtractions;
-using GUI.Attributes;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
 {
-    [VirtualArea("User")]
     public class ProductController : BaseUserController
     {
         private readonly IProductClient _productClient;

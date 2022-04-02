@@ -1,5 +1,7 @@
 ﻿using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
 using Shared.Exceptions;
@@ -7,6 +9,7 @@ using Shared.Models;
 using Shared.RequestModels;
 using Shared.Validations;
 using ShopInterfaceService.Commands;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopInterfaceService.Controllers
@@ -27,6 +30,7 @@ namespace ShopInterfaceService.Controllers
             rules.Change(FileValidationRuleName.MinFileCount, 1);
         }
 
+        [Authorize]
         [HttpPost("{shopId}")]
         public async Task<ApiResult> CreateShopInterface(int shopId, 
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
@@ -49,6 +53,7 @@ namespace ShopInterfaceService.Controllers
             return ApiResult.SucceedResult;
         }
 
+        [Authorize]
         [HttpPut("{shopId}")]
         public async Task<ApiResult> EditShopInterface(int shopId,
             [FromForm(Name = "requestModel")] CreateOrEditInterfaceRequestModel requestModel)
@@ -75,22 +80,35 @@ namespace ShopInterfaceService.Controllers
         [HttpGet("{shopId}")]
         public async Task<ApiResult> GetShopInterface(int shopId)
         {
-            var command = new FindShopInterfaceByShopIdCommand
+            var command = new FindShopInterfaceByShopIdQuery
             {
                 ShopId = shopId
             };
 
             var result = await _mediator.Send(command);
 
+            if (!result.IsSuccess)
+                return ApiResult.CreateErrorResult(500, result.ErrorMessage);
+            
             return ApiResult<ShopInterfaceDTO>.CreateSucceedResult(result.Response);
         }
 
+        [HttpGet("avatar/{*shopId}")]
+        public async Task<ApiResult> GetAvatar(params int[] shopId)
+        {
+            var result = await _mediator.Send(new GetShopAvatarQuery
+            {
+                ShopId = shopId
+            });
+            return ApiResult<Dictionary<int, string>>.CreateSucceedResult(result);
+        }
+
         [HttpGet("images/{imageId}")]
-        public IActionResult Index(string imageId)
+        public IActionResult Image(string imageId)
         {
             var fileResponse = _fileStore.GetFile(imageId);
             if (!fileResponse.IsExisted)
-                return StatusCode(404);
+                return StatusCode(StatusCodes.Status404NotFound);
             return PhysicalFile(fileResponse.FullPath, fileResponse.MimeType);
         }
     }

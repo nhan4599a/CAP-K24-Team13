@@ -1,17 +1,19 @@
+using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories;
 using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Text.Json.Serialization;
+using Microsoft.IdentityModel.Tokens;
+using OrderService.Commands;
+using OrderService.Validations;
 
-namespace OrderHistoryService
+namespace OrderService
 {
     public class Startup
     {
@@ -26,51 +28,46 @@ namespace OrderHistoryService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddNewtonsoftJson();
-            services.AddTransient<IInvoiceRepository, InvoiceRepository>();
+                .AddFluentValidation<FindInvoiceQuery, FindInvoiceQueryValidator>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
             services.RegisterOcelotService(Configuration);
-            services.AddSwaggerGen();
-            services.AddScoped<ApplicationDbContext>();
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.AddSingleton(Mapper.GetInstance());
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
                 {
-                    builder.WithOrigins("https://localhost:3006").AllowAnyHeader().AllowAnyMethod();
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 });
             });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+               {
+                   options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateAudience = false
+                   };
+               });
             services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-
             app.UseCors("Default");
             app.UseRouting();
 
-            app.UseSwagger();
-            app.UseSwaggerUI();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                        name: "Default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Models;
+using System;
 
 namespace Shared.DTOs
 {
@@ -12,10 +13,12 @@ namespace Shared.DTOs
 
         public int Quantity { get; set; }   
 
-        public DateTime Created { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public int Price { get; set; }   
 
-        public string Images { get; set; }
+        public string Image { get; set; }
+
+        public InvoiceStatus Status { get; set; }
     }
 }

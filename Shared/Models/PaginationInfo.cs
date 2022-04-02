@@ -4,11 +4,9 @@
     {
         public int PageNumber { get; set; } = 1;
 
-        public int? PageSize { get; set; }
+        public int PageSize { get; set; } = 5;
 
-        public static PaginationInfo Default => new()
-        {
-            PageSize = 5
-        };
+        public static readonly PaginationInfo Default = new();
     }
 }
+ 

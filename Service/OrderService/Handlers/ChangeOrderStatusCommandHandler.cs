@@ -1,7 +1,7 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using OrderService.Commands;
-using Shared;
+using Shared.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

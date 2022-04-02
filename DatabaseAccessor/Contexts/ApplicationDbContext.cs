@@ -2,16 +2,16 @@
 using DatabaseAccessor.Converters;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Triggers;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace DatabaseAccessor.Contexts
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>, IDataProtectionKeyContext
     {
-        //private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
-        private static readonly string _connectionString = "Server=.; Database=CAP-K24-Team13; Integrated Security=true; TrustServerCertificate=True";
+        private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
         public DbSet<ShopCategory> ShopCategories { get; set; }
 
@@ -25,11 +25,15 @@ namespace DatabaseAccessor.Contexts
 
         public DbSet<ProductComment> ProductComments { get; set; }
 
-        public DbSet<InvoiceStatusChangedHistory> InvoiceStatusChangedHistory { get; set; }
+        public DbSet<InvoiceStatusChangedHistory> InvoiceStatusChangedHistories { get; set; }
 
         public DbSet<Cart> Carts { get; set; }
 
         public DbSet<CartDetail> CartDetails { get; set; }
+
+        public DbSet<Report> Reports { get; set; }
+
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -79,6 +83,7 @@ namespace DatabaseAccessor.Contexts
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ShopInterfaceConfiguration());
@@ -88,6 +93,7 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new InvoiceStatusChangedHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new CartDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportConfiguration());
         }
     }
 }

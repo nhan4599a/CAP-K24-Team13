@@ -20,18 +20,60 @@ namespace AuthServer.Configurations
                 },
                 RedirectUris = new[]
                 {
-                    "https://localhost:3006/signin-oidc"
+                    "https://cap-k24-team13.herokuapp.com/signin-oidc"
+                },
+                PostLogoutRedirectUris = new[]
+                {
+                    "https://cap-k24-team13.herokuapp.com/signout-callback-oidc"
                 },
                 AllowedScopes = new[]
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.OfflineAccess,
-                    "product.read", "product.write", "roles"
+                    "roles", "shop", IdentityServerConstants.LocalApi.ScopeName
                 },
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
-                AllowOfflineAccess = true
+                AllowOfflineAccess = true,
+                UserSsoLifetime = 7200,
+                AccessTokenLifetime = 7200,
+                RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                RefreshTokenExpiration = TokenExpiration.Absolute
+            },
+            new Client
+            {
+                ClientId = "oidc-client-team5",
+                ClientName = "OIDC client Team5",
+                AllowedGrantTypes = GrantTypes.Code,
+                ClientSecrets = new[]
+                {
+                    new Secret("CapK24Team5".Sha256())
+                },
+                RedirectUris = new[]
+                {
+                    "https://emallsolution-admin.herokuapp.com/signin-oidc",
+                    "https://localhost:44382/signin-oidc"
+                },
+                PostLogoutRedirectUris = new[]
+                {
+                    "https://emallsolution-admin.herokuapp.com/signout-callback-oidc",
+                    "https://localhost:44382/signout-callback-oidc"
+                },
+                AllowedScopes = new[]
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    "roles", "shop", IdentityServerConstants.LocalApi.ScopeName
+                },
+                RequirePkce = true,
+                AllowPlainTextPkce = false,
+                AllowOfflineAccess = true,
+                UserSsoLifetime = 7200,
+                AccessTokenLifetime = 7200,
+                RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                RefreshTokenExpiration = TokenExpiration.Absolute
             }
         };
 
@@ -47,45 +89,26 @@ namespace AuthServer.Configurations
                 {
                     JwtClaimTypes.Role
                 }
-            }
-        };
-
-        public static IEnumerable<ApiResource> ApiResources => new[]
-        {
-            new ApiResource
+            },
+            new IdentityResource
             {
-                Name = "product",
-                DisplayName = "Product API",
-                Description = "Allow the application to access product API",
-                Scopes = new[]
-                {
-                    "product.read", "product.write"
-                },
-                ApiSecrets = new[]
-                {
-                    new Secret("CapK24Team13".Sha256())
-                },
+                Name = "shop",
+                DisplayName = "Shop",
                 UserClaims =
                 {
-                    JwtClaimTypes.Role
+                    "ShopId"
                 }
             }
         };
 
-        public static IEnumerable<ApiScope> ApiScopes => new[]
+        public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
-            new ApiScope
-            {
-                Name = "product.read",
-                DisplayName = "product.read",
-                Description = "Allow application to have read permission on product"
-            },
-            new ApiScope
-            {
-                Name = "product.write",
-                DisplayName = "product.write",
-                Description = "Allow application to have write permission on product"
-            }
+            new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
+        };
+
+        public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
+        {
+            new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
         };
     }
 }

@@ -1,0 +1,157 @@
+﻿@using GUI.Extensions
+@using System.Globalization
+@using Shared.Models
+@model List<Shared.DTOs.OrderItemDTO>
+@section Styles {
+<style>
+    /*h1 {
+                font-size: 1.5em;
+                margin: 10px;
+            }
+            */
+    .rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center
+    }
+
+        .rating > input {
+            display: none
+        }
+
+        .rating > label {
+            position: relative;
+            width: 1em;
+            font-size: 4vw;
+            color: #FFD600;
+            cursor: pointer
+        }
+
+            .rating > label::before {
+                content: "\2605";
+                position: absolute;
+                opacity: 0
+            }
+
+            .rating > label:hover:before,
+            .rating > label:hover ~ label:before {
+                opacity: 1 !important
+            }
+
+        .rating > input:checked ~ label:before {
+            opacity: 1
+        }
+
+        .rating:hover > input:checked ~ label:before {
+            opacity: 0.4
+        }
+</style>
+}
+<main class="main">
+    @await Component.InvokeAsync("HomePageSlider")
+    <div class="mb-4"></div><!-- End .mb-2 -->
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-12">
+                <h2 class="title mb-3">
+                    <a href="#">
+                        <i class="fas fa-user-circle"></i>
+                        Account name
+                    </a>
+                </h2>
+            </div>
+            <div class="col-md-10">
+                <table style="width: 100%">
+                    <thead>
+                        <tr>
+                            <td id="product-col">Product</td>
+                            <td id="quantity-col" style="font-size: 20px;">Quantity</td>
+                            <td id="date-col" style="font-size: 20px;">Date</td>
+                            <td id="price-col" style="font-size: 20px;">Price</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="mb-2" data-product="@item.ProductId">
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <img src="@Url.ProductImageUrl(item.Image)">
+                                        </div>
+                                        <div class="col-md-10">
+                                            <a href="/product/index/@item.ProductId">
+                                                <p>
+                                                    @item.ProductName
+                                                </p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td id="quantity-col">
+                                    @item.Quantity
+                                </td>
+                                <td id="date-col">
+                                    @item.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
+                                </td>
+                                <td id="price-col">
+                                    @((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))
+                                </td>
+                                <td id="status-col">
+                                    @item.Status.GetDescription()
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary">Rate & comment</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- End .col-md-12 -->
+        </div>
+    </div>
+    <div class="mb-4"></div><!-- End .mb-4 -->
+</main><!-- End .main -->
+<!-- rating / comments Modal -->
+<div class="modal fade" id="rating-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+                <div class="form-box">
+                    <div class="form-tab">
+                        <ul class="nav nav-pills nav-fill" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="rating-tab" data-toggle="tab" href="#rating" role="tab" aria-controls="rating" aria-selected="true">Rating & Comments</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tab-content-5">
+                            <div class="tab-pane fade show active" id="rating" role="tabpanel" aria-labelledby="rating-tab">
+                                <p>*Please rate before comment</p>
+                                <div class="rating">
+                                    <input type="radio" name="rating" value="5" id="5">
+                                    <label for="5">☆</label>
+                                    <input type="radio" name="rating" value="4" id="4">
+                                    <label for="4">☆</label>
+                                    <input type="radio" name="rating" value="3" id="3">
+                                    <label for="3">☆</label>
+                                    <input type="radio" name="rating" value="2" id="2">
+                                    <label for="2">☆</label>
+                                    <input type="radio" name="rating" value="1" id="1">
+                                    <label for="1">☆</label>
+                                </div>
+                                <textarea class="form-control" rows="5" id="comment" style="resize: none"></textarea>
+                                <button class="btn btn-primary">Send Feedback</button>
+                            </div><!-- .End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+@section Scripts {
+<script src="@Url.Content("~/assets/user/js/rating.js")"></script>
+}

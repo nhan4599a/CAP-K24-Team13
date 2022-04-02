@@ -1,6 +1,7 @@
-﻿using AspNetCoreSharedComponent.ModelBinders.Providers;
+﻿using AspNetCoreSharedComponent.Mail;
+using AspNetCoreSharedComponent.Middleware;
+using AspNetCoreSharedComponent.ModelBinders.Providers;
 using AspNetCoreSharedComponent.ModelValidations;
-using AuthServer.Abstractions;
 using AuthServer.Configurations;
 using AuthServer.Factories;
 using AuthServer.Identities;
@@ -10,18 +11,21 @@ using AuthServer.Services;
 using AuthServer.Validators;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Shared;
 using System;
-using System.Net;
-using System.Net.Mail;
 using System.Reflection;
+using static IdentityServer4.IdentityServerConstants;
 
 namespace AuthServer
 {
@@ -44,36 +48,35 @@ namespace AuthServer
             {
                 options.ModelBinderProviders.Add(new StringToDateOnlyModelBinderProvider());
             }).AddFluentValidation<UserSignUpModel, SignUpModelValidator>()
-            .AddFluentValidation<ExternalSignUpModel, ExternalSignUpModelValidator>();
-            services.AddScoped<UserStore<User, Role, ApplicationDbContext, Guid>, ApplicationUserStore>();
+            .AddFluentValidation<EditUserInformationModel, EditUserInformationModelValidator>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            });
+            services.AddDataProtection()
+                .PersistKeysToDbContext<ApplicationDbContext>();
+            services.AddScoped<UserStore<User, Role, ApplicationDbContext,
+                Guid, IdentityUserClaim<Guid>, UserRole, IdentityUserLogin<Guid>, IdentityUserToken<Guid>, 
+                IdentityRoleClaim<Guid>>, ApplicationUserStore>();
             services.AddScoped<UserManager<User>, ApplicationUserManager>();
             services.AddScoped<RoleManager<Role>, ApplicationRoleManager>();
             services.AddScoped<SignInManager<User>, ApplicationSignInManager>();
             services.AddScoped<RoleStore<Role, ApplicationDbContext, Guid>, ApplicationRoleStore>();
             services.AddDbContext<ApplicationDbContext>();
-            services.AddAuthentication()
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/auth/signin";
-                    options.LogoutPath = "/auth/signout";
-                });
-                //.AddGoogle(options =>
-                //{
-                //    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                //    options.ClientId = Configuration["GOOGLE_CLIENT_ID"];
-                //    options.ClientSecret = Configuration["GOOGLE_CLIENT_SECRET"];
-                //});
-            services.AddTransient<MailConfirmationTokenProvider<User>>();
-            services.AddSingleton(new SmtpClient
+            services.AddAuthorization(options =>
             {
-                Credentials = new NetworkCredential(Configuration["GMAIL_USERNAME"], Configuration["GMAIL_PASSWORD"]),
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                EnableSsl = true,
-                Host = "smtp.gmail.com",
-                Port = 587
+                options.AddPolicy(LocalApi.PolicyName, policy =>
+                {
+                    policy.AddAuthenticationSchemes(LocalApi.AuthenticationScheme);
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole(SystemConstant.Roles.ADMIN_TEAM_13);
+                });
             });
-            services.AddSingleton<IMailService, GmailService>();
-            services.AddScoped<SignInActionFilter>();
+            services.AddTransient<MailConfirmationTokenProvider<User>>();
+            services.AddTransient<ResetPasswordTokenProvider<User>>();
+            services.AddScoped(services => 
+                new MailHelper(Configuration["SEND_GRID_API_KEY"], Configuration["SENDER_EMAIL"], 
+                    services.GetRequiredService<ILoggerFactory>()));
             services.AddScoped<IUserClaimsPrincipalFactory<User>, ApplicationUserClaimsPrincipleFactory>();
             services.AddIdentity<User, Role>(options =>
             {
@@ -81,12 +84,16 @@ namespace AuthServer
                 options.SignIn.RequireConfirmedAccount = AccountConfig.RequireEmailConfirmation;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredLength = 8;
+                options.User.RequireUniqueEmail = true;
                 if (AccountConfig.RequireEmailConfirmation)
                 {
                     options.Tokens.ProviderMap.Add("MailConfirmation",
                         new TokenProviderDescriptor(typeof(MailConfirmationTokenProvider<User>)));
                     options.Tokens.EmailConfirmationTokenProvider = "MailConfirmation";
                 }
+                options.Tokens.ProviderMap.Add("ResetPassword",
+                    new TokenProviderDescriptor(typeof(ResetPasswordTokenProvider<User>)));
+                options.Tokens.PasswordResetTokenProvider = "ResetPassword";
                 options.Lockout.MaxFailedAccessAttempts = AccountConfig.MaxFailedAccessAttempts;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountConfig.LockOutTime);
             }).AddUserStore<ApplicationUserStore>()
@@ -95,7 +102,7 @@ namespace AuthServer
             .AddRoleManager<ApplicationRoleManager>()
             .AddSignInManager<ApplicationSignInManager>()
             .AddPasswordValidator<UserPasswordValidator>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();   
+            .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer(options =>
             {
@@ -108,32 +115,62 @@ namespace AuthServer
                 options.Endpoints.EnableAuthorizeEndpoint = true;
                 options.Endpoints.EnableTokenEndpoint = true;
                 options.Endpoints.EnableIntrospectionEndpoint = true;
-                
+                options.Authentication.RequireAuthenticatedUserForSignOutMessage = true;
             })
                 .AddAspNetIdentity<User>()
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = ApplyOptions;
+                    options.TokenCleanupInterval = 7200;
                 })
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = ApplyOptions;
                 })
-                .AddDeveloperSigningCredential();
+                .AddDeveloperSigningCredential()
+                .AddProfileService<ApplicationUserProfileService>();
+            services.AddLocalApiAuthentication();
             services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
+                options.SlidingExpiration = false;
+            });
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto
+            });
+            app.Use(async (context, next) =>
+            {
+                context.SetIdentityServerOrigin("https://cap-k24-team13-auth.herokuapp.com/");
+                await next();
+            });
+            app.UseHsts();
+
+            app.UseIdentityServer();
+
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseGlogalExceptionHandlerMiddleware();
+
             app.UseAuthentication();
-            app.UseIdentityServer();
             app.UseAuthorization();
+            app.UseSession();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
@@ -142,10 +179,9 @@ namespace AuthServer
 
         private void ApplyOptions(DbContextOptionsBuilder builder)
         {
-            var connectionString = "Server=.; Database=ClientAuth; User ID=sa; Password=nhan4599; TrustServerCertificate=True";
+            var connectionString = Configuration["CLIENT_AUTH_CONNECTION_STRING"];
             var assemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(assemblyName));
         }
-
     }
 }
