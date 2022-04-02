@@ -1,5 +1,4 @@
-﻿using AspNetCoreSharedComponent.HttpContext;
-using AspNetCoreSharedComponent.Mail;
+﻿using AspNetCoreSharedComponent.Mail;
 using AuthServer.Configurations;
 using AuthServer.Extensions;
 using AuthServer.Identities;
@@ -8,10 +7,7 @@ using DatabaseAccessor.Models;
 using IdentityServer4.Events;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
-using Shared;
 using Shared.Models;
 using System;
 using System.Security.Claims;
@@ -42,7 +38,7 @@ namespace AuthServer.Controllers
         public IActionResult SignIn()
         {
             var paramString = Request.QueryString.ToString();
-            HttpContext.Session.SetString(SignInParamsKey, paramString);
+            TempData[SignInParamsKey] = paramString!;
             return View();
         }
 
@@ -114,12 +110,12 @@ namespace AuthServer.Controllers
                 ModelState.AddModelError("SignUp-Error", "Input information is invalid");
                 return View(model);
             }
-            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model, SystemConstant.Roles.CUSTOMER);
+            var createUserResult = await _signInManager.UserManager.CreateUserAsync(model);
             if (createUserResult.Succeeded)
             {
                 if (AccountConfig.RequireEmailConfirmation)
                     await SendUserConfirmationEmail(createUserResult.User!);
-                return Redirect($"/auth/signin{HttpContext.Session.GetAndRemove<string>(SignInParamsKey)}");
+                return View("WaitingForConfirmEmail");
             }
             foreach (var error in createUserResult.Errors)
                 ModelState.AddModelError("SignUp-Error", error.Description);
@@ -165,10 +161,10 @@ namespace AuthServer.Controllers
             var result = await _signInManager.UserManager.ConfirmEmailAsync(user, StringExtension.FromBase64(token));
             if(result.Succeeded)
             {
-                return View();
+                return Redirect($"/Auth/SignIn{TempData[SignInParamsKey]}");
             }
-            foreach(var error in result.Errors)
-                ModelState.AddModelError("ConfirmEmail-Error", error.Description);
+            await SendUserConfirmationEmail(user);
+            ModelState.AddModelError("ConfirmEmail-Error", "Your token is invalid, we re-sent an email to you again");
             return View();
         }
 
@@ -221,7 +217,7 @@ namespace AuthServer.Controllers
                 await _signInManager.UserManager.ResetPasswordAsync(user, StringExtension.FromBase64(token), newPassword);
             if (resetPasswordResult.Succeeded)
             {
-                return Redirect($"/auth/signin{HttpContext.Session.GetAndRemove<string>(SignInParamsKey)}");
+                return Redirect($"/auth/signin{TempData[SignInParamsKey]}");
             }
             foreach (var error in resetPasswordResult.Errors)
                 ModelState.AddModelError("ResetPassword-Error", error.Description);

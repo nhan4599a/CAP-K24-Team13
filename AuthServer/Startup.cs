@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Shared;
 using System;
 using System.Reflection;
@@ -73,7 +74,9 @@ namespace AuthServer
             });
             services.AddTransient<MailConfirmationTokenProvider<User>>();
             services.AddTransient<ResetPasswordTokenProvider<User>>();
-            services.AddScoped(_ => new MailHelper(Configuration["SEND_GRID_API_KEY"], Configuration["SENDER_EMAIL"]));
+            services.AddScoped(services => 
+                new MailHelper(Configuration["SEND_GRID_API_KEY"], Configuration["SENDER_EMAIL"], 
+                    services.GetRequiredService<ILoggerFactory>()));
             services.AddScoped<IUserClaimsPrincipalFactory<User>, ApplicationUserClaimsPrincipleFactory>();
             services.AddIdentity<User, Role>(options =>
             {

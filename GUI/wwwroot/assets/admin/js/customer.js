@@ -49,7 +49,7 @@ function onLoadCustomersCompleted(paginatedData) {
         moveToPage(pageNumber, currentPageInfo.pageSize);
     });
 
-    $('a[name=btn-action]').click(function (e) {
+    $('a[name=btn-action]:not(.disabled)').click(function (e) {
         e.preventDefault();
         let eventSource = $(this);
         let userId = eventSource.parent().parent().children().eq(1).children().text().trim();
@@ -59,7 +59,7 @@ function onLoadCustomersCompleted(paginatedData) {
             unbanUser(userId)
                 .then(() => {
                     animationLoader.hideAnimation();
-                    toastr.succ5ess('User unban successfully');
+                    toastr.success('User unban successfully');
                     eventSource.children('span').text(' Ban');
                     eventSource.parent().parent().children().eq(6).children().text('Available');
                 }).catch(error => {
@@ -67,7 +67,7 @@ function onLoadCustomersCompleted(paginatedData) {
                     toastr.error(error);
                 });
         } else {
-            banUser(userId, )
+            //banUser(userId, )
         }
     });
 }

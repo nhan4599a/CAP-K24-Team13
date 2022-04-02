@@ -269,7 +269,7 @@ function buildCustomerTableRowHtml(customer, index) {
                 </td>
                 <td class="align-middle text-center">${customer.reportCount}</td>
                 <td class="align-middle text-center text-sm">
-                    ${customer.isLockedOut ? 'Locked out' : (customer.isAvailable ? 'Available' : 'Banned')}
+                    ${customer.isLockedOut ? 'Locked out' : (customer.isAvailable ? (!customer.isConfirmed ? 'Unavailable' : 'Available') : 'Banned')}
                 </td>
                 <td class="align-middle">
                     ${buildCustomerActionButtonHtml(customer)}
@@ -346,15 +346,18 @@ function buildReportActionButtonHtml(isApproved) {
 }
 
 function buildCustomerActionButtonHtml(customer) {
-    if (!customer.isLockedOut && !customer.isAvailable)
+    if (customer.isLockedOut)
+        return '';
+    if (!customer.isAvailable)
         return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
                     <i class="fas fa-check"></i>
                     <span> Unban</span>
                 </a>`;
-    return `<a class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" name="btn-action" style="cursor: pointer">
-                <i class="fas fa-check"></i>
-                <span> Unban</span>
-            </a>`;
+    else
+        return `<a class="text-secondary font-weight-bold text-xs ${!customer.isConfirmed ? 'disabled' : ''}" data-toggle="tooltip" name="btn-action" style="${customer.isConfirmed ? 'cursor: pointer' : 'text-decoration: none'}">
+                    <i class="fas fa-check"></i>
+                    <span> Ban</span>
+                </a>`;
 }
 
 function buildEditButtonHtml() {

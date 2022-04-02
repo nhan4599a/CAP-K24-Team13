@@ -2,6 +2,7 @@
 using SendGridHelper = SendGrid.Helpers.Mail;
 using Shared.Models;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCoreSharedComponent.Mail
 {
@@ -13,11 +14,14 @@ namespace AspNetCoreSharedComponent.Mail
 
         private readonly SendGridHelper.EmailAddress _from;
 
-        public MailHelper(string apiKey, string senderAddress, string? senderName = null)
+        private readonly ILogger<MailHelper> _logger;
+
+        public MailHelper(string apiKey, string senderAddress, ILoggerFactory loggerFactory, string? senderName = null)
         {
             ApiKey = apiKey;
             _client = new SendGridClient(ApiKey);
             _from = new SendGridHelper.EmailAddress(senderAddress, senderName);
+            _logger = loggerFactory.CreateLogger<MailHelper>();
         }
 
         public async Task<bool> SendEmail(MailRequest mailRequest)
@@ -28,7 +32,10 @@ namespace AspNetCoreSharedComponent.Mail
                 ? SendGridHelper.MailHelper.CreateSingleEmail(_from, to, mailRequest.Subject, "", mailRequest.Body)
                 : SendGridHelper.MailHelper.CreateSingleEmail(_from, to, mailRequest.Subject, mailRequest.Body, "");
 
-            return (await _client.SendEmailAsync(mail)).IsSuccessStatusCode;
+            var response = await _client.SendEmailAsync(mail);
+
+            _logger.LogInformation($"Send email completed {response.IsSuccessStatusCode}, Message: {await response.Body.ReadAsStringAsync()}");
+            return response.IsSuccessStatusCode;
         }
     }
 }

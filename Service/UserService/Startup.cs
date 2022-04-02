@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using UserService.Commands;
@@ -58,7 +59,9 @@ namespace UserService
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
-            services.AddScoped(_ => new MailHelper(Configuration["SEND_GRID_API_KEY"], Configuration["SENDER_EMAIL"]));
+            services.AddScoped(services => 
+                new MailHelper(Configuration["SEND_GRID_API_KEY"], Configuration["SENDER_EMAIL"], 
+                    services.GetRequiredService<ILoggerFactory>()));
             services.AddHangfire(config => config
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()

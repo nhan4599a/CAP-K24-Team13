@@ -2,7 +2,6 @@
 using DatabaseAccessor.Models;
 using Microsoft.AspNetCore.Identity;
 using Shared;
-using Shared.Models;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ namespace AuthServer.Extensions
     public static class IdentityUserExtension
     {
         public static async Task<CreateUserResult> CreateUserAsync(this UserManager<User> userManager,
-            UserSignUpModel model, string role, int? shopId = null)
+            UserSignUpModel model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -25,8 +24,7 @@ namespace AuthServer.Extensions
                 DoB = model.DoB,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber,
-                ShopId = shopId
+                PhoneNumber = model.PhoneNumber
             };
             var createAccountResult = await userManager.CreateAsync(user, model.Password);
             if (createAccountResult.Succeeded)
@@ -35,27 +33,12 @@ namespace AuthServer.Extensions
                 {
                     new Claim(ClaimTypes.Email, model.Email)
                 });
-                var addToRoleResult = await userManager.AddToRoleAsync(user, role);
+                var addToRoleResult = await userManager.AddToRoleAsync(user, SystemConstant.Roles.CUSTOMER);
                 if (addToRoleResult.Succeeded)
                     return CreateUserResult.Success(user);
                 return CreateUserResult.Failed(addToRoleResult.Errors);
             }
             return CreateUserResult.Failed(createAccountResult.Errors);
-        }
-
-        public static async Task<CreateUserResult> CreateUserAsync(this UserManager<User> userManager, ShopOwnerSignUpModel model,
-            string username, string password)
-        {
-            return await userManager.CreateUserAsync(new UserSignUpModel
-            (
-                model.FirstName,
-                model.LastName,
-                username,
-                password,
-                model.Email,
-                model.PhoneNumber,
-                model.DoB
-            ), SystemConstant.Roles.SHOP_OWNER, model.ShopId);
         }
     }
 }
