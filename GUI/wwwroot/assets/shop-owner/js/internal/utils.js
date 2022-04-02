@@ -710,7 +710,7 @@ function buildOrderItem(order) {
                         <input type="tel" name="phonenumber" placeholder="phonenumber" value="${order.phone}" disabled />
                         <input type="text" name="address" placeholder="address" value="${order.shippingAddress}" disabled />
                     </div>
-                    <button id="btn-order-details" type="button" class="btn btn-primary">
+                    <button id="btn-order-details" type="button" class="btn btn-primary" onclick=" window.open('https://cap-k24-team13.herokuapp.com/invoice/detail/${order.invoiceCode}','_blank')">
                         View
                     </button>
                 </div>
