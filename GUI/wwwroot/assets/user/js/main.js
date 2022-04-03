@@ -39,7 +39,7 @@ $(document).ready(function () {
         catDropdown.addClass('show').find('.dropdown-menu').addClass('show');
         catDropdown.find('.dropdown-toggle').attr('aria-expanded', 'true');
     }
-        
+    
 	if ( $('.sticky-header').length && $(window).width() >= 992 ) {
 		var sticky = new Waypoint.Sticky({
 			element: $('.sticky-header')[0],
