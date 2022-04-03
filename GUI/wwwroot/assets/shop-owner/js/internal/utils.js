@@ -693,6 +693,60 @@ function displayImportQuantityDialog(product, saveCallback) {
     });
 }
 
+function displayBanCustomerDialog(customer, saveCallback) {
+    var modalHtml = `<div class="modal fade" id="quantity-modal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Ban Options</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="col-12">
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-6 align-items-center col-form-label" for="customer-name">Permanently Ban</label>
+                                            <input type="radio" name="tab" id="permanently-ban" checked />
+                                        </div>
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-6 align-items-center col-form-label" for="current-product-quantity">Ban depend on the date</label>
+                                            <input type="radio" name="tab" id="ban-depend-on-date" />
+                                            <div class="hide">
+                                                <hr>
+                                                <p>Choose option</p>
+                                                <button class="btn btn-primary">3 days</button>
+                                                <button class="btn btn-primary">7 days</button>
+                                                <button class="btn btn-primary">15 days</button>
+                                                <button class="btn btn-primary">30 days</button><br>
+                                                <input style="margin-top:5px; text-align: center" type="number" name="input-name">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn bg-gradient-primary-dark my-shadow text-white"
+                                            data-action="save">
+                                        Confirm
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-action="cancel">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+    $('body').append(modalHtml);
+    $('#ban-modal').modal({
+        backdrop: 'static',
+        keyboard: false
+    }).modal('show');
+    $('#permanently-ban').click(() => {
+        $('div.hide').css('display', 'none');
+    });
+    $('#ban-depend-on-date').click(() => {
+        $('div.hide').css('display', 'block');
+    });
+}   
+
 function formatPrice(price) {
     return new Intl.NumberFormat('en-US', {
         maximumFractionDigits: 3
