@@ -684,7 +684,7 @@ function displayImportQuantityDialog(product, saveCallback) {
     $('#quantity-modal div.modal-footer > button:first-child').click(function () {
         $('#quantity-modal').modal('hide');
         let importedQuantity = parseInt($('#quantity').val());
-        saveCallback(importedQuantity, importedQuantity);
+        saveCallback(importedQuantity);
     });
     $('#quantity-modal').on('hidden.bs.modal', function () {
         $(this).modal('dispose');
@@ -692,8 +692,8 @@ function displayImportQuantityDialog(product, saveCallback) {
     });
 }
 
-function displayBanCustomerDialog(customer, saveCallback) {
-    var modalHtml = `<div class="modal fade" id="quantity-modal" tabindex="-1" role="dialog"
+function displayBanCustomerDialog(confirmedCallback) {
+    var modalHtml = `<div class="modal fade" id="ban-customer-modal" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
@@ -703,20 +703,21 @@ function displayBanCustomerDialog(customer, saveCallback) {
                                 <div class="modal-body">
                                     <form class="col-12">
                                         <div class="form-row mb-3">
-                                            <label class="col-sm-6 align-items-center col-form-label" for="customer-name">Permanently Ban</label>
+                                            <label class="col-sm-6 align-items-center col-form-label">Permanently Ban</label>
                                             <input type="radio" name="tab" id="permanently-ban" checked />
                                         </div>
                                         <div class="form-row mb-3">
-                                            <label class="col-sm-6 align-items-center col-form-label" for="current-product-quantity">Ban depend on the date</label>
+                                            <label class="col-sm-6 align-items-center col-form-label">Ban depend on the date</label>
                                             <input type="radio" name="tab" id="ban-depend-on-date" />
-                                            <div class="hide">
+                                            <div class="hide" style="display: none">
                                                 <hr>
                                                 <p>Choose option</p>
-                                                <button class="btn btn-primary">3 days</button>
-                                                <button class="btn btn-primary">7 days</button>
-                                                <button class="btn btn-primary">15 days</button>
-                                                <button class="btn btn-primary">30 days</button><br>
-                                                <input style="margin-top:5px; text-align: center" type="number" name="input-name">
+                                                <button class="btn btn-primary change-day-count-button">3 days</button>
+                                                <button class="btn btn-primary change-day-count-button">7 days</button>
+                                                <button class="btn btn-primary change-day-count-button">15 days</button>
+                                                <button class="btn btn-primary change-day-count-button">30 days</button>
+                                                <br>
+                                                <input style="margin-top:5px; text-align: center" type="number" name="input-day-count" value="3">
                                             </div>
                                         </div>
                                     </form>
@@ -734,17 +735,30 @@ function displayBanCustomerDialog(customer, saveCallback) {
                         </div>
                     </div>`;
     $('body').append(modalHtml);
-    $('#ban-modal').modal({
+    $('#ban-customer-modal').modal({
         backdrop: 'static',
         keyboard: false
     }).modal('show');
+    $('#ban-customer-modal').on('hidden.bs.modal', function () {
+        $(this).modal('dispose');
+        $(this).remove();
+    });
     $('#permanently-ban').click(() => {
         $('div.hide').css('display', 'none');
     });
     $('#ban-depend-on-date').click(() => {
         $('div.hide').css('display', 'block');
     });
-}   
+    $('button.btn.change-day-count-button').click(function (e) {
+        e.preventDefault();
+        $('input[name=input-day-count]').val($(this).text().split(' ')[0]);
+    });
+    $('#ban-customer-modal div.modal-footer > button:first-child').click(function () {
+        $('#ban-customer-modal').modal('hide');
+        let dayCount = $('#permanently-ban')[0].checked ? null : $('input[name=input-day-count]').val();
+        confirmedCallback(dayCount);
+    });
+}
 
 function formatPrice(price) {
     return new Intl.NumberFormat('en-US', {
