@@ -133,7 +133,7 @@ function buildReportTableHtml(reports) {
             </table>`;
 }
 
-function buildCustomerTableHtml(customers) {
+function buildCustomerTableHtml(customers) { 
     let tableRowHtml = '';
     customers.forEach((customer, index) => {
         tableRowHtml += buildCustomerTableRowHtml(customer, index);
