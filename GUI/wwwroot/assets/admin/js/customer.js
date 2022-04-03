@@ -61,7 +61,7 @@ function onLoadCustomersCompleted(paginatedData) {
                     animationLoader.hideAnimation();
                     toastr.success('User unban successfully');
                     eventSource.children('span').text(' Ban');
-                    eventSource.parent().parent().children().eq(6).children().text('Available');
+                    eventSource.parent().parent().children().eq(6).html('Available');
                 }).catch(error => {
                     animationLoader.hideAnimation();
                     toastr.error(error);
@@ -77,7 +77,7 @@ function onLoadCustomersCompleted(paginatedData) {
                             animationLoader.hideAnimation();
                             toastr.success('User ban successfully');
                             eventSource.children('span').text(' Unban');
-                            eventSource.parent().parent().children().eq(6).children().text('Banned');
+                            eventSource.parent().parent().children().eq(6).html('Banned');
                         }).catch(error => {
                             animationLoader.hideAnimation();
                             toastr.error(error);
