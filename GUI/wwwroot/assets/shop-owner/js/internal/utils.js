@@ -23,7 +23,6 @@ function renderReportTable(reports) {
 }
 
 function renderCustomerTable(customers) {
-    console.log(customers);
     if (customers.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no customer to show!</p>');
     } else {
@@ -139,7 +138,7 @@ function buildCustomerTableHtml(customers) {
     customers.forEach((customer, index) => {
         tableRowHtml += buildCustomerTableRowHtml(customer, index);
     });
-    return `<table class="table align-items-center mb-0">
+    return `<table class="table align-items-center m b-0">
                 <thead>
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"

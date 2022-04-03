@@ -121,7 +121,9 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
-    <div id="loading-container"></div>
+    <div id="loading-container">
+        <div id="animation-container"></div>
+    </div>
     @await Component.InvokeAsync("SideBar", new { activeItem = "profile" })
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
         <!-- Navbar -->
