@@ -1,12 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using OrderService.Commands;
 using Shared.DTOs;
 using Shared.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace OrderService.Controllers
@@ -18,9 +20,17 @@ namespace OrderService.Controllers
     {
         private readonly IMediator _mediator;
 
-        public OrderController(IMediator mediator)
+        private readonly IDistributedCache _cache;
+
+        private static readonly DistributedCacheEntryOptions cacheOptions = new()
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+        };
+
+        public OrderController(IMediator mediator, IDistributedCache cache)
         {
             _mediator = mediator;
+            _cache = cache;
         }
 
         [HttpGet("user/{userId}")]
@@ -70,16 +80,24 @@ namespace OrderService.Controllers
         [HttpGet("{invoiceCode}")]
         public async Task<ApiResult> GetOrderDetail(string invoiceCode)
         {
+            var cachedResult = _cache.GetString(GetCacheKey(invoiceCode));
+            if (cachedResult != null)
+                return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(JsonSerializer.Deserialize<InvoiceDetailDTO>(cachedResult)!);
             var response = await _mediator.Send(new GetInvoiceByInvoiceCodeQuery
             {
                 InvoiceCode = invoiceCode 
             });
             if (response == null)
                 return ApiResult.CreateErrorResult(404, "Invoice not found");
-            System.IO.File.AppendAllLines("/home/ec2-user/user.txt", User.Claims.Select(e => $"type: {e.Type}; value: {e.Value}"));
+            await _cache.SetStringAsync(GetCacheKey(invoiceCode), JsonSerializer.Serialize(response), cacheOptions);
             if (User.FindFirstValue("ShopId") != response.ShopId.ToString())
                 return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
             return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(response);
+        }
+
+        private static string GetCacheKey(string invoiceCode)
+        {
+            return $"Order.{invoiceCode}";
         }
     }
 }

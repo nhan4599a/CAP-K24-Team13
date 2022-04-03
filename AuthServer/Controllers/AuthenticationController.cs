@@ -240,7 +240,7 @@ namespace AuthServer.Controllers
             var email = receiver.ToBase64();
             var body = "Thanks for your registration," +
                 $" this is your email confirmation <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}"}\">link</a>" +
-                $" The link will be expired at {DateTime.UtcNow.AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}";
+                $" The link will be expired at {DateTime.UtcNow.AddHours(7).AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}";
             return new MailRequest()
             {
                 Body = body,
@@ -266,7 +266,7 @@ namespace AuthServer.Controllers
             var email = receiver.ToBase64();
             var body = "You are receiving this email because we received a password reset request for your account." +
                  $" This is your link to reset your password <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/reset/{email}?token={token.ToBase64()}"}\">link</a>. " +
-                 $" This link will be expired at {DateTime.UtcNow.AddMinutes(10):dddd, MMMM d, yyyy; HH:mm:ss}" +
+                 $" This link will be expired at {DateTime.UtcNow.AddHours(7).AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}" +
                  $" If you did not request a password reset, no further action is required. Regards!";
             return new MailRequest()
             {
