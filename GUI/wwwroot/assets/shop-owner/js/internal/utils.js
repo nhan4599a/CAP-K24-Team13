@@ -354,7 +354,7 @@ function buildCustomerActionButtonHtml(customer) {
                     <span> Unban</span>
                 </a>`;
     else
-        return `<a class="text-secondary font-weight-bold text-xs ${!customer.isConfirmed ? 'disabled' : ''}" data-toggle="tooltip" name="btn-action" style="${customer.isConfirmed ? 'cursor: pointer' : 'text-decoration: none'}">
+        return `<a class="text-secondary text-xs ${!customer.isConfirmed ? 'disabled' : 'font-weight-bold'}" data-toggle="tooltip" name="btn-action" style="${customer.isConfirmed ? 'cursor: pointer' : 'text-decoration: none; cursor: default'}">
                     <i class="fas fa-check"></i>
                     <span> Ban</span>
                 </a>`;

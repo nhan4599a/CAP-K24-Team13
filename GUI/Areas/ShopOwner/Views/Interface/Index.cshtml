@@ -378,7 +378,6 @@
                 })
                 .catch((e) => {
                     animationLoader.hideAnimation();
-                    console.log(e);
                     toastr.error(e, 'Error');
                 });
             });
@@ -387,11 +386,12 @@
         function onInformationGot(shopInformation) {
             if (shopInformation) {
                 $('#input-description').val(shopInformation.description);
-                $('#input-name').val(shopInformation.shopName);
+                $('#input-name').val(shopInformation.shop_Name);
                 $('#input-phone').val(shopInformation.phone);
                 $('#input-email').val(shopInformation.email);
-                $('#input-address').val(shopInformation.shopAddress);
-                $('#shop-name').text(shopInformation.shopName);
+                let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;
+                $('#input-address').val(location);
+                $('#shop-name').text(shopInformation.shop_Name);
                 localStorage.setItem('shop-interface.information', JSON.stringify(shopInformation));
             }
         }
