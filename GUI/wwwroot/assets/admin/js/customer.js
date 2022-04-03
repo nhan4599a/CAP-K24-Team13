@@ -53,21 +53,37 @@ function onLoadCustomersCompleted(paginatedData) {
         e.preventDefault();
         let eventSource = $(this);
         let userId = eventSource.parent().parent().children().eq(1).children().text().trim();
-        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
-        animationLoader.showAnimation();
         if (eventSource.children('span').text().toLowerCase().includes('unban')) {
+            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+            animationLoader.showAnimation();
             unbanUser(userId)
                 .then(() => {
                     animationLoader.hideAnimation();
                     toastr.success('User unban successfully');
                     eventSource.children('span').text(' Ban');
-                    eventSource.parent().parent().children().eq(6).children().text('Available');
+                    eventSource.parent().parent().children().eq(6).html('Available');
                 }).catch(error => {
                     animationLoader.hideAnimation();
                     toastr.error(error);
                 });
         } else {
-            //banUser(userId, )
+            displayBanCustomerDialog(dayCount => {
+                displayYesNoQuestion('Are you sure ?', () => {
+                    let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+                    animationLoader.showAnimation();
+                    console.log(dayCount);
+                    banUser(userId, dayCount)
+                        .then(() => {
+                            animationLoader.hideAnimation();
+                            toastr.success('User ban successfully');
+                            eventSource.children('span').text(' Unban');
+                            eventSource.parent().parent().children().eq(6).html('Banned');
+                        }).catch(error => {
+                            animationLoader.hideAnimation();
+                            toastr.error(error);
+                        });
+                });
+            });
         }
     });
 }

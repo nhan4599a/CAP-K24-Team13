@@ -42,7 +42,7 @@ namespace UserService.Controllers
         }
 
         [HttpPost("ban/{userId}")]
-        public async Task<ApiResult> ApplyBan(string userId, uint? dayCount)
+        public async Task<ApiResult> ApplyBan(string userId, [FromBody] uint? dayCount)
         {
             var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
             if (!parseResult)
