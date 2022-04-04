@@ -424,7 +424,7 @@
                     carouselItems.eq(i).children('img')
                         .attr('src', carouselItems.eq(i + 1).children('img').attr('src'));
                 }
-                carouselItems.eq(lastAddedIndex).children('img').attr('src', '~/assets/shop-owner/img/image-holder.jpg');
+                carouselItems.eq(lastAddedIndex).children('img').attr('src', '/assets/shop-owner/img/image-holder.jpg');
                 $('#image-carousel').carousel({
                     ride: true,
                     interval: 3500
@@ -462,7 +462,6 @@
                 }
 
                 let formData = new FormData();
-                let requestModelObject = buildRequestModel();
                 for (let i = 0; i < imageDropzone.files.length; i++)
                     formData.append(`images[${i}]`, imageDropzone.files[i]);
                 if (editMode === 'add') {
