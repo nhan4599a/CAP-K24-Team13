@@ -291,14 +291,11 @@ function unbanUser(userId) {
 }
 
 function banUser(userId, dayCount) {
+    let formData = new FormData();
     if (dayCount) {
-        return axios.post(`${userEndpoint}/ban/${userId}`, dayCount, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
+        formData.append('dayCount', dayCount);
     }
-    return axios.post(`${userEndpoint}/ban/${userId}`);
+    return axios.post(`${userEndpoint}/ban/${userId}`, formData);
 }
 
 function getShopInformation(shopId) {
