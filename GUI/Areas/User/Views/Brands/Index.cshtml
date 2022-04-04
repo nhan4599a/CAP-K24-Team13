@@ -121,7 +121,7 @@
                 <div class="col-md-4">
                     <div class="form-group has-search">
                         <span class="fa fa-search form-control-feedback"></span>
-                        <input type="text" class="form-control" placeholder="Search by name" id="input-search">
+                        <input type="text" class="form-control" placeholder="Search by name" id="input-search-shop">
                     </div>
                 </div>
             </div>
@@ -159,3 +159,13 @@
         </div>
     </div><!-- End .page-content -->
 </main>
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            $('#input-search-shop').change(function () {
+                let keyword = $(this).val();
+                location.href = `/brands?keyword=${keyword}`;
+            });
+        });
+    </script>
+}

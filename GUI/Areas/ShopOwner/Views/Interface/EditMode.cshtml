@@ -189,7 +189,7 @@
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row gx-4 mb-2">
                     <div class="col-3">
-                        <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px" action="#">
+                        <div class="dropzone dz-clickable mb-3" id="avatar-section" style="border-radius: 10px" action="#">
                             <div class="dz-default dz-message" data-dz-message="">
                                 <span>Drop images here to upload</span>
                             </div>
@@ -238,7 +238,7 @@
                     <div class="row justify-content-center">
                         <div class="col-xl-10">
                             <div class="form-group mb-3">
-                                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px" action="#">
+                                <div class="dropzone dz-clickable mb-3" id="image-section" style="border-radius: 10px" action="#">
                                     <div class="dz-default dz-message" data-dz-message="">
                                         <span>Drop images here to upload</span>
                                     </div>
@@ -354,7 +354,7 @@
             const acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
             const acceptedMaxBytes = 4 * 1024 * 1024;
             let remainingBytes = acceptedMaxBytes;
-            let dropzone = new Dropzone('div#file-section', {
+            let imageDropzone = new Dropzone('div#image-section', {
                 maxFilesize: 1,
                 paramName: 'files',
                 maxFiles: 5,
@@ -365,10 +365,21 @@
                 addRemoveLinks: true,
                 myFiles: []
             });
+            let avatarDropzone = new Dropzone('div#avatar-section', {
+                maxFilesize: 1,
+                paramName: 'files',
+                maxFiles: 1,
+                filesizeBase: 1024,
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                acceptedFiles: acceptedMimeTypes.join(','),
+                addRemoveLinks: true,
+                myFiles: []
+            });
             let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting'));
             if (edittingShopInterface)
-                loadEdittingShopInterface(edittingShopInterface, dropzone);
-            dropzone.on('addedfile', function (file) {
+                loadEdittingShopInterface(edittingShopInterface, imageDropzone);
+            imageDropzone.on('addedfile', function (file) {
                 this.options.myFiles.push(file);
                 let maxFileNumber = this.options.maxFiles;
                 let maxFileSize = this.options.maxFilesize;
@@ -383,7 +394,7 @@
                     this.removeFile(file);
                     toastr.error(`${uploadedFileSizeInMb.toFixed(2)} MB file is too big to upload!`, 'File is rejected');
                 } else if (file.size > remainingBytes) {
-                    this.removeFile(file);z
+                    this.removeFile(file);
                     toastr.error('Maximum file size exceeded!', 'File is rejected');
                 } else {
                     remainingBytes -= file.size;
@@ -402,7 +413,7 @@
                     fileReader.readAsDataURL(file);
                 }
             });
-            dropzone.on('removedfile', function (file) {
+            imageDropzone.on('removedfile', function (file) {
                 let removedIndex = this.options.myFiles.findIndex(item => item.upload.uuid == file.upload.uuid);
 
                 let lastAddedIndex = this.options.myFiles.length - 1;
@@ -422,8 +433,8 @@
             });
             $('a.btn[name=btn-clear]').click(function () {
                 displayYesNoQuestion('Are you sure?', () => {
-                    dropzone.files.forEach(function (file) {
-                        dropzone.removeFile(file);
+                    imageDropzone.files.forEach(function (file) {
+                        imageDropzone.removeFile(file);
                     });
                 });
             });
@@ -445,18 +456,15 @@
                     toastr.error('Failed to edit interface!', 'Error');
                 };
 
-                if (dropzone.files.length < 1) {
+                if (imageDropzone.files.length < 1) {
                     toastr.error('You must upload at least 1 pictures!', 'Error');
                     return;
                 }
 
                 let formData = new FormData();
                 let requestModelObject = buildRequestModel();
-                Object.keys(requestModelObject).forEach(key => {
-                    formData.append(`requestModel.${key}`, requestModelObject[key]);
-                });
-                for (let i = 0; i < dropzone.files.length; i++)
-                    formData.append(`images[${i}]`, dropzone.files[i]);
+                for (let i = 0; i < imageDropzone.files.length; i++)
+                    formData.append(`images[${i}]`, imageDropzone.files[i]);
                 if (editMode === 'add') {
                     addShopInterface(0, formData).then(successCallback).catch(errorCallback);
                 } else {
@@ -466,22 +474,6 @@
                 }
             });
         });
-
-        function buildRequestModel() {
-            let name = $('#input-name').val();
-            let phone = $('#input-phone').val();
-            let email = $('#input-email').val();
-            let address = $('#input-address').val();
-            let description = tinymce.activeEditor.getContent({ format: 'text' });
-
-            return {
-                name: name,
-                shopPhoneNumber: phone,
-                shopEmail: email,
-                shopAddress: address,
-                shopDescription: description
-            }
-        }
 
         function loadEdittingShopInterface(shopInterface, dropzone) {
             var shopInformation = JSON.parse(localStorage.getItem('shop-interface.information'));
