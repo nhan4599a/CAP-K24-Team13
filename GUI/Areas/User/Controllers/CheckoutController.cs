@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Shared;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,9 +18,12 @@ namespace GUI.Areas.User.Controllers
     {
         private readonly IProductClient _productClient;
 
-        public CheckoutController(IProductClient productClient)
+        private readonly ILogger<CheckoutController> _logger;
+
+        public CheckoutController(IProductClient productClient, ILoggerFactory loggerFactory)
         {
             _productClient = productClient;
+            _logger = loggerFactory.CreateLogger<CheckoutController>();
         }
 
         [HttpPost]
@@ -33,6 +37,7 @@ namespace GUI.Areas.User.Controllers
                 var productResponse = await _productClient.GetProductInfoInCheckout(token, model.ProductId);
                 if (!productResponse.IsSuccessStatusCode || productResponse.Content.ResponseCode != 200)
                     return StatusCode(StatusCodes.Status500InternalServerError);
+                _logger.LogInformation($"Product name: {productResponse.Content.Data.ProductName}; Product quantity: {productResponse.Content.Data.Quantity}; Quantity in cart: {model.Quantity}");
                 if (model.Quantity > productResponse.Content.Data.Quantity)
                 {
                     productsError.Add(productResponse.Content.Data.ProductName);
