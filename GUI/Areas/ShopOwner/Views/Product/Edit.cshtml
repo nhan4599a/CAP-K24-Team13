@@ -61,6 +61,7 @@
     $(function () {
         let classNames = ['active', 'bg-gradient-primary'];
         $('#nav-item-product').addClass(classNames);
+        $('#input-search').parent().remove();
         let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
         animationLoader.showAnimation(3500);
         getShopId().then(shopId => {

@@ -36,6 +36,7 @@
         Dropzone.autoDiscover = false;
         const edittingCategory = JSON.parse(window.localStorage.getItem('editting-category'));
         $(function () {
+            $('#input-search').parent().remove();
             let acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
             let dropzone = new Dropzone('div#file-section', {
                 maxFilesize: 0.3,
