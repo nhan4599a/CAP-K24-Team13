@@ -23,12 +23,13 @@ namespace ShopInterfaceService.Controllers
         private readonly IFileStorable _fileStore;
         private readonly FileValidationRuleSet rules;
 
-        public ShopInterfaceController(IMediator mediator, IFileStorable imageManager, ILoggerFactory loggerFactory)
+        public ShopInterfaceController(IMediator mediator, IFileStorable imageManager)
         {
             _mediator = mediator;
             _fileStore = imageManager;
             rules = FileValidationRuleSet.DefaultValidationRules;
-            rules.Change(FileValidationRuleName.MinFileCount, 1);
+            rules.Change(FileValidationRuleName.MinFileCount, 2);
+            rules.Change(FileValidationRuleName.MaxFileCount, 6);
         }
 
         [Authorize]
