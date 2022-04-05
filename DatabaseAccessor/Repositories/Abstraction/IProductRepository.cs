@@ -3,6 +3,7 @@ using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories.Abstraction
@@ -26,6 +27,8 @@ namespace DatabaseAccessor.Repositories.Abstraction
         Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo pagination);
 
         Task<PaginatedList<ProductDTO>> FindProductsOfShopAsync(int shopId, string keyword, PaginationInfo paginationInfo);
+
+        Task<CommandResponse<List<ProductDTO>>> GetRelatedProductsAsync(Guid productId);
 
         Task<CommandResponse<int>> ImportProductQuantityAsync(Guid productId, int quantity);
     }

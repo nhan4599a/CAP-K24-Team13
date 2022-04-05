@@ -7,6 +7,7 @@ using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -162,9 +163,9 @@ namespace DatabaseAccessor.Repositories
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
                 .Include(product => product.Category)
-                .Where(product => product.Category.ShopId == shopId &&
-                    (product.ProductName.Contains(keyword)
-                        || product.Category.CategoryName.Contains(keyword)))
+                .Where(product => product.ShopId == shopId &&
+                    (EF.Functions.Like(product.ProductName, $"%{product.ProductName}%")
+                        || EF.Functions.Like(product.Category.CategoryName, $"%{product.Category.CategoryName}%")))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return result;
@@ -173,6 +174,19 @@ namespace DatabaseAccessor.Repositories
         private async Task<ShopProduct> FindProductByIdAsync(Guid id)
         {
             return await _dbContext.ShopProducts.FindAsync(id);
+        }
+
+        public async Task<CommandResponse<List<ProductDTO>>> GetRelatedProductsAsync(Guid productId)
+        {
+            var sourceProduct = await _dbContext.ShopProducts.FindAsync(productId);
+            if (sourceProduct == null)
+                return CommandResponse<List<ProductDTO>>.Error("Product is not found!", null);
+            var result = await _dbContext.ShopProducts.Where(product => product.ShopId == sourceProduct.ShopId
+                    && product.CategoryId == sourceProduct.CategoryId && product.Id != sourceProduct.Id)
+                .OrderBy(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
+                .Take(4).Select(product => _mapper.MapToProductDTO(product))
+                .ToListAsync();
+            return CommandResponse<List<ProductDTO>>.Success(result);
         }
 
         public void Dispose()

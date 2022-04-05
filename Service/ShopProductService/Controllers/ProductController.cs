@@ -9,6 +9,7 @@ using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -165,6 +166,18 @@ namespace ShopProductService.Controllers
             if (product == null)
                 return ApiResult.CreateErrorResult(404, "Product is not found");
             return ApiResult<MinimalProductDTO>.CreateSucceedResult(product);
+        }
+
+        [HttpGet("related/{productId}")]
+        public async Task<ApiResult> GetRelatedProducts(string productId)
+        {
+            var response = await _mediator.Send(new FindRelatedProductsQuery
+            {
+                Id = Guid.Parse(productId)
+            });
+            if (!response.IsSuccess)
+                return ApiResult.CreateErrorResult(404, response.ErrorMessage);
+            return ApiResult<List<ProductDTO>>.CreateSucceedResult(response.Response);
         }
 
         [Authorize]
