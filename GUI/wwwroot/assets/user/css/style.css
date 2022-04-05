@@ -19432,8 +19432,13 @@ button:focus {
 }
 
 #product-col{
-    width: 50%;
+    width: 40%;
 	font-size: 20px;
+}
+
+#status-col {
+	text-align: center;
+	width: 15%
 }
 
 #quantity-col{
@@ -19443,7 +19448,7 @@ button:focus {
 }
 
 #date-col{
-    width: 20%;
+    width: 15%;
     text-align: center;
 }
 

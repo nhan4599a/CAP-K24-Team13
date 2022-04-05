@@ -29,7 +29,6 @@
 }
 @model SearchResultViewModel
 <main class="main">
-    @await Component.InvokeAsync("HomePageSlider")
     <div class="mb-2"></div><!-- End .mb-2-->
     <div class="col-md-12">
         <h3 style="text-align: center;">Search results for: "@ViewBag.Keyword"</h3>
@@ -58,6 +57,7 @@
                                             <a href="#" onclick="return false;" class="btn-product btn-cart" title="Add to cart" data-product="@product.Id">
                                                 <span>add to cart</span>
                                             </a>
+
                                         </div>
                                     </figure>
                                     <div class="product-body">
