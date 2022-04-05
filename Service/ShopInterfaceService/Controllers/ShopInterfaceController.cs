@@ -11,6 +11,7 @@ using Shared.RequestModels;
 using Shared.Validations;
 using ShopInterfaceService.Commands;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopInterfaceService.Controllers
@@ -39,11 +40,8 @@ namespace ShopInterfaceService.Controllers
         {
             try
             {
-                requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files, rules: rules);
-                var text = new List<string> { Request.Form.Files.GetFiles("images").Count.ToString() };
-                foreach (var file in Request.Form.Files.GetFiles("images"))
-                    text.Add($"FileName: {file.FileName}, Name: {file.Name}");
-                System.IO.File.AppendAllLines(@"/home/ec2-user/log-interface.txt", text);
+                requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files.Take(5), rules: rules);
+                requestModel.Avatar = await _fileStore.SaveFileAsync(Request.Form.Files.Skip(5).Take(1).First(), rules: rules);
             }
             catch (ImageValidationException ex)
             {
