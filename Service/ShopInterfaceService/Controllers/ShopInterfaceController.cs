@@ -43,7 +43,7 @@ namespace ShopInterfaceService.Controllers
                 requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files.Take(5), rules: rules);
                 requestModel.Avatar = await 
                     _fileStore.SaveFileAsync(Request.Form.Files.Skip(5).Take(1).First(),
-                        rules: FileValidationRuleSet.DefaultValidationRules);
+                        rules: FileValidationRuleSet.DefaultSingleValidationRules);
             }
             catch (ImageValidationException ex)
             {
