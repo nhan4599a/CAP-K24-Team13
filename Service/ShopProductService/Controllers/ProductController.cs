@@ -95,6 +95,8 @@ namespace ShopProductService.Controllers
         [HttpGet("shop/{shopId}/search")]
         public async Task<ApiResult> GetProductsOfShop(int shopId, [FromQuery] SearchRequestModel requestModel)
         {
+
+            System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", new string[] { requestModel.Keyword, requestModel.PageNumber.ToString(), requestModel.PageSize.ToString() });
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrWhiteSpace(requestModel.Keyword)
                 ? new FindProductsByShopIdQuery
                 {
@@ -116,13 +118,14 @@ namespace ShopProductService.Controllers
                     }
                 };
             var response = await _mediator.Send(request);
+            System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", new string[] { "==============", response.Data.Count.ToString() });
+            System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", response.Data.Select(product => product.ProductName));
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(response);
         }
 
         [HttpGet("search")]
         public async Task<ApiResult> FindProducts([FromQuery] SearchRequestModel requestModel)
         {
-            System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", new string[] { requestModel.Keyword, requestModel.PageNumber.ToString(), requestModel.PageSize.ToString() });
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrEmpty(requestModel.Keyword)
                 ? new FindAllProductsQuery
                 {
@@ -142,8 +145,6 @@ namespace ShopProductService.Controllers
                     }
                 };
             var productList = await _mediator.Send(request);
-            System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", new string[] { "==============", productList.Data.Count.ToString() });
-            System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", productList.Data.Select(product => product.ProductName));
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productList);
         }
 
