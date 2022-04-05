@@ -379,9 +379,12 @@
                 addRemoveLinks: true,
                 myFiles: []
             });
-            let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting'));
+            let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting.interface'));
+            let edittingShopInformation = JSON.parse(localStorage.getItem('shop-interface.editting.information'));
             if (edittingShopInterface)
-                loadEdittingShopInterface(edittingShopInterface, imageDropzone);
+                loadEdittingShopInterface(edittingShopInterface, imageDropzone, avatarDropzone);
+            if (edittingShopInformation)
+                loadEdittingShopInformation(edittingShopInformation);
             imageDropzone.on('addedfile', function (file) {
                 this.options.myFiles.push(file);
                 let maxFileNumber = this.options.maxFiles;
@@ -442,8 +445,8 @@
                 animationLoader.showAnimation();
                 let successCallback = () => {
                     localStorage.removeItem('shop-interface.edit-mode');
-                    localStorage.removeItem('shop-interface.editting');
-                    localStorage.removeItem('shop-interface.information');
+                    localStorage.removeItem('shop-interface.editting.interface');
+                    localStorage.removeItem('shop-interface.editting.information');
                     animationLoader.hideAnimation();
                     setTimeout(() => window.location = '/shopowner/interface', 500);
                 };
@@ -467,32 +470,44 @@
                     formData.append(`images[${i}]`, imageDropzone.files[i]);
                 formData.append('avatar', avatarDropzone.files[0]);
                 if (editMode === 'add') {
-                    addShopInterface(0, formData).then(successCallback).catch(errorCallback);
+                    getShopId()
+                        .then(shopId => {
+                            addShopInterface(shopId, formData)
+                                .then(successCallback).catch(errorCallback);
+                        });
                 } else {
                     for (let i = 0; i < edittingShopInterface.images.length; i++)
                         formData.append(`requestModel.shopImages[${i}]`, edittingShopInterface.images[i]);
-                    editShopInterface(0, formData).then(successCallback).catch(errorCallback);
+                    formData.append('avatar', avatarDropzone.files[0]);
+                    getShopId()
+                        .then(shopId => {
+                            editShopInterface(shopId, formData)
+                                .then(successCallback).catch(errorCallback);
+                        });
                 }
             });
         });
 
-        function loadEdittingShopInterface(shopInterface, dropzone) {
-            var shopInformation = JSON.parse(localStorage.getItem('shop-interface.information'));
-            if (shopInformation) {
-                $('#input-description').val(shopInformation.description);
-                $('#input-name').val(shopInformation.shop_Name);
-                $('#input-phone').val(shopInformation.phone);
-                $('#input-email').val(shopInformation.email);
-                let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;
-                $('#input-address').val(location);
-                $('#shop-name').text(shopInformation.shop_Name);
-            }
+        function loadEdittingShopInterface(shopInterface, imagesDropzone, avatarDropzone) {
+            console.log(shopInterface);
             shopInterface.images.forEach(imageUrl => getShopInterfaceImage(imageUrl).then(blob => {
                 let file = new File([blob], blob.name, { type: blob.type });
-                dropzone.addFile(file);
+                imagesDropzone.addFile(file);
             }));
-            if (shopInterface.avatar)
-                $('#shop-avatar').attr('src', getShopInterfaceImageUrl(shopInterface.avatar));
+            getShopInterfaceImage(shopInterface.avatar).then(blob => {
+                let file = new File([blob], blob.name, { type: blob.type });
+                avatarDropzone.addFile(file);
+            });
+        }
+
+        function loadEdittingShopInformation(shopInformation) {
+            $('#input-description').val(shopInformation.description);
+            $('#input-name').val(shopInformation.shop_Name);
+            $('#input-phone').val(shopInformation.phone);
+            $('#input-email').val(shopInformation.email);
+            let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;
+            $('#input-address').val(location);
+            $('#shop-name').text(shopInformation.shop_Name);
         }
     </script>
 </body>

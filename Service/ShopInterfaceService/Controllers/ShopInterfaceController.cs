@@ -40,10 +40,10 @@ namespace ShopInterfaceService.Controllers
         {
             try
             {
-                requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files.Take(5), rules: rules);
-                requestModel.Avatar = await 
-                    _fileStore.SaveFileAsync(Request.Form.Files.Skip(5).Take(1).First(),
+                requestModel.Avatar = await
+                    _fileStore.SaveFileAsync(Request.Form.Files.Take(1).First(),
                         rules: FileValidationRuleSet.DefaultSingleValidationRules);
+                requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files.Skip(1), rules: rules);
             }
             catch (ImageValidationException ex)
             {
@@ -66,7 +66,9 @@ namespace ShopInterfaceService.Controllers
         {
             try
             {
-                requestModel.ShopImages = await _fileStore.EditFilesAsync(requestModel.ShopImages, Request.Form.Files,
+                requestModel.Avatar = await _fileStore.EditFileAsync(requestModel.Avatar, Request.Form.Files.Take(1).First(),
+                    rules: FileValidationRuleSet.DefaultSingleValidationRules);
+                requestModel.ShopImages = await _fileStore.EditFilesAsync(requestModel.ShopImages, Request.Form.Files.Skip(1),
                     rules: rules);
             }
             catch (ImageValidationException ex)

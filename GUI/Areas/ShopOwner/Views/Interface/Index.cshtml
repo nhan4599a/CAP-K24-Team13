@@ -31,11 +31,11 @@
     <style>
         #button-img {
             display: inline-block;
-            height: 50%;
+            height: 100%;
             padding: 0;
             margin: 0;
             vertical-align: top;
-            width: 50%;
+            width: 100%;
         }
 
         .container-fluid h5 {
@@ -394,7 +394,7 @@
                 let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;
                 $('#input-address').val(location);
                 $('#shop-name').text(shopInformation.shop_Name);
-                localStorage.setItem('shop-interface.information', JSON.stringify(shopInformation));
+                localStorage.setItem('shop-interface.editting.information', JSON.stringify(shopInformation));
             }
         }
 
@@ -402,7 +402,7 @@
             localStorage.setItem('shop-interface.edit-mode', !shopInterface ? 'add' : 'edit');
             if (shopInterface) {
                 loadShopInterfaceImages(shopInterface);
-                localStorage.setItem('shop-interface.editting', JSON.stringify(shopInterface));
+                localStorage.setItem('shop-interface.editting.interface', JSON.stringify(shopInterface));
             }
         }
 
