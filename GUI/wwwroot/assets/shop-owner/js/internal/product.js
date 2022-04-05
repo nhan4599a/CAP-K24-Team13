@@ -11,10 +11,9 @@
         if (e.which == 13) {
             e.preventDefault();
             let keyword = $(this).val().trim();
-            let urlEncodedKeyword = encodeURIComponent(keyword);
             let currentPageSize = getCurrentPageInfo().pageSize;
             window.location.href =
-                `https://cap-k24-team13.herokuapp.com/shopowner/product?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=${currentPageSize}`;
+                `https://cap-k24-team13.herokuapp.com/shopowner/product?keyword=${keyword}&pageNumber=1&pageSize=${currentPageSize}`;
         }
     });
 

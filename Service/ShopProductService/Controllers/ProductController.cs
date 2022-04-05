@@ -95,7 +95,6 @@ namespace ShopProductService.Controllers
         [HttpGet("shop/{shopId}/search")]
         public async Task<ApiResult> GetProductsOfShop(int shopId, [FromQuery] SearchRequestModel requestModel)
         {
-
             System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", new string[] { requestModel.Keyword, requestModel.PageNumber.ToString(), requestModel.PageSize.ToString() });
             IRequest<PaginatedList<ProductDTO>> request = string.IsNullOrWhiteSpace(requestModel.Keyword)
                 ? new FindProductsByShopIdQuery

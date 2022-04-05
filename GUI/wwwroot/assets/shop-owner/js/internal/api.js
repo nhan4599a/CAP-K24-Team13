@@ -46,7 +46,7 @@ function findProducts(shopId, keyword, pageNumber, pageSize) {
         pageSize: pageSize || 5
     };
     if (keyword)
-        params.keyword = encodeURIComponent(keyword);
+        params.keyword = keyword;
     return axios.get(acctualEndpoint, {
         params
     });
