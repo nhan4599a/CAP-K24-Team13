@@ -10,6 +10,7 @@ using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -141,6 +142,8 @@ namespace ShopProductService.Controllers
                     }
                 };
             var productList = await _mediator.Send(request);
+            System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", new string[] { "==============", productList.Data.Count.ToString() });
+            System.IO.File.AppendAllLines("/home/ec2-user/keyword.txt", productList.Data.Select(product => product.ProductName));
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productList);
         }
 
