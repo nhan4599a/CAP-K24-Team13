@@ -33,6 +33,7 @@
     <script>
         Dropzone.autoDiscover = false;
         $(function () {
+            $('#input-search').parent().remove();
             let acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
             const acceptedMaxBytes = 4 * 1024 * 1024;
             let dropzone = new Dropzone('div#file-section', {
