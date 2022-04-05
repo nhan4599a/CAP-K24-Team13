@@ -40,8 +40,8 @@ namespace ShopInterfaceService.Controllers
             try
             {
                 requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files, rules: rules);
-                var text = new List<string> { Request.Form.Files.Count.ToString() };
-                foreach (var file in Request.Form.Files)
+                var text = new List<string> { Request.Form.Files.GetFiles("images").Count.ToString() };
+                foreach (var file in Request.Form.Files.GetFiles("images"))
                     text.Add($"FileName: {file.FileName}, Name: {file.Name}");
                 System.IO.File.AppendAllLines(@"/home/ec2-user/log-interface.txt", text);
             }
