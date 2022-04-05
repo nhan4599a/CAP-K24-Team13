@@ -86,7 +86,6 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new ShopInterfaceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
             modelBuilder.ApplyConfiguration(new CommentConfiguration());

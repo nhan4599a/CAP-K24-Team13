@@ -1,4 +1,5 @@
 ﻿using Shared.RequestModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseAccessor.Models
@@ -6,6 +7,8 @@ namespace DatabaseAccessor.Models
     [Table("ShopInterfaces", Schema = "dbo")]
     public class ShopInterface
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ShopId { get; set; }
 
         public string Avatar { get; set; }

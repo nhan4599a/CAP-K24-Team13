@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseAccessor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220327150945_ChangeSchemeName")]
-    partial class ChangeSchemeName
+    [Migration("20220405082759_InitDb")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -97,7 +97,7 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InvoiceCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -124,6 +124,8 @@ namespace DatabaseAccessor.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
+
+                    b.HasIndex("InvoiceCode");
 
                     b.HasIndex("UserId");
 
@@ -253,16 +255,8 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate() + '7:0:0'");
 
-                    b.Property<int?>("Punishment")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("ReporterId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
@@ -340,10 +334,7 @@ namespace DatabaseAccessor.Migrations
             modelBuilder.Entity("DatabaseAccessor.Models.ShopInterface", b =>
                 {
                     b.Property<int>("ShopId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShopId"), 1L, 1);
 
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");
@@ -599,11 +590,15 @@ namespace DatabaseAccessor.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -623,6 +618,15 @@ namespace DatabaseAccessor.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.UserRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasDiscriminator().HasValue("UserRole");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.Cart", b =>
@@ -780,21 +784,6 @@ namespace DatabaseAccessor.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.HasOne("DatabaseAccessor.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DatabaseAccessor.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("DatabaseAccessor.Models.User", null)
@@ -802,6 +791,25 @@ namespace DatabaseAccessor.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.UserRole", b =>
+                {
+                    b.HasOne("DatabaseAccessor.Models.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseAccessor.Models.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.Cart", b =>
@@ -816,6 +824,11 @@ namespace DatabaseAccessor.Migrations
                     b.Navigation("Report");
 
                     b.Navigation("StatusChangedHistories");
+                });
+
+            modelBuilder.Entity("DatabaseAccessor.Models.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopCategory", b =>
@@ -841,6 +854,8 @@ namespace DatabaseAccessor.Migrations
                     b.Navigation("Invoices");
 
                     b.Navigation("Reports");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

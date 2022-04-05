@@ -19,7 +19,7 @@ namespace ShopInterfaceService.Handlers
 
         public async Task<Dictionary<int, string>> Handle(GetShopAvatarQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.GetShopAvatar(request.ShopId);
+            return await _repository.GetShopAvatar(request.ShopIds);
         }
 
         public void Dispose()

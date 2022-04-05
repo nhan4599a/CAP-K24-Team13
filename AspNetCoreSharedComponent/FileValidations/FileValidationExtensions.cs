@@ -46,11 +46,11 @@ namespace AspNetCoreSharedComponent.FileValidations
             throw new ArgumentException($"{rule.RuleName} is not suitable for single file validation", nameof(rule));
         }
 
-        public static FileValidationResult Validate(this IFormFileCollection files, FileValidationRuleSet? rules = null)
+        public static FileValidationResult Validate(this IEnumerable<IFormFile> files, FileValidationRuleSet? rules = null)
         {
             if (files == null)
                 throw new ArgumentNullException(nameof(files));
-            if (files.Count == 0)
+            if (!files.Any())
                 throw new ArgumentException("file collection must not have zero file", nameof(files));
             if (rules == null || rules.Count == 0)
                 rules = FileValidationRuleSet.DefaultValidationRules;
@@ -63,7 +63,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             return FileValidationResult.CreateFailedResult(rules, passedRules);
         }
 
-        public static bool ValidateMultiple(this IFormFileCollection files, FileValidationRule rule)
+        public static bool ValidateMultiple(this IEnumerable<IFormFile> files, FileValidationRule rule)
         {
             if (files == null)
                 throw new ArgumentNullException(nameof(files));
@@ -71,13 +71,13 @@ namespace AspNetCoreSharedComponent.FileValidations
                 throw new ArgumentNullException(nameof(rule));
             if (rule.RuleName == FileValidationRuleName.MinFileCount)
             {
-                if (files.Count >= rule.Value)
+                if (files.Count() >= rule.Value)
                     return true;
                 return false;
             }
             if (rule.RuleName == FileValidationRuleName.MaxFileCount)
             {
-                if (files.Count <= rule.Value)
+                if (files.Count() <= rule.Value)
                     return true;
                 return false;
             }

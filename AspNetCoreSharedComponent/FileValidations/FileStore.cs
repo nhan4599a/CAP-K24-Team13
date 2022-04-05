@@ -31,7 +31,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             _directoryInfo = new DirectoryInfo(Path.Combine(_environment.WebRootPath, _relationalPath));
         }
 
-        public async Task<string[]> SaveFilesAsync(IFormFileCollection files, bool shouldValidate = true,
+        public async Task<string[]> SaveFilesAsync(IEnumerable<IFormFile> files, bool shouldValidate = true,
             FileValidationRuleSet? rules = null)
         {
             if (shouldValidate)
@@ -47,7 +47,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             return savedFileNames.ToArray();
         }
 
-        public async Task<string[]> EditFilesAsync(string[] oldImagesName, IFormFileCollection files,
+        public async Task<string[]> EditFilesAsync(string[] oldImagesName, IEnumerable<IFormFile> files,
             bool shouldValidate = true, FileValidationRuleSet? rules = null)
         {
             if (oldImagesName == null)
@@ -62,7 +62,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             }
             CreateDirectory();
             var imageFilesName = files.Select(x => x.FileName).ToList();
-            List<string> savedFileNames = new(files.Count);
+            List<string> savedFileNames = new(files.Count());
             var shouldBeEdittedFileNames = oldImagesName.Intersect(imageFilesName).ToList();
             var shouldBeDeletedFileNames = oldImagesName.Except(imageFilesName).ToList();
             var shouldBeCreatedFileNames = imageFilesName.Except(oldImagesName).ToList();
