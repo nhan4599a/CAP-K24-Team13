@@ -24,6 +24,7 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="@Url.Content("~/assets/shop-owner/css/loading.css")" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="@Url.Content("~/assets/shop-owner/css/material-dashboard.css?v=3.0.0")" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
@@ -132,7 +133,9 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
-    <div id="loading-container"></div>
+    <div id="loading-container">
+        <div id="animation-container"></div>
+    </div>
     @await Component.InvokeAsync("SideBar", new { activeItem = "profile" })
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
         <!-- Navbar -->
@@ -431,13 +434,6 @@
                 }).carousel(removedIndex);
                 this.options.myFiles.splice(removedIndex, 1);
             });
-            $('a.btn[name=btn-clear]').click(function () {
-                displayYesNoQuestion('Are you sure?', () => {
-                    imageDropzone.files.forEach(function (file) {
-                        imageDropzone.removeFile(file);
-                    });
-                });
-            });
 
             $('a.btn[name=btn-save]').click(function () {
                 let editMode = localStorage.getItem('shop-interface.edit-mode');
@@ -451,9 +447,9 @@
                     animationLoader.hideAnimation();
                     setTimeout(() => window.location = '/shopowner/interface', 500);
                 };
-                let errorCallback = () => {
+                let errorCallback = (error) => {
                     animationLoader.hideAnimation();
-                    toastr.error('Failed to edit interface!', 'Error');
+                    toastr.error('Failed to edit interface! ' + error, 'Error');
                 };
 
                 if (imageDropzone.files.length < 1) {
@@ -461,9 +457,15 @@
                     return;
                 }
 
+                if (avatarDropzone.files.length < 1) {
+                    toastr.error('You must upload avatar!', 'Error');
+                    return;
+                }
+
                 let formData = new FormData();
                 for (let i = 0; i < imageDropzone.files.length; i++)
                     formData.append(`images[${i}]`, imageDropzone.files[i]);
+                formData.append('avatar', avatarDropzone.files[0]);
                 if (editMode === 'add') {
                     addShopInterface(0, formData).then(successCallback).catch(errorCallback);
                 } else {
