@@ -14,6 +14,6 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<CommandResponse<ShopInterfaceDTO>> FindShopInterfaceByShopIdAsync(int shopId);
 
-        Task<Dictionary<int, string>> GetShopAvatar(int[] shopId);
+        Task<Dictionary<int, string>> GetShopAvatar(int[] shopIds);
     }
 }

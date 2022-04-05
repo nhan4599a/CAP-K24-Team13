@@ -332,10 +332,7 @@ namespace DatabaseAccessor.Migrations
             modelBuilder.Entity("DatabaseAccessor.Models.ShopInterface", b =>
                 {
                     b.Property<int>("ShopId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShopId"), 1L, 1);
 
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");

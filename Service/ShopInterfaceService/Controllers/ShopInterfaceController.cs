@@ -99,12 +99,12 @@ namespace ShopInterfaceService.Controllers
             return ApiResult<ShopInterfaceDTO>.CreateSucceedResult(result.Response);
         }
 
-        [HttpGet("avatar/{*shopId}")]
-        public async Task<ApiResult> GetAvatar(params int[] shopId)
+        [HttpGet("avatar/{*shopIds}")]
+        public async Task<ApiResult> GetAvatar(params int[] shopIds)
         {
             var result = await _mediator.Send(new GetShopAvatarQuery
             {
-                ShopId = shopId
+                ShopIds = shopIds
             });
             return ApiResult<Dictionary<int, string>>.CreateSucceedResult(result);
         }
