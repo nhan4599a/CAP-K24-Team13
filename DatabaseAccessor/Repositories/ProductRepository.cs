@@ -163,9 +163,9 @@ namespace DatabaseAccessor.Repositories
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
                 .Include(product => product.Category)
-                .Where(product => product.ShopId == shopId &&
-                    (EF.Functions.Like(product.ProductName, $"%{product.ProductName}%")
-                        || EF.Functions.Like(product.Category.CategoryName, $"%{product.Category.CategoryName}%")))
+                .Where(product => product.ShopId == shopId)
+                .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
+                        || EF.Functions.Like(product.Category.CategoryName, $"%{keyword}%"))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return result;
