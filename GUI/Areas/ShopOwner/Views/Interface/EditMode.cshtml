@@ -466,9 +466,9 @@
                 }
 
                 let formData = new FormData();
+                formData.append('avatar', avatarDropzone.files[0]);
                 for (let i = 0; i < imageDropzone.files.length; i++)
                     formData.append(`images[${i}]`, imageDropzone.files[i]);
-                formData.append('avatar', avatarDropzone.files[0]);
                 if (editMode === 'add') {
                     getShopId()
                         .then(shopId => {
@@ -476,9 +476,9 @@
                                 .then(successCallback).catch(errorCallback);
                         });
                 } else {
+                    formData.append('requestModel.avatar', edittingShopInterface.avatar);
                     for (let i = 0; i < edittingShopInterface.images.length; i++)
                         formData.append(`requestModel.shopImages[${i}]`, edittingShopInterface.images[i]);
-                    formData.append('avatar', avatarDropzone.files[0]);
                     getShopId()
                         .then(shopId => {
                             editShopInterface(shopId, formData)
@@ -508,6 +508,7 @@
             let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;
             $('#input-address').val(location);
             $('#shop-name').text(shopInformation.shop_Name);
+            $('.input-group-outline').addClass('is-filled');
         }
     </script>
 </body>
