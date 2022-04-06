@@ -20,7 +20,7 @@ namespace UserService.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult> GetAllUsers([FromQuery] GetAllUsersQuery query)
+        public async Task<ApiResult> FindUsers([FromQuery] FindUsersQuery query)
         {
             var result = await _mediator.Send(query);
             return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);

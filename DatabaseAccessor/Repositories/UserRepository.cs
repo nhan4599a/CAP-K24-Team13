@@ -23,7 +23,7 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper;
         }
 
-        public async Task<PaginatedList<UserDTO>> GetAllUsersAsync(PaginationInfo paginationInfo, bool customer)
+        public async Task<PaginatedList<UserDTO>> FindUsersAsync(string keyword, PaginationInfo paginationInfo, bool customer)
         {
             return await _dbContext.Users
                 .AsNoTracking()
@@ -31,6 +31,7 @@ namespace DatabaseAccessor.Repositories
                 .ThenInclude(e => e.Role)
                 .Include(e => e.AffectedReports)
                 .Where(e => !customer || e.UserRoles.Any(userRole => userRole.Role.Name == SystemConstant.Roles.CUSTOMER))
+                .Where(e => string.IsNullOrWhiteSpace(keyword) || e.Email.Contains(keyword))
                 .AsSplitQuery()
                 .Select(e => _mapper.MapToUserDTO(e))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);

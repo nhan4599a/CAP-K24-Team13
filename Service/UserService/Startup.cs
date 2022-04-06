@@ -33,7 +33,7 @@ namespace UserService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddFluentValidation<GetAllUsersQuery, GetAllUsersQueryValidator>();
+                .AddFluentValidation<FindUsersQuery, GetAllUsersQueryValidator>();
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration["REDIS_CONNECTION_STRING"];

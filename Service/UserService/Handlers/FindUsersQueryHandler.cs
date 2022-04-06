@@ -9,18 +9,18 @@ using UserService.Commands;
 
 namespace UserService.Handlers
 {
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PaginatedList<UserDTO>>, IDisposable
+    public class FindUsersQueryHandler : IRequestHandler<FindUsersQuery, PaginatedList<UserDTO>>, IDisposable
     {
         private readonly IUserRepository _repository;
 
-        public GetAllUsersQueryHandler(IUserRepository repository)
+        public FindUsersQueryHandler(IUserRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<PaginatedList<UserDTO>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedList<UserDTO>> Handle(FindUsersQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.GetAllUsersAsync(new PaginationInfo
+            return await _repository.FindUsersAsync(request.Keyword, new PaginationInfo
             {
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize

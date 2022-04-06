@@ -1,6 +1,6 @@
 ﻿$(document).ready(() => {
     let currentPageInfo = getCurrentPageInfo();
-    loadCustomers(currentPageInfo.pageNumber, currentPageInfo.pageSize);
+    loadCustomers(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
 
     $('#pagesize-select').change(function () {
@@ -11,10 +11,10 @@
     });
 });
 
-function loadCustomers(pageNumber, pageSize) {
+function loadCustomers(keyword, pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
-    getCustomers(pageNumber, pageSize).then((paginatedData) => {
+    getCustomers(keyword, pageNumber, pageSize).then((paginatedData) => {
         onLoadCustomersCompleted(paginatedData);
         animationLoader.hideAnimation();
     }).catch(() => {
@@ -35,18 +35,18 @@ function onLoadCustomersCompleted(paginatedData) {
     $('#previous-page').click((e) => {
         e.preventDefault();
         let currentPageInfo = getCurrentPageInfo();
-        moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
+        moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
     });
     $('#next-page').click((e) => {
         e.preventDefault();
         let currentPageInfo = getCurrentPageInfo();
-        moveToPage(currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
+        moveToPage(currentPageInfo.keyword, currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
     });
     $('a.pagination-item').click(function (e) {
         e.preventDefault();
         let pageNumber = $(this).text();
         let currentPageInfo = getCurrentPageInfo();
-        moveToPage(pageNumber, currentPageInfo.pageSize);
+        moveToPage(currentPageInfo.keyword, pageNumber, currentPageInfo.pageSize);
     });
 
     $('a[name=btn-action]:not(.disabled)').click(function (e) {
@@ -88,8 +88,8 @@ function onLoadCustomersCompleted(paginatedData) {
     });
 }
 
-function moveToPage(pageNumber, pageSize) {
-    window.location.href = `https://cap-k24-team13.herokuapp.com/admin/customer/index?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+function moveToPage(keyword, pageNumber, pageSize) {
+    window.location.href = `https://cap-k24-team13.herokuapp.com/admin/customer/index?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
 }
 
 function getCurrentPageInfo() {
@@ -97,8 +97,10 @@ function getCurrentPageInfo() {
     let queryObj = url.searchParams;
     let currentPageNumber = queryObj.get('pageNumber') ? parseInt(queryObj.get('pageNumber')) : 1;
     let currentPageSize = queryObj.get('pageSize') ? parseInt(queryObj.get('pageSize')) : 5;
+    let keyword = queryObj.get('keyword') ? queryObj.get('keyword') : undefined;
     return {
         pageNumber: currentPageNumber,
-        pageSize: currentPageSize
+        pageSize: currentPageSize,
+        keyword: keyword
     };
 }

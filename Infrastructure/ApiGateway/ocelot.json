@@ -31,6 +31,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/products/related/{id}",
+      "DownstreamScheme": "http",
+      "ServiceName": "ProductService",
+      "UpstreamPathTemplate": "/products/related/{id}",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/categories/",
       "DownstreamScheme": "http",
       "ServiceName": "ProductService",

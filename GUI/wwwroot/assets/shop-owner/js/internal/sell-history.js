@@ -3,18 +3,21 @@
     loadInvoices(currentPageInfo.key, currentPageInfo.value, currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
     let searchTextField = $('#input-search');
-    if (currentPageInfo.keyword) {
+    if (currentPageInfo.value) {
         searchTextField.parent().addClass('is-filled');
-        searchTextField.val(currentPageInfo.keyword);
+        searchTextField.val(currentPageInfo.value);
+    }
+    if (currentPageInfo.key) {
+        $(`#invoice-search-by option[value=${currentPageInfo.key}]`).attr('selected', true);
     }
     searchTextField.keypress(function (e) {
         if (e.which == 13) {
             e.preventDefault();
+            let key = $('#invoice-search-by').val().trim();
             let value = $(this).val().trim();
-            let urlEncodedValue = encodeURIComponent(value);
             let currentPageSize = getCurrentPageInfo().pageSize;
             window.location.href =
-                `https://cap-k24-team13.herokuapp.com/shopowner/order/sell-history?key=${urlEncodedValue}&value=${urlEncodedValue}&pageNumber=1&pageSize=${currentPageSize}`;
+                `https://cap-k24-team13.herokuapp.com/shopowner/order/sell-history?key=${key}&value=${value}&pageNumber=1&pageSize=${currentPageSize}`;
         }
     });
 

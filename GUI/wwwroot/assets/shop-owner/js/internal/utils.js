@@ -786,3 +786,21 @@ function buildOrderItem(order) {
                 </div>
             </div>`;
 }
+
+function buildRelatedProductItem(product) {
+    return `<div class="product product-sm">
+                <figure class="product-media">
+                    <a href="/product/index/${product.id}">
+                        <img src="${getProductImageUrl(product.images[0])}" alt="Product image" class="product-image">
+                    </a>
+                </figure>
+                <div class="product-body">
+                    <h5 class="product-title">
+                        <a href="product.html">Light brown studded <br>Wide fit wedges</a>\
+                    </h5><!-- End .product-title -->
+                    <div class="product-price">
+                        <span class="new-price">${formatPrice(product.price)}</span>
+                    </div>
+                </div>
+            </div>`;
+}
