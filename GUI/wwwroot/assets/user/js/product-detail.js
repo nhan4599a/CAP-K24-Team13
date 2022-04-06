@@ -8,7 +8,7 @@
     let path = location.pathname;
     if (path.endsWith('/'))
         path = path.slice(0, path.length - 1);
-    let productId = path.split('/')[2];
+    let productId = path.split('/')[3];
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation();
     getRelatedProducts(productId)
@@ -20,7 +20,8 @@
             });
             $('.products').html(relatedProductsHtml);
         })
-        .catch(() => {
+        .catch((error) => {
+            toastr.error(error);
             animationLoader.hideAnimation();
         });
 });

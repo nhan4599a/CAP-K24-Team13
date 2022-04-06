@@ -2,12 +2,25 @@
     let currentPageInfo = getCurrentPageInfo();
     loadCustomers(currentPageInfo.keyword, currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
-
+    let searchTextField = $('#input-search');
+    if (currentPageInfo.keyword) {
+        searchTextField.parent().addClass('is-filled');
+        searchTextField.val(currentPageInfo.keyword);
+    }
+    searchTextField.keypress(function (e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            let keyword = $(this).val().trim();
+            let currentPageSize = getCurrentPageInfo().pageSize;
+            window.location.href =
+                `https://cap-k24-team13.herokuapp.com/admin/customer/index?keyword=${keyword}&pageNumber=1&pageSize=${currentPageSize}`;
+        }
+    });
     $('#pagesize-select').change(function () {
         let selectedValue = $(this).val();
         let pageSize = parseInt(selectedValue);
         let pageInfo = getCurrentPageInfo();
-        moveToPage(pageInfo.pageNumber, pageSize);
+        moveToPage(pageInfo.keyword, pageInfo.pageNumber, pageSize);
     });
 });
 

@@ -181,9 +181,10 @@ namespace DatabaseAccessor.Repositories
             var sourceProduct = await _dbContext.ShopProducts.FindAsync(productId);
             if (sourceProduct == null)
                 return CommandResponse<List<ProductDTO>>.Error("Product is not found!", null);
-            var result = await _dbContext.ShopProducts.Where(product => product.ShopId == sourceProduct.ShopId
+            var result = await _dbContext.ShopProducts
+                .Include(e => e.Category)
+                .Where(product => product.ShopId == sourceProduct.ShopId
                     && product.CategoryId == sourceProduct.CategoryId && product.Id != sourceProduct.Id)
-                .OrderBy(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
                 .Take(4).Select(product => _mapper.MapToProductDTO(product))
                 .ToListAsync();
             return CommandResponse<List<ProductDTO>>.Success(result);

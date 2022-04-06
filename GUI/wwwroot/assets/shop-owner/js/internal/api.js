@@ -278,8 +278,8 @@ function getReports(pageNumber, pageSize) {
 
 function getCustomers(keyword, pageNumber, pageSize) {
     let params = {
-        pageNumber = pageNumber,
-        pageSize = pageSize,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
         customer: true
     };
     if (keyword)
