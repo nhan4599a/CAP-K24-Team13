@@ -68,6 +68,7 @@ function onCategoriesLoaded(paginatedData) {
                     .text('Activated');
                 $(this).parent().prepend(buildEditButtonHtml());
                 $(this).children('span').text(' Deactivate');
+                $(this).children('i').removeClass().addClass('far fa-trash-alt');
                 $('a[name=btn-edit]').click(function (e) {
                     e.preventDefault();
                     let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
