@@ -15,6 +15,11 @@ namespace ShopProductService.Handlers.Product
     {
         private readonly IProductRepository _repository;
 
+        public FindRelatedProductsQueryHandler(IProductRepository repository)
+        {
+            _repository = repository;
+        }
+
         public async Task<CommandResponse<List<ProductDTO>>> Handle(FindRelatedProductsQuery request, CancellationToken cancellationToken)
         {
             return await _repository.GetRelatedProductsAsync(request.Id);
