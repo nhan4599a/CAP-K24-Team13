@@ -25,8 +25,7 @@ namespace TestShopProductService
                     Id = 1,
                     CategoryName = "Demo",
                     ShopId = 0,
-                    IsDisabled = false,
-                    Special = 0
+                    IsDisabled = false
                 });
             }
             if (dbContext.ShopCategories.Find(2) == null)
@@ -36,8 +35,7 @@ namespace TestShopProductService
                     Id = 2,
                     CategoryName = "disabled demo",
                     ShopId = 0,
-                    IsDisabled = true,
-                    Special = 0
+                    IsDisabled = true
                 });
             }
             dbContext.SaveChanges();

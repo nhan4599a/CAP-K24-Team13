@@ -186,6 +186,7 @@ namespace DatabaseAccessor.Repositories
                 .Where(product => product.ShopId == sourceProduct.ShopId
                     && product.CategoryId == sourceProduct.CategoryId && product.Id != sourceProduct.Id)
                 .OrderBy(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
+                .ThenByDescending(product => product.Price)
                 .Take(4).Select(product => _mapper.MapToProductDTO(product))
                 .ToListAsync();
             return CommandResponse<List<ProductDTO>>.Success(result);

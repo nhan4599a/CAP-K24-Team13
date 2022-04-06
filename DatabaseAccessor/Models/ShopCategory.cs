@@ -13,8 +13,6 @@ namespace DatabaseAccessor.Models
 
         public string CategoryName { get; set; }
 
-        public int Special { get; set; }
-
         public bool IsDisabled { get; set; }
 
         public string Image { get; set; }
@@ -24,7 +22,6 @@ namespace DatabaseAccessor.Models
         public ShopCategory AssignByRequestModel(CreateOrEditCategoryRequestModel requestModel)
         {
             CategoryName = requestModel.CategoryName;
-            Special = requestModel.Special;
             Image = requestModel.ImagePath;
             return this;
         }

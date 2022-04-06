@@ -426,9 +426,6 @@ function buildCategoryTableHtml(categories) {
                             Category name
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Special
-                        </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Status
                         </th>
                         <th class="text-secondary opacity-7">Action</th>
@@ -456,10 +453,6 @@ function buildCategoryTableRowHtml(category, index) {
                             <h6 class="mb-0 text-sm">${category.categoryName}</h6>
                         </div>
                     </div>
-                </td>
-                <td class="align-middle text-center">
-                    <input type="checkbox" checked="checked">
-                    <span class="checkmark"></span>
                 </td>
                 <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-${!category.isDisabled ? 'success' : 'secondary'}">
@@ -796,7 +789,7 @@ function buildRelatedProductItem(product) {
                 </figure>
                 <div class="product-body">
                     <h5 class="product-title">
-                        <a href="product.html">Light brown studded <br>Wide fit wedges</a>\
+                        <a href="/product/index/${product.id}">${product.productName}</a>\
                     </h5><!-- End .product-title -->
                     <div class="product-price">
                         <span class="new-price">${formatPrice(product.price)}</span>

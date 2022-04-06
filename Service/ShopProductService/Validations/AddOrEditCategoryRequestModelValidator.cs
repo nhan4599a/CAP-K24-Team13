@@ -8,7 +8,6 @@ namespace ShopProductService.Validations
         public AddOrEditCategoryRequestModelValidator()
         {
             RuleFor(e => e.CategoryName).NotEmpty().NotNull();
-            RuleFor(e => e.Special).NotEqual(0);
         }
     }
 }
