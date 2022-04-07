@@ -4,8 +4,6 @@
     {
         public string Description { get; set; }
 
-        public int Discount { get; set; }
-
         public string CategoryName { get; set; }
 
         public string[] Images { get; set; }

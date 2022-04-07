@@ -42,7 +42,7 @@ namespace CheckoutService.Controllers
                 requestModel.ShippingPhone, shippingAddress, requestModel.OrderNotes));
             if (result.IsSuccess)
                 return ApiResult.SucceedResult;
-            return ApiResult.CreateErrorResult(404, result.ErrorMessage);
+            return ApiResult.CreateErrorResult(500, result.ErrorMessage);
         }
     }
 }

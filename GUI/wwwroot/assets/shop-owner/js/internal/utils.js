@@ -296,11 +296,7 @@ function buildProductActionButtonHtml(isDisabled) {
                     <i class="far fa-trash-alt"></i>
                     <span> Deactivate</span>
                 </a>
-                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                    name="btn-inport-quantity">
-                    <i class="fas fa-pencil-alt"></i>
-                    <span> Import quantity</span>
-                </a>`;
+                ${buildImportQuantityButtonHtml()}`;
     else
         return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                     name="btn-action">
@@ -366,12 +362,20 @@ function buildEditButtonHtml() {
             </a>`;
 }
 
-function buildEditQuantityButtonHtml() {
-    return `<a href="#" class="text-secondary font-weight-bold text-xs"
-                data-toggle="tooltip" data-original-title="Edit quantity" style="margin-right: 24px" name="btn-quantity">
-                <i class="far fa-pencil"></i><span> Edit quantity</span>
+function buildImportQuantityButtonHtml() {
+    return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                name="btn-import-quantity">
+                <i class="fas fa-pencil-alt"></i>
+                <span> Import quantity</span>
             </a>`;
 }
+
+//function buildEditQuantityButtonHtml() {
+//    return `<a href="#" class="text-secondary font-weight-bold text-xs"
+//                data-toggle="tooltip" data-original-title="Edit quantity" style="margin-right: 24px" name="btn-quantity">
+//                <i class="far fa-pencil"></i><span> Edit quantity</span>
+//            </a>`;
+//}
 
 function renderPagination(paginationObject) {
     let paginationHtml = '';

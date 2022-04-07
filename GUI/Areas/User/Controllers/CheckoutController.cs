@@ -37,7 +37,6 @@ namespace GUI.Areas.User.Controllers
                 var productResponse = await _productClient.GetProductInfoInCheckout(token, model.ProductId);
                 if (!productResponse.IsSuccessStatusCode || productResponse.Content.ResponseCode != 200)
                     return StatusCode(StatusCodes.Status500InternalServerError);
-                _logger.LogInformation($"Product name: {productResponse.Content.Data.ProductName}; Product quantity: {productResponse.Content.Data.Quantity}; Quantity in cart: {model.Quantity}");
                 if (model.Quantity > productResponse.Content.Data.Quantity)
                 {
                     productsError.Add(productResponse.Content.Data.ProductName);

@@ -2,12 +2,11 @@
 @using System.Globalization
 @model List<CheckOutViewModel>
 @{
-    var totalPrice = Model.Sum(item => item.Quantity * item.Item.Price);
+    var totalPrice = Model.Sum(item => item.Quantity * (item.Item.Price * (1 - (item.Item.Discount / 100.0))));
 }
 <main class="main">
     <div class="page-header text-center" style="background-image: url('@Url.Content("~/assets/user/images/page-header-bg.jpg")')">
         <div class="container">
-
             <h1 class="page-title">Checkout<span>Shop</span></h1>
         </div>
     </div>

@@ -85,7 +85,7 @@ namespace DatabaseAccessor.Repositories
                 invoices[cartItem.ShopId].Details.Add(new InvoiceDetail
                 {
                     ProductId = cartItem.ProductId,
-                    Price = actualProduct.Price,
+                    Price = actualProduct.Price * (1 - (actualProduct.Discount / 100.0)),
                     Quantity = cartItem.Quantity
                 });
                 if (actualProduct.Quantity < cartItem.Quantity)
