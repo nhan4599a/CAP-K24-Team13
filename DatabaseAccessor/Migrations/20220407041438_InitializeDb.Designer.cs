@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseAccessor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220406141011_RemoveRedundantField")]
-    partial class RemoveRedundantField
+    [Migration("20220407041438_InitializeDb")]
+    partial class InitializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -374,8 +374,8 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<string>("ProductName")
                         .IsRequired()

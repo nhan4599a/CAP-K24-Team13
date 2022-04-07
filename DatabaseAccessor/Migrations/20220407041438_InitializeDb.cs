@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DatabaseAccessor.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class InitializeDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -79,7 +79,6 @@ namespace DatabaseAccessor.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ShopId = table.Column<int>(type: "int", nullable: false),
                     CategoryName = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Special = table.Column<int>(type: "int", nullable: false),
                     IsDisabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -267,7 +266,7 @@ namespace DatabaseAccessor.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Images = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
-                    Price = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
                     Discount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     IsDisabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate() + '7:0:0'"),

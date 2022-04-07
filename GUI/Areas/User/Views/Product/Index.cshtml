@@ -94,10 +94,16 @@
                                         </div><!-- End .ratings -->
                                     </div><!-- End .rating-container -->
                                     <div class="product-price">
-                                        <span class="new-price">@(Model.Price.ToString("N0", CultureInfo.InvariantCulture))</span>
-                                        <span class="old-price" style="text-decoration: line-through;">(@((Model.Price * (1 + Model.Discount / 100.0)).ToString("N0", CultureInfo.InvariantCulture)))</span>
+                                        @if (Model.Discount > 0)
+                                        {
+                                            <span class="new-price">@((Model.Price * (1 - (Model.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                            <span class="old-price" style="text-decoration: line-through;">(@(Model.Price.ToString("N0", CultureInfo.InvariantCulture)))</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="new-price">@(Model.Price.ToString("N0", CultureInfo.InvariantCulture))</span>
+                                        }
                                     </div>
-
                                     <div class="details-filter-row details-row-size">
                                         <label for="qty">Qty:</label>
                                         <div class="product-details-quantity">

@@ -9,6 +9,6 @@ namespace ShopProductService.Commands.Product
     {
         public int ShopId { get; set; }
 
-        public CreateOrEditProductRequestModel RequestModel { get; set; }
+        public CreateProductRequestModel RequestModel { get; set; }
     }
 }

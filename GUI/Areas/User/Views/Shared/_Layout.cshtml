@@ -148,6 +148,12 @@
                                         <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
                                         <form action="/home/search" method="get">
                                             <div class="header-search-wrapper search-wrapper-wide">
+                                                <div class="select-custom">
+                                                    <select id="cat" name="cat">
+                                                        <option value="product">Search by products</option>
+                                                        <option value="shop">Search by shop</option>
+                                                    </select>
+                                                </div><!-- End .select-custom -->
                                                 <input type="search" class="form-control" name="keyword" id="q" placeholder="Search product ..." required>
                                                 <input type="hidden" name="pageNumber" value="1" />
                                                 <input type="hidden" name="pageSize" value="5" />
@@ -207,9 +213,9 @@
                                                                         <span class="base-price">@item.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
                                                                     </span>
                                                                 </div><!-- End .product-cart-details -->
-                                                                <figure class="product-image-container">
+                                                        <figure class="product-image-container">
                                                                     <a href="/product/detail/@item.ProductId" class="product-image">
-                                                                        <img src="@Url.ProductImageUrl(item.Image)")" alt="product">
+                                                                        <img src="@Url.ProductImageUrl(item.Image)" )" alt="product">
                                                                     </a>
                                                                 </figure>
                                                                 <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
@@ -302,7 +308,7 @@
                                                         <div class="col-md-4">
                                                             <div class="banner banner-overlay">
                                                                 <a href="category.html" class="banner banner-menu">
-                                                                    <img src="@Url.Content("~/assets/user/images/demos/demo-13/menu/banner-1.jpg")")" alt="Banner">
+                                                                    <img src="@Url.Content("~/assets/user/images/demos/demo-13/menu/banner-1.jpg")" )" alt="Banner">
                                                                 </a>
                                                             </div><!-- End .banner banner-overlay -->
                                                         </div><!-- End .col-md-4 -->
@@ -364,7 +370,7 @@
                                                         <div class="col-md-4">
                                                             <div class="banner banner-overlay">
                                                                 <a href="category.html" class="banner banner-menu">
-                                                                    <img src="@Url.Content("~/assets/user/images/demos/demo-13/menu/banner-2.jpg")")" alt="Banner">
+                                                                    <img src="@Url.Content("~/assets/user/images/demos/demo-13/menu/banner-2.jpg")" )" alt="Banner">
                                                                 </a>
                                                             </div><!-- End .banner banner-overlay -->
                                                         </div><!-- End .col-md-4 -->
@@ -933,7 +939,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-4">
                             <div class="widget widget-about">
-                                <img src="@Url.Content("~/assets/user/images/demos/demo-14/logo-footer1.png")" class="footer-logo")" alt="Footer Logo" width="105" height="25">
+                                <img src="@Url.Content("~/assets/user/images/demos/demo-14/logo-footer1.png")" class="footer-logo" )" alt="Footer Logo" width="105" height="25">
                                 <p>GIGAMALL's online shopping site, helping you access the latest trends.</p>
 
                                 <div class="widget-about-info">
@@ -945,7 +951,7 @@
                                         <div class="col-sm-6 col-md-8">
                                             <span class="widget-about-title">Payment Method</span>
                                             <figure class="footer-payments">
-                                                <img src="@Url.Content("~/assets/user/images/payments.png")")" alt="Payment methods" width="272" height="20">
+                                                <img src="@Url.Content("~/assets/user/images/payments.png")" )" alt="Payment methods" width="272" height="20">
                                             </figure><!-- End .footer-payments -->
                                         </div><!-- End .col-sm-6 -->
                                     </div><!-- End .row -->

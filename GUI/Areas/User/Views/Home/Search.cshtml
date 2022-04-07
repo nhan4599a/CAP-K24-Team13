@@ -1,5 +1,6 @@
 ﻿@using GUI.Areas.User.ViewModels
 @using GUI.Extensions
+@using System.Globalization
 @{
     var keyword = (string)ViewBag.Keyword;
     var pageSize = (int)ViewBag.PageSize;
@@ -44,6 +45,7 @@
             <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab-1-tab">
                 <div class="container" style="width:100%">
                     <div class="row" style="text-align: center;">
+                        <div style="padding-right: 5%"></div>
                         @foreach (var product in Model.Products)
                         {
                             <div class="col-2" style="margin-right: 20px;">
@@ -57,7 +59,6 @@
                                             <a href="#" onclick="return false;" class="btn-product btn-cart" title="Add to cart" data-product="@product.Id">
                                                 <span>add to cart</span>
                                             </a>
-
                                         </div>
                                     </figure>
                                     <div class="product-body">
@@ -66,10 +67,14 @@
                                         </div>
                                         <h3 class="product-title"><a href="/product/index/@product.Id">@product.ProductName</a></h3>
                                         <div class="product-price">
-                                            <span class="new-price">@product.Price</span>
                                             @if (product.Discount > 0)
                                             {
-                                                <span class="old-price">Was $290.00</span>
+                                                <span class="new-price">@((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                                <span class="old-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="new-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
                                             }
                                         </div>
                                         <div class="ratings-container">
@@ -82,10 +87,10 @@
                             </div>
                         }
                     </div>
-                    @*@Html.RenderPagination(Model.Products, keyword, pageSize,
+                    @Html.RenderPagination(Model.Products, keyword, pageSize,
                         (keyword, pageNumber, pageSize) =>
-                        $"https://localhost:3006/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
-                        )*@
+                            $"https://cap-k24-team13.herokuapp.com/home/search?keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
+                        )
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
                             <li class="page-item disabled">

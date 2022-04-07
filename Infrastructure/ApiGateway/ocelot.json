@@ -138,6 +138,14 @@
       "UpstreamHttpMethod": [ "POST", "PUT", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
+      },
+      "RateLimitOptions": {
+        "ClientWhiteList": [],
+        "ClientIdHeader": "Authorization",
+        "EnableRateLimiting": true,
+        "Period": "2s",
+        "PeriodTimespan": 1,
+        "Limit": 1
       }
     },
     {

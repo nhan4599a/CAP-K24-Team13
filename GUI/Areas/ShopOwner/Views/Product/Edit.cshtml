@@ -22,10 +22,6 @@
                 <input class="form-control" type="text" id="input-description" />
             </div>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Quantity</label>
-                <input class="form-control" type="number" id="input-quantity" />
-            </div>
-            <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Price</label>
                 <input class="form-control" type="number" id="input-price" />
             </div>
@@ -152,7 +148,6 @@
         $('#input-name').val(edittingProduct.productName);
         $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
         $('#input-description').val(edittingProduct.description);
-        $('#input-quantity').val(edittingProduct.quantity);
         $('#input-price').val(edittingProduct.price);
         $('#input-discount').val(edittingProduct.discount);
         edittingProduct.images.forEach(imageUrl => getProductImage(imageUrl).then(blob => {
@@ -166,14 +161,12 @@
         let name = $('#input-name').val();
         let category = $('#input-category').val();
         let description = tinymce.activeEditor.getContent({ format: 'text' });
-        let quantity = $('#input-quantity').val();
         let price = $('#input-price').val();
         let discount = $('#input-discount').val();
         return {
             productName: name,
             categoryId: category,
             description: description,
-            quantity: quantity,
             price: price,
             discount: discount
         };

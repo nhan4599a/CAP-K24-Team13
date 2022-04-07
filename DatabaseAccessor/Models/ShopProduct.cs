@@ -18,7 +18,7 @@ namespace DatabaseAccessor.Models
 
         public int Quantity { get; set; }
 
-        public int Price { get; set; }
+        public double Price { get; set; }
 
         public int Discount { get; set; }
 
@@ -38,12 +38,15 @@ namespace DatabaseAccessor.Models
 
         public virtual IList<CartDetail> CartDetails { get; set; }
 
-        public ShopProduct AssignByRequestModel(CreateOrEditProductRequestModel requestModel)
+        public ShopProduct AssignByRequestModel(EditProductRequestModel requestModel)
         {
             ProductName = requestModel.ProductName;
             CategoryId = requestModel.CategoryId;
             Description = requestModel.Description;
-            Quantity = requestModel.Quantity;
+            if (requestModel is CreateProductRequestModel model)
+            {
+                Quantity = model.Quantity;
+            }
             Price = requestModel.Price;
             Discount = requestModel.Discount;
             if (requestModel.ImagePaths != null)

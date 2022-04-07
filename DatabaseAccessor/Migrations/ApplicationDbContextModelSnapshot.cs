@@ -372,8 +372,8 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<string>("ProductName")
                         .IsRequired()

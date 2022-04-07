@@ -52,7 +52,7 @@ namespace TestShopProductService
                 PageSize = 10
             };
             var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new CreateProductRequestModel
             {
                 CategoryId = 1,
                 Description = "description for product",
@@ -85,7 +85,7 @@ namespace TestShopProductService
                 PageSize = 10
             };
             var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new CreateProductRequestModel
             {
                 CategoryId = 0,
                 Description = "Demo description",
@@ -119,7 +119,7 @@ namespace TestShopProductService
                 PageSize = 10
             };
             var productCount = (await _repository.GetAllProductAsync(paginationInfo)).Data.Count;
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new CreateProductRequestModel
             {
                 CategoryId = 2,
                 Description = "Demo description",
@@ -151,14 +151,13 @@ namespace TestShopProductService
                 PageSize = 10
             };
             var product = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new EditProductRequestModel
             {
                 ProductName = product.ProductName,
                 Description = product.Description,
                 Discount = product.Discount,
-                //Price = product.Price,
+                Price = product.Price,
                 CategoryId = 1,
-                Quantity = 2
             };
 
             var result = await _repository.EditProductAsync(Guid.Parse(product.Id), requestModel);
@@ -173,15 +172,14 @@ namespace TestShopProductService
         [Fact]
         public async void TestEditProductFailBecauseProductNotFound()
         {
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new EditProductRequestModel
             {
                 ProductName = "Demo product",
                 CategoryId = 1,
                 Description = "Demo description",
                 Discount = 0,
                 ImagePaths = Array.Empty<string>(),
-                Price = 24000,
-                Quantity = 1
+                Price = 24000
             };
 
             var result = await _repository.EditProductAsync(Guid.Empty, requestModel);

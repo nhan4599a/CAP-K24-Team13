@@ -58,7 +58,7 @@ namespace DatabaseAccessor.Repositories
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
-        public async Task<CommandResponse<Guid>> AddProductAsync(CreateOrEditProductRequestModel requestModel)
+        public async Task<CommandResponse<Guid>> AddProductAsync(CreateProductRequestModel requestModel)
         {
             var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
             if (category == null)
@@ -102,7 +102,7 @@ namespace DatabaseAccessor.Repositories
         }
 
         public async Task<CommandResponse<ProductDTO>> EditProductAsync(Guid productId,
-            CreateOrEditProductRequestModel requestModel)
+            EditProductRequestModel requestModel)
         {
             var product = await FindProductByIdAsync(productId);
             if (product == null)

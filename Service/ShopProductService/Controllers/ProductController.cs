@@ -36,7 +36,7 @@ namespace ShopProductService.Controllers
         [Authorize]
         [HttpPost]
         public async Task<ApiResult> AddProduct(
-            [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+            [FromForm(Name = "requestModel")] CreateProductRequestModel requestModel)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace ShopProductService.Controllers
         [Authorize]
         [HttpPut("{productId}")]
         public async Task<ApiResult> EditProduct(string productId, 
-            [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+            [FromForm(Name = "requestModel")] EditProductRequestModel requestModel)
         {
             try
             {
