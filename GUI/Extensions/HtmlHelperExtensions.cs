@@ -18,7 +18,7 @@ namespace GUI.Extensions
                 return new HtmlString("");
 
             var navTag = new TagBuilder("nav");
-            navTag.Attributes.Add("style", "text-align: center;");
+            navTag.Attributes.Add("aria-label", "Page navigation example");
 
             var ulTag = new TagBuilder("ul");
             ulTag.AddCssClass("pagination");

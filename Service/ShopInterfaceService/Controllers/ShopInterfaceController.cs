@@ -101,12 +101,12 @@ namespace ShopInterfaceService.Controllers
             return ApiResult<ShopInterfaceDTO>.CreateSucceedResult(result.Response);
         }
 
-        [HttpGet("avatar/{*shopIds}")]
-        public async Task<ApiResult> GetAvatar(params int[] shopIds)
+        [HttpGet("avatar")]
+        public async Task<ApiResult> GetAvatar([FromQuery(Name = "shopId")] List<int> shopIds)
         {
             var result = await _mediator.Send(new GetShopAvatarQuery
             {
-                ShopIds = shopIds
+                ShopIds = shopIds.ToArray()
             });
             return ApiResult<Dictionary<int, string>>.CreateSucceedResult(result);
         }

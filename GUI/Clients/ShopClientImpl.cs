@@ -24,7 +24,7 @@ namespace GUI.Clients
             var externalShopResponse = await _externalShopClient.FindShops(keyword, pageNumber, pageSize);
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetAvatar(externalShopResponse.Content.Items.Select(item => item.Id).ToList());
+                var avatars = await GetAvatar(externalShopResponse.Content.Items.Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Items.Count; i++)
@@ -42,7 +42,7 @@ namespace GUI.Clients
             var externalShopResponse = await _externalShopClient.GetAllShops();
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetAvatar(externalShopResponse.Content.Select(item => item.Id).ToList());
+                var avatars = await GetAvatar(externalShopResponse.Content.Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Count; i++)
@@ -60,7 +60,7 @@ namespace GUI.Clients
             var externalShopResponse = await _externalShopClient.GetShop(shopId);
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatar = await GetAvatar(new List<int> { shopId });
+                var avatar = await GetAvatar(new int[] { shopId });
                 if (avatar != null)
                 {
                     externalShopResponse.Content.ResultObj.Avatar = avatar[externalShopResponse.Content.ResultObj.Id];
@@ -75,7 +75,7 @@ namespace GUI.Clients
 
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetAvatar(externalShopResponse.Content.Select(item => item.Id).ToList());
+                var avatars = await GetAvatar(externalShopResponse.Content.Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Count; i++)
@@ -88,7 +88,7 @@ namespace GUI.Clients
             return externalShopResponse;
         }
 
-        private async Task<Dictionary<int, string>> GetAvatar(List<int> shopId)
+        private async Task<Dictionary<int, string>> GetAvatar(int[] shopId)
         {
             var result = await _interfaceClient.GetShopAvatar(shopId);
             if (result.IsSuccessStatusCode)

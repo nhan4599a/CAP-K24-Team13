@@ -7,7 +7,7 @@ namespace GUI.Clients
 {
     public interface IShopInterfaceClient
     {
-        [Get("/interfaces/avatar{?shopId}")]
-        Task<ApiResponse<ApiResult<Dictionary<int, string>>>> GetShopAvatar(List<int> shopId);
+        [Get("/interfaces/avatar")]
+        Task<ApiResponse<ApiResult<Dictionary<int, string>>>> GetShopAvatar([Query(CollectionFormat.Multi)] int[] shopId);
     }
 }

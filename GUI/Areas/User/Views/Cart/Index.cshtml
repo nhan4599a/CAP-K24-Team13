@@ -57,7 +57,7 @@
                                                 <input type="number" class="form-control" value="@item.Quantity" min="1" step="1" data-decimals="0" required>
                                             </div><!-- End .cart-product-quantity -->
                                         </td>
-                                        <td class="total-col">@(((item.Price * (1 - (item.Discount / 100.0))) * item.Quantity).ToString("N0", CultureInfo.InvariantCulture)))</td>
+                                        <td class="total-col">@(((item.Price * (1 - (item.Discount / 100.0))) * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
                                         <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
                                     </tr>
                                 }
