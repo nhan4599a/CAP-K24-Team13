@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Shared.Models;
 using Shared.Validations;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AspNetCoreSharedComponent.FileValidations
 {
     public interface IFileStorable
     {
-        Task<string[]> SaveFilesAsync(IFormFileCollection files, bool shouldValidate = true, FileValidationRuleSet? rules = null);
+        Task<string[]> SaveFilesAsync(IEnumerable<IFormFile> files, bool shouldValidate = true, FileValidationRuleSet? rules = null);
 
-        Task<string[]> EditFilesAsync(string[] oldFileName, IFormFileCollection files, bool shouldValidate = true,
+        Task<string[]> EditFilesAsync(string[] oldFileName, IEnumerable<IFormFile> files, bool shouldValidate = true,
             FileValidationRuleSet? rules = null);
 
         Task<string> SaveFileAsync(IFormFile file, bool shouldValidate = true, FileValidationRuleSet? rules = null);

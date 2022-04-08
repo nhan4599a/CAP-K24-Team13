@@ -28,7 +28,7 @@ namespace ReportService.Controllers
             var reporterString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parseResult = Guid.TryParse(reporterString, out Guid reporter);
             if (!parseResult)
-                return ApiResult.CreateErrorResult(400, "can not determine who are you");
+                return ApiResult.CreateErrorResult(400, "Can not determine who are you");
             var response = await _mediator.Send(new CreateReportCommand
             {
                 InvoiceId = invoiceId,

@@ -13,10 +13,10 @@ namespace Shared.Models
 
         public static Comparer DefaultComparer => new();
 
-        public StatisticDateResult(StatisticStrategy strategy, DateTime dateOnly)
+        public StatisticDateResult(StatisticStrategy strategy, DateTime result)
         {
             Strategy = strategy;
-            Result = dateOnly;
+            Result = result;
         }
 
         public override string ToString()

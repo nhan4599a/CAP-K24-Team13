@@ -2,7 +2,7 @@
     let currentPageInfo = getCurrentPageInfo();
     loadReports(currentPageInfo.pageNumber, currentPageInfo.pageSize);
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
-
+    $('#input-search').parent().remove();
     $('#pagesize-select').change(function () {
         let selectedValue = $(this).val();
         let pageSize = parseInt(selectedValue);

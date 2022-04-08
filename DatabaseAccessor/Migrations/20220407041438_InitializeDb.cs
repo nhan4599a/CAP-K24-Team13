@@ -5,13 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DatabaseAccessor.Migrations
 {
-    public partial class FullInitialDb : Migration
+    public partial class InitializeDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "CartDetail");
-
             migrationBuilder.EnsureSchema(
                 name: "dbo");
 
@@ -82,7 +79,6 @@ namespace DatabaseAccessor.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ShopId = table.Column<int>(type: "int", nullable: false),
                     CategoryName = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Special = table.Column<int>(type: "int", nullable: false),
                     IsDisabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -96,8 +92,7 @@ namespace DatabaseAccessor.Migrations
                 schema: "dbo",
                 columns: table => new
                 {
-                    ShopId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ShopId = table.Column<int>(type: "int", nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Images = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -173,7 +168,8 @@ namespace DatabaseAccessor.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -239,9 +235,9 @@ namespace DatabaseAccessor.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InvoiceCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InvoiceCode = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate() + '7:0:0'"),
                     ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -270,10 +266,10 @@ namespace DatabaseAccessor.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Images = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
-                    Price = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
                     Discount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     IsDisabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate() + '7:0:0'"),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     ShopId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -282,7 +278,7 @@ namespace DatabaseAccessor.Migrations
                     table.PrimaryKey("PK_ShopProducts", x => x.Id);
                     table.CheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100");
                     table.CheckConstraint("CK_ShopProducts_Price", "[Price] >= 0");
-                    table.CheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 1");
+                    table.CheckConstraint("CK_ShopProducts_Quantity", "[Quantity] >= 0");
                     table.ForeignKey(
                         name: "FK_ShopProducts_ShopCategories_CategoryId",
                         column: x => x.CategoryId,
@@ -300,9 +296,9 @@ namespace DatabaseAccessor.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InvoiceId = table.Column<int>(type: "int", nullable: false),
-                    OldStatus = table.Column<int>(type: "int", nullable: false),
+                    OldStatus = table.Column<int>(type: "int", nullable: true),
                     NewStatus = table.Column<int>(type: "int", nullable: false),
-                    ChangedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                    ChangedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate() + '7:0:0'")
                 },
                 constraints: table =>
                 {
@@ -323,9 +319,7 @@ namespace DatabaseAccessor.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    Punishment = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate() + '7:0:0'"),
                     ReporterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AffectedUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AffectedInvoiceId = table.Column<int>(type: "int", nullable: false)
@@ -353,7 +347,7 @@ namespace DatabaseAccessor.Migrations
 
             migrationBuilder.CreateTable(
                 name: "CartDetails",
-                schema: "CartDetail",
+                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -366,7 +360,7 @@ namespace DatabaseAccessor.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartDetails", x => x.Id);
-                    table.CheckConstraint("CK_CartDetails_CK_CartDetail_Quantity", "[Quantity] >= 1");
+                    table.CheckConstraint("CK_CartDetail_Quantity", "[Quantity] >= 1");
                     table.ForeignKey(
                         name: "FK_CartDetails_Carts_CartId",
                         column: x => x.CartId,
@@ -398,8 +392,8 @@ namespace DatabaseAccessor.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InvoiceDetails", x => x.Id);
-                    table.CheckConstraint("CK_InvoiceDetails_CK_InvoiceDetail_Price", "[Price] > 0");
-                    table.CheckConstraint("CK_InvoiceDetails_CK_InvoiceDetail_Quantity", "[Quantity] between 1 and 10");
+                    table.CheckConstraint("CK_InvoiceDetail_Price", "[Price] > 0");
+                    table.CheckConstraint("CK_InvoiceDetail_Quantity", "[Quantity] between 1 and 10");
                     table.ForeignKey(
                         name: "FK_InvoiceDetails_Invoices_InvoiceId",
                         column: x => x.InvoiceId,
@@ -427,7 +421,7 @@ namespace DatabaseAccessor.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Star = table.Column<int>(type: "int", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate() + '7:0:0'")
                 },
                 constraints: table =>
                 {
@@ -489,13 +483,13 @@ namespace DatabaseAccessor.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartDetails_CartId",
-                schema: "CartDetail",
+                schema: "dbo",
                 table: "CartDetails",
                 column: "CartId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartDetails_ProductId",
-                schema: "CartDetail",
+                schema: "dbo",
                 table: "CartDetails",
                 column: "ProductId");
 
@@ -523,6 +517,12 @@ namespace DatabaseAccessor.Migrations
                 schema: "dbo",
                 table: "Invoices",
                 column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoices_InvoiceCode",
+                schema: "dbo",
+                table: "Invoices",
+                column: "InvoiceCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_UserId",
@@ -605,7 +605,7 @@ namespace DatabaseAccessor.Migrations
 
             migrationBuilder.DropTable(
                 name: "CartDetails",
-                schema: "CartDetail");
+                schema: "dbo");
 
             migrationBuilder.DropTable(
                 name: "DataProtectionKeys");

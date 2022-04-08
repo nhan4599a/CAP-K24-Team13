@@ -116,12 +116,12 @@
     </nav><!-- End .breadcrumb-nav -->
 
     <div class="page-content">
-        <div class="container">
+        <div class="container"  style="width: 90%; justify-content: center">
             <div class="row justify-content-center">
                 <div class="col-md-4">
                     <div class="form-group has-search">
                         <span class="fa fa-search form-control-feedback"></span>
-                        <input type="text" class="form-control" placeholder="Search by name" id="input-search">
+                        <input type="text" class="form-control" placeholder="Search by name" id="input-search-shop">
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@
                                     }
                                     else
                                     {
-                                        <span>L@shop.Floor-@shop.Position</span>
+                                        <span>L@(shop.Floor + "-" + shop.Position)</span>
                                     }
                                 </h3>
                             </div>
@@ -159,3 +159,13 @@
         </div>
     </div><!-- End .page-content -->
 </main>
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            $('#input-search-shop').change(function () {
+                let keyword = $(this).val();
+                location.href = `/brands?keyword=${keyword}`;
+            });
+        });
+    </script>
+}

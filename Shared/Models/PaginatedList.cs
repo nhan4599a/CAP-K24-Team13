@@ -55,6 +55,11 @@ namespace Shared.Models
 
         public IEnumerable<TValue> Select<TValue>(Func<T, TValue> selector) => Data.Select(selector);
 
+        public List<T> ToList()
+        {
+            return Data.ToList();
+        }
+
         public T this[int i] => Data[i];
 	}
 }

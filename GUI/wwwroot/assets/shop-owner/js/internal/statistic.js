@@ -12,6 +12,7 @@ const endDatePicker = MCDatepicker.create({
 });
 
 $(document).ready(() => {
+    $('#input-search').parent().remove();
     $('#statistic-strategy').change(function () {
         let strategy = $(this).val();
         $('.row .col-12 .row.justify-content-end:nth-child(2)').remove();

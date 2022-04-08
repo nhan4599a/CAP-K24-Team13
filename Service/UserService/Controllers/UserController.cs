@@ -20,7 +20,7 @@ namespace UserService.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult> GetAllUsers([FromQuery] GetAllUsersQuery query)
+        public async Task<ApiResult> FindUsers([FromQuery] FindUsersQuery query)
         {
             var result = await _mediator.Send(query);
             return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);
@@ -42,7 +42,7 @@ namespace UserService.Controllers
         }
 
         [HttpPost("ban/{userId}")]
-        public async Task<ApiResult> ApplyBan(string userId, uint? dayCount)
+        public async Task<ApiResult> ApplyBan(string userId, [FromForm] uint? dayCount)
         {
             var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
             if (!parseResult)

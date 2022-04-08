@@ -10,7 +10,6 @@
                 <label class="form-label">Name</label>
                 <input type="text" class="form-control" id="input-name">
             </div>
-            @await Component.InvokeAsync("CategorySpecialDropdown")
             <div class="form-group mb-3">
                 <label class="form-label">Images</label>
                 <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px" action="#">
@@ -21,9 +20,7 @@
             </div>
             <div class="form-group">
                 <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Add</button>
-                <button class="btn btn-danger" style="float: right">
-                    <a href="category" class="text-white">Cancel</a>
-                </button>
+                <a href="category" class="text-white btn btn-danger" style="float: right">Cancel</a>
             </div>
         </div>
     </div>
@@ -33,6 +30,7 @@
     <script>
         Dropzone.autoDiscover = false;
         $(function () {
+            $('#input-search').parent().remove();
             let acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
             const acceptedMaxBytes = 4 * 1024 * 1024;
             let dropzone = new Dropzone('div#file-section', {

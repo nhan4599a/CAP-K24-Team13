@@ -15,7 +15,7 @@ namespace GUI.Controllers
         public async Task<ApiResult> GetCurrentUserAccessToken()
         {
             if (!User.Identity.IsAuthenticated)
-                return ApiResult.CreateErrorResult(401, "User is not logged in");
+                return ApiResult.CreateErrorResult(401, "User do not signed in");
             return ApiResult<string>.CreateSucceedResult(await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY));
         }
 
@@ -23,7 +23,7 @@ namespace GUI.Controllers
         public ApiResult GetCurrentUserId()
         {
             if (!User.Identity.IsAuthenticated)
-                return ApiResult.CreateErrorResult(401, "User is not logged in");
+                return ApiResult.CreateErrorResult(401, "User do not signed in");
             return ApiResult<string>.CreateSucceedResult(User.GetUserId().ToString());
         }
 
@@ -31,7 +31,7 @@ namespace GUI.Controllers
         public ApiResult GetCurrentShopId()
         {
             if (!User.Identity.IsAuthenticated)
-                return ApiResult.CreateErrorResult(401, "User is not logged in");
+                return ApiResult.CreateErrorResult(401, "User do not signed in");
             if (!User.IsInRole(SystemConstant.Roles.SHOP_OWNER))
                 return ApiResult.CreateErrorResult(403, "User is not shop owner");
             return ApiResult<int>.CreateSucceedResult(User.GetShopId().Value);

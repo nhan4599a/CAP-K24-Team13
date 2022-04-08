@@ -33,13 +33,13 @@ $(document).ready(function () {
 	// Sticky header 
     var catDropdown = $('.category-dropdown'),
         catInitVal = catDropdown.data('visible'),
-        catShowOnUp = !(new RegExp('^/cart|/checkout|/product/index/|/brands/.*[#/]?$').test(window.location.pathname));
+        catShowOnUp = !(new RegExp('^/cart|/checkout|/product/index/|/home/search|/brands.*[#/]?$').test(window.location.pathname));
 
     if (catShowOnUp) {
         catDropdown.addClass('show').find('.dropdown-menu').addClass('show');
         catDropdown.find('.dropdown-toggle').attr('aria-expanded', 'true');
     }
-        
+    
 	if ( $('.sticky-header').length && $(window).width() >= 992 ) {
 		var sticky = new Waypoint.Sticky({
 			element: $('.sticky-header')[0],

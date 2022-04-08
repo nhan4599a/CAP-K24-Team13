@@ -33,7 +33,8 @@ namespace ShopProductService
             {
                 options.ModelBinderProviders.Add(new IntToBoolModelBinderProvider());
             }).AddFluentValidation<CreateOrEditCategoryRequestModel, AddOrEditCategoryRequestModelValidator>()
-            .AddFluentValidation<CreateOrEditProductRequestModel, AddOrEditProductRequestModelValidator>()
+            .AddFluentValidation<EditProductRequestModel, EditProductRequestModelValidator>()
+            .AddFluentValidation<CreateProductRequestModel, CreateProductRequestModelValidator>()
             .AddFluentValidation<SearchRequestModel, SearchProductRequestModelValidator>();
             services.AddStackExchangeRedisCache(options =>
             {

@@ -1,0 +1,411 @@
+﻿@using GUI.Areas.User.ViewModels
+@using System.Globalization
+@using GUI.Extensions
+@model ShopDetailViewModel
+<main class="main">
+    <div class="mb-lg-2"></div>
+    <!-- End .mb-lg-2 -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-9 col-xxl-8 offset-lg-3 offset-xxl-2">
+                <div class="intro-slider-container slider-container-ratio mb-2">
+                    <div class="intro-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl"
+                         data-owl-options='{
+                            "nav": false,
+                            "dots": true
+                        }'>
+                        <div class="intro-slide">
+                            <figure class="slide-image">
+                                <picture>
+                                    <source media="(max-width: 480px)"
+                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-1-480w.jpg")" />
+                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-1.jpg")" alt="Image Desc">
+                                </picture>
+                            </figure>
+                            <!-- End .slide-image -->
+                        </div>
+                        <!-- End .intro-slide -->
+                        <div class="intro-slide">
+                            <figure class="slide-image">
+                                <picture>
+                                    <source media="(max-width: 480px)"
+                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-2-480w.jpg")" />
+                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-2.jpg")" alt="Image Desc">
+                                </picture>
+                            </figure>
+                            <!-- End .slide-image -->
+                        </div>
+                        <!-- End .intro-slide -->
+                        <div class="intro-slide">
+                            <figure class="slide-image">
+                                <picture>
+                                    <source media="(max-width: 480px)"
+                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3-480w.jpg")" />
+                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3.jpg")" alt="Image Desc">
+                                </picture>
+                            </figure>
+                            <!-- End .slide-image -->
+                        </div>
+                        <!-- End .intro-slide -->
+                        <div class="intro-slide">
+                            <figure class="slide-image">
+                                <picture>
+                                    <source media="(max-width: 480px)"
+                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3-480w.jpg")" />
+                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3.jpg")" alt="Image Desc">
+                                </picture>
+                            </figure>
+                            <!-- End .slide-image -->
+                        </div>
+                        <!-- End .intro-slide -->
+                        <div class="intro-slide">
+                            <figure class="slide-image">
+                                <picture>
+                                    <source media="(max-width: 480px)"
+                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3-480w.jpg")" />
+                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3.jpg")" alt="Image Desc">
+                                </picture>
+                            </figure>
+                            <!-- End .slide-image -->
+                        </div>
+                        <!-- End .intro-slide -->
+                    </div>
+                    <!-- End .intro-slider owl-carousel owl-simple -->
+                    <span class="slider-loader"></span><!-- End .slider-loader -->
+                </div>
+                <!-- End .intro-slider-container -->
+            </div>
+            <!-- End .col-xl-9 col-xxl-10 -->
+        </div>
+        <!-- End .row -->
+    </div>
+    <!-- End .container-fluid -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-9 col-xxl-10">
+                <div class="row">
+                    <div class="col-lg-12 col-xxl-4-5col">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="banner banner-overlay">
+                                    <a href="#">
+                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-2.jpg")" alt="Banner img desc">
+                                    </a>
+                                    <div class="banner-content">
+                                        <h4 class="banner-subtitle text-white d-none d-sm-block">
+                                            <a href="#">Hottest Deals</a>
+                                        </h4>
+                                        <!-- End .banner-subtitle -->
+                                        <h3 class="banner-title text-white">
+                                            <a href="#">
+                                                Detox And Beautify
+                                                <br>For Spring <br><span>Up To 20% Off</span>
+                                            </a>
+                                        </h3>
+                                        <!-- End .banner-title -->
+                                        <a href="#" class="banner-link">
+                                            Shop Now <i class="icon-long-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                    <!-- End .banner-content -->
+                                </div>
+                                <!-- End .banner -->
+                            </div>
+                            <!-- End .col-md-6 -->
+                            <div class="col-md-6">
+                                <div class="banner banner-overlay">
+                                    <a href="#">
+                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-3.png")" alt="Banner img desc">
+                                    </a>
+                                    <div class="banner-content">
+                                        <h4 class="banner-subtitle text-white d-none d-sm-block">
+                                            <a href="#">Deal of the Day</a>
+                                        </h4>
+                                        <!-- End .banner-subtitle -->
+                                        <h3 class="banner-title text-white">
+                                            <a href="#">
+                                                Headphones <br><span>
+                                                    Up
+                                                    To 30% Off
+                                                </span>
+                                            </a>
+                                        </h3>
+                                        <!-- End .banner-title -->
+                                        <a href="#" class="banner-link">
+                                            Shop Now <i class="icon-long-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                    <!-- End .banner-content -->
+                                </div>
+                                <!-- End .banner banner-overlay -->
+                            </div>
+                            <!-- End .col-md-6 -->
+                        </div>
+                        <!-- End .row -->
+                    </div>
+                    <!-- End .col-lg-3 col-xxl-4-5col -->
+                    <div class="col-12 col-xxl-5col d-none d-xxl-block">
+                        <div class="banner banner-overlay">
+                            <a href="#">
+                                <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-4.jpg")" alt="Banner img desc">
+                            </a>
+                            <div class="banner-content">
+                                <h4 class="banner-subtitle text-white"><a href="#">Clearance</a></h4>
+                                <!-- End .banner-subtitle -->
+                                <h3 class="banner-title text-white">
+                                    <a href="#">Seating and Tables Clearance</a>
+                                </h3>
+                                <!-- End .banner-title -->
+                                <a href="#" class="banner-link">
+                                    Shop Now <i class="icon-long-arrow-right"></i>
+                                </a>
+                            </div>
+                            <!-- End .banner-content -->
+                        </div>
+                        <!-- End .banner banner-overlay -->
+                    </div>
+                    <!-- End .col-lg-3 col-xxl-2 -->
+                </div>
+                <!-- End .row -->
+                <div class="mb-3"></div>
+                <!-- End .mb-3 -->
+                <div class="mb-5"></div>
+                <!-- End .mb-5 -->
+                <div class="row cat-banner-row electronics">
+                    <!-- End .col-xl-3 -->
+                    <div class="col-xl-12 col-xxl-12">
+                        <div class="owl-carousel owl-full carousel-equal-height carousel-with-shadow" data-toggle="owl"
+                             data-owl-options='{
+                                 "nav": true,
+                                 "dots": false,
+                                 "margin": 20,
+                                 "loop": false,
+                                 "responsive": {
+                                     "0": {
+                                        "items":2
+                                     },
+                                     "480": {
+                                        "items":2
+                                     },
+                                     "768": {
+                                        "items":4
+                                     },
+                                     "992": {
+                                        "items":4
+                                     },
+                                     "1200": {
+                                        "items":4
+                                     },
+                                     "1600": {
+                                        "items":4
+                                     }
+                                 }
+                            }'>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <div class="product text-center">
+                                    <figure class="product-media">
+                                        <a href="#">
+                                            <img src="@Url.CategoryImageUrl(category.Image)" alt="@category.CategoryName" class="product-image">
+                                        </a>
+                                        <!-- End .product-action -->
+                                </figure>
+                                    <!-- End .product-media -->
+                                <div class="product-body">
+                                        <h3 class="product-title">
+                                            <a href="#">
+                                                @category.CategoryName
+                                            </a>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <!-- End .product -->
+                            }
+                        </div>
+                        <!-- End .owl-carousel -->
+                    </div>
+                    <!-- End .col-xl-9 -->
+                </div>
+                <div class="bg-lighter trending-products">
+                    <div class="heading heading-flex mb-3">
+                        <div class="heading-left">
+                            <h2 class="title">Products by categories</h2>
+                            <!-- End .title -->
+                        </div>
+                        <!-- End .heading-left -->
+                        <div class="heading-right">
+                            <ul class="nav nav-pills justify-content-center" role="tablist">
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="category-@category.Id" data-toggle="tab"
+                                       href="#category-@category.Id" role="tab" aria-controls="category-@category.Id-tab"
+                                       aria-selected="false">@category.CategoryName</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <!-- End .heading-right -->
+                    </div>
+                    <!-- End .heading -->
+                    <div class="tab-content tab-content-carousel">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <div class="tab-pane p-0 fade show active" id="category-@category.Id-tab" role="tabpanel"
+                             aria-labelledby="category-@category.Id">
+                                <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
+                                    data-owl-options='{
+                                        "nav": false,
+                                        "dots": true,
+                                        "margin": 20,
+                                        "loop": false,
+                                        "responsive": {
+                                            "0": {
+                                                "items":1
+                                            },
+                                            "480": {
+                                                "items":2
+                                            },
+                                            "768": {
+                                                "items":4
+                                            },
+                                            "992": {
+                                                "items":4
+                                            },
+                                            "1200": {
+                                                "items":4,
+                                                "nav": true
+                                            },
+                                            "1600": {
+                                                "items":5,
+                                                "nav": true
+                                            }
+                                        }
+                                    }'>
+                                    @foreach (var product in Model.Products[category.Id])
+                                    {
+                                        <div class="product text-center">
+                                            <figure class="product-media">
+                                                <a href="product.html">
+                                                    <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
+                                                </a>
+                                                <div class="product-action">
+                                                    <a href="#" class="btn-product btn-cart" title="Add to cart">
+                                                        <span>add to cart</span>
+                                                    </a>
+                                                </div>
+                                                <!-- End .product-action -->
+                                            </figure>
+                                            <!-- End .product-media -->
+                                            <div class="product-body">
+                                                <div class="product-cat">
+                                                    <a href="/product/index/@product.Id">@product.CategoryName</a>
+                                                </div>
+                                                <!-- End .product-cat -->
+                                                <h3 class="product-title">
+                                                    <a href="/product/index/@product.Id">@product.ProductName</a>
+                                                </h3>
+                                                <!-- End .product-title -->
+                                                <div class="product-price">
+                                                    <span class="new-price">$251.99</span>
+                                                    <span class="old-price">Was $290.00</span>
+                                                </div>
+                                                <!-- End .product-price -->
+                                                <div class="ratings-container">
+                                                    <div class="ratings">
+                                                        <div class="ratings-val" style="width: 100%;"></div>
+                                                    </div>
+                                                </div>
+                                                <!-- End .rating-container -->
+                                            </div>
+                                            <!-- End .product-body -->
+                                        </div>
+                                    }
+                                    <!-- End .product -->
+                                </div>
+                            </div>
+                        }                    
+                    </div>
+                    <!-- End .tab-content -->
+                </div>
+                <!-- End .bg-lighter -->
+                <div class="mb-5"></div>
+                <!-- End .mb-5 -->
+            </div>
+            <!-- End .col-lg-9 col-xxl-10 -->
+            <aside class="col-xl-3 col-xxl-2 order-xl-first">
+                <div class="sidebar sidebar-home">
+                    <div class="row">
+                        <div class="col-sm-6 col-xl-12 mb-2 mt-2">
+                            <div class="widget widget-products">
+                                <h4 class="widget-title"><span>Bestsellers</span></h4>
+                                <!-- End .widget-title -->
+                                <div class="products">
+                                    @foreach (var product in Model.BestSeller)
+                                    {
+                                        <div class="product product-sm">
+                                            <figure class="product-media">
+                                                <a href="/product/index/@product.Id">
+                                                    <img src="@Url.ProductImageUrl("")" alt="@product.ProductName" class="product-image">
+                                                </a>
+                                            </figure>
+                                            <div class="product-body">
+                                                <h5 class="product-title">
+                                                    <a href="/product/index/@product.Id">
+                                                        @product.ProductName
+                                                    </a>
+                                                </h5>
+                                                <!-- End .product-title -->
+                                            <div class="product-price">
+                                                    @((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))
+                                                </div>
+                                                <!-- End .product-price -->
+                                        </div>
+                                            <!-- End .product-body -->
+                                    </div>
+                                    }
+                                </div>
+                                <!-- End .products -->
+                            </div>
+                            <!-- End .widget widget-products -->
+                        </div>
+                        <!-- End .col-sm-6 col-xl-12 -->
+                        <!-- End .col-sm-6 col-lg-xl -->
+                        <div class="col-sm-6 col-xl-12">
+                            <div class="widget widget-banner">
+                                <div class="banner banner-overlay">
+                                    <a href="#">
+                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-12.jpg")" alt="Banner img desc">
+                                    </a>
+                                    <div class="banner-content banner-content-top">
+                                        <h3 class="banner-title text-white">
+                                            <a href="#">
+                                                Take Better Photos
+                                                <br><span>With</span> Canon EOS <br><span>
+                                                    Up To 20%
+                                                    Off
+                                                </span>
+                                            </a>
+                                        </h3>
+                                        <!-- End .banner-title -->
+                                        <a href="#" class="banner-link">
+                                            Shop Now <i class="icon-long-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                    <!-- End .banner-content -->
+                                </div>
+                                <!-- End .banner banner-overlay -->
+                            </div>
+                            <!-- End .widget widget-banner -->
+                        </div>
+                    </div>
+                    <!-- End .row -->
+                </div>
+                <!-- End .sidebar sidebar-home -->
+            </aside>
+            <!-- End .col-lg-3 col-xxl-2 -->
+        </div>
+        <!-- End .row -->
+    </div>
+    <!-- End .container-fluid -->
+</main>

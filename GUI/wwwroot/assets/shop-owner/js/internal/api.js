@@ -46,7 +46,7 @@ function findProducts(shopId, keyword, pageNumber, pageSize) {
         pageSize: pageSize || 5
     };
     if (keyword)
-        params.keyword = encodeURIComponent(keyword);
+        params.keyword = keyword;
     return axios.get(acctualEndpoint, {
         params
     });
@@ -255,8 +255,8 @@ function findInvoices(shopId, key, value, pageNumber, pageSize) {
         pageSize: pageSize || 5
     };
     if (key && value) {
-        params.key = encodeURIComponent(key);
-        params.value = encodeURIComponent(value);
+        params.key = key;
+        params.value = value;
     }
     return axios.get(acctualEndpoint, {
         params
@@ -276,13 +276,16 @@ function getReports(pageNumber, pageSize) {
     });
 }
 
-function getCustomers(pageNumber, pageSize) {
+function getCustomers(keyword, pageNumber, pageSize) {
+    let params = {
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+        customer: true
+    };
+    if (keyword)
+        params.keyword = keyword;
     return axios.get(userEndpoint, {
-        params: {
-            pageNumber: pageNumber,
-            pageSize: pageSize,
-            customer: true
-        }
+        params
     });
 }
 
@@ -291,14 +294,15 @@ function unbanUser(userId) {
 }
 
 function banUser(userId, dayCount) {
+    let formData = new FormData();
     if (dayCount) {
-        return axios.post(`${userEndpoint}/ban/${userId}`, dayCount, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
+        formData.append('dayCount', dayCount);
     }
-    return axios.post(`${userEndpoint}/ban/${userId}`);
+    return axios.post(`${userEndpoint}/ban/${userId}`, formData);
+}
+
+function getRelatedProducts(productId) {
+    return axios.get(`${productEndpoint}/related/${productId}`);
 }
 
 function getShopInformation(shopId) {

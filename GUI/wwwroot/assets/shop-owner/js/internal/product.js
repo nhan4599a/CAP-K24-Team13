@@ -11,10 +11,9 @@
         if (e.which == 13) {
             e.preventDefault();
             let keyword = $(this).val().trim();
-            let urlEncodedKeyword = encodeURIComponent(keyword);
             let currentPageSize = getCurrentPageInfo().pageSize;
             window.location.href =
-                `https://cap-k24-team13.herokuapp.com/shopowner/product?keyword=${urlEncodedKeyword}&pageNumber=1&pageSize=${currentPageSize}`;
+                `https://cap-k24-team13.herokuapp.com/shopowner/product?keyword=${keyword}&pageNumber=1&pageSize=${currentPageSize}`;
         }
     });
 
@@ -75,12 +74,32 @@ function onLoadProductsCompleted(paginatedData) {
                     .addClass('bg-gradient-success')
                     .text('Activated');
                 $(this).parent().prepend(buildEditButtonHtml());
+                $(this).parent().append(buildImportQuantityButtonHtml());
                 $('a[name=btn-edit]').click(function (e) {
                     e.preventDefault();
                     let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
                     let productInfoStr = JSON.stringify(products[index]);
                     window.localStorage.setItem('editting-product', productInfoStr);
                     window.location.href = "/shopowner/product/edit";
+                });
+                $('a[name=btn-import-quantity]').click(function (e) {
+                    e.preventDefault();
+                    let currentRow = $(this).parent().parent();
+                    let index = parseInt(currentRow.children('td:nth-child(2)').text()) - 1;
+                    displayImportQuantityDialog(products[index], function (importedQuantity) {
+                        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+                        animationLoader.showAnimation();
+                        importQuantityProduct(products[index].id, importedQuantity)
+                            .then((newQuantity) => {
+                                animationLoader.hideAnimation();
+                                toastr.success(`Imported ${importedQuantity} for ${products[index].productName}`, 'Success');
+                                currentRow.children('td:nth-child(4)').children('span').html(newQuantity);
+                            })
+                            .catch(error => {
+                                animationLoader.hideAnimation();
+                                toastr.error(`Failed to import ${importedQuantity} for ${products[index].productName}, ${error}`, 'Error');
+                            });
+                    });
                 });
                 $(this).children('span').text(' Deactivate');
                 $(this).children('i').removeClass().addClass('far fa-trash-alt');
@@ -91,6 +110,7 @@ function onLoadProductsCompleted(paginatedData) {
                     .addClass('bg-gradient-secondary')
                     .text('deactivated');
                 $(this).parent().children('*[name="btn-edit"]').remove();
+                $(this).parent().children('*[name="btn-import-quantity"]').remove();
                 $(this).children('span').text(' Activate');
                 $(this).children('i').removeClass().addClass('fas fa-check');
             };
@@ -105,7 +125,7 @@ function onLoadProductsCompleted(paginatedData) {
             });
         });
     });
-    $('a[name=btn-inport-quantity]').click(function (e) {
+    $('a[name=btn-import-quantity]').click(function (e) {
         e.preventDefault();
         let currentRow = $(this).parent().parent();
         let index = parseInt(currentRow.children('td:nth-child(2)').text()) - 1;

@@ -24,6 +24,7 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="@Url.Content("~/assets/shop-owner/css/loading.css")" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="@Url.Content("~/assets/shop-owner/css/material-dashboard.css?v=3.0.0")" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
@@ -58,8 +59,7 @@
     </style>
     <style>
         textarea {
-            width: 100%;
-            height: 80%;
+            height: 200px;
             padding: 12px 20px;
             box-sizing: border-box;
             border: 2px solid #ccc;
@@ -132,7 +132,9 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
-    <div id="loading-container"></div>
+    <div id="loading-container">
+        <div id="animation-container"></div>
+    </div>
     @await Component.InvokeAsync("SideBar", new { activeItem = "profile" })
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
         <!-- Navbar -->
@@ -149,12 +151,7 @@
                     <h6 class="font-weight-bolder mb-0">Profile</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                        <div class="input-group input-group-outline">
-                            <label class="form-label">Type to search</label>
-                            <input type="text" class="form-control" id="input-search">
-                        </div>
-                    </div>
+                    <div class="ms-md-auto pe-md-3 d-flex align-items-center"></div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center dropstart">
                             <a href="#" class="nav-link text-body font-weight-bold px-0 dropdown-toggle" id="user-dropdown" data-bs-toggle="dropdown">
@@ -189,7 +186,7 @@
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row gx-4 mb-2">
                     <div class="col-3">
-                        <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px" action="#">
+                        <div class="dropzone dz-clickable mb-3" id="avatar-section" style="border-radius: 10px" action="#">
                             <div class="dz-default dz-message" data-dz-message="">
                                 <span>Drop images here to upload</span>
                             </div>
@@ -212,7 +209,7 @@
                         <div class="col-12 col-xl-6">
                             <div class="form-group">
                                 <h6 class="mb-3">Shop Description</h6>
-                                <input class="form-control" type="text" id="input-description" name="input-description" disabled />
+                                <textarea class="form-control" id="input-description" disabled></textarea>
                             </div>
                         </div>
                         <div class="col-12 col-xl-6">
@@ -238,7 +235,7 @@
                     <div class="row justify-content-center">
                         <div class="col-xl-10">
                             <div class="form-group mb-3">
-                                <div class="dropzone dz-clickable mb-3" id="file-section" style="border-radius: 10px" action="#">
+                                <div class="dropzone dz-clickable mb-3" id="image-section" style="border-radius: 10px" action="#">
                                     <div class="dz-default dz-message" data-dz-message="">
                                         <span>Drop images here to upload</span>
                                     </div>
@@ -351,14 +348,10 @@
     <script>
         Dropzone.autoDiscover = false;
         $(document).ready(function () {
-            tinymce.init({
-                selector: '#input-description',
-                height: '210px'
-            });
             const acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
             const acceptedMaxBytes = 4 * 1024 * 1024;
             let remainingBytes = acceptedMaxBytes;
-            let dropzone = new Dropzone('div#file-section', {
+            let imageDropzone = new Dropzone('div#image-section', {
                 maxFilesize: 1,
                 paramName: 'files',
                 maxFiles: 5,
@@ -369,10 +362,24 @@
                 addRemoveLinks: true,
                 myFiles: []
             });
-            let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting'));
+            let avatarDropzone = new Dropzone('div#avatar-section', {
+                maxFilesize: 1,
+                paramName: 'files',
+                maxFiles: 1,
+                filesizeBase: 1024,
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                acceptedFiles: acceptedMimeTypes.join(','),
+                addRemoveLinks: true,
+                myFiles: []
+            });
+            let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting.interface'));
+            let edittingShopInformation = JSON.parse(localStorage.getItem('shop-interface.editting.information'));
             if (edittingShopInterface)
-                loadEdittingShopInterface(edittingShopInterface, dropzone);
-            dropzone.on('addedfile', function (file) {
+                loadEdittingShopInterface(edittingShopInterface, imageDropzone, avatarDropzone);
+            if (edittingShopInformation)
+                loadEdittingShopInformation(edittingShopInformation);
+            imageDropzone.on('addedfile', function (file) {
                 this.options.myFiles.push(file);
                 let maxFileNumber = this.options.maxFiles;
                 let maxFileSize = this.options.maxFilesize;
@@ -387,7 +394,7 @@
                     this.removeFile(file);
                     toastr.error(`${uploadedFileSizeInMb.toFixed(2)} MB file is too big to upload!`, 'File is rejected');
                 } else if (file.size > remainingBytes) {
-                    this.removeFile(file);z
+                    this.removeFile(file);
                     toastr.error('Maximum file size exceeded!', 'File is rejected');
                 } else {
                     remainingBytes -= file.size;
@@ -406,7 +413,7 @@
                     fileReader.readAsDataURL(file);
                 }
             });
-            dropzone.on('removedfile', function (file) {
+            imageDropzone.on('removedfile', function (file) {
                 let removedIndex = this.options.myFiles.findIndex(item => item.upload.uuid == file.upload.uuid);
 
                 let lastAddedIndex = this.options.myFiles.length - 1;
@@ -417,19 +424,12 @@
                     carouselItems.eq(i).children('img')
                         .attr('src', carouselItems.eq(i + 1).children('img').attr('src'));
                 }
-                carouselItems.eq(lastAddedIndex).children('img').attr('src', '~/assets/shop-owner/img/image-holder.jpg');
+                carouselItems.eq(lastAddedIndex).children('img').attr('src', '/assets/shop-owner/img/image-holder.jpg');
                 $('#image-carousel').carousel({
                     ride: true,
                     interval: 3500
                 }).carousel(removedIndex);
                 this.options.myFiles.splice(removedIndex, 1);
-            });
-            $('a.btn[name=btn-clear]').click(function () {
-                displayYesNoQuestion('Are you sure?', () => {
-                    dropzone.files.forEach(function (file) {
-                        dropzone.removeFile(file);
-                    });
-                });
             });
 
             $('a.btn[name=btn-save]').click(function () {
@@ -439,70 +439,70 @@
                 animationLoader.showAnimation();
                 let successCallback = () => {
                     localStorage.removeItem('shop-interface.edit-mode');
-                    localStorage.removeItem('shop-interface.editting');
-                    localStorage.removeItem('shop-interface.information');
+                    localStorage.removeItem('shop-interface.editting.interface');
+                    localStorage.removeItem('shop-interface.editting.information');
                     animationLoader.hideAnimation();
                     setTimeout(() => window.location = '/shopowner/interface', 500);
                 };
-                let errorCallback = () => {
+                let errorCallback = (error) => {
                     animationLoader.hideAnimation();
-                    toastr.error('Failed to edit interface!', 'Error');
+                    toastr.error('Failed to edit interface! ' + error, 'Error');
                 };
 
-                if (dropzone.files.length < 1) {
+                if (imageDropzone.files.length < 1) {
                     toastr.error('You must upload at least 1 pictures!', 'Error');
                     return;
                 }
 
+                if (avatarDropzone.files.length < 1) {
+                    toastr.error('You must upload avatar!', 'Error');
+                    return;
+                }
+
                 let formData = new FormData();
-                let requestModelObject = buildRequestModel();
-                Object.keys(requestModelObject).forEach(key => {
-                    formData.append(`requestModel.${key}`, requestModelObject[key]);
-                });
-                for (let i = 0; i < dropzone.files.length; i++)
-                    formData.append(`images[${i}]`, dropzone.files[i]);
+                formData.append('avatar', avatarDropzone.files[0]);
+                for (let i = 0; i < imageDropzone.files.length; i++)
+                    formData.append(`images[${i}]`, imageDropzone.files[i]);
                 if (editMode === 'add') {
-                    addShopInterface(0, formData).then(successCallback).catch(errorCallback);
+                    getShopId()
+                        .then(shopId => {
+                            addShopInterface(shopId, formData)
+                                .then(successCallback).catch(errorCallback);
+                        });
                 } else {
+                    formData.append('requestModel.avatar', edittingShopInterface.avatar);
                     for (let i = 0; i < edittingShopInterface.images.length; i++)
                         formData.append(`requestModel.shopImages[${i}]`, edittingShopInterface.images[i]);
-                    editShopInterface(0, formData).then(successCallback).catch(errorCallback);
+                    getShopId()
+                        .then(shopId => {
+                            editShopInterface(shopId, formData)
+                                .then(successCallback).catch(errorCallback);
+                        });
                 }
             });
         });
 
-        function buildRequestModel() {
-            let name = $('#input-name').val();
-            let phone = $('#input-phone').val();
-            let email = $('#input-email').val();
-            let address = $('#input-address').val();
-            let description = tinymce.activeEditor.getContent({ format: 'text' });
-
-            return {
-                name: name,
-                shopPhoneNumber: phone,
-                shopEmail: email,
-                shopAddress: address,
-                shopDescription: description
-            }
-        }
-
-        function loadEdittingShopInterface(shopInterface, dropzone) {
-            var shopInformation = JSON.parse(localStorage.getItem('shop-interface.information'));
-            if (shopInformation) {
-                $('#input-description').val(shopInformation.description);
-                $('#input-name').val(shopInformation.shopName);
-                $('#input-phone').val(shopInformation.phone);
-                $('#input-email').val(shopInformation.email);
-                $('#input-address').val(shopInformation.shopAddress);
-                $('#shop-name').text(shopInformation.shopName);
-            }
+        function loadEdittingShopInterface(shopInterface, imagesDropzone, avatarDropzone) {
+            console.log(shopInterface);
             shopInterface.images.forEach(imageUrl => getShopInterfaceImage(imageUrl).then(blob => {
                 let file = new File([blob], blob.name, { type: blob.type });
-                dropzone.addFile(file);
+                imagesDropzone.addFile(file);
             }));
-            if (shopInterface.avatar)
-                $('#shop-avatar').attr('src', getShopInterfaceImageUrl(shopInterface.avatar));
+            getShopInterfaceImage(shopInterface.avatar).then(blob => {
+                let file = new File([blob], blob.name, { type: blob.type });
+                avatarDropzone.addFile(file);
+            });
+        }
+
+        function loadEdittingShopInformation(shopInformation) {
+            $('#input-description').val(shopInformation.description);
+            $('#input-name').val(shopInformation.shop_Name);
+            $('#input-phone').val(shopInformation.phone);
+            $('#input-email').val(shopInformation.email);
+            let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;
+            $('#input-address').val(location);
+            $('#shop-name').text(shopInformation.shop_Name);
+            $('.input-group-outline').addClass('is-filled');
         }
     </script>
 </body>

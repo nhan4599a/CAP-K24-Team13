@@ -96,7 +96,7 @@ $(document).ready(function () {
             $(this).parent().parent().children('input').trigger('change');
         });
 
-    $('.quantity-col > .cart-product-quantity > .input-group > input').change(function () {
+    $('.quantity-col > .cart-product-quantity > .input-group > input').change(_.debounce(function () {
         let currentQuantity = $(this).val();
         let productId = $(this).parent().parent().parent().parent().data('product');
         getUserId().then(userId => {
@@ -113,7 +113,7 @@ $(document).ready(function () {
                 })
                 .catch(error => toastr.error(error));
         });
-    });
+    }, 2000));
 
     $('.remove-col > button.btn-remove').click(function () {
         let mostParentElement = $(this).parent().parent();

@@ -21,6 +21,8 @@ namespace Shared.Models
 
         public StatisticDateResult LowestDate { get; set; }
 
+        public StatisticResult() { }
+
         protected StatisticResult(StatisticStrategy strategy, StatisticDateRange.Result range,
             SortedDictionary<StatisticDateResult, StatisticResultItem> items)
         {

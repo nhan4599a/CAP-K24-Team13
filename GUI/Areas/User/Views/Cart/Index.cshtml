@@ -19,7 +19,7 @@
 
     <div class="page-content">
         <div class="cart">
-            <div class="container">
+            <div class="container" style="width: 90%; justify-content: center">
                 <div class="row">
                     <div class="col-lg-9">
                         <table class="table table-cart table-mobile">
@@ -49,15 +49,15 @@
                                                 <h3 class="product-title">
                                                     <a href="/product/index/@item.ProductId">@item.ProductName</a>
                                                 </h3><!-- End .product-title -->
-                                        </div><!-- End .product -->
-                                    </td>
-                                        <td class="price-col">@(item.Price.ToString("N0", CultureInfo.InvariantCulture))</td>
+                                            </div><!-- End .product -->
+                                        </td>
+                                        <td class="price-col">@((item.Price * (1 - (item.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</td>
                                         <td class="quantity-col">
                                             <div class="cart-product-quantity">
                                                 <input type="number" class="form-control" value="@item.Quantity" min="1" step="1" data-decimals="0" required>
                                             </div><!-- End .cart-product-quantity -->
-                                    </td>
-                                        <td class="total-col">@((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
+                                        </td>
+                                        <td class="total-col">@(((item.Price * (1 - (item.Discount / 100.0))) * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
                                         <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
                                     </tr>
                                 }
@@ -73,47 +73,8 @@
                                 <tbody>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>@Model.Items.Sum(item => item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture)</td>
-                                    </tr><!-- End .summary-subtotal -->
-                                    @*<tr class="summary-shipping">
-                                        <td>Shipping:</td>
-                                        <td>&nbsp;</td>
-                                        </tr>*@
-
-                                    @* <tr class="summary-shipping-row">
-                                        <td>
-                                        <div class="custom-control custom-radio">
-                                        <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-                                        <label class="custom-control-label" for="free-shipping">Free Shipping</label>
-                                        </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$0.00</td>
-                                        </tr><!-- End .summary-shipping-row -->
-
-                                        <tr class="summary-shipping-row">
-                                        <td>
-                                        <div class="custom-control custom-radio">
-                                        <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-                                        <label class="custom-control-label" for="standart-shipping">Standart:</label>
-                                        </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$10.00</td>
-                                        </tr><!-- End .summary-shipping-row -->
-
-                                        <tr class="summary-shipping-row">
-                                        <td>
-                                        <div class="custom-control custom-radio">
-                                        <input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-                                        <label class="custom-control-label" for="express-shipping">Express:</label>
-                                        </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$20.00</td>
-                                        </tr><!-- End .summary-shipping-row -->*@
-
-                                    @*<tr class="summary-total">
-                                        <td>Total:</td>
-                                        <td>$160.00</td>*@
-                                    </tr><!-- End .summary-total -->
+                                        <td>@Model.Items.Sum(item => (item.Price * (1 - (item.Discount / 100.0))) * item.Quantity).ToString("N0", CultureInfo.InvariantCulture)</td>
+                                    </tr>
                                 </tbody>
                             </table><!-- End .table table-summary -->
 

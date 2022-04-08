@@ -10,6 +10,6 @@ namespace ShopProductService.Commands.Product
     {
         public Guid Id { get; set; }
 
-        public CreateOrEditProductRequestModel RequestModel { get; set; }
+        public EditProductRequestModel RequestModel { get; set; }
     }
 }

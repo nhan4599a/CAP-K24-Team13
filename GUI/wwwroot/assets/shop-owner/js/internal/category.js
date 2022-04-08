@@ -54,20 +54,21 @@ function onCategoriesLoaded(paginatedData) {
             shouldShowCascadeButton: true,
             shouldShowNonCascadeButton: action === 'activate'
         }, option => {
-            var shouldBeCascade = option === 'cascade';
-            var command = {
+            let shouldBeCascade = option === 'cascade';
+            let command = {
                 id: id,
                 isActivateCommand: action === 'activate',
                 shouldBeCascade: action === 'activate' ? shouldBeCascade : true
             };
-            var successCallback = command.isActivateCommand ? () => {
+            let successCallback = command.isActivateCommand ? () => {
                 toastr.success(`Activated ${name}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(6)').children()
+                $(this).parent().parent().children('td:nth-child(5)').children()
                     .removeClass('bg-gradient-secondary')
                     .addClass('bg-gradient-success')
                     .text('Activated');
                 $(this).parent().prepend(buildEditButtonHtml());
-                $(this).children('span').text(' Deactivate')
+                $(this).children('span').text(' Deactivate');
+                $(this).children('i').removeClass().addClass('far fa-trash-alt');
                 $('a[name=btn-edit]').click(function (e) {
                     e.preventDefault();
                     let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
@@ -77,7 +78,7 @@ function onCategoriesLoaded(paginatedData) {
                 });
             } : () => {
                 toastr.success(`Deactivated ${name}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(6)').children()
+                $(this).parent().parent().children('td:nth-child(5)').children()
                     .removeClass('bg-gradient-success')
                     .addClass('bg-gradient-secondary')
                     .text('Deactivated');

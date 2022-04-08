@@ -9,6 +9,7 @@ using Shared.Models;
 using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -34,7 +35,7 @@ namespace ShopProductService.Controllers
         [Authorize]
         [HttpPost]
         public async Task<ApiResult> AddProduct(
-            [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+            [FromForm(Name = "requestModel")] CreateProductRequestModel requestModel)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace ShopProductService.Controllers
         [Authorize]
         [HttpPut("{productId}")]
         public async Task<ApiResult> EditProduct(string productId, 
-            [FromForm(Name = "requestModel")] CreateOrEditProductRequestModel requestModel)
+            [FromForm(Name = "requestModel")] EditProductRequestModel requestModel)
         {
             try
             {
@@ -167,6 +168,18 @@ namespace ShopProductService.Controllers
             return ApiResult<MinimalProductDTO>.CreateSucceedResult(product);
         }
 
+        [HttpGet("related/{productId}")]
+        public async Task<ApiResult> GetRelatedProducts(string productId)
+        {
+            var response = await _mediator.Send(new FindRelatedProductsQuery
+            {
+                Id = Guid.Parse(productId)
+            });
+            if (!response.IsSuccess)
+                return ApiResult.CreateErrorResult(404, response.ErrorMessage);
+            return ApiResult<List<ProductDTO>>.CreateSucceedResult(response.Response);
+        }
+
         [Authorize]
         [HttpPost("{productId}/import")]
         public async Task<ApiResult> ImportProduct(string productId, [FromBody] int importedQuantity)
@@ -179,6 +192,31 @@ namespace ShopProductService.Controllers
             if (!newQuantityResponse.IsSuccess)
                 return ApiResult.CreateErrorResult(500, newQuantityResponse.ErrorMessage);
             return ApiResult<int>.CreateSucceedResult(newQuantityResponse.Response);
+        }
+
+        [HttpGet("best")]
+        public async Task<ApiResult> GetBestSellerProducts([FromQuery] int? shopId)
+        {
+            var bestSellerProductsResponse = await _mediator.Send(new FindBestSellerProductsQuery
+            {
+                ShopId = shopId
+            });
+            return ApiResult<List<MinimalProductDTO>>.CreateSucceedResult(bestSellerProductsResponse);
+        }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<ApiResult> GetProductsOfCategory(int categoryId, [FromQuery] SearchRequestModel pagination)
+        {
+            var productsOfCategoryResult = await _mediator.Send(new GetProductsByCategoryIdQuery
+            {
+                CategoryId = categoryId,
+                PaginationInfo = new PaginationInfo
+                {
+                    PageNumber = pagination.PageNumber,
+                    PageSize = pagination.PageSize
+                }
+            });
+            return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

@@ -33,7 +33,7 @@ namespace UserService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddFluentValidation<GetAllUsersQuery, GetAllUsersQueryValidator>();
+                .AddFluentValidation<FindUsersQuery, GetAllUsersQueryValidator>();
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
@@ -59,9 +59,6 @@ namespace UserService
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
-            services.AddScoped(services => 
-                new MailHelper(Configuration["SEND_GRID_API_KEY"], Configuration["SENDER_EMAIL"], 
-                    services.GetRequiredService<ILoggerFactory>()));
             services.AddHangfire(config => config
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()

@@ -11,13 +11,11 @@ namespace GUI.Areas.User.Controllers
     {
         private readonly IProductClient _productClient;
         private readonly IShopClient _shopClient;
-        private readonly IShopInterfaceClient _interfaceClient;
 
-        public HomeController(IProductClient productClient, IShopClient shopClient, IShopInterfaceClient interfaceClient)
+        public HomeController(IProductClient productClient, IShopClient shopClient)
         {
             _productClient = productClient;
             _shopClient = shopClient;
-            _interfaceClient = interfaceClient;
         }
 
         public IActionResult Index()
@@ -25,19 +23,35 @@ namespace GUI.Areas.User.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Search(string keyword, int pageNumber, int pageSize = 5)
+        public async Task<IActionResult> Search(string cat, string keyword, int pageNumber, int pageSize = 5)
         {
-            var productResponse = await _productClient.FindProducts(keyword, pageNumber, pageSize);
-            var shopResponse = await _shopClient.FindShops(keyword, pageNumber, pageSize);
-            if (!productResponse.IsSuccessStatusCode || !shopResponse.IsSuccessStatusCode)
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            if (cat.ToLower() != "product" && cat.ToLower() != "shop")
+                return StatusCode(StatusCodes.Status404NotFound);
             ViewBag.Keyword = keyword;
             ViewBag.PageSize = pageSize;
-            return View(new SearchResultViewModel
+            ViewBag.Cat = cat;
+            if (cat.ToLower() == "product")
             {
-                Products = productResponse.Content.Data,
-                Shops = shopResponse.Content.ToInternal()
-            });
+                var productResponse = await _productClient.FindProducts(keyword, pageNumber, pageSize);
+                if (!productResponse.IsSuccessStatusCode)
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                return View(new SearchResultViewModel
+                {
+                    Products = productResponse.Content.Data,
+                    Shops = null
+                });
+            }
+            else
+            {
+                var shopResponse = await _shopClient.FindShops(keyword, pageNumber, pageSize);
+                if (!shopResponse.IsSuccessStatusCode)
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                return View(new SearchResultViewModel
+                {
+                    Products = null,
+                    Shops = shopResponse.Content.ToInternal()
+                });
+            }
         }
     }
 }

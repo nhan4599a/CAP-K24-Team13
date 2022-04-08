@@ -38,6 +38,7 @@ namespace DatabaseAccessor.Repositories
             if (shopInterface == null)
             {
                 shopInterface = new ShopInterface().AssignByRequestModel(requestModel);
+                shopInterface.ShopId = shopId;
                 _dbContext.ShopInterfaces.Add(shopInterface);
             }
             else
@@ -55,13 +56,21 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<ShopInterfaceDTO>.Success(_mapper.MapToShopInterfaceDTO(shopInterface));
         }
 
-        public async Task<Dictionary<int, string>> GetShopAvatar(int[] shopId)
+        public async Task<Dictionary<int, string>> GetShopAvatar(int[] shopIds)
         {
             return await _dbContext.ShopInterfaces
                 .AsNoTracking()
                 .Select(e => new { e.ShopId, e.Avatar })
-                .Where(e => shopId.Contains(e.ShopId))
+                .Where(e => shopIds.Contains(e.ShopId))
                 .ToDictionaryAsync(e => e.ShopId, e => e.Avatar);
+        }
+
+        public async Task<Dictionary<int, ShopInterfaceDTO>> GetShopInterfacesAsync(List<int> shopIds)
+        {
+            return await _dbContext.ShopInterfaces
+                .AsNoTracking()
+                .Where(e => shopIds.Contains(e.ShopId))
+                .ToDictionaryAsync(e => e.ShopId, e => _mapper.MapToShopInterfaceDTO(e));
         }
 
         public void Dispose()
@@ -69,5 +78,6 @@ namespace DatabaseAccessor.Repositories
             _dbContext.Dispose();
             GC.SuppressFinalize(this);
         }
+
     }
 }

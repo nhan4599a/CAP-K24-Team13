@@ -49,7 +49,7 @@ namespace TestShopProductService
                 ControllerContext = new ControllerContext { HttpContext = contextMock.Object }
             };
 
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new CreateProductRequestModel
             {
                 CategoryId = 1,
                 Description = "Some description",
@@ -95,7 +95,7 @@ namespace TestShopProductService
                 ControllerContext = new ControllerContext { HttpContext = contextMock.Object }
             };
 
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new CreateProductRequestModel
             {
                 CategoryId = 1,
                 Description = "Some description",
@@ -144,13 +144,12 @@ namespace TestShopProductService
                 ControllerContext = new ControllerContext { HttpContext = contextMock.Object }
             };
 
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new EditProductRequestModel
             {
                 CategoryId = 1,
                 Description = "Some description",
                 Price = 24000,
                 ProductName = "Some name",
-                Quantity = 1,
                 Discount = 0
             };
 
@@ -194,13 +193,12 @@ namespace TestShopProductService
                 ControllerContext = new ControllerContext { HttpContext = contextMock.Object }
             };
 
-            var requestModel = new CreateOrEditProductRequestModel
+            var requestModel = new EditProductRequestModel
             {
                 CategoryId = 1,
                 Description = "Some description",
                 Price = 24000,
                 ProductName = "Some name",
-                Quantity = 1,
                 Discount = 0
             };
 

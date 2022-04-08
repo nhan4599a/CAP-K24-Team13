@@ -1,6 +1,7 @@
 ﻿using GUI.Models;
 using Refit;
 using Shared.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,13 +25,14 @@ namespace GUI.Clients
             var externalShopResponse = await _externalShopClient.FindShops(keyword, pageNumber, pageSize);
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetAvatar(externalShopResponse.Content.Items.Select(item => item.Id).ToList());
+                var avatars = await GetShopInformation(externalShopResponse.Content.Items.Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Items.Count; i++)
                     {
                         var shopId = externalShopResponse.Content.Items[i].Id;
-                        externalShopResponse.Content.Items[i].Avatar = avatars[shopId];
+                        externalShopResponse.Content.Items[i].Avatar = avatars.ContainsKey(shopId) ? avatars[shopId].Avatar : string.Empty;
+                        externalShopResponse.Content.Items[i].Images = avatars.ContainsKey(shopId) ? avatars[shopId].Images : Array.Empty<string>();
                     }
                 }
             }
@@ -42,13 +44,14 @@ namespace GUI.Clients
             var externalShopResponse = await _externalShopClient.GetAllShops();
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetAvatar(externalShopResponse.Content.Select(item => item.Id).ToList());
+                var avatars = await GetShopInformation(externalShopResponse.Content.Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Count; i++)
                     {
                         var shopId = externalShopResponse.Content[i].Id;
-                        externalShopResponse.Content[i].Avatar = avatars[shopId];
+                        externalShopResponse.Content[i].Avatar = avatars.ContainsKey(shopId) ? avatars[shopId].Avatar : string.Empty;
+                        externalShopResponse.Content[i].Images = avatars.ContainsKey(shopId) ? avatars[shopId].Images : Array.Empty<string>();
                     }
                 }
             }
@@ -60,10 +63,11 @@ namespace GUI.Clients
             var externalShopResponse = await _externalShopClient.GetShop(shopId);
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatar = await GetAvatar(new List<int> { shopId });
+                var avatar = await GetShopInformation(new int[] { shopId });
                 if (avatar != null)
                 {
-                    externalShopResponse.Content.ResultObj.Avatar = avatar[externalShopResponse.Content.ResultObj.Id];
+                    externalShopResponse.Content.ResultObj.Avatar = avatar.ContainsKey(shopId) ? avatar[shopId].Avatar : string.Empty;
+                    externalShopResponse.Content.ResultObj.Images = avatar.ContainsKey(shopId) ? avatar[shopId].Images : Array.Empty<string>();
                 }
             }
             return externalShopResponse;
@@ -75,22 +79,23 @@ namespace GUI.Clients
 
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetAvatar(externalShopResponse.Content.Select(item => item.Id).ToList());
+                var avatars = await GetShopInformation(externalShopResponse.Content.Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Count; i++)
                     {
                         var shopId = externalShopResponse.Content[i].Id;
-                        externalShopResponse.Content[i].Avatar = avatars[shopId];
+                        externalShopResponse.Content[i].Avatar = avatars.ContainsKey(shopId) ? avatars[shopId].Avatar : string.Empty;
+                        externalShopResponse.Content[i].Images = avatars.ContainsKey(shopId) ? avatars[shopId].Images : Array.Empty<string>();
                     }
                 }
             }
             return externalShopResponse;
         }
 
-        private async Task<Dictionary<int, string>> GetAvatar(List<int> shopId)
+        private async Task<Dictionary<int, ShopInterfaceDTO>> GetShopInformation(int[] shopId)
         {
-            var result = await _interfaceClient.GetShopAvatar(shopId);
+            var result = await _interfaceClient.GetShopInterface(shopId);
             if (result.IsSuccessStatusCode)
                 return result.Content.Data;
             return null;

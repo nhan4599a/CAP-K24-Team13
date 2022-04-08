@@ -3,13 +3,17 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using Shared.Exceptions;
 using Shared.Models;
 using Shared.RequestModels;
 using Shared.Validations;
 using ShopInterfaceService.Commands;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopInterfaceService.Controllers
@@ -27,7 +31,8 @@ namespace ShopInterfaceService.Controllers
             _mediator = mediator;
             _fileStore = imageManager;
             rules = FileValidationRuleSet.DefaultValidationRules;
-            rules.Change(FileValidationRuleName.MinFileCount, 1);
+            rules.Change(FileValidationRuleName.MinFileCount, 2);
+            rules.Change(FileValidationRuleName.MaxFileCount, 6);
         }
 
         [Authorize]
@@ -37,7 +42,10 @@ namespace ShopInterfaceService.Controllers
         {
             try
             {
-                requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files, rules: rules);
+                requestModel.Avatar = await
+                    _fileStore.SaveFileAsync(Request.Form.Files.Take(1).First(),
+                        rules: FileValidationRuleSet.DefaultSingleValidationRules);
+                requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files.Skip(1), rules: rules);
             }
             catch (ImageValidationException ex)
             {
@@ -60,7 +68,9 @@ namespace ShopInterfaceService.Controllers
         {
             try
             {
-                requestModel.ShopImages = await _fileStore.EditFilesAsync(requestModel.ShopImages, Request.Form.Files,
+                requestModel.Avatar = await _fileStore.EditFileAsync(requestModel.Avatar, Request.Form.Files.Take(1).First(),
+                    rules: FileValidationRuleSet.DefaultSingleValidationRules);
+                requestModel.ShopImages = await _fileStore.EditFilesAsync(requestModel.ShopImages, Request.Form.Files.Skip(1),
                     rules: rules);
             }
             catch (ImageValidationException ex)
@@ -93,16 +103,17 @@ namespace ShopInterfaceService.Controllers
             return ApiResult<ShopInterfaceDTO>.CreateSucceedResult(result.Response);
         }
 
-        [HttpGet("avatar/{*shopId}")]
-        public async Task<ApiResult> GetAvatar(params int[] shopId)
+        [HttpGet]
+        public async Task<ApiResult> GetShopInterfacesInfo([FromQuery(Name = "shopId")] List<int> shopIds)
         {
-            var result = await _mediator.Send(new GetShopAvatarQuery
+            var result = await _mediator.Send(new GetShopInterfacesQuery
             {
-                ShopId = shopId
+                ShopIds = shopIds
             });
-            return ApiResult<Dictionary<int, string>>.CreateSucceedResult(result);
+            return ApiResult<Dictionary<int, ShopInterfaceDTO>>.CreateSucceedResult(result);
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet("images/{imageId}")]
         public IActionResult Image(string imageId)
         {

@@ -6,10 +6,10 @@ using System;
 namespace DatabaseAccessor.Resolvers
 {
     public class ImageValueResolver :
-        IValueResolver<ShopProduct, ProductDTO, string[]>,
+        IValueResolver<ShopProduct, MinimalProductDTO, string[]>,
         IValueResolver<ShopInterface, ShopInterfaceDTO, string[]>
     {
-        public string[] Resolve(ShopProduct source, ProductDTO destination, string[] destMember, ResolutionContext context)
+        public string[] Resolve(ShopProduct source, MinimalProductDTO destination, string[] destMember, ResolutionContext context)
         {
             if (source.Images == null)
                 return Array.Empty<string>();

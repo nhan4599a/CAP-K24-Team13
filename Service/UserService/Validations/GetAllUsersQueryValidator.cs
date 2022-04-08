@@ -3,7 +3,7 @@ using UserService.Commands;
 
 namespace UserService.Validations
 {
-    public class GetAllUsersQueryValidator : AbstractValidator<GetAllUsersQuery>
+    public class GetAllUsersQueryValidator : AbstractValidator<FindUsersQuery>
     {
         public GetAllUsersQueryValidator()
         {

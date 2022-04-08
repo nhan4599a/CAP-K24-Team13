@@ -23,7 +23,6 @@ function renderReportTable(reports) {
 }
 
 function renderCustomerTable(customers) {
-    console.log(customers);
     if (customers.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no customer to show!</p>');
     } else {
@@ -134,12 +133,12 @@ function buildReportTableHtml(reports) {
             </table>`;
 }
 
-function buildCustomerTableHtml(customers) {
+function buildCustomerTableHtml(customers) { 
     let tableRowHtml = '';
     customers.forEach((customer, index) => {
         tableRowHtml += buildCustomerTableRowHtml(customer, index);
     });
-    return `<table class="table align-items-center mb-0">
+    return `<table class="table align-items-center m b-0">
                 <thead>
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
@@ -297,11 +296,7 @@ function buildProductActionButtonHtml(isDisabled) {
                     <i class="far fa-trash-alt"></i>
                     <span> Deactivate</span>
                 </a>
-                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                    name="btn-inport-quantity">
-                    <i class="fas fa-pencil-alt"></i>
-                    <span> Import quantity</span>
-                </a>`;
+                ${buildImportQuantityButtonHtml()}`;
     else
         return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                     name="btn-action">
@@ -354,7 +349,7 @@ function buildCustomerActionButtonHtml(customer) {
                     <span> Unban</span>
                 </a>`;
     else
-        return `<a class="text-secondary font-weight-bold text-xs ${!customer.isConfirmed ? 'disabled' : ''}" data-toggle="tooltip" name="btn-action" style="${customer.isConfirmed ? 'cursor: pointer' : 'text-decoration: none'}">
+        return `<a class="text-secondary text-xs ${!customer.isConfirmed ? 'disabled' : 'font-weight-bold'}" data-toggle="tooltip" name="btn-action" style="${customer.isConfirmed ? 'cursor: pointer' : 'text-decoration: none; cursor: default'}">
                     <i class="fas fa-check"></i>
                     <span> Ban</span>
                 </a>`;
@@ -367,12 +362,20 @@ function buildEditButtonHtml() {
             </a>`;
 }
 
-function buildEditQuantityButtonHtml() {
-    return `<a href="#" class="text-secondary font-weight-bold text-xs"
-                data-toggle="tooltip" data-original-title="Edit quantity" style="margin-right: 24px" name="btn-quantity">
-                <i class="far fa-pencil"></i><span> Edit quantity</span>
+function buildImportQuantityButtonHtml() {
+    return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                name="btn-import-quantity">
+                <i class="fas fa-pencil-alt"></i>
+                <span> Import quantity</span>
             </a>`;
 }
+
+//function buildEditQuantityButtonHtml() {
+//    return `<a href="#" class="text-secondary font-weight-bold text-xs"
+//                data-toggle="tooltip" data-original-title="Edit quantity" style="margin-right: 24px" name="btn-quantity">
+//                <i class="far fa-pencil"></i><span> Edit quantity</span>
+//            </a>`;
+//}
 
 function renderPagination(paginationObject) {
     let paginationHtml = '';
@@ -427,9 +430,6 @@ function buildCategoryTableHtml(categories) {
                             Category name
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Special
-                        </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Status
                         </th>
                         <th class="text-secondary opacity-7">Action</th>
@@ -457,10 +457,6 @@ function buildCategoryTableRowHtml(category, index) {
                             <h6 class="mb-0 text-sm">${category.categoryName}</h6>
                         </div>
                     </div>
-                </td>
-                <td class="align-middle text-center">
-                    <input type="checkbox" checked="checked">
-                    <span class="checkmark"></span>
                 </td>
                 <td class="align-middle text-center text-sm">
                     <span class="badge badge-sm bg-gradient-${!category.isDisabled ? 'success' : 'secondary'}">
@@ -685,11 +681,79 @@ function displayImportQuantityDialog(product, saveCallback) {
     $('#quantity-modal div.modal-footer > button:first-child').click(function () {
         $('#quantity-modal').modal('hide');
         let importedQuantity = parseInt($('#quantity').val());
-        saveCallback(importedQuantity, importedQuantity);
+        saveCallback(importedQuantity);
     });
     $('#quantity-modal').on('hidden.bs.modal', function () {
         $(this).modal('dispose');
         $(this).remove();
+    });
+}
+
+function displayBanCustomerDialog(confirmedCallback) {
+    var modalHtml = `<div class="modal fade" id="ban-customer-modal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Ban Options</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="col-12">
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-6 align-items-center col-form-label">Permanently Ban</label>
+                                            <input type="radio" name="tab" id="permanently-ban" checked />
+                                        </div>
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-6 align-items-center col-form-label">Ban depend on the date</label>
+                                            <input type="radio" name="tab" id="ban-depend-on-date" />
+                                            <div class="hide" style="display: none">
+                                                <hr>
+                                                <p>Choose option</p>
+                                                <button class="btn btn-primary change-day-count-button">3 days</button>
+                                                <button class="btn btn-primary change-day-count-button">7 days</button>
+                                                <button class="btn btn-primary change-day-count-button">15 days</button>
+                                                <button class="btn btn-primary change-day-count-button">30 days</button>
+                                                <br>
+                                                <input style="margin-top:5px; text-align: center" type="number" name="input-day-count" value="3">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn bg-gradient-primary-dark my-shadow text-white"
+                                            data-action="save">
+                                        Confirm
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-action="cancel">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+    $('body').append(modalHtml);
+    $('#ban-customer-modal').modal({
+        backdrop: 'static',
+        keyboard: false
+    }).modal('show');
+    $('#ban-customer-modal').on('hidden.bs.modal', function () {
+        $(this).modal('dispose');
+        $(this).remove();
+    });
+    $('#permanently-ban').click(() => {
+        $('div.hide').css('display', 'none');
+    });
+    $('#ban-depend-on-date').click(() => {
+        $('div.hide').css('display', 'block');
+    });
+    $('button.btn.change-day-count-button').click(function (e) {
+        e.preventDefault();
+        $('input[name=input-day-count]').val($(this).text().split(' ')[0]);
+    });
+    $('#ban-customer-modal div.modal-footer > button:first-child').click(function () {
+        $('#ban-customer-modal').modal('hide');
+        let dayCount = $('#permanently-ban')[0].checked ? null : $('input[name=input-day-count]').val();
+        confirmedCallback(dayCount);
     });
 }
 
@@ -716,6 +780,24 @@ function buildOrderItem(order) {
                     <button id="btn-order-details" type="button" class="btn btn-primary" onclick=" window.open('https://cap-k24-team13.herokuapp.com/invoice/detail/${order.invoiceCode}','_blank')">
                         View
                     </button>
+                </div>
+            </div>`;
+}
+
+function buildRelatedProductItem(product) {
+    return `<div class="product product-sm">
+                <figure class="product-media">
+                    <a href="/product/index/${product.id}">
+                        <img src="${getProductImageUrl(product.images[0])}" alt="Product image" class="product-image">
+                    </a>
+                </figure>
+                <div class="product-body">
+                    <h5 class="product-title">
+                        <a href="/product/index/${product.id}">${product.productName}</a>\
+                    </h5><!-- End .product-title -->
+                    <div class="product-price">
+                        <span class="new-price">${formatPrice(product.price)}</span>
+                    </div>
                 </div>
             </div>`;
 }

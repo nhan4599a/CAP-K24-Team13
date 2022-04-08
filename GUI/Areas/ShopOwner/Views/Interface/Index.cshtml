@@ -31,11 +31,11 @@
     <style>
         #button-img {
             display: inline-block;
-            height: 50%;
+            height: 100%;
             padding: 0;
             margin: 0;
             vertical-align: top;
-            width: 50%;
+            width: 100%;
         }
 
         .container-fluid h5 {
@@ -121,7 +121,9 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
-    <div id="loading-container"></div>
+    <div id="loading-container">
+        <div id="animation-container"></div>
+    </div>
     @await Component.InvokeAsync("SideBar", new { activeItem = "profile" })
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
         <!-- Navbar -->
@@ -138,12 +140,7 @@
                     <h6 class="font-weight-bolder mb-0">Profile</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                        <div class="input-group input-group-outline">
-                            <label class="form-label">Type to search</label>
-                            <input type="text" class="form-control" id="input-search">
-                        </div>
-                    </div>
+                    <div class="ms-md-auto pe-md-3 d-flex align-items-center"></div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center dropstart">
                             <a href="#" class="nav-link text-body font-weight-bold px-0 dropdown-toggle" id="user-dropdown" data-bs-toggle="dropdown">
@@ -378,7 +375,6 @@
                 })
                 .catch((e) => {
                     animationLoader.hideAnimation();
-                    console.log(e);
                     toastr.error(e, 'Error');
                 });
             });
@@ -387,12 +383,13 @@
         function onInformationGot(shopInformation) {
             if (shopInformation) {
                 $('#input-description').val(shopInformation.description);
-                $('#input-name').val(shopInformation.shopName);
+                $('#input-name').val(shopInformation.shop_Name);
                 $('#input-phone').val(shopInformation.phone);
                 $('#input-email').val(shopInformation.email);
-                $('#input-address').val(shopInformation.shopAddress);
-                $('#shop-name').text(shopInformation.shopName);
-                localStorage.setItem('shop-interface.information', JSON.stringify(shopInformation));
+                let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;
+                $('#input-address').val(location);
+                $('#shop-name').text(shopInformation.shop_Name);
+                localStorage.setItem('shop-interface.editting.information', JSON.stringify(shopInformation));
             }
         }
 
@@ -400,7 +397,7 @@
             localStorage.setItem('shop-interface.edit-mode', !shopInterface ? 'add' : 'edit');
             if (shopInterface) {
                 loadShopInterfaceImages(shopInterface);
-                localStorage.setItem('shop-interface.editting', JSON.stringify(shopInterface));
+                localStorage.setItem('shop-interface.editting.interface', JSON.stringify(shopInterface));
             }
         }
 

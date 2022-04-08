@@ -22,10 +22,6 @@
                 <input class="form-control" type="text" id="input-description" />
             </div>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label">Quantity</label>
-                <input class="form-control" type="number" id="input-quantity" />
-            </div>
-            <div class="input-group input-group-outline mb-3">
                 <label class="form-label">Price</label>
                 <input class="form-control" type="number" id="input-price" />
             </div>
@@ -44,9 +40,7 @@
             </div>
             <div class="form-group">
                 <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Update</button>
-                <button class="btn btn-danger" style="float: right">
-                    <a href="product" class="text-white">Cancel</a>
-                </button>
+                <a href="product" class="text-white btn btn-danger" style="float: right">Cancel</a>
             </div>
         </div>
     </div>
@@ -61,6 +55,7 @@
     $(function () {
         let classNames = ['active', 'bg-gradient-primary'];
         $('#nav-item-product').addClass(classNames);
+        $('#input-search').parent().remove();
         let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
         animationLoader.showAnimation(3500);
         getShopId().then(shopId => {
@@ -153,7 +148,6 @@
         $('#input-name').val(edittingProduct.productName);
         $(`#input-category option:contains(${edittingProduct.categoryName})`).attr('selected', true);
         $('#input-description').val(edittingProduct.description);
-        $('#input-quantity').val(edittingProduct.quantity);
         $('#input-price').val(edittingProduct.price);
         $('#input-discount').val(edittingProduct.discount);
         edittingProduct.images.forEach(imageUrl => getProductImage(imageUrl).then(blob => {
@@ -167,14 +161,12 @@
         let name = $('#input-name').val();
         let category = $('#input-category').val();
         let description = tinymce.activeEditor.getContent({ format: 'text' });
-        let quantity = $('#input-quantity').val();
         let price = $('#input-price').val();
         let discount = $('#input-discount').val();
         return {
             productName: name,
             categoryId: category,
             description: description,
-            quantity: quantity,
             price: price,
             discount: discount
         };

@@ -13,6 +13,8 @@ namespace Shared.DTOs
 
         public string Avatar { get; set; }
 
+        public string[] Images { get; set; }
+
         public string Floor { get; set; }
 
         public string Position { get; set; }

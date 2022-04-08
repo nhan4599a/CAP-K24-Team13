@@ -5,6 +5,6 @@ namespace ShopInterfaceService.Commands
 {
     public class GetShopAvatarQuery : IRequest<Dictionary<int, string>>
     {
-        public int[] ShopId { get; set; }
+        public int[] ShopIds { get; set; }
     }
 }

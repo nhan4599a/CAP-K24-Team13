@@ -4,8 +4,10 @@ using Shared.Models;
 
 namespace UserService.Commands
 {
-    public class GetAllUsersQuery : IRequest<PaginatedList<UserDTO>>
+    public class FindUsersQuery : IRequest<PaginatedList<UserDTO>>
     {
+        public string Keyword { get; set; } = string.Empty;
+
         public int PageNumber { get; set; } = PaginationInfo.Default.PageNumber;
 
         public int PageSize { get; set; } = PaginationInfo.Default.PageSize;
