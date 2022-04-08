@@ -205,7 +205,7 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet("category/{categoryId}")]
-        public async Task<ApiResult> GetProductsOfCategory(int categoryId, SearchRequestModel pagination)
+        public async Task<ApiResult> GetProductsOfCategory(int categoryId, [FromQuery] SearchRequestModel pagination)
         {
             var productsOfCategoryResult = await _mediator.Send(new GetProductsByCategoryIdQuery
             {
