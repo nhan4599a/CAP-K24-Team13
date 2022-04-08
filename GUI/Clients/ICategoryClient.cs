@@ -7,7 +7,7 @@ namespace GUI.Clients
 {
     public interface ICategoryClient
     {
-        [Get("/categories/shop/{shopId}")]
-        Task<ApiResponse<ApiResult<PaginatedList<CategoryDTO>>>> GetCategoriesOfShop(int shopId);
+        [Get("/categories/shop/{shopId}?pageSize={pageSize}")]
+        Task<ApiResponse<ApiResult<PaginatedList<CategoryDTO>>>> GetCategoriesOfShop(int shopId, int pageSize);
     }
 }

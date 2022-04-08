@@ -182,6 +182,7 @@ namespace DatabaseAccessor.Repositories
             if (sourceProduct == null)
                 return CommandResponse<List<ProductDTO>>.Error("Product is not found!", null);
             var result = await _dbContext.ShopProducts
+                .AsNoTracking()
                 .Include(e => e.Category)
                 .Where(product => product.ShopId == sourceProduct.ShopId
                     && product.CategoryId == sourceProduct.CategoryId && product.Id != sourceProduct.Id)
@@ -190,6 +191,27 @@ namespace DatabaseAccessor.Repositories
                 .Take(4).Select(product => _mapper.MapToProductDTO(product))
                 .ToListAsync();
             return CommandResponse<List<ProductDTO>>.Success(result);
+        }
+
+        public async Task<List<MinimalProductDTO>> GetBestSellerProductsAsync(int? shopId)
+        {
+            return await _dbContext.ShopProducts
+                .AsNoTracking()
+                .Where(product => !shopId.HasValue || product.ShopId == shopId.Value)
+                .OrderByDescending(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
+                .Take(5)
+                .Select(product => _mapper.MapToMinimalProductDTO(product))
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int categoryId, PaginationInfo paginationInfo)
+        {
+            return await _dbContext.ShopProducts
+                .AsNoTracking()
+                .Include(e => e.Category)
+                .Where(product => product.CategoryId == categoryId)
+                .Select(product => _mapper.MapToProductDTO(product))
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
         public void Dispose()

@@ -65,10 +65,19 @@ namespace DatabaseAccessor.Repositories
                 .ToDictionaryAsync(e => e.ShopId, e => e.Avatar);
         }
 
+        public async Task<Dictionary<int, ShopInterfaceDTO>> GetShopInterfacesAsync(List<int> shopIds)
+        {
+            return await _dbContext.ShopInterfaces
+                .AsNoTracking()
+                .Where(e => shopIds.Contains(e.ShopId))
+                .ToDictionaryAsync(e => e.ShopId, e => _mapper.MapToShopInterfaceDTO(e));
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();
             GC.SuppressFinalize(this);
         }
+
     }
 }

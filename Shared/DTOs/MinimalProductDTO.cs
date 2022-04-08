@@ -11,5 +11,7 @@
         public int Discount { get; set; }
 
         public int Quantity { get; set; }
+
+        public string[] Images { get; set; }
     }
 }

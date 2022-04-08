@@ -6,8 +6,6 @@
 
         public string CategoryName { get; set; }
 
-        public string[] Images { get; set; }
-
         public bool IsDisabled { get; set; }
     }
 }

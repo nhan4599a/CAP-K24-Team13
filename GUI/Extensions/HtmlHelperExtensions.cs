@@ -75,6 +75,11 @@ namespace GUI.Extensions
             return $"http://ec2-52-207-214-39.compute-1.amazonaws.com:3000/products/images/{imageUrl}";
         }
 
+        public static string CategoryImageUrl(this IUrlHelper _, string imageUrl)
+        {
+            return $"http://ec2-52-207-214-39.compute-1.amazonaws.com:3000/categories/images/{imageUrl}";
+        }
+
         public static string ShopImageUrl(this IUrlHelper _, string imageUrl)
         {
             return $"http://ec2-52-207-214-39.compute-1.amazonaws.com:3000/interfaces/images/{imageUrl}";

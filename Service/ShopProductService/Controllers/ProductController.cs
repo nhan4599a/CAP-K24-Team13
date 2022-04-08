@@ -10,7 +10,6 @@ using Shared.RequestModels;
 using ShopProductService.Commands.Product;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopProductService.Controllers
@@ -193,6 +192,31 @@ namespace ShopProductService.Controllers
             if (!newQuantityResponse.IsSuccess)
                 return ApiResult.CreateErrorResult(500, newQuantityResponse.ErrorMessage);
             return ApiResult<int>.CreateSucceedResult(newQuantityResponse.Response);
+        }
+
+        [HttpGet("best")]
+        public async Task<ApiResult> GetBestSellerProducts([FromQuery] int? shopId)
+        {
+            var bestSellerProductsResponse = await _mediator.Send(new FindBestSellerProductsQuery
+            {
+                ShopId = shopId
+            });
+            return ApiResult<List<MinimalProductDTO>>.CreateSucceedResult(bestSellerProductsResponse);
+        }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<ApiResult> GetProductsOfCategory(int categoryId, SearchRequestModel pagination)
+        {
+            var productsOfCategoryResult = await _mediator.Send(new GetProductsByCategoryIdQuery
+            {
+                CategoryId = categoryId,
+                PaginationInfo = new PaginationInfo
+                {
+                    PageNumber = pagination.PageNumber,
+                    PageSize = pagination.PageSize
+                }
+            });
+            return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

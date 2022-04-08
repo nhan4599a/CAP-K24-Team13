@@ -1,13 +1,15 @@
 ﻿using Shared.DTOs;
-using Shared.Models;
+using System.Collections.Generic;
 
 namespace GUI.Areas.User.ViewModels
 {
     public class ShopDetailViewModel
     {
-        public PaginatedList<ProductDTO> Products { get; set; }
+        public Dictionary<int, List<ProductDTO>> Products { get; set; }
 
-        public PaginatedList<CategoryDTO> Categories { get; set; }
+        public List<CategoryDTO> Categories { get; set; }
+
+        public List<MinimalProductDTO> BestSeller { get; set; }
 
         public ShopDTO Shop { get; set; }
     }

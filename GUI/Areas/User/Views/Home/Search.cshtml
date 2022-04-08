@@ -26,10 +26,6 @@
     .page-item {
         background-color: #
     }
-
-    .old-price {
-        text-decoration: line-through
-    }
 </style>
 }
 @model SearchResultViewModel
@@ -95,7 +91,7 @@
                                             <img src="@Url.ShopImageUrl(shop.Avatar)" alt="Product image" class="product-image">
                                         </a>
                                         <div class="product-action">
-                                            <a href="/shop/@shop.Id" class="btn-product" title="Go to shop"><span>go to shop</span></a>
+                                            <a href="/shop/index/@shop.Id" class="btn-product" title="Go to shop"><span>go to shop</span></a>
                                         </div>
                                     </figure>
                                     <div class="product-body">

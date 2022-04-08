@@ -10,7 +10,9 @@ using Shared.Models;
 using Shared.RequestModels;
 using Shared.Validations;
 using ShopInterfaceService.Commands;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -101,16 +103,17 @@ namespace ShopInterfaceService.Controllers
             return ApiResult<ShopInterfaceDTO>.CreateSucceedResult(result.Response);
         }
 
-        [HttpGet("avatar")]
-        public async Task<ApiResult> GetAvatar([FromQuery(Name = "shopId")] List<int> shopIds)
+        [HttpGet]
+        public async Task<ApiResult> GetShopInterfacesInfo([FromQuery(Name = "shopId")] List<int> shopIds)
         {
-            var result = await _mediator.Send(new GetShopAvatarQuery
+            var result = await _mediator.Send(new GetShopInterfacesQuery
             {
-                ShopIds = shopIds.ToArray()
+                ShopIds = shopIds
             });
-            return ApiResult<Dictionary<int, string>>.CreateSucceedResult(result);
+            return ApiResult<Dictionary<int, ShopInterfaceDTO>>.CreateSucceedResult(result);
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet("images/{imageId}")]
         public IActionResult Image(string imageId)
         {
