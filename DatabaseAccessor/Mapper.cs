@@ -19,6 +19,7 @@ namespace DatabaseAccessor.Mapping
             MapperConfiguration config = new(cfg =>
             {
                 cfg.CreateMap<ShopProduct, ProductDTO>()
+                    .IncludeBase<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.CategoryName,
                         options => options.MapFrom(source => source.Category == null ? "" : source.Category.CategoryName));
                 cfg.CreateMap<ShopProduct, ProductWithCommentsDTO>()
