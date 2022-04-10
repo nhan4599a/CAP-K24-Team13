@@ -5,7 +5,6 @@ using DatabaseAccessor.Repositories.Abstraction;
 using EntityFrameworkCore.Triggered;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
@@ -34,6 +33,7 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<CategoryDTO>> GetAllCategoriesAsync(PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopCategories.AsNoTracking()
+                .Include(e => e.ShopProducts)
                 .Select(category => _mapper.MapToCategoryDTO(category))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -99,6 +99,7 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopCategories.AsNoTracking()
+                .Include(e => e.ShopProducts)
                 .Where(category => category.ShopId == shopId)
                 .Select(category => _mapper.MapToCategoryDTO(category))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
