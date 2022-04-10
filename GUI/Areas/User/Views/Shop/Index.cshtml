@@ -17,61 +17,19 @@
                             "nav": false,
                             "dots": true
                         }'>
-                        <div class="intro-slide">
-                            <figure class="slide-image">
-                                <picture>
-                                    <source media="(max-width: 480px)"
-                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-1-480w.jpg")" />
-                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-1.jpg")" alt="Image Desc">
-                                </picture>
-                            </figure>
-                            <!-- End .slide-image -->
-                        </div>
-                        <!-- End .intro-slide -->
-                        <div class="intro-slide">
-                            <figure class="slide-image">
-                                <picture>
-                                    <source media="(max-width: 480px)"
-                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-2-480w.jpg")" />
-                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-2.jpg")" alt="Image Desc">
-                                </picture>
-                            </figure>
-                            <!-- End .slide-image -->
-                        </div>
-                        <!-- End .intro-slide -->
-                        <div class="intro-slide">
-                            <figure class="slide-image">
-                                <picture>
-                                    <source media="(max-width: 480px)"
-                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3-480w.jpg")" />
-                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3.jpg")" alt="Image Desc">
-                                </picture>
-                            </figure>
-                            <!-- End .slide-image -->
-                        </div>
-                        <!-- End .intro-slide -->
-                        <div class="intro-slide">
-                            <figure class="slide-image">
-                                <picture>
-                                    <source media="(max-width: 480px)"
-                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3-480w.jpg")" />
-                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3.jpg")" alt="Image Desc">
-                                </picture>
-                            </figure>
-                            <!-- End .slide-image -->
-                        </div>
-                        <!-- End .intro-slide -->
-                        <div class="intro-slide">
-                            <figure class="slide-image">
-                                <picture>
-                                    <source media="(max-width: 480px)"
-                                            srcset="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3-480w.jpg")" />
-                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/slider/slide-3.jpg")" alt="Image Desc">
-                                </picture>
-                            </figure>
-                            <!-- End .slide-image -->
-                        </div>
-                        <!-- End .intro-slide -->
+                        @foreach (var image in Model.Shop.Images)
+                        {
+                            <div class="intro-slide">
+                                <figure class="slide-image">
+                                    <picture>
+                                        <source media="(max-width: 480px)"
+                                            srcset="@Url.ShopImageUrl(image)" />
+                                        <img src="@Url.ShopImageUrl(image)" alt="Image Desc">
+                                    </picture>
+                                </figure>
+                                <!-- End .slide-image -->
+                            </div>
+                        }
                     </div>
                     <!-- End .intro-slider owl-carousel owl-simple -->
                     <span class="slider-loader"></span><!-- End .slider-loader -->
@@ -89,12 +47,12 @@
                 <div class="row">
                     <div class="col-md-1">
                         <div class="avatar avatar-xl position-relative">
-                            <img src="img_girl.jpg" alt="" width="74" height="74">
+                            <img src="@Url.ShopImageUrl(Model.Shop.Avatar)" alt="" width="74" height="74">
                         </div>
                     </div>
                     <div class="col-md-5 vertical-align-center">
                         <div class="vertical-align-center">
-                            <h5 class="vertical-align-center" id="shop-name">ACB</h5>
+                            <h5 class="vertical-align-center" id="shop-name">@Model.Shop.ShopName</h5>
                         </div>
                     </div>
                     <div class="col-lg-12 col-xxl-4-5col">
@@ -104,10 +62,12 @@
                                     <div class="card-header p-3">
                                         <h6 class="mb-0">Shop Description</h6>
                                     </div>
-                                <div class="card-body p-2">
-                                <textarea class="form-control" id="input-description" disabled="" style="height: 231px;resize: none;"></textarea>
-                            </div>
-                        </div>
+                                    <div class="card-body p-2">
+                                        <textarea class="form-control" id="input-description" disabled style="height: 231px; resize: none;">
+                                            @Model.Shop.Description
+                                        </textarea>
+                                    </div>
+                                </div>
                             </div>
                             <!-- End .col-md-6 -->
                             <div class="col-md-6">
@@ -119,42 +79,42 @@
                                             </div>
                                         </div>
                                     </div>
-                                <div class="card-body p-2" style="/* padding-left: 1rem !important; */">
-                                    <hr class="horizontal gray-light my-0">
-                                    <div class="row align-items-center">
-                                        <div class="col-2">
-                                            <label for="input-name" style="margin: 0px">Name:</label>
+                                    <div class="card-body p-2">
+                                        <hr class="horizontal gray-light my-0">
+                                        <div class="row align-items-center">
+                                            <div class="col-2">
+                                                <label for="input-name" style="margin: 0px">Name:</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input class="form-control" type="text" id="input-name" disabled value="@Model.Shop.ShopName">
+                                            </div>
                                         </div>
-                                        <div class="col-10">
-                                            <input class="form-control" type="text" id="input-name" disabled="">
+                                        <div class="row align-items-center">
+                                            <div class="col-2">
+                                                <label for="input-name" style="margin: 0px">Phone:</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input class="form-control" type="text" id="input-phone" disabled value="@Model.Shop.Phone">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="col-2">
-                                            <label for="input-name" style="margin: 0px">Phone:</label>
+                                        <div class="row align-items-center">
+                                            <div class="col-2">
+                                                <label for="input-name" style="margin: 0px">Email:</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input class="form-control" type="text" id="input-email" disabled value="@Model.Shop.Email">
+                                            </div>
                                         </div>
-                                    <div class="col-10">
-                                        <input class="form-control" type="text" id="input-phone" disabled="">
+                                        <div class="row align-items-center mb-2">
+                                            <div class="col-2">
+                                                <label for="input-name" style="margin: 0px">Location:</label>
+                                            </div>
+                                            <div class="col-10">
+                                                <input class="form-control" type="text" id="input-address" disabled value="@($"{Model.Shop.Floor}-{Model.Shop.Position}")">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row align-items-center">
-                                    <div class="col-2">
-                                        <label for="input-name" style="margin: 0px">Email:</label>
-                                    </div>
-                                    <div class="col-10">
-                                        <input class="form-control" type="text" id="input-email" disabled="">
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-2">
-                                        <label for="input-name" style="margin: 0px">Location:</label>
-                                    </div>
-                                    <div class="col-10">
-                                        <input class="form-control" type="text" id="input-address" disabled="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                             </div>
                             <!-- End .col-md-6 -->
                         </div>
@@ -379,13 +339,13 @@
                                                     </a>
                                                 </h5>
                                                 <!-- End .product-title -->
-                                            <div class="product-price">
+                                                <div class="product-price">
                                                     @((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))
                                                 </div>
                                                 <!-- End .product-price -->
-                                        </div>
+                                            </div>
                                             <!-- End .product-body -->
-                                    </div>
+                                        </div>
                                     }
                                 </div>
                                 <!-- End .products -->

@@ -204,12 +204,12 @@ namespace ShopProductService.Controllers
             return ApiResult<List<MinimalProductDTO>>.CreateSucceedResult(bestSellerProductsResponse);
         }
 
-        [HttpGet("category/{categoryId}")]
-        public async Task<ApiResult> GetProductsOfCategory(int categoryId, [FromQuery] SearchRequestModel pagination)
+        [HttpGet("category")]
+        public async Task<ApiResult> GetProductsOfCategory([FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel pagination)
         {
             var productsOfCategoryResult = await _mediator.Send(new GetProductsByCategoryIdQuery
             {
-                CategoryId = categoryId,
+                CategoryIds = categoryIds,
                 PaginationInfo = new PaginationInfo
                 {
                     PageNumber = pagination.PageNumber,

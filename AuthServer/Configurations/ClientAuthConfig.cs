@@ -36,8 +36,8 @@ namespace AuthServer.Configurations
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
                 AllowOfflineAccess = true,
-                UserSsoLifetime = 7200,
-                AccessTokenLifetime = 7200,
+                UserSsoLifetime = 43200,
+                AccessTokenLifetime = 43200,
                 RefreshTokenUsage = TokenUsage.OneTimeOnly,
                 RefreshTokenExpiration = TokenExpiration.Absolute
             },
@@ -70,8 +70,8 @@ namespace AuthServer.Configurations
                 RequirePkce = true,
                 AllowPlainTextPkce = false,
                 AllowOfflineAccess = true,
-                UserSsoLifetime = 7200,
-                AccessTokenLifetime = 7200,
+                UserSsoLifetime = 43200,
+                AccessTokenLifetime = 43200,
                 RefreshTokenUsage = TokenUsage.OneTimeOnly,
                 RefreshTokenExpiration = TokenExpiration.Absolute
             }

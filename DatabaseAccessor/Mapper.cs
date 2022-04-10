@@ -27,7 +27,9 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
-                cfg.CreateMap<ShopCategory, CategoryDTO>();
+                cfg.CreateMap<ShopCategory, CategoryDTO>()
+                    .ForMember(target => target.ProductCount, 
+                        options => options.MapFrom(source => source.ShopProducts.Count));
 
                 cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
                     .ForMember(target => target.Images,

@@ -34,7 +34,7 @@ namespace GUI.Areas.User.Controllers
             var productsOfCategory = new Dictionary<int, List<ProductDTO>>();
             foreach (var categoryId in shopCategoriesResponse.Content.Data.Select(e => e.Id))
             {
-                var productsResponse = await _productClient.GetProductsOfCategory(categoryId, 1, 5);
+                var productsResponse = await _productClient.GetProductsOfCategory(new int[] { categoryId }, 1, 5);
                 if (!productsResponse.IsSuccessStatusCode)
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 productsOfCategory.Add(categoryId, productsResponse.Content.Data.ToList());
@@ -45,6 +45,22 @@ namespace GUI.Areas.User.Controllers
                 Shop = shopResponse.Content.ResultObj,
                 BestSeller = bestSellerProductsResponse.Content.Data,
                 Products = productsOfCategory
+            });
+        }
+
+        public async Task<IActionResult> Category([FromRoute(Name = "id")] int shopId, List<int> categoryId, int pageNumber)
+        {
+            var shopCategoriesResponse = await _categoryClient.GetCategoriesOfShop(shopId, 0);
+            var shopResponse = await _shopClient.GetShop(shopId);
+            var productsResponse = await _productClient.GetProductsOfCategory(categoryId.ToArray(), pageNumber, 20);
+            if (!shopResponse.IsSuccessStatusCode || !shopCategoriesResponse.IsSuccessStatusCode
+                    || !productsResponse.IsSuccessStatusCode)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return View(new ShopCategoryViewModel
+            {
+                Categories = shopCategoriesResponse.Content.Data.ToList(),
+                Shop = shopResponse.Content.ResultObj,
+                Products = productsResponse.Content.Data
             });
         }
     }

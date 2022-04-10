@@ -204,12 +204,12 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int categoryId, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(List<int> categoryIds, PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts
                 .AsNoTracking()
                 .Include(e => e.Category)
-                .Where(product => product.CategoryId == categoryId)
+                .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }

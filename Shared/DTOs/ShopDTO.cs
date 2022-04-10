@@ -9,6 +9,10 @@ namespace Shared.DTOs
         [JsonPropertyName("shop_Name")]
         public string ShopName { get; set; }
 
+        public string Phone { get; set; }
+
+        public string Email { get; set; }
+
         public string Description { get; set; }
 
         public string Avatar { get; set; }

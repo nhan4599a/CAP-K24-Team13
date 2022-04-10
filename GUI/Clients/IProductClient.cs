@@ -26,7 +26,7 @@ namespace GUI.Clients
         [Get("/products/best")]
         Task<ApiResponse<ApiResult<List<MinimalProductDTO>>>> GetBestSellerProducts([Query] int? shopId);
 
-        [Get("/products/category/{categoryId}?pageNumber={pageNumber}&pageSize={pageSize}")]
-        Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsOfCategory(int categoryId, int pageNumber, int pageSize);
+        [Get("/products/category?pageNumber={pageNumber}&pageSize={pageSize}")]
+        Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsOfCategory([Query(CollectionFormat.Multi)] int[] categoryId, int pageNumber, int pageSize);
     }
 }

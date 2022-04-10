@@ -121,7 +121,7 @@ namespace AuthServer
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = ApplyOptions;
-                    options.TokenCleanupInterval = 7200;
+                    options.TokenCleanupInterval = 43200;
                 })
                 .AddConfigurationStore(options =>
                 {
@@ -135,12 +135,12 @@ namespace AuthServer
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.ExpireTimeSpan = TimeSpan.FromHours(2);
+                options.ExpireTimeSpan = TimeSpan.FromHours(12);
                 options.SlidingExpiration = false;
             });
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromHours(2);
+                options.IdleTimeout = TimeSpan.FromHours(12);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
