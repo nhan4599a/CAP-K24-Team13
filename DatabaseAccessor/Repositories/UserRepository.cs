@@ -88,7 +88,12 @@ namespace DatabaseAccessor.Repositories
             if (user.ShopId != null)
                 return CommandResponse<bool>.Error("User is already belong to another shop", null);
             user.ShopId = shopId;
-            user.UserRoles[0].RoleId = (await _dbContext.Roles.FirstOrDefaultAsync(role => role.Name == SystemConstant.Roles.SHOP_OWNER)).Id;
+            _dbContext.UserRoles.Remove(user.UserRoles[0]);
+            await _dbContext.SaveChangesAsync();
+            user.UserRoles.Add(new Models.UserRole
+            {
+                Role = await _dbContext.Roles.FirstOrDefaultAsync(role => role.Name == SystemConstant.Roles.SHOP_OWNER)
+            });
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
