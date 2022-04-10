@@ -85,21 +85,16 @@
                         <div class="collapse show" id="widget-1">
                             <div class="widget-body">
                                 <div class="filter-items filter-items-count">
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-1">
-                                            <label class="custom-control-label" for="cat-1">Dresses</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">3</span>
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-2">
-                                            <label class="custom-control-label" for="cat-2">T-shirts</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">0</span>
-                                    </div><!-- End .filter-item -->
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <div class="filter-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" data-category="@category.Id">
+                                                <label class="custom-control-label" for="cat-1">@category.CategoryName</label>
+                                            </div><!-- End .custom-checkbox -->
+                                            <span class="item-count">@category.ProductCount</span>
+                                        </div>
+                                    }
                                 </div><!-- End .filter-items -->
                                 <div class="justify-content-center mt-2">
                                     <button class="btn btn-primary">Filter categories</button>

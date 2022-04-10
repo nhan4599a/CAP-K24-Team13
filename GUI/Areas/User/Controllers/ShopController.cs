@@ -48,7 +48,7 @@ namespace GUI.Areas.User.Controllers
             });
         }
 
-        public async Task<IActionResult> Category([FromRoute(Name = "id")] int shopId, List<int> categoryId, int pageNumber)
+        public async Task<IActionResult> Categories([FromRoute(Name = "id")] int shopId, List<int> categoryId, int pageNumber)
         {
             var shopCategoriesResponse = await _categoryClient.GetCategoriesOfShop(shopId, 0);
             var shopResponse = await _shopClient.GetShop(shopId);
