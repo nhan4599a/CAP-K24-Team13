@@ -409,7 +409,7 @@
         border-color: #333
     }
 
-        .btn-product:hover span, .btn-product:focus span {
+        .btn-product:hover span {
             color: #c96;
             box-shadow: none
         }

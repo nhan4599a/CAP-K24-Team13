@@ -26,7 +26,7 @@ $(document).ready(function () {
     $('.product-details-action > .btn-product.btn-cart').click(function (e) {
         e.preventDefault();
         let productId = $(this).data('product');
-        let quantity = $(this).parent().parent().children('.details-filter-row.details-row-size').eq(2)
+        let quantity = $(this).parent().parent().children('.details-filter-row.details-row-size')
             .find('.input-group.input-spinner').children('input').val();
         let productDetailRootElement = $('div.product-details');
         let name = productDetailRootElement.find('h1.product-title').html();

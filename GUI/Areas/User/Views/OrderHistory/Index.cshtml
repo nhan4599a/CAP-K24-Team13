@@ -47,6 +47,9 @@
         }
 </style>
 }
+@section Header {
+    @await Component.InvokeAsync("UserStickyHeader", "home")
+}
 <main class="main">
     @await Component.InvokeAsync("HomePageSlider")
     <div class="mb-4"></div><!-- End .mb-2 -->
