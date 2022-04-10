@@ -7,7 +7,7 @@
     <!-- End .mb-lg-2 -->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xl-9 col-xxl-8 offset-lg-3 offset-xxl-2">
+            <div class="col-xl-9 col-xxl-12 offset-lg-3 offset-xxl-2">
                 <div class="intro-slider-container slider-container-ratio mb-2">
                     <div class="intro-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl"
                          data-owl-options='{
@@ -84,60 +84,74 @@
         <div class="row">
             <div class="col-xl-9 col-xxl-10">
                 <div class="row">
+                    <div class="col-md-1">
+                        <div class="avatar avatar-xl position-relative">
+                            <img src="img_girl.jpg" alt="" width="74" height="74">
+                        </div>
+                    </div>
+                    <div class="col-md-5 vertical-align-center">
+                        <div class="vertical-align-center">
+                            <h5 class="vertical-align-center" id="shop-name">ACB</h5>
+                        </div>
+                    </div>
                     <div class="col-lg-12 col-xxl-4-5col">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="banner banner-overlay">
-                                    <a href="#">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-2.jpg")" alt="Banner img desc">
-                                    </a>
-                                    <div class="banner-content">
-                                        <h4 class="banner-subtitle text-white d-none d-sm-block">
-                                            <a href="#">Hottest Deals</a>
-                                        </h4>
-                                        <!-- End .banner-subtitle -->
-                                        <h3 class="banner-title text-white">
-                                            <a href="#">
-                                                Detox And Beautify
-                                                <br>For Spring <br><span>Up To 20% Off</span>
-                                            </a>
-                                        </h3>
-                                        <!-- End .banner-title -->
-                                        <a href="#" class="banner-link">
-                                            Shop Now <i class="icon-long-arrow-right"></i>
-                                        </a>
+                                <div class="card card-plain">
+                                    <div class="card-header p-3">
+                                        <h6 class="mb-0">Shop Description</h6>
                                     </div>
-                                    <!-- End .banner-content -->
-                                </div>
-                                <!-- End .banner -->
+                                <div class="card-body p-2">
+                                <textarea class="form-control" id="input-description" disabled="" style="height: 231px;resize: none;"></textarea>
+                            </div>
+                        </div>
                             </div>
                             <!-- End .col-md-6 -->
                             <div class="col-md-6">
-                                <div class="banner banner-overlay">
-                                    <a href="#">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-3.png")" alt="Banner img desc">
-                                    </a>
-                                    <div class="banner-content">
-                                        <h4 class="banner-subtitle text-white d-none d-sm-block">
-                                            <a href="#">Deal of the Day</a>
-                                        </h4>
-                                        <!-- End .banner-subtitle -->
-                                        <h3 class="banner-title text-white">
-                                            <a href="#">
-                                                Headphones <br><span>
-                                                    Up
-                                                    To 30% Off
-                                                </span>
-                                            </a>
-                                        </h3>
-                                        <!-- End .banner-title -->
-                                        <a href="#" class="banner-link">
-                                            Shop Now <i class="icon-long-arrow-right"></i>
-                                        </a>
+                                <div class="card card-plain">
+                                    <div class="card-header pb-0 p-3">
+                                        <div class="row">
+                                            <div class="col-md-8 d-flex align-items-center">
+                                                <h6 class="mb-0">Profile Information</h6>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- End .banner-content -->
+                                <div class="card-body p-2" style="/* padding-left: 1rem !important; */">
+                                    <hr class="horizontal gray-light my-0">
+                                    <div class="row align-items-center">
+                                        <div class="col-2">
+                                            <label for="input-name" style="margin: 0px">Name:</label>
+                                        </div>
+                                        <div class="col-10">
+                                            <input class="form-control" type="text" id="input-name" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col-2">
+                                            <label for="input-name" style="margin: 0px">Phone:</label>
+                                        </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-phone" disabled="">
+                                    </div>
                                 </div>
-                                <!-- End .banner banner-overlay -->
+                                <div class="row align-items-center">
+                                    <div class="col-2">
+                                        <label for="input-name" style="margin: 0px">Email:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-email" disabled="">
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-2">
+                                    <div class="col-2">
+                                        <label for="input-name" style="margin: 0px">Location:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <input class="form-control" type="text" id="input-address" disabled="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                             </div>
                             <!-- End .col-md-6 -->
                         </div>
