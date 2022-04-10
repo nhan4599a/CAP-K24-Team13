@@ -48,10 +48,10 @@ namespace GUI.Areas.User.Controllers
             });
         }
 
-        public async Task<IActionResult> Categories([FromRoute(Name = "id")] int shopId, List<int> categoryId, int pageNumber)
+        public async Task<IActionResult> Categories(int id, List<int> categoryId, int pageNumber = 1)
         {
-            var shopCategoriesResponse = await _categoryClient.GetCategoriesOfShop(shopId, 0);
-            var shopResponse = await _shopClient.GetShop(shopId);
+            var shopCategoriesResponse = await _categoryClient.GetCategoriesOfShop(id, 0);
+            var shopResponse = await _shopClient.GetShop(id);
             var productsResponse = await _productClient.GetProductsOfCategory(categoryId.ToArray(), pageNumber, 20);
             if (!shopResponse.IsSuccessStatusCode || !shopCategoriesResponse.IsSuccessStatusCode
                     || !productsResponse.IsSuccessStatusCode)

@@ -1,5 +1,8 @@
 ﻿@using GUI.Areas.User.ViewModels
 @model ShopCategoryViewModel
+@section Header {
+    @await Component.InvokeAsync("UserStickyHeader", "shop")
+}
 <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         <div class="container">
