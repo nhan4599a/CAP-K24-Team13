@@ -227,7 +227,7 @@
                                 <input type="text" class="form-control" id="input-email" disabled />
                             </div>
                             <div class="input-group input-group-outline mb-3">
-                                <label class="form-label" for="input-address">Address</label>
+                                <label class="form-label" for="input-address">Location</label>
                                 <input type="text" class="form-control" id="input-address" disabled />
                             </div>
                         </div>
@@ -434,9 +434,20 @@
 
             $('a.btn[name=btn-save]').click(function () {
                 let editMode = localStorage.getItem('shop-interface.edit-mode');
+
+                if (imageDropzone.files.length < 1) {
+                    toastr.error('You must upload at least 1 pictures!', 'Error');
+                    return;
+                }
+
+                if (avatarDropzone.files.length < 1) {
+                    toastr.error('You must upload avatar!', 'Error');
+                    return;
+                }
                 
                 let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
                 animationLoader.showAnimation();
+                                
                 let successCallback = () => {
                     localStorage.removeItem('shop-interface.edit-mode');
                     localStorage.removeItem('shop-interface.editting.interface');
@@ -448,16 +459,6 @@
                     animationLoader.hideAnimation();
                     toastr.error('Failed to edit interface! ' + error, 'Error');
                 };
-
-                if (imageDropzone.files.length < 1) {
-                    toastr.error('You must upload at least 1 pictures!', 'Error');
-                    return;
-                }
-
-                if (avatarDropzone.files.length < 1) {
-                    toastr.error('You must upload avatar!', 'Error');
-                    return;
-                }
 
                 let formData = new FormData();
                 formData.append('avatar', avatarDropzone.files[0]);

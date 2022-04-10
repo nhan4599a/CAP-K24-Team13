@@ -29,6 +29,9 @@
 </style>
 }
 @model SearchResultViewModel
+@section Header {
+    @await Component.InvokeAsync("UserStickyHeader", "home")
+}
 <main class="main">
     <div class="mb-2"></div><!-- End .mb-2-->
     <div class="col-md-12">
@@ -95,7 +98,7 @@
                                         </div>
                                     </figure>
                                     <div class="product-body">
-                                        <h3 class="product-title"><a href="product.html">@shop.ShopName</a></h3>
+                                        <h3 class="product-title"><a href="/shop/index/@shop.Id">@shop.ShopName</a></h3>
                                     </div>
                                 </div>
                             </div>
