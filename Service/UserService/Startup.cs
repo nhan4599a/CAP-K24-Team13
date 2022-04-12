@@ -1,5 +1,4 @@
-﻿using AspNetCoreSharedComponent.Mail;
-using AspNetCoreSharedComponent.ModelValidations;
+﻿using AspNetCoreSharedComponent.ModelValidations;
 using AspNetCoreSharedComponent.ServiceDiscoveries;
 using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
@@ -10,9 +9,11 @@ using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using UserService.Commands;
@@ -38,7 +39,7 @@ namespace UserService
             {
                 options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
             });
-            services.RegisterOcelotService(Configuration);
+            services.RegisterOcelotService(Configuration, Configuration["HEALTH_CHECK_EXECUTION_PATH"]);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
@@ -73,6 +74,9 @@ namespace UserService
                 }));
 
             services.AddHangfireServer();
+
+            services.AddHealthChecks()
+                .AddDbContextCheck<ApplicationDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,19 +86,20 @@ namespace UserService
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseHangfireDashboard(options: new DashboardOptions
-            {
-                Authorization = new[]
-                {
-                    new HangfireDashboardActionFilter()
-                }
-            });
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                {
+                    ResultStatusCodes =
+                    {
+                        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+                        [HealthStatus.Degraded] = StatusCodes.Status200OK,
+                        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+                    }
+                });
                 endpoints.MapControllers();
-                endpoints.MapHangfireDashboard();
             });
         }
     }

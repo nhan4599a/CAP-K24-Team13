@@ -8,6 +8,7 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCoreSharedComponent.ServiceDiscoveries
 {
@@ -21,16 +22,19 @@ namespace AspNetCoreSharedComponent.ServiceDiscoveries
             return services;
         }
 
-        public static IApplicationBuilder UseOcelot(this IApplicationBuilder app)
+        public static IApplicationBuilder UseOcelot(this IApplicationBuilder app, OcelotPipelineConfiguration? configuration = null)
         {
-            OcelotMiddlewareExtensions.UseOcelot(app).Wait();
+            OcelotMiddlewareExtensions.UseOcelot(app, configuration).Wait();
             return app;
         }
 
-        public static IServiceCollection RegisterOcelotService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterOcelotService(this IServiceCollection services, IConfiguration configuration,
+            string healtchCheckExecutionPath)
         {
             var serviceConfiguration = configuration.GetServiceConfiguration();
-            services.AddSingleton<IHostedService, ServiceDiscoveryHostedService>();
+            services.AddSingleton<IHostedService, ServiceDiscoveryHostedService>(sv => 
+                new ServiceDiscoveryHostedService(sv.GetRequiredService<IConsulClient>(), sv.GetRequiredService<IConfiguration>(),
+                    sv.GetRequiredService<ILogger<ServiceDiscoveryHostedService>>(), healtchCheckExecutionPath));
             services.AddSingleton<IConsulClient>(CreateConsulClient(serviceConfiguration));
             return services;
         }

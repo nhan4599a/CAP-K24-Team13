@@ -22,7 +22,7 @@ namespace ApiGateway
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseOcelot();
+            ServiceDiscoveryExtensions.UseOcelot(app);
         }
     }
 }

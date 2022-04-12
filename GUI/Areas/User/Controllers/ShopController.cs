@@ -48,7 +48,7 @@ namespace GUI.Areas.User.Controllers
             });
         }
 
-        public async Task<IActionResult> Categories(int id, List<int> categoryId, int pageNumber = 1)
+        public async Task<IActionResult> Categories(int id, [FromQuery(Name = "cat")] List<int> categoryId, int pageNumber = 1)
         {
             var shopCategoriesResponse = await _categoryClient.GetCategoriesOfShop(id, 0);
             var shopResponse = await _shopClient.GetShop(id);

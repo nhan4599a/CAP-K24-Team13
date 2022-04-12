@@ -1,4 +1,6 @@
 ﻿@using GUI.Areas.User.ViewModels
+@using GUI.Extensions
+@using System.Globalization
 @model ShopCategoryViewModel
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "shop")
@@ -25,50 +27,76 @@
                 <div class="col-lg-9">
                     <div class="products mb-3">
                         <div class="row">
-                            <div class="col-6 col-md-4 col-lg-4 col-xl-3">
-                                <div class="product product-7 text-center">
-                                    <figure class="product-media">
-                                        <span class="product-label label-new">New</span>
-                                        <a href="#">
-                                            <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
-                                        </a>
+                            @foreach (var product in Model.Products)
+                            {
+                                <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                                    <div class="product product-7 text-center">
+                                        <figure class="product-media">
+                                            <span class="product-label label-new">New</span>
+                                            <a href="/product/index/@product.Id">
+                                                <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
+                                            </a>
+                                            <div class="product-action">
+                                                <a href="#" class="btn-product btn-cart">
+                                                    <span>add to cart</span>
+                                                </a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
 
-                                        <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                        </div><!-- End .product-action -->
-                                    </figure><!-- End .product-media -->
-
-                                    <div class="product-body">
-                                        <div class="product-cat">
-                                            <a href="#">CAt name</a>
-                                        </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="#">Brown paperbag waist pencil skirt</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            $60.00
-                                        </div><!-- End .product-price -->
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                        </div><!-- End .rating-container -->
-                                    </div><!-- End .product-body -->
-                                </div><!-- End .product -->
-                            </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+                                        <div class="product-body">
+                                            <div class="product-cat">
+                                                <a href="#">@product.CategoryName</a>
+                                            </div><!-- End .product-cat -->
+                                            <h3 class="product-title">
+                                                <a href="#">@product.ProductName</a>
+                                            </h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                @if (product.Discount > 0)
+                                                {
+                                                    <span class="new-price">@((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                                    <span class="old-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="new-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                }
+                                            </div><!-- End .product-price -->
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                            </div><!-- End .rating-container -->
+                                        </div><!-- End .product-body -->
+                                    </div>
+                                </div>
+                            }
                         </div><!-- End .row -->
                     </div><!-- End .products -->
 
                     <nav aria-label="Page navigation">
                         <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
+                            <li class="page-item@(Model.Products.HasPreviousPage ? "" : " disabled")">
                                 <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
                                     <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
                                 </a>
                             </li>
-                            <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item-total">of 6</li>
-                            <li class="page-item">
+                            @for (var i = 1; i <= @Model.Products.MaxPageNumber; i++)
+                            {
+                                if (i == Model.Products.PageNumber)
+                                {
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link" href="#">@i</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">@i</a>
+                                    </li>
+                                }
+                            }
+                            <li class="page-item-total">of @Model.Products.MaxPageNumber</li>
+                            <li class="page-item@(Model.Products.HasNextPage ? "" : " disabled")">
                                 <a class="page-link page-link-next" href="#" aria-label="Next">
                                     Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
                                 </a>
@@ -92,15 +120,17 @@
                                     {
                                         <div class="filter-item">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" data-category="@category.Id">
-                                                <label class="custom-control-label" for="cat-1">@category.CategoryName</label>
+                                                <input type="checkbox" class="custom-control-input" data-category="@category.Id" id="cat-@category.Id">
+                                                <label class="custom-control-label" for="cat-@category.Id" style="cursor: pointer">
+                                                    @category.CategoryName
+                                                </label>
                                             </div><!-- End .custom-checkbox -->
                                             <span class="item-count">@category.ProductCount</span>
                                         </div>
                                     }
                                 </div><!-- End .filter-items -->
                                 <div class="justify-content-center mt-2">
-                                    <button class="btn btn-primary">Filter categories</button>
+                                    <button class="btn btn-primary" id="btn-filter">Filter categories</button>
                                 </div>
 
                             </div><!-- End .widget-body -->
@@ -112,3 +142,75 @@
         </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+@section Scripts {
+<script>
+    $(document).ready(() => {
+        let currentSelectedCategory = getCurrentPageInfo().categories;
+        $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]')
+            .each((_, element) => {
+                let categoryId = $(element).data('category').toString();
+                if (currentSelectedCategory.includes(categoryId)) {
+                    $(element).attr('checked', true);
+                }
+            });
+        $('#btn-filter').click(() => {
+            moveToPage(1);
+        });
+        $('.page-link').click(function (e) {
+            e.preventDefault();
+            let currentPageNumber = getCurrentPageInfo().pageNumber;
+            if ($(this).hasClass('page-link-prev')) {
+                moveToPage(currentPageNumber - 1);
+            } else if ($(this).hasClass('page-link-next')) {
+                moveToPage(currentPageNumber + 1);
+            } else {
+                let selectedPageNumber = $(this).html();
+                moveToPage(selectedPageNumber);
+            }
+        });
+    });
+
+    function getCurrentPageInfo() {
+        let url = new URL(window.location.href);
+        let queryObj = url.searchParams;
+        let parsedQueryObj = groupParamsByKey(queryObj);
+        return {
+            pageNumber: parsedQueryObj.pageNumber || 1,
+            categories: parsedQueryObj.cat || []
+        };
+    }
+
+    function moveToPage(pageNumber) {
+        let selectedCategoriesId = [];
+        $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]:checked').each((_, element) => {
+            selectedCategoriesId.push($(element).data('category'));
+        });
+        if (selectedCategoriesId.length == 0) {
+            location.href = `/shop/categories/@Model.Shop.Id?pageNumber=${pageNumber}`;
+        } else {
+            let categoriesInUrl = `?cat=${selectedCategoriesId[0]}`;
+            if (selectedCategoriesId.length > 1)
+                for (var categoryId of selectedCategoriesId)
+                    categoriesInUrl += `&cat=${categoryId}`;
+            location.href = `/shop/categories/@Model.Shop.Id${categoriesInUrl}&pageNumber=${pageNumber}`;
+        }
+    }
+
+    function groupParamsByKey(params) {
+        return [...params.entries()]
+            .reduce((accumulator, tuple) => {
+                const [key, value] = tuple;
+                if (accumulator.hasOwnProperty(key)) {
+                    if (Array.isArray(accumulator[key])) {
+                        accumulator[key] = [...accumulator[key], value];
+                    } else {
+                        accumulator[key] = [accumulator[key], value];
+                    }
+                } else {
+                    accumulator[key] = value;
+                }
+                return accumulator;
+            }, {});
+    }
+</script>
+}
