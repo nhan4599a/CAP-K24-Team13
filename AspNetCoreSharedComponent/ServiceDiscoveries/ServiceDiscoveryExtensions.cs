@@ -22,9 +22,9 @@ namespace AspNetCoreSharedComponent.ServiceDiscoveries
             return services;
         }
 
-        public static IApplicationBuilder UseOcelot(this IApplicationBuilder app, OcelotPipelineConfiguration? configuration = null)
+        public static IApplicationBuilder UseOcelot(this IApplicationBuilder app)
         {
-            OcelotMiddlewareExtensions.UseOcelot(app, configuration).Wait();
+            OcelotMiddlewareExtensions.UseOcelot(app).Wait();
             return app;
         }
 
