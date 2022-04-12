@@ -56,7 +56,7 @@ namespace AspNetCoreSharedComponent.ServiceDiscoveries
                     { 
                         "/usr/bin/dotnet",
                         _healthCheckExecutionPath,
-                        $"{_serviceConfiguration.ServiceAddress}/health",
+                        $"{_serviceConfiguration.ServiceAddress}health",
                         _serviceConfiguration.ServiceName
                     },
                     Interval = TimeSpan.FromMinutes(10),
