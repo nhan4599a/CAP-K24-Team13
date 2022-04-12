@@ -223,7 +223,7 @@
                                 </div>
                                 <div class="row align-items-center mb-2">
                                     <div class="col-2">
-                                        <label for="input-name" style="margin: 0px">Phone:</label>
+                                        <label for="input-phone" style="margin: 0px">Phone:</label>
                                     </div>
                                     <div class="col-10">
                                         <input class="form-control" type="text" id="input-phone" disabled />
@@ -231,7 +231,7 @@
                                 </div>
                                 <div class="row align-items-center mb-2">
                                     <div class="col-2">
-                                        <label for="input-name" style="margin: 0px">Email:</label>
+                                        <label for="input-email" style="margin: 0px">Email:</label>
                                     </div>
                                     <div class="col-10">
                                         <input class="form-control" type="text" id="input-email" disabled />
@@ -239,7 +239,7 @@
                                 </div>
                                 <div class="row align-items-center mb-2">
                                     <div class="col-2">
-                                        <label for="input-name" style="margin: 0px">Location:</label>
+                                        <label for="input-address" style="margin: 0px">Location:</label>
                                     </div>
                                     <div class="col-10">
                                         <input class="form-control" type="text" id="input-address" disabled />
@@ -383,7 +383,7 @@
         function onInformationGot(shopInformation) {
             if (shopInformation) {
                 $('#input-description').val(shopInformation.description);
-                $('#input-name').val(shopInformation.shop_Name);
+                $('#input-name').val(shopInformation.name);
                 $('#input-phone').val(shopInformation.phone);
                 $('#input-email').val(shopInformation.email);
                 let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;

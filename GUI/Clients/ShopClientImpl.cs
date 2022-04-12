@@ -14,10 +14,13 @@ namespace GUI.Clients
 
         private readonly IShopInterfaceClient _interfaceClient;
 
-        public ShopClientImpl(IExternalShopClient externalShopClient, IShopInterfaceClient interfaceClient)
+        private readonly IUserClient _userClient;
+
+        public ShopClientImpl(IExternalShopClient externalShopClient, IShopInterfaceClient interfaceClient, IUserClient userClient)
         {
             _externalShopClient = externalShopClient;
             _interfaceClient = interfaceClient;
+            _userClient = userClient;
         }
 
         public async Task<ApiResponse<ExternalApiPaginatedList<ShopDTO>>> FindShops(string keyword, int pageNumber, int pageSize)
@@ -69,6 +72,13 @@ namespace GUI.Clients
                     externalShopResponse.Content.ResultObj.Avatar = avatar.ContainsKey(shopId) ? avatar[shopId].Avatar : string.Empty;
                     externalShopResponse.Content.ResultObj.Images = avatar.ContainsKey(shopId) ? avatar[shopId].Images : Array.Empty<string>();
                 }
+                var userInfo = await GetUserInfo(externalShopResponse.Content.ResultObj.UserId);
+                if (userInfo != null)
+                {
+                    externalShopResponse.Content.ResultObj.Name = userInfo.FullName;
+                    externalShopResponse.Content.ResultObj.Phone = userInfo.PhoneNumber;
+                    externalShopResponse.Content.ResultObj.Email = userInfo.Email;
+                }
             }
             return externalShopResponse;
         }
@@ -96,6 +106,14 @@ namespace GUI.Clients
         private async Task<Dictionary<int, ShopInterfaceDTO>> GetShopInformation(int[] shopId)
         {
             var result = await _interfaceClient.GetShopInterface(shopId);
+            if (result.IsSuccessStatusCode)
+                return result.Content.Data;
+            return null;
+        }
+
+        private async Task<UserDTO> GetUserInfo(string userId)
+        {
+            var result = await _userClient.GetUserInfo(userId);
             if (result.IsSuccessStatusCode)
                 return result.Content.Data;
             return null;

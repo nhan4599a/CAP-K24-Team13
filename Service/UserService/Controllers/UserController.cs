@@ -1,5 +1,7 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using Shared.DTOs;
 using Shared.Models;
 using System;
@@ -10,6 +12,7 @@ namespace UserService.Controllers
 {
     [ApiController]
     [Route("/api/users")]
+    [Authorize(Roles = $"{SystemConstant.Roles.ADMIN_TEAM_5}, {SystemConstant.Roles.ADMIN_TEAM_13}")]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -19,6 +22,7 @@ namespace UserService.Controllers
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ApiResult> FindUsers([FromQuery] FindUsersQuery query)
         {
@@ -26,6 +30,7 @@ namespace UserService.Controllers
             return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{userId}")]
         public async Task<ApiResult> GetUser(string userId)
         {

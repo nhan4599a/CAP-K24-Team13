@@ -308,7 +308,7 @@ function getRelatedProducts(productId) {
 }
 
 function getShopInformation(shopId) {
-    return axios.get(`https://emallsolution-backendapi.herokuapp.com/api/shops/${shopId}`);
+    return axios.get(`https://cap-k24-team13.herokuapp.com/api/integrated/shop/${shopId}`);
 }
 
 function getAccessToken() {

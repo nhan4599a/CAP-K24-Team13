@@ -118,6 +118,8 @@ namespace GUI
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IShopInterfaceClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
+            services.AddRefitClient<IUserClient>()
+                .ConfigureHttpClient(ConfigureHttpClient);
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(12);

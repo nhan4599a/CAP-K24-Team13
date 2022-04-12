@@ -373,12 +373,14 @@
                 addRemoveLinks: true,
                 myFiles: []
             });
-            let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting.interface'));
-            let edittingShopInformation = JSON.parse(localStorage.getItem('shop-interface.editting.information'));
-            if (edittingShopInterface)
-                loadEdittingShopInterface(edittingShopInterface, imageDropzone, avatarDropzone);
-            if (edittingShopInformation)
-                loadEdittingShopInformation(edittingShopInformation);
+            if (localStorage.getItem('shop-interface.edit-mode') == 'edit') {
+                let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting.interface'));
+                let edittingShopInformation = JSON.parse(localStorage.getItem('shop-interface.editting.information'));
+                if (edittingShopInterface)
+                    loadEdittingShopInterface(edittingShopInterface, imageDropzone, avatarDropzone);
+                if (edittingShopInformation)
+                    loadEdittingShopInformation(edittingShopInformation);
+            }
             imageDropzone.on('addedfile', function (file) {
                 this.options.myFiles.push(file);
                 let maxFileNumber = this.options.maxFiles;
@@ -497,7 +499,7 @@
 
         function loadEdittingShopInformation(shopInformation) {
             $('#input-description').val(shopInformation.description);
-            $('#input-name').val(shopInformation.shop_Name);
+            $('#input-name').val(shopInformation.name);
             $('#input-phone').val(shopInformation.phone);
             $('#input-email').val(shopInformation.email);
             let location = (shopInformation.floor.includes('L') ? shopInformation.floor : `L${shopInformation.floor}`) + '-' + shopInformation.position;
