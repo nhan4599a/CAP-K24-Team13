@@ -37,10 +37,10 @@ namespace GUI
         {
             IdentityModelEventSource.ShowPII = true;
             services.AddControllersWithViews().AddSessionStateTempDataProvider();
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
-            });
+            //services.AddStackExchangeRedisCache(options =>
+            //{
+            //    options.Configuration = Configuration["REDIS_CONNECTION_STRING"];
+            //});
             services.AddDataProtection()
                 .PersistKeysToDbContext<ApplicationDbContext>();
             services.AddDbContext<ApplicationDbContext>();

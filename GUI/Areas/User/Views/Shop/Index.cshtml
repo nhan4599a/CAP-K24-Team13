@@ -62,9 +62,7 @@
                                         <h6 class="mb-0">Shop Description</h6>
                                     </div>
                                     <div class="card-body p-2">
-                                        <textarea class="form-control" id="input-description" disabled style="height: 231px; resize: none;">
-                                            @Model.Shop.Description.Trim()
-                                        </textarea>
+                                        <textarea class="form-control" id="input-description" disabled style="height: 231px; resize: none;">@Model.Shop.Description.Trim()</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +83,7 @@
                                                 <label for="input-name" style="margin: 0px">Name:</label>
                                             </div>
                                             <div class="col-10">
-                                                <input class="form-control" type="text" id="input-name" disabled value="@Model.Shop.ShopName">
+                                                <input class="form-control" type="text" id="input-name" disabled value="@Model.Shop.Name">
                                             </div>
                                         </div>
                                         <div class="row align-items-center">

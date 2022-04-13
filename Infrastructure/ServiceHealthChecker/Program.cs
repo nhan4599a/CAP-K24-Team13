@@ -11,7 +11,10 @@ namespace ServiceHealthChecker
             if (args.Length != 2)
                 throw new NotImplementedException("Args structure not supported now");
 
-            HttpClient client = new();
+            HttpClient client = new()
+            {
+                Timeout = TimeSpan.FromSeconds(10)
+            };
             try
             {
                 var response = await client.GetAsync(args[0]);
@@ -19,7 +22,7 @@ namespace ServiceHealthChecker
                 if (response.IsSuccessStatusCode)
                     return 0;
             }
-            catch (HttpRequestException)
+            catch (Exception)
             {
                 var chatId = Environment.GetEnvironmentVariable("TELEGRAM_CHAT_ID");
                 var botAccessToken = Environment.GetEnvironmentVariable("TELEGRAM_BOT_ACCESS_TOKEN");
