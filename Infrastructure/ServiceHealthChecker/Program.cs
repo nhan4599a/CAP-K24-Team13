@@ -26,7 +26,7 @@ namespace ServiceHealthChecker
             {
                 var chatId = Environment.GetEnvironmentVariable("TELEGRAM_CHAT_ID");
                 var botAccessToken = Environment.GetEnvironmentVariable("TELEGRAM_BOT_ACCESS_TOKEN");
-                var telegramApiEndpoint = $"https://api.telegram.org/bot${botAccessToken}/sendMessage?chat_id=${chatId}&text=Service ${args[1]} is downed";
+                var telegramApiEndpoint = $"https://api.telegram.org/bot{botAccessToken}/sendMessage?chat_id=${chatId}&text=Service {args[1]} is downed";
                 Console.WriteLine(telegramApiEndpoint);
                 await client.GetAsync(telegramApiEndpoint);
                 return 2;
