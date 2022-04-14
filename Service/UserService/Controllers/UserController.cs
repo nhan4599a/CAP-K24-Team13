@@ -95,7 +95,7 @@ namespace UserService.Controllers
             return ApiResult.SucceedResult;
         }
 
-        [HttpPost("{userId")]
+        [HttpPost("{userId}")]
         public async Task<ApiResult> MakeAsAdmin(string userId, [FromQuery] bool team5 = false)
         {
             var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
