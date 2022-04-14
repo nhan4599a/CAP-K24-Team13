@@ -12,6 +12,8 @@
 
         public int Quantity { get; set; }
 
+        public int ShopId { get; set; }
+
         public string[] Images { get; set; }
     }
 }

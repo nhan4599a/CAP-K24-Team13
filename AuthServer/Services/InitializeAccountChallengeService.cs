@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -58,6 +59,12 @@ namespace AuthServer.Services
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(user, SystemConstant.Roles.ADMIN_TEAM_5);
             }
+            if (await userManager.FindByNameAsync("admin_team52") == null)
+            {
+                var user = await CreateUserObj("admin_team52");
+                await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, SystemConstant.Roles.ADMIN_TEAM_5);
+            }
         }
 
         private static async Task InitializeRoles(ApplicationRoleManager roleManager)
@@ -104,6 +111,7 @@ namespace AuthServer.Services
                 UserName = username,
                 NormalizedUserName = username.ToUpper(),
                 Email = email,
+                PhoneNumber = "0123456789",
                 NormalizedEmail = email.ToUpper(),
                 FirstName = "Test",
                 LastName = "Test",

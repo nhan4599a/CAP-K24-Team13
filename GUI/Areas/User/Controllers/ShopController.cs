@@ -3,8 +3,8 @@ using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shared.DTOs;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -25,20 +25,23 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index(int id)
         {
-            var bestSellerProductsResponse = await _productClient.GetBestSellerProducts(id);
-            var shopCategoriesResponse = await _categoryClient.GetCategoriesOfShop(id, 4);
-            var shopResponse = await _shopClient.GetShop(id);
-            if (!bestSellerProductsResponse.IsSuccessStatusCode || !shopCategoriesResponse.IsSuccessStatusCode
-                    || !shopResponse.IsSuccessStatusCode)
+            var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(id);
+            var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id, 4);
+            var shopResponseTask = _shopClient.GetShop(id);
+            var bestSellerProductsResponse = await bestSellerProductsResponseTask;
+            var shopCategoriesResponse = await shopCategoriesResponseTask;
+            if (!bestSellerProductsResponse.IsSuccessStatusCode || !shopCategoriesResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            var productsOfCategory = new Dictionary<int, List<ProductDTO>>();
-            foreach (var categoryId in shopCategoriesResponse.Content.Data.Select(e => e.Id))
-            {
-                var productsResponse = await _productClient.GetProductsOfCategory(new int[] { categoryId }, 1, 5);
-                if (!productsResponse.IsSuccessStatusCode)
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-                productsOfCategory.Add(categoryId, productsResponse.Content.Data.ToList());
-            }
+            var productsResponse = await _productClient.GetProductsOfCategory(shopCategoriesResponse.Content.Data.Select(e => e.Id).ToArray(), 1, 0);
+            if (!productsResponse.IsSuccessStatusCode)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            var productsOfCategory = productsResponse.Content.Data.Data
+                .GroupBy(e => e.CategoryName)
+                .ToDictionary(e => shopCategoriesResponse.Content.Data.Data.First(item => item.CategoryName == e.Key).Id,
+                    e => e.Take(5).ToList());
+            var shopResponse = await shopResponseTask;
+            if (!shopResponse.IsSuccessStatusCode)
+                return StatusCode(StatusCodes.Status500InternalServerError);
             return View(new ShopDetailViewModel
             {
                 Categories = shopCategoriesResponse.Content.Data.ToList(),
@@ -50,11 +53,16 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Categories(int id, [FromQuery(Name = "cat")] List<int> categoryId, int pageNumber = 1)
         {
-            var shopCategoriesResponse = await _categoryClient.GetCategoriesOfShop(id, 0);
-            var shopResponse = await _shopClient.GetShop(id);
-            var productsResponse = await _productClient.GetProductsOfCategory(categoryId.ToArray(), pageNumber, 20);
-            if (!shopResponse.IsSuccessStatusCode || !shopCategoriesResponse.IsSuccessStatusCode
+            var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id, 0);
+            var shopResponseTask = _shopClient.GetShop(id);
+            var productsResponseTask = _productClient.GetProductsOfCategory(categoryId.ToArray(), pageNumber, 20);
+            var shopCategoriesResponse = await shopCategoriesResponseTask;
+            var productsResponse = await productsResponseTask;
+            if (!shopCategoriesResponse.IsSuccessStatusCode
                     || !productsResponse.IsSuccessStatusCode)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            var shopResponse = await shopResponseTask;
+            if (!shopResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return View(new ShopCategoryViewModel
             {

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Shared;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,12 +17,9 @@ namespace GUI.Areas.User.Controllers
     {
         private readonly IProductClient _productClient;
 
-        private readonly ILogger<CheckoutController> _logger;
-
-        public CheckoutController(IProductClient productClient, ILoggerFactory loggerFactory)
+        public CheckoutController(IProductClient productClient)
         {
             _productClient = productClient;
-            _logger = loggerFactory.CreateLogger<CheckoutController>();
         }
 
         [HttpPost]

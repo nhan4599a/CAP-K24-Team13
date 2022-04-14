@@ -51,6 +51,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/products/sales",
+      "DownstreamScheme": "http",
+      "ServiceName": "ProductService",
+      "UpstreamPathTemplate": "/products/sales",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/products/category",
       "DownstreamScheme": "http",
       "ServiceName": "ProductService",
@@ -243,7 +253,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "UserService",
       "UpstreamPathTemplate": "/users/{userId}",
-      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "DELETE", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }

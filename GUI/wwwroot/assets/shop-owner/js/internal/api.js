@@ -307,6 +307,12 @@ function getRelatedProducts(productId) {
     return axios.get(`${productEndpoint}/related/${productId}`);
 }
 
+function authorizeUser(userId, admin) {
+    if (!admin)
+        return axios.delete(`${userEndpoint}/${userId}`);
+    return axios.post(`${userEndpoint}/${userId}`);
+}
+
 function getShopInformation(shopId) {
     return axios.get(`https://cap-k24-team13.herokuapp.com/api/integrated/shop/${shopId}`);
 }

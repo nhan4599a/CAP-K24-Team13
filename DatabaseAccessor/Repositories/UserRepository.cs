@@ -1,5 +1,6 @@
 ﻿using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Mapping;
+using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Shared;
@@ -83,18 +84,41 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<bool>> AssignShopOwnerAsync(Guid userId, int shopId)
         {
             var user = await _dbContext.Users.FindAsync(userId);
-            if (user.UserRoles[0].Role.Name == SystemConstant.Roles.SHOP_OWNER)
-                return CommandResponse<bool>.Error("User is already shop owner", null);
             if (user.ShopId != null)
                 return CommandResponse<bool>.Error("User is already belong to another shop", null);
+            var response = await MoveToRoleAsync(user, SystemConstant.Roles.SHOP_OWNER);
             user.ShopId = shopId;
+            await _dbContext.SaveChangesAsync();
+            return response;
+        }
+
+        public async Task<CommandResponse<bool>> AuthorizeUserAsync(Guid userId, bool authorizeToAdmin, bool team5)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+            if (user.ShopId != null)
+                return CommandResponse<bool>.Error("ShopOwner can't be an system admin", null);
+            return await MoveToRoleAsync(user,
+                    authorizeToAdmin ? (team5 ? SystemConstant.Roles.ADMIN_TEAM_5 : SystemConstant.Roles.ADMIN_TEAM_13) : SystemConstant.Roles.CUSTOMER,
+                    true);
+        }
+
+        private async Task<CommandResponse<bool>> MoveToRoleAsync(User user, string roleName, bool shouldSave = false)
+        {
+            if (user == null)
+                return CommandResponse<bool>.Error("User not found", null);
+            if (roleName != SystemConstant.Roles.CUSTOMER && roleName != SystemConstant.Roles.SHOP_OWNER
+                && roleName != SystemConstant.Roles.ADMIN_TEAM_13 && roleName != SystemConstant.Roles.ADMIN_TEAM_5)
+                throw new ArgumentException("Specified role is not supported", new NotSupportedException());
+            if (user.UserRoles[0].Role.Name == roleName)
+                return CommandResponse<bool>.Error("User is already in role", null);
             _dbContext.UserRoles.Remove(user.UserRoles[0]);
             await _dbContext.SaveChangesAsync();
-            user.UserRoles.Add(new Models.UserRole
+            user.UserRoles.Add(new UserRole
             {
-                Role = await _dbContext.Roles.FirstOrDefaultAsync(role => role.Name == SystemConstant.Roles.SHOP_OWNER)
+                Role = await _dbContext.Roles.FirstOrDefaultAsync(role => role.Name == roleName)
             });
-            await _dbContext.SaveChangesAsync();
+            if (shouldSave)
+                await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
 

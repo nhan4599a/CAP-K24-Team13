@@ -11,12 +11,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Shared.RequestModels;
 using ShopProductService.Validations;
+using System;
 
 namespace ShopProductService
 {
@@ -69,7 +71,11 @@ namespace ShopProductService
             });
 
             services.AddHealthChecks()
-                .AddDbContextCheck<ApplicationDbContext>();
+                .AddDbContextCheck<ApplicationDbContext>(customTestQuery: async (dbContext, cancellationToken) =>
+                {
+                    dbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(10));
+                    return await dbContext.Database.CanConnectAsync(cancellationToken);
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -219,6 +219,13 @@ namespace ShopProductService.Controllers
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
         }
 
+        [HttpGet("sales")]
+        public async Task<ApiResult> GetTopMostSaleOffProducts()
+        {
+            var result = await _mediator.Send(new GetMostSaleOffProductsQuery());
+            return ApiResult<List<MinimalProductDTO>>.CreateSucceedResult(result);
+        }
+
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet("images/{image}")]
         public IActionResult GetImage(string image)
