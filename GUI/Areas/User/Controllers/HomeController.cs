@@ -3,6 +3,7 @@ using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -10,7 +11,7 @@ namespace GUI.Areas.User.Controllers
     public class HomeController : BaseUserController
     {
         private readonly IProductClient _productClient;
-        private readonly IShopClient _shopClient;
+        private readonly IExternalShopClient _shopClient;
 
         public HomeController(IProductClient productClient, IShopClient shopClient)
         {
@@ -18,9 +19,23 @@ namespace GUI.Areas.User.Controllers
             _shopClient = shopClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(null);
+            var topMostSaleOffProductsResponseTask = _productClient.GetMostSaleOffProducts();
+            var shopsResponseTask = _shopClient.GetAllShops();
+            var bestSellerProductsResponse = await bestSellerProductsResponseTask;
+            var topMostSaleOffProductsResponse = await topMostSaleOffProductsResponseTask;
+            var shopsResponse = await shopsResponseTask;
+            if (!bestSellerProductsResponse.IsSuccessStatusCode || !shopsResponse.IsSuccessStatusCode
+                    || !topMostSaleOffProductsResponse.IsSuccessStatusCode)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return View(new HomePageViewModel
+            {
+                Shops = shopsResponse.Content.Select(shop => (shop.Id, shop.ShopName)).ToList(),
+                BestSellerProducts = bestSellerProductsResponse.Content.Data,
+                TopMostSaleOffProducts = topMostSaleOffProductsResponse.Content.Data
+            });
         }
 
         public async Task<IActionResult> Search(string cat, string keyword, int pageNumber, int pageSize = 5)

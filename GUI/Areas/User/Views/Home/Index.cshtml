@@ -1,4 +1,8 @@
-﻿@section Header {
+﻿@using GUI.Areas.User.ViewModels
+@using GUI.Extensions
+@using System.Globalization
+@model HomePageViewModel
+@section Header {
     @await Component.InvokeAsync("UserStickyHeader", "home")
 }
 <main class="main">
@@ -127,7 +131,7 @@
                                     <div class="banner-content">
                                         <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="#">Hottest Deals</a></h4><!-- End .banner-subtitle -->
                                         <h3 class="banner-title text-white"><a href="#">Detox And Beautify <br>For Spring <br><span>Up To  20% Off</span></a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">Shop No <i class="icon-long-arrow-right"></i></a>
+                                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner -->
                             </div><!-- End .col-md-6 -->
@@ -189,33 +193,12 @@
                                     }
                                 }
                             }'>
-                    <a href="#" class="brand">
-                        <img src="@Url.Content("~/assets/user/images/brands/1.png")" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="@Url.Content("~/assets/user/images/brands/2.png")" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="@Url.Content("~/assets/user/images/brands/3.png")" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="@Url.Content("~/assets/user/images/brands/4.png")" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="@Url.Content("~/assets/user/images/brands/5.png")" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="@Url.Content("~/assets/user/images/brands/6.png")" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="@Url.Content("~/assets/user/images/brands/7.png")" alt="Brand Name">
-                    </a>
+                    @foreach (var shop in Model.Shops)
+                    {
+                        <a href="/shop/index/@shop.Id" class="brand">
+                            <p class="product-title" style="font-size: 2rem">@shop.ShopName</p>
+                        </a>
+                    }
                 </div><!-- End .owl-carousel -->
 
                 <div class="mb-5"></div><!-- End .mb-5 -->
@@ -783,7 +766,7 @@
                                         <a href="product.html">
                                             <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-1.jpg")" alt="Product image" class="product-image">
                                         </a>
-                                        
+
 
                                         <div class="product-action">
                                             <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
@@ -2143,80 +2126,33 @@
                                 <h4 class="widget-title"><span>Bestsellers</span></h4><!-- End .widget-title -->
 
                                 <div class="products">
-                                    <div class="product product-sm">
-                                        <figure class="product-media">
-                                            <a href="product.html">
-                                                <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/small/product-1.jpg")" alt="Product image" class="product-image">
-                                            </a>
-                                        </figure>
+                                    @foreach (var product in Model.BestSellerProducts)
+                                    {
+                                        <div class="product product-sm">
+                                            <figure class="product-media">
+                                                <a href="/product/index/@product.Id">
+                                                    <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
+                                                </a>
+                                            </figure>
 
-                                        <div class="product-body">
-                                            <h5 class="product-title"><a href="product.html">Sceptre 50" Class FHD (1080P) LED TV</a></h5><!-- End .product-title -->
-                                            <div class="product-price">
-                                                $199.99
-                                            </div><!-- End .product-price -->
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product product-sm -->
-
-                                    <div class="product product-sm">
-                                        <figure class="product-media">
-                                            <a href="product.html">
-                                                <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/small/product-2.jpg")" alt="Product image" class="product-image">
-                                            </a>
-                                        </figure>
-
-                                        <div class="product-body">
-                                            <h5 class="product-title"><a href="product.html">Red Cookware Set, 9 Piece</a></h5><!-- End .product-title -->
-                                            <div class="product-price">
-                                                $24.95
-                                            </div><!-- End .product-price -->
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product product-sm -->
-
-                                    <div class="product product-sm">
-                                        <figure class="product-media">
-                                            <a href="product.html">
-                                                <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/small/product-3.jpg")" alt="Product image" class="product-image">
-                                            </a>
-                                        </figure>
-
-                                        <div class="product-body">
-                                            <h5 class="product-title"><a href="product.html">Epson WorkForce WF-2750 All-in-One Wireless</a></h5><!-- End .product-title -->
-                                            <div class="product-price">
-                                                $49.99
-                                            </div><!-- End .product-price -->
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product product-sm -->
-
-                                    <div class="product product-sm">
-                                        <figure class="product-media">
-                                            <a href="product.html">
-                                                <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/small/product-4.jpg")" alt="Product image" class="product-image">
-                                            </a>
-                                        </figure>
-
-                                        <div class="product-body">
-                                            <h5 class="product-title"><a href="product.html">Stainless Steel Microwave Oven</a></h5><!-- End .product-title -->
-                                            <div class="product-price">
-                                                $64.84
-                                            </div><!-- End .product-price -->
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product product-sm -->
-
-                                    <div class="product product-sm">
-                                        <figure class="product-media">
-                                            <a href="product.html">
-                                                <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/small/product-5.jpg")" alt="Product image" class="product-image">
-                                            </a>
-                                        </figure>
-
-                                        <div class="product-body">
-                                            <h5 class="product-title"><a href="product.html">Fatboy Original Beanbag</a></h5><!-- End .product-title -->
-                                            <div class="product-price">
-                                                $49.99
-                                            </div><!-- End .product-price -->
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product product-sm -->
+                                            <div class="product-body">
+                                                <h5 class="product-title">
+                                                    <a href="/product/index/@product.Id">@product.ProductName</a>
+                                                </h5><!-- End .product-title -->
+                                                <div class="product-price">
+                                                    @if (product.Discount > 0)
+                                                    {
+                                                        <span class="new-price">@((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                                        <span class="old-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="new-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                    }
+                                                </div>
+                                            </div><!-- End .product-body -->
+                                        </div>
+                                    }
                                 </div><!-- End .products -->
                             </div><!-- End .widget widget-products -->
                         </div><!-- End .col-sm-6 col-xl-12 -->

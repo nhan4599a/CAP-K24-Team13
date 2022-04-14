@@ -28,5 +28,8 @@ namespace GUI.Clients
 
         [Get("/products/category?pageNumber={pageNumber}&pageSize={pageSize}")]
         Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsOfCategory([Query(CollectionFormat.Multi)] int[] categoryId, int pageNumber, int pageSize);
+
+        [Get("/products/sales")]
+        Task<ApiResponse<ApiResult<List<MinimalProductDTO>>>> GetMostSaleOffProducts();
     }
 }

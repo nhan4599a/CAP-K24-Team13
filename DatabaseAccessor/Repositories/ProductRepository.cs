@@ -214,6 +214,17 @@ namespace DatabaseAccessor.Repositories
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
+        public async Task<List<MinimalProductDTO>> GetTopMostSaleOffProductsAsync()
+        {
+            return await _dbContext.ShopProducts
+                .AsNoTracking()
+                .OrderByDescending(product => product.Discount)
+                .ThenBy(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
+                .Take(2)
+                .Select(product => _mapper.MapToMinimalProductDTO(product))
+                .ToListAsync();
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();
