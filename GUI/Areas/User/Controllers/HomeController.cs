@@ -3,6 +3,7 @@ using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Extensions;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,17 +13,20 @@ namespace GUI.Areas.User.Controllers
     {
         private readonly IProductClient _productClient;
         private readonly IExternalShopClient _shopClient;
+        private readonly ICategoryClient _categoryClient;
 
-        public HomeController(IProductClient productClient, IShopClient shopClient)
+        public HomeController(IProductClient productClient, IShopClient shopClient, ICategoryClient categoryClient)
         {
             _productClient = productClient;
             _shopClient = shopClient;
+            _categoryClient = categoryClient;
         }
 
         public async Task<IActionResult> Index()
         {
             var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(null);
             var topMostSaleOffProductsResponseTask = _productClient.GetMostSaleOffProducts();
+            var categoriesResponseTask = _categoryClient.GetCategoriesOfShop
             var shopsResponseTask = _shopClient.GetAllShops();
             var bestSellerProductsResponse = await bestSellerProductsResponseTask;
             var topMostSaleOffProductsResponse = await topMostSaleOffProductsResponseTask;
@@ -30,6 +34,7 @@ namespace GUI.Areas.User.Controllers
             if (!bestSellerProductsResponse.IsSuccessStatusCode || !shopsResponse.IsSuccessStatusCode
                     || !topMostSaleOffProductsResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
+
             return View(new HomePageViewModel
             {
                 Shops = shopsResponse.Content.Select(shop => (shop.Id, shop.ShopName)).ToList(),
