@@ -16,5 +16,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
         Task<CommandResponse<bool>> UnbanAsync(Guid userId);
 
         Task<CommandResponse<bool>> AssignShopOwnerAsync(Guid userId, int shopId);
+
+        Task<CommandResponse<bool>> AuthorizeUserAsync(Guid userId, bool authorizeToAdmin, bool team5);
     }
 }

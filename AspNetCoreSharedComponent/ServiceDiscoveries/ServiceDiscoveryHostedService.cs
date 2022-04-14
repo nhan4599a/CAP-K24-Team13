@@ -60,7 +60,6 @@ namespace AspNetCoreSharedComponent.ServiceDiscoveries
                         _serviceConfiguration.ServiceName
                     },
                     Interval = TimeSpan.FromMinutes(10),
-                    Timeout = TimeSpan.FromSeconds(10),
                     Status = HealthStatus.Passing
                 };
             }

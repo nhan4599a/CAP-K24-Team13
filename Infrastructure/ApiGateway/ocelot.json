@@ -243,7 +243,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "UserService",
       "UpstreamPathTemplate": "/users/{userId}",
-      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "DELETE", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }

@@ -94,5 +94,38 @@ namespace UserService.Controllers
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
             return ApiResult.SucceedResult;
         }
+
+        [HttpPost("{userId")]
+        public async Task<ApiResult> MakeAsAdmin(string userId, [FromQuery] bool team5 = false)
+        {
+            var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
+            if (!parseResult)
+                return ApiResult.CreateErrorResult(400, "UserId is invalid");
+            var response = await _mediator.Send(new AuthorizeUserCommand
+            {
+                UserId = parsedUserId,
+                AuthorizeToAdmin = true,
+                ToTeam5Admin = team5
+            });
+            if (!response.IsSuccess)
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult.SucceedResult;
+        }
+
+        [HttpDelete("{userId}")]
+        public async Task<ApiResult> RemoveFromAdmin(string userId)
+        {
+            var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
+            if (!parseResult)
+                return ApiResult.CreateErrorResult(400, "UserId is invalid");
+            var response = await _mediator.Send(new AuthorizeUserCommand
+            {
+                UserId = parsedUserId,
+                AuthorizeToAdmin = false
+            });
+            if (!response.IsSuccess)
+                return ApiResult.CreateErrorResult(500, response.ErrorMessage);
+            return ApiResult.SucceedResult;
+        }
     }
 }

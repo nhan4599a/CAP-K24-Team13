@@ -130,7 +130,7 @@ namespace AuthServer
                 .AddDeveloperSigningCredential()
                 .AddProfileService<ApplicationUserProfileService>();
             services.AddLocalApiAuthentication();
-            services.AddHostedService<InitializeClientAuthenticationService>();
+            //services.AddHostedService<InitializeClientAuthenticationService>();
             services.AddHostedService<InitializeAccountChallengeService>();
 
             services.ConfigureApplicationCookie(options =>
