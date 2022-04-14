@@ -26,7 +26,6 @@ namespace GUI.Areas.User.Controllers
         {
             var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(null);
             var topMostSaleOffProductsResponseTask = _productClient.GetMostSaleOffProducts();
-            var categoriesResponseTask = _categoryClient.GetCategoriesOfShop
             var shopsResponseTask = _shopClient.GetAllShops();
             var bestSellerProductsResponse = await bestSellerProductsResponseTask;
             var topMostSaleOffProductsResponse = await topMostSaleOffProductsResponseTask;
