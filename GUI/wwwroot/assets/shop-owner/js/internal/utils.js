@@ -386,7 +386,7 @@ function renderPagination(paginationObject) {
 function renderCategoryDropdown(categories) {
     let optionsHtml = '';
     categories.forEach(category => {
-        optionsHtml += `<option value="${category.id}">${category.categoryName}</option>`;
+        optionsHtml += `<option value="${category.category_Id}">${category.category_Name}</option>`;
     });
     if (optionsHtml != '') {
         $('option[selected=selected]').after(optionsHtml);

@@ -114,13 +114,16 @@
                 });
                 for (let i = 0; i < dropzone.files.length; i++)
                     formData.append(`images[${i}]`, dropzone.files[i]);
-                addProduct(formData).then(() => {
-                    animationLoader.hideAnimation();
-                    window.location.href = '/shopowner/product';
-                }).catch(error => {
-                    animationLoader.hideAnimation();
-                    toastr.error(error, 'Error');
-                });
+                getShopId()
+                    .then(shopId => {        
+                        addProduct(formData, shopId).then(() => {
+                            animationLoader.hideAnimation();
+                            window.location.href = '/shopowner/product';
+                        }).catch(error => {
+                            animationLoader.hideAnimation();
+                            toastr.error(error, 'Error');
+                        });
+                    });
             });
             let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation(3500);

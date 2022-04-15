@@ -48,11 +48,11 @@ namespace DatabaseAccessor.Models
             if (requestModel is CreateProductRequestModel model)
             {
                 Quantity = model.Quantity;
+                ShopId = requestModel.ShopId;
             }
             Price = requestModel.Price;
             Discount = requestModel.Discount;
             Category = requestModel.CategoryName;
-            ShopId = requestModel.ShopId;
             if (requestModel.ImagePaths != null)
                 Images = string.Join(';', requestModel.ImagePaths);
             return this;

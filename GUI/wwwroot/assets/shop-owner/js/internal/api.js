@@ -73,7 +73,8 @@ function activateProduct(id, isActivateCommand) {
     );
 }
 
-function addProduct(formData) {
+function addProduct(formData, shopId) {
+    formData.shopId = shopId;
     return axios.post(productEndpoint, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
