@@ -12,7 +12,7 @@ namespace UserService.Controllers
 {
     [ApiController]
     [Route("/api/users")]
-    [Authorize(Roles = $"{SystemConstant.Roles.ADMIN_TEAM_5}, {SystemConstant.Roles.ADMIN_TEAM_13}")]
+    //[Authorize(Roles = $"{SystemConstant.Roles.ADMIN_TEAM_5}, {SystemConstant.Roles.ADMIN_TEAM_13}")]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
