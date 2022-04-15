@@ -18,16 +18,6 @@ namespace ShopProductService.Controllers
         {
             _mediator = mediator;
         }
-
-        [HttpGet]
-        public async Task<ApiResult> GetAllCategories([FromQuery] PaginationInfo paginationInfo)
-        {
-            var categories = await _mediator.Send(new FindAllCategoriesQuery
-            {
-                PaginationInfo = paginationInfo
-            });
-            return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(categories);
-        }
         
         [HttpGet("shop/{shopId}")]
         public async Task<ApiResult> GetCategoriesOfShop(int shopId, [FromQuery] PaginationInfo paginationInfo)

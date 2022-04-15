@@ -55,8 +55,6 @@ namespace DatabaseAccessor.Contexts
                         .UseTriggers(options =>
                         {
                             options.UseTransactionTriggers();
-                            options.AddTrigger<CategoryActivatedTrigger>();
-                            options.AddTrigger<CategoryDeactivatedTrigger>();
                             options.AddTrigger<InvoiceAddedTrigger>();
                             options.AddTrigger<InvoiceStatusChangedTrigger>();
                         });

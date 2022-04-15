@@ -30,6 +30,9 @@ namespace DatabaseAccessor.Configurations
             builder.Property(e => e.Quantity)
                 .HasDefaultValue(1);
 
+            builder.Property(e => e.IsVisible)
+                .HasDefaultValue(true);
+
             builder.HasIndex(e => e.ProductName);
 
             builder.HasCheckConstraint("CK_ShopProducts_Price", "[Price] >= 0")

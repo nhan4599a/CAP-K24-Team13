@@ -51,6 +51,8 @@ namespace DatabaseAccessor.Models
             }
             Price = requestModel.Price;
             Discount = requestModel.Discount;
+            Category = requestModel.CategoryName;
+            ShopId = requestModel.ShopId;
             if (requestModel.ImagePaths != null)
                 Images = string.Join(';', requestModel.ImagePaths);
             return this;

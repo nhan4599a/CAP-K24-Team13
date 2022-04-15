@@ -60,18 +60,12 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<CommandResponse<Guid>> AddProductAsync(CreateProductRequestModel requestModel)
         {
-            var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
-            if (category == null)
-                return CommandResponse<Guid>.Error("Category is not found", null);
-            if (category.IsDisabled)
-                return CommandResponse<Guid>.Error("Category is disabled", null);
             var shopProduct = new ShopProduct().AssignByRequestModel(requestModel);
             if (await _dbContext.ShopProducts.AnyAsync(product => product.ShopId == shopProduct.ShopId && 
                 product.Category == shopProduct.Category && product.ProductName == shopProduct.ProductName))
             {
                 return CommandResponse<Guid>.Error("Product's name is already existed", null);
             }
-            shopProduct.ShopId = category.ShopId;
             _dbContext.ShopProducts.Add(shopProduct);
             try
             {
@@ -107,13 +101,7 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<ProductDTO>.Error("Product is not found", null);
             if (product.IsDisabled)
                 return CommandResponse<ProductDTO>.Error("Product is disabled", null);
-            var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
-            if (category == null)
-                return CommandResponse<ProductDTO>.Error($"Category is not found", null);
-            if (category.IsDisabled)
-                return CommandResponse<ProductDTO>.Error($"Category is disabled", null);
             product.AssignByRequestModel(requestModel);
-            product.ShopId = category.ShopId;
             try
             {
                 await _dbContext.SaveChangesAsync();

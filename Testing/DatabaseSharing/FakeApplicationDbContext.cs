@@ -35,13 +35,6 @@ namespace DatabaseSharing
                 .HasCheckConstraint("CK_ShopProducts_Discount", "[Discount] between 0 and 100")
                 .ToTable("ShopProducts");
 
-            modelBuilder.Entity<ShopCategory>()
-                .Property(e => e.IsDisabled)
-                .HasDefaultValue(false);
-
-            modelBuilder.Entity<ShopCategory>()
-                .ToTable("ShopCategories");
-
             modelBuilder.Entity<ShopInterface>()
                 .ToTable("ShopInterfaces");
         }

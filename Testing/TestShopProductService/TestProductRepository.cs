@@ -18,26 +18,6 @@ namespace TestShopProductService
         {
             FakeApplicationDbContext dbContext = new();
             dbContext.Database.EnsureCreated();
-            if (dbContext.ShopCategories.Find(1) == null)
-            {
-                dbContext.ShopCategories.Add(new ShopCategory
-                {
-                    Id = 1,
-                    CategoryName = "Demo",
-                    ShopId = 0,
-                    IsDisabled = false
-                });
-            }
-            if (dbContext.ShopCategories.Find(2) == null)
-            {
-                dbContext.ShopCategories.Add(new ShopCategory
-                {
-                    Id = 2,
-                    CategoryName = "disabled demo",
-                    ShopId = 0,
-                    IsDisabled = true
-                });
-            }
             dbContext.SaveChanges();
             _repository = new ProductRepository(dbContext, null);
         }
