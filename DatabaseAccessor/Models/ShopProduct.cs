@@ -30,7 +30,9 @@ namespace DatabaseAccessor.Models
 
         public int ShopId { get; set; }
 
-        public virtual ShopCategory Category { get; set; }
+        public bool IsVisible { get; set; }
+
+        public string Category { get; set; }
 
         public virtual IList<InvoiceDetail> Invoices { get; set; }
 

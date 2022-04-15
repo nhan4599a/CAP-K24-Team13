@@ -38,7 +38,7 @@ namespace DatabaseAccessor.Repositories
         {
             return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
-                        || EF.Functions.Like(product.Category.CategoryName, $"%{keyword}%"))
+                        || EF.Functions.Like(product.Category, $"%{keyword}%"))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -67,7 +67,7 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<Guid>.Error("Category is disabled", null);
             var shopProduct = new ShopProduct().AssignByRequestModel(requestModel);
             if (await _dbContext.ShopProducts.AnyAsync(product => product.ShopId == shopProduct.ShopId && 
-                product.CategoryId == shopProduct.CategoryId && product.ProductName == shopProduct.ProductName))
+                product.Category == shopProduct.Category && product.ProductName == shopProduct.ProductName))
             {
                 return CommandResponse<Guid>.Error("Product's name is already existed", null);
             }
@@ -93,8 +93,6 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<bool>.Error("Product is already activated", null);
             if (!isActivateCommand && product.IsDisabled)
                 return CommandResponse<bool>.Error("Product is already deactivated", null);
-            if (isActivateCommand && product.Category.IsDisabled)
-                return CommandResponse<bool>.Error($"Product is belong to {product.Category.CategoryName} which was deactivated", null);
             product.IsDisabled = !isActivateCommand;
             _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
@@ -109,8 +107,6 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<ProductDTO>.Error("Product is not found", null);
             if (product.IsDisabled)
                 return CommandResponse<ProductDTO>.Error("Product is disabled", null);
-            if (product.Category.IsDisabled)
-                return CommandResponse<ProductDTO>.Error($"Product is belong to {product.Category.CategoryName} which was deactivated", null);
             var category = await _dbContext.ShopCategories.FindAsync(requestModel.CategoryId);
             if (category == null)
                 return CommandResponse<ProductDTO>.Error($"Category is not found", null);
@@ -136,9 +132,6 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<int>.Error("Product is not found", null);
             if (product.IsDisabled)
                 return CommandResponse<int>.Error("Product is disabled", null);
-            if (product.Category.IsDisabled)
-                return CommandResponse<int>.Error($"Product is belong to " +
-                    $"{product.Category.CategoryName} which was deactivated", null);
             if (quantity <= 0)
                 return CommandResponse<int>.Error("Quantity must greater than 0", null);
             var newQuantity = quantity + product.Quantity;
@@ -151,8 +144,7 @@ namespace DatabaseAccessor.Repositories
         {
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
-                .Include(product => product.Category)
-                .Where(product => product.Category.ShopId == shopId)
+                .Where(product => product.ShopId == shopId)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return result;
@@ -165,7 +157,7 @@ namespace DatabaseAccessor.Repositories
                 .Include(product => product.Category)
                 .Where(product => product.ShopId == shopId)
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
-                        || EF.Functions.Like(product.Category.CategoryName, $"%{keyword}%"))
+                        || EF.Functions.Like(product.Category, $"%{keyword}%"))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return result;
@@ -185,7 +177,7 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.Category)
                 .Where(product => product.ShopId == sourceProduct.ShopId
-                    && product.CategoryId == sourceProduct.CategoryId && product.Id != sourceProduct.Id)
+                    && product.Category == sourceProduct.Category && product.Id != sourceProduct.Id)
                 .OrderByDescending(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
                 .ThenByDescending(product => product.Price)
                 .Take(4).Select(product => _mapper.MapToProductDTO(product))

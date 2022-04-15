@@ -18,11 +18,6 @@ namespace DatabaseSharing
                 .IsRequired();
 
             modelBuilder.Entity<ShopProduct>()
-                .HasOne(e => e.Category)
-                .WithMany(e => e.ShopProducts)
-                .IsRequired();
-
-            modelBuilder.Entity<ShopProduct>()
                 .Property(e => e.IsDisabled)
                 .HasDefaultValue(false);
 

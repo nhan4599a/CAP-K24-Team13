@@ -75,11 +75,6 @@ namespace GUI.Extensions
             return $"http://ec2-18-139-226-54.ap-southeast-1.compute.amazonaws.com:3000/products/images/{imageUrl}";
         }
 
-        public static string CategoryImageUrl(this IUrlHelper _, string imageUrl)
-        {
-            return $"http://ec2-18-139-226-54.ap-southeast-1.compute.amazonaws.com:3000/categories/images/{imageUrl}";
-        }
-
         public static string ShopImageUrl(this IUrlHelper _, string imageUrl)
         {
             return $"http://ec2-18-139-226-54.ap-southeast-1.compute.amazonaws.com:3000/interfaces/images/{imageUrl}";

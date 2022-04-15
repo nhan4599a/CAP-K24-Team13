@@ -11,10 +11,6 @@ namespace DatabaseAccessor.Configurations
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd();
 
-            builder.HasOne(e => e.Category)
-                .WithMany(e => e.ShopProducts)
-                .IsRequired();
-
             builder.HasMany(e => e.Invoices)
                 .WithOne(e => e.Product)
                 .IsRequired();

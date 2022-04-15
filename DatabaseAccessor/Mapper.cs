@@ -21,15 +21,15 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopProduct, ProductDTO>()
                     .IncludeBase<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.CategoryName,
-                        options => options.MapFrom(source => source.Category == null ? "" : source.Category.CategoryName));
+                        options => options.MapFrom(source => source.Category));
                 cfg.CreateMap<ShopProduct, ProductWithCommentsDTO>()
                     .IncludeBase<ShopProduct, ProductDTO>();
                 cfg.CreateMap<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
-                cfg.CreateMap<ShopCategory, CategoryDTO>()
+                cfg.CreateMap<IGrouping<string, ShopProduct>, CategoryDTO>()
                     .ForMember(target => target.ProductCount, 
-                        options => options.MapFrom(source => source.ShopProducts.Count));
+                        options => options.MapFrom(source => source.Count()));
 
                 cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
                     .ForMember(target => target.Images,
@@ -110,10 +110,10 @@ namespace DatabaseAccessor.Mapping
 
         public ProductWithCommentsDTO MapToProductWithCommentsDTO(ShopProduct product) => _mapper.Map<ProductWithCommentsDTO>(product);
 
-        public CategoryDTO MapToCategoryDTO(ShopCategory category) => _mapper.Map<CategoryDTO>(category);
-
         public ShopInterfaceDTO MapToShopInterfaceDTO(ShopInterface shopInterface)
             => _mapper.Map<ShopInterfaceDTO>(shopInterface);
+
+        public CategoryDTO MapToCategoryDTO(IGrouping<string, ShopProduct> source) => _mapper.Map<CategoryDTO>(source);
 
         public CartItemDTO MapToCartItemDTO(CartDetail cartItem) => _mapper.Map<CartItemDTO>(cartItem);
 

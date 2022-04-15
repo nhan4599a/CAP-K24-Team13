@@ -36,67 +36,6 @@ function onCategoriesLoaded(paginatedData) {
         pageNumber: paginatedData.pageNumber,
         maxPageNumber: paginatedData.maxPageNumber
     });
-    $('a[name=btn-edit]').click(function (e) {
-        e.preventDefault();
-        let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-        let categoryInfoStr = JSON.stringify(categories[index]);
-        window.localStorage.setItem('editting-category', categoryInfoStr);
-        window.location.href = "/shopowner/category/edit";
-    });
-    $('a[name=btn-action]').click(function (e) {
-        e.preventDefault();
-        let id = $(this).parent().parent().children('#cate-id').text();
-        let name = $(this).parent().parent().children('td:nth-child(4)').children().text();
-        let action = $(this).text().trim().toLowerCase();
-        if (action !== 'deactivate' && action !== 'activate')
-            return;
-        displayCascadeQuestionDialog(`Do you want to ${action} ${name}`, {
-            shouldShowCascadeButton: true,
-            shouldShowNonCascadeButton: action === 'activate'
-        }, option => {
-            let shouldBeCascade = option === 'cascade';
-            let command = {
-                id: id,
-                isActivateCommand: action === 'activate',
-                shouldBeCascade: action === 'activate' ? shouldBeCascade : true
-            };
-            let successCallback = command.isActivateCommand ? () => {
-                toastr.success(`Activated ${name}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(5)').children()
-                    .removeClass('bg-gradient-secondary')
-                    .addClass('bg-gradient-success')
-                    .text('Activated');
-                $(this).parent().prepend(buildEditButtonHtml());
-                $(this).children('span').text(' Deactivate');
-                $(this).children('i').removeClass().addClass('far fa-trash-alt');
-                $('a[name=btn-edit]').click(function (e) {
-                    e.preventDefault();
-                    let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-                    let categoryInfoStr = JSON.stringify(categories[index]);
-                    window.localStorage.setItem('editting-category', categoryInfoStr);
-                    window.location.href = "/shopowner/category/edit";
-                });
-            } : () => {
-                toastr.success(`Deactivated ${name}`, 'Success');
-                $(this).parent().parent().children('td:nth-child(5)').children()
-                    .removeClass('bg-gradient-success')
-                    .addClass('bg-gradient-secondary')
-                    .text('Deactivated');
-                $(this).parent().children('*[name="btn-edit"]').remove();
-                $(this).children('span').text(' Activate');
-                $(this).children('i').removeClass().addClass('fas fa-check');
-            };
-            let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
-            animationLoader.showAnimation();
-            activateCategory(command).then(() => {
-                successCallback();
-                animationLoader.hideAnimation()
-            }).catch(() => {
-                animationLoader.hideAnimation();
-                toastr.error(`Failed to ${action} ${name}`);
-            });
-        });
-    });
 
     $('#previous-page').click(() => {
         let currentPageInfo = getCurrentPageInfo();

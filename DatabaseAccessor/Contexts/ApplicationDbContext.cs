@@ -13,8 +13,6 @@ namespace DatabaseAccessor.Contexts
     {
         private static readonly string _connectionString = Environment.GetEnvironmentVariable("TEAM13_CONNECTION_STRING");
 
-        public DbSet<ShopCategory> ShopCategories { get; set; }
-
         public DbSet<ShopInterface> ShopInterfaces { get; set; }
 
         public DbSet<ShopProduct> ShopProducts { get; set; }
@@ -85,7 +83,6 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
             modelBuilder.ApplyConfiguration(new CommentConfiguration());

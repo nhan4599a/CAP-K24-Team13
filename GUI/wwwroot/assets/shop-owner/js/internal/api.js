@@ -104,10 +104,6 @@ function getCategories(shopId, pageNumber, pageSize) {
     });
 }
 
-function getCategoryImageUrl(imageFileName) {
-    return `${axios.defaults.baseURL}${categoryEndpoint}/images/${imageFileName}`;
-}
-
 function getCategoryImage(imageFileName) {
     return axios.get(`${getCategoryImageUrl(imageFileName)}?${Date.now() / 1000}`, {
         responseType: 'blob'
@@ -129,22 +125,6 @@ function activateCategory(activateCommand) {
     return axios.delete(
         `${categoryEndpoint}/${activateCommand.id}?action=${action}&cascade=${cascade}`
     );
-}
-
-function addCategory(shopId, formData) {
-    return axios.post(`${categoryEndpoint}/shop/${shopId}`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        }
-    });
-}
-
-function editCategory(categoryId, formData) {
-    return axios.put(`${categoryEndpoint}/${categoryId}`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    });
 }
 
 function getShopInterface(shopId) {

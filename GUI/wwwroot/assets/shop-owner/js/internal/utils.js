@@ -305,17 +305,8 @@ function buildProductActionButtonHtml(isDisabled) {
                 </a>`;
 }
 
-function buildCategoryActionButtonHtml(isDisabled) {
-    if (!isDisabled)
-        return `
-                ${buildEditButtonHtml()}
-                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                    name="btn-action" style="margin-right: 24px">
-                    <i class="far fa-trash-alt"></i>
-                    <span> Deactivate</span>
-                </a>`;
-    else
-        return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+function buildCategoryActionButtonHtml() {
+    return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                     name="btn-action">
                     <i class="fas fa-check"></i>
                     <span> Activate</span>
@@ -422,15 +413,8 @@ function buildCategoryTableHtml(categories) {
                             style="width: 50px; min-width: 50px !important;">
                             #
                         </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                            style="padding-left: 24px!important">
-                            ID
-                        </th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                             Category name
-                        </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Status
                         </th>
                         <th class="text-secondary opacity-7">Action</th>
                     </tr>
@@ -443,30 +427,12 @@ function buildCategoryTableHtml(categories) {
 
 function buildCategoryTableRowHtml(category, index) {
     return `<tr>
-                <td style="display: none" id="cate-id">${category.id}</td>
                 <td class="align-middle text-center">${index + 1}</td>
                 <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm bg-gradient-success">${category.id}</span>
-                </td>
-                <td class="align-middle text-center">
-                    <div class="d-flex px-2 py-1">
-                        <div>
-                            <img src="${getCategoryImageUrl(category.image)}?${Date.now() / 1000}" class="avatar avatar-sm me-3 border-radius-lg">
-                        </div>
-                        <div class="d-grid flex-column" style="align-self: center">
-                            <h6 class="mb-0 text-sm">${category.categoryName}</h6>
-                        </div>
-                    </div>
-                </td>
-                <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm bg-gradient-${!category.isDisabled ? 'success' : 'secondary'}">
-                        ${!category.isDisabled ? 'Activated' : 'Deactivated'}
-                    </span>
+                    <span class="badge badge-sm bg-gradient-success">${category.categoryName}</span>
                 </td>
                 <td class="align-middle">
-                    ${buildCategoryActionButtonHtml(category.isDisabled)}
-                </td>
-                <td>
+                    ${buildCategoryActionButtonHtml()}
                 </td>
             </tr>`;
 }
