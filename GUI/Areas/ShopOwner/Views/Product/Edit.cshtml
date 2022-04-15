@@ -58,16 +58,15 @@
         $('#input-search').parent().remove();
         let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
         animationLoader.showAnimation(3500);
-        getShopId().then(shopId => {
-            getAllCategories(shopId).then(categories => {
-                onLoadedAllCategories(categories.filter(category => !category.isDisabled));
+        getAllCategories()
+            .then(categories => {
+                onLoadedAllCategories(categories);
                 animationLoader.hideAnimation();
-            }).catch(() => {
-                console.log('error');
+            })
+            .catch(error => {
                 animationLoader.hideAnimation();
-                toastr.error('Failed to load categories', 'Error');
+                toastr.error('Failed to load list categories', 'Error');
             });
-        });
     });
 
     function onLoadedAllCategories(categories) {
@@ -159,13 +158,15 @@
     function buildRequestModel() {
         let id = $('#input-id').val();
         let name = $('#input-name').val();
-        let category = $('#input-category').val();
+        let categoryId = $('#input-category').val();
+        let categoryName = $('#input-category option:selected').text();
         let description = tinymce.activeEditor.getContent({ format: 'text' });
         let price = $('#input-price').val();
         let discount = $('#input-discount').val();
         return {
             productName: name,
-            categoryId: category,
+            categoryId: categoryId,
+            categoryName: categoryName,
             description: description,
             price: price,
             discount: discount

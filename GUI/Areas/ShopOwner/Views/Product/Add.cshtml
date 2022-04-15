@@ -124,19 +124,20 @@
             });
             let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
             animationLoader.showAnimation(3500);
-            getShopId().then(shopId => {
-                getAllCategories(shopId).then(categories => {
-                    renderCategoryDropdown(categories.filter(category => !category.isDisabled))
+            getAllCategories()
+                .then(categories => {
+                    renderCategoryDropdown(categories);
                     animationLoader.hideAnimation();
-                }).catch(() => {
+                })
+                .catch(error => {
                     animationLoader.hideAnimation();
                     toastr.error('Failed to load list categories', 'Error');
                 });
-            });
         });
         function buildRequestModel() {
             let name = $("#input-name").val();
-            let category = $('#input-category').val();
+            let categoryId = $('#input-category').val();
+            let categoryName = $('#input-category option:selected').text();
             let description = tinymce.activeEditor.getContent({ format: 'text' });
             let quantity = $("#input-quantity").val();
             let price = $("#input-price").val();
@@ -144,7 +145,8 @@
 
             return {
                 productName: name,
-                categoryId: category,
+                categoryId: categoryId,
+                categoryName: categoryName,
                 description: description,
                 quantity: quantity,
                 price: price,

@@ -27,7 +27,11 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.Images,
                         options => options.MapFrom<ImageValueResolver>());
-                cfg.CreateMap<IGrouping<string, ShopProduct>, CategoryDTO>()
+                cfg.CreateMap<IGrouping<CategoryItem, ShopProduct>, CategoryDTO>()
+                    .ForMember(target => target.Id,
+                        options => options.MapFrom(source => source.Key.Id))
+                    .ForMember(target => target.CategoryName,
+                        options => options.MapFrom(source => source.Key.Name))
                     .ForMember(target => target.ProductCount, 
                         options => options.MapFrom(source => source.Count()));
 
@@ -113,7 +117,7 @@ namespace DatabaseAccessor.Mapping
         public ShopInterfaceDTO MapToShopInterfaceDTO(ShopInterface shopInterface)
             => _mapper.Map<ShopInterfaceDTO>(shopInterface);
 
-        public CategoryDTO MapToCategoryDTO(IGrouping<string, ShopProduct> source) => _mapper.Map<CategoryDTO>(source);
+        public CategoryDTO MapToCategoryDTO(IGrouping<CategoryItem, ShopProduct> source) => _mapper.Map<CategoryDTO>(source);
 
         public CartItemDTO MapToCartItemDTO(CartDetail cartItem) => _mapper.Map<CartItemDTO>(cartItem);
 

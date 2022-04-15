@@ -89,13 +89,8 @@ function editProduct(productId, formData) {
     });
 }
 
-function getAllCategories(shopId) {
-    const actualEndpoint = categoryEndpoint + (shopId ? `/shop/${shopId}` : '');
-    return axios.get(actualEndpoint).then(paginatedResponse => paginatedResponse.data);
-}
-
 function getCategories(shopId, pageNumber, pageSize) {
-    const actualEndpoint = categoryEndpoint + (shopId ? `/shop/${shopId}` : '');
+    const actualEndpoint = `${categoryEndpoint}/shop/${shopId}`;
     return axios.get(actualEndpoint, {
         params: {
             pageNumber: pageNumber,
@@ -295,6 +290,10 @@ function authorizeUser(userId, admin) {
 
 function getShopInformation(shopId) {
     return axios.get(`https://cap-k24-team13.herokuapp.com/api/integrated/shop/${shopId}`);
+}
+
+function getAllCategories() {
+    return axios.get('https://emallsolution-backendapi.herokuapp.com/api/CategoriesShop/publish/categoryShop/getall');
 }
 
 function getAccessToken() {

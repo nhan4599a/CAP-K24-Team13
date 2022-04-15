@@ -25,7 +25,7 @@ namespace DatabaseAccessor.Repositories
         {
             return await _dbContext.ShopProducts.AsNoTracking()
                 .Where(product => product.ShopId == shopId)
-                .GroupBy(product => product.Category)
+                .GroupBy(product => new CategoryItem { Id = product.CategoryId, Name = product.Category })
                 .Select(category => _mapper.MapToCategoryDTO(category))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
