@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.DTOs;
 using Shared.Models;
 using System;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,8 +23,8 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo)
         {
             return await _dbContext.Categories
-                .FromSqlRaw("SELECT CategoryId, Category as CategoryName, COUNT(*) as ProductCoung FROM dbo.ShopProducts" +
-                    $"WHERE ShopId = {shopId} GROUP BY ShopId, CategoryId, Category")
+                .FromSqlRaw("SELECT CategoryId, Category as CategoryName, COUNT(*) as ProductCoung FROM dbo.ShopProducts " +
+                    "WHERE ShopId = @ShopId GROUP BY ShopId, CategoryId, Category", new SqlParameter("@ShopId", shopId))
                 .AsNoTracking()
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
