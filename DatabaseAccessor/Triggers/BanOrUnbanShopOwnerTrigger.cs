@@ -28,7 +28,7 @@ namespace DatabaseAccessor.Triggers
                     .Where(product => product.ShopId == context.Entity.ShopId)
                     .BatchUpdateAsync(new ShopProduct
                     {
-                        IsVisible = context.Entity.Status == AccountStatus.Banned
+                        IsVisible = context.Entity.Status != AccountStatus.Banned
                     }, new List<string> { "IsVisible" }, cancellationToken);
             }
         }
