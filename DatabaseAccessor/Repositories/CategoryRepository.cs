@@ -1,12 +1,10 @@
 ﻿using DatabaseAccessor.Contexts;
-using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Repositories.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTOs;
 using Shared.Models;
 using System;
-using System.Data.SqlClient;
-using System.Linq;
+using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace DatabaseAccessor.Repositories
