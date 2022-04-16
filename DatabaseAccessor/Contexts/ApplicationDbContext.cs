@@ -5,6 +5,7 @@ using DatabaseAccessor.Triggers;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Shared.DTOs;
 using System;
 
 namespace DatabaseAccessor.Contexts
@@ -33,6 +34,8 @@ namespace DatabaseAccessor.Contexts
 
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
+        public DbSet<CategoryDTO> Categories { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public ApplicationDbContext(string connectionString) : base(
@@ -57,6 +60,7 @@ namespace DatabaseAccessor.Contexts
                             options.UseTransactionTriggers();
                             options.AddTrigger<InvoiceAddedTrigger>();
                             options.AddTrigger<InvoiceStatusChangedTrigger>();
+                            options.AddTrigger<BanOrUnbanShopOwnerTrigger>();
                         });
             }
         }
@@ -88,6 +92,12 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new CartDetailConfiguration());
             modelBuilder.ApplyConfiguration(new ReportConfiguration());
+
+            modelBuilder.Entity<CategoryDTO>()
+                .HasNoKey();
+
+            modelBuilder.Entity<ShopProduct>()
+                .HasQueryFilter(e => e.IsVisible && !e.IsDisabled);
         }
     }
 }

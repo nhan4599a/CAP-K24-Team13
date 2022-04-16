@@ -32,12 +32,12 @@ namespace GUI.Areas.User.Controllers
             var shopCategoriesResponse = await shopCategoriesResponseTask;
             if (!bestSellerProductsResponse.IsSuccessStatusCode || !shopCategoriesResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            var productsResponse = await _productClient.GetProductsOfCategory(shopCategoriesResponse.Content.Data.Select(e => e.Id).ToArray(), 1, 0);
+            var productsResponse = await _productClient.GetProductsOfCategory(shopCategoriesResponse.Content.Data.Select(e => e.CategoryId).ToArray(), 1, 0);
             if (!productsResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             var productsOfCategory = productsResponse.Content.Data.Data
                 .GroupBy(e => e.CategoryName)
-                .ToDictionary(e => shopCategoriesResponse.Content.Data.Data.First(item => item.CategoryName == e.Key).Id,
+                .ToDictionary(e => shopCategoriesResponse.Content.Data.Data.First(item => item.CategoryName == e.Key).CategoryId,
                     e => e.Take(5).ToList());
             var shopResponse = await shopResponseTask;
             if (!shopResponse.IsSuccessStatusCode)

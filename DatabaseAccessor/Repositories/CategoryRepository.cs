@@ -13,20 +13,18 @@ namespace DatabaseAccessor.Repositories
     public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly Mapper _mapper;
 
-        public CategoryRepository(ApplicationDbContext dbContext, Mapper mapper)
+        public CategoryRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
         }
 
         public async Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo)
         {
-            return await _dbContext.ShopProducts.AsNoTracking()
-                .Where(product => product.ShopId == shopId)
-                .GroupBy(product => new CategoryItem { Id = product.CategoryId, Name = product.Category })
-                .Select(category => _mapper.MapToCategoryDTO(category))
+            return await _dbContext.Categories
+                .FromSqlRaw("SELECT CategoryId, Category as CategoryName, COUNT(*) as ProductCoung FROM dbo.ShopProducts" +
+                    $"WHERE ShopId = {shopId} GROUP BY ShopId, CategoryId, Category")
+                .AsNoTracking()
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 

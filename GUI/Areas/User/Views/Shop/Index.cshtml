@@ -210,8 +210,8 @@
                                 @for (var i = 0; i < Model.Categories.Count; i++)
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link" id="category-@Model.Categories[i].Id" data-toggle="tab"
-                                       href="#category-@Model.Categories[i].Id-tab" role="tab" aria-controls="category-@Model.Categories[i].Id-tab"
+                                        <a class="nav-link" id="category-@Model.Categories[i].CategoryId" data-toggle="tab"
+                                       href="#category-@Model.Categories[i].CategoryId-tab" role="tab" aria-controls="category-@Model.Categories[i].CategoryId-tab"
                                        aria-selected="@(i == 0 ? "true" : "false")">@Model.Categories[i].CategoryName</a>
                                     </li>
                                 }
@@ -223,8 +223,8 @@
                     <div class="tab-content tab-content-carousel">
                         @for (var i = 0; i < Model.Categories.Count; i++)
                         {
-                            <div class="tab-pane p-0 fade@(i == 0 ? " show active" : "")" id="category-@Model.Categories[i].Id-tab" role="tabpanel"
-                             aria-labelledby="category-@Model.Categories[i].Id">
+                            <div class="tab-pane p-0 fade@(i == 0 ? " show active" : "")" id="category-@Model.Categories[i].CategoryId-tab" role="tabpanel"
+                             aria-labelledby="category-@Model.Categories[i].CategoryId">
                                 <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
                                  data-owl-options='{
                                         "nav": false,
@@ -254,7 +254,7 @@
                                             }
                                         }
                                     }'>
-                                    @foreach (var product in Model.Products[Model.Categories[i].Id])
+                                    @foreach (var product in Model.Products[Model.Categories[i].CategoryId])
                                     {
                                         <div class="product text-center">
                                             <figure class="product-media">
