@@ -692,8 +692,8 @@ function displayBanCustomerDialog(confirmedCallback) {
                                             </div>
                                         </div>
                                         <div class="form-row mb-3">
-                                            <label class="col-sm-12 align-items-center col-form-label">Ban Message</label>
-                                            <input type="text" name="ban-message" id="ban-message" />
+                                            <label class="col-sm-12 align-items-center col-form-label">Ban message</label>
+                                            <input class="col-md-12" type="text" name="ban-message" id="ban-message" />
                                         </div>
                                     </form>
                                 </div>
