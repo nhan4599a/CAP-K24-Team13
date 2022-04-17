@@ -691,6 +691,10 @@ function displayBanCustomerDialog(confirmedCallback) {
                                                 <input style="margin-top:5px; text-align: center" type="number" name="input-day-count" value="3">
                                             </div>
                                         </div>
+                                        <div class="form-row mb-3">
+                                            <label class="col-sm-12 align-items-center col-form-label">Ban Message</label>
+                                            <input type="text" name="ban-message" id="ban-message" />
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
