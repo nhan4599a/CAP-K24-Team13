@@ -387,6 +387,9 @@ namespace DatabaseAccessor.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("BanReason")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -589,6 +592,20 @@ namespace DatabaseAccessor.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Shared.DTOs.CategoryDTO", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductCount")
+                        .HasColumnType("int");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.UserRole", b =>

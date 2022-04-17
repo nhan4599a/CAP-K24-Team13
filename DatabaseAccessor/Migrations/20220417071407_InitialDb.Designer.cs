@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseAccessor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220407041438_InitializeDb")]
-    partial class InitializeDb
+    [Migration("20220417071407_InitialDb")]
+    partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -298,36 +298,6 @@ namespace DatabaseAccessor.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("DatabaseAccessor.Models.ShopCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("Npgsql:IdentitySequenceOptions", "'0', '1', '', '', 'False', '1'");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CategoryName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDisabled")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryName");
-
-                    b.ToTable("ShopCategories", "dbo");
-                });
-
             modelBuilder.Entity("DatabaseAccessor.Models.ShopInterface", b =>
                 {
                     b.Property<int>("ShopId")
@@ -349,6 +319,9 @@ namespace DatabaseAccessor.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -374,6 +347,11 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsVisible")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -390,8 +368,6 @@ namespace DatabaseAccessor.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ProductName");
 
@@ -412,6 +388,9 @@ namespace DatabaseAccessor.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("BanReason")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -617,6 +596,20 @@ namespace DatabaseAccessor.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Shared.DTOs.CategoryDTO", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductCount")
+                        .HasColumnType("int");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("DatabaseAccessor.Models.UserRole", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
@@ -743,17 +736,6 @@ namespace DatabaseAccessor.Migrations
                     b.Navigation("Reporter");
                 });
 
-            modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
-                {
-                    b.HasOne("DatabaseAccessor.Models.ShopCategory", "Category")
-                        .WithMany("ShopProducts")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("DatabaseAccessor.Models.Role", null)
@@ -826,11 +808,6 @@ namespace DatabaseAccessor.Migrations
             modelBuilder.Entity("DatabaseAccessor.Models.Role", b =>
                 {
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("DatabaseAccessor.Models.ShopCategory", b =>
-                {
-                    b.Navigation("ShopProducts");
                 });
 
             modelBuilder.Entity("DatabaseAccessor.Models.ShopProduct", b =>
