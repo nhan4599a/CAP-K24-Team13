@@ -57,7 +57,7 @@ namespace UserService.Controllers
             {
                 UserId = parsedUserId,
                 DayCount = requestModel.DayCount,
-                Message = requestModel.Message
+                Message = requestModel.BanMessage
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
