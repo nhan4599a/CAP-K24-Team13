@@ -67,7 +67,7 @@ namespace AuthServer.Controllers
             if (user.Status == AccountStatus.Banned && user.LockoutEnd == null)
             {
                 ModelState.AddModelError("SignIn-Error", 
-                    "Look like your account is locked out permanently. Contact admin for more detail");
+                    $"Look like your account is locked out permanently. Contact admin for more detail. Reason is {user.BanReason}");
                 return View();
             }
             var signInResult =  await 

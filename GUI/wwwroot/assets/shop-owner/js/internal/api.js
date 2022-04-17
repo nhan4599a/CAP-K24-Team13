@@ -271,12 +271,19 @@ function unbanUser(userId) {
     return axios.post(`${userEndpoint}/unban/${userId}`);
 }
 
-function banUser(userId, dayCount) {
-    let formData = new FormData();
-    if (dayCount) {
-        formData.append('dayCount', dayCount);
-    }
-    return axios.post(`${userEndpoint}/ban/${userId}`, formData);
+function banUser(userId, dayCount, message) {
+    if (!message)
+        throw new Error('Message is required');
+    let requestBody = {
+        banMessage: message
+    };
+    if (dayCount)
+        requestBody.dayCount = dayCount;
+    return axios.post(`${userEndpoint}/ban/${userId}`, requestBody, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
 }
 
 function getRelatedProducts(productId) {
