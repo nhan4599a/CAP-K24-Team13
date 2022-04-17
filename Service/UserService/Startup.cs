@@ -18,6 +18,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using UserService.Commands;
+using UserService.RequestModels;
 using UserService.Validations;
 
 namespace UserService
@@ -35,7 +36,8 @@ namespace UserService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddFluentValidation<FindUsersQuery, GetAllUsersQueryValidator>();
+                .AddFluentValidation<FindUsersQuery, GetAllUsersQueryValidator>()
+                .AddFluentValidation<BanUserRequestModel, BanUserRequestModelValidator>();
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration["REDIS_CONNECTION_STRING"];

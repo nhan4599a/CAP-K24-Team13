@@ -38,7 +38,7 @@ namespace DatabaseAccessor.Repositories
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
-        public async Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, uint? dayCount)
+        public async Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, uint? dayCount, string banReason)
         {
             var user = await _dbContext.Users.FindAsync(userId);
 
@@ -51,6 +51,7 @@ namespace DatabaseAccessor.Repositories
             user.LockoutEnd = dayCount.HasValue ? DateTimeOffset.Now.AddDays((double)dayCount) : null;
 
             user.Status = AccountStatus.Banned;
+            user.BanReason = banReason;
 
             await _dbContext.SaveChangesAsync();
 
@@ -69,6 +70,7 @@ namespace DatabaseAccessor.Repositories
 
             user.LockoutEnd = null;
             user.Status = AccountStatus.Available;
+            user.BanReason = null;
 
             await _dbContext.SaveChangesAsync();
 

@@ -309,7 +309,7 @@ function buildCategoryActionButtonHtml() {
     return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                     name="btn-action">
                     <i class="fas fa-check"></i>
-                    <span> Activate</span>
+                    <span> Import</span>
                 </a>`;
 }
 
@@ -409,12 +409,16 @@ function buildCategoryTableHtml(categories) {
     return `<table class="table align-items-center mb-0">
                 <thead>
                     <tr>
+                        <th style="display: none">Id</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                             style="width: 50px; min-width: 50px !important;">
                             #
                         </th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">
                             Category name
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">
+                            Product count
                         </th>
                         <th class="text-secondary opacity-7">Action</th>
                     </tr>
@@ -427,9 +431,13 @@ function buildCategoryTableHtml(categories) {
 
 function buildCategoryTableRowHtml(category, index) {
     return `<tr>
+                <td style="display: none">${category.categoryId}</td>
                 <td class="align-middle text-center">${index + 1}</td>
                 <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm bg-gradient-success">${category.categoryName}</span>
+                    ${category.categoryName}
+                </td>
+                <td class="align-middle text-center">
+                    ${category.productCount}
                 </td>
                 <td class="align-middle">
                     ${buildCategoryActionButtonHtml()}

@@ -1,6 +1,7 @@
 ﻿$(document).ready(() => {
     var currentPageInfo = getCurrentPageInfo();
     loadCategories(currentPageInfo.pageNumber, currentPageInfo.pageSize);
+    $('#input-search').parent().remove();
     $(`#pagesize-select option[value=${currentPageInfo.pageSize}]`).attr('selected', true);
     let classNames = ['active', 'bg-gradient-primary'];
     $('#nav-item-category').addClass(classNames);
@@ -48,6 +49,11 @@ function onCategoriesLoaded(paginatedData) {
     $('a.pagination-item').click(function () {
         let pageNumber = $(this).text();
         moveToPage(pageNumber, getCurrentPageInfo().pageSize);
+    });
+    $('a[name=btn-action]').click(function (e) {
+        e.preventDefault();
+        let categoryId = $(this).parent().parent().children('td:first-child').html();
+        location.href = `/shopowner/product/add?category=${categoryId}`;
     });
 }
 

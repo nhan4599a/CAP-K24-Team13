@@ -7,6 +7,7 @@ using Shared.Models;
 using System;
 using System.Threading.Tasks;
 using UserService.Commands;
+using UserService.RequestModels;
 
 namespace UserService.Controllers
 {
@@ -47,17 +48,16 @@ namespace UserService.Controllers
         }
 
         [HttpPost("ban/{userId}")]
-        public async Task<ApiResult> ApplyBan(string userId, [FromForm] uint? dayCount)
+        public async Task<ApiResult> ApplyBan(string userId, [FromBody] BanUserRequestModel requestModel)
         {
             var parseResult = Guid.TryParse(userId, out Guid parsedUserId);
             if (!parseResult)
                 return ApiResult.CreateErrorResult(400, "UserId is invalid");
-            if (dayCount != null && dayCount == 0)
-                return ApiResult.CreateErrorResult(400, "Day count must be greater than zero");
             var response = await _mediator.Send(new BanUserCommand
             {
                 UserId = parsedUserId,
-                DayCount = dayCount
+                DayCount = requestModel.DayCount,
+                Message = requestModel.Message
             });
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);

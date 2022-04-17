@@ -19,6 +19,8 @@ namespace DatabaseAccessor.Models
 
         public int? ShopId { get; set; }
 
+        public string BanReason { get; set; }
+
         public virtual IList<Invoice> Invoices { get; set; }
 
         public virtual Cart Cart { get; set; }

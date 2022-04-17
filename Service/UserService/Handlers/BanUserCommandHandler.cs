@@ -19,7 +19,7 @@ namespace UserService.Handlers
 
         public async Task<CommandResponse<bool>> Handle(BanUserCommand request, CancellationToken cancellationToken)
         {
-            return await _repository.ApplyBanAsync(request.UserId, request.DayCount);
+            return await _repository.ApplyBanAsync(request.UserId, request.DayCount, request.Message);
         }
 
         public void Dispose()

@@ -79,11 +79,16 @@ namespace AuthServer.Controllers
                 );
                 return Redirect(model.ReturnUrl);
             }
-            if (signInResult.IsLockedOut || user.Status == AccountStatus.Banned)
+            if (signInResult.IsLockedOut)
             {
-                ModelState.AddModelError("SignIn-Error", 
-                    $"Account is locked out. It will be unlocked at {user.LockoutEnd!.Value.AddHours(7):dd/MM/yyyy HH:mm:ss}");
+                if (user.Status == AccountStatus.Banned)
+                    ViewBag.BanMessage = user.BanReason;
                 return View();
+            }
+            if (user.Status == AccountStatus.Banned)
+            {
+                ModelState.AddModelError("SignIn-Error",
+                    $"Account is banned. It will be unban at {user.LockoutEnd!.Value.AddHours(7):dd/MM/yyyy HH:mm:ss}. Reason is {user.BanReason}");
             }
             if (signInResult.IsNotAllowed)
             {

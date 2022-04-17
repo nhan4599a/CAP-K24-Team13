@@ -62,9 +62,12 @@
             let classNames = ['active'];
             $('#nav-item-product').addClass(classNames).css('background-color', '#2f9db6');
             $('#input-search').parent().remove();
+            if (location.search)
             tinymce.init({
                 selector: '#input-description'
             });
+            let defaultCategory = getDefaultCategory();
+
             let acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
             const acceptedMaxBytes = 4 * 1024 * 1024;
             let remainingBytes = acceptedMaxBytes;
@@ -118,7 +121,7 @@
                     .then(shopId => {        
                         addProduct(formData, shopId).then(() => {
                             animationLoader.hideAnimation();
-                            window.location.href = '/shopowner/product';
+                            window.location.href = '/shopowner/' + (defaultCategory ? 'category' : 'product');
                         }).catch(error => {
                             animationLoader.hideAnimation();
                             toastr.error(error, 'Error');
@@ -130,6 +133,8 @@
             getAllCategories()
                 .then(categories => {
                     renderCategoryDropdown(categories);
+                    if (defaultCategory)
+                        $(`#input-category option[value=${defaultCategory}]`).prop('selected', true);
                     animationLoader.hideAnimation();
                 })
                 .catch(error => {
@@ -137,6 +142,7 @@
                     toastr.error('Failed to load list categories', 'Error');
                 });
         });
+
         function buildRequestModel() {
             let name = $("#input-name").val();
             let categoryId = $('#input-category').val();
@@ -155,6 +161,14 @@
                 price: price,
                 discount: discount
             };
+        }
+
+        
+        function getDefaultCategory() {
+            let url = new URL(window.location.href);
+            let queryObj = url.searchParams;
+            let category = queryObj.get('category') ? parseInt(queryObj.get('category')) : undefined;
+            return category;
         }
     </script>
 }

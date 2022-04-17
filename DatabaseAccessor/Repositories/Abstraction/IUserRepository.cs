@@ -11,7 +11,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<UserDTO> GetUserByIdAsync(Guid userId);
 
-        Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, uint? dayCount);
+        Task<CommandResponse<bool>> ApplyBanAsync(Guid userId, uint? dayCount, string banReason);
 
         Task<CommandResponse<bool>> UnbanAsync(Guid userId);
 

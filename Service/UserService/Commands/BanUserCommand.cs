@@ -9,5 +9,7 @@ namespace UserService.Commands
         public Guid UserId { get; set; }
 
         public uint? DayCount { get; set; }
+
+        public string? Message { get; set; }
     }
 }
