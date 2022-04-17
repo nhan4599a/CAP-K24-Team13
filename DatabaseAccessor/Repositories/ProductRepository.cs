@@ -36,7 +36,7 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<PaginatedList<ProductDTO>> FindProductsAsync(string keyword, PaginationInfo paginationInfo)
         {
-            return await _dbContext.ShopProducts.AsNoTracking().Include(e => e.Category)
+            return await _dbContext.ShopProducts.AsNoTracking()
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
                         || EF.Functions.Like(product.Category, $"%{keyword}%"))
                 .Select(product => _mapper.MapToProductDTO(product))
@@ -46,7 +46,6 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking()
-                .Include(product => product.Category)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -142,7 +141,6 @@ namespace DatabaseAccessor.Repositories
         {
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
-                .Include(product => product.Category)
                 .Where(product => product.ShopId == shopId)
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
                         || EF.Functions.Like(product.Category, $"%{keyword}%"))
@@ -163,7 +161,6 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<List<ProductDTO>>.Error("Product is not found!", null);
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
-                .Include(e => e.Category)
                 .Where(product => product.ShopId == sourceProduct.ShopId
                     && product.Category == sourceProduct.Category && product.Id != sourceProduct.Id)
                 .OrderByDescending(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
@@ -188,7 +185,6 @@ namespace DatabaseAccessor.Repositories
         {
             return await _dbContext.ShopProducts
                 .AsNoTracking()
-                .Include(e => e.Category)
                 .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
