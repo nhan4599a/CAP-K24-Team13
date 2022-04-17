@@ -80,12 +80,15 @@ function onLoadCustomersCompleted(paginatedData) {
                     toastr.error(error);
                 });
         } else {
-            displayBanCustomerDialog(dayCount => {
+            displayBanCustomerDialog((dayCount, message) => {
+                if (!message) {
+                    toastr.error('Message is required');
+                    return;
+                }
                 displayYesNoQuestion('Are you sure ?', () => {
                     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
                     animationLoader.showAnimation();
-                    console.log(dayCount);
-                    banUser(userId, dayCount)
+                    banUser(userId, dayCount, message)
                         .then(() => {
                             animationLoader.hideAnimation();
                             toastr.success('User ban successfully');

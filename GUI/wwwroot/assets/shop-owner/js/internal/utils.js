@@ -731,7 +731,8 @@ function displayBanCustomerDialog(confirmedCallback) {
     $('#ban-customer-modal div.modal-footer > button:first-child').click(function () {
         $('#ban-customer-modal').modal('hide');
         let dayCount = $('#permanently-ban')[0].checked ? null : $('input[name=input-day-count]').val();
-        confirmedCallback(dayCount);
+        let message = $('#ban-message').val();
+        confirmedCallback(dayCount, message);
     });
 }
 
