@@ -24,17 +24,19 @@ namespace GUI.Areas.User.Controllers
             _categoryClient = categoryClient;
         }
 
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> Index(int? id)
         {
-            var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(id);
-            var shopResponseTask = _shopClient.GetShop(id);
+            if (!id.HasValue)
+                return StatusCode(StatusCodes.Status404NotFound);
+            var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(id.Value);
+            var shopResponseTask = _shopClient.GetShop(id.Value);
             var bestSellerProductsResponse = await bestSellerProductsResponseTask;
             var shopResponse = await shopResponseTask;
             if (bestSellerProductsResponse.IsSuccessStatusCode && shopResponse.IsSuccessStatusCode)
             {
                 if (bestSellerProductsResponse.Content.Data.Any())
                 {
-                    var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id, 4);
+                    var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id.Value, 4);
                     var shopCategoriesResponse = await shopCategoriesResponseTask;
                     var productsResponse = await _productClient.GetProductsOfCategory(
                         shopCategoriesResponse.Content.Data.Select(e => e.CategoryId).ToArray(), 1, 0

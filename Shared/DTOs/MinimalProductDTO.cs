@@ -14,6 +14,8 @@
 
         public int ShopId { get; set; }
 
+        public bool IsAvailable { get; set; }
+
         public string[] Images { get; set; }
     }
 }

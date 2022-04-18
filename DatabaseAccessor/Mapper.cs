@@ -21,14 +21,14 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopProduct, ProductDTO>()
                     .IncludeBase<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.CategoryName,
-                        options => options.MapFrom(source => source.Category))
-                    .ForMember(target => target.IsAvailable,
-                        options => options.MapFrom(source => source.IsVisible && !source.IsDisabled));
+                        options => options.MapFrom(source => source.Category));
                 cfg.CreateMap<ShopProduct, ProductWithCommentsDTO>()
                     .IncludeBase<ShopProduct, ProductDTO>();
                 cfg.CreateMap<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.Images,
-                        options => options.MapFrom<ImageValueResolver>());
+                        options => options.MapFrom<ImageValueResolver>())
+                    .ForMember(target => target.IsAvailable,
+                        options => options.MapFrom(source => source.IsVisible && !source.IsDisabled));
 
                 cfg.CreateMap<ShopInterface, ShopInterfaceDTO>()
                     .ForMember(target => target.Images,
