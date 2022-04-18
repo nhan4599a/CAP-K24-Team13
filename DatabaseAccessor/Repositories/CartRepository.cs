@@ -49,14 +49,18 @@ namespace DatabaseAccessor.Repositories
             var cartDetail = cart.Details
                 .FirstOrDefault(item => item.ProductId == Guid.Parse(requestModel.ProductId));
             if (cartDetail == null)
+            {
                 cart.Details.Add(new CartDetail
                 {
                     ProductId = Guid.Parse(requestModel.ProductId),
                     Quantity = requestModel.Quantity,
                     ShopId = product.ShopId
                 });
+            }
             else
+            {
                 cartDetail.Quantity += requestModel.Quantity;
+            }
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
@@ -72,6 +76,8 @@ namespace DatabaseAccessor.Repositories
                 .FirstOrDefault(item => item.ProductId == Guid.Parse(requestModel.ProductId));
             if (cartItem == null)
                 return CommandResponse<bool>.Error("Destination cart item does not exsisted", null);
+            if (!cartItem.Product.IsVisible || cartItem.Product.IsDisabled)
+                return CommandResponse<bool>.Error("Destination cart item is unavailable", null);
             cartItem.Quantity = requestModel.Quantity;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);

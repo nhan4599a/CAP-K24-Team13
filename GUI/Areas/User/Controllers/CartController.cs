@@ -30,7 +30,7 @@ namespace GUI.Areas.User.Controllers
             ViewData["CartItems"] = cartItemsResponse.Content.Data;
             return View(new CartViewModel
             {
-                Email = "customer@test.com",
+                Email = User.GetUsername(),
                 Size = cartItemsResponse.Content.Data.Count,
                 Items = cartItemsResponse.Content.Data
             });

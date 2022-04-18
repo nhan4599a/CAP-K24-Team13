@@ -39,7 +39,9 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.Discount,
                         options => options.MapFrom(source => source.Product.Discount))
                     .ForMember(target => target.Image,
-                        options => options.MapFrom<SingleImageResolver>());
+                        options => options.MapFrom<SingleImageResolver>())
+                    .ForMember(target => target.IsAvailable,
+                        options => options.MapFrom(source => source.Product.IsVisible && !source.Product.IsDisabled));
                 cfg.CreateMap<Invoice, OrderDTO>()
                     .ForMember(target => target.CustomerName,
                         options => options.MapFrom(source => source.FullName));
