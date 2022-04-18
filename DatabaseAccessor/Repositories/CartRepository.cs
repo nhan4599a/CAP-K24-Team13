@@ -93,7 +93,7 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<List<CartItemDTO>> GetCartAsync(string userId)
         {
-            var cart = await _dbContext.Carts.FirstOrDefaultAsync(cart => cart.UserId.ToString() == userId);
+            var cart = await _dbContext.Carts.IgnoreQueryFilters().FirstOrDefaultAsync(cart => cart.UserId.ToString() == userId);
             if (cart == null)
                 return new List<CartItemDTO>();
             return cart.Details.Select(item => _mapper.MapToCartItemDTO(item)).ToList();

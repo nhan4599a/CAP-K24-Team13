@@ -102,7 +102,8 @@ namespace ShopProductService.Controllers
                     {
                         PageNumber = requestModel.PageNumber,
                         PageSize = requestModel.PageSize
-                    }
+                    },
+                    IncludeFilter = requestModel.IncludeFilter
                 }
                 : new FindProductsByShopIdAndKeywordQuery
                 {
@@ -112,7 +113,8 @@ namespace ShopProductService.Controllers
                     {
                         PageNumber = requestModel.PageNumber,
                         PageSize = requestModel.PageSize
-                    }
+                    },
+                    IncludeFilter = requestModel.IncludeFilter
                 };
             var response = await _mediator.Send(request);
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(response);

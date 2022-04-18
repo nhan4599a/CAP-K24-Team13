@@ -45,7 +45,8 @@ function findProducts(shopId, keyword, pageNumber, pageSize) {
     const acctualEndpoint = productEndpoint + (shopId ? `/shop/${shopId}/` : '/') + 'search';
     const params = {
         pageNumber: pageNumber,
-        pageSize: pageSize || 5
+        pageSize: pageSize || 5,
+        includeFilter: false
     };
     if (keyword)
         params.keyword = keyword;

@@ -127,9 +127,12 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<int>.Success(newQuantity);
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo paginationInfo, bool includeFilter)
         {
-            var result = await _dbContext.ShopProducts
+            IQueryable<ShopProduct> source = _dbContext.ShopProducts;
+            if (!includeFilter)
+                source = source.IgnoreQueryFilters();
+            var result = await source
                 .AsNoTracking()
                 .Where(product => product.ShopId == shopId)
                 .Select(product => _mapper.MapToProductDTO(product))
@@ -137,9 +140,12 @@ namespace DatabaseAccessor.Repositories
             return result;
         }
 
-        public async Task<PaginatedList<ProductDTO>> FindProductsOfShopAsync(int shopId, string keyword, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> FindProductsOfShopAsync(int shopId, string keyword, PaginationInfo paginationInfo, bool includeFilter)
         {
-            var result = await _dbContext.ShopProducts
+            IQueryable<ShopProduct> source = _dbContext.ShopProducts;
+            if (!includeFilter)
+                source = source.IgnoreQueryFilters();
+            var result = await source
                 .AsNoTracking()
                 .Where(product => product.ShopId == shopId)
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
@@ -151,7 +157,7 @@ namespace DatabaseAccessor.Repositories
 
         private async Task<ShopProduct> FindProductByIdAsync(Guid id)
         {
-            return await _dbContext.ShopProducts.FindAsync(id);
+            return await _dbContext.ShopProducts.IgnoreQueryFilters().Where(product => product.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<CommandResponse<List<ProductDTO>>> GetRelatedProductsAsync(Guid productId)

@@ -113,7 +113,7 @@ $(document).ready(function () {
                 })
                 .catch(error => toastr.error(error));
         });
-    }, 2000));
+    }, 200));
 
     $('.remove-col > button.btn-remove').click(function () {
         let mostParentElement = $(this).parent().parent();

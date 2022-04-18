@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Product
 {
-    public class FindProductsByShopIdHandler
+    public class FindProductsByShopIdQueryHandler
         : IRequestHandler<FindProductsByShopIdQuery, PaginatedList<ProductDTO>>, IDisposable
     {
         private readonly IProductRepository _productRepository;
 
-        public FindProductsByShopIdHandler(IProductRepository productRepository)
+        public FindProductsByShopIdQueryHandler(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
@@ -22,7 +22,7 @@ namespace ShopProductService.Handlers.Product
         public async Task<PaginatedList<ProductDTO>> Handle(FindProductsByShopIdQuery request,
             CancellationToken cancellationToken)
         {
-            return await _productRepository.GetAllProductsOfShopAsync(request.ShopId, request.PaginationInfo);
+            return await _productRepository.GetAllProductsOfShopAsync(request.ShopId, request.PaginationInfo, request.IncludeFilter);
         }
 
         public void Dispose()

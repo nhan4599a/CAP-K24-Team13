@@ -24,9 +24,9 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<CommandResponse<ProductDTO>> EditProductAsync(Guid productId, EditProductRequestModel requestModel);
 
-        Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo pagination);
+        Task<PaginatedList<ProductDTO>> GetAllProductsOfShopAsync(int shopId, PaginationInfo pagination, bool includeFilter);
 
-        Task<PaginatedList<ProductDTO>> FindProductsOfShopAsync(int shopId, string keyword, PaginationInfo paginationInfo);
+        Task<PaginatedList<ProductDTO>> FindProductsOfShopAsync(int shopId, string keyword, PaginationInfo paginationInfo, bool includeFilter);
 
         Task<CommandResponse<List<ProductDTO>>> GetRelatedProductsAsync(Guid productId);
 

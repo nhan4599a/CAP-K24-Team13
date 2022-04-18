@@ -3,6 +3,7 @@ using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DTOs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,29 +27,46 @@ namespace GUI.Areas.User.Controllers
         public async Task<IActionResult> Index(int id)
         {
             var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(id);
-            var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id, 4);
             var shopResponseTask = _shopClient.GetShop(id);
             var bestSellerProductsResponse = await bestSellerProductsResponseTask;
-            var shopCategoriesResponse = await shopCategoriesResponseTask;
-            if (!bestSellerProductsResponse.IsSuccessStatusCode || !shopCategoriesResponse.IsSuccessStatusCode)
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            var productsResponse = await _productClient.GetProductsOfCategory(shopCategoriesResponse.Content.Data.Select(e => e.CategoryId).ToArray(), 1, 0);
-            if (!productsResponse.IsSuccessStatusCode)
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            var productsOfCategory = productsResponse.Content.Data.Data
-                .GroupBy(e => e.CategoryName)
-                .ToDictionary(e => shopCategoriesResponse.Content.Data.Data.First(item => item.CategoryName == e.Key).CategoryId,
-                    e => e.Take(5).ToList());
             var shopResponse = await shopResponseTask;
-            if (!shopResponse.IsSuccessStatusCode)
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            return View(new ShopDetailViewModel
+            if (bestSellerProductsResponse.IsSuccessStatusCode && shopResponse.IsSuccessStatusCode)
             {
-                Categories = shopCategoriesResponse.Content.Data.ToList(),
-                Shop = shopResponse.Content.ResultObj,
-                BestSeller = bestSellerProductsResponse.Content.Data,
-                Products = productsOfCategory
-            });
+                if (bestSellerProductsResponse.Content.Data.Any())
+                {
+                    var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id, 4);
+                    var shopCategoriesResponse = await shopCategoriesResponseTask;
+                    var productsResponse = await _productClient.GetProductsOfCategory(
+                        shopCategoriesResponse.Content.Data.Select(e => e.CategoryId).ToArray(), 1, 0
+                    );
+                    var productsOfCategory = productsResponse.Content.Data.Data
+                        .GroupBy(e => e.CategoryName)
+                        .ToDictionary(
+                            e => shopCategoriesResponse.Content.Data.Data.First(item => item.CategoryName == e.Key).CategoryId,
+                            e => e.Take(5).ToList());
+                    return View(new ShopDetailViewModel
+                    {
+                        BestSeller = bestSellerProductsResponse.Content.Data,
+                        Products = productsOfCategory,
+                        Categories = shopCategoriesResponse.Content.Data.ToList(),
+                        Shop = shopResponse.Content.ResultObj
+                    });
+                }
+                else
+                {
+                    return View(new ShopDetailViewModel
+                    {
+                        Categories = new List<CategoryDTO>(),
+                        BestSeller = new List<MinimalProductDTO>(),
+                        Products = new Dictionary<int, List<ProductDTO>>(),
+                        Shop = shopResponse.Content.ResultObj
+                    });
+                }    
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         public async Task<IActionResult> Categories(int id, [FromQuery(Name = "cat")] List<int> categoryId, int pageNumber = 1)
