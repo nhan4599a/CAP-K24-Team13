@@ -21,8 +21,10 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo)
         {
             return await _dbContext.Categories
-                .FromSqlRaw("SELECT CategoryId, Category as CategoryName, COUNT(*) as ProductCount FROM dbo.ShopProducts " +
-                    "WHERE ShopId = @ShopId GROUP BY ShopId, CategoryId, Category", new SqlParameter("@ShopId", shopId))
+                .FromSqlRaw("SELECT CategoryId, Category as CategoryName, " +
+                    "COUNT(IIF(IsVisible = 1 AND IsDisabled = 0, 1, NULL)) as ProductCount FROM dbo.ShopProducts " +
+                    "WHERE ShopId = @ShopId " +
+                    "GROUP BY ShopId, CategoryId, Category", new SqlParameter("@ShopId", shopId))
                 .AsNoTracking()
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }

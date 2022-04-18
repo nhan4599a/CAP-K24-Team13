@@ -5162,7 +5162,8 @@ p {
 
 .header-14 .header-dropdown {
 	padding-top: .8rem;
-	padding-bottom: .8rem
+	padding-bottom: .8rem;
+	padding-right: .8rem
 }
 
 .header-14 .header-dropdown+.header-dropdown {
@@ -5199,7 +5200,7 @@ p {
 }
 
 .header-14 .top-menu .menus>li+li {
-	margin-left: 4rem
+	margin-right: 4rem
 }
 
 .header-14 .top-menu li+li {

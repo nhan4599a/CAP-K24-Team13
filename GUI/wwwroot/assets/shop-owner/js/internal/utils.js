@@ -196,12 +196,12 @@ function buildProductTableRowHtml(product, index) {
                     <span class="text-secondary text-xs font-weight-bold">${formatPrice(product.price)}đ</span>
                 </td>
                 <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm bg-gradient-${!product.isAvailable ? 'success' : 'secondary'}">
-                        ${!product.isAvailable ? 'Activated' : 'Deactivated'}
+                    <span class="badge badge-sm bg-gradient-${product.isAvailable ? 'success' : 'secondary'}">
+                        ${product.isAvailable ? 'Activated' : 'Deactivated'}
                     </span>
                 </td>
                 <td class="align-middle">
-                    ${buildProductActionButtonHtml(product.isDisabled)}
+                    ${buildProductActionButtonHtml(product.isAvailable)}
                 </td>
             </tr>`;
 }
@@ -287,8 +287,8 @@ function formatDateTime(dateStr) {
     return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
 }
 
-function buildProductActionButtonHtml(isDisabled) {
-    if (!isDisabled)
+function buildProductActionButtonHtml(isAvailable) {
+    if (isAvailable)
         return `
                 ${buildEditButtonHtml()}
                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"

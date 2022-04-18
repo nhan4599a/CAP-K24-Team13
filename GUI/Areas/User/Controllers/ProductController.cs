@@ -18,7 +18,8 @@ namespace GUI.Areas.User.Controllers
         public async Task<IActionResult>Index(string id)
         {
         	var productResponse = await _productClient.GetProductAsync(id);
-        	if (!productResponse.IsSuccessStatusCode || productResponse.Content.ResponseCode != StatusCodes.Status200OK)
+        	if (!productResponse.IsSuccessStatusCode || productResponse.Content.ResponseCode != StatusCodes.Status200OK
+                    || !productResponse.Content.Data.IsAvailable)
 			    return new StatusCodeResult(StatusCodes.Status404NotFound);
 		    return View(productResponse.Content.Data);
 	    }
