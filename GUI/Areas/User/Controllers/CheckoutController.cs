@@ -33,7 +33,7 @@ namespace GUI.Areas.User.Controllers
                 var productResponse = await _productClient.GetProductInfoInCheckout(token, model.ProductId);
                 if (!productResponse.IsSuccessStatusCode || productResponse.Content.ResponseCode != 200)
                     return StatusCode(StatusCodes.Status500InternalServerError);
-                if (model.Quantity > productResponse.Content.Data.Quantity)
+                if (model.Quantity > productResponse.Content.Data.Quantity || !productResponse.Content.Data.IsAvailable)
                 {
                     productsError.Add(productResponse.Content.Data.ProductName);
                 }

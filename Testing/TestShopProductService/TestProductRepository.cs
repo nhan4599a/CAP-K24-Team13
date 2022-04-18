@@ -192,7 +192,7 @@ namespace TestShopProductService
 
             var afterProduct = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
-            Assert.True(afterProduct.IsDisabled);
+            Assert.True(afterProduct.IsAvailable);
         }
 
         [TestCasePriority(7)]
@@ -215,7 +215,7 @@ namespace TestShopProductService
 
             var afterProduct = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
-            Assert.False(afterProduct.IsDisabled);
+            Assert.False(afterProduct.IsAvailable);
         }
 
         [TestCasePriority(8)]
@@ -265,7 +265,7 @@ namespace TestShopProductService
 
             var afterProduct = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
-            Assert.Equal(product.IsDisabled, afterProduct.IsDisabled);
+            Assert.Equal(product.IsAvailable, afterProduct.IsAvailable);
         }
 
         [TestCasePriority(11)]
@@ -289,7 +289,7 @@ namespace TestShopProductService
 
             var afterProduct = (await _repository.GetAllProductAsync(paginationInfo)).Data[0];
 
-            Assert.Equal(product.IsDisabled, afterProduct.IsDisabled);
+            Assert.Equal(product.IsAvailable, afterProduct.IsAvailable);
         }
 
         [TestCasePriority(12)]

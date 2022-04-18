@@ -196,8 +196,8 @@ function buildProductTableRowHtml(product, index) {
                     <span class="text-secondary text-xs font-weight-bold">${formatPrice(product.price)}đ</span>
                 </td>
                 <td class="align-middle text-center text-sm">
-                    <span class="badge badge-sm bg-gradient-${!product.isDisabled ? 'success' : 'secondary'}">
-                        ${!product.isDisabled ? 'Activated' : 'Deactivated'}
+                    <span class="badge badge-sm bg-gradient-${!product.isAvailable ? 'success' : 'secondary'}">
+                        ${!product.isAvailable ? 'Activated' : 'Deactivated'}
                     </span>
                 </td>
                 <td class="align-middle">

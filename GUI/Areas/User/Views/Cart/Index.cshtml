@@ -39,30 +39,58 @@
                             <tbody>
                                 @foreach (var item in Model.Items)
                                 {
-                                    <tr data-product="@item.ProductId" @(item.IsAvailable ? "style=\"opacity: 0.3\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Unavailable\"" : "")>
-                                        <td class="product-col">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="margin-top: 20px;">
-                                            <div class="product" style="margin-left: 10px;">
-                                                <figure class="product-media">
-                                                    <a href="/product/index/@item.ProductId">
-                                                        <img src="@Url.ProductImageUrl(item.Image)" alt="Product image">
-                                                    </a>
-                                                </figure>
+                                    @if (item.IsAvailable)
+                                    {
+                                        <tr data-product="@item.ProductId">
+                                            <td class="product-col">
+                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="margin-top: 20px;">
+                                                <div class="product" style="margin-left: 10px;">
+                                                    <figure class="product-media">
+                                                        <a href="/product/index/@item.ProductId">
+                                                            <img src="@Url.ProductImageUrl(item.Image)" alt="Product image">
+                                                        </a>
+                                                    </figure>
 
-                                                <h3 class="product-title">
-                                                    <a href="/product/index/@item.ProductId">@item.ProductName</a>
-                                                </h3><!-- End .product-title -->
-                                            </div><!-- End .product -->
-                                        </td>
-                                        <td class="price-col">@((item.Price * (1 - (item.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</td>
-                                        <td class="quantity-col">
-                                            <div class="cart-product-quantity">
-                                                <input type="number" class="form-control" value="@item.Quantity" min="1" step="1" data-decimals="0" required>
-                                            </div><!-- End .cart-product-quantity -->
-                                        </td>
-                                        <td class="total-col">@(((item.Price * (1 - (item.Discount / 100.0))) * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
-                                        <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-                                    </tr>
+                                                    <h3 class="product-title">
+                                                        <a href="/product/index/@item.ProductId">@item.ProductName</a>
+                                                    </h3><!-- End .product-title -->
+                                                </div><!-- End .product -->
+                                            </td>0
+                                            <td class="price-col">@((item.Price * (1 - (item.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</td>
+                                            <td class="quantity-col">
+                                                <div class="cart-product-quantity">
+                                                    <input type="number" class="form-control" value="@item.Quantity" min="1" step="1" data-decimals="0" required>
+                                                </div><!-- End .cart-product-quantity -->
+                                            </td>
+                                            <td class="total-col">@(((item.Price * (1 - (item.Discount / 100.0))) * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
+                                            <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr style="opacity: 0.3" data-toggle="tooltip" data-placement="top" title="Unavailable">
+                                            <td class="product-col">
+                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="margin-top: 20px;" disabled>
+                                                <div class="product" style="margin-left: 10px;">
+                                                    <figure class="product-media">
+                                                        <img src="@Url.ProductImageUrl(item.Image)" alt="Product image">
+                                                    </figure>
+
+                                                    <h3 class="product-title">
+                                                        @item.ProductName
+                                                    </h3><!-- End .product-title -->
+                                                </div><!-- End .product -->
+                                            </td>
+                                            <td class="price-col">@((item.Price * (1 - (item.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</td>
+                                            <td class="quantity-col">
+                                                <div class="cart-product-quantity">
+                                                    <input type="number" class="form-control" value="@item.Quantity" min="1" step="1" data-decimals="0" disabled>
+                                                </div><!-- End .cart-product-quantity -->
+                                            </td>
+                                            <td class="total-col">@(((item.Price * (1 - (item.Discount / 100.0))) * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))</td>
+                                            <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                                        </tr>
+                                    }
                                 }
                             </tbody>
                         </table><!-- End .table table-wishlist -->

@@ -6,6 +6,6 @@
 
         public string CategoryName { get; set; }
 
-        public bool IsDisabled { get; set; }
+        public bool IsAvailable { get; set; }
     }
 }
