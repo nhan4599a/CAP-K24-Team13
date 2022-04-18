@@ -94,6 +94,7 @@ namespace DatabaseAccessor.Repositories
         public async Task<List<CartItemDTO>> GetCartAsync(Guid userId)
         {
             return await _dbContext.CartDetails.AsNoTracking()
+                .Include(e => e.Product)
                 .IgnoreQueryFilters()
                 .Where(item => item.Cart.UserId == userId)
                 .Select(item => _mapper.MapToCartItemDTO(item))
