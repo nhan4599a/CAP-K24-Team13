@@ -187,9 +187,12 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(List<int> categoryIds, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int? shopId, List<int> categoryIds, PaginationInfo paginationInfo)
         {
-            return await _dbContext.ShopProducts
+            IQueryable<ShopProduct> source = _dbContext.ShopProducts;
+            if (shopId.HasValue)
+                source = source.Where(product => product.ShopId == shopId);
+            return await source
                 .AsNoTracking()
                 .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId))
                 .Select(product => _mapper.MapToProductDTO(product))

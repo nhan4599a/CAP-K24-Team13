@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Product
 {
-    public class GetProductsByCategoryIdQueryHandler
-        : IRequestHandler<GetProductsByCategoryIdQuery, PaginatedList<ProductDTO>>, IDisposable
+    public class GetProductsOfShopInCategoryQueryHandler
+        : IRequestHandler<GetProductsOfShopInCategoryQuery, PaginatedList<ProductDTO>>, IDisposable
     {
         private readonly IProductRepository _repository;
 
-        public GetProductsByCategoryIdQueryHandler(IProductRepository repository)
+        public GetProductsOfShopInCategoryQueryHandler(IProductRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<PaginatedList<ProductDTO>> Handle(GetProductsByCategoryIdQuery request, CancellationToken cancellationToken)
+        public Task<PaginatedList<ProductDTO>> Handle(GetProductsOfShopInCategoryQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.GetProductsOfCategoryAsync(null, request.CategoryIds, request.PaginationInfo);
+            return _repository.GetProductsOfCategoryAsync(request.ShopId, request.CategoryIds, request.PaginationInfo);
         }
 
         public void Dispose()

@@ -221,6 +221,22 @@ namespace ShopProductService.Controllers
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
         }
 
+        [HttpGet("shop/{shopId}/category")]
+        public async Task<ApiResult> GetProductsOfShopInCategory(int shopId, [FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel pagination)
+        {
+            var productsOfCategoryResult = await _mediator.Send(new GetProductsOfShopInCategoryQuery
+            {
+                ShopId = shopId,
+                CategoryIds = categoryIds,
+                PaginationInfo = new PaginationInfo
+                {
+                    PageNumber = pagination.PageNumber,
+                    PageSize = pagination.PageSize
+                }
+            });
+            return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
+        }
+
         [HttpGet("sales")]
         public async Task<ApiResult> GetTopMostSaleOffProducts()
         {
