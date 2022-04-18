@@ -20,7 +20,8 @@ namespace ShopProductService.Handlers.Cart
 
         public async Task<List<CartItemDTO>> Handle(GetCartItemsQuery request, CancellationToken cancellationToken)
         {
-            return await _cartRepository.GetCartAsync(request.UserId);
+            var canParse = Guid.TryParse(request.UserId, out Guid parsedResult);
+            return await _cartRepository.GetCartAsync(parsedResult);
         }
 
         public void Dispose()

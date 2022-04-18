@@ -15,6 +15,6 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<CommandResponse<bool>> RemoveCartItemAsync(RemoveCartItemRequestModel requestModel);
         
-        Task<List<CartItemDTO>> GetCartAsync(string userId);
+        Task<List<CartItemDTO>> GetCartAsync(Guid userId);
     }
 }

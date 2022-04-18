@@ -91,12 +91,13 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
-        public async Task<List<CartItemDTO>> GetCartAsync(string userId)
+        public async Task<List<CartItemDTO>> GetCartAsync(Guid userId)
         {
-            var cart = await _dbContext.Carts.IgnoreQueryFilters().FirstOrDefaultAsync(cart => cart.UserId.ToString() == userId);
-            if (cart == null)
-                return new List<CartItemDTO>();
-            return cart.Details.Select(item => _mapper.MapToCartItemDTO(item)).ToList();
+            return await _dbContext.CartDetails.AsNoTracking()
+                .IgnoreQueryFilters()
+                .Where(item => item.Cart.UserId == userId)
+                .Select(item => _mapper.MapToCartItemDTO(item))
+                .ToListAsync();
         }
 
         public void Dispose()
