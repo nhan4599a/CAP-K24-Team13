@@ -1,5 +1,4 @@
-﻿using Shared.Models;
-using System;
+﻿using System;
 
 namespace Shared.DTOs
 {

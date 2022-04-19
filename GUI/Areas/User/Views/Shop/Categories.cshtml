@@ -175,9 +175,13 @@
         let url = new URL(window.location.href);
         let queryObj = url.searchParams;
         let parsedQueryObj = groupParamsByKey(queryObj);
+        let categories = 
+            Array.isArray(parsedQueryObj.cat)
+                ? parsedQueryObj.cat 
+                : [parsedQueryObj.cat];
         return {
             pageNumber: parsedQueryObj.pageNumber || 1,
-            categories: parsedQueryObj.cat || []
+            categories: categories || []
         };
     }
 

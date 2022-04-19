@@ -181,7 +181,7 @@
                                      }
                                  }
                             }'>
-                            @foreach (var category in Model.Categories)
+                            @foreach (var category in Model.Categories.Skip(1))
                             {
                                 <div class="product text-center">
                                     <div class="product-body">
@@ -210,7 +210,7 @@
                                 @for (var i = 0; i < Model.Categories.Count; i++)
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link" id="category-@Model.Categories[i].CategoryId" data-toggle="tab"
+                                        <a class="nav-link @(i == 0 ? "active" : "")" id="category-@Model.Categories[i].CategoryId" data-toggle="tab"
                                        href="#category-@Model.Categories[i].CategoryId-tab" role="tab" aria-controls="category-@Model.Categories[i].CategoryId-tab"
                                        aria-selected="@(i == 0 ? "true" : "false")">@Model.Categories[i].CategoryName</a>
                                     </li>

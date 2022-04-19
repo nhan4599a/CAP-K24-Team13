@@ -10,5 +10,7 @@ namespace GUI.Areas.User.ViewModels
         public List<MinimalProductDTO> BestSellerProducts { get; set; }
 
         public List<MinimalProductDTO> TopMostSaleOffProducts { get; set; }
+
+        public Dictionary<string, List<ProductDTO>> Products { get; set; }
     }
 }

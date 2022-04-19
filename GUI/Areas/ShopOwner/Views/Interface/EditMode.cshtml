@@ -350,6 +350,8 @@
         $(document).ready(function () {
             const acceptedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
             const acceptedMaxBytes = 4 * 1024 * 1024;
+            let edittingShopInterface = {};
+            let edittingShopInformation = {};
             let remainingBytes = acceptedMaxBytes;
             let imageDropzone = new Dropzone('div#image-section', {
                 maxFilesize: 1,
@@ -374,8 +376,8 @@
                 myFiles: []
             });
             if (localStorage.getItem('shop-interface.edit-mode') == 'edit') {
-                let edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting.interface'));
-                let edittingShopInformation = JSON.parse(localStorage.getItem('shop-interface.editting.information'));
+                edittingShopInterface = JSON.parse(localStorage.getItem('shop-interface.editting.interface'));
+                edittingShopInformation = JSON.parse(localStorage.getItem('shop-interface.editting.information'));
                 if (edittingShopInterface)
                     loadEdittingShopInterface(edittingShopInterface, imageDropzone, avatarDropzone);
                 if (edittingShopInformation)
@@ -473,9 +475,9 @@
                                 .then(successCallback).catch(errorCallback);
                         });
                 } else {
-                    formData.append('requestModel.avatar', edittingShopInterface.avatar);
-                    for (let i = 0; i < edittingShopInterface.images.length; i++)
-                        formData.append(`requestModel.shopImages[${i}]`, edittingShopInterface.images[i]);
+                    formData.append('requestModel.avatar', edittingShopInformation.avatar);
+                    for (let i = 0; i < edittingShopInformation.images.length; i++)
+                        formData.append(`requestModel.shopImages[${i}]`, edittingShopInformation.images[i]);
                     getShopId()
                         .then(shopId => {
                             editShopInterface(shopId, formData)
@@ -486,7 +488,6 @@
         });
 
         function loadEdittingShopInterface(shopInterface, imagesDropzone, avatarDropzone) {
-            console.log(shopInterface);
             shopInterface.images.forEach(imageUrl => getShopInterfaceImage(imageUrl).then(blob => {
                 let file = new File([blob], blob.name, { type: blob.type });
                 imagesDropzone.addFile(file);

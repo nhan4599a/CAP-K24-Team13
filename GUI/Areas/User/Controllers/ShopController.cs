@@ -41,16 +41,29 @@ namespace GUI.Areas.User.Controllers
                     var productsResponse = await _productClient.GetProductsOfShopInCategory(
                         id.Value, shopCategoriesResponse.Content.Data.Select(e => e.CategoryId).ToArray(), 1, 0
                     );
+                    var categories = shopCategoriesResponse.Content.Data.ToList();
+                    categories.Insert(0, new CategoryDTO
+                    {
+                        CategoryId = int.MinValue,
+                        CategoryName = "All",
+                        ProductCount = productsResponse.Content.Data.ToList().Take(20).Count()
+                    });
                     var productsOfCategory = productsResponse.Content.Data.Data
                         .GroupBy(e => e.CategoryName)
                         .ToDictionary(
                             e => shopCategoriesResponse.Content.Data.Data.First(item => item.CategoryName == e.Key).CategoryId,
                             e => e.Take(5).ToList());
+                    foreach (var category in shopCategoriesResponse.Content.Data.Data)
+                    {
+                        if (!productsOfCategory.ContainsKey(category.CategoryId))
+                            productsOfCategory.Add(category.CategoryId, new List<ProductDTO>());
+                    }
+                    productsOfCategory.Add(int.MinValue, productsResponse.Content.Data.ToList().Take(20).ToList());
                     return View(new ShopDetailViewModel
                     {
                         BestSeller = bestSellerProductsResponse.Content.Data,
                         Products = productsOfCategory,
-                        Categories = shopCategoriesResponse.Content.Data.ToList(),
+                        Categories = categories,
                         Shop = shopResponse.Content.ResultObj
                     });
                 }

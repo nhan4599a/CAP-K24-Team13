@@ -3,7 +3,8 @@ using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Extensions;
+using Shared.DTOs;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +15,53 @@ namespace GUI.Areas.User.Controllers
         private readonly IProductClient _productClient;
         private readonly IExternalShopClient _shopClient;
         private readonly ICategoryClient _categoryClient;
+
+        private readonly string[] HomePageCategoriesName =
+        {
+            "Fashion", "Electronics", "Furniture", "Book & Magazine"
+        };
+
+        private readonly int[][] HomePageCategoriesId =
+        {
+            new int[]
+            {
+                1, 2, 5, 7, 8, 11, 12, 13, 18
+            },
+            new int[]
+            {
+                6, 9, 13, 14, 19, 20, 28
+            },
+            new int[]
+            {
+                21
+            },
+            new int[]
+            {
+                27
+            }
+        };
+
+        private readonly string[][] HomePageChildCategoriesName =
+        {
+            new string[]
+            {
+                "Women Fashion", "Men Fashion", "Fashion Accessories", "Men's Shoes", "Women's Shoes", "Women's bag",
+                "Men's bag", "Watches", "Baby fashion"
+            },
+            new string[]
+            {
+                "Electrics", "Phone & accessories", "Watches", "Speaker Devices", "Gaming & Console", "Camera & Flycam",
+                "Computer & Laptop"
+            },
+            new string[]
+            {
+                "House & Life"
+            },
+            new string[]
+            {
+                "Book & Magazine"
+            }
+        };
 
         public HomeController(IProductClient productClient, IShopClient shopClient, ICategoryClient categoryClient)
         {
@@ -33,12 +81,25 @@ namespace GUI.Areas.User.Controllers
             if (!bestSellerProductsResponse.IsSuccessStatusCode || !shopsResponse.IsSuccessStatusCode
                     || !topMostSaleOffProductsResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
-
+            var productsResponse = await 
+                _productClient.GetProductsInCategory(HomePageCategoriesId.SelectMany(i => i).Distinct().ToArray(), 1, 0);
+            if (!productsResponse.IsSuccessStatusCode)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            var productsInCategories = new Dictionary<string, List<ProductDTO>>();
+            for (int i = 0; i < HomePageCategoriesId.Length; i++)
+            {
+                productsInCategories.Add(
+                    HomePageCategoriesName[i],
+                    productsResponse.Content.Data.Data
+                        .Where(e => HomePageChildCategoriesName[i].Contains(e.CategoryName)).Take(5).ToList()
+                );
+            }
             return View(new HomePageViewModel
             {
                 Shops = shopsResponse.Content.Select(shop => (shop.Id, shop.ShopName)).ToList(),
                 BestSellerProducts = bestSellerProductsResponse.Content.Data,
-                TopMostSaleOffProducts = topMostSaleOffProductsResponse.Content.Data
+                TopMostSaleOffProducts = topMostSaleOffProductsResponse.Content.Data,
+                Products = productsInCategories
             });
         }
 
