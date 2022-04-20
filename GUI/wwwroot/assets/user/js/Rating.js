@@ -5,8 +5,7 @@
             backdrop: 'static',
             keyboard: false
         }).modal('show');
-        console.log(productId);
-        modal.find('.btn.btn-primary').click(function () {
+        modal.find('.btn.btn-primary').off('click').click(function () {
             let star = $('input[name=rating]:checked').val();
             let comment = $('#comment').val();
             let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/user/checking-out.json');
@@ -17,7 +16,7 @@
                     .then(() => {
                         animationLoader.hideAnimation();
                         toastr.success('Rating success');
-                        window.location.href = `/product/index/${productId}`;
+                        //window.location.href = `/product/index/${productId}`;
                     })
                     .catch(error => {
                         animationLoader.hideAnimation();

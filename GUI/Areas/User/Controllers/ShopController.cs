@@ -90,7 +90,8 @@ namespace GUI.Areas.User.Controllers
                 return StatusCode(StatusCodes.Status404NotFound);
             var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id.Value, 0);
             var shopResponseTask = _shopClient.GetShop(id.Value);
-            var productsResponseTask = _productClient.GetProductsOfShopInCategory(id.Value, categoryId.ToArray(), keyword, pageNumber, 20);
+            var productsResponseTask = 
+                _productClient.GetProductsOfShopInCategory(id.Value, categoryId.ToArray(), keyword, pageNumber, 20);
             var shopCategoriesResponse = await shopCategoriesResponseTask;
             var productsResponse = await productsResponseTask;
             if (!shopCategoriesResponse.IsSuccessStatusCode

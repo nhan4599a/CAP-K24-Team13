@@ -85,7 +85,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "ProductService",
       "UpstreamPathTemplate": "/categories/",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
