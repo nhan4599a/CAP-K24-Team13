@@ -41,7 +41,7 @@ namespace DatabaseAccessor.Repositories
                 .AsSplitQuery()
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
                         || EF.Functions.Like(product.Category, $"%{keyword}%"))
-                .Reverse()
+                .OrderByDescending(product => product.CreatedDate)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -51,7 +51,7 @@ namespace DatabaseAccessor.Repositories
             return await _dbContext.ShopProducts.AsNoTracking()
                 .Include(e => e.Comments)
                 .AsSplitQuery()
-                .Reverse()
+                .OrderByDescending(product => product.CreatedDate)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -136,7 +136,7 @@ namespace DatabaseAccessor.Repositories
                 .Include(e => e.Comments)
                 .AsSplitQuery()
                 .Where(product => product.ShopId == shopId)
-                .Reverse()
+                .OrderByDescending(product => product.CreatedDate)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return result;
@@ -151,10 +151,10 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.Comments)
                 .AsSplitQuery()
-                .Reverse()
                 .Where(product => product.ShopId == shopId)
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
                         || EF.Functions.Like(product.Category, $"%{keyword}%"))
+                .OrderByDescending(product => product.CreatedDate)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return result;
@@ -180,6 +180,7 @@ namespace DatabaseAccessor.Repositories
                 .Where(product => product.ShopId == sourceProduct.ShopId
                     && product.Category == sourceProduct.Category && product.Id != sourceProduct.Id)
                 .OrderByDescending(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
+                .ThenByDescending(product => product.CreatedDate)
                 .ThenByDescending(product => product.Price)
                 .Take(4).Select(product => _mapper.MapToProductDTO(product))
                 .ToListAsync();
@@ -192,6 +193,7 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Where(product => !shopId.HasValue || product.ShopId == shopId.Value)
                 .OrderByDescending(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
+                .ThenByDescending(product => product.CreatedDate)
                 .Take(5)
                 .Select(product => _mapper.MapToMinimalProductDTO(product))
                 .ToListAsync();
@@ -207,6 +209,7 @@ namespace DatabaseAccessor.Repositories
                 .Include(e => e.Comments)
                 .AsSplitQuery()
                 .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId))
+                .OrderByDescending(product => product.CreatedDate)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
