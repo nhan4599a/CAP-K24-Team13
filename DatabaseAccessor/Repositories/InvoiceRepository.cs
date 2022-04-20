@@ -31,7 +31,9 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.Invoice)
                 .Include(e => e.Product)
-                .Where(item => item.Invoice.UserId.ToString() == userId).ToListAsync();
+                .Where(item => item.Invoice.UserId.ToString() == userId)
+                .OrderByDescending(e => e.Invoice.CreatedAt)
+                .ToListAsync();
             return invoices.Select(item => _mapper.MapToOrderItemDTO(item)).ToList();
         }
 

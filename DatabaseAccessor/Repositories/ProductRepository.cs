@@ -41,6 +41,7 @@ namespace DatabaseAccessor.Repositories
                 .AsSplitQuery()
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
                         || EF.Functions.Like(product.Category, $"%{keyword}%"))
+                .Reverse()
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -50,14 +51,8 @@ namespace DatabaseAccessor.Repositories
             return await _dbContext.ShopProducts.AsNoTracking()
                 .Include(e => e.Comments)
                 .AsSplitQuery()
+                .Reverse()
                 .Select(product => _mapper.MapToProductDTO(product))
-                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
-        }
-
-        public async Task<PaginatedList<MinimalProductDTO>> GetAllProductMinimalAsync(PaginationInfo paginationInfo)
-        {
-            return await _dbContext.ShopProducts.AsNoTracking()
-                .Select(product => _mapper.MapToMinimalProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
@@ -141,6 +136,7 @@ namespace DatabaseAccessor.Repositories
                 .Include(e => e.Comments)
                 .AsSplitQuery()
                 .Where(product => product.ShopId == shopId)
+                .Reverse()
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
             return result;
@@ -155,6 +151,7 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.Comments)
                 .AsSplitQuery()
+                .Reverse()
                 .Where(product => product.ShopId == shopId)
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
                         || EF.Functions.Like(product.Category, $"%{keyword}%"))
