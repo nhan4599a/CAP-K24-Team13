@@ -30,6 +30,11 @@
                     }
                     $.getScript('/assets/shop-owner/js/internal/kanban.js')
                         .then(() => {
+                            $('.board-item-content > button').mouseup(function (e) {
+                                e.stopPropagation();
+                                let invoiceCode = $(this).parent().find('h4').text().substring(1);
+                                window.open(`https://cap-k24-team13.herokuapp.com/invoice/detail/${invoiceCode}`, '_blank');
+                            });
                             animationLoader.hideAnimation();
                         });
                 })

@@ -165,9 +165,11 @@
                     $(element).attr('checked', true);
                 }
             });
+
         $('#btn-filter').click(() => {
             moveToPage(1);
         });
+
         $('.page-link').click(function (e) {
             e.preventDefault();
             let currentPageNumber = getCurrentPageInfo().pageNumber;
@@ -178,6 +180,13 @@
             } else {
                 let selectedPageNumber = $(this).html();
                 moveToPage(selectedPageNumber);
+            }
+        });
+
+        $('#input-search-product').keypress(function (e) {
+            if (e.which == 13) {
+                let keyword = $(this).val().trim();
+                search(keyword);
             }
         });
     });
@@ -192,24 +201,47 @@
                 : [parsedQueryObj.cat];
         return {
             pageNumber: parsedQueryObj.pageNumber || 1,
-            categories: categories || []
+            categories: categories || [],
+            keyword: parsedQueryObj.q || undefined
         };
     }
 
     function moveToPage(pageNumber) {
         let selectedCategoriesId = [];
+        let keyword = getCurrentPageInfo().keyword;
         $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]:checked').each((_, element) => {
             selectedCategoriesId.push($(element).data('category'));
         });
+        let destinationUrl = '/shop/categories/@Model.Shop.Id?';
+        if (keyword)
+            destinationUrl += `q=${keyword}&`;
         if (selectedCategoriesId.length == 0) {
-            location.href = `/shop/categories/@Model.Shop.Id?pageNumber=${pageNumber}`;
+            destinationUrl += `pageNumber=${pageNumber}`;
         } else {
-            let categoriesInUrl = `?cat=${selectedCategoriesId[0]}`;
-            if (selectedCategoriesId.length > 1)
+            destinationUrl += `cat=${selectedCategoriesId.shift()}`;
+            if (selectedCategoriesId.length >= 1)
                 for (var categoryId of selectedCategoriesId)
-                    categoriesInUrl += `&cat=${categoryId}`;
-            location.href = `/shop/categories/@Model.Shop.Id${categoriesInUrl}&pageNumber=${pageNumber}`;
+                    destinationUrl += `&cat=${categoryId}`;
+            destinationUrl += `&pageNumber=${pageNumber}`;
         }
+        location.href = destinationUrl;
+    }
+
+    function search(keyword) {
+        if (!keyword)
+            return;
+        let selectedCategoriesId = [];
+        $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]:checked').each((_, element) => {
+            selectedCategoriesId.push($(element).data('category'));
+        });
+        let destinationUrl = `/shop/categories/@Model.Shop.Id?q=${keyword}`;
+        if (selectedCategoriesId.length > 0) {
+            destinationUrl += `&cat=${selectedCategoriesId.shift()}`;
+            if (selectedCategoriesId.length >= 1)
+                for (var categoryId of selectedCategoriesId)
+                    destinationUrl += `&cat=${categoryId}`;
+        }
+        location.href = destinationUrl;
     }
 
     function groupParamsByKey(params) {

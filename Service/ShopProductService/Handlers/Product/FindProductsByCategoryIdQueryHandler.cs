@@ -21,7 +21,9 @@ namespace ShopProductService.Handlers.Product
 
         public async Task<PaginatedList<ProductDTO>> Handle(FindProductsByCategoryIdQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.GetProductsOfCategoryAsync(null, request.CategoryIds, request.PaginationInfo);
+            if (request.Keyword != null)
+                request.Keyword = request.Keyword.Trim();
+            return await _repository.GetProductsOfCategoryAsync(null, request.CategoryIds, request.Keyword, request.PaginationInfo);
         }
 
         public void Dispose()

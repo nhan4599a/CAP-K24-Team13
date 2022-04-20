@@ -199,15 +199,16 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int? shopId, List<int> categoryIds, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int? shopId, List<int> categoryIds, string keyword, PaginationInfo paginationInfo)
         {
-            IQueryable<ShopProduct> source = _dbContext.ShopProducts;
+            IQueryable<ShopProduct> source = _dbContext.ShopProducts.AsNoTracking()
+                .Include(e => e.Comments)
+                .AsSplitQuery();
             if (shopId.HasValue)
                 source = source.Where(product => product.ShopId == shopId);
+            if (!string.IsNullOrWhiteSpace(keyword))
+                source = source.Where(product => EF.Functions.Like(keyword, $"%{keyword}%"));
             return await source
-                .AsNoTracking()
-                .Include(e => e.Comments)
-                .AsSplitQuery()
                 .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId))
                 .OrderByDescending(product => product.CreatedDate)
                 .Select(product => _mapper.MapToProductDTO(product))

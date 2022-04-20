@@ -23,7 +23,6 @@ itemContainers.forEach(function (container) {
     })
         .on('dragInit', function (item) {
             item.getElement().style.width = item.getWidth() + 'px';
-            //item.getElement().style.height = item.getHeight() + 'px';
         })
         .on('dragReleaseEnd', function (item) {
             item.getGrid().refreshItems([item]);

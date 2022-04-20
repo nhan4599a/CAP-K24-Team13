@@ -111,7 +111,7 @@
                                     { 
                                         <div class="filter-item">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="cat-@category.CategoryId">
+                                                <input type="checkbox" class="custom-control-input" id="cat-@category.CategoryId" data-category="@category.CategoryId">
                                                 <label class="custom-control-label" for="cat-@category.CategoryId">
                                                     @category.CategoryName
                                                 </label>
@@ -131,3 +131,49 @@
         </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            let currentSelectedCategory = getCurrentPageInfo().categories;
+            $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]')
+                .each((_, element) => {
+                    let categoryId = $(element).data('category').toString();
+                    if (currentSelectedCategory.includes(categoryId)) {
+                        $(element).attr('checked', true);
+                    }
+                });
+        });
+
+        function getCurrentPageInfo() {
+            let url = new URL(window.location.href);
+            let queryObj = url.searchParams;
+            let parsedQueryObj = groupParamsByKey(queryObj);
+            let categories = 
+                Array.isArray(parsedQueryObj.cat)
+                    ? parsedQueryObj.cat 
+                    : [parsedQueryObj.cat];
+            return {
+                pageNumber: parsedQueryObj.pageNumber || 1,
+                categories: categories || []
+            };
+        }
+
+        function groupParamsByKey(params) {
+            return [...params.entries()]
+                .reduce((accumulator, tuple) => {
+                    const [key, value] = tuple;
+                    if (accumulator.hasOwnProperty(key)) {
+                        if (Array.isArray(accumulator[key])) {
+                            accumulator[key] = [...accumulator[key], value];
+                        } else {
+                            accumulator[key] = [accumulator[key], value];
+                        }
+                    } else {
+                        accumulator[key] = value;
+                    }
+                    return accumulator;
+                }, {});
+        }
+    </script>
+}
