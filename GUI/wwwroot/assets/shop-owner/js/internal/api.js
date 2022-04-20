@@ -4,6 +4,8 @@ axios.defaults.baseURL = 'http://ec2-18-139-226-54.ap-southeast-1.compute.amazon
 axios.interceptors.request.use(async config => {
     if (config.url.startsWith('/products', '/categories') && config.method == 'get')
         return Promise.resolve(config);
+    if (config.url.startsWith('https://emallsolution-backendapi.herokuapp.com'))
+        return Promise.resolve(config);
     if (!config.url.startsWith('https://cap-k24-team13.herokuapp.com/')) {
         let accessToken = await getAccessToken();
         config.headers.Authorization = `Bearer ${accessToken}`;
@@ -299,6 +301,10 @@ function authorizeUser(userId, admin) {
 
 function getShopInformation(shopId) {
     return axios.get(`https://cap-k24-team13.herokuapp.com/api/integrated/shop/${shopId}`);
+}
+
+function getShop(shopId) {
+    return axios.get(`https://emallsolution-backendapi.herokuapp.com/api/shops/${shopId}`);
 }
 
 function getAllCategories() {

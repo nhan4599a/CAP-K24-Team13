@@ -24,7 +24,7 @@
                                     <picture>
                                         <source media="(max-width: 480px)"
                                             srcset="@Url.ShopImageUrl(image)" />
-                                        <img src="@Url.ShopImageUrl(image)" alt="Image Desc">
+                                        <img src="@Url.ShopImageUrl(image)" alt="@Model.Shop.ShopName">
                                     </picture>
                                 </figure>
                             </div>
@@ -46,7 +46,7 @@
                 <div class="row">
                     <div class="col-md-1">
                         <div class="avatar avatar-xl position-relative">
-                            <img src="@Url.ShopImageUrl(Model.Shop.Avatar)" alt="" width="74" height="74">
+                            <img src="@Url.ShopImageUrl(Model.Shop.Avatar)" alt="@Model.Shop.ShopName" width="74" height="74">
                         </div>
                     </div>
                     <div class="col-md-5 vertical-align-center">
@@ -186,7 +186,7 @@
                                 <div class="product text-center">
                                     <div class="product-body">
                                         <h3 class="product-title">
-                                            <a href="#">
+                                            <a href="/shop/categories/@Model.Shop.Id?cat=@category.CategoryId">
                                                 @category.CategoryName
                                             </a>
                                         </h3>

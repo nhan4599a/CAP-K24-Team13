@@ -33,7 +33,10 @@
                                 <div class="col-6 col-md-4 col-lg-4 col-xl-3">
                                     <div class="product text-center">
                                         <figure class="product-media">
-                                            <span class="product-label label-new">New</span>
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="product-label label-sale">@(product.Discount)% Off</span>
+                                            }
                                             <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
@@ -64,7 +67,7 @@
                                             </div><!-- End .product-price -->
                                             <div class="ratings-container">
                                                 <div class="ratings">
-                                                    <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                                                    <div class="ratings-val" style="width: @(product.AverageStar * 20)%"></div><!-- End .ratings-val -->
                                                 </div><!-- End .ratings -->
                                             </div><!-- End .rating-container -->
                                         </div><!-- End .product-body -->

@@ -94,6 +94,8 @@ namespace GUI.Areas.User.Controllers
                         .Where(e => HomePageChildCategoriesName[i].Contains(e.CategoryName)).Take(5).ToList()
                 );
             }
+            productsInCategories.Add("All",
+                    productsResponse.Content.Data.Data.Take(20).ToList());
             return View(new HomePageViewModel
             {
                 Shops = shopsResponse.Content.Select(shop => (shop.Id, shop.ShopName)).ToList(),

@@ -26,17 +26,19 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<ProductWithCommentsDTO> GetProductAsync(Guid productId)
         {
-            return _mapper.MapToProductWithCommentsDTO(await FindProductByIdAsync(productId));
+            return _mapper.MapToProductWithCommentsDTO(await FindProductByIdAsync(productId, true));
         }
 
         public async Task<MinimalProductDTO> GetMinimalProductAsync(Guid productId)
         {
-            return _mapper.MapToMinimalProductDTO(await FindProductByIdAsync(productId));
+            return _mapper.MapToMinimalProductDTO(await FindProductByIdAsync(productId, false));
         }
 
         public async Task<PaginatedList<ProductDTO>> FindProductsAsync(string keyword, PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking()
+                .Include(e => e.Comments)
+                .AsSplitQuery()
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
                         || EF.Functions.Like(product.Category, $"%{keyword}%"))
                 .Select(product => _mapper.MapToProductDTO(product))
@@ -46,6 +48,8 @@ namespace DatabaseAccessor.Repositories
         public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(PaginationInfo paginationInfo)
         {
             return await _dbContext.ShopProducts.AsNoTracking()
+                .Include(e => e.Comments)
+                .AsSplitQuery()
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
@@ -79,7 +83,7 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<CommandResponse<bool>> ActivateProductAsync(Guid productId, bool isActivateCommand)
         {
-            var product = await FindProductByIdAsync(productId);
+            var product = await FindProductByIdAsync(productId, false);
             if (product == null)
                 return CommandResponse<bool>.Error("Product is not found", null);
             if (isActivateCommand && !product.IsDisabled)
@@ -95,7 +99,7 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<ProductDTO>> EditProductAsync(Guid productId,
             EditProductRequestModel requestModel)
         {
-            var product = await FindProductByIdAsync(productId);
+            var product = await FindProductByIdAsync(productId, false);
             if (product == null)
                 return CommandResponse<ProductDTO>.Error("Product is not found", null);
             if (product.IsDisabled)
@@ -114,7 +118,7 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<CommandResponse<int>> ImportProductQuantityAsync(Guid productId, int quantity)
         {
-            var product = await FindProductByIdAsync(productId);
+            var product = await FindProductByIdAsync(productId, false);
             if (product == null)
                 return CommandResponse<int>.Error("Product is not found", null);
             if (product.IsDisabled)
@@ -134,6 +138,8 @@ namespace DatabaseAccessor.Repositories
                 source = source.IgnoreQueryFilters();
             var result = await source
                 .AsNoTracking()
+                .Include(e => e.Comments)
+                .AsSplitQuery()
                 .Where(product => product.ShopId == shopId)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
@@ -147,6 +153,8 @@ namespace DatabaseAccessor.Repositories
                 source = source.IgnoreQueryFilters();
             var result = await source
                 .AsNoTracking()
+                .Include(e => e.Comments)
+                .AsSplitQuery()
                 .Where(product => product.ShopId == shopId)
                 .Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%")
                         || EF.Functions.Like(product.Category, $"%{keyword}%"))
@@ -155,9 +163,12 @@ namespace DatabaseAccessor.Repositories
             return result;
         }
 
-        private async Task<ShopProduct> FindProductByIdAsync(Guid id)
+        private async Task<ShopProduct> FindProductByIdAsync(Guid id, bool includeComments)
         {
-            return await _dbContext.ShopProducts.IgnoreQueryFilters().Where(product => product.Id == id).FirstOrDefaultAsync();
+            var source = _dbContext.ShopProducts.IgnoreQueryFilters();
+            if (includeComments)
+                source.Include(e => e.Comments);
+            return await source.Where(product => product.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<CommandResponse<List<ProductDTO>>> GetRelatedProductsAsync(Guid productId)
@@ -167,6 +178,8 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<List<ProductDTO>>.Error("Product is not found!", null);
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
+                .Include(e => e.Comments)
+                .AsSplitQuery()
                 .Where(product => product.ShopId == sourceProduct.ShopId
                     && product.Category == sourceProduct.Category && product.Id != sourceProduct.Id)
                 .OrderByDescending(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
@@ -194,6 +207,8 @@ namespace DatabaseAccessor.Repositories
                 source = source.Where(product => product.ShopId == shopId);
             return await source
                 .AsNoTracking()
+                .Include(e => e.Comments)
+                .AsSplitQuery()
                 .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId))
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
