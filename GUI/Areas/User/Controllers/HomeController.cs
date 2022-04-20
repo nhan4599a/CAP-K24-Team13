@@ -135,5 +135,15 @@ namespace GUI.Areas.User.Controllers
                 });
             }
         }
+
+        public IActionResult Categories()
+        {
+            return View();
+        }
+
+        public IActionResult About()
+        {
+            return View();
+        }
     }
 }

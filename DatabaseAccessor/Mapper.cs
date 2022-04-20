@@ -22,7 +22,7 @@ namespace DatabaseAccessor.Mapping
                     .IncludeBase<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.CategoryName,
                         options => options.MapFrom(source => source.Category))
-                    .ForMember(target => target.AverageStar,
+                    .ForMember(target => target.AverageRating,
                         options => options.MapFrom(source => source.Comments.Average(comment => comment.Star) ?? 0));
                 cfg.CreateMap<ShopProduct, ProductWithCommentsDTO>()
                     .IncludeBase<ShopProduct, ProductDTO>();

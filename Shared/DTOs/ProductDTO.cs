@@ -6,6 +6,6 @@
 
         public string CategoryName { get; set; }
 
-        public double AverageStar { get; set; }
+        public double AverageRating { get; set; }
     }
 }
