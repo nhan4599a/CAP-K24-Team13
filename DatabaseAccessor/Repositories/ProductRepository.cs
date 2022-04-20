@@ -207,7 +207,7 @@ namespace DatabaseAccessor.Repositories
             if (shopId.HasValue)
                 source = source.Where(product => product.ShopId == shopId);
             if (!string.IsNullOrWhiteSpace(keyword))
-                source = source.Where(product => EF.Functions.Like(keyword, $"%{keyword}%"));
+                source = source.Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%"));
             return await source
                 .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId))
                 .OrderByDescending(product => product.CreatedDate)
