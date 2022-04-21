@@ -260,7 +260,14 @@
                                 {
                                     <div class="product text-center">
                                         <figure class="product-media">
-                                            <span class="product-label label-top">Top</span>
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                            }
+                                            @if (product.IsNewProduct)
+                                            {
+                                                <span class="product-label label-new">New</span>
+                                            }
                                             <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
@@ -334,7 +341,14 @@
                                 {
                                     <div class="product text-center">
                                         <figure class="product-media">
-                                            <span class="product-label label-top">Top</span>
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                            }
+                                            @if (product.IsNewProduct)
+                                            {
+                                                <span class="product-label label-new">New</span>
+                                            }
                                             <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
@@ -408,7 +422,14 @@
                                 {
                                     <div class="product text-center">
                                         <figure class="product-media">
-                                            <span class="product-label label-top">Top</span>
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                            }
+                                            @if (product.IsNewProduct)
+                                            {
+                                                <span class="product-label label-new">New</span>
+                                            }
                                             <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
@@ -482,7 +503,14 @@
                                 {
                                     <div class="product text-center">
                                         <figure class="product-media">
-                                            <span class="product-label label-top">Top</span>
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                            }
+                                            @if (product.IsNewProduct)
+                                            {
+                                                <span class="product-label label-new">New</span>
+                                            }
                                             <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
@@ -556,7 +584,14 @@
                                 {
                                     <div class="product text-center">
                                         <figure class="product-media">
-                                            <span class="product-label label-top">Top</span>
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                            }
+                                            @if (product.IsNewProduct)
+                                            {
+                                                <span class="product-label label-new">New</span>
+                                            }
                                             <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
@@ -668,7 +703,14 @@
                             {
                                 <div class="product text-center">
                                     <figure class="product-media">
-                                        <span class="product-label label-top">Top</span>
+                                        @if (product.Discount > 0)
+                                        {
+                                            <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                        }
+                                        @if (product.IsNewProduct)
+                                        {
+                                            <span class="product-label label-new">New</span>
+                                        }
                                         <a href="/product/index/@product.Id">
                                             <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
                                         </a>
@@ -780,7 +822,14 @@
                             {
                                 <div class="product text-center">
                                     <figure class="product-media">
-                                        <span class="product-label label-new">New</span>
+                                        @if (product.Discount > 0)
+                                        {
+                                            <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                        }
+                                        @if (product.IsNewProduct)
+                                        {
+                                            <span class="product-label label-new">New</span>
+                                        }
                                         <a href="product.html">
                                             <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
                                         </a>
@@ -923,6 +972,14 @@
                             {
                                 <div class="product text-center">
                                     <figure class="product-media">
+                                        @if (product.Discount > 0)
+                                        {
+                                            <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                        }
+                                        @if (product.IsNewProduct)
+                                        {
+                                            <span class="product-label label-new">New</span>
+                                        }
                                         <a href="/product/index/@product.Id">
                                             <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
                                         </a>
@@ -1026,67 +1083,56 @@
 
                                 <div class="row">
                                     
-                                    <div class="col-sm-6 col-xl-12">
-                                        <div class="product text-center">
-                                            <figure class="product-media">
-                                                <span class="product-label label-sale">Deal of the week</span>
-                                                <a href="product.html">
-                                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/deals/product-1.jpg")" alt="Product image" class="product-image">
-                                                </a>
+                                    @foreach (var product in Model.NewProducts)
+                                    {
+                                        <div class="col-sm-6 col-xl-12">
+                                            <div class="product text-center">
+                                                <figure class="product-media">
+                                                    @if (product.Discount > 0)
+                                                    {
+                                                        <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                                    }
+                                                    @if (product.IsNewProduct)
+                                                    {
+                                                        <span class="product-label label-new">New</span>
+                                                    }
+                                                    <span class="product-label label-sale">Deal of the week</span>
+                                                    <a href="/product/index/@product.Id">
+                                                        <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
+                                                    </a>
 
-                                                <div class="product-action">
-                                                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                                </div><!-- End .product-action -->
-                                            </figure><!-- End .product-media -->
+                                                    <div class="product-action">
+                                                        <a href="/product/index/@product.Id" class="btn-product btn-cart" title="Add to cart" data-product="@product.Id">
+                                                            <span>add to cart</span>
+                                                        </a>
+                                                    </div><!-- End .product-action -->
+                                                </figure><!-- End .product-media -->
 
-                                            <div class="product-body">
-                                                <div class="product-cat">
-                                                    <a href="#">Audio</a>
-                                                </div><!-- End .product-cat -->
-                                                <h3 class="product-title"><a href="product.html">Bose SoundLink Micro speaker</a></h3><!-- End .product-title -->
-                                                <div class="product-price">
-                                                    <span class="new-price">$99.99</span>
-                                                    <span class="old-price">Was $110.99</span>
-                                                </div><!-- End .product-price -->
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                </div><!-- End .rating-container -->
-                                            </div><!-- End .product-body -->
-                                        </div><!-- End .product -->
-                                    </div><!-- End .col-sm-6 col-xl-12 -->
-
-                                    <div class="col-sm-6 col-xl-12">
-                                        <div class="product text-center">
-                                            <figure class="product-media">
-                                                <span class="product-label label-sale">Deal of the week</span>
-                                                <a href="product.html">
-                                                    <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/deals/product-2.jpg")" alt="Product image" class="product-image">
-                                                </a>
-
-                                                <div class="product-action">
-                                                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                                </div><!-- End .product-action -->
-                                            </figure><!-- End .product-media -->
-
-                                            <div class="product-body">
-                                                <div class="product-cat">
-                                                    <a href="#">Cameras</a>
-                                                </div><!-- End .product-cat -->
-                                                <h3 class="product-title"><a href="product.html">GoPro HERO Session Waterproof HD Action Camera</a></h3><!-- End .product-title -->
-                                                <div class="product-price">
-                                                    <span class="new-price">$196.99</span>
-                                                    <span class="old-price">Was $210.99</span>
-                                                </div><!-- End .product-price -->
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                </div><!-- End .rating-container -->
-                                            </div><!-- End .product-body -->
-                                        </div><!-- End .product -->
-                                    </div><!-- End .col-sm-6 col-xl-12 -->
+                                                <div class="product-body">
+                                                    <div class="product-cat">
+                                                        <a href="#">@product.CategoryName</a>
+                                                    </div><!-- End .product-cat -->
+                                                    <h3 class="product-title"><a href="/product/index/@product.Id">@product.ProductName</a></h3><!-- End .product-title -->
+                                                    <div class="product-price">
+                                                        @if (product.Discount > 0)
+                                                        {
+                                                            <span class="new-price">@((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                                            <span class="old-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="new-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                        }
+                                                    </div><!-- End .product-price -->
+                                                    <div class="ratings-container">
+                                                        <div class="ratings">
+                                                            <div class="ratings-val" style="width: @(product.AverageRating * 20)%"></div><!-- End .ratings-val -->
+                                                        </div><!-- End .ratings -->
+                                                    </div><!-- End .rating-container -->
+                                                </div><!-- End .product-body -->
+                                            </div><!-- End .product -->
+                                        </div><!-- End .col-sm-6 col-xl-12 -->   
+                                    }
                                 </div><!-- End .row -->
                             </div><!-- End .widget widget-deals -->
                         </div><!-- End .col-sm-6 col-lg-xl -->

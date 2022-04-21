@@ -6,6 +6,8 @@
 
         public string CategoryName { get; set; }
 
+        public bool IsNewProduct { get; set; }
+
         public double AverageRating { get; set; }
     }
 }

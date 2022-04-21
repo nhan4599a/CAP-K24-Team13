@@ -12,6 +12,9 @@ namespace Shared.DTOs
         [JsonPropertyName("user_Id")]
         public string UserId { get; set; }
 
+        [JsonPropertyName("status")]
+        public bool IsAvailable { get; set; }
+
         public string Name { get; set; }
 
         public string Phone { get; set; }

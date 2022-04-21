@@ -92,6 +92,7 @@ namespace GUI.Areas.User.Controllers
             var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(null);
             var topMostSaleOffProductsResponseTask = _productClient.GetMostSaleOffProducts();
             var shopsResponseTask = _shopClient.GetAllShops();
+            var newProductsResponseTask = _productClient.GetTopNewsProducts();
             var bestSellerProductsResponse = await bestSellerProductsResponseTask;
             var topMostSaleOffProductsResponse = await topMostSaleOffProductsResponseTask;
             var shopsResponse = await shopsResponseTask;
@@ -113,10 +114,14 @@ namespace GUI.Areas.User.Controllers
             }
             productsInCategories.Add("All",
                     productsResponse.Content.Data.Data.Take(20).ToList());
+            var newProductsResponse = await newProductsResponseTask;
+            if (newProductsResponse.IsSuccessStatusCode)
+                return StatusCode(StatusCodes.Status500InternalServerError);
             return View(new HomePageViewModel
             {
-                Shops = shopsResponse.Content.Select(shop => (shop.Id, shop.ShopName)).ToList(),
+                Shops = shopsResponse.Content.Where(shop => shop.IsAvailable).Select(shop => (shop.Id, shop.ShopName)).ToList(),
                 BestSellerProducts = bestSellerProductsResponse.Content.Data,
+                NewProducts = newProductsResponse.Content.Data,
                 TopMostSaleOffProducts = topMostSaleOffProductsResponse.Content.Data,
                 Products = productsInCategories
             });

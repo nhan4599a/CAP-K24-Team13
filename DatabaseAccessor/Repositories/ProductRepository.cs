@@ -64,6 +64,10 @@ namespace DatabaseAccessor.Repositories
             {
                 return CommandResponse<Guid>.Error("Product's name is already existed", null);
             }
+            if (!(await _dbContext.ShopProducts.FirstAsync(product => product.ShopId == shopProduct.ShopId)).IsVisible)
+            {
+                return CommandResponse<Guid>.Error("Shop is already disabled!", null);
+            }
             _dbContext.ShopProducts.Add(shopProduct);
             try
             {
@@ -85,6 +89,8 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<bool>.Error("Product is already activated", null);
             if (!isActivateCommand && product.IsDisabled)
                 return CommandResponse<bool>.Error("Product is already deactivated", null);
+            if (!product.IsVisible)
+                return CommandResponse<bool>.Error("Shop is already disabled", null);
             product.IsDisabled = !isActivateCommand;
             _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
@@ -118,6 +124,8 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<int>.Error("Product is not found", null);
             if (product.IsDisabled)
                 return CommandResponse<int>.Error("Product is disabled", null);
+            if (product.IsVisible)
+                return CommandResponse<int>.Error("Shop is already disabled", null);
             if (quantity <= 0)
                 return CommandResponse<int>.Error("Quantity must greater than 0", null);
             var newQuantity = quantity + product.Quantity;

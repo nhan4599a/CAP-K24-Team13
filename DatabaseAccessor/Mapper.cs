@@ -23,7 +23,9 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.CategoryName,
                         options => options.MapFrom(source => source.Category))
                     .ForMember(target => target.AverageRating,
-                        options => options.MapFrom(source => source.Comments.Average(comment => comment.Star) ?? 0));
+                        options => options.MapFrom(source => source.Comments.Average(comment => comment.Star) ?? 0))
+                    .ForMember(target => target.IsNewProduct,
+                        options => options.MapFrom(source => DateTime.Now.AddHours(7).AddDays(3) >= source.CreatedDate));
                 cfg.CreateMap<ShopProduct, ProductWithCommentsDTO>()
                     .IncludeBase<ShopProduct, ProductDTO>();
                 cfg.CreateMap<ShopProduct, MinimalProductDTO>()

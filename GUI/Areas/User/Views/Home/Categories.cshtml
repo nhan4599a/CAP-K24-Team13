@@ -55,6 +55,10 @@
                                     {
                                         <span class="product-label label-sale">@(product.Discount)% Off</span>
                                     }
+                                    @if (product.IsNewProduct)
+                                    {
+                                        <span class="product-label label-new">New</span>
+                                    }
                                     <a href="/product/index/@product.Id">
                                         <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
                                     </a>

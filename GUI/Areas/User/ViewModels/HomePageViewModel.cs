@@ -11,6 +11,8 @@ namespace GUI.Areas.User.ViewModels
 
         public List<MinimalProductDTO> TopMostSaleOffProducts { get; set; }
 
+        public List<ProductDTO> NewProducts { get; set; }
+
         public Dictionary<string, List<ProductDTO>> Products { get; set; }
     }
 }

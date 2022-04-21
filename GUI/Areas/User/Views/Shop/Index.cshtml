@@ -258,6 +258,14 @@
                                     {
                                         <div class="product text-center">
                                             <figure class="product-media">
+                                                @if (product.Discount > 0)
+                                                {
+                                                    <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                                }
+                                                @if (product.IsNewProduct)
+                                                {
+                                                    <span class="product-label label-new">New</span>
+                                                }
                                                 <a href="/product/index/@product.Id">
                                                     <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
                                                 </a>
@@ -323,6 +331,10 @@
                                     {
                                         <div class="product product-sm">
                                             <figure class="product-media">
+                                                @if (product.Discount > 0)
+                                                {
+                                                    <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                                }
                                                 <a href="/product/index/@product.Id">
                                                     <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
                                                 </a>

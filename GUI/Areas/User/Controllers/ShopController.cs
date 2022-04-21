@@ -32,6 +32,8 @@ namespace GUI.Areas.User.Controllers
             var shopResponseTask = _shopClient.GetShop(id.Value);
             var bestSellerProductsResponse = await bestSellerProductsResponseTask;
             var shopResponse = await shopResponseTask;
+            if (!shopResponse.Content.ResultObj.IsAvailable)
+                return StatusCode(StatusCodes.Status404NotFound);
             if (bestSellerProductsResponse.IsSuccessStatusCode && shopResponse.IsSuccessStatusCode)
             {
                 if (bestSellerProductsResponse.Content.Data.Any())
@@ -100,6 +102,8 @@ namespace GUI.Areas.User.Controllers
             var shopResponse = await shopResponseTask;
             if (!shopResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
+            if (!shopResponse.Content.ResultObj.IsAvailable)
+                return StatusCode(StatusCodes.Status404NotFound);
             return View(new ShopCategoryViewModel
             {
                 Categories = shopCategoriesResponse.Content.Data.ToList(),

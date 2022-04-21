@@ -47,7 +47,14 @@
                             <div class="col-2" style="margin-right: 20px;">
                                 <div class="product">
                                     <figure class="product-media">
-                                        <span class="product-label label-sale">Sale</span>
+                                        @if (product.Discount > 0)
+                                        {
+                                            <span class="product-label label-sale">Sale @(product.Discount)% Off</span>
+                                        }
+                                        @if (product.IsNewProduct)
+                                        {
+                                            <span class="product-label label-new">New</span>
+                                        }
                                         <a href="/product/index/@product.Id">
                                             <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.Images[0]" class="product-image">
                                         </a>
