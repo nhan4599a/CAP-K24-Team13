@@ -5,6 +5,7 @@
             backdrop: 'static',
             keyboard: false
         }).modal('show');
+        var sourceButton = $(this);
         modal.find('.btn.btn-primary').off('click').click(function () {
             let star = $('input[name=rating]:checked').val();
             let comment = $('#comment').val();
@@ -15,6 +16,7 @@
                 ratingProduct(userId, productId, star, comment)
                     .then(() => {
                         animationLoader.hideAnimation();
+                        sourceButton.prop('disabled', true);
                         toastr.success('Rating success');
                     })
                     .catch(error => {

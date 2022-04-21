@@ -47,7 +47,7 @@ namespace DatabaseAccessor.Repositories
                     .CountAsync(comment => comment.UserId == parsedUserId
                         && comment.ProductId == Guid.Parse(order.ProductId));
 
-                order.CanBeRating = (ratingCount - buyCount) > 0;
+                order.CanBeRating = ((ratingCount - buyCount) > 0) && order.Status == InvoiceStatus.Succeed;
             }
 
             return orders;
