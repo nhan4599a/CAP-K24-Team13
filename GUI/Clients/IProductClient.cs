@@ -34,5 +34,8 @@ namespace GUI.Clients
 
         [Get("/products/sales")]
         Task<ApiResponse<ApiResult<List<MinimalProductDTO>>>> GetMostSaleOffProducts();
+
+        [Get("/products/new")]
+        Task<ApiResponse<ApiResult<List<ProductDTO>>>> GetTopNewsProducts();
     }
 }

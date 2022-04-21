@@ -246,6 +246,13 @@ namespace ShopProductService.Controllers
             return ApiResult<List<MinimalProductDTO>>.CreateSucceedResult(result);
         }
 
+        [HttpGet("new")]
+        public async Task<ApiResult> GetTopNewProducts()
+        {
+            var result = await _mediator.Send(new GetTopNewProductsQuery());
+            return ApiResult<List<ProductDTO>>.CreateSucceedResult(result);
+        }
+
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [HttpGet("images/{image}")]
         public IActionResult GetImage(string image)

@@ -861,7 +861,7 @@
                         <div class="cat-banner row no-gutters">
                             <div class="cat-banner-list col-sm-6 d-xl-none d-xxl-flex" style="background-image: url(/assets/images/demos/demo-14/banners/banner-bg-3.jpg);">
                                 <div class="banner-list-content">
-                                    <h2>Take care</h2>
+                                    <h2>Accessories</h2>
 
                                     <ul>
                                         <li><a href="#">Beauty</a></li>
@@ -919,149 +919,43 @@
                                             }
                                         }
                                     }'>
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-14.jpg")" alt="Product image" class="product-image">
-                                    </a>
+                            @foreach (var product in Model.Products["Accessories"])
+                            {
+                                <div class="product text-center">
+                                    <figure class="product-media">
+                                        <a href="/product/index/@product.Id">
+                                            <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
 
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Shoes</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Beige faux suede runner  trainers</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $64.00
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 12 Reviews )</span>
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-new">New</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-15.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Accessories</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Black boucle check scarf</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $36.00
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 4 Reviews )</span>
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-16.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">T-Shirts</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Carronade Large <br>Suspension Lamp</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $56.00
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 60%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 6 Reviews )</span>
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-17.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Bags</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Triple compartment cross body bag</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $64.00
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 40%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-14.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Shoes</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Beige faux suede runner  trainers</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $64.00
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 12 Reviews )</span>
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">@product.CategoryName</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title"><a href="product.html">@product.ProductName</a></h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="new-price">@((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                                <span class="old-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="new-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                            }
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                            <span class="ratings-text">( 12 Reviews )</span>
+                                        </div><!-- End .rating-container -->
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->   
+                            }
                         </div><!-- End .owl-carousel -->
                     </div><!-- End .col-xl-9 -->
                 </div><!-- End .row cat-banner-row -->
@@ -1131,6 +1025,7 @@
                                 <h4 class="widget-title"><span>Special Offer</span></h4><!-- End .widget-title -->
 
                                 <div class="row">
+                                    
                                     <div class="col-sm-6 col-xl-12">
                                         <div class="product text-center">
                                             <figure class="product-media">
@@ -1186,7 +1081,7 @@
                                                 </div><!-- End .product-price -->
                                                 <div class="ratings-container">
                                                     <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                        <div class="ratings-val" style="width: 100%"></div><!-- End .ratings-val -->
                                                     </div><!-- End .ratings -->
                                                 </div><!-- End .rating-container -->
                                             </div><!-- End .product-body -->
