@@ -1,4 +1,5 @@
-﻿using GUI.Clients;
+﻿using GUI.Abtractions;
+using GUI.Clients;
 using GUI.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ namespace GUI.Areas.User.Controllers
 {
     [Authorize]
     [Route("/order-history")]
-    public class OrderHistoryController : Controller
+    public class OrderHistoryController : BaseUserController
     {
         private readonly IOrderClient _orderHistoryClient;
 

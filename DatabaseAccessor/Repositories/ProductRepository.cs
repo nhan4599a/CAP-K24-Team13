@@ -226,6 +226,18 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<ProductDTO>> GetTopNewsProductsAsync()
+        {
+            return await _dbContext.ShopProducts
+                .AsNoTracking()
+                .Include(e => e.Comments)
+                .Where(product => product.CreatedDate >= DateTime.Now.AddHours(7).AddDays(-3))
+                .OrderByDescending(product => product.CreatedDate)
+                .Take(2)
+                .Select(product => _mapper.MapToProductDTO(product))
+                .ToListAsync();
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();

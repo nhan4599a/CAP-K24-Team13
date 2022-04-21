@@ -1,5 +1,4 @@
-﻿using Shared;
-using Shared.DTOs;
+﻿using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
@@ -37,5 +36,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
         Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int? shopId, List<int> categoryIds, string keyword, PaginationInfo paginationInfo);
 
         Task<List<MinimalProductDTO>> GetTopMostSaleOffProductsAsync();
+
+        Task<List<ProductDTO>> GetTopNewsProductsAsync();
     }
 }

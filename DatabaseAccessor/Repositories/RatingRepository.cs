@@ -52,7 +52,7 @@ namespace DatabaseAccessor.Repositories
             var ratingCount = await _dbContext.ProductComments
                 .CountAsync(comment => comment.UserId == user.Id
                     && comment.ProductId == productId);
-            if (buyCount - ratingCount == 0)
+            if (buyCount - ratingCount <= 0)
                 return CommandResponse<bool>.Error("User have not bought yet", null);
             _dbContext.ProductComments.Add(new ProductComment
             {
