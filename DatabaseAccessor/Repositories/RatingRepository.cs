@@ -32,8 +32,11 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<List<RatingDTO>> GetRatingAsync(string productId)
         {
-            var ratings = await _dbContext.ProductComments.Where(item => item.ProductId.ToString() == productId).ToListAsync();
-            return ratings.Select(item => _mapper.MapToRatingDTO(item)).ToList();
+            return await _dbContext.ProductComments
+                .AsNoTracking()
+                .Where(item => item.ProductId == Guid.Parse(productId))
+                .Select(item => _mapper.MapToRatingDTO(item))
+                .ToListAsync();
         }
 
         public async Task<CommandResponse<bool>> RatingProductAsync(RatingRequestModel requestModel)

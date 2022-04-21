@@ -16,7 +16,6 @@
                     .then(() => {
                         animationLoader.hideAnimation();
                         toastr.success('Rating success');
-                        //window.location.href = `/product/index/${productId}`;
                     })
                     .catch(error => {
                         animationLoader.hideAnimation();

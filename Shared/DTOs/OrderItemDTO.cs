@@ -20,5 +20,7 @@ namespace Shared.DTOs
         public string Image { get; set; }
 
         public InvoiceStatus Status { get; set; }
+
+        public bool CanBeRating { get; set; }
     }
 }

@@ -27,14 +27,30 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<List<OrderItemDTO>> GetOrderHistoryAsync(string userId)
         {
-            var invoices = await _dbContext.InvoiceDetails
+            var parsedUserId = Guid.Parse(userId);
+            var orders = await _dbContext.InvoiceDetails
                 .AsNoTracking()
                 .Include(e => e.Invoice)
                 .Include(e => e.Product)
-                .Where(item => item.Invoice.UserId.ToString() == userId)
+                .Where(item => item.Invoice.UserId == parsedUserId)
                 .OrderByDescending(e => e.Invoice.CreatedAt)
+                .Select(item => _mapper.MapToOrderItemDTO(item))
                 .ToListAsync();
-            return invoices.Select(item => _mapper.MapToOrderItemDTO(item)).ToList();
+
+            foreach (var order in orders)
+            {
+                var buyCount = await _dbContext.InvoiceDetails
+                    .CountAsync(detail => detail.ProductId == Guid.Parse(order.ProductId)
+                        && detail.Invoice.UserId == parsedUserId
+                        && detail.Invoice.Status == InvoiceStatus.Succeed);
+                var ratingCount = await _dbContext.ProductComments
+                    .CountAsync(comment => comment.UserId == parsedUserId
+                        && comment.ProductId == Guid.Parse(order.ProductId));
+
+                order.CanBeRating = (ratingCount - buyCount) > 0;
+            }
+
+            return orders;
         }
 
         public async Task<List<OrderDTO>> GetOrdersOfShopAsync(int shopId)
