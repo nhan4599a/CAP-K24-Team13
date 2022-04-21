@@ -256,180 +256,48 @@
                                                 }
                                             }
                                         }'>
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <span class="product-label label-sale">Sale</span>
-                                        <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-1.jpg")" alt="Product image" class="product-image">
-                                        </a>
+                                @foreach (var product in Model.Products["All"])
+                                {
+                                    <div class="product text-center">
+                                        <figure class="product-media">
+                                            <span class="product-label label-top">Top</span>
+                                            <a href="/product/index/@product.Id">
+                                                <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
+                                            </a>
 
-                                        <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                        </div><!-- End .product-action -->
-                                    </figure><!-- End .product-media -->
+                                            <div class="product-action">
+                                                <a href="#" class="btn-product btn-cart" title="Add to cart" data-product="@product.Id">
+                                                    <span>add to cart</span>
+                                                </a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
 
-                                    <div class="product-body">
-                                        <div class="product-cat">
-                                            <a href="#">Furniture</a>
-                                        </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="product.html">Butler Stool Ladder</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">$251.99</span>
-                                            <span class="old-price">Was $290.00</span>
-                                        </div><!-- End .product-price -->
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 2 Reviews )</span>
-                                        </div><!-- End .rating-container -->
-                                    </div><!-- End .product-body -->
-                                </div><!-- End .product -->
-
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <span class="product-label label-sale">Sale</span>
-                                        <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-2.jpg")" alt="Product image" class="product-image">
-                                        </a>
-
-                                        <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                        </div><!-- End .product-action -->
-                                    </figure><!-- End .product-media -->
-
-                                    <div class="product-body">
-                                        <div class="product-cat">
-                                            <a href="#">Electronics</a>
-                                        </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="product.html">Bose - SoundSport wireless headphones</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">$179.99</span>
-                                            <span class="old-price">Was $199.00</span>
-                                        </div><!-- End .product-price -->
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                        </div><!-- End .rating-container -->
-                                    </div><!-- End .product-body -->
-                                </div><!-- End .product -->
-
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-3.jpg")" alt="Product image" class="product-image">
-                                        </a>
-
-                                        <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                        </div><!-- End .product-action -->
-                                    </figure><!-- End .product-media -->
-
-                                    <div class="product-body">
-                                        <div class="product-cat">
-                                            <a href="#">Furniture</a>
-                                        </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="product.html">Can 2-Seater Sofa frame charcoal</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            $3,050.00
-                                        </div><!-- End .product-price -->
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 60%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                        </div><!-- End .rating-container -->
-                                    </div><!-- End .product-body -->
-                                </div><!-- End .product -->
-
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-4.jpg")" alt="Product image" class="product-image">
-                                        </a>
-
-
-                                        <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                        </div><!-- End .product-action -->
-                                    </figure><!-- End .product-media -->
-
-                                    <div class="product-body">
-                                        <div class="product-cat">
-                                            <a href="#">Clothes</a>
-                                        </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="product.html">Tan suede biker jacket</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            $240.00
-                                        </div><!-- End .product-price -->
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
-                                        </div><!-- End .rating-container -->
-                                    </div><!-- End .product-body -->
-                                </div><!-- End .product -->
-
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <span class="product-label label-top">Top</span>
-                                        <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-5.jpg")" alt="Product image" class="product-image">
-                                        </a>
-
-
-                                        <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                        </div><!-- End .product-action -->
-                                    </figure><!-- End .product-media -->
-
-                                    <div class="product-body">
-                                        <div class="product-cat">
-                                            <a href="#">Electronics</a>
-                                        </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="product.html">Sony - Class LED 2160p Smart <br>4K Ultra HD</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            $1,699.99
-                                        </div><!-- End .product-price -->
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 10 Reviews )</span>
-                                        </div><!-- End .rating-container -->
-                                    </div><!-- End .product-body -->
-                                </div><!-- End .product -->
-
-                                <div class="product text-center">
-                                    <figure class="product-media">
-                                        <span class="product-label label-top">Top</span>
-                                        <a href="product.html">
-                                            <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-6.jpg")" alt="Product image" class="product-image">
-                                        </a>
-
-
-                                        <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                        </div><!-- End .product-action -->
-                                    </figure><!-- End .product-media -->
-
-                                    <div class="product-body">
-                                        <div class="product-cat">
-                                            <a href="#">Laptops</a>
-                                        </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="product.html">MacBook Pro 13" Display, i5</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            $1,199.99
-                                        </div><!-- End .product-price -->
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
-                                        </div><!-- End .rating-container -->
-                                    </div><!-- End .product-body -->
-                                </div><!-- End .product -->
+                                        <div class="product-body">
+                                            <div class="product-cat">
+                                                <a href="#">@product.CategoryName</a>
+                                            </div><!-- End .product-cat -->
+                                            <h3 class="product-title">
+                                                <a href="/product/index/@product.Id">@product.ProductName</a>
+                                            </h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                @if (product.Discount > 0)
+                                                {
+                                                    <span class="new-price">@((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                                    <span class="old-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="new-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                                }
+                                            </div><!-- End .product-price -->
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: @(product.AverageRating * 20)%"></div><!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                            </div><!-- End .rating-container -->
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                }
                             </div><!-- End .owl-carousel -->
                         </div><!-- .End .tab-pane -->
                         <div class="tab-pane p-0 fade" id="trending-0-tab" role="tabpanel" aria-labelledby="trending-0-link">
@@ -467,7 +335,7 @@
                                     <div class="product text-center">
                                         <figure class="product-media">
                                             <span class="product-label label-top">Top</span>
-                                            <a href="product.html">
+                                            <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
 
@@ -482,7 +350,9 @@
                                             <div class="product-cat">
                                                 <a href="#">@product.CategoryName</a>
                                             </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="product.html">@product.ProductName</a></h3><!-- End .product-title -->
+                                            <h3 class="product-title">
+                                                <a href="/product/index/@product.Id">@product.ProductName</a>
+                                            </h3><!-- End .product-title -->
                                             <div class="product-price">
                                                 @if (product.Discount > 0)
                                                 {
@@ -496,7 +366,7 @@
                                             </div><!-- End .product-price -->
                                             <div class="ratings-container">
                                                 <div class="ratings">
-                                                    <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                                    <div class="ratings-val" style="width: @(product.AverageRating * 20)%"></div><!-- End .ratings-val -->
                                                 </div><!-- End .ratings -->
                                             </div><!-- End .rating-container -->
                                         </div><!-- End .product-body -->
@@ -539,7 +409,7 @@
                                     <div class="product text-center">
                                         <figure class="product-media">
                                             <span class="product-label label-top">Top</span>
-                                            <a href="product.html">
+                                            <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
 
@@ -554,7 +424,9 @@
                                             <div class="product-cat">
                                                 <a href="#">@product.CategoryName</a>
                                             </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="product.html">@product.ProductName</a></h3><!-- End .product-title -->
+                                            <h3 class="product-title">
+                                                <a href="/product/index/@product.Id">@product.ProductName</a>
+                                            </h3><!-- End .product-title -->
                                             <div class="product-price">
                                                 @if (product.Discount > 0)
                                                 {
@@ -568,7 +440,7 @@
                                             </div><!-- End .product-price -->
                                             <div class="ratings-container">
                                                 <div class="ratings">
-                                                    <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                                    <div class="ratings-val" style="width: @(product.AverageRating * 20)%"></div><!-- End .ratings-val -->
                                                 </div><!-- End .ratings -->
                                             </div><!-- End .rating-container -->
                                         </div><!-- End .product-body -->
@@ -611,7 +483,7 @@
                                     <div class="product text-center">
                                         <figure class="product-media">
                                             <span class="product-label label-top">Top</span>
-                                            <a href="product.html">
+                                            <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
 
@@ -626,7 +498,9 @@
                                             <div class="product-cat">
                                                 <a href="#">@product.CategoryName</a>
                                             </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="product.html">@product.ProductName</a></h3><!-- End .product-title -->
+                                            <h3 class="product-title">
+                                                <a href="/product/index/@product.Id">@product.ProductName</a>
+                                            </h3><!-- End .product-title -->
                                             <div class="product-price">
                                                 @if (product.Discount > 0)
                                                 {
@@ -640,7 +514,7 @@
                                             </div><!-- End .product-price -->
                                             <div class="ratings-container">
                                                 <div class="ratings">
-                                                    <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                                    <div class="ratings-val" style="width: @(product.AverageRating * 20)%"></div><!-- End .ratings-val -->
                                                 </div><!-- End .ratings -->
                                             </div><!-- End .rating-container -->
                                         </div><!-- End .product-body -->
@@ -683,7 +557,7 @@
                                     <div class="product text-center">
                                         <figure class="product-media">
                                             <span class="product-label label-top">Top</span>
-                                            <a href="product.html">
+                                            <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="Product image" class="product-image">
                                             </a>
 
@@ -698,7 +572,9 @@
                                             <div class="product-cat">
                                                 <a href="#">@product.CategoryName</a>
                                             </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="product.html">@product.ProductName</a></h3><!-- End .product-title -->
+                                            <h3 class="product-title">
+                                                <a href="/product/index/@product.Id">@product.ProductName</a>
+                                            </h3><!-- End .product-title -->
                                             <div class="product-price">
                                                 @if (product.Discount > 0)
                                                 {
@@ -712,7 +588,7 @@
                                             </div><!-- End .product-price -->
                                             <div class="ratings-container">
                                                 <div class="ratings">
-                                                    <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                                    <div class="ratings-val" style="width: @(product.AverageRating * 20)%"></div><!-- End .ratings-val -->
                                                 </div><!-- End .ratings -->
                                             </div><!-- End .rating-container -->
                                         </div><!-- End .product-body -->

@@ -21,7 +21,9 @@ namespace DatabaseAccessor.Mapping
                 cfg.CreateMap<ShopProduct, ProductDTO>()
                     .IncludeBase<ShopProduct, MinimalProductDTO>()
                     .ForMember(target => target.CategoryName,
-                        options => options.MapFrom(source => source.Category));
+                        options => options.MapFrom(source => source.Category))
+                    .ForMember(target => target.AverageRating,
+                        options => options.MapFrom(source => source.Comments.Average(comment => comment.Star) ?? 0));
                 cfg.CreateMap<ShopProduct, ProductWithCommentsDTO>()
                     .IncludeBase<ShopProduct, ProductDTO>();
                 cfg.CreateMap<ShopProduct, MinimalProductDTO>()

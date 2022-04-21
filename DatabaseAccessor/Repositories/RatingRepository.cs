@@ -21,8 +21,7 @@ namespace DatabaseAccessor.Repositories
         public RatingRepository(ApplicationDbContext context, Mapper mapper)
         {
             _dbContext = context;
-            _mapper = mapper
-                      ?? Mapper.GetInstance();
+            _mapper = mapper ?? Mapper.GetInstance();
         }
 
         public void Dispose()
@@ -40,17 +39,20 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<bool>> RatingProductAsync(RatingRequestModel requestModel)
         {
             var user = await _dbContext.Users.FindAsync(Guid.Parse(requestModel.UserId));
+            var productId = Guid.Parse(requestModel.ProductId);
             if (user == null)
                 return CommandResponse<bool>.Error("Invalid User", null);
-            var product = await _dbContext.ShopProducts.FindAsync(Guid.Parse(requestModel.ProductId));
+            var product = await _dbContext.ShopProducts.FindAsync(productId);
             if (product == null)
                 return CommandResponse<bool>.Error("Invalid Product", null);
-            var bought = await _dbContext.InvoiceDetails
-                .AsNoTracking()
-                .AnyAsync(detail => detail.ProductId.ToString() == requestModel.ProductId 
-                    && detail.Invoice.UserId.ToString() == requestModel.UserId
+            var buyCount = await _dbContext.InvoiceDetails
+                .CountAsync(detail => detail.ProductId.ToString() == requestModel.ProductId 
+                    && detail.Invoice.UserId == user.Id
                     && detail.Invoice.Status == InvoiceStatus.Succeed);
-            if (!bought)
+            var ratingCount = await _dbContext.ProductComments
+                .CountAsync(comment => comment.UserId == user.Id
+                    && comment.ProductId == productId);
+            if (buyCount - ratingCount == 0)
                 return CommandResponse<bool>.Error("User have not bought yet", null);
             _dbContext.ProductComments.Add(new ProductComment
             {

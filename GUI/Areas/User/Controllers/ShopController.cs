@@ -39,7 +39,7 @@ namespace GUI.Areas.User.Controllers
                     var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id.Value, 4);
                     var shopCategoriesResponse = await shopCategoriesResponseTask;
                     var productsResponse = await _productClient.GetProductsOfShopInCategory(
-                        id.Value, shopCategoriesResponse.Content.Data.Select(e => e.CategoryId).ToArray(), 1, 0
+                        id.Value, shopCategoriesResponse.Content.Data.Select(e => e.CategoryId).ToArray(), string.Empty, 1, 0
                     );
                     var categories = shopCategoriesResponse.Content.Data.ToList();
                     categories.Insert(0, new CategoryDTO
@@ -84,13 +84,14 @@ namespace GUI.Areas.User.Controllers
             }
         }
 
-        public async Task<IActionResult> Categories(int? id, [FromQuery(Name = "cat")] List<int> categoryId, int pageNumber = 1)
+        public async Task<IActionResult> Categories(int? id, [FromQuery(Name = "cat")] List<int> categoryId, [FromQuery(Name = "q")] string keyword, int pageNumber = 1)
         {
             if (!id.HasValue)
                 return StatusCode(StatusCodes.Status404NotFound);
             var shopCategoriesResponseTask = _categoryClient.GetCategoriesOfShop(id.Value, 0);
             var shopResponseTask = _shopClient.GetShop(id.Value);
-            var productsResponseTask = _productClient.GetProductsOfShopInCategory(id.Value, categoryId.ToArray(), pageNumber, 20);
+            var productsResponseTask =
+                _productClient.GetProductsOfShopInCategory(id.Value, categoryId.ToArray(), keyword, pageNumber, 20);
             var shopCategoriesResponse = await shopCategoriesResponseTask;
             var productsResponse = await productsResponseTask;
             if (!shopCategoriesResponse.IsSuccessStatusCode

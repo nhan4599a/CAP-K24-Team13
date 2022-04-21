@@ -77,7 +77,7 @@
     </style>
     <style>
         .old-price {
-            text-decoration: line-through
+            text-decoration: line-through !important
         }
     </style>
     @RenderSection("Styles", false)
@@ -174,7 +174,7 @@
                                 <div class="col-lg-4 col-xxl-5col d-flex justify-content-center align-items-center">
                                     <div class="header-dropdown-link">
                                         <div class="dropdown cart-dropdown">
-                                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                            <a href="/cart" class="dropdown-toggle" role="button">
                                                 <i class="icon-shopping-cart"></i>
                                                 <span class="cart-count">@(cartItems == null ? 0 : cartItems.Count)</span>
                                                 <span class="cart-txt">Cart</span>

@@ -29,5 +29,15 @@ namespace ShopProductService.Controllers
             });
             return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(categories);
         }
+
+        [HttpGet]
+        public async Task<ApiResult> GetCategories([FromQuery] PaginationInfo paginationInfo)
+        {
+            var categories = await _mediator.Send(new FindAllCategoriesQuery
+            {
+                PaginationInfo = paginationInfo
+            });
+            return ApiResult<PaginatedList<CategoryDTO>>.CreateSucceedResult(categories);
+        }
     }
 }

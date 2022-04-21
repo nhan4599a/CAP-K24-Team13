@@ -5,5 +5,7 @@
         public string Description { get; set; }
 
         public string CategoryName { get; set; }
+
+        public double AverageRating { get; set; }
     }
 }

@@ -29,10 +29,21 @@ namespace DatabaseAccessor.Repositories
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 
+        public async Task<PaginatedList<CategoryDTO>> GetCategoriesAsync(PaginationInfo paginationInfo)
+        {
+            return await _dbContext.Categories
+                .FromSqlRaw("SELECT CategoryId, Category as CategoryName, " +
+                    "COUNT(IIF(IsVisible = 1 AND IsDisabled = 0, 1, NULL)) as ProductCount FROM dbo.ShopProducts " +
+                    "GROUP BY ShopId, CategoryId, Category")
+                .AsNoTracking()
+                .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();
             GC.SuppressFinalize(this);
         }
+
     }
 }

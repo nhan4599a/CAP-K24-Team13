@@ -8,5 +8,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
     public interface ICategoryRepository : IDisposable
     {
         Task<PaginatedList<CategoryDTO>> GetCategoriesOfShopAsync(int shopId, PaginationInfo paginationInfo);
+
+        Task<PaginatedList<CategoryDTO>> GetCategoriesAsync(PaginationInfo paginationInfo);
     }
 }

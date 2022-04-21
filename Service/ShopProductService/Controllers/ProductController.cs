@@ -207,32 +207,34 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet("category")]
-        public async Task<ApiResult> GetProductsOfCategory([FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel pagination)
+        public async Task<ApiResult> GetProductsOfCategory([FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel requestModel)
         {
-            var productsOfCategoryResult = await _mediator.Send(new GetProductsByCategoryIdQuery
+            var productsOfCategoryResult = await _mediator.Send(new FindProductsByCategoryIdQuery
             {
                 CategoryIds = categoryIds,
                 PaginationInfo = new PaginationInfo
                 {
-                    PageNumber = pagination.PageNumber,
-                    PageSize = pagination.PageSize
-                }
+                    PageNumber = requestModel.PageNumber,
+                    PageSize = requestModel.PageSize
+                },
+                Keyword = requestModel.Keyword
             });
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
         }
 
         [HttpGet("shop/{shopId}/category")]
-        public async Task<ApiResult> GetProductsOfShopInCategory(int shopId, [FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel pagination)
+        public async Task<ApiResult> GetProductsOfShopInCategory(int shopId, [FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel requestModel)
         {
-            var productsOfCategoryResult = await _mediator.Send(new GetProductsOfShopInCategoryQuery
+            var productsOfCategoryResult = await _mediator.Send(new FindProductsOfShopInCategoryQuery
             {
                 ShopId = shopId,
                 CategoryIds = categoryIds,
                 PaginationInfo = new PaginationInfo
                 {
-                    PageNumber = pagination.PageNumber,
-                    PageSize = pagination.PageSize
-                }
+                    PageNumber = requestModel.PageNumber,
+                    PageSize = requestModel.PageSize
+                },
+                Keyword = requestModel.Keyword
             });
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
         }

@@ -49,11 +49,10 @@
 }
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "home")
-}
+}0
 <main class="main">
-    @await Component.InvokeAsync("HomePageSlider")
     <div class="mb-4"></div><!-- End .mb-2 -->
-    <div class="container">
+    <div class="container" style="width: 90%">
         <div class="row justify-content-md-center">
             <div class="col-md-12">
                 <h2 class="title mb-3">
@@ -105,7 +104,14 @@
                                     @item.Status.GetDescription()
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary">Rate & comment</button>
+                                    @if (item.Status == InvoiceStatus.Succeed)
+                                    {
+                                        <button class="btn btn-primary">Rate & comment</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-primary" disabled>Rate & comment</button>
+                                    }
                                 </td>
                             </tr>
                         }

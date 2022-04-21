@@ -39,14 +39,14 @@
                         <li class="@(Model == "shop" ? "active" : "")">
                             <a href="/brands">Shop</a>
                         </li>
-                        <li>
+                        <li class="@(Model == "category" ? "active" : "")">
                             <a href="/home/categories">Categories</a>
                         </li>
                         <li>
                             <a href="https://emallsolution-admin.herokuapp.com/#services">Services</a>
                         </li>
-                        <li>
-                            <a href="https://emallsolution-admin.herokuapp.com/#about">About us</a>
+                        <li class="@(Model == "about" ? "active" : "")">
+                            <a href="/home/about">About us</a>
                         </li>
                         <li>
                             <a href="#contact">Contact</a>
