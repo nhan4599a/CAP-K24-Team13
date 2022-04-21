@@ -664,152 +664,48 @@
                                             }
                                         }
                                     }'>
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-top">Top</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-6.jpg")" alt="Product image" class="product-image">
-                                    </a>
+                            @foreach (var product in Model.Products["Convenience"])
+                            {
+                                <div class="product text-center">
+                                    <figure class="product-media">
+                                        <span class="product-label label-top">Top</span>
+                                        <a href="/product/index/@product.Id">
+                                            <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
+                                        </a>
 
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart" title="Add to cart" data-product="@product.Id">
+                                                <span>add to cart</span>
+                                            </a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
 
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Laptops</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">MacBook Pro 13" Display, i5</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $1,199.99
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 4 Reviews )</span>
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-7.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Audio</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Bose - SoundLink Bluetooth Speaker</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $79.99
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 60%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 6 Reviews )</span>
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-new">New</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-8.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Tablets</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Apple - 11 Inch iPad Pro <br>with Wi-Fi 256GB </a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $899.99
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 60%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-top">Top</span>
-                                    <span class="product-label label-sale">Sale</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-9.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Cell Phone</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Google - Pixel 3 XL 128GB</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        <span class="new-price">$350.00</span>
-                                        <span class="old-price">Was $410.00</span>
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-top">Top</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-6.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Laptops</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">MacBook Pro 13" Display, i5</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $1,199.99
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 4 Reviews )</span>
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">@product.CategoryName</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title">
+                                            <a href="/product/index/@product.Id">@product.ProductName</a>
+                                        </h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="new-price">@((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                                <span class="old-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="new-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                            }
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: @(product.AverageRating * 20)%"></div><!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                        </div><!-- End .rating-container -->
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->
+                            }
                         </div><!-- End .owl-carousel -->
                     </div><!-- End .col-xl-9 -->
                 </div><!-- End .row cat-banner-row -->
@@ -880,148 +776,48 @@
                                             }
                                         }
                                     }'>
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-new">New</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-10.jpg")" alt="Product image" class="product-image">
-                                    </a>
+                            @foreach (var product in Model.Products["Fashion"])
+                            {
+                                <div class="product text-center">
+                                    <figure class="product-media">
+                                        <span class="product-label label-new">New</span>
+                                        <a href="product.html">
+                                            <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
+                                        </a>
 
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart" title="Add to cart" data-product="@product.Id">
+                                                <span>add to cart</span>
+                                            </a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
 
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Tables</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Block Side Table/Trolley</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $299.99
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-11.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Sofas</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Roots Sofa Bed</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $1,199.99
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 4 Reviews )</span>
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-sale">Sale</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-12.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Lighting</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Carronade Large <br>Suspension Lamp</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        <span class="new-price">$892.99</span>
-                                        <span class="old-price">Was $931.00</span>
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 60%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-13.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Chairs</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Wingback Chair</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $210.00
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-new">New</span>
-                                    <a href="product.html">
-                                        <img src="@Url.Content("~/assets/user/images/demos/demo-14/products/product-10.jpg")" alt="Product image" class="product-image">
-                                    </a>
-
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Tables</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Block Side Table/Trolley</a></h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $299.99
-                                    </div><!-- End .product-price -->
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">Tables</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title">
+                                            <a href="/product/index/@product.Id">@product.ProductName</a>
+                                        </h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            @if (product.Discount > 0)
+                                            {
+                                                <span class="new-price">@((product.Price * (1 - (product.Discount / 100.0))).ToString("N0", CultureInfo.InvariantCulture))</span>
+                                                <span class="old-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="new-price">@product.Price.ToString("N0", CultureInfo.InvariantCulture)</span>
+                                            }
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: @(product.AverageRating * 20)%"></div><!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                        </div><!-- End .rating-container -->
+                                    </div><!-- End .product-body -->
+                                </div>                            
+                            }
                         </div><!-- End .owl-carousel -->
                     </div><!-- End .col-xl-9 -->
                 </div><!-- End .row cat-banner-row -->
