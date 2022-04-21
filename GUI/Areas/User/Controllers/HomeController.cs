@@ -18,7 +18,7 @@ namespace GUI.Areas.User.Controllers
 
         private readonly string[] HomePageCategoriesName =
         {
-            "Fashion", "Electronics", "Furniture", "Book & Magazine"
+            "Fashion", "Electronics", "Furniture", "Book & Magazine", "Convenience", "Accessories"
         };
 
         private readonly int[][] HomePageCategoriesId =
@@ -38,6 +38,14 @@ namespace GUI.Areas.User.Controllers
             new int[]
             {
                 27
+            },
+            new int[]
+            {
+                6, 9, 10, 14, 16, 21
+            },
+            new int[]
+            {
+                1, 2, 3, 4, 5, 7, 8, 11, 12, 13
             }
         };
 
@@ -60,6 +68,15 @@ namespace GUI.Areas.User.Controllers
             new string[]
             {
                 "Book & Magazine"
+            },
+            new string[]
+            {
+                "Electronics", "Phone & accessories", "Travel & Luggage", "Speaker Devices", "Pet care", "House & Life"
+            },
+            new string[]
+            {
+                "Women Fashion", "Men Fashion", "Beauty", "Health", "Fashion Accessories", "Men's Shoes", "Women's Shoes",
+                "Women's bag", "Men's bag", "Watches"
             }
         };
 
