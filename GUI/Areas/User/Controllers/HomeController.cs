@@ -80,7 +80,7 @@ namespace GUI.Areas.User.Controllers
             }
         };
 
-        public HomeController(IProductClient productClient, IShopClient shopClient, ICategoryClient categoryClient)
+        public HomeController(IProductClient productClient, IExternalShopClient shopClient, ICategoryClient categoryClient)
         {
             _productClient = productClient;
             _shopClient = shopClient;

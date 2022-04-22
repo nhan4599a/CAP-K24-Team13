@@ -105,7 +105,10 @@ namespace GUI
             services.AddScoped<IShopClient, ShopClientImpl>();
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
-            services.AddRefitClient<IExternalShopClient>()
+            services.AddRefitClient<IExternalShopClient>(new RefitSettings
+            {
+                ContentSerializer = new CustomRefitJsonContenSerializer()
+            })
                 .ConfigureHttpClient(options =>
                 {
                     options.BaseAddress = new Uri("https://emallsolution-backendapi.herokuapp.com/api");
