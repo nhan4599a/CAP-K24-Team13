@@ -115,7 +115,7 @@ namespace GUI.Areas.User.Controllers
             productsInCategories.Add("All",
                     productsResponse.Content.Data.Data.Take(20).ToList());
             var newProductsResponse = await newProductsResponseTask;
-            if (newProductsResponse.IsSuccessStatusCode)
+            if (!newProductsResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return View(new HomePageViewModel
             {
