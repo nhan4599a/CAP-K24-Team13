@@ -4,11 +4,6 @@
 @model List<Shared.DTOs.OrderItemDTO>
 @section Styles {
 <style>
-    /*h1 {
-                font-size: 1.5em;
-                margin: 10px;
-            }
-            */
     .rating {
         display: flex;
         flex-direction: row-reverse;
@@ -76,7 +71,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr class="mb-2" data-product="@item.ProductId">
+                            <tr class="mb-2" data-product="@item.ProductId" data-invoice="@item.InvoiceId">
                                 <td>
                                     <div class="row">
                                         <div class="col-md-2">

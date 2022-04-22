@@ -59,7 +59,9 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.CreatedAt,
                         option => option.MapFrom(source => source.Invoice.CreatedAt))
                     .ForMember(target => target.Status,
-                        option => option.MapFrom(source => source.Invoice.Status));
+                        option => option.MapFrom(source => source.Invoice.Status))
+                    .ForMember(target => target.CanBeRating,
+                        option => option.MapFrom(source => source.Invoice.Status == InvoiceStatus.Succeed && !source.IsCommented));
                 cfg.CreateMap<ProductComment, RatingDTO>()
                     .ForMember(target => target.ProductName,
                         option => option.MapFrom(source => source.Product.ProductName))

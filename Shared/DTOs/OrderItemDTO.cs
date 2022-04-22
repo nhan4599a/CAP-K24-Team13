@@ -5,7 +5,7 @@ namespace Shared.DTOs
 {
     public class OrderItemDTO
     {
-        public int Id { get; set; }
+        public int InvoiceId { get; set; }
 
         public string ProductId { get; set; }
 

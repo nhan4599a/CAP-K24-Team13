@@ -21,6 +21,8 @@ namespace DatabaseAccessor.Models
         [Required]
         public double Price { get; set; }
 
+        public bool IsCommented { get; set; }
+
         public virtual Invoice Invoice { get; set; }
 
         public virtual ShopProduct Product { get; set; }

@@ -1,6 +1,7 @@
 ﻿$(document).ready(() => {
     $('tbody > tr button.btn.btn-primary').click(function () {
         let productId = $(this).parent().parent().data('product');
+        let invoiceId = $(this).parent().parent().data('invoice');
         let modal = $('.modal.fade').attr('data-product', productId).modal({
             backdrop: 'static',
             keyboard: false
@@ -12,18 +13,16 @@
             let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/user/checking-out.json');
             animationLoader.showAnimation();
             modal.modal('hide');
-            getUserId().then(userId => {
-                ratingProduct(userId, productId, star, comment)
-                    .then(() => {
-                        animationLoader.hideAnimation();
-                        sourceButton.prop('disabled', true);
-                        toastr.success('Rating success');
-                    })
-                    .catch(error => {
-                        animationLoader.hideAnimation();
-                        toastr.error(error);
-                    });
-            });
+            ratingProduct(invoiceId, productId, star, comment)
+                .then(() => {
+                    animationLoader.hideAnimation();
+                    sourceButton.prop('disabled', true);
+                    toastr.success('Rating success');
+                })
+                .catch(error => {
+                    animationLoader.hideAnimation();
+                    toastr.error(error);
+                });
         });
     });
 });

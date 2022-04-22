@@ -41,29 +41,24 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<CommandResponse<bool>> RatingProductAsync(RatingRequestModel requestModel)
         {
-            var user = await _dbContext.Users.FindAsync(Guid.Parse(requestModel.UserId));
             var productId = Guid.Parse(requestModel.ProductId);
-            if (user == null)
-                return CommandResponse<bool>.Error("Invalid User", null);
-            var product = await _dbContext.ShopProducts.FindAsync(productId);
-            if (product == null)
-                return CommandResponse<bool>.Error("Invalid Product", null);
-            var buyCount = await _dbContext.InvoiceDetails
-                .CountAsync(detail => detail.ProductId.ToString() == requestModel.ProductId 
-                    && detail.Invoice.UserId == user.Id
-                    && detail.Invoice.Status == InvoiceStatus.Succeed);
-            var ratingCount = await _dbContext.ProductComments
-                .CountAsync(comment => comment.UserId == user.Id
-                    && comment.ProductId == productId);
-            if (buyCount - ratingCount <= 0)
-                return CommandResponse<bool>.Error("User have not bought yet", null);
+            var invoice = await _dbContext.InvoiceDetails
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(item => item.InvoiceId == requestModel.InvoiceId && item.ProductId == productId);
+            if (invoice == null)
+                return CommandResponse<bool>.Error("Invalid rating action", null);
+            if (invoice.Invoice.Status != InvoiceStatus.Succeed)
+                return CommandResponse<bool>.Error("Invoice must be succeed to rating", null);
+            if (invoice.IsCommented)
+                return CommandResponse<bool>.Error("You are already rating this product", null);
             _dbContext.ProductComments.Add(new ProductComment
             {
-                UserId = Guid.Parse(requestModel.UserId),
-                ProductId = Guid.Parse(requestModel.ProductId),
+                UserId = invoice.Invoice.UserId,
+                ProductId = productId,
                 Star = requestModel.Star,
                 Message = requestModel.Message
             });
+            invoice.IsCommented = true;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }

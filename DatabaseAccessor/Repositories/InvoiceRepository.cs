@@ -28,7 +28,7 @@ namespace DatabaseAccessor.Repositories
         public async Task<List<OrderItemDTO>> GetOrderHistoryAsync(string userId)
         {
             var parsedUserId = Guid.Parse(userId);
-            var orders = await _dbContext.InvoiceDetails
+            return await _dbContext.InvoiceDetails
                 .AsNoTracking()
                 .Include(e => e.Invoice)
                 .Include(e => e.Product)
@@ -36,21 +36,6 @@ namespace DatabaseAccessor.Repositories
                 .OrderByDescending(e => e.Invoice.CreatedAt)
                 .Select(item => _mapper.MapToOrderItemDTO(item))
                 .ToListAsync();
-
-            foreach (var order in orders)
-            {
-                var buyCount = await _dbContext.InvoiceDetails
-                    .CountAsync(detail => detail.ProductId == Guid.Parse(order.ProductId)
-                        && detail.Invoice.UserId == parsedUserId
-                        && detail.Invoice.Status == InvoiceStatus.Succeed);
-                var ratingCount = await _dbContext.ProductComments
-                    .CountAsync(comment => comment.UserId == parsedUserId
-                        && comment.ProductId == Guid.Parse(order.ProductId));
-
-                order.CanBeRating = (buyCount > ratingCount) && order.Status == InvoiceStatus.Succeed;
-            }
-
-            return orders;
         }
 
         public async Task<List<OrderDTO>> GetOrdersOfShopAsync(int shopId)

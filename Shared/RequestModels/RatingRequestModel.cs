@@ -2,9 +2,9 @@
 {
     public class RatingRequestModel
     {
-        public string ProductId { get; set; }
+        public int InvoiceId { get; set; }
 
-        public string UserId { get; set; }
+        public string ProductId { get; set; }
 
         public string Message { get; set; }
 
