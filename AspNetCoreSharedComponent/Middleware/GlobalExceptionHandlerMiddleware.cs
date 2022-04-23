@@ -10,7 +10,7 @@ namespace AspNetCoreSharedComponent.Middleware
 {
     public class GlobalExceptionHandlerMiddleware
     {
-        private readonly AspNetCoreHttp.RequestDelegate _next;
+        private readonly RequestDelegate _next;
         private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
 
         public GlobalExceptionHandlerMiddleware(AspNetCoreHttp.RequestDelegate next,

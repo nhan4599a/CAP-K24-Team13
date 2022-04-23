@@ -123,7 +123,11 @@
                             window.location.href = '/shopowner/' + (defaultCategory ? 'category' : 'product');
                         }).catch(error => {
                             animationLoader.hideAnimation();
-                            toastr.error(error, 'Error');
+                            if (error.fields) {
+                                toastr.error('Field validation failed: ' + error.fields.join(', '), 'Error');
+                            } else {
+                                toastr.error(error, 'Error');
+                            }
                         });
                     });
             });

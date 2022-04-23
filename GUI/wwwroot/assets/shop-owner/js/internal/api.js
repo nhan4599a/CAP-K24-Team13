@@ -29,7 +29,10 @@ axios.interceptors.response.use(axiosResp => {
         return Promise.resolve(resp.data);
     }
 }, error => {
-    console.log(error);
+    if (error.response.status == 400) {
+        let validationFailedFields = Object.keys(error.response.data.errors).map(value => value.replace('requestModel.', ''));
+        error.response.fields = validationFailedFields;
+    }
     return Promise.reject(error);
 });
 
