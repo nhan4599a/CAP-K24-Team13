@@ -28,7 +28,10 @@ axios.interceptors.response.use(axiosResp => {
         }
         return Promise.resolve(resp.data);
     }
-}, error => Promise.reject(error));
+}, error => {
+    console.log(error);
+    return Promise.reject(error);
+});
 
 const productEndpoint = '/products';
 const categoryEndpoint = '/categories';

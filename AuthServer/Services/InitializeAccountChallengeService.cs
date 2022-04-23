@@ -1,4 +1,5 @@
 ﻿using AuthServer.Identities;
+using DatabaseAccessor.Contexts;
 using DatabaseAccessor.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,13 +25,14 @@ namespace AuthServer.Services
             using var scope = _serviceProvider.CreateScope();
             var userManager = scope.ServiceProvider.GetRequiredService<ApplicationUserManager>();
             var roleManager = scope.ServiceProvider.GetRequiredService<ApplicationRoleManager>();
+            var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await InitializeRoles(roleManager);
-            await InitializeTestUsers(userManager);
+            await InitializeTestUsers(userManager, applicationDbContext);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        private static async Task InitializeTestUsers(ApplicationUserManager userManager)
+        private static async Task InitializeTestUsers(ApplicationUserManager userManager, ApplicationDbContext dbContext)
         {
             string password = "CapK24Team13@Default";
             if (await userManager.FindByNameAsync("customer_test") == null)
@@ -46,6 +48,8 @@ namespace AuthServer.Services
                 user.Id = Guid.Parse("751e9157-b88e-4e5c-46d3-08da12252e89");
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(user, SystemConstant.Roles.SHOP_OWNER);
+                dbContext.ShopStatus.Add(new ShopStatus { ShopId = 1 });
+                await dbContext.SaveChangesAsync();
             }
             if (await userManager.FindByNameAsync("admin_team13") == null)
             {
