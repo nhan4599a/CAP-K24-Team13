@@ -33,7 +33,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<CommandResponse<int>> ImportProductQuantityAsync(Guid productId, int quantity);
 
-        Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int? shopId, List<int> categoryIds, string keyword, PaginationInfo paginationInfo);
+        Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int? shopId, List<int> categoryIds, string keyword, string orderByFieldName, OrderByDirection orderByDirection, PaginationInfo paginationInfo);
 
         Task<List<MinimalProductDTO>> GetTopMostSaleOffProductsAsync();
 

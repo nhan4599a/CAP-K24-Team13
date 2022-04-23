@@ -34,6 +34,10 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<ShopInterfaceDTO>> EditShopInterfaceAsync(int shopId,
             CreateOrEditInterfaceRequestModel requestModel)
         {
+            var shopStatus = await _dbContext.ShopStatus.AsNoTracking()
+                .FirstOrDefaultAsync(shop => shop.ShopId == shopId && !shop.IsDisabled);
+            if (shopStatus == null)
+                return CommandResponse<ShopInterfaceDTO>.Error("Shop is already disabled!", null);
             var shopInterface = await _dbContext.ShopInterfaces.FirstOrDefaultAsync(e => e.ShopId == shopId);
             if (shopInterface == null)
             {

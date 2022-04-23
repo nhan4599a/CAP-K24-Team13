@@ -86,10 +86,16 @@ namespace DatabaseAccessor.Repositories
         public async Task<CommandResponse<bool>> AssignShopOwnerAsync(Guid userId, int shopId)
         {
             var user = await _dbContext.Users.FindAsync(userId);
+            var shopStatus = await _dbContext.ShopStatus.FindAsync(shopId);
+            if (shopStatus != null)
+                return CommandResponse<bool>.Error("Invalid request", null);
+            if (user.Status == AccountStatus.Banned)
+                return CommandResponse<bool>.Error("User is banned", null);
             if (user.ShopId != null)
                 return CommandResponse<bool>.Error("User is already belong to another shop", null);
             var response = await MoveToRoleAsync(user, SystemConstant.Roles.SHOP_OWNER);
             user.ShopId = shopId;
+            _dbContext.ShopStatus.Add(new ShopStatus { ShopId = shopId });
             await _dbContext.SaveChangesAsync();
             return response;
         }

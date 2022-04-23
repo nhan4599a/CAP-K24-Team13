@@ -23,7 +23,7 @@ namespace ShopProductService.Handlers.Product
         {
             if (request.Keyword != null)
                 request.Keyword = request.Keyword.Trim();
-            return await _repository.GetProductsOfCategoryAsync(null, request.CategoryIds, request.Keyword, request.PaginationInfo);
+            return await _repository.GetProductsOfCategoryAsync(null, request.CategoryIds, request.Keyword, "Price", request.Direction, request.PaginationInfo);
         }
 
         public void Dispose()

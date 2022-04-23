@@ -36,6 +36,8 @@ namespace DatabaseAccessor.Contexts
 
         public DbSet<CategoryDTO> Categories { get; set; }
 
+        public DbSet<ShopStatus> ShopStatus { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public ApplicationDbContext(string connectionString) : base(
@@ -85,6 +87,7 @@ namespace DatabaseAccessor.Contexts
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new InterfaceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
             modelBuilder.ApplyConfiguration(new CommentConfiguration());

@@ -332,6 +332,8 @@
 
         function onInformationGot(shopInformation) {
             if (shopInformation) {
+                if (!shopInformation.status)
+                    
                 $('#input-description').val(shopInformation.description);
                 $('#input-name').val(shopInformation.name);
                 $('#input-phone').val(shopInformation.phone);

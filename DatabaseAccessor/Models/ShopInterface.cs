@@ -15,6 +15,8 @@ namespace DatabaseAccessor.Models
 
         public string Images { get; set; }
 
+        public bool IsVisible { get; set; }
+
         public ShopInterface AssignByRequestModel(CreateOrEditInterfaceRequestModel requestModel)
         {
             Avatar = requestModel.Avatar;

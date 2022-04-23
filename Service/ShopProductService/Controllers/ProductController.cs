@@ -207,7 +207,7 @@ namespace ShopProductService.Controllers
         }
 
         [HttpGet("category")]
-        public async Task<ApiResult> GetProductsOfCategory([FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel requestModel)
+        public async Task<ApiResult> GetProductsOfCategory([FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel requestModel, [FromQuery(Name = "direction")] OrderByDirection direction = OrderByDirection.Unspecified)
         {
             var productsOfCategoryResult = await _mediator.Send(new FindProductsByCategoryIdQuery
             {
@@ -217,13 +217,14 @@ namespace ShopProductService.Controllers
                     PageNumber = requestModel.PageNumber,
                     PageSize = requestModel.PageSize
                 },
-                Keyword = requestModel.Keyword
+                Keyword = requestModel.Keyword,
+                Direction = direction
             });
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
         }
 
         [HttpGet("shop/{shopId}/category")]
-        public async Task<ApiResult> GetProductsOfShopInCategory(int shopId, [FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel requestModel)
+        public async Task<ApiResult> GetProductsOfShopInCategory(int shopId, [FromQuery(Name = "categoryId")] List<int> categoryIds, [FromQuery] SearchRequestModel requestModel, [FromQuery(Name = "direction")] OrderByDirection direction = OrderByDirection.Unspecified)
         {
             var productsOfCategoryResult = await _mediator.Send(new FindProductsOfShopInCategoryQuery
             {
@@ -234,7 +235,8 @@ namespace ShopProductService.Controllers
                     PageNumber = requestModel.PageNumber,
                     PageSize = requestModel.PageSize
                 },
-                Keyword = requestModel.Keyword
+                Keyword = requestModel.Keyword,
+                Direction = direction
             });
             return ApiResult<PaginatedList<ProductDTO>>.CreateSucceedResult(productsOfCategoryResult);
         }

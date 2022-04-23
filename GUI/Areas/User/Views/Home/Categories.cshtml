@@ -28,14 +28,14 @@
                         <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
                     </div><!-- End .toolbox-left -->
                     <div class="toolbox-center col-md-4">
-                        <input type="text" class="form-control" placeholder="Search by name" id="input-search-shop"><!-- End .toolbox-info -->
+                        <input type="text" class="form-control" placeholder="Search by name" id="input-search-product"><!-- End .toolbox-info -->
                     </div><!-- End .toolbox-center -->
                     <div class="toolbox-right">
         	            <div class="toolbox-sort">
         			        <label for="sortby">Sort by:</label>
         			        <div class="select-custom">
 						        <select name="sortby" id="sortby" class="form-control">
-							        <option value="" selected="selected">Sort by</option>
+							        <option selected="selected">Sort by</option>
 							        <option value="asc">Ascending</option>
                                     <option value="desc">Descending</option>
 						        </select>
@@ -97,6 +97,36 @@
                     }
                 </div>
             </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item@(Model.Products.HasPreviousPage ? "" : " disabled")">
+                        <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
+                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                        </a>
+                    </li>
+                    @for (var i = 1; i <= @Model.Products.MaxPageNumber; i++)
+                    {
+                        if (i == Model.Products.PageNumber)
+                        {
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">@i</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="#">@i</a>
+                            </li>
+                        }
+                    }
+                    <li class="page-item-total">of @Model.Products.MaxPageNumber</li>
+                    <li class="page-item@(Model.Products.HasNextPage ? "" : " disabled")">
+                        <a class="page-link page-link-next" href="#" aria-label="Next">
+                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
             <div class="sidebar-filter-overlay"></div>
             <aside class="sidebar-shop sidebar-filter">
                 <div class="sidebar-filter-wrapper">
@@ -149,6 +179,30 @@
                         $(element).attr('checked', true);
                     }
                 });
+
+            $('#btn-filter').click(() => {
+                moveToPage(1);
+            });
+
+            $('.page-link').click(function (e) {
+                e.preventDefault();
+                let currentPageNumber = getCurrentPageInfo().pageNumber;
+                if ($(this).hasClass('page-link-prev')) {
+                    moveToPage(currentPageNumber - 1);
+                } else if ($(this).hasClass('page-link-next')) {
+                    moveToPage(currentPageNumber + 1);
+                } else {
+                    let selectedPageNumber = $(this).html();
+                    moveToPage(selectedPageNumber);
+                }
+            });
+
+            $('#input-search-product').keypress(function (e) {
+                if (e.which == 13) {
+                    let keyword = $(this).val().trim();
+                    search(keyword);
+                }
+            });
         });
 
         function getCurrentPageInfo() {
@@ -161,8 +215,47 @@
                     : [parsedQueryObj.cat];
             return {
                 pageNumber: parsedQueryObj.pageNumber || 1,
-                categories: categories || []
+                categories: categories || [],
+                keyword: parsedQueryObj.q || undefined
             };
+        }
+
+        function moveToPage(pageNumber) {
+            let selectedCategoriesId = [];
+            let keyword = getCurrentPageInfo().keyword;
+            $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]:checked').each((_, element) => {
+                selectedCategoriesId.push($(element).data('category'));
+            });
+            let destinationUrl = '/home/categories?';
+            if (keyword)
+                destinationUrl += `q=${keyword}&`;
+            if (selectedCategoriesId.length == 0) {
+                destinationUrl += `pageNumber=${pageNumber}`;
+            } else {
+                destinationUrl += `cat=${selectedCategoriesId.shift()}`;
+                if (selectedCategoriesId.length >= 1)
+                    for (var categoryId of selectedCategoriesId)
+                        destinationUrl += `&cat=${categoryId}`;
+                destinationUrl += `&pageNumber=${pageNumber}`;
+            }
+            location.href = destinationUrl;
+        }
+
+        function search(keyword) {
+            if (!keyword)
+                return;
+            let selectedCategoriesId = [];
+            $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]:checked').each((_, element) => {
+                selectedCategoriesId.push($(element).data('category'));
+            });
+            let destinationUrl = `/home/categories?q=${keyword}`;
+            if (selectedCategoriesId.length > 0) {
+                destinationUrl += `&cat=${selectedCategoriesId.shift()}`;
+                if (selectedCategoriesId.length >= 1)
+                    for (var categoryId of selectedCategoriesId)
+                        destinationUrl += `&cat=${categoryId}`;
+            }
+            location.href = destinationUrl;
         }
 
         function groupParamsByKey(params) {

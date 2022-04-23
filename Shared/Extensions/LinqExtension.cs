@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Shared.Models;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -41,7 +41,7 @@ namespace Shared.Extensions
             if (propertyType != type)
                 throw new ArgumentException(
                     $"Type of {field} is {propertyType.FullName} does not match provided type," +
-                    $" Provided type is {type.FullName}");
+                    $" provided type is {type.FullName}");
             if (arg.GetType() != type)
                 throw new ArgumentException(
                     $"Type of arg is {arg.GetType().FullName} does not match provided type," +
@@ -59,6 +59,30 @@ namespace Shared.Extensions
             };
             var whereClause = Expression.Lambda<Func<TEntity, bool>>(equalExpression, param);
             return entities.Where(whereClause);
+        }
+
+        public static IOrderedQueryable<TEntity> OrderBy<TEntity>(
+            this IQueryable<TEntity> entities, string field, OrderByDirection direction = OrderByDirection.Ascending)
+        {
+            if (direction == OrderByDirection.Unspecified)
+                throw new ArgumentException(field, new NotSupportedException());
+            ParameterExpression param = Expression.Parameter(typeof(TEntity));
+            MemberExpression member = param.BuildMemberExpression(field);
+            if (direction == OrderByDirection.Ascending)
+                return entities.OrderBy(Expression.Lambda<Func<TEntity, object>>(member));
+            return entities.OrderByDescending(Expression.Lambda<Func<TEntity, object>>(member));
+        }
+
+        public static IOrderedQueryable<TEntity> ThenBy<TEntity>(
+            this IOrderedQueryable<TEntity> entities, string field, OrderByDirection direction = OrderByDirection.Ascending)
+        {
+            if (direction == OrderByDirection.Unspecified)
+                throw new ArgumentException(field, new NotSupportedException());
+            ParameterExpression param = Expression.Parameter(typeof(TEntity));
+            MemberExpression member = param.BuildMemberExpression(field);
+            if (direction == OrderByDirection.Ascending)
+                return entities.ThenBy(Expression.Lambda<Func<TEntity, object>>(member));
+            return entities.ThenByDescending(Expression.Lambda<Func<TEntity, object>>(member));
         }
 
         private static MemberExpression BuildMemberExpression(this Expression expression, string field)

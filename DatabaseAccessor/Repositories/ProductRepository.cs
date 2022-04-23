@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.DTOs;
 using Shared.Models;
 using Shared.RequestModels;
+using Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,15 +59,15 @@ namespace DatabaseAccessor.Repositories
 
         public async Task<CommandResponse<Guid>> AddProductAsync(CreateProductRequestModel requestModel)
         {
+            var shopStatus = await _dbContext.ShopStatus.AsNoTracking()
+                .FirstOrDefaultAsync(shop => shop.ShopId == requestModel.ShopId && !shop.IsDisabled);
+            if (shopStatus == null)
+                return CommandResponse<Guid>.Error("Shop is already disabled!", null);
             var shopProduct = new ShopProduct().AssignByRequestModel(requestModel);
             if (await _dbContext.ShopProducts.AnyAsync(product => product.ShopId == shopProduct.ShopId && 
                 product.Category == shopProduct.Category && product.ProductName == shopProduct.ProductName))
             {
                 return CommandResponse<Guid>.Error("Product's name is already existed", null);
-            }
-            if (!(await _dbContext.ShopProducts.FirstAsync(product => product.ShopId == shopProduct.ShopId)).IsVisible)
-            {
-                return CommandResponse<Guid>.Error("Shop is already disabled!", null);
             }
             _dbContext.ShopProducts.Add(shopProduct);
             try
@@ -90,7 +91,7 @@ namespace DatabaseAccessor.Repositories
             if (!isActivateCommand && product.IsDisabled)
                 return CommandResponse<bool>.Error("Product is already deactivated", null);
             if (!product.IsVisible)
-                return CommandResponse<bool>.Error("Shop is already disabled", null);
+                return CommandResponse<bool>.Error("Shop is already disabled!", null);
             product.IsDisabled = !isActivateCommand;
             _dbContext.Entry(product).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
@@ -105,6 +106,8 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<ProductDTO>.Error("Product is not found", null);
             if (product.IsDisabled)
                 return CommandResponse<ProductDTO>.Error("Product is disabled", null);
+            if (!product.IsVisible)
+                return CommandResponse<ProductDTO>.Error("Shop is already disabled!", null);
             product.AssignByRequestModel(requestModel);
             try
             {
@@ -125,7 +128,7 @@ namespace DatabaseAccessor.Repositories
             if (product.IsDisabled)
                 return CommandResponse<int>.Error("Product is disabled", null);
             if (product.IsVisible)
-                return CommandResponse<int>.Error("Shop is already disabled", null);
+                return CommandResponse<int>.Error("Shop is already disabled!", null);
             if (quantity <= 0)
                 return CommandResponse<int>.Error("Quantity must greater than 0", null);
             var newQuantity = quantity + product.Quantity;
@@ -207,7 +210,7 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
         }
 
-        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int? shopId, List<int> categoryIds, string keyword, PaginationInfo paginationInfo)
+        public async Task<PaginatedList<ProductDTO>> GetProductsOfCategoryAsync(int? shopId, List<int> categoryIds, string keyword, string orderByFieldName, OrderByDirection orderByDirection, PaginationInfo paginationInfo)
         {
             IQueryable<ShopProduct> source = _dbContext.ShopProducts.AsNoTracking()
                 .Include(e => e.Comments)
@@ -216,9 +219,15 @@ namespace DatabaseAccessor.Repositories
                 source = source.Where(product => product.ShopId == shopId);
             if (!string.IsNullOrWhiteSpace(keyword))
                 source = source.Where(product => EF.Functions.Like(product.ProductName, $"%{keyword}%"));
+            source = source
+                .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId));
+            if (orderByDirection != OrderByDirection.Unspecified)
+                source = source
+                    .OrderBy(orderByFieldName, orderByDirection)
+                    .ThenByDescending(product => product.CreatedDate);
+            else
+                source = source.OrderByDescending(product => product.CreatedDate);
             return await source
-                .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId))
-                .OrderByDescending(product => product.CreatedDate)
                 .Select(product => _mapper.MapToProductDTO(product))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }

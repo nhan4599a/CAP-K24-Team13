@@ -107,7 +107,7 @@ namespace GUI
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IExternalShopClient>(new RefitSettings
             {
-                ContentSerializer = new CustomRefitJsonContenSerializer()
+                ContentSerializer = new CustomRefitJsonContentSerializer()
             })
                 .ConfigureHttpClient(options =>
                 {

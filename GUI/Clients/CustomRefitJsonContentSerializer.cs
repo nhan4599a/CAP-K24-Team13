@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace GUI.Clients
 {
-    public class CustomRefitJsonContenSerializer : IHttpContentSerializer
+    public class CustomRefitJsonContentSerializer : IHttpContentSerializer
     {
         private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-        public CustomRefitJsonContenSerializer() : this(GetDefaultJsonSerializerOptions())
+        public CustomRefitJsonContentSerializer() : this(GetDefaultJsonSerializerOptions())
         { }
 
-        public CustomRefitJsonContenSerializer(JsonSerializerOptions jsonSerializerOptions)
+        public CustomRefitJsonContentSerializer(JsonSerializerOptions jsonSerializerOptions)
         {
             _jsonSerializerOptions = jsonSerializerOptions;
         }
@@ -41,7 +41,9 @@ namespace GUI.Clients
 
         public HttpContent ToHttpContent<T>(T item)
         {
-            throw new System.NotImplementedException();
+            var content = JsonContent.Create(item, options: _jsonSerializerOptions);
+
+            return content;
         }
 
         public static JsonSerializerOptions GetDefaultJsonSerializerOptions()
@@ -52,7 +54,7 @@ namespace GUI.Clients
                 PropertyNameCaseInsensitive = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
-            jsonSerializerOptions.Converters.Add(new NumberToBooleanTypeConverter());
+            jsonSerializerOptions.Converters.Add(new BooleanTypeConverter());
             jsonSerializerOptions.Converters.Add(new ObjectToInferredTypesConverter());
             jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 
@@ -60,18 +62,34 @@ namespace GUI.Clients
         }
     }
 
-    public class NumberToBooleanTypeConverter : JsonConverter<bool>
+    public class BooleanTypeConverter : JsonConverter<bool>
     {
         public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var byteValue = reader.GetByte();
+            if (reader.TokenType == JsonTokenType.True)
+                return true;
+            if (reader.TokenType == JsonTokenType.False)
+                return false;
+            if (reader.TokenType == JsonTokenType.String)
+            {
+                var strValue = reader.GetString()!.ToLower();
 
-            return byteValue > 0;
+                return strValue == "true";
+            }
+            if (reader.TokenType == JsonTokenType.Number)
+            {
+
+                var byteValue = reader.GetByte();
+
+                return byteValue > 0;
+            }
+
+            throw new NotSupportedException();
         }
 
         public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            writer.WriteBooleanValue(value);
         }
     }
 }

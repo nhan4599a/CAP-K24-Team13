@@ -30,6 +30,13 @@ namespace DatabaseAccessor.Triggers
                     {
                         IsVisible = context.Entity.Status != AccountStatus.Banned
                     }, new List<string> { "IsVisible" }, cancellationToken);
+
+                await _dbContext.ShopStatus
+                    .Where(shop => shop.ShopId == context.Entity.ShopId)
+                    .BatchUpdateAsync(new ShopStatus
+                    {
+                        IsDisabled = context.Entity.Status == AccountStatus.Banned
+                    }, new List<string> { "IsDisabled" }, cancellationToken);
             }
         }
 

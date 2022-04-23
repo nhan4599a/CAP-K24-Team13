@@ -190,6 +190,7 @@ function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAd
     return axios.post(checkoutEndpoint, formData);
 }
 
+
 function ratingProduct(invoiceId, productId, star, comment) {
     let formData = new FormData();
     formData.append('InvoiceId', invoiceId);
