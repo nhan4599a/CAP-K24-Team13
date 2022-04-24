@@ -238,7 +238,7 @@
                     ? parsedQueryObj.cat
                     : [parsedQueryObj.cat];
             return {
-                pageNumber: parsedQueryObj.pageNumber || 1,
+                pageNumber: parseInt(parsedQueryObj.pageNumber) || 1,
                 categories: categories || [],
                 keyword: parsedQueryObj.q || undefined,
                 orderBy: parsedQueryObj.sort || undefined

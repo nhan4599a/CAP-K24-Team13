@@ -9,6 +9,8 @@ namespace Shared.Models
     {
         public int PageNumber { get; private set; }
 
+        public int PageSize { get; private set; }
+
         public int MaxPageNumber { get; private set; }
 
         public bool HasPreviousPage
@@ -29,9 +31,10 @@ namespace Shared.Models
         public IReadOnlyList<T> Data { get; private set; }
 
         [JsonConstructor]
-        public PaginatedList(int pageNumber, int maxPageNumber, IReadOnlyList<T> data) 
+        public PaginatedList(int pageNumber, int pageSize, int maxPageNumber, IReadOnlyList<T> data) 
         {
             PageNumber = pageNumber;
+            PageSize = pageSize;
             MaxPageNumber = maxPageNumber;
             Data = data;
         }
@@ -44,6 +47,7 @@ namespace Shared.Models
                 throw new ArgumentException($"{nameof(pageSize)} must be greater than 0, passed value is {pageSize}", nameof(pageSize));
             Data = data.AsReadOnly();
             PageNumber = pageNumber;
+            PageSize = pageSize ?? count;
             MaxPageNumber = count != 0 ? (int)Math.Ceiling((float)count / pageSize.Value) : 1;
         }
 
