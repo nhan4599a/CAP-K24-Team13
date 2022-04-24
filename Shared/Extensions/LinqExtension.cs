@@ -69,8 +69,8 @@ namespace Shared.Extensions
             ParameterExpression param = Expression.Parameter(typeof(TEntity));
             MemberExpression member = param.BuildMemberExpression(field);
             if (direction == OrderByDirection.Ascending)
-                return entities.OrderBy(Expression.Lambda<Func<TEntity, object>>(member));
-            return entities.OrderByDescending(Expression.Lambda<Func<TEntity, object>>(member));
+                return entities.OrderBy(Expression.Lambda<Func<TEntity, object>>(member, param));
+            return entities.OrderByDescending(Expression.Lambda<Func<TEntity, object>>(member, param));
         }
 
         public static IOrderedQueryable<TEntity> ThenBy<TEntity>(

@@ -30,7 +30,7 @@ namespace GUI.Clients
         Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsOfShopInCategory(int shopId, [Query(CollectionFormat.Multi)] int[] categoryId, [Query] string keyword, int pageNumber, int pageSize);
 
         [Get("/products/category?pageNumber={pageNumber}&pageSize={pageSize}")]
-        Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsInCategory([Query(CollectionFormat.Multi)] int[] categoryId, [Query] string keyword, int pageNumber, int pageSize);
+        Task<ApiResponse<ApiResult<PaginatedList<ProductDTO>>>> GetProductsInCategory([Query(CollectionFormat.Multi)] int[] categoryId, [Query] string keyword, [Query] OrderByDirection direction, int pageNumber, int pageSize);
 
         [Get("/products/sales")]
         Task<ApiResponse<ApiResult<List<MinimalProductDTO>>>> GetMostSaleOffProducts();

@@ -4,6 +4,7 @@ using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
+using Shared.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -100,7 +101,11 @@ namespace GUI.Areas.User.Controllers
                     || !topMostSaleOffProductsResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             var productsResponse = await 
-                _productClient.GetProductsInCategory(HomePageCategoriesId.SelectMany(i => i).Distinct().ToArray(), "", 1, 0);
+                _productClient.GetProductsInCategory(
+                    HomePageCategoriesId.SelectMany(i => i).Distinct().ToArray(),
+                    "",
+                    OrderByDirection.Unspecified,
+                    1, 0);
             if (!productsResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             var productsInCategories = new Dictionary<string, List<ProductDTO>>();
@@ -158,10 +163,10 @@ namespace GUI.Areas.User.Controllers
             }
         }
 
-        public async Task<IActionResult> Categories([FromQuery(Name = "q")] string keyword, [FromQuery(Name = "cat")] List<int> categoryId)
+        public async Task<IActionResult> Categories([FromQuery(Name = "q")] string keyword, [FromQuery(Name = "cat")] List<int> categoryId, [FromQuery(Name = "sort")] OrderByDirection orderBy)
         {
             var categoriesResponseTask = _categoryClient.GetCategories(0);
-            var productsResponseTask = _productClient.GetProductsInCategory(categoryId.ToArray(), keyword, 1, 20);
+            var productsResponseTask = _productClient.GetProductsInCategory(categoryId.ToArray(), keyword, orderBy, 1, 20);
             var categoriesResponse = await categoriesResponseTask;
             var productsResponse = await productsResponseTask;
             if (!categoriesResponse.IsSuccessStatusCode || !productsResponse.IsSuccessStatusCode)

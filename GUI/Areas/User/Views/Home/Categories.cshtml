@@ -165,19 +165,19 @@
                             <div class="widget-body">
                                 <div class="filter-items">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="asc">
-                                        <label class="form-check-label" for="flexRadioDefault1" style="margin-left: 1.1rem">Ascending</label>
+                                        <input class="form-check-input" type="radio" name="sort" id="sort-asc" value="ascending">
+                                        <label class="form-check-label" for="sort-asc" style="margin-left: 1.1rem">Ascending</label>
                                     </div><!-- End .filter-item -->
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="desc">
-                                        <label class="form-check-label" for="flexRadioDefault2" style="margin-left: 1.1rem">Descending</label>
+                                        <input class="form-check-input" type="radio" name="sort" id="sort-desc" value="descending">
+                                        <label class="form-check-label" for="sort-desc" style="margin-left: 1.1rem">Descending</label>
                                     </div><!-- End .filter-item -->
                                 </div><!-- End .filter-items -->
                             </div><!-- End .widget-body -->
                         </div><!-- End .collapse -->
                     </div><!-- End .widget -->
                     <div class="row">
-                        <button class="btn btn-primary">Filter</button>
+                        <button class="btn btn-primary" id="btn-filter">Filter</button>
                     </div>
                 </div><!-- End .sidebar-filter-wrapper -->
             </aside><!-- End .sidebar-filter -->
@@ -189,6 +189,7 @@
     <script>
         $(document).ready(() => {
             let currentSelectedCategory = getCurrentPageInfo().categories;
+            let sort = getCurrentPageInfo().orderBy;
             $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]')
                 .each((_, element) => {
                     let categoryId = $(element).data('category').toString();
@@ -196,6 +197,8 @@
                         $(element).attr('checked', true);
                     }
                 });
+
+            $(`.filter-items input.form-check-input[name="sort"][value="${sort}"]`).prop('checked', true);
 
             $('#btn-filter').click(() => {
                 moveToPage(1);
@@ -226,26 +229,30 @@
             let url = new URL(window.location.href);
             let queryObj = url.searchParams;
             let parsedQueryObj = groupParamsByKey(queryObj);
-            let categories = 
+            let categories =
                 Array.isArray(parsedQueryObj.cat)
-                    ? parsedQueryObj.cat 
+                    ? parsedQueryObj.cat
                     : [parsedQueryObj.cat];
             return {
                 pageNumber: parsedQueryObj.pageNumber || 1,
                 categories: categories || [],
-                keyword: parsedQueryObj.q || undefined
+                keyword: parsedQueryObj.q || undefined,
+                orderBy: parsedQueryObj.sort || undefined
             };
         }
 
         function moveToPage(pageNumber) {
             let selectedCategoriesId = [];
             let keyword = getCurrentPageInfo().keyword;
+            let sort = getCurrentPageInfo().orderBy;
             $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]:checked').each((_, element) => {
                 selectedCategoriesId.push($(element).data('category'));
             });
             let destinationUrl = '/home/categories?';
             if (keyword)
                 destinationUrl += `q=${keyword}&`;
+            if (sort)
+                destinationUrl += `sort=${sort}&`;
             if (selectedCategoriesId.length == 0) {
                 destinationUrl += `pageNumber=${pageNumber}`;
             } else {
@@ -266,6 +273,9 @@
                 selectedCategoriesId.push($(element).data('category'));
             });
             let destinationUrl = `/home/categories?q=${keyword}`;
+            let sort = $('input.form-check-input[name="sort"]:checked').val();
+            if (sort)
+                destinationUrl += `&sort=${sort}`;
             if (selectedCategoriesId.length > 0) {
                 destinationUrl += `&cat=${selectedCategoriesId.shift()}`;
                 if (selectedCategoriesId.length >= 1)
