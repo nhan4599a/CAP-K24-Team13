@@ -61,34 +61,46 @@ namespace Shared.Extensions
             return entities.Where(whereClause);
         }
 
-        public static IOrderedQueryable<TEntity> OrderBy<TEntity, TField>(
+        public static IOrderedQueryable<TEntity> OrderBy<TEntity>(
             this IQueryable<TEntity> entities, string field, OrderByDirection direction = OrderByDirection.Ascending)
         {
             if (direction == OrderByDirection.Unspecified)
                 throw new ArgumentException(field, new NotSupportedException());
             ParameterExpression param = Expression.Parameter(typeof(TEntity));
             MemberExpression member = param.BuildMemberExpression(field);
-            if (member.Type != typeof(TField))
-                throw new ArgumentException($"Type of {field} is {member.Type} does not match provided type," +
-                    $" provided type is {typeof(TField)}");
-            if (direction == OrderByDirection.Ascending)
-                return entities.OrderBy(Expression.Lambda<Func<TEntity, TField>>(member, param));
-            return entities.OrderByDescending(Expression.Lambda<Func<TEntity, TField>>(member, param));
+            var command = direction switch
+            {
+                OrderByDirection.Ascending => "OrderBy",
+                OrderByDirection.Descending => "OrderByDescending",
+                _ => throw new NotImplementedException()
+            };
+            var lambda = Expression.Lambda(member, param);
+            var expression = Expression.Call(
+                    typeof(Queryable), command,
+                    new Type[] { typeof(TEntity), member.Type },
+                    entities.Expression, Expression.Quote(lambda));
+            return (IOrderedQueryable<TEntity>)entities.Provider.CreateQuery<TEntity>(expression);
         }
 
-        public static IOrderedQueryable<TEntity> ThenBy<TEntity, TField>(
+        public static IOrderedQueryable<TEntity> ThenBy<TEntity>(
             this IOrderedQueryable<TEntity> entities, string field, OrderByDirection direction = OrderByDirection.Ascending)
         {
             if (direction == OrderByDirection.Unspecified)
                 throw new ArgumentException(field, new NotSupportedException());
             ParameterExpression param = Expression.Parameter(typeof(TEntity));
             MemberExpression member = param.BuildMemberExpression(field);
-            if (member.Type != typeof(TField))
-                throw new ArgumentException($"Type of {field} is {member.Type} does not match provided type," +
-                    $" provided type is {typeof(TField)}");
-            if (direction == OrderByDirection.Ascending)
-                return entities.ThenBy(Expression.Lambda<Func<TEntity, TField>>(member));
-            return entities.ThenByDescending(Expression.Lambda<Func<TEntity, TField>>(member));
+            var command = direction switch
+            {
+                OrderByDirection.Ascending => "ThenBy",
+                OrderByDirection.Descending => "ThenByDescending",
+                _ => throw new NotImplementedException()
+            };
+            var lambda = Expression.Lambda(member, param);
+            var expression = Expression.Call(
+                    typeof(Queryable), command,
+                    new Type[] { typeof(TEntity), member.Type },
+                    entities.Expression, Expression.Quote(lambda));
+            return (IOrderedQueryable<TEntity>)entities.Provider.CreateQuery<TEntity>(expression);
         }
 
         private static MemberExpression BuildMemberExpression(this Expression expression, string field)
