@@ -123,8 +123,8 @@
                             window.location.href = '/shopowner/' + (defaultCategory ? 'category' : 'product');
                         }).catch(error => {
                             animationLoader.hideAnimation();
-                            if (error.fields) {
-                                toastr.error('Field validation failed: ' + error.fields.join(', '), 'Error');
+                            if (error.response.fields) {
+                                toastr.error('Field validation failed: ' + error.response.fields.join(', '), 'Error');
                             } else {
                                 toastr.error(error, 'Error');
                             }

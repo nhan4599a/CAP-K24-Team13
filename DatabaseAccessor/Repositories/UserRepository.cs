@@ -106,8 +106,9 @@ namespace DatabaseAccessor.Repositories
             if (user.ShopId != null)
                 return CommandResponse<bool>.Error("ShopOwner can't be an system admin", null);
             return await MoveToRoleAsync(user,
-                    authorizeToAdmin ? (team5 ? SystemConstant.Roles.ADMIN_TEAM_5 : SystemConstant.Roles.ADMIN_TEAM_13) : SystemConstant.Roles.CUSTOMER,
-                    true);
+                    authorizeToAdmin
+                    ? (team5 ? SystemConstant.Roles.ADMIN_TEAM_5 : SystemConstant.Roles.ADMIN_TEAM_13)
+                    : SystemConstant.Roles.CUSTOMER, true);
         }
 
         private async Task<CommandResponse<bool>> MoveToRoleAsync(User user, string roleName, bool shouldSave = false)

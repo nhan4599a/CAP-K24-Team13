@@ -166,28 +166,42 @@ $(document).ready(() => {
     else
         $('#statistic-strategy').change();
     $('#view-statistic').click(() => {
-        let strategy = $('#statistic-strategy').val();
-        let start = '';
-        let end = '';
-        if (strategy == 0) {
-            start = $('#input-start').val();
-            end = $('#input-end').val();
-        } else if (strategy == 1) {
-            start = $('#select-start-month').val() + '/' + $('#input-start-year').val();
-            end = $('#select-end-month').val() + '/' + $('#input-end-year').val();
-        } else if (strategy == 2) {
-            start = $('#select-start-quarter').val() + '/' + $('#input-start-year').val();
-            end = $('#select-end-quarter').val() + '/' + $('#input-end-year').val();
-        } else {
-            start = $('#input-start-year').val();
-            end = $('#input-end-year').val();
-        }
-        if (!start || !end) {
-            toastr.error('All fields are required!', 'Error');
-            return;
-        }
-        let view = $('#statistic-view-mode').val();
-        window.location.href = `/shopowner/statistic?strategy=${strategy}&start=${start}&end=${end}&view=${view}`;
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
+        animationLoader.showAnimation();
+        getShopId()
+            .then(shopId => {
+                getShop(shopId)
+                    .then(shop => {
+                        if (!shop.status) {
+                            animationLoader.hideAnimation();
+                            toastr.error('Shop is already disabled');
+                        } else {
+                            let strategy = $('#statistic-strategy').val();
+                            let start = '';
+                            let end = '';
+                            if (strategy == 0) {
+                                start = $('#input-start').val();
+                                end = $('#input-end').val();
+                            } else if (strategy == 1) {
+                                start = $('#select-start-month').val() + '/' + $('#input-start-year').val();
+                                end = $('#select-end-month').val() + '/' + $('#input-end-year').val();
+                            } else if (strategy == 2) {
+                                start = $('#select-start-quarter').val() + '/' + $('#input-start-year').val();
+                                end = $('#select-end-quarter').val() + '/' + $('#input-end-year').val();
+                            } else {
+                                start = $('#input-start-year').val();
+                                end = $('#input-end-year').val();
+                            }
+                            if (!start || !end) {
+                                toastr.error('All fields are required!', 'Error');
+                                return;
+                            }
+                            let view = $('#statistic-view-mode').val();
+                            animationLoader.hideAnimation();
+                            window.location.href = `/shopowner/statistic?strategy=${strategy}&start=${start}&end=${end}&view=${view}`;
+                        }
+                    });
+            });
     });
 });
 

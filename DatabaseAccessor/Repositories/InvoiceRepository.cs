@@ -106,6 +106,9 @@ namespace DatabaseAccessor.Repositories
             if (invoice == null)
                 return CommandResponse<bool>.Error("Order not found", null);
 
+            if (await _dbContext.ShopStatus.AllAsync(shop => shop.ShopId == invoice.ShopId && !shop.IsDisabled))
+                return CommandResponse<bool>.Error("Shop is already disabled", null);
+
             // checking new status is valid
             if (newStatus != InvoiceStatus.Canceled)
             {
@@ -121,7 +124,6 @@ namespace DatabaseAccessor.Repositories
                     return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
             }
 
-            invoice.Status = newStatus;
             if (newStatus == InvoiceStatus.Confirmed)
             {
                 foreach (var detail in invoice.Details)
@@ -132,6 +134,8 @@ namespace DatabaseAccessor.Repositories
                         return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not in sufficient quantity", null);
                 }
             }
+
+            invoice.Status = newStatus;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }
