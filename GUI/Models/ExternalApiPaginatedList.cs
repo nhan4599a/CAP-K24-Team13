@@ -17,7 +17,7 @@ namespace GUI.Models
 
         public PaginatedList<T> ToInternal()
         {
-            return new PaginatedList<T>(PageIndex, PageCount, Items);
+            return new PaginatedList<T>(PageIndex, PageSize, PageCount, Items);
         }
     }
 }

@@ -22,7 +22,7 @@
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">All Categories</a></li>
+                <li class="breadcrumb-item"><a href="/home/categories">All Categories</a></li>
             </ol>
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
@@ -65,7 +65,7 @@
                                 </figure><!-- End .product-media -->
                                 <div class="product-body">
                                     <div class="product-cat">
-                                        <a href="#">@product.CategoryName</a>
+                                        <a href="/home/categories?cat=@product.CategoryId">@product.CategoryName</a>
                                     </div><!-- End .product-cat -->
                                     <h3 class="product-title">
                                         <a href="/product/index/@product.Id">@product.ProductName</a>
@@ -189,7 +189,9 @@
     <script>
         $(document).ready(() => {
             let currentSelectedCategory = getCurrentPageInfo().categories;
+            let keyword = getCurrentPageInfo().keyword;
             let sort = getCurrentPageInfo().orderBy;
+            $('#input-search-product').val(keyword);
             $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]')
                 .each((_, element) => {
                     let categoryId = $(element).data('category').toString();
@@ -201,19 +203,21 @@
             $(`.filter-items input.form-check-input[name="sort"][value="${sort}"]`).prop('checked', true);
 
             $('#btn-filter').click(() => {
-                moveToPage(1);
+                let keyword = $('#input-search-product').val().trim();
+                let sort = $('.filter-items input.form-check-input[name="sort"]:checked').val();
+                moveToPage(keyword, sort, 1);
             });
 
             $('.page-link').click(function (e) {
                 e.preventDefault();
-                let currentPageNumber = getCurrentPageInfo().pageNumber;
+                let currentPageInfo = getCurrentPageInfo();
                 if ($(this).hasClass('page-link-prev')) {
-                    moveToPage(currentPageNumber - 1);
+                    moveToPage(currentPageInfo.keyword, currentPageInfo.orderBy, currentPageInfo.pageNumber - 1);
                 } else if ($(this).hasClass('page-link-next')) {
-                    moveToPage(currentPageNumber + 1);
+                    moveToPage(currentPageInfo.keyword, currentPageInfo.orderBy, currentPageInfo.pageNumber + 1);
                 } else {
                     let selectedPageNumber = $(this).html();
-                    moveToPage(selectedPageNumber);
+                    moveToPage(currentPageInfo.keyword, currentPageInfo.orderBy, selectedPageNumber);
                 }
             });
 
@@ -234,17 +238,15 @@
                     ? parsedQueryObj.cat
                     : [parsedQueryObj.cat];
             return {
-                pageNumber: parsedQueryObj.pageNumber || 1,
+                pageNumber: parseInt(parsedQueryObj.pageNumber) || 1,
                 categories: categories || [],
                 keyword: parsedQueryObj.q || undefined,
                 orderBy: parsedQueryObj.sort || undefined
             };
         }
 
-        function moveToPage(pageNumber) {
+        function moveToPage(keyword, sort, pageNumber) {
             let selectedCategoriesId = [];
-            let keyword = getCurrentPageInfo().keyword;
-            let sort = getCurrentPageInfo().orderBy;
             $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]:checked').each((_, element) => {
                 selectedCategoriesId.push($(element).data('category'));
             });
@@ -253,7 +255,7 @@
                 destinationUrl += `q=${keyword}&`;
             if (sort)
                 destinationUrl += `sort=${sort}&`;
-            if (selectedCategoriesId.length == 0) {
+            if (selectedCategoriesId.length == 0) { 
                 destinationUrl += `pageNumber=${pageNumber}`;
             } else {
                 destinationUrl += `cat=${selectedCategoriesId.shift()}`;
@@ -266,16 +268,11 @@
         }
 
         function search(keyword) {
-            if (!keyword)
-                return;
             let selectedCategoriesId = [];
             $('.filter-item div.custom-control.custom-checkbox input[type=checkbox]:checked').each((_, element) => {
                 selectedCategoriesId.push($(element).data('category'));
             });
             let destinationUrl = `/home/categories?q=${keyword}`;
-            let sort = $('input.form-check-input[name="sort"]:checked').val();
-            if (sort)
-                destinationUrl += `&sort=${sort}`;
             if (selectedCategoriesId.length > 0) {
                 destinationUrl += `&cat=${selectedCategoriesId.shift()}`;
                 if (selectedCategoriesId.length >= 1)

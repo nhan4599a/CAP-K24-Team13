@@ -66,7 +66,7 @@
                                     </figure>
                                     <div class="product-body">
                                         <div class="product-cat">
-                                            <a href="#">@product.CategoryName</a>
+                                            <a href="/home/categories?cat=@product.CategoryId">@product.CategoryName</a>
                                         </div>
                                         <h3 class="product-title"><a href="/product/index/@product.Id">@product.ProductName</a></h3>
                                         <div class="product-price">
@@ -97,7 +97,7 @@
                             <div class="col-2" style="margin-right: 20px;">
                                 <div class="product shop-items">
                                     <figure class="product-media shop-ava">
-                                        <a href="#">
+                                        <a href="shop/index/@shop.Id">
                                             <img src="@Url.ShopImageUrl(shop.Avatar)" alt="Product image" class="product-image">
                                         </a>
                                         <div class="product-action">

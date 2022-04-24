@@ -1,8 +1,8 @@
-﻿function renderProductTable(products) {
+﻿function renderProductTable(products, pageNumber, pageSize) {
     if (products.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no product to show!</p>');
     } else {
-        $('.table-responsive.p-0').html(buildProductTableHtml(products));
+        $('.table-responsive.p-0').html(buildProductTableHtml(products, pageNumber, pageSize));
     }
 }
 
@@ -30,10 +30,10 @@ function renderCustomerTable(customers) {
     }
 }
 
-function buildProductTableHtml(products) {
+function buildProductTableHtml(products, pageNumber, pageSize) {
     let tableRowHtml = '';
     products.forEach((product, index) => {
-        tableRowHtml += buildProductTableRowHtml(product, index);
+        tableRowHtml += buildProductTableRowHtml(product, index, pageNumber, pageSize);
     });
     return `<table class="table align-items-center mb-0">
                 <thead>
@@ -174,10 +174,11 @@ function buildCustomerTableHtml(customers) {
             </table>`;
 }
 
-function buildProductTableRowHtml(product, index) {
+function buildProductTableRowHtml(product, index, pageNumber, pageSize) {
+    let baseIndex = pageNumber * pageSize;
     return `<tr>
                 <td style="display: none" id="prod-id">${product.id}</td>
-                <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                <td class="align-middle text-center" style="padding: 0;">${baseIndex + index + 1}</td>
                 <td class="align-middle text-center">
                     <div class="d-flex px-2 py-1">
                         <div>

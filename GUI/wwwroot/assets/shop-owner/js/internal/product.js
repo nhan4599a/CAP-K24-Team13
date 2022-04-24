@@ -29,7 +29,7 @@ function loadProducts(keyword, pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
     getShopId().then(shopId => {
-        findProducts(shopId, keyword, pageNumber, pageSize).then((paginatedData) => {
+        findProducts(shopId, keyword, pageNumber, pageSize).then(paginatedData => {
             onLoadProductsCompleted(paginatedData);
             animationLoader.hideAnimation();
         }).catch(() => {
@@ -41,7 +41,7 @@ function loadProducts(keyword, pageNumber, pageSize) {
 
 function onLoadProductsCompleted(paginatedData) {
     let products = paginatedData.data;
-    renderProductTable(products);
+    renderProductTable(products, paginatedData.pageNumber, paginatedData.pageSize);
     renderPagination({
         hasPreviousPage: paginatedData.hasPreviousPage,
         hasNextPage: paginatedData.hasNextPage,
@@ -162,8 +162,9 @@ function onLoadProductsCompleted(paginatedData) {
     });
     $('#sort-select').change(function () {
         let sortDirection = $(this).val();
+        let currentPageInfo = getCurrentPageInfo();
         clearTable();
-        renderProductTable(sortList('productName', sortDirection, products));
+        renderProductTable(sortList('productName', sortDirection, products), currentPageInfo.pageNumber, currentPageInfo.pageSize);
     });
 }
 
