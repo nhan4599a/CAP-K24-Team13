@@ -163,10 +163,10 @@ namespace GUI.Areas.User.Controllers
             }
         }
 
-        public async Task<IActionResult> Categories([FromQuery(Name = "q")] string keyword, [FromQuery(Name = "cat")] List<int> categoryId, [FromQuery(Name = "sort")] OrderByDirection orderBy)
+        public async Task<IActionResult> Categories([FromQuery(Name = "q")] string keyword, [FromQuery(Name = "cat")] List<int> categoryId, [FromQuery(Name = "sort")] OrderByDirection orderBy, [FromQuery] int pageNumber = 1)
         {
             var categoriesResponseTask = _categoryClient.GetCategories(0);
-            var productsResponseTask = _productClient.GetProductsInCategory(categoryId.ToArray(), keyword, orderBy, 1, 20);
+            var productsResponseTask = _productClient.GetProductsInCategory(categoryId.ToArray(), keyword, orderBy, pageNumber, 20);
             var categoriesResponse = await categoriesResponseTask;
             var productsResponse = await productsResponseTask;
             if (!categoriesResponse.IsSuccessStatusCode || !productsResponse.IsSuccessStatusCode)
