@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
 .gradient-custom-2 {
     /* fallback for old browsers */
-    background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
+    background: #c96;
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
+    background: #c96;
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
+    background: #c96;
 }
 
 @media (min-width: 768px) {
     .gradient-form {
-        height: 100vh !important;
+        height: 1vh !important;
     }
 }
 
@@ -22,7 +22,7 @@
 }
 
 .btn-hover:hover {
-    background: linear-gradient(59deg, rgba(253,214,255,1) 36%, rgba(124,226,250,1) 74%, rgba(107,232,252,1) 100%);
+    background: #c96;
     color: #b9257b;
     border-color: #000
 }
@@ -30,4 +30,16 @@
 .text-custom {
     color: #b9257b;
 }
+
+.btn-block {
+    border: 1px !important;
+    border-color: #c96;
+}
+
+.btn-sign-up:hover {
+    background-color: white;
+    border-color: white;
+    font-size: 20px
+}
+
 
