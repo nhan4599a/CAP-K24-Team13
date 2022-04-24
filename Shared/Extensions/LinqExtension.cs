@@ -61,28 +61,34 @@ namespace Shared.Extensions
             return entities.Where(whereClause);
         }
 
-        public static IOrderedQueryable<TEntity> OrderBy<TEntity>(
+        public static IOrderedQueryable<TEntity> OrderBy<TEntity, TField>(
             this IQueryable<TEntity> entities, string field, OrderByDirection direction = OrderByDirection.Ascending)
         {
             if (direction == OrderByDirection.Unspecified)
                 throw new ArgumentException(field, new NotSupportedException());
             ParameterExpression param = Expression.Parameter(typeof(TEntity));
             MemberExpression member = param.BuildMemberExpression(field);
+            if (member.Type != typeof(TField))
+                throw new ArgumentException($"Type of {field} is {member.Type} does not match provided type," +
+                    $" provided type is {typeof(TField)}");
             if (direction == OrderByDirection.Ascending)
-                return entities.OrderBy(Expression.Lambda<Func<TEntity, object>>(member, param));
-            return entities.OrderByDescending(Expression.Lambda<Func<TEntity, object>>(member, param));
+                return entities.OrderBy(Expression.Lambda<Func<TEntity, TField>>(member, param));
+            return entities.OrderByDescending(Expression.Lambda<Func<TEntity, TField>>(member, param));
         }
 
-        public static IOrderedQueryable<TEntity> ThenBy<TEntity>(
+        public static IOrderedQueryable<TEntity> ThenBy<TEntity, TField>(
             this IOrderedQueryable<TEntity> entities, string field, OrderByDirection direction = OrderByDirection.Ascending)
         {
             if (direction == OrderByDirection.Unspecified)
                 throw new ArgumentException(field, new NotSupportedException());
             ParameterExpression param = Expression.Parameter(typeof(TEntity));
             MemberExpression member = param.BuildMemberExpression(field);
+            if (member.Type != typeof(TField))
+                throw new ArgumentException($"Type of {field} is {member.Type} does not match provided type," +
+                    $" provided type is {typeof(TField)}");
             if (direction == OrderByDirection.Ascending)
-                return entities.ThenBy(Expression.Lambda<Func<TEntity, object>>(member));
-            return entities.ThenByDescending(Expression.Lambda<Func<TEntity, object>>(member));
+                return entities.ThenBy(Expression.Lambda<Func<TEntity, TField>>(member));
+            return entities.ThenByDescending(Expression.Lambda<Func<TEntity, TField>>(member));
         }
 
         private static MemberExpression BuildMemberExpression(this Expression expression, string field)

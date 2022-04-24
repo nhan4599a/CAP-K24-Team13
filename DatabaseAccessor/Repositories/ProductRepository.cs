@@ -223,7 +223,7 @@ namespace DatabaseAccessor.Repositories
                 .Where(product => !categoryIds.Any() || categoryIds.Contains(product.CategoryId));
             if (orderByDirection != OrderByDirection.Unspecified)
                 source = source
-                    .OrderBy(orderByFieldName, orderByDirection)
+                    .OrderBy<ShopProduct, double>(orderByFieldName, orderByDirection)
                     .ThenByDescending(product => product.CreatedDate);
             else
                 source = source.OrderByDescending(product => product.CreatedDate);
