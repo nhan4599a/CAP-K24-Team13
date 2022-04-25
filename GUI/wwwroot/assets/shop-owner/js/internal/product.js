@@ -30,6 +30,9 @@ function loadProducts(keyword, pageNumber, pageSize) {
     animationLoader.showAnimation(3500);
     getShopId().then(shopId => {
         findProducts(shopId, keyword, pageNumber, pageSize).then(paginatedData => {
+            if (paginatedData.pageNumber > paginatedData.maxPageNumber) {
+                moveToPage(keyword, 1, paginatedData.pageSize);
+            }
             onLoadProductsCompleted(paginatedData);
             animationLoader.hideAnimation();
         }).catch(() => {

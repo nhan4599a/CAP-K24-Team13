@@ -184,15 +184,15 @@ namespace DatabaseAccessor.Repositories
             var sourceProduct = await _dbContext.ShopProducts.FindAsync(productId);
             if (sourceProduct == null)
                 return CommandResponse<List<ProductDTO>>.Error("Product is not found!", null);
+            var relatedCategoriesId = GetRelatedCategories(sourceProduct.CategoryId);
             var result = await _dbContext.ShopProducts
                 .AsNoTracking()
                 .Include(e => e.Comments)
                 .AsSplitQuery()
-                .Where(product => product.ShopId == sourceProduct.ShopId
-                    && product.Category == sourceProduct.Category && product.Id != sourceProduct.Id)
+                .Where(product => product.Category == sourceProduct.Category && product.Id != sourceProduct.Id)
+                .Where(product => relatedCategoriesId.Contains(product.CategoryId))
                 .OrderByDescending(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
                 .ThenByDescending(product => product.CreatedDate)
-                .ThenByDescending(product => product.Price)
                 .Take(4).Select(product => _mapper.MapToProductDTO(product))
                 .ToListAsync();
             return CommandResponse<List<ProductDTO>>.Success(result);
@@ -259,6 +259,48 @@ namespace DatabaseAccessor.Repositories
         {
             _dbContext.Dispose();
             GC.SuppressFinalize(this);
+        }
+
+        private static List<int> GetRelatedCategories(int categoryId)
+        {
+            var superCategories = new int[][]
+            {
+                new int[]
+                {
+                    1, 2, 5, 7, 8, 9, 11, 12, 13, 17, 18
+                },
+                new int[]
+                {
+                    6, 9, 10, 14 ,16, 21
+                },
+                new int[]
+                {
+                    4, 3
+                },
+                new int[]
+                {
+                    3, 4, 1 ,8, 11, 2, 7, 12, 5, 13
+                },
+                new int[]
+                {
+                    19, 29, 14, 9, 28, 6
+                },
+                new int[]
+                {
+                    28, 19, 14
+                },
+                new int[]
+                {
+                    26, 25
+                },
+                new int[]
+                {
+                    21, 22, 24, 3, 4, 6, 15, 14, 20, 23, 27, 29
+                }
+            };
+            return superCategories
+                .Where(superCategory => superCategory.Contains(categoryId))
+                .SelectMany(e => e).Distinct().ToList();
         }
     }
 }
