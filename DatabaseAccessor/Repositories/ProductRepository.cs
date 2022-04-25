@@ -189,7 +189,7 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Include(e => e.Comments)
                 .AsSplitQuery()
-                .Where(product => product.Category == sourceProduct.Category && product.Id != sourceProduct.Id)
+                .Where(product => product.Id != sourceProduct.Id)
                 .Where(product => relatedCategoriesId.Contains(product.CategoryId))
                 .OrderByDescending(product => product.Invoices.Count(invoice => invoice.Invoice.Status == InvoiceStatus.Succeed))
                 .ThenByDescending(product => product.CreatedDate)
