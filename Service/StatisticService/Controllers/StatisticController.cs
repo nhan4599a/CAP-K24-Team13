@@ -104,9 +104,9 @@ namespace StatisticService.Controllers
                 {
                     incomeSheet.Cell(3, currentColumn).Value = value.Value.Income;
 
-                    numberOfInvoicesSheet.Cell(3, currentColumn).Value = value.Value.Data.NewInvoiceCount;
-                    numberOfInvoicesSheet.Cell(4, currentColumn).Value = value.Value.Data.SucceedInvoiceCount;
-                    numberOfInvoicesSheet.Cell(5, currentColumn).Value = value.Value.Data.CanceledInvoiceCount;
+                    numberOfInvoicesSheet.Cell(3, currentColumn).SetValue(value.Value.Data.NewInvoiceCount.ToString("N0"));
+                    numberOfInvoicesSheet.Cell(4, currentColumn).SetValue(value.Value.Data.SucceedInvoiceCount.ToString("N0"));
+                    numberOfInvoicesSheet.Cell(5, currentColumn).SetValue(value.Value.Data.CanceledInvoiceCount.ToString("N0"));
                 }
 
                 currentColumn += 1;
