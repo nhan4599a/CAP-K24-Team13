@@ -309,6 +309,9 @@ function authorizeUser(userId, admin) {
 function downloadStatistic(key) {
     return axios.get(`${statisticEndpoint}/get/${key}`, {
         responseType: 'blob'
+    }).then(blob => {
+        blob.name = key;
+        return blob;
     });
 }
 

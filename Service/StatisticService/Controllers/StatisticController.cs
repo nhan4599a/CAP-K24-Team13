@@ -66,6 +66,7 @@ namespace StatisticService.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("get/{key}")]
         public async Task<IActionResult> GetStatistic(string key)
         {

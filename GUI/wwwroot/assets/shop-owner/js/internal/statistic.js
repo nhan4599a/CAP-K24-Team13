@@ -162,7 +162,7 @@ $(document).ready(() => {
                                     const url = window.URL.createObjectURL(new Blob([blob.data]));
                                     const link = document.createElement('a');
                                     link.href = url;
-                                    link.setAttribute('download', 'file.pdf'); //or any other extension
+                                    link.setAttribute('download', `${blob.name}.xlsx`); //or any other extension
                                     document.body.appendChild(link);
                                     link.click();
                                     $(link).remove();
