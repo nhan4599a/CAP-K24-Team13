@@ -29,9 +29,12 @@ $(document).ready(() => {
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button class="btn" style="visibility: hidden">placeholder</button>
+                                                    <button class="btn" id="btn-export">Export Statistic</button>
                                                 </div>
                                             </div>`);
+            console.log(currentPageInfo);
+            console.log(getDateObj(currentPageInfo.start));
+            console.log(getDateObj(currentPageInfo.end));
             $('#input-start').val(getDateObj(currentPageInfo.start) ? currentPageInfo.start : '');
             $('#input-end').val(getDateObj(currentPageInfo.end) ? currentPageInfo.end : '');
         } else if (strategy == 1) {
@@ -75,7 +78,7 @@ $(document).ready(() => {
                                                     <input type="text" id="input-end-year" class="form-control" placeholder="End year" />
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button class="btn" style="visibility: hidden">placeholder</button>
+                                                    <button class="btn" id="btn-export">Export Statistic</button>
                                                 </div>
                                             </div>`);
             $('#select-start-month').val(currentPageInfo.start ? (currentPageInfo.start.split('/')[0] || 0) : 0);
@@ -107,7 +110,7 @@ $(document).ready(() => {
                                                     <input type="text" id="input-end-year" class="form-control" placeholder="End year" />
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button class="btn" style="visibility: hidden">placeholder</button>
+                                                    <button class="btn" id="btn-export">Export Statistic</button>
                                                 </div>
                                             </div>`);
             $('#select-start-month').val(currentPageInfo.start ? (currentPageInfo.start.split('/')[0] || 0) : 0);
@@ -123,7 +126,7 @@ $(document).ready(() => {
                                                     <input type="text" id="input-end-year" class="form-control" value="${currentYear}" placeholder="End year" />
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button class="btn" style="visibility: hidden">placeholder</button>
+                                                    <button class="btn" id="btn-export">Export Statistic</button>
                                                 </div>
                                             </div>`);
             $('#input-start-year').val(currentPageInfo.start || currentYear);
@@ -169,8 +172,10 @@ $(document).ready(() => {
                     });
             });
     }
-    else
+    else {
         $('#statistic-strategy').change();
+        $('#btn-export').css('visibility', 'hidden');
+    }
     $('#view-statistic').click(() => {
         let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
         animationLoader.showAnimation();
@@ -266,23 +271,22 @@ function switchChartViewMode(chart, context, viewMode, data) {
                 labels: result.map(obj => obj.date),
                 datasets: [
                     {
-                        label: 'New orders',
+                        label: 'New Orders',
                         data: result.map(obj => obj.new),
                         borderColor: 'rgb(66, 115, 121)',
                         backgroundColor: 'rgb(75, 192, 192)'
                     },
                     {
-                        label: 'Succeed Income',
+                        label: 'Succeed Orders',
                         data: result.map(obj => obj.succeed),
                         borderColor: 'rgba(181, 224, 90, 1)',
                         backgroundColor: 'rgba(153, 191, 74, 1)'
                     },
                     {
-                        label: 'Canceled Income',
+                        label: 'Canceled Orders',
                         data: result.map(obj => obj.canceled),
                         borderColor: 'rgb(255, 99, 132)',
                         backgroundColor: 'rgb(224, 155, 170)'
-
                     }
                 ]
             },

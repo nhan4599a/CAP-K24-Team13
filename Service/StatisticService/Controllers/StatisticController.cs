@@ -1,10 +1,14 @@
-﻿using MediatR;
+﻿using ClosedXML.Excel;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Shared.Models;
 using StatisticService.Commands;
 using System;
+using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -21,7 +25,7 @@ namespace StatisticService.Controllers
 
         private static readonly DistributedCacheEntryOptions cacheOptions = new()
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
         };
 
         public StatisticController(IMediator mediator, IDistributedCache cache)
@@ -59,6 +63,45 @@ namespace StatisticService.Controllers
             {
                 return ApiResult.CreateErrorResult(500, e.Message);
             }
+        }
+
+        [HttpGet("get/{key}")]
+        public async Task<IActionResult> GetStatistic(string key)
+        {
+            var cachedResult = await _cache.GetStringAsync(key);
+            if (cachedResult == null)
+                return StatusCode(StatusCodes.Status404NotFound);
+            var parsedCacheResult = JsonSerializer.Deserialize<StatisticResult>(cachedResult);
+            var columnCount = parsedCacheResult!.Details.Count;
+            using var workbook = new XLWorkbook();
+            var incomeSheet = workbook.Worksheets.Add("Income");
+            var numberOfInvoicesSheet = workbook.Worksheets.Add("Number of invoices");
+            incomeSheet.Cell("B1").Value = $"{parsedCacheResult.StatisticBy.GetStrategy()} from {parsedCacheResult.Details.First().Key} to {parsedCacheResult.Details.Last().Key}";
+            numberOfInvoicesSheet.Cell("B1").Value = $"{parsedCacheResult.StatisticBy.GetStrategy()} from {parsedCacheResult.Details.First().Key} to {parsedCacheResult.Details.Last().Key}";
+            incomeSheet.Range(1, 2, 1, 1 + columnCount).Merge();
+            numberOfInvoicesSheet.Range(1, 2, 1, 1 + columnCount).Merge();
+            incomeSheet.Cell("A3").Value = "Income";
+            numberOfInvoicesSheet.Cell("A3").Value = "New orders";
+            numberOfInvoicesSheet.Cell("A4").Value = "Succeed orders";
+            numberOfInvoicesSheet.Cell("A5").Value = "Canceled orders";
+            var currentColumn = 2;
+            foreach (var value in parsedCacheResult.Details)
+            {
+                incomeSheet.Cell(2, currentColumn).Value = value.Key;
+                incomeSheet.Cell(3, currentColumn).Value = value.Value.Income;
+
+                numberOfInvoicesSheet.Cell(2, currentColumn).Value = value.Key;
+                numberOfInvoicesSheet.Cell(3, currentColumn).Value = value.Value.Data.NewInvoiceCount;
+                numberOfInvoicesSheet.Cell(4, currentColumn).Value = value.Value.Data.SucceedInvoiceCount;
+                numberOfInvoicesSheet.Cell(5, currentColumn).Value = value.Value.Data.CanceledInvoiceCount;
+
+                currentColumn += 1;
+            }
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            var content = stream.ToArray();
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "statistic.xlsx");
         }
 
         private static string GetCacheKey(StatisticStrategy strategy, StatisticDateRange range)

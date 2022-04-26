@@ -41,7 +41,8 @@ namespace ReportService
                     options.Authority = "https://cap-k24-team13-auth.herokuapp.com";
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        RoleClaimType = "role"
                     };
                 });
             services.AddMediatR(typeof(Startup));
