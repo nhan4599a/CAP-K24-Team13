@@ -3,16 +3,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Shared.DTOs;
 using Shared.Exceptions;
 using Shared.Models;
 using Shared.RequestModels;
 using Shared.Validations;
 using ShopInterfaceService.Commands;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
