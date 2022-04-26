@@ -91,12 +91,24 @@ namespace StatisticService.Controllers
             foreach (var value in parsedCacheResult.Details)
             {
                 incomeSheet.Cell(2, currentColumn).Value = value.Key;
-                incomeSheet.Cell(3, currentColumn).Value = value.Value?.Income;
-
                 numberOfInvoicesSheet.Cell(2, currentColumn).Value = value.Key;
-                numberOfInvoicesSheet.Cell(3, currentColumn).Value = value.Value?.Data.NewInvoiceCount;
-                numberOfInvoicesSheet.Cell(4, currentColumn).Value = value.Value?.Data.SucceedInvoiceCount;
-                numberOfInvoicesSheet.Cell(5, currentColumn).Value = value.Value?.Data.CanceledInvoiceCount;
+
+                if (value.Value == null)
+                {
+                    incomeSheet.Cell(3, currentColumn).Value = 0;
+
+                    numberOfInvoicesSheet.Cell(3, currentColumn).Value = 0;
+                    numberOfInvoicesSheet.Cell(4, currentColumn).Value = 0;
+                    numberOfInvoicesSheet.Cell(5, currentColumn).Value = 0;
+                }
+                else
+                {
+                    incomeSheet.Cell(3, currentColumn).Value = value.Value.Income;
+
+                    numberOfInvoicesSheet.Cell(3, currentColumn).Value = value.Value.Data.NewInvoiceCount;
+                    numberOfInvoicesSheet.Cell(4, currentColumn).Value = value.Value.Data.SucceedInvoiceCount;
+                    numberOfInvoicesSheet.Cell(5, currentColumn).Value = value.Value.Data.CanceledInvoiceCount;
+                }
 
                 currentColumn += 1;
             }
