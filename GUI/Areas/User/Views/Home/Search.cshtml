@@ -32,6 +32,14 @@
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "home")
 }
+<nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="">Home</a></li>
+            <li class="breadcrumb-item"><a href="/home/search">Search</a></li>
+        </ol>
+    </div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
 <main class="main">
     <div class="mb-2"></div><!-- End .mb-2-->
     <div class="col-md-12">

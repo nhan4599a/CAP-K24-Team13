@@ -10,7 +10,7 @@
 
 @media (min-width: 768px) {
     .gradient-form {
-        height: 1vh !important;
+        height: 100vh !important;
     }
 }
 
@@ -29,6 +29,8 @@
 
 .text-custom {
     color: #b9257b;
+    font-family: Roboto; 
+    text-decoration:underline;
 }
 
 .btn-block {
