@@ -19,6 +19,9 @@ function loadCategories(pageNumber, pageSize) {
     animationLoader.showAnimation();
     getShopId().then(shopId => {
         getCategories(shopId, pageNumber, pageSize).then((paginatedData) => {
+            if (paginatedData.pageNumber > paginatedData.maxPageNumber) {
+                moveToPage(1, paginatedData.pageSize);
+            }
             onCategoriesLoaded(paginatedData);
             animationLoader.hideAnimation();
         }).catch(() => {
@@ -30,7 +33,7 @@ function loadCategories(pageNumber, pageSize) {
 
 function onCategoriesLoaded(paginatedData) {
     let categories = paginatedData.data;
-    renderCategoryTable(categories);
+    renderCategoryTable(categories, paginatedData.pageNumber, paginatedData.pageSize);
     renderPagination({
         hasPreviousPage: paginatedData.hasPreviousPage,
         hasNextPage: paginatedData.hasNextPage,
@@ -38,15 +41,18 @@ function onCategoriesLoaded(paginatedData) {
         maxPageNumber: paginatedData.maxPageNumber
     });
 
-    $('#previous-page').click(() => {
+    $('#previous-page').click((e) => {
+        e.preventDefault();
         let currentPageInfo = getCurrentPageInfo();
         moveToPage(currentPageInfo.pageNumber - 1, currentPageInfo.pageSize);
     });
-    $('#next-page').click(() => {
+    $('#next-page').click((e) => {
+        e.preventDefault();
         let currentPageInfo = getCurrentPageInfo();
         moveToPage(currentPageInfo.pageNumber + 1, currentPageInfo.pageSize);
     });
-    $('a.pagination-item').click(function () {
+    $('a.pagination-item').click(function (e) {
+        e.preventDefault();
         let pageNumber = $(this).text();
         moveToPage(pageNumber, getCurrentPageInfo().pageSize);
     });

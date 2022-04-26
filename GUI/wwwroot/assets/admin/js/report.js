@@ -15,6 +15,9 @@ function loadReports(pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
     getReports(pageNumber, pageSize).then((paginatedData) => {
+        if (paginatedData.pageNumber > paginatedData.maxPageNumber) {
+            moveToPage(1, paginatedData.pageSize);
+        }
         onLoadReportsCompleted(paginatedData);
         animationLoader.hideAnimation();
     }).catch(() => {
@@ -25,7 +28,7 @@ function loadReports(pageNumber, pageSize) {
 
 function onLoadReportsCompleted(paginatedData) {
     let reports = paginatedData.data;
-    renderReportTable(reports);
+    renderReportTable(reports, paginatedData.pageNumber, paginatedData.pageSize);
     renderPagination({
         hasPreviousPage: paginatedData.hasPreviousPage,
         hasNextPage: paginatedData.hasNextPage,

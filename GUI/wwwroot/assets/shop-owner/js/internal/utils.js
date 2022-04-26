@@ -6,27 +6,27 @@
     }
 }
 
-function renderInvoiceTable(invoices) {
+function renderInvoiceTable(invoices, pageNumber, pageSize) {
     if (invoices.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no invoice to show!</p>');
     } else {
-        $('.table-responsive.p-0').html(buildInvoiceTableHtml(invoices));
+        $('.table-responsive.p-0').html(buildInvoiceTableHtml(invoices, pageNumber, pageSize));
     }
 }
 
-function renderReportTable(reports) {
+function renderReportTable(reports, pageNumber, pageSize) {
     if (reports.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no report to show!</p>');
     } else {
-        $('.table-responsive.p-0').html(buildReportTableHtml(reports));
+        $('.table-responsive.p-0').html(buildReportTableHtml(reports, pageNumber, pageSize));
     }
 }
 
-function renderCustomerTable(customers) {
+function renderCustomerTable(customers, pageNumber, pageSize) {
     if (customers.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no customer to show!</p>');
     } else {
-        $('.table-responsive.p-0').html(buildCustomerTableHtml(customers));
+        $('.table-responsive.p-0').html(buildCustomerTableHtml(customers, pageNumber, pageSize));
     }
 }
 
@@ -64,10 +64,10 @@ function buildProductTableHtml(products, pageNumber, pageSize) {
             </table>`;
 }
 
-function buildInvoiceTableHtml(invoices) {
+function buildInvoiceTableHtml(invoices, pageNumber, pageSize) {
     let tableRowHtml = '';
     invoices.forEach((invoice, index) => {
-        tableRowHtml += buildInvoiceTableRowHtml(invoice, index);
+        tableRowHtml += buildInvoiceTableRowHtml(invoice, index, pageNumber, pageSize);
     });
     return `<table class="table align-items-center mb-0">
                 <thead>
@@ -99,10 +99,10 @@ function buildInvoiceTableHtml(invoices) {
             </table>`;
 }
 
-function buildReportTableHtml(reports) {
+function buildReportTableHtml(reports, pageNumber, pageSize) {
     let tableRowHtml = '';
     reports.forEach((report, index) => {
-        tableRowHtml += buildReportTableRowHtml(report, index);
+        tableRowHtml += buildReportTableRowHtml(report, index, pageNumber, pageSize);
     });
     return `<table class="table align-items-center mb-0">
                 <thead>
@@ -133,10 +133,10 @@ function buildReportTableHtml(reports) {
             </table>`;
 }
 
-function buildCustomerTableHtml(customers) { 
+function buildCustomerTableHtml(customers, pageNumber, pageSize) { 
     let tableRowHtml = '';
     customers.forEach((customer, index) => {
-        tableRowHtml += buildCustomerTableRowHtml(customer, index);
+        tableRowHtml += buildCustomerTableRowHtml(customer, index, pageNumber, pageSize);
     });
     return `<table class="table align-items-center m b-0">
                 <thead>
@@ -175,7 +175,7 @@ function buildCustomerTableHtml(customers) {
 }
 
 function buildProductTableRowHtml(product, index, pageNumber, pageSize) {
-    let baseIndex = pageNumber * pageSize;
+    let baseIndex = (pageNumber - 1) * pageSize;
     return `<tr>
                 <td style="display: none" id="prod-id">${product.id}</td>
                 <td class="align-middle text-center" style="padding: 0;">${baseIndex + index + 1}</td>
@@ -207,11 +207,12 @@ function buildProductTableRowHtml(product, index, pageNumber, pageSize) {
             </tr>`;
 }
 
-function buildInvoiceTableRowHtml(invoice, index) {
+function buildInvoiceTableRowHtml(invoice, index, pageNumber, pageSize) {
+    let baseIndex = (pageNumber - 1) * pageSize;
     let statusList = ['New', 'Confirmed', 'Shipper Received', 'Succeed', 'Canceled'];
     return `<tr>
                 <td style="display: none">${invoice.id}</td>
-                <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                <td class="align-middle text-center" style="padding: 0;">${baseIndex + index + 1}</td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${invoice.invoiceCode}</span>
                 </td>
@@ -234,9 +235,10 @@ function buildInvoiceTableRowHtml(invoice, index) {
             </tr>`;
 }
 
-function buildReportTableRowHtml(report, index) {
+function buildReportTableRowHtml(report, index, pageNumber, pageSize) {
+    let baseIndex = (pageNumber - 1) * pageSize;
     return `<tr>
-                <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                <td class="align-middle text-center" style="padding: 0;">${baseIndex + index + 1}</td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${report.id}</span>
                 </td>
@@ -252,9 +254,10 @@ function buildReportTableRowHtml(report, index) {
             </tr>`;
 }
 
-function buildCustomerTableRowHtml(customer, index) {
+function buildCustomerTableRowHtml(customer, index, pageNumber, pageSize) {
+    let baseIndex = (pageNumber - 1) * pageSize;
     return `<tr>
-                <td class="align-middle text-center" style="padding: 0;">${index + 1}</td>
+                <td class="align-middle text-center" style="padding: 0;">${baseIndex + index + 1}</td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${customer.id}</span>
                 </td>
@@ -362,13 +365,6 @@ function buildImportQuantityButtonHtml() {
             </a>`;
 }
 
-//function buildEditQuantityButtonHtml() {
-//    return `<a href="#" class="text-secondary font-weight-bold text-xs"
-//                data-toggle="tooltip" data-original-title="Edit quantity" style="margin-right: 24px" name="btn-quantity">
-//                <i class="far fa-pencil"></i><span> Edit quantity</span>
-//            </a>`;
-//}
-
 function renderPagination(paginationObject) {
     let paginationHtml = '';
     if (paginationObject.hasPreviousPage)
@@ -394,18 +390,18 @@ function renderCategoryDropdown(categories) {
     }
 }
 
-function renderCategoryTable(categories) {
+function renderCategoryTable(categories, pageNumber, pageSize) {
     if (categories.length == 0) {
         $('.table-responsive.p-0').html('<p style="text-align: center">There is no category to show!</p>');
     } else {
-        $('.table-responsive.p-0').html(buildCategoryTableHtml(categories));
+        $('.table-responsive.p-0').html(buildCategoryTableHtml(categories, pageNumber, pageSize));
     }
 }
 
-function buildCategoryTableHtml(categories) {
+function buildCategoryTableHtml(categories, pageNumber, pageSize) {
     let tableRowHtml = '';
     categories.forEach((category, index) => {
-        tableRowHtml += buildCategoryTableRowHtml(category, index);
+        tableRowHtml += buildCategoryTableRowHtml(category, index, pageNumber, pageSize);
     });
     return `<table class="table align-items-center mb-0">
                 <thead>
@@ -430,10 +426,11 @@ function buildCategoryTableHtml(categories) {
             </table>`;
 }
 
-function buildCategoryTableRowHtml(category, index) {
+function buildCategoryTableRowHtml(category, index, pageNumber, pageSize) {
+    let baseIndex = (pageNumber - 1) * pageSize;
     return `<tr>
                 <td style="display: none">${category.categoryId}</td>
-                <td class="align-middle text-center">${index + 1}</td>
+                <td class="align-middle text-center">${baseIndex + index + 1}</td>
                 <td class="align-middle text-center text-sm">
                     ${category.categoryName}
                 </td>

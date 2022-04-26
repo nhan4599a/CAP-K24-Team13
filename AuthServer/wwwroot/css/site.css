@@ -23,7 +23,7 @@
 
 .btn-hover:hover {
     background: #c96;
-    color: #b9257b;
+    color: #fff;
     border-color: #000
 }
 
@@ -40,8 +40,8 @@
 
 .btn-sign-up:hover {
     background-color: white;
-    border-color: white;
-    font-size: 20px
+    border-color: #8a0404;
+    color: #8a0404
 }
 
 

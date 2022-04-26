@@ -2,6 +2,11 @@
 @using GUI.Extensions
 @using System.Globalization
 @model HomePageViewModel
+@{
+    var highlightConvenience = Model.Products["Convenience"].MaxBy(product => product.Discount);
+    var highlightFashion = Model.Products["Fashion"].MaxBy(product => product.Discount);
+    var highlightAccessories = Model.Products["Fashion"].MaxBy(product => product.Discount);
+}
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "home")
 }
