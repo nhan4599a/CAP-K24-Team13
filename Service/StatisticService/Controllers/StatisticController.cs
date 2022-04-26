@@ -88,14 +88,12 @@ namespace StatisticService.Controllers
             numberOfInvoicesSheet.Cell("A4").Value = "Succeed Orders";
             numberOfInvoicesSheet.Cell("A5").Value = "Canceled Orders";
             var currentColumn = 2;
-            incomeSheet.Row(2).SetDataType(XLDataType.Text);
-            numberOfInvoicesSheet.Row(2).SetDataType(XLDataType.Text);
             foreach (var value in parsedCacheResult.Details)
             {
                 incomeSheet.Cell(2, currentColumn).Value = value.Key;
+                incomeSheet.Cell(2, currentColumn).SetDataType(XLDataType.Text);
                 numberOfInvoicesSheet.Cell(2, currentColumn).Value = value.Key;
-
-
+                numberOfInvoicesSheet.Cell(2, currentColumn).SetDataType(XLDataType.Text);
                 if (value.Value == null)
                 {
                     incomeSheet.Cell(3, currentColumn).Value = 0;
