@@ -32,9 +32,6 @@ $(document).ready(() => {
                                                     <button class="btn" id="btn-export">Export Statistic</button>
                                                 </div>
                                             </div>`);
-            console.log(currentPageInfo);
-            console.log(getDateObj(currentPageInfo.start));
-            console.log(getDateObj(currentPageInfo.end));
             $('#input-start').val(getDateObj(currentPageInfo.start) ? currentPageInfo.start : '');
             $('#input-end').val(getDateObj(currentPageInfo.end) ? currentPageInfo.end : '');
         } else if (strategy == 1) {
@@ -158,6 +155,9 @@ $(document).ready(() => {
                             window.history.pushState({}, null,
                                 `/shopowner/statistic?strategy=${currentPageInfo.strategy}&view=${viewMode}&start=${currentPageInfo.start}&end=${currentPageInfo.end}`);
                             chart = switchChartViewMode(chart, context, viewMode, statisticResult.details);
+                        });
+                        $('#btn-export').click(() => {
+                            window.open(`http://ec2-18-139-226-54.ap-southeast-1.compute.amazonaws.com:3000/statistic/get/${statisticResult.key}`, '_blank');
                         });
                     })
                     .catch(error => {
@@ -355,7 +355,7 @@ function openEndDatePicker() {
 function getDateObj(str) {
     if (typeof(str) != 'string')
         return null;
-    if (/\d[1-9]\/\d[1-9]\/\d{4}/.test(str)) {
+    if (/\d{2}\/\d{2}\/\d{4}/.test(str)) {
         let parts = str.split('/');
         if (parts.length != 3)
             return null;

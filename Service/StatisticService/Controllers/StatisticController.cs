@@ -56,7 +56,8 @@ namespace StatisticService.Controllers
                     Strategy = strategy,
                     Range = range
                 });
-                await _cache.SetStringAsync(GetCacheKey(strategy, range), JsonSerializer.Serialize(result), cacheOptions);
+                result.Key = GetCacheKey(strategy, range);
+                await _cache.SetStringAsync(result.Key, JsonSerializer.Serialize(result), cacheOptions);
                 return ApiResult<StatisticResult>.CreateSucceedResult(result);
             }
             catch (Exception e)
@@ -81,9 +82,9 @@ namespace StatisticService.Controllers
             incomeSheet.Range(1, 2, 1, 1 + columnCount).Merge();
             numberOfInvoicesSheet.Range(1, 2, 1, 1 + columnCount).Merge();
             incomeSheet.Cell("A3").Value = "Income";
-            numberOfInvoicesSheet.Cell("A3").Value = "New orders";
-            numberOfInvoicesSheet.Cell("A4").Value = "Succeed orders";
-            numberOfInvoicesSheet.Cell("A5").Value = "Canceled orders";
+            numberOfInvoicesSheet.Cell("A3").Value = "New Orders";
+            numberOfInvoicesSheet.Cell("A4").Value = "Succeed Orders";
+            numberOfInvoicesSheet.Cell("A5").Value = "Canceled Orders";
             var currentColumn = 2;
             foreach (var value in parsedCacheResult.Details)
             {

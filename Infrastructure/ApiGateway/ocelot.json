@@ -239,6 +239,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/statistic/get/{key}",
+      "DownstreamScheme": "http",
+      "ServiceName": "StatisticService",
+      "UpstreamPathTemplate": "/statistic/get/{key}",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/reports",
       "DownstreamScheme": "http",
       "ServiceName": "ReportService",
