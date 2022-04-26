@@ -157,7 +157,22 @@ $(document).ready(() => {
                             chart = switchChartViewMode(chart, context, viewMode, statisticResult.details);
                         });
                         $('#btn-export').click(() => {
-                            window.open(`http://ec2-18-139-226-54.ap-southeast-1.compute.amazonaws.com:3000/statistic/get/${statisticResult.key}`, '_blank');
+                            downloadStatistic(statisticResult.key)
+                                .then(blob => {
+                                    const url = window.URL.createObjectURL(new Blob([blob.data]));
+                                    const link = document.createElement('a');
+                                    link.href = url;
+                                    link.setAttribute('download', 'file.pdf'); //or any other extension
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    $(link).remove();
+                                })
+                                .catch(error => {
+                                    if (error.response.status == 401 || error.response.status == 403)
+                                        toastr.error('Your token is expired! Please re log-in', 'Error');
+                                    else
+                                        toastr.error('Something went wrong', 'Error');
+                                });
                         });
                     })
                     .catch(error => {

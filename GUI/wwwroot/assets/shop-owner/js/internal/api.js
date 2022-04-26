@@ -306,6 +306,12 @@ function authorizeUser(userId, admin) {
     return axios.post(`${userEndpoint}/${userId}`);
 }
 
+function downloadStatistic(key) {
+    return axios.get(`${statisticEndpoint}/get/${key}`, {
+        responseType: 'blob'
+    });
+}
+
 function getShopInformation(shopId) {
     return axios.get(`https://cap-k24-team13.herokuapp.com/api/integrated/shop/${shopId}`);
 }
