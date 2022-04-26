@@ -88,10 +88,12 @@ namespace StatisticService.Controllers
             numberOfInvoicesSheet.Cell("A4").Value = "Succeed Orders";
             numberOfInvoicesSheet.Cell("A5").Value = "Canceled Orders";
             var currentColumn = 2;
+            System.IO.File.WriteAllLines("/home/ec2-user/keys.txt", parsedCacheResult.Details.Keys);
             foreach (var value in parsedCacheResult.Details)
             {
                 incomeSheet.Cell(2, currentColumn).Value = value.Key;
                 numberOfInvoicesSheet.Cell(2, currentColumn).Value = value.Key;
+
 
                 if (value.Value == null)
                 {
