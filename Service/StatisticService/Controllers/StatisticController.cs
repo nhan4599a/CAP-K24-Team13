@@ -107,7 +107,7 @@ namespace StatisticService.Controllers
 
         private static string GetCacheKey(StatisticStrategy strategy, StatisticDateRange range)
         {
-            return $"Statistic.{strategy}.{range.Range.Start:dd/MM/yyyy}-{range.Range.End:dd/MM/yyyy}";
+            return $"Statistic.{strategy}.{range.Range.Start:ddMMyyyy}-{range.Range.End:ddMMyyyy}";
         }
     }
 }
