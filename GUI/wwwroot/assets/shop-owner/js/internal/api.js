@@ -20,8 +20,9 @@ axios.interceptors.response.use(axiosResp => {
         }
         return Promise.resolve(axiosResp.data.resultObj);
     } else {
-        if (axiosResp.data instanceof Blob)
+        if (axiosResp.data instanceof Blob) {
             return Promise.resolve(axiosResp.data);
+        }
         let resp = axiosResp.data;
         if (resp.responseCode != 200) {
             return Promise.reject(resp.errorMessage);

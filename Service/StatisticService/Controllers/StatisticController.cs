@@ -66,7 +66,6 @@ namespace StatisticService.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpGet("get/{key}")]
         public async Task<IActionResult> GetStatistic(string key)
         {
@@ -82,6 +81,8 @@ namespace StatisticService.Controllers
             numberOfInvoicesSheet.Cell("B1").Value = $"{parsedCacheResult.StatisticBy.GetStrategy()} from {parsedCacheResult.Details.First().Key} to {parsedCacheResult.Details.Last().Key}";
             incomeSheet.Range(1, 2, 1, 1 + columnCount).Merge();
             numberOfInvoicesSheet.Range(1, 2, 1, 1 + columnCount).Merge();
+            incomeSheet.Range(1, 2, 1, 1 + columnCount).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            numberOfInvoicesSheet.Range(1, 2, 1, 1 + columnCount).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             incomeSheet.Cell("A3").Value = "Income";
             numberOfInvoicesSheet.Cell("A3").Value = "New Orders";
             numberOfInvoicesSheet.Cell("A4").Value = "Succeed Orders";
@@ -99,7 +100,8 @@ namespace StatisticService.Controllers
 
                 currentColumn += 1;
             }
-
+            incomeSheet.Columns().AdjustToContents();
+            numberOfInvoicesSheet.Columns().AdjustToContents();
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
             var content = stream.ToArray();

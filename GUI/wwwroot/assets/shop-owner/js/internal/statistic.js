@@ -159,7 +159,7 @@ $(document).ready(() => {
                         $('#btn-export').click(() => {
                             downloadStatistic(statisticResult.key)
                                 .then(blob => {
-                                    const url = window.URL.createObjectURL(new Blob([blob.data]));
+                                    const url = window.URL.createObjectURL(new Blob([blob]));
                                     const link = document.createElement('a');
                                     link.href = url;
                                     link.setAttribute('download', `${blob.name}.xlsx`); //or any other extension
