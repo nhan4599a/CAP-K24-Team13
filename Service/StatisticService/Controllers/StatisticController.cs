@@ -90,10 +90,8 @@ namespace StatisticService.Controllers
             var currentColumn = 2;
             foreach (var value in parsedCacheResult.Details)
             {
-                incomeSheet.Cell(2, currentColumn).SetDataType(XLDataType.Text);
-                incomeSheet.Cell(2, currentColumn).Value = value.Key;
-                numberOfInvoicesSheet.Cell(2, currentColumn).SetDataType(XLDataType.Text);
-                numberOfInvoicesSheet.Cell(2, currentColumn).Value = value.Key;
+                incomeSheet.Cell(2, currentColumn).SetValue(value.Key);
+                numberOfInvoicesSheet.Cell(2, currentColumn).SetValue(value.Key);
                 if (value.Value == null)
                 {
                     incomeSheet.Cell(3, currentColumn).Value = 0;
