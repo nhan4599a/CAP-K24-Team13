@@ -88,7 +88,8 @@ namespace StatisticService.Controllers
             numberOfInvoicesSheet.Cell("A4").Value = "Succeed Orders";
             numberOfInvoicesSheet.Cell("A5").Value = "Canceled Orders";
             var currentColumn = 2;
-            System.IO.File.WriteAllLines("/home/ec2-user/keys.txt", parsedCacheResult.Details.Keys);
+            incomeSheet.Row(2).SetDataType(XLDataType.Text);
+            numberOfInvoicesSheet.Row(2).SetDataType(XLDataType.Text);
             foreach (var value in parsedCacheResult.Details)
             {
                 incomeSheet.Cell(2, currentColumn).Value = value.Key;
@@ -116,8 +117,6 @@ namespace StatisticService.Controllers
             }
             incomeSheet.Columns().AdjustToContents();
             numberOfInvoicesSheet.Columns().AdjustToContents();
-            incomeSheet.Row(2).SetDataType(XLDataType.Text);
-            numberOfInvoicesSheet.Row(2).SetDataType(XLDataType.Text);
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
             var content = stream.ToArray();
