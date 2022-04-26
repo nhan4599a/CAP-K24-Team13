@@ -114,6 +114,8 @@ namespace StatisticService.Controllers
             }
             incomeSheet.Columns().AdjustToContents();
             numberOfInvoicesSheet.Columns().AdjustToContents();
+            incomeSheet.Row(2).SetDataType(XLDataType.Text);
+            numberOfInvoicesSheet.Row(2).SetDataType(XLDataType.Text);
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
             var content = stream.ToArray();
