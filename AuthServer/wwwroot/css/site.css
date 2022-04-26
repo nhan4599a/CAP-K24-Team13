@@ -6,6 +6,7 @@
     background: #c96;
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: #c96;
+    border: 1px solid #c96;
 }
 
 @media (min-width: 768px) {
@@ -33,10 +34,41 @@
     text-decoration:underline;
 }
 
+.text-muted {
+    position: relative;
+    text-decoration: none;
+    color: #0dcaf0;
+}
+
+    .text-muted:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 3px;
+        display: block;
+        margin-top: 5px;
+        right: 0;
+        background: #fff;
+        transition: width .2s ease;
+        -webkit-transition: width .2s ease;
+    }
+
+    .text-muted:hover:after {
+        width: 100%;
+        left: 0;
+        background: #fff;
+    }
+
 .btn-block {
     border: 1px !important;
     border-color: #c96;
 }
+
+    .btn-block:hover {
+        color: #c96;
+        background-color: #fff !important;
+        border: 1px solid #c96 !important;
+    }
 
 .btn-sign-up:hover {
     background-color: white;

@@ -12230,7 +12230,9 @@ button:focus {
 
 .sidebar-toggler i {
 	font-size: 1.6rem;
-	margin-right: .9rem
+	margin-right: .9rem;
+	border: 1px solid;
+	border-radius: 5px;
 }
 
 .sidebar-toggler:hover,
