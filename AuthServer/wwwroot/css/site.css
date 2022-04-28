@@ -37,10 +37,10 @@
         bottom: 0;
         content: "";
         display: block;
-        height: 2px;
+        height: 1px;
         left: 50%;
         position: absolute;
-        background: #000;
+        background: #1266f1;
         transition: width 0.3s ease 0s, left 0.3s ease 0s;
         width: 0;
     }
@@ -50,8 +50,10 @@
         left: 0;
     }
 
-.btn-sign-in{
+.btn-sign-in {
     color: #fff;
+    background-color: #c96;
+    border: 2px solid #c96;
 }
     .btn-sign-in:hover {
         color: #c96;
