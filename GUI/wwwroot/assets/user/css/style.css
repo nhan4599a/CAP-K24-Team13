@@ -247,13 +247,17 @@ blockquote p {
 	max-width: 1120px
 }
 
+blockquote img {
+	height:100%	!important
+}
+
 blockquote.text-center p {
 	margin-left: auto;
 	margin-right: auto
 }
 
 blockquote cite {
-	font-style: normal;
+	font-style: normal;	
 	font-weight: 500;
 	color: #333333;
 	letter-spacing: -.01em;
@@ -12229,7 +12233,7 @@ button:focus {
 }
 
 .sidebar-toggler i {
-	font-size: 1.6rem;
+	font-size: 3.6rem;
 	margin-right: .9rem;
 	border: 1px solid;
 	border-radius: 5px;
@@ -13612,7 +13616,7 @@ button:focus {
 	margin-right: 1.8rem
 }
 
-.menu-cat.justify-content-center li:lat-child {
+.menu-cat.justify-content-center li:last-child {
 	margin-right: 1.8rem
 }
 
@@ -19460,6 +19464,25 @@ button:focus {
     width:20%;
     text-align: center;
 }
+
+
+#shop-name {
+	color: #000;
+	text-transform: uppercase;
+	font-weight: 500;
+	font-size: 2rem;
+	/*margin: 20px 0 10px;*/
+	line-height: 1.1em;
+}
+
+/*.product.text-center .product-media .product-image {
+	height: 251px
+}*/
+
+/*.product .product-media .product-image {
+	height: 322.54px
+} */
+
 
 
 /*# sourceMappingURL=style.css.map */

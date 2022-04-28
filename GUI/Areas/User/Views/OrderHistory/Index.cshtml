@@ -45,8 +45,24 @@
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "home")
 }
+@section MobileHeader {
+    @await Component.InvokeAsync("MobileMenuHeader", "home")
+}
+
 <main class="main">
-    <div class="mb-4"></div><!-- End .mb-2 -->
+    <div class="page-header text-center" style="background-image: url('@Url.Content("~/assets/user/images/page-header-bg.jpg")')">
+        <div class="container">
+            <h1 class="page-title">Purchased</h1>
+        </div>
+    </div>
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page" href="/orderhistory">My purchase</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
     <div class="container" style="width: 90%">
         <div class="row justify-content-md-center">
             <div class="col-md-12">

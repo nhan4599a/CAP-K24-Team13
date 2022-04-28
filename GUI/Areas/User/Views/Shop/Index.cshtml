@@ -5,6 +5,10 @@
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "shop")
 }
+@section MobileHeader {
+    @await Component.InvokeAsync("MobileMenuHeader", "shop")
+}
+
 <main class="main">
     <div class="mb-lg-2"></div>
     <!-- End .mb-lg-2 -->
@@ -43,18 +47,18 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-9 col-xxl-10">
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-1">
                         <div class="avatar avatar-xl position-relative">
                             <img src="@Url.ShopImageUrl(Model.Shop.Avatar)" alt="@Model.Shop.ShopName" width="74" height="74">
                         </div>
                     </div>
                     <div class="col-md-5 vertical-align-center">
-                        <div class="vertical-align-center">
-                            <h5 class="vertical-align-center" id="shop-name">@Model.Shop.ShopName</h5>
-                        </div>
+                            <h5 id="shop-name">@Model.Shop.ShopName</h5>
                     </div>
-                    <div class="col-lg-12 col-xxl-4-5col">
+                </div>
+                <!-- End .row -->
+                <div class="col-lg-12 col-xxl-4-5col">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card card-plain">
@@ -115,9 +119,9 @@
                             <!-- End .col-md-6 -->
                         </div>
                         <!-- End .row -->
-                    </div>
-                    <!-- End .col-lg-3 col-xxl-4-5col -->
-                    <div class="col-12 col-xxl-5col d-none d-xxl-block">
+                </div>
+                <!-- End .col-lg-3 col-xxl-4-5col -->
+                <div class="col-12 col-xxl-5col d-none d-xxl-block">
                         <div class="banner banner-overlay">
                             <a href="#">
                                 <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-4.jpg")" alt="Banner img desc">
@@ -136,14 +140,11 @@
                             <!-- End .banner-content -->
                         </div>
                         <!-- End .banner banner-overlay -->
-                    </div>
-                    <!-- End .col-lg-3 col-xxl-2 -->
                 </div>
-                <!-- End .row -->
+                <!-- End .col-lg-3 col-xxl-2 -->
+
                 <div class="mb-3"></div>
                 <!-- End .mb-3 -->
-                <div class="mb-5"></div>
-                <!-- End .mb-5 -->
                 <div class="d-flex mb-2">
                     <div class="p-2">
                         <h2 class="title">Categories</h2>

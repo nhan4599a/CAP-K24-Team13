@@ -6,7 +6,7 @@
     background: #c96;
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: #c96;
-    border: 1px solid #c96;
+    
 }
 
 @media (min-width: 768px) {
@@ -22,58 +22,68 @@
     }
 }
 
-.btn-hover:hover {
-    background: #c96;
-    color: #fff;
-    border-color: #000
-}
-
-.text-custom {
-    color: #b9257b;
-    font-family: Roboto; 
-    text-decoration:underline;
-}
-
-.text-muted {
-    position: relative;
+.forgot-password {
+    color: #000;
+    text-transform: uppercase;
     text-decoration: none;
-    color: #0dcaf0;
+    letter-spacing: 0.15em;
+    display: inline-block;
+    padding: 15px 20px;
+    position: relative;
 }
 
-    .text-muted:after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 3px;
+    .forgot-password:after {
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
         display: block;
-        margin-top: 5px;
-        right: 0;
-        background: #fff;
-        transition: width .2s ease;
-        -webkit-transition: width .2s ease;
+        height: 2px;
+        left: 50%;
+        position: absolute;
+        background: #000;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
     }
 
-    .text-muted:hover:after {
+    .forgot-password:hover:after {
         width: 100%;
         left: 0;
-        background: #fff;
     }
 
-.btn-block {
-    border: 1px !important;
-    border-color: #c96;
+.btn-sign-in{
+    color: #fff;
 }
 
-    .btn-block:hover {
+    .btn-sign-in:hover {
         color: #c96;
-        background-color: #fff !important;
-        border: 1px solid #c96 !important;
+        background-color: #fff;
+        border: 2px solid #c96;
+    }
+.btn-sign-up {
+    color: #c96;
+    background-color: #fff;
+    border: 2px solid #c96;
+}
+    .btn-sign-up:hover {
+        color: #fff;
+        background-color: #c96
     }
 
-.btn-sign-up:hover {
-    background-color: white;
-    border-color: #8a0404;
-    color: #8a0404
+.btn-next{
+    border: 2px solid #c96;
+    color: #c96
+}
+    .btn-next:hover {
+        background-color: #c96;
+        color: #fff
+    }
+
+.btn-change {
+    border: 2px solid #c96;
+    color: #c96
 }
 
-
+    .btn-change:hover {
+        background-color: #c96;
+        color: #fff
+    }

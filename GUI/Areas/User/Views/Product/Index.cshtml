@@ -45,6 +45,10 @@
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "home")
 }
+@section MobileHeader {
+    @await Component.InvokeAsync("MobileMenuHeader", "home")
+}
+
 <main class="main">
     <p id="shop-id" style="display: none">@Model.ShopId</p>
     <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
@@ -52,7 +56,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="/home/categories">Products</a></li>
-                <li class="breadcrumb-item active" aria-current="page">@Model.ProductName</li>
+                <li class="breadcrumb-item active" aria-current="page" >@Model.ProductName</li>
             </ol>
         </div><!-- End .container-fluid -->
     </nav><!-- End .breadcrumb-nav -->

@@ -33,7 +33,7 @@ $(document).ready(function () {
 	// Sticky header 
     var catDropdown = $('.category-dropdown'),
         catInitVal = catDropdown.data('visible'),
-        catShowOnUp = !(new RegExp('^/cart|/checkout|/product/index/|/home/search|/order-history|/shop/categories/.+|/home/categories.*|/brands.*[#/]?$').test(window.location.pathname));
+        catShowOnUp = !(new RegExp('^/cart|/checkout|/product/index/|/home/search|/order-history|/shop/categories/.+|/about/?|/home/categories.*|/brands.*[#/]?$').test(window.location.pathname));
 
     if (catShowOnUp) {
         catDropdown.addClass('show').find('.dropdown-menu').addClass('show');

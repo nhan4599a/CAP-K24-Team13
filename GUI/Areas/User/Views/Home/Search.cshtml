@@ -32,6 +32,10 @@
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "home")
 }
+@section MobileHeader {
+    @await Component.InvokeAsync("MobileMenuHeader", "home")
+}
+
 <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
     <div class="container">
         <ol class="breadcrumb">

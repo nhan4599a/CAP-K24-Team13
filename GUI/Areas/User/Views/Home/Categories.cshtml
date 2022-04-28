@@ -5,6 +5,10 @@
 @section Header {
     @await Component.InvokeAsync("UserStickyHeader", "category")
 }
+
+@section MobileHeader {
+    @await Component.InvokeAsync("MobileMenuHeader", "category")
+}
 @section Styles {
 <style>
     .form-check-input {
@@ -129,6 +133,7 @@
                         <label>Filters</label>
                         <a href="#" class="sidebar-filter-clear">Clean All</a>
                     </div><!-- End .widget -->
+
                     <div class="widget widget-collapsible">
                         <h3 class="widget-title">
                             <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
@@ -153,8 +158,8 @@
                                 </div><!-- End .filter-items -->
                             </div><!-- End .widget-body -->
                         </div><!-- End .collapse -->
-
                     </div><!-- End .widget -->
+
                     <div class="widget widget-collapsible">
                         <h3 class="widget-title">
                             <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
@@ -176,7 +181,7 @@
                             </div><!-- End .widget-body -->
                         </div><!-- End .collapse -->
                     </div><!-- End .widget -->
-                    <div class="row">
+                    <div class="row mx-2">
                         <button class="btn btn-primary" id="btn-filter">Filter</button>
                     </div>
                 </div><!-- End .sidebar-filter-wrapper -->
