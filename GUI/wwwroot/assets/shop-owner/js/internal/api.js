@@ -25,7 +25,7 @@ axios.interceptors.response.use(axiosResp => {
         }
         let resp = axiosResp.data;
         if (resp.responseCode != 200) {
-            return Promise.reject(resp.errorMessage);
+            return Promise.reject(resp);
         }
         return Promise.resolve(resp.data);
     }

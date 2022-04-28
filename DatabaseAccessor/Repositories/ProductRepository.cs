@@ -271,7 +271,7 @@ namespace DatabaseAccessor.Repositories
                 },
                 new int[]
                 {
-                    6, 9, 10, 14 ,16, 21
+                    6, 9, 10, 14, 16
                 },
                 new int[]
                 {
