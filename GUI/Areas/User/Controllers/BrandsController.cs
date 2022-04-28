@@ -2,6 +2,7 @@
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -25,7 +26,7 @@ namespace GUI.Areas.User.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            return View(shopsResponse.Content);
+            return View(shopsResponse.Content.Where(shop => shop.IsAvailable));
         }
     }
 }
