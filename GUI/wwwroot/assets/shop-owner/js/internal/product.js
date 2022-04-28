@@ -124,7 +124,7 @@ function onLoadProductsCompleted(paginatedData) {
                 animationLoader.hideAnimation();
             }).catch(err => {
                 animationLoader.hideAnimation();
-                toastr.error(`Failed to ${action} ${name}, ${err}`, 'Error')
+                toastr.error(`Failed to ${action} ${name}, ${err.errorMessage}`, 'Error')
             });
         });
     });

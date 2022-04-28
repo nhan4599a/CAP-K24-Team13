@@ -2,6 +2,7 @@
 using DatabaseAccessor.Models;
 using EFCore.BulkExtensions;
 using EntityFrameworkCore.Triggered;
+using Microsoft.EntityFrameworkCore;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -22,11 +23,10 @@ namespace DatabaseAccessor.Triggers
 
         public async Task AfterSave(ITriggerContext<User> context, CancellationToken cancellationToken)
         {
-            System.IO.File.AppendAllText(@"/home/ec2-user/test.txt", "shop Id: " + context.Entity.ShopId);
-            System.IO.File.AppendAllText(@"/home/ec2-user/test.txt", "unmodified shop Id: " + context.UnmodifiedEntity.ShopId);
             if (context.ChangeType == ChangeType.Modified && context.Entity.ShopId != null)
             {
                 await _dbContext.ShopProducts
+                    .IgnoreQueryFilters()
                     .Where(product => product.ShopId == context.Entity.ShopId)
                     .BatchUpdateAsync(new ShopProduct
                     {
