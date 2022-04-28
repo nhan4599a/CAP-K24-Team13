@@ -122,6 +122,7 @@
                             animationLoader.hideAnimation();
                             window.location.href = '/shopowner/' + (defaultCategory ? 'category' : 'product');
                         }).catch(error => {
+                            console.log(error.responseCode != 200);
                             animationLoader.hideAnimation();
                             if (error.responseCode != 200) {
                                 toastr.error(error.errorMessage);
@@ -131,7 +132,7 @@
                                 } else if (error.response.status == 401 || error.response.status == 403) {
                                     toastr.error('Your token is expired, please re-login', 'Error');
                                 } else {
-                                    toastr.error(error, 'Error');
+                                    toastr.error(error.response, 'Error');
                                 }
                             }
                         });
