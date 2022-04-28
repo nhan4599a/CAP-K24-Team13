@@ -1,4 +1,5 @@
-﻿using GUI.Abtractions;
+﻿using DatabaseAccessor;
+using GUI.Abtractions;
 using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using Microsoft.AspNetCore.Http;
@@ -152,13 +153,13 @@ namespace GUI.Areas.User.Controllers
             }
             else
             {
-                var shopResponse = await _shopClient.FindShops(keyword, pageNumber, pageSize);
+                var shopResponse = await _shopClient.FindShops(keyword);
                 if (!shopResponse.IsSuccessStatusCode)
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 return View(new SearchResultViewModel
                 {
                     Products = null,
-                    Shops = shopResponse.Content.ToInternal()
+                    Shops = shopResponse.Content.Where(shop => shop.IsAvailable).Paginate(pageNumber, pageSize)
                 });
             }
         }
