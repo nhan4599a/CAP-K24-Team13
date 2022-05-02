@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GUI.Clients
 {
-    public interface IOrderClient
+    public interface IInvoiceClient
     {
         [Get("/orders/user/{userId}")]
         Task<ApiResponse<ApiResult<List<OrderItemDTO>>>> GetOrderUserHistory([Authorize("Bearer")] string token, string userId);

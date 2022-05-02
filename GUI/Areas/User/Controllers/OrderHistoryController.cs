@@ -14,9 +14,9 @@ namespace GUI.Areas.User.Controllers
     [Route("/order-history")]
     public class OrderHistoryController : BaseUserController
     {
-        private readonly IOrderClient _orderHistoryClient;
+        private readonly IInvoiceClient _orderHistoryClient;
 
-        public OrderHistoryController(IOrderClient orderHistoryClient)
+        public OrderHistoryController(IInvoiceClient orderHistoryClient)
         {
             _orderHistoryClient = orderHistoryClient;
         }

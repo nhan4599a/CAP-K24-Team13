@@ -28,7 +28,7 @@ namespace DatabaseAccessor.Configurations
                 .IsRequired();
 
             builder.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("getdate() + '7:0:0'");
+                .HasDefaultValueSql("getdate()");
 
             builder.HasIndex(e => e.ReporterId);
             builder.HasIndex(e => new { e.AffectedUserId, e.CreatedAt });

@@ -6,8 +6,8 @@ using System.Collections.Generic;
 namespace CheckoutService.Commands
 {
     public record CheckOutCommand(Guid UserId, List<Guid> ProductIds, string ShippingName, string ShippingPhone,
-        string ShippingAddress, string OrderNotes)
-        : IRequest<CommandResponse<bool>>
+        string ShippingAddress, string OrderNotes, PaymentMethod PaymentMethod)
+        : IRequest<CommandResponse<string[]>>
     {
 
     }

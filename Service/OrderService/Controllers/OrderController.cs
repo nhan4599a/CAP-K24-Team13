@@ -24,7 +24,7 @@ namespace OrderService.Controllers
 
         private static readonly DistributedCacheEntryOptions cacheOptions = new()
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
         };
 
         public OrderController(IMediator mediator, IDistributedCache cache)

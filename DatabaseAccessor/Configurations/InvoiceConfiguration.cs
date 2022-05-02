@@ -26,10 +26,13 @@ namespace DatabaseAccessor.Configurations
                 .IsRequired();
 
             builder.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("getdate() + '7:0:0'");
+                .HasDefaultValueSql("getdate()");
 
             builder.Property(e => e.Status)
                 .HasDefaultValue(InvoiceStatus.New);
+
+            builder.Property(e => e.IsPaid)
+                .HasDefaultValue(false);
         }
     }
 }

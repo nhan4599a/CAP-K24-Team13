@@ -93,14 +93,14 @@ function onLoadProductsCompleted(paginatedData) {
                         let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
                         animationLoader.showAnimation();
                         importQuantityProduct(products[index].id, importedQuantity)
-                            .then((newQuantity) => {
+                            .then(newQuantity => {
                                 animationLoader.hideAnimation();
                                 toastr.success(`Imported ${importedQuantity} for ${products[index].productName}`, 'Success');
                                 currentRow.children('td:nth-child(4)').children('span').html(newQuantity);
                             })
                             .catch(error => {
                                 animationLoader.hideAnimation();
-                                toastr.error(`Failed to import ${importedQuantity} for ${products[index].productName}, ${error}`, 'Error');
+                                toastr.error(`Failed to import ${importedQuantity} for ${products[index].productName}, ${error.errorMessage}`, 'Error');
                             });
                     });
                 });

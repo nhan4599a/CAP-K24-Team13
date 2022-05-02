@@ -1,4 +1,6 @@
-﻿namespace Shared.RequestModels
+﻿using Shared.Models;
+
+namespace Shared.RequestModels
 {
     public class CheckOutRequestModel
     {
@@ -13,5 +15,7 @@
         public string ShippingAddress { get; set; }
 
         public string OrderNotes { get; set; }
+
+        public PaymentMethod PaymentMethod { get; set; }
     }
 }

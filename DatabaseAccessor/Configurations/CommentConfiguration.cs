@@ -13,7 +13,7 @@ namespace DatabaseAccessor.Configurations
                 .HasIdentityOptions(0, 1);
 
             builder.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("getdate() + '7:0:0'");
+                .HasDefaultValueSql("getdate()");
 
             builder.HasOne(e => e.User)
                 .WithMany()

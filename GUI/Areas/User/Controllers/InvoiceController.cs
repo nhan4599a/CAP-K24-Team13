@@ -10,9 +10,9 @@ namespace GUI.Areas.User.Controllers
 {
     public class InvoiceController : BaseUserController
     {
-        private readonly IOrderClient _orderClient;
+        private readonly IInvoiceClient _orderClient;
 
-        public InvoiceController(IOrderClient orderClient)
+        public InvoiceController(IInvoiceClient orderClient)
         {
             _orderClient = orderClient;
         }

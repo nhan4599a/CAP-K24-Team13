@@ -134,7 +134,7 @@
                             {
                                 <div class="col-md-6">
                                     <div class="banner banner-overlay">
-                                        <a href="@product.Id">
+                                        <a href="/product/index/@product.Id">
                                             <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-3.png")" alt="Banner img desc">
                                         </a>
                                         <div class="banner-content">
@@ -665,14 +665,23 @@
 
                             <div class="col-sm-6 col-xl-12 col-xxl-6">
                                 <div class="banner banner-overlay">
-                                    <a href="#">
+                                    <a href="/product/index/@highlightConvenience.Id">
                                         <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-5.jpg")" alt="Banner img desc">
                                     </a>
 
                                     <div class="banner-content">
-                                        <h4 class="banner-subtitle text-white"><a href="#">Best Deals</a></h4><!-- End .banner-subtitle -->
-                                        <h3 class="banner-title text-white"><a href="#">Canon EOS <br>Mega Sale <br><span>Up To 20% Off</span></a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                        <h4 class="banner-subtitle text-white">
+                                            <a href="/product/index/@highlightConvenience.Id">Best Deals</a>
+                                        </h4><!-- End .banner-subtitle -->
+                                        <h3 class="banner-title text-white">
+                                            <a href="/product/index/@highlightConvenience.Id">@highlightConvenience.ProductName <br />
+                                                @if (highlightConvenience.Discount > 0)
+                                                {
+                                                    <span>Up To @highlightConvenience.Discount% Off</span>
+                                                }
+                                            </a>
+                                        </h3><!-- End .banner-title -->
+                                        <a href="/product/index/@highlightAccessories.Id" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner -->
                             </div><!-- End .col-sm-6 -->
@@ -784,14 +793,21 @@
 
                             <div class="col-sm-6 col-xl-12 col-xxl-6">
                                 <div class="banner banner-overlay">
-                                    <a href="#">
+                                    <a href="/product/index/@highlightFashion.Id">
                                         <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-6.jpg")" alt="Banner img desc">
                                     </a>
 
                                     <div class="banner-content">
-                                        <h4 class="banner-subtitle text-white"><a href="#">Best Deals</a></h4><!-- End .banner-subtitle -->
-                                        <h3 class="banner-title text-white"><a href="#">Furniture Sets <br><span>Up To 30% Off</span></a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                        <h4 class="banner-subtitle text-white"><a href="/product/index/@highlightFashion.Id">Best Deals</a></h4><!-- End .banner-subtitle -->
+                                        <h3 class="banner-title text-white">
+                                            <a href="/product/index/@highlightFashion.Id">@highlightFashion.ProductName <br>
+                                                @if (highlightFashion.Discount > 0)
+                                                {
+                                                    <span>Up To @highlightFashion.Discount% Off</span>
+                                                }
+                                            </a>
+                                        </h3><!-- End .banner-title -->
+                                        <a href="/product/index/@highlightFashion.Id" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner -->
                             </div><!-- End .col-sm-6 -->
@@ -889,9 +905,9 @@
                             </a>
 
                             <div class="banner-content">
-                                <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="#">Spring Sale is Coming</a></h4><!-- End .banner-subtitle -->
+                                <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="/home/categories?cat=2">Spring Sale is Coming</a></h4><!-- End .banner-subtitle -->
                                 <h3 class="banner-title text-white"><a href="#">Floral T-shirts and Vests  <br><span>Spring Sale</span></a></h3><!-- End .banner-title -->
-                                <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                <a href="/home/categories?cat=2" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner -->
                     </div><!-- End .col-md-6 -->
@@ -903,9 +919,9 @@
                             </a>
 
                             <div class="banner-content">
-                                <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="#">Amazing Value</a></h4><!-- End .banner-subtitle -->
+                                <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="/home/categories?cat=9">Amazing Value</a></h4><!-- End .banner-subtitle -->
                                 <h3 class="banner-title text-white"><a href="#">Upgrade and Save <br><span>On The Latest Apple Devices</span></a></h3><!-- End .banner-title -->
-                                <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                <a href="/home/categories?cat=9" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner banner-overlay -->
                     </div><!-- End .col-md-6 -->
@@ -933,14 +949,21 @@
 
                             <div class="col-sm-6 col-xl-12 col-xxl-6">
                                 <div class="banner banner-overlay">
-                                    <a href="#">
+                                    <a href="/product/index/@highlightAccessories.Id">
                                         <img src="@Url.Content("~/assets/user/images/demos/demo-14/banners/banner-9.jpg")" alt="Banner img desc">
                                     </a>
 
                                     <div class="banner-content">
-                                        <h4 class="banner-subtitle text-white"><a href="#">Best Deals</a></h4><!-- End .banner-subtitle -->
-                                        <h3 class="banner-title text-white"><a href="#">Clearance <br>Outerwear<br><span>Up To 70% Off</span></a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                        <h4 class="banner-subtitle text-white"><a href="/product/index/@highlightAccessories.Id">Best Deals</a></h4><!-- End .banner-subtitle -->
+                                        <h3 class="banner-title text-white">
+                                            <a href="/product/index/@highlightAccessories.Id">@highlightAccessories.ProductName <br>
+                                                @if (highlightAccessories.Discount > 0)
+                                                {
+                                                    <span>Up To @highlightAccessories.Discount% Off</span>
+                                                }
+                                            </a>
+                                        </h3><!-- End .banner-title -->
+                                        <a href="/product/index/@highlightAccessories.Id" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner -->
                             </div><!-- End .col-sm-6 -->
@@ -1151,8 +1174,8 @@
                                     </a>
 
                                     <div class="banner-content banner-content-top">
-                                        <h3 class="banner-title text-white"><a href="#">Take Better Photos <br><span>With</span> Canon EOS <br><span>Up To 20% Off</span></a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                        <h3 class="banner-title text-white"><a href="#">Take Better Photos <br><span>With</span> Canon EOS <br></a></h3><!-- End .banner-title -->
+                                        <a href="/home/categories?cat=20" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner banner-overlay -->
                             </div><!-- End .widget widget-banner -->

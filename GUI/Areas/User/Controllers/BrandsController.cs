@@ -26,7 +26,7 @@ namespace GUI.Areas.User.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            return View(shopsResponse.Content.Where(shop => shop.IsAvailable));
+            return View(shopsResponse.Content.Where(shop => shop.IsAvailable).ToList());
         }
     }
 }

@@ -34,6 +34,12 @@ namespace DatabaseAccessor.Models
 
         public int ShopId { get; set; }
 
+        public PaymentMethod PaymentMethod { get; set; }
+
+        public bool IsPaid { get; set; }
+
+        public string RefId { get; set; }
+
         public virtual User User { get; set; }
 
         public virtual IList<InvoiceDetail> Details { get; set; } = new List<InvoiceDetail>();

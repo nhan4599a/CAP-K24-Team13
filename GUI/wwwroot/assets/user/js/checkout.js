@@ -1,4 +1,5 @@
 ﻿$(document).ready(() => {
+    $('#accordion-payment > .card:nth-child(1) a.collapsed').click();
     $('#form-input').submit(function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -10,7 +11,8 @@
         let model = buildRequestModel();
         getUserId()
             .then(userId => {
-                checkOut(userId, model.productIdList, model.fullname, model.phone, model.shippingAddress, model.orderNotes)
+                checkOut(userId, model.productIdList, model.fullname, model.phone,
+                        model.shippingAddress, model.orderNotes, model.paymentMethod)
                     .then(() => {
                         animationLoader.hideAnimation(true);
                     })
@@ -30,6 +32,7 @@ function buildRequestModel() {
     let district = $("#input-district").val();
     let townCity = $("#input-towncity").val();
     let orderNotes = $("#input-ordernotes").val();
+    let paymentMethod = $('#accordion-payment > .card a:not(.collapsed)').data('payment');
     let productList = [];
     $('table.table-summary').find('tbody > tr.product-item').each((_, element) => {
         let href = $(element).find('td > a').attr('href');
@@ -40,7 +43,8 @@ function buildRequestModel() {
         phone: phone,
         shippingAddress: streetaddress + ' ' + ward + ' ' + district + ' ' + townCity,
         orderNotes: orderNotes,
-        productIdList: productList
+        productIdList: productList,
+        paymentMethod: paymentMethod
     };
 }
 

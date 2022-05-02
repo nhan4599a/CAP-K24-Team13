@@ -1,5 +1,4 @@
-﻿using Shared;
-using Shared.DTOs;
+﻿using Shared.DTOs;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -15,8 +14,8 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<List<OrderDTO>> GetOrdersOfShopAsync(int shopId);
 
-        Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
-            string shippingPhone, string shippingAddress, string orderNotes);
+        Task<CommandResponse<string>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
+            string shippingPhone, string shippingAddress, string orderNotes, PaymentMethod paymentMethod);
 
         Task<CommandResponse<bool>> ChangeOrderStatusAsync(int invoiceId, InvoiceStatus newStatus);
 

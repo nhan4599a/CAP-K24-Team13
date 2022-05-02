@@ -25,16 +25,20 @@ axios.interceptors.response.use(axiosResp => {
         }
         let resp = axiosResp.data;
         if (resp.responseCode != 200) {
-            return Promise.reject(resp);
+            return Promise.reject(resp.errorMessage);
         }
         return Promise.resolve(resp.data);
     }
 }, error => {
+    let message = error;
     if (error.response.status == 400) {
         let validationFailedFields = Object.keys(error.response.data.errors).map(value => value.replace('requestModel.', ''));
         error.response.fields = validationFailedFields;
+        message = 'Field validation failed: ' + error.response.fields.join(', ');
+    } else if (error.response.status == 401 || error.response.status == 403) {
+        message = 'Your token is expired, please re-login';
     }
-    return Promise.reject(error);
+    return Promise.reject(message);
 });
 
 const productEndpoint = '/products';
@@ -186,7 +190,7 @@ function removeProductInCart(userId, productId) {
     return axios.delete(`${cartEndpoint}/${userId}/${productId}`);
 }
 
-function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAddress, orderNotes) {
+function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAddress, orderNotes, paymentMethod) {
     let formData = new FormData();
     formData.append('requestModel.userId', userId);
     formData.append('requestModel.productIds', productIdList);
@@ -194,6 +198,7 @@ function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAd
     formData.append('requestModel.shippingPhone', shippingPhone);
     formData.append('requestModel.shippingAddress', shippingAddress);
     formData.append('requestModel.orderNotes', orderNotes);
+    formData.append('requestModel.paymentMethod', orderNotes);
     return axios.post(checkoutEndpoint, formData);
 }
 

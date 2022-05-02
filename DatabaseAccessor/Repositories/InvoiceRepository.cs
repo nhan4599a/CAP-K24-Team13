@@ -60,19 +60,20 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
         }
 
-        public async Task<CommandResponse<bool>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
-            string shippingPhone, string shippingAddress, string orderNotes)
+        public async Task<CommandResponse<string>> AddOrderAsync(Guid userId, List<Guid> productIds, string shippingName,
+            string shippingPhone, string shippingAddress, string orderNotes, PaymentMethod paymentMethod)
         {
             var cart = await _dbContext.Carts.FirstOrDefaultAsync(cart => cart.UserId == userId);
             if (cart == null)
-                return CommandResponse<bool>.Error("Cart not found!", null);
+                return CommandResponse<string>.Error("Cart not found!", null);
             Dictionary<int, Invoice> invoices = new();
             var products = cart.Details.Where(item => productIds.Contains(item.ProductId)).ToList();
+            var refId = Guid.NewGuid().ToString();
             foreach (var cartItem in products)
             {
                 var actualProduct = await _dbContext.ShopProducts.FindAsync(cartItem.ProductId);
-                if (actualProduct.IsDisabled)
-                    return CommandResponse<bool>.Error($"The product {actualProduct.ProductName} is not available now", null);
+                if (actualProduct.IsDisabled || !actualProduct.IsVisible)
+                    return CommandResponse<string>.Error($"The product {actualProduct.ProductName} is not available now", null);
                 if (!invoices.ContainsKey(cartItem.ShopId))
                 {
                     invoices.Add(cartItem.ShopId, new Invoice
@@ -82,7 +83,10 @@ namespace DatabaseAccessor.Repositories
                         FullName = shippingName,
                         ShippingAddress = shippingAddress,
                         Note = orderNotes,
-                        ShopId = cartItem.ShopId
+                        ShopId = cartItem.ShopId,
+                        PaymentMethod = paymentMethod,
+                        RefId = refId,
+                        IsPaid = paymentMethod == PaymentMethod.CoD
                     });
                 }
                 invoices[cartItem.ShopId].Details.Add(new InvoiceDetail
@@ -92,12 +96,12 @@ namespace DatabaseAccessor.Repositories
                     Quantity = cartItem.Quantity
                 });
                 if (actualProduct.Quantity < cartItem.Quantity)
-                    return CommandResponse<bool>.Error($"Sorry, the product {actualProduct.ProductName} is not in sufficient quantity", null);
+                    return CommandResponse<string>.Error($"Sorry, the product {actualProduct.ProductName} is not in sufficient quantity", null);
                 cart.Details.Remove(cartItem);
             }
             _dbContext.Invoices.AddRange(invoices.Values);
             await _dbContext.SaveChangesAsync();
-            return CommandResponse<bool>.Success(true);
+            return CommandResponse<string>.Success(refId);
         }
 
         public async Task<CommandResponse<bool>> ChangeOrderStatusAsync(int invoiceId, InvoiceStatus newStatus)
@@ -106,7 +110,7 @@ namespace DatabaseAccessor.Repositories
             if (invoice == null)
                 return CommandResponse<bool>.Error("Order not found", null);
 
-            if (await _dbContext.ShopStatus.AllAsync(shop => shop.ShopId == invoice.ShopId && !shop.IsDisabled))
+            if (await _dbContext.ShopStatus.AnyAsync(shop => shop.ShopId == invoice.ShopId && !shop.IsDisabled))
                 return CommandResponse<bool>.Error("Shop is already disabled", null);
 
             // checking new status is valid
@@ -117,6 +121,9 @@ namespace DatabaseAccessor.Repositories
 
                 if (newStatus - invoice.Status > 1)
                     return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
+
+                if (!invoice.IsPaid)
+                    return CommandResponse<bool>.Error("Invoice is paid by user", null);
             }
             else
             {
@@ -128,7 +135,7 @@ namespace DatabaseAccessor.Repositories
             {
                 foreach (var detail in invoice.Details)
                 {
-                    if (detail.Product.IsDisabled)
+                    if (detail.Product.IsDisabled || !detail.Product.IsVisible)
                         return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not available now", null);
                     if (detail.Product.Quantity < detail.Quantity)
                         return CommandResponse<bool>.Error($"The product {detail.Product.ProductName} is not in sufficient quantity", null);

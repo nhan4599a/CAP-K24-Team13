@@ -7,5 +7,7 @@ namespace GUI.Areas.User.ViewModels
         public int Quantity { get; set; }
 
         public MinimalProductDTO Item { get; set; }
+
+        public bool IsAvailable { get; set; }
     }
 }

@@ -303,7 +303,7 @@ function buildProductActionButtonHtml(isAvailable) {
                 ${buildImportQuantityButtonHtml()}`;
     else
         return `<a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                    name="btn-action">
+                    name="btn-action" style="margin-right: 24px">
                     <i class="fas fa-check"></i>
                     <span> Activate</span>
                 </a>`;
