@@ -1,9 +1,18 @@
-﻿using GUI.Payments.Momo.Exceptions;
+﻿using GUI.Payments.Abstraction;
+using GUI.Payments.Momo.Exceptions;
 
 namespace GUI.Payments.Momo.Models
 {
-    public class MomoWalletCaptureResponse : MomoWalletBaseObject
+    public class MomoWalletCaptureResponse : PaymentResponse
     {
+        public string PartnerCode { get; set; }
+
+        public string OrderId { get; set; }
+
+        public string RequestId { get; set; }
+
+        public int Amount { get; set; }
+
         public long ResponseTime { get; set; }
 
         public string Message { get; set; }
@@ -14,9 +23,9 @@ namespace GUI.Payments.Momo.Models
 
         public MomoWalletException[] SubErrors { get; set; }
 
-        public override string GetSecurityMessage()
+        public override bool IsErrorResponse()
         {
-            throw new System.NotImplementedException();
+            return ResultCode != 0;
         }
     }
 }

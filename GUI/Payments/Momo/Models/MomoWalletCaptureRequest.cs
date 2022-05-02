@@ -1,7 +1,17 @@
-﻿namespace GUI.Payments.Momo.Models
+﻿using GUI.Payments.Abstraction;
+
+namespace GUI.Payments.Momo.Models
 {
-    public class MomoWalletCaptureRequest : MomoWalletBaseObject
+    public class MomoWalletCaptureRequest : PaymentRequest
     {
+        public string PartnerCode { get; set; }
+
+        public string OrderId { get; set; }
+
+        public string RequestId { get; set; }
+
+        public int Amount { get; set; }
+
         public string AccessKey { get; set; }
 
         public string RequestType { get; } = "captureWallet";

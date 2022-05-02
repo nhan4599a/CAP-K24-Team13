@@ -3,6 +3,10 @@ using DatabaseAccessor.Contexts;
 using GUI.Abtractions;
 using GUI.Attributes;
 using GUI.Clients;
+using GUI.Payments.Abstraction;
+using GUI.Payments.Factory;
+using GUI.Payments.Momo.Cryptography;
+using GUI.Payments.Momo.Processor;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -103,6 +107,10 @@ namespace GUI
             });
             services.AddScoped<BaseUserActionFilter>();
             services.AddScoped<IShopClient, ShopClientImpl>();
+            services.AddScoped<HttpClient>();
+            services.AddScoped(servicesProvider => new MomoWalletSecurity(Configuration["MOMO_SECRET_KEY"]));
+            services.AddScoped<IPaymentProcessor, MomoWalletProcessor>();
+            services.AddScoped<PaymentProcessorFactory>();
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);
             services.AddRefitClient<IExternalShopClient>(new RefitSettings

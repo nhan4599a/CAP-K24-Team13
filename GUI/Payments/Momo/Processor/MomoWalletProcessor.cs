@@ -1,4 +1,5 @@
-﻿using GUI.Payments.Momo.Cryptography;
+﻿using GUI.Payments.Abstraction;
+using GUI.Payments.Momo.Cryptography;
 using GUI.Payments.Momo.Models;
 using Newtonsoft.Json;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GUI.Payments.Momo.Processor
 {
-    public class MomoWalletProcessor : IDisposable
+    public class MomoWalletProcessor : IPaymentProcessor, IDisposable
     {
         public MomoWalletSecurity Security { get; set; }
 
@@ -27,8 +28,10 @@ namespace GUI.Payments.Momo.Processor
             : this(security, httpClient, MomoWalletPaymentMode.Test)
         { }
 
-        public async Task<MomoWalletCaptureResponse> Execute(MomoWalletCaptureRequest request)
+        public async Task<PaymentResponse> ExecuteAsync(PaymentRequest request)
         {
+            if (request.GetType() != typeof(MomoWalletCaptureRequest))
+                throw new NotSupportedException();
             var content = JsonContent.Create(request);
             var endpoint = GetMomoWalletEndpoint(Mode);
             var response = await Client.PostAsync(endpoint, content);

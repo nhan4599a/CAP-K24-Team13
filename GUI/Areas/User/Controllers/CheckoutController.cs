@@ -2,10 +2,14 @@
 using GUI.Areas.User.Models;
 using GUI.Areas.User.ViewModels;
 using GUI.Clients;
+using GUI.Payments.Factory;
+using GUI.Payments.Momo.Models;
+using GUI.Payments.Momo.Processor;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.Models;
 using System;
@@ -22,17 +26,42 @@ namespace GUI.Areas.User.Controllers
 
         private readonly IInvoiceClient _invoiceClient;
 
-        public CheckoutController(IProductClient productClient, IInvoiceClient invoiceClient)
+        private readonly PaymentProcessorFactory _paymentProcessorFactory;
+
+        private readonly ILogger<CheckoutController> _logger;
+
+        public CheckoutController(IProductClient productClient, IInvoiceClient invoiceClient,
+            PaymentProcessorFactory paymentProcessorFactory, ILoggerFactory loggerFactory)
         {
             _productClient = productClient;
             _invoiceClient = invoiceClient;
+            _paymentProcessorFactory = paymentProcessorFactory;
+            _logger = loggerFactory.CreateLogger<CheckoutController>();
         }
 
         [HttpPost]
         public async Task<IActionResult> Payment([FromQuery] PaymentMethod method, [FromForm] string paymentRefId)
         {
             if (method == PaymentMethod.CoD)
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return StatusCode(StatusCodes.Status404NotFound);
+            var accessToken = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
+            var invoice = await _invoiceClient.GetOrderDetailByRefId(accessToken, paymentRefId);
+            if (method == PaymentMethod.MoMo)
+            {
+                var paymentProcessor = _paymentProcessorFactory.Create(method) as MomoWalletProcessor;
+                try
+                {
+                    var momoResponse = (MomoWalletCaptureResponse)await paymentProcessor.ExecuteAsync(new MomoWalletCaptureRequest());
+                    if (momoResponse.IsErrorResponse())
+                        throw new Exception("Validation failed");
+                    return Redirect(momoResponse.PayUrl);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("Failed to request to momo wallet, error: " + e.Message);
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
             return View();
         }
 
