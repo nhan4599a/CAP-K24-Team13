@@ -9,12 +9,23 @@
         });
         animationLoader.showAnimation(10000);
         let model = buildRequestModel();
+        console.log(model.paymentMethod);
+        if (!model.paymentMethod) {
+            toastr.error('You must choose payment method', 'Error');
+            return;
+        }
         getUserId()
             .then(userId => {
                 checkOut(userId, model.productIdList, model.fullname, model.phone,
                         model.shippingAddress, model.orderNotes, model.paymentMethod)
-                    .then(() => {
+                    .then(result => {
                         animationLoader.hideAnimation(true);
+                        if (model.paymentMethod != 'CoD') {
+                            $('body').append('<form id="payment-form"></form>');
+                            let form = $('form#payment-form').attr('method', 'POST').attr('action', `/checkout/payment?method=${model.paymentMethod}`);
+                            form.append(`<input type="hidden" value="${result}" name="paymentRefId" />`);
+                            form.submit();
+                        }
                     })
                     .catch(error => {
                         toastr.error(error);

@@ -24,6 +24,8 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<InvoiceDetailDTO> GetInvoiceDetailAsync(string invoiceCode);
 
+        Task<InvoiceDetailDTO[]> GetInvoiceDetailByRefIdAsync(string refId);
+
         Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy, StatisticDateRange range);
     }
 }

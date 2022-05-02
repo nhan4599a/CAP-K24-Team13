@@ -1,4 +1,5 @@
 ﻿using GUI.Payments.Abstraction;
+using Newtonsoft.Json;
 
 namespace GUI.Payments.Momo.Models
 {
@@ -22,9 +23,10 @@ namespace GUI.Payments.Momo.Models
 
         public string OrderInfo { get; set; }
 
+        [JsonProperty(PropertyName = "lang")]
         public string ResponseLanguage { get; set; }
 
-        public string ExtraData { get; set; }
+        public string ExtraData { get; set; } = "";
 
         public string Signature { get; set; }
 

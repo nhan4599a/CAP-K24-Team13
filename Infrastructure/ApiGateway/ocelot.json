@@ -191,6 +191,16 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/orders/ref/{refId}",
+      "DownstreamScheme": "http",
+      "ServiceName": "OrderService",
+      "UpstreamPathTemplate": "/orders/ref/{refId}",
+      "UpstreamHttpMethod": [ "GET", "POST", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/cart",
       "DownstreamScheme": "http",
       "ServiceName": "ProductService",
@@ -205,7 +215,7 @@
         "EnableRateLimiting": true,
         "Period": "1m",
         "PeriodTimespan": 1,
-        "Limit": 1
+        "Limit": 45
       }
     },
     {

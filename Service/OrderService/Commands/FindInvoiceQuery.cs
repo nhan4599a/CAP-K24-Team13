@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Shared;
 using Shared.DTOs;
 using Shared.Models;
 

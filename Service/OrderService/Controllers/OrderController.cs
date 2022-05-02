@@ -94,10 +94,26 @@ namespace OrderService.Controllers
                 return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
             return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(response);
         }
-
-        private static string GetCacheKey(string invoiceCode)
+        
+        [HttpGet("ref/{refId}")]
+        public async Task<ApiResult> GetOrderDetailByRefIf(string refId)
         {
-            return $"Order.{invoiceCode}";
+            var cachedResult = _cache.GetString(GetCacheKey(refId, true));
+            if (cachedResult != null)
+                return ApiResult<InvoiceDetailDTO[]>.CreateSucceedResult(JsonSerializer.Deserialize<InvoiceDetailDTO[]>(cachedResult)!);
+            var response = await _mediator.Send(new FindInvoiceByRefIdQuery
+            {
+                RefId = refId
+            });
+            await _cache.SetStringAsync(GetCacheKey(refId, true), JsonSerializer.Serialize(response), cacheOptions);
+            return ApiResult<InvoiceDetailDTO[]>.CreateSucceedResult(response);
+        }
+
+        private static string GetCacheKey(string value, bool isRefId = false)
+        {
+            if (!isRefId)
+                return $"Order.{value}";
+            return $"Order.Ref.{value}";
         }
     }
 }

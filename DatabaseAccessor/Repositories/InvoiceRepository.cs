@@ -344,6 +344,20 @@ namespace DatabaseAccessor.Repositories
             return _mapper.MapToInvoiceDetailDTO(result);
         }
 
+        public async Task<InvoiceDetailDTO[]> GetInvoiceDetailByRefIdAsync(string refId)
+        {
+            var invoices = await _dbContext.Invoices
+                .AsNoTracking()
+                .Include(e => e.Report)
+                .Include(e => e.Details)
+                .ThenInclude(e => e.Product)
+                .AsSplitQuery()
+                .Where(invoice => invoice.RefId == refId)
+                .ToListAsync();
+
+            return invoices.Select(e => _mapper.MapToInvoiceDetailDTO(e)).ToArray();
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();

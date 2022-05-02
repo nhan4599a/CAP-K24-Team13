@@ -15,6 +15,6 @@ namespace GUI.Clients
         Task<ApiResponse<ApiResult<InvoiceDetailDTO>>> GetOrderDetail([Authorize("Bearer")] string token, string invoiceCode);
 
         [Get("/orders/ref/{refId}")]
-        Task<ApiResponse<ApiResult<InvoiceDetailDTO>>> GetOrderDetailByRefId([Authorize("Bearer")] string token, string refId);
+        Task<ApiResponse<ApiResult<InvoiceDetailDTO[]>>> GetOrderDetailByRefId([Authorize("Bearer")] string token, string refId);
     }
 }
