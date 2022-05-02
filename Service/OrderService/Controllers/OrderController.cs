@@ -129,7 +129,7 @@ namespace OrderService.Controllers
                 ValidateAudience = false
             });
             if (!validateResult.IsValid)
-                return ApiResult.CreateErrorResult(401, "Authorized token");
+                return ApiResult.CreateErrorResult(401, "Unauthorized token, message: " + validateResult.Exception.Message);
             byte[] keyBytes = Encoding.UTF8.GetBytes(_configuration["MOMO_SECRET_KEY"]);
             var ipnRequest = JsonConvert.DeserializeObject<MomoWalletIpnRequest>(requestModel.WalletIpnRequest)!;
             ipnRequest.AccessKey = _configuration["MOMO_ACCESS_KEY"];
