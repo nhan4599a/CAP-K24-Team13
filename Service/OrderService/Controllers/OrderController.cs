@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using OrderService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -121,19 +123,13 @@ namespace OrderService.Controllers
         [AllowAnonymous]
         public async Task<ApiResult> MakeAsPaid(string refId, MakeAsPaidRequestModel requestModel)
         {
-            var httpClient = new HttpClient();
-            var introspectResult = await httpClient.IntrospectTokenAsync(new TokenIntrospectionRequest
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var validateResult = await jwtTokenHandler.ValidateTokenAsync(requestModel.AccessToken, new TokenValidationParameters
             {
-                Address = "https://cap-k24-team13-auth.herokuapp.com/connect/introspect",
-                ClientId = _configuration["AUTH_CLIENT_ID"],
-                ClientSecret = _configuration["AUTH_CLIENT_SECRET"],
-                Token = requestModel.AccessToken
+                ValidateAudience = false
             });
-            if (introspectResult.IsError)
-                return ApiResult.CreateErrorResult(500, "Failed to validate token, error: " + introspectResult.Error);
-            if (!introspectResult.IsActive)
-                return ApiResult.CreateErrorResult(401, "Invalid token");
-
+            if (!validateResult.IsValid)
+                return ApiResult.CreateErrorResult(401, "Authorized token");
             byte[] keyBytes = Encoding.UTF8.GetBytes(_configuration["MOMO_SECRET_KEY"]);
             var ipnRequest = JsonConvert.DeserializeObject<MomoWalletIpnRequest>(requestModel.WalletIpnRequest)!;
             ipnRequest.AccessKey = _configuration["MOMO_ACCESS_KEY"];
