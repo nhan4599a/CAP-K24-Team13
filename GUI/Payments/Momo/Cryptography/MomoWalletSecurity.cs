@@ -24,14 +24,13 @@ namespace GUI.Payments.Momo.Cryptography
             request.Signature = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
         }
 
-        public bool ValidateIpnRequest(MomoWalletIpnRequest request, out string key)
+        public bool ValidateIpnRequest(MomoWalletIpnRequest request)
         {
             var rawMessage = request.GetSecurityMessage();
             byte[] messageBytes = Encoding.UTF8.GetBytes(rawMessage);
             using var hmacsha256 = new HMACSHA256(_keyBytes);
             byte[] hashedBytes = hmacsha256.ComputeHash(messageBytes);
-            key = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-            return key == request.Signature;
+            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower() == request.Signature;
         }
     }
 }
