@@ -101,9 +101,7 @@ namespace GUI.Areas.User.Controllers
             var momoIpnRequest = JsonConvert.DeserializeObject<MomoWalletIpnRequest>(rawMessage);
             momoIpnRequest.AccessKey = _configuration["MOMO_ACCESS_KEY"];
             var momoProcessor = (MomoWalletProcessor)_paymentProcessorFactory.Create(PaymentMethod.MoMo);
-            _logger.LogInformation("Security message: " + momoIpnRequest.GetSecurityMessage());
-            _logger.LogInformation("Received signature: " + momoIpnRequest.Signature);
-            if (momoProcessor.Security.ValidateIpnRequest(momoIpnRequest, out string signedKey))
+            if (momoProcessor.Security.ValidateIpnRequest(momoIpnRequest))
             {
                 var data = await _invoiceClient.MakeAsPaid(momoIpnRequest.OrderId, new MakeAsPaidRequestModel
                 {
@@ -130,7 +128,7 @@ namespace GUI.Areas.User.Controllers
                     _logger.LogError("Content is null");
                 }
             }
-            _logger.LogInformation("Signed key: " + signedKey);
+            _logger.LogError("Validate momo signature failed");
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
