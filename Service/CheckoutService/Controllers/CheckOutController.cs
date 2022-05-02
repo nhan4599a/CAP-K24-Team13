@@ -41,7 +41,7 @@ namespace CheckoutService.Controllers
             var result = await _mediator.Send(new CheckOutCommand(userId, productIds, requestModel.ShippingName,
                 requestModel.ShippingPhone, shippingAddress, requestModel.OrderNotes, requestModel.PaymentMethod));
             if (result.IsSuccess)
-                return ApiResult<string[]>.CreateSucceedResult(result.Response);
+                return ApiResult<string>.CreateSucceedResult(result.Response);
             return ApiResult.CreateErrorResult(500, result.ErrorMessage);
         }
     }

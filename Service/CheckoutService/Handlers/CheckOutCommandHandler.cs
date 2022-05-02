@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CheckoutService.Handlers
 {
-    public class CheckOutCommandHandler : IRequestHandler<CheckOutCommand, CommandResponse<string[]>>, IDisposable
+    public class CheckOutCommandHandler : IRequestHandler<CheckOutCommand, CommandResponse<string>>, IDisposable
     {
         private readonly IInvoiceRepository _orderRepository;
 
@@ -17,7 +17,7 @@ namespace CheckoutService.Handlers
             _orderRepository = orderRepository;
         }
 
-        public async Task<CommandResponse<string[]>> Handle(CheckOutCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResponse<string>> Handle(CheckOutCommand request, CancellationToken cancellationToken)
         {
             return await _orderRepository.AddOrderAsync(request.UserId, request.ProductIds, request.ShippingName,
                 request.ShippingPhone, request.ShippingAddress, request.OrderNotes, request.PaymentMethod);
