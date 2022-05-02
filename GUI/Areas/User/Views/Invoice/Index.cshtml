@@ -61,7 +61,7 @@
                                                     @for (int i = 0; i < Model.Products.Count; i++)
                                                     {
                                                         <tr>
-                                                            <th scope="row">@i</th>
+                                                            <th scope="row">@(i + 1)</th>
                                                             <td>@Model.Products[i].ProductName</td>
                                                             <td>@Model.Products[i].Price.ToString("N0")</td>
                                                             <td>@Model.Products[i].Quantity</td>
@@ -74,7 +74,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">Payment Methods</th>
-                                        <td>COD</td>
+                                        <td>@Model.PaymentMethod</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Total order value</th>

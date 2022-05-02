@@ -37,6 +37,8 @@ axios.interceptors.response.use(axiosResp => {
         message = 'Field validation failed: ' + error.response.fields.join(', ');
     } else if (error.response.status == 401 || error.response.status == 403) {
         message = 'Your token is expired, please re-login';
+    } else {
+        return Promise.reject(error);
     }
     return Promise.reject(message);
 });
@@ -198,10 +200,9 @@ function checkOut(userId, productIdList, shippingName, shippingPhone, shippingAd
     formData.append('requestModel.shippingPhone', shippingPhone);
     formData.append('requestModel.shippingAddress', shippingAddress);
     formData.append('requestModel.orderNotes', orderNotes);
-    formData.append('requestModel.paymentMethod', orderNotes);
+    formData.append('requestModel.paymentMethod', paymentMethod);
     return axios.post(checkoutEndpoint, formData);
 }
-
 
 function ratingProduct(invoiceId, productId, star, comment) {
     let formData = new FormData();

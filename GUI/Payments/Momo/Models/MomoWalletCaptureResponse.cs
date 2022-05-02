@@ -1,5 +1,5 @@
-﻿using GUI.Payments.Abstraction;
-using GUI.Payments.Momo.Exceptions;
+﻿using GUI.Payments.Momo.Exceptions;
+using Shared.Models;
 
 namespace GUI.Payments.Momo.Models
 {

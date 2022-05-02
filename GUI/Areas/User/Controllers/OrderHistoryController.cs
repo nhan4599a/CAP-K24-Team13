@@ -23,6 +23,7 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
+            Request.QueryString = new QueryString();
             var token = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
             var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory(token, User.GetUserId().ToString());
             if (!orderHistoryRespone.IsSuccessStatusCode)

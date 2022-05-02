@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AuthServer.Extensions
+namespace Shared.Extensions
 {
     public static class StringExtension
     {

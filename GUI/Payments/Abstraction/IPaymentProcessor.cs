@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Shared.Models;
+using System.Threading.Tasks;
 
 namespace GUI.Payments.Abstraction
 {

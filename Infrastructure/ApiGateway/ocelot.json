@@ -101,16 +101,6 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/categories/{id}",
-      "DownstreamScheme": "http",
-      "ServiceName": "ProductService",
-      "UpstreamPathTemplate": "/categories/{id}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
-      "LoadBalancerOptions": {
-        "Type": "LeastConnection"
-      }
-    },
-    {
       "DownstreamPathTemplate": "/api/interfaces/{shopId}",
       "DownstreamScheme": "http",
       "ServiceName": "InterfaceService",
@@ -195,7 +185,17 @@
       "DownstreamScheme": "http",
       "ServiceName": "OrderService",
       "UpstreamPathTemplate": "/orders/ref/{refId}",
-      "UpstreamHttpMethod": [ "GET", "POST", "OPTIONS" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/paid/{refId}",
+      "DownstreamScheme": "http",
+      "ServiceName": "OrderService",
+      "UpstreamPathTemplate": "/orders/paid/{refId}",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }

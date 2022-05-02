@@ -2,6 +2,7 @@
 using DatabaseAccessor.Mapping;
 using DatabaseAccessor.Models;
 using DatabaseAccessor.Repositories.Abstraction;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTOs;
 using Shared.Extensions;
@@ -110,7 +111,7 @@ namespace DatabaseAccessor.Repositories
             if (invoice == null)
                 return CommandResponse<bool>.Error("Order not found", null);
 
-            if (await _dbContext.ShopStatus.AnyAsync(shop => shop.ShopId == invoice.ShopId && !shop.IsDisabled))
+            if (await _dbContext.ShopStatus.AnyAsync(shop => shop.ShopId == invoice.ShopId && shop.IsDisabled))
                 return CommandResponse<bool>.Error("Shop is already disabled", null);
 
             // checking new status is valid
@@ -356,6 +357,15 @@ namespace DatabaseAccessor.Repositories
                 .ToListAsync();
 
             return invoices.Select(e => _mapper.MapToInvoiceDetailDTO(e)).ToArray();
+        }
+
+        public async Task MakeAsPaidAsync(string refId)
+        {
+            await _dbContext.Invoices.Where(item => item.RefId == refId)
+                .BatchUpdateAsync(new Invoice
+                {
+                    IsPaid = true
+                }, new List<string> { "IsPaid" });
         }
 
         public void Dispose()

@@ -19,6 +19,8 @@ namespace Shared.DTOs
 
         public double TotalPrice { get; set; }
 
+        public PaymentMethod PaymentMethod { get; set; }
+
         public bool IsReported { get; set; }
     }
 }

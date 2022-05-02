@@ -3,17 +3,17 @@
     $('#form-input').submit(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/user/checking-out.json');
-        animationLoader.setAnimationCompletedCallback(() => {
-            showCompletedModal();
-        });
-        animationLoader.showAnimation(10000);
         let model = buildRequestModel();
         console.log(model.paymentMethod);
         if (!model.paymentMethod) {
             toastr.error('You must choose payment method', 'Error');
             return;
         }
+        let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/user/checking-out.json');
+        animationLoader.setAnimationCompletedCallback(() => {
+            showCompletedModal();
+        });
+        animationLoader.showAnimation(10000);
         getUserId()
             .then(userId => {
                 checkOut(userId, model.productIdList, model.fullname, model.phone,

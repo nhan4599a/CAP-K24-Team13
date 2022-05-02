@@ -1,14 +1,19 @@
-﻿using MediatR;
+﻿using IdentityModel.Client;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using OrderService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Security.Claims;
-using System.Text.Json;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace OrderService.Controllers
@@ -22,15 +27,18 @@ namespace OrderService.Controllers
 
         private readonly IDistributedCache _cache;
 
+        private readonly IConfiguration _configuration;
+
         private static readonly DistributedCacheEntryOptions cacheOptions = new()
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
         };
 
-        public OrderController(IMediator mediator, IDistributedCache cache)
+        public OrderController(IMediator mediator, IDistributedCache cache, IConfiguration configuration)
         {
             _mediator = mediator;
             _cache = cache;
+            _configuration = configuration;
         }
 
         [HttpGet("user/{userId}")]
@@ -82,14 +90,14 @@ namespace OrderService.Controllers
         {
             var cachedResult = _cache.GetString(GetCacheKey(invoiceCode));
             if (cachedResult != null)
-                return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(JsonSerializer.Deserialize<InvoiceDetailDTO>(cachedResult)!);
+                return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(System.Text.Json.JsonSerializer.Deserialize<InvoiceDetailDTO>(cachedResult)!);
             var response = await _mediator.Send(new GetInvoiceByInvoiceCodeQuery
             {
                 InvoiceCode = invoiceCode 
             });
             if (response == null)
                 return ApiResult.CreateErrorResult(404, "Invoice not found");
-            await _cache.SetStringAsync(GetCacheKey(invoiceCode), JsonSerializer.Serialize(response), cacheOptions);
+            await _cache.SetStringAsync(GetCacheKey(invoiceCode), System.Text.Json.JsonSerializer.Serialize(response), cacheOptions);
             if (User.FindFirstValue("ShopId") != response.ShopId.ToString())
                 return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
             return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(response);
@@ -100,13 +108,46 @@ namespace OrderService.Controllers
         {
             var cachedResult = _cache.GetString(GetCacheKey(refId, true));
             if (cachedResult != null)
-                return ApiResult<InvoiceDetailDTO[]>.CreateSucceedResult(JsonSerializer.Deserialize<InvoiceDetailDTO[]>(cachedResult)!);
+                return ApiResult<InvoiceDetailDTO[]>.CreateSucceedResult(System.Text.Json.JsonSerializer.Deserialize<InvoiceDetailDTO[]>(cachedResult)!);
             var response = await _mediator.Send(new FindInvoiceByRefIdQuery
             {
                 RefId = refId
             });
-            await _cache.SetStringAsync(GetCacheKey(refId, true), JsonSerializer.Serialize(response), cacheOptions);
+            await _cache.SetStringAsync(GetCacheKey(refId, true), System.Text.Json.JsonSerializer.Serialize(response), cacheOptions);
             return ApiResult<InvoiceDetailDTO[]>.CreateSucceedResult(response);
+        }
+
+        [HttpPost("paid/{refId}")]
+        [AllowAnonymous]
+        public async Task<ApiResult> MakeAsPaid(string refId, MakeAsPaidRequestModel requestModel)
+        {
+            var httpClient = new HttpClient();
+            var introspectResult = await httpClient.IntrospectTokenAsync(new TokenIntrospectionRequest
+            {
+                Address = "https://cap-k24-team13-auth.herokuapp.com/connect/introspect",
+                ClientId = _configuration["AUTH_CLIENT_ID"],
+                ClientSecret = _configuration["AUTH_CLIENT_SECRET"],
+                Token = requestModel.AccessToken
+            });
+            if (introspectResult.IsError)
+                return ApiResult.CreateErrorResult(500, "Failed to validate token, error: " + introspectResult.Error);
+            if (!introspectResult.IsActive)
+                return ApiResult.CreateErrorResult(401, "Invalid token");
+
+            byte[] keyBytes = Encoding.UTF8.GetBytes(_configuration["MOMO_SECRET_KEY"]);
+            var ipnRequest = JsonConvert.DeserializeObject<MomoWalletIpnRequest>(requestModel.WalletIpnRequest)!;
+            ipnRequest.AccessKey = _configuration["MOMO_ACCESS_KEY"];
+            byte[] messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ipnRequest));
+            using var hmacsha256 = new HMACSHA256(keyBytes);
+            byte[] hashedBytes = hmacsha256.ComputeHash(messageBytes);
+            var hashedMessage = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            if (hashedMessage != ipnRequest.Signature)
+                return ApiResult.CreateErrorResult(400, "Invalid momo ipn request");
+            var response = await _mediator.Send(new MakeAsPaidInvoiceCommand
+            {
+                RefId = refId
+            });
+            return ApiResult.SucceedResult;
         }
 
         private static string GetCacheKey(string value, bool isRefId = false)
