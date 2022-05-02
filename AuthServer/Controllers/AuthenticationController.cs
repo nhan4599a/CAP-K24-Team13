@@ -8,6 +8,7 @@ using IdentityServer4.Events;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Extensions;
 using Shared.Models;
 using System;
 using System.Security.Claims;

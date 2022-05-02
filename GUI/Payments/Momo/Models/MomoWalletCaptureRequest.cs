@@ -1,5 +1,5 @@
-﻿using GUI.Payments.Abstraction;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Shared.Models;
 
 namespace GUI.Payments.Momo.Models
 {

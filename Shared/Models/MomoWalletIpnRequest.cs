@@ -2,8 +2,10 @@
 
 namespace Shared.Models
 {
-    public class MomoWalletIpnRequest
+    public class MomoWalletIpnRequest : PaymentRequest
     {
+        public string AccessKey { get; set; }
+
         public string PartnerCode { get; set; }
 
         public string OrderId { get; set; }
@@ -30,5 +32,10 @@ namespace Shared.Models
         public string ExtraData { get; set; }
 
         public string Signature { get; set; }
+
+        public override string GetSecurityMessage()
+        {
+            return $"accessKey={AccessKey}&amount={Amount}&extraData={ExtraData}&message={Message}&orderId={OrderId}&orderInfo={OrderInfo}&orderType={OrderType}&partnerCode={PartnerCode}&payType={PayType}&requestId={RequestId}&responseTime={ResponseTime}&resultCode={ResultCode}&transId={TransactionId}";
+        }
     }
 }

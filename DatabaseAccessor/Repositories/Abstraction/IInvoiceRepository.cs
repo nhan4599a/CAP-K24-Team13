@@ -26,6 +26,8 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task<InvoiceDetailDTO[]> GetInvoiceDetailByRefIdAsync(string refId);
 
+        Task MakeAsPaidAsync(string refId);
+
         Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy, StatisticDateRange range);
     }
 }

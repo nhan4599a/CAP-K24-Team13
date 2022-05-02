@@ -109,7 +109,7 @@ namespace GUI
             services.AddScoped<IShopClient, ShopClientImpl>();
             services.AddScoped<HttpClient>();
             services.AddScoped(servicesProvider => new MomoWalletSecurity(Configuration["MOMO_SECRET_KEY"]));
-            services.AddScoped<IPaymentProcessor, MomoWalletProcessor>();
+            services.AddScoped<MomoWalletProcessor>();
             services.AddScoped<PaymentProcessorFactory>();
             services.AddRefitClient<IProductClient>()
                 .ConfigureHttpClient(ConfigureHttpClient);

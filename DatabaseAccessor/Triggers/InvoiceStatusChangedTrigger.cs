@@ -54,15 +54,6 @@ namespace DatabaseAccessor.Triggers
                         detail.Product.Quantity += detail.Quantity;
                     }
                 }
-                if (context.Entity.Status == InvoiceStatus.Confirmed && 
-                    (context.Entity.PaymentMethod == PaymentMethod.MoMo || context.Entity.PaymentMethod == PaymentMethod.VISA))
-                {
-                    context.Entity.IsPaid = true;
-                }
-                if (context.Entity.Status == InvoiceStatus.Succeed && context.Entity.PaymentMethod == PaymentMethod.CoD)
-                {
-                    context.Entity.IsPaid = true;
-                }
             }
             return Task.CompletedTask;
         }
