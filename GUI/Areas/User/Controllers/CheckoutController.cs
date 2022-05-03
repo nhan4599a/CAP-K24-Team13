@@ -103,9 +103,10 @@ namespace GUI.Areas.User.Controllers
             var momoProcessor = (MomoWalletProcessor)_paymentProcessorFactory.Create(PaymentMethod.MoMo);
             if (momoProcessor.Security.ValidateIpnRequest(momoIpnRequest))
             {
-                var data = await _invoiceClient.MakeAsPaid(momoIpnRequest.OrderId, new MakeAsPaidRequestModel
+                var accessToken = momoIpnRequest.ExtraData.Split("=")[1];
+                var data = await _invoiceClient.MakeAsPaid(accessToken, momoIpnRequest.OrderId, new MakeAsPaidRequestModel
                 {
-                    AccessToken = momoIpnRequest.ExtraData.Split("=")[1],
+                    AccessToken = accessToken,
                     WalletIpnRequest = rawMessage
                 });
                 if (!data.IsSuccessStatusCode)

@@ -18,6 +18,6 @@ namespace GUI.Clients
         Task<ApiResponse<ApiResult<InvoiceDetailDTO[]>>> GetOrderDetailByRefId([Authorize("Bearer")] string token, string refId);
 
         [Post("/orders/paid/{refId}")]
-        Task<ApiResponse<ApiResult>> MakeAsPaid(string refId, [Body] MakeAsPaidRequestModel requestModel);
+        Task<ApiResponse<ApiResult>> MakeAsPaid([Authorize("Bearer")] string token, string refId, [Body] MakeAsPaidRequestModel requestModel);
     }
 }

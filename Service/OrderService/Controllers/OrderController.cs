@@ -125,13 +125,11 @@ namespace OrderService.Controllers
         {
             byte[] keyBytes = Encoding.UTF8.GetBytes(_configuration["MOMO_SECRET_KEY"]);
             var accessToken = await HttpContext.GetTokenAsync(Shared.SystemConstant.Authentication.ACCESS_TOKEN_KEY);
-            System.IO.File.WriteAllLines("/home/ec2-user/paid.txt", new string[] { accessToken!, requestModel.AccessToken, requestModel.WalletIpnRequest });
-            System.IO.File.WriteAllLines("/home/ec2-user/key.txt", new string[] { _configuration["MOMO_SECRET_KEY"], _configuration["MOMO_ACCESS_KEY"] });
             if (accessToken != requestModel.AccessToken)
                 return ApiResult.CreateErrorResult(401, "Unauthorized token");
             var ipnRequest = JsonConvert.DeserializeObject<MomoWalletIpnRequest>(requestModel.WalletIpnRequest)!;
             ipnRequest.AccessKey = _configuration["MOMO_ACCESS_KEY"];
-            byte[] messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ipnRequest));
+            byte[] messageBytes = Encoding.UTF8.GetBytes(ipnRequest.GetSecurityMessage());
             using var hmacsha256 = new HMACSHA256(keyBytes);
             byte[] hashedBytes = hmacsha256.ComputeHash(messageBytes);
             var hashedMessage = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
