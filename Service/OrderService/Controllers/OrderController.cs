@@ -1,5 +1,6 @@
 ﻿using IdentityModel.Client;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -120,19 +121,16 @@ namespace OrderService.Controllers
         }
 
         [HttpPost("paid/{refId}")]
-        [AllowAnonymous]
         public async Task<ApiResult> MakeAsPaid(string refId, MakeAsPaidRequestModel requestModel)
         {
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var validateResult = await jwtTokenHandler.ValidateTokenAsync(requestModel.AccessToken, new TokenValidationParameters
-            {
-                ValidateAudience = false
-            });
-            if (!validateResult.IsValid)
-                return ApiResult.CreateErrorResult(401, "Unauthorized token, message: " + validateResult.Exception.Message);
             byte[] keyBytes = Encoding.UTF8.GetBytes(_configuration["MOMO_SECRET_KEY"]);
+            var accessToken = await HttpContext.GetTokenAsync(Shared.SystemConstant.Authentication.ACCESS_TOKEN_KEY);
+            if (accessToken != requestModel.AccessToken)
+                return ApiResult.CreateErrorResult(401, "Unauthorized token");
+            System.IO.File.WriteAllLines("/home/ec2-user/paid.txt", new string[] { accessToken, requestModel.AccessToken, requestModel.WalletIpnRequest });
             var ipnRequest = JsonConvert.DeserializeObject<MomoWalletIpnRequest>(requestModel.WalletIpnRequest)!;
             ipnRequest.AccessKey = _configuration["MOMO_ACCESS_KEY"];
+            System.IO.File.WriteAllLines("/home/ec2-user/key.txt", new string[] { _configuration["MOMO_SECRET_KEY"], _configuration["MOMO_ACCESS_KEY"] });
             byte[] messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ipnRequest));
             using var hmacsha256 = new HMACSHA256(keyBytes);
             byte[] hashedBytes = hmacsha256.ComputeHash(messageBytes);
