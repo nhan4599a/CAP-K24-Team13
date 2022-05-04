@@ -95,7 +95,9 @@ namespace DatabaseAccessor.Mapping
                         options => options.MapFrom(source => source.Report != null));
 
                 cfg.CreateMap<Invoice, InvoiceWithItemDTO>()
-                    .IncludeBase<Invoice, InvoiceDTO>();
+                    .IncludeBase<Invoice, InvoiceDTO>()
+                    .ForMember(target => target.Products,
+                        options => options.MapFrom(source => source.Details));
 
                 cfg.CreateMap<InvoiceDetail, InvoiceItemDTO>()
                     .ForMember(target => target.Image,
