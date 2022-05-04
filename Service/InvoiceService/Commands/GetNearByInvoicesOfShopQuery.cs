@@ -2,9 +2,9 @@
 using Shared.DTOs;
 using System.Collections.Generic;
 
-namespace OrderService.Commands
+namespace InvoiceService.Commands
 {
-    public class GetNearByOrdersOfShopQuery : IRequest<List<OrderDTO>>
+    public class GetNearByInvoicesOfShopQuery : IRequest<List<InvoiceDTO>>
     {
         public int ShopId { get; set; }
     }

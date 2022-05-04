@@ -1,23 +1,23 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using OrderService.Commands;
+using InvoiceService.Commands;
 using Shared.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OrderService.Handlers
+namespace InvoiceService.Handlers
 {
-    public class ChangeOrderStatusCommandHandler : IRequestHandler<ChangeOrderStatusCommand, CommandResponse<bool>>, IDisposable
+    public class ChangeInvoiceStatusCommandHandler : IRequestHandler<ChangeInvoiceStatusCommand, CommandResponse<bool>>, IDisposable
     {
         private readonly IInvoiceRepository _invoiceRepository;
 
-        public ChangeOrderStatusCommandHandler(IInvoiceRepository invoiceRepository)
+        public ChangeInvoiceStatusCommandHandler(IInvoiceRepository invoiceRepository)
         {
             _invoiceRepository = invoiceRepository;
         }
 
-        public async Task<CommandResponse<bool>> Handle(ChangeOrderStatusCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResponse<bool>> Handle(ChangeInvoiceStatusCommand request, CancellationToken cancellationToken)
         {
             return await _invoiceRepository.ChangeOrderStatusAsync(request.InvoiceId, request.NewStatus);
         }

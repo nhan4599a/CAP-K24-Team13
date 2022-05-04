@@ -21,7 +21,7 @@ namespace GUI.Areas.User.Controllers
         public async Task<IActionResult> Index(string invoiceCode)
         {
             var accessToken = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
-            var orderDetailResponse = await _orderClient.GetOrderDetail(accessToken, invoiceCode);
+            var orderDetailResponse = await _orderClient.GetInvoiceDetail(accessToken, invoiceCode);
             if (!orderDetailResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             if (orderDetailResponse.Content.ResponseCode == 403)

@@ -53,7 +53,7 @@ namespace GUI.Areas.User.Controllers
             if (method == PaymentMethod.CoD)
                 return StatusCode(StatusCodes.Status404NotFound);
             var accessToken = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
-            var invoice = await _invoiceClient.GetOrderDetailByRefId(accessToken, paymentRefId);
+            var invoice = await _invoiceClient.GetInvoiceDetailByRefId(accessToken, paymentRefId);
             if (!invoice.IsSuccessStatusCode || invoice.Content.ResponseCode != 200)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             if (method == PaymentMethod.MoMo)
@@ -70,7 +70,7 @@ namespace GUI.Areas.User.Controllers
                     ResponseLanguage = "en",
                     RedirectUrl = "https://cap-k24-team13.herokuapp.com/order-history",
                     IpnUrl = "https://cap-k24-team13.herokuapp.com/checkout/momo-payment-postback",
-                    Amount = (int)Math.Ceiling(invoice.Content.Data.Sum(e => e.TotalPrice)),
+                    Amount = (int)Math.Ceiling(invoice.Content.Data.SelectMany(e => e.Products).Sum(e => e.Price * e.Quantity)),
                     ExtraData = extraData
                 };
                 try

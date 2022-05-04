@@ -22,7 +22,7 @@
             getRecentOrdersOfShop(shopId)
                 .then(orders => {
                     for (let order of orders) {
-                        columnContents[order.status] += buildOrderItem(order);
+                        columnContents[order.status] += buildInvoiceItem(order);
                     }
                     for (let content in columnContents) {
                         $(`.board-column.${orderStatusClassList[content]} .board-column-content`)

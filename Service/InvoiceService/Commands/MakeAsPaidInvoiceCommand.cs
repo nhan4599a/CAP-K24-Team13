@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using Shared.Models;
 
-namespace OrderService.Commands
+namespace InvoiceService.Commands
 {
     public class MakeAsPaidInvoiceCommand : IRequest
     {

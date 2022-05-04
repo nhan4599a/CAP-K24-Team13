@@ -15,11 +15,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using OrderService.Commands;
-using OrderService.Validations;
+using InvoiceService.Commands;
+using InvoiceService.Validations;
 using System;
 
-namespace OrderService
+namespace InvoiceService
 {
     public class Startup
     {

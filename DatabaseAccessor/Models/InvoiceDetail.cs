@@ -21,7 +21,7 @@ namespace DatabaseAccessor.Models
         [Required]
         public double Price { get; set; }
 
-        public bool IsCommented { get; set; }
+        public bool IsRated { get; set; }
 
         public virtual Invoice Invoice { get; set; }
 

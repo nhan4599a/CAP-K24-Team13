@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using OrderService.Commands;
+using InvoiceService.Commands;
 
-namespace OrderService.Validations
+namespace InvoiceService.Validations
 {
     public class FindInvoiceQueryValidator : AbstractValidator<FindInvoiceQuery>
     {

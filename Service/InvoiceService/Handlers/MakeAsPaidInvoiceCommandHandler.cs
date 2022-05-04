@@ -1,11 +1,11 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using OrderService.Commands;
+using InvoiceService.Commands;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OrderService.Handlers
+namespace InvoiceService.Handlers
 {
     public class MakeAsPaidInvoiceCommandHandler : IRequestHandler<MakeAsPaidInvoiceCommand>, IDisposable
     {

@@ -5,23 +5,24 @@ namespace Shared.DTOs
 {
     public class InvoiceDTO
     {
-        public int Id { get; set; }
+        public int InvoiceId { get; set; }
 
         public string InvoiceCode { get; set; }
 
-        public string FullName { get; set; }
+        public string RefId { get; set; }
+
+        public string ReceiverName { get; set; }
 
         public string PhoneNumber { get; set; }
 
+        public string ShippingAddress { get; set; }
+
         public DateTime CreatedAt { get; set; }
-
-        public InvoiceStatus Status { get; set; }
-
-        public double TotalPrice { get; set; }
 
         public PaymentMethod PaymentMethod { get; set; }
 
-        public bool IsReported { get; set; }
+        public InvoiceStatus Status { get; set; }
+
+        public int ShopId { get; set; }
     }
 }
-

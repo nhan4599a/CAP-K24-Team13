@@ -49,7 +49,7 @@ const cartEndpoint = '/cart'
 const interfaceEndpoint = '/interfaces';
 const checkoutEndpoint = '/checkout';
 const ratingProductEndpoint = '/rating';
-const orderEndpoint = '/orders';
+const invoiceEndpoint = '/invoices';
 const statisticEndpoint = '/statistic';
 const reportEndpoint = '/reports';
 const userEndpoint = '/users';
@@ -214,7 +214,7 @@ function ratingProduct(invoiceId, productId, star, comment) {
 }
 
 function changeOrderStatus(orderId, newStatus) {
-    return axios.post(`${orderEndpoint}/${orderId}`, newStatus, {
+    return axios.post(`${invoiceEndpoint}/${orderId}`, newStatus, {
         headers: {
             "Content-Type": "application/json"
         }
@@ -240,11 +240,11 @@ function getStatisticOfShop(shopId, strategy, start, end) {
 }
 
 function getRecentOrdersOfShop(shopId) {
-    return axios.get(`${orderEndpoint}/shop/${shopId}`);
+    return axios.get(`${invoiceEndpoint}/shop/${shopId}`);
 }
 
 function findInvoices(shopId, key, value, pageNumber, pageSize) {
-    const acctualEndpoint = `${orderEndpoint}/shop/${shopId}/search`;
+    const acctualEndpoint = `${invoiceEndpoint}/shop/${shopId}/search`;
     const params = {
         pageNumber: pageNumber,
         pageSize: pageSize || 5

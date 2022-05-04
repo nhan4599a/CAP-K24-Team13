@@ -1,15 +1,15 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using OrderService.Commands;
+using InvoiceService.Commands;
 using Shared.DTOs;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OrderService.Handlers
+namespace InvoiceService.Handlers
 {
     public class GetInvoiceByInvoiceCodeQueryHandler
-        : IRequestHandler<GetInvoiceByInvoiceCodeQuery, InvoiceDetailDTO>, IDisposable
+        : IRequestHandler<GetInvoiceByInvoiceCodeQuery, InvoiceWithItemDTO>, IDisposable
     {
         private readonly IInvoiceRepository _repository;
 
@@ -18,7 +18,7 @@ namespace OrderService.Handlers
             _repository = repository;
         }
 
-        public async Task<InvoiceDetailDTO> Handle(GetInvoiceByInvoiceCodeQuery request, CancellationToken cancellationToken)
+        public async Task<InvoiceWithItemDTO> Handle(GetInvoiceByInvoiceCodeQuery request, CancellationToken cancellationToken)
         {
             return await _repository.GetInvoiceDetailAsync(request.InvoiceCode);
         }

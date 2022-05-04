@@ -25,7 +25,7 @@ namespace GUI.Areas.User.Controllers
         {
             Request.QueryString = new QueryString();
             var token = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
-            var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory(token, User.GetUserId().ToString());
+            var orderHistoryRespone = await _orderHistoryClient.GetOrderHistoryOfUser(token, User.GetUserId().ToString());
             if (!orderHistoryRespone.IsSuccessStatusCode)
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             return View(orderHistoryRespone.Content.Data);

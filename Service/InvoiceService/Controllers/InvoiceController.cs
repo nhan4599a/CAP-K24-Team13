@@ -1,30 +1,27 @@
-﻿using IdentityModel.Client;
+﻿using InvoiceService.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using OrderService.Commands;
 using Shared.DTOs;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using SystemJson = System.Text.Json;
 
 namespace OrderService.Controllers
 {
     [Authorize]
-    [Route("api/orders")]
+    [Route("api/invoices")]
     [ApiController]
-    public class OrderController : Controller
+    public class InvoiceController : Controller
     {
         private readonly IMediator _mediator;
 
@@ -37,7 +34,7 @@ namespace OrderService.Controllers
             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
         };
 
-        public OrderController(IMediator mediator, IDistributedCache cache, IConfiguration configuration)
+        public InvoiceController(IMediator mediator, IDistributedCache cache, IConfiguration configuration)
         {
             _mediator = mediator;
             _cache = cache;
@@ -47,27 +44,27 @@ namespace OrderService.Controllers
         [HttpGet("user/{userId}")]
         public async Task<ApiResult> GetOrderHistory(string userId)
         {
-            var result = await _mediator.Send(new GetOrderHistoryByUserIdQuery
+            var result = await _mediator.Send(new GetOrderHistoryQuery
             {
                 UserId = userId
             });
-            return ApiResult<List<OrderItemDTO>>.CreateSucceedResult(result);
+            return ApiResult<InvoiceWithItemDTO[]>.CreateSucceedResult(result);
         }
 
         [HttpGet("shop/{shopId}")]
-        public async Task<ApiResult> GetOrdersOfShop(int shopId)
+        public async Task<ApiResult> GetNearByInvoicesOfShop(int shopId)
         {
-            var result = await _mediator.Send(new GetNearByOrdersOfShopQuery
+            var result = await _mediator.Send(new GetNearByInvoicesOfShopQuery
             {
                 ShopId = shopId
             });
-            return ApiResult<List<OrderDTO>>.CreateSucceedResult(result);
+            return ApiResult<List<InvoiceDTO>>.CreateSucceedResult(result);
         }
 
         [HttpPost("{invoiceId}")]
         public async Task<ApiResult> ChangeOrderStatus(int invoiceId, [FromBody] int newStatusInt)
         {
-            var result = await _mediator.Send(new ChangeOrderStatusCommand
+            var result = await _mediator.Send(new ChangeInvoiceStatusCommand
             {
                 InvoiceId = invoiceId,
                 NewStatus = (InvoiceStatus)newStatusInt
@@ -85,25 +82,25 @@ namespace OrderService.Controllers
             var response = await _mediator.Send(query);
             if (!response.IsSuccess)
                 return ApiResult.CreateErrorResult(500, response.ErrorMessage);
-            return ApiResult<PaginatedList<InvoiceDTO>>.CreateSucceedResult(response.Response);
+            return ApiResult<PaginatedList<InvoiceWithReportDTO>>.CreateSucceedResult(response.Response);
         }
         
         [HttpGet("{invoiceCode}")]
-        public async Task<ApiResult> GetOrderDetail(string invoiceCode)
+        public async Task<ApiResult> GetInvoiceDetail(string invoiceCode)
         {
             var cachedResult = _cache.GetString(GetCacheKey(invoiceCode));
             if (cachedResult != null)
-                return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(System.Text.Json.JsonSerializer.Deserialize<InvoiceDetailDTO>(cachedResult)!);
+                return ApiResult<InvoiceWithItemDTO>.CreateSucceedResult(SystemJson.JsonSerializer.Deserialize<InvoiceWithItemDTO>(cachedResult)!);
             var response = await _mediator.Send(new GetInvoiceByInvoiceCodeQuery
             {
-                InvoiceCode = invoiceCode 
+                InvoiceCode = invoiceCode
             });
             if (response == null)
                 return ApiResult.CreateErrorResult(404, "Invoice not found");
-            await _cache.SetStringAsync(GetCacheKey(invoiceCode), System.Text.Json.JsonSerializer.Serialize(response), cacheOptions);
+            await _cache.SetStringAsync(GetCacheKey(invoiceCode), SystemJson.JsonSerializer.Serialize(response), cacheOptions);
             if (User.FindFirstValue("ShopId") != response.ShopId.ToString())
                 return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
-            return ApiResult<InvoiceDetailDTO>.CreateSucceedResult(response);
+            return ApiResult<InvoiceWithItemDTO>.CreateSucceedResult(response);
         }
         
         [HttpGet("ref/{refId}")]
@@ -111,13 +108,13 @@ namespace OrderService.Controllers
         {
             var cachedResult = _cache.GetString(GetCacheKey(refId, true));
             if (cachedResult != null)
-                return ApiResult<InvoiceDetailDTO[]>.CreateSucceedResult(System.Text.Json.JsonSerializer.Deserialize<InvoiceDetailDTO[]>(cachedResult)!);
-            var response = await _mediator.Send(new FindInvoiceByRefIdQuery
+                return ApiResult<InvoiceWithItemDTO[]>.CreateSucceedResult(SystemJson.JsonSerializer.Deserialize<InvoiceWithItemDTO[]>(cachedResult)!);
+            var response = await _mediator.Send(new FindInvoicesByRefIdQuery
             {
                 RefId = refId
             });
-            await _cache.SetStringAsync(GetCacheKey(refId, true), System.Text.Json.JsonSerializer.Serialize(response), cacheOptions);
-            return ApiResult<InvoiceDetailDTO[]>.CreateSucceedResult(response);
+            await _cache.SetStringAsync(GetCacheKey(refId, true), SystemJson.JsonSerializer.Serialize(response), cacheOptions);
+            return ApiResult<InvoiceWithItemDTO[]>.CreateSucceedResult(response);
         }
 
         [HttpPost("paid/{refId}")]

@@ -141,19 +141,19 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/orders/user/{userId}",
+      "DownstreamPathTemplate": "/api/invoices/user/{userId}",
       "DownstreamScheme": "http",
-      "ServiceName": "OrderService",
-      "UpstreamPathTemplate": "/orders/user/{userId}",
+      "ServiceName": "InvoiceService",
+      "UpstreamPathTemplate": "/invoices/user/{userId}",
       "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/orders/shop/{shopId}",
+      "DownstreamPathTemplate": "/api/invoices/shop/{shopId}",
       "DownstreamScheme": "http",
-      "ServiceName": "OrderService",
+      "ServiceName": "InvoiceService",
       "UpstreamPathTemplate": "/orders/shop/{shopId}",
       "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
@@ -161,40 +161,40 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/orders/shop/{shopId}/search",
+      "DownstreamPathTemplate": "/api/invoices/shop/{shopId}/search",
       "DownstreamScheme": "http",
-      "ServiceName": "OrderService",
-      "UpstreamPathTemplate": "/orders/shop/{shopId}/search",
+      "ServiceName": "InvoiceService",
+      "UpstreamPathTemplate": "/invoices/shop/{shopId}/search",
       "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/orders/{orderId}",
+      "DownstreamPathTemplate": "/api/invoices/{orderId}",
       "DownstreamScheme": "http",
-      "ServiceName": "OrderService",
-      "UpstreamPathTemplate": "/orders/{orderId}",
+      "ServiceName": "InvoiceService",
+      "UpstreamPathTemplate": "/invoices/{orderId}",
       "UpstreamHttpMethod": [ "GET", "POST", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/orders/ref/{refId}",
+      "DownstreamPathTemplate": "/api/invoices/ref/{refId}",
       "DownstreamScheme": "http",
-      "ServiceName": "OrderService",
-      "UpstreamPathTemplate": "/orders/ref/{refId}",
+      "ServiceName": "InvoiceService",
+      "UpstreamPathTemplate": "/invoices/ref/{refId}",
       "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/orders/paid/{refId}",
+      "DownstreamPathTemplate": "/api/invoices/paid/{refId}",
       "DownstreamScheme": "http",
-      "ServiceName": "OrderService",
-      "UpstreamPathTemplate": "/orders/paid/{refId}",
+      "ServiceName": "InvoiceService",
+      "UpstreamPathTemplate": "/invoices/paid/{refId}",
       "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"

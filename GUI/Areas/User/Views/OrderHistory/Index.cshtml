@@ -1,7 +1,8 @@
 ﻿@using GUI.Extensions
 @using System.Globalization
+@using Shared.DTOs
 @using Shared.Models
-@model List<Shared.DTOs.OrderItemDTO>
+@model InvoiceWithItemDTO[]
 @section Styles {
 <style>
     .rating {
@@ -52,27 +53,19 @@
 <main class="main">
     <div class="page-header text-center" style="background-image: url('@Url.Content("~/assets/user/images/page-header-bg.jpg")')">
         <div class="container">
-            <h1 class="page-title">Purchased</h1>
+            <h1 class="page-title">My purchased<span>@User.GetUsername()</span></h1>
         </div>
     </div>
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/home">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page" href="/orderhistory">My purchase</li>
+                <li class="breadcrumb-item active" aria-current="page" href="/order-history">My purchase</li>
             </ol>
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
-    <div class="container" style="width: 90%">
+    @*<div class="container" style="width: 90%">
         <div class="row justify-content-md-center">
-            <div class="col-md-12">
-                <h2 class="title mb-3">
-                    <a href="#">
-                        <i class="fas fa-user-circle"></i>
-                        Account name
-                    </a>
-                </h2>
-            </div>
             <div class="col-md-12">
                 <table class="table table-cart table-mobile" style="width: 100%">
                     <thead>
@@ -130,7 +123,138 @@
                 </table>
             </div><!-- End .col-md-12 -->
         </div>
-    </div>
+    </div>*@
+    <div class="page-content">
+        <div class="container" style="width: 90%">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="accordion">
+                        @foreach (var invoice in Model)
+                        {
+                            <div class="card">
+						        <div class="card-header" id="heading-@invoice.RefId">
+							        <h2 class="card-title">
+							            <a role="button" data-toggle="collapse" href="#collapse-@invoice.RefId" aria-expanded="true" aria-controls="collapse-@invoice.RefId">
+                                            <div class="row">
+                                                <div class="col-md-6">@invoice.CreatedAt.ToLongDateString()</div>
+                                                <p class="col-md-6" style="text-align: right; font-size: 20px;">
+                                                    @invoice.Products.Sum(e => e.Price * e.Quantity).ToString("N0")
+                                                </p>
+                                            </div>
+							            </a>
+							        </h2>
+						        </div><!-- End .card-header -->
+						        <div id="collapse-1" class="collapse show" aria-labelledby="heading-@invoice.RefId" data-parent="#accordion-1">
+							        <div class="card-body">
+                                        <table class="table table-cart table-mobile" style="width: 100%">
+                                            <thead>
+                                                <tr>
+                                                    <td id="product-col" style="text-align: left;width: 40%;">Product</td>
+                                                    <td id="price" style="width: 15%;">Price</td>
+                                                    <td id="quantity-col" style="width: 10%;">Quantity</td> 
+                                                    <td id="sub-total" style="width: 15%;">Sub Total</td>
+                                                    <td id="status-col" style="width: 20%;">Status</td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var product in invoice.Products)
+                                                {
+                                                    <tr class="mb-2" data-product="@product.ProductId" data-invoice="@invoice.InvoiceId">
+                                                        <td class="product-col">
+                                                            <div class="product" style="margin-left: 10px;">
+                                                                <figure class="product-media">
+                                                                    <a href="@Url.ProductImageUrl(product.Image)">
+                                                                        <img src="/product/index/@product.ProductId" alt="Product image">
+                                                                    </a>
+                                                                </figure>
+                                                                <h3 class="product-title">
+                                                                    <a href="/product/index/@product.ProductId">@product.ProductName</a>
+                                                                </h3><!-- End .product-title -->
+                                                            </div><!-- End .product -->
+                                                        </td>
+                                                        <td class="cost">@product.Price.ToString("N0")</td>
+                                                        <td id="quantity-col">
+                                                            @product.Quantity
+                                                        </td>
+                                                        <td id="sub-total">
+                                                            @((product.Price * product.Quantity).ToString("N0"))
+                                                        </td>
+                                                        <td id="status-col">
+                                                            @invoice.Status.GetDescription()
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-primary">Rate &amp; comment</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+							        </div><!-- End .card-body -->
+						        </div><!-- End .collapse -->
+					        </div><!-- End .card -->   
+                        }
+
+					    @*<div class="card">
+						    <div class="card-header" id="heading-2">
+							    <h2 class="card-title">
+							        <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+                                        Ngày giờ đặt hàng
+							        </a>
+							    </h2>
+						    </div><!-- End .card-header -->
+						    <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-1">
+							    <div class="card-body">
+                                    <table class="table table-cart table-mobile" style="width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <td id="product-col" style="text-align: left;width: 40%;">Product</td>
+                                                <td id="cost" style="width: 15%;">Cost</td>
+                                                <td id="quantity-col" style="width: 10%;">Quantity</td> 
+                                                <td id="sub-total" style="width: 15%;">Sub Total</td>
+                                                <td id="status-col" style="width: 20%;">Status</td>
+                                                <td></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr class="mb-2" data-product="d429e333-78b3-492f-65fb-08da28f6d900" data-invoice="51">
+                                                    <td class="product-col">
+                                                        <div class="product" style="margin-left: 10px;">
+                                                            <figure class="product-media">
+                                                                <a href="#">
+                                                                    <img src="#" alt="Product image">
+                                                                </a>
+                                                            </figure>
+                                                            <h3 class="product-title">
+                                                                <a href="#">Product name</a>
+                                                            </h3><!-- End .product-title -->
+                                                        </div><!-- End .product -->
+                                                    </td>
+                                                    <td class="cost">23,000,000</td>
+                                                    <td id="quantity-col">
+                                                        1
+                                                    </td>
+                                                    <td id="sub-total">
+                                                        23,000,000
+                                                    </td>
+                                                    <td id="status-col">
+                                                        New
+                                                    </td>
+                                                    <td>
+                                                            <button class="btn btn-primary">Rate &amp; comment</button>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+							    </div><!-- End .card-body -->
+						    </div><!-- End .collapse -->
+					    </div><!-- End .card -->*@
+
+				    </div><!-- End .accordion -->
+                </div><!-- End .col-md-12 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
     <div class="mb-4"></div><!-- End .mb-4 -->
 </main><!-- End .main -->
 <!-- rating / comments Modal -->

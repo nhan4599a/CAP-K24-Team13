@@ -26,27 +26,23 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper ?? Mapper.GetInstance();
         }
 
-        public async Task<List<OrderItemDTO>> GetOrderHistoryAsync(string userId)
+        public async Task<InvoiceWithItemDTO[]> GetOrderHistoryAsync(string userId)
         {
             var parsedUserId = Guid.Parse(userId);
-            return await _dbContext.InvoiceDetails
-                .AsNoTracking()
-                .Include(e => e.Invoice)
-                .Include(e => e.Product)
-                .Where(item => item.Invoice.UserId == parsedUserId)
-                .OrderByDescending(e => e.Invoice.CreatedAt)
-                .Select(item => _mapper.MapToOrderItemDTO(item))
-                .ToListAsync();
-        }
-
-        public async Task<List<OrderDTO>> GetOrdersOfShopAsync(int shopId)
-        {
             return await _dbContext.Invoices
                 .AsNoTracking()
-                .Where(item => item.ShopId == shopId).Select(invoice => _mapper.MapToOrderDTO(invoice)).ToListAsync();
+                .Include(e => e.Details)
+                .ThenInclude(e => e.Product)
+                .AsSplitQuery()
+                .Where(item => item.UserId == parsedUserId)
+                .OrderByDescending(e => e.CreatedAt)
+                .GroupBy(e => e.RefId)
+                .SelectMany(e => e)
+                .Select(item => _mapper.MapToInvoiceWithItemDTO(item))
+                .ToArrayAsync();
         }
 
-        public async Task<List<OrderDTO>> GetOrdersOfShopWithInTimeAsync(int shopId, DateOnly startDate, DateOnly endDate)
+        public async Task<List<InvoiceDTO>> GetOrdersOfShopWithInTimeAsync(int shopId, DateOnly startDate, DateOnly endDate)
         {
             var currentDate = DateOnly.FromDateTime(DateTime.Now);
             if (startDate > endDate)
@@ -57,7 +53,7 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Where(item => item.ShopId == shopId && item.CreatedAt >= startDate.ToDateTime(TimeOnly.MinValue)
                     && item.CreatedAt <= endDate.ToDateTime(TimeOnly.MaxValue))
-                .Select(invoice => _mapper.MapToOrderDTO(invoice))
+                .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
                 .ToListAsync();
         }
 
@@ -148,7 +144,7 @@ namespace DatabaseAccessor.Repositories
             return CommandResponse<bool>.Success(true);
         }
 
-        public async Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy, 
+        public async Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy,
             StatisticDateRange range)
         {
             var builder = new StatisticResult.Builder(strategy);
@@ -163,7 +159,8 @@ namespace DatabaseAccessor.Repositories
                         Value = new StatisticResultItem
                         {
                             Income = group.Where(e => e.NewStatus == InvoiceStatus.Succeed)
-                                        .SelectMany(e => e.Invoice.Details).Sum(detail => detail.Price * detail.Quantity),
+                                        .SelectMany(e => e.Invoice.Details)
+                                        .Sum(detail => detail.Price * detail.Quantity),
                             Data = new StatisticResultItemData
                             {
                                 NewInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.New),
@@ -187,7 +184,8 @@ namespace DatabaseAccessor.Repositories
                         Value = new StatisticResultItem
                         {
                             Income = group.Where(e => e.NewStatus == InvoiceStatus.Succeed)
-                                        .SelectMany(e => e.Invoice.Details).Sum(detail => detail.Price * detail.Quantity),
+                                        .SelectMany(e => e.Invoice.Details)
+                                        .Sum(detail => detail.Price * detail.Quantity),
                             Data = new StatisticResultItemData
                             {
                                 NewInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.New),
@@ -211,7 +209,8 @@ namespace DatabaseAccessor.Repositories
                         Value = new StatisticResultItem
                         {
                             Income = group.Where(e => e.NewStatus == InvoiceStatus.Succeed)
-                                        .SelectMany(e => e.Invoice.Details).Sum(detail => detail.Price * detail.Quantity),
+                                        .SelectMany(e => e.Invoice.Details)
+                                        .Sum(detail => detail.Price * detail.Quantity),
                             Data = new StatisticResultItemData
                             {
                                 NewInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.New),
@@ -235,7 +234,8 @@ namespace DatabaseAccessor.Repositories
                                         Value = new StatisticResultItem
                                         {
                                             Income = group.Where(e => e.NewStatus == InvoiceStatus.Succeed)
-                                                        .SelectMany(e => e.Invoice.Details).Sum(detail => detail.Price * detail.Quantity),
+                                                        .SelectMany(e => e.Invoice.Details)
+                                                        .Sum(detail => detail.Price * detail.Quantity),
                                             Data = new StatisticResultItemData
                                             {
                                                 NewInvoiceCount = group.Count(e => e.NewStatus == InvoiceStatus.New),
@@ -251,22 +251,21 @@ namespace DatabaseAccessor.Repositories
             }
             return builder.Build(range);
         }
-        
-        public async Task<CommandResponse<PaginatedList<InvoiceDTO>>> FindInvoicesAsync(int shopId, string key,
+
+        public async Task<CommandResponse<PaginatedList<InvoiceWithReportDTO>>> FindInvoicesAsync(int shopId, string key,
             string value, PaginationInfo paginationInfo)
         {
-            var result = _dbContext.Invoices.AsNoTracking().Include(e => e.Details).Include(e => e.Report)
-                .AsSplitQuery()
+            var result = _dbContext.Invoices.AsNoTracking().Include(e => e.Report)
                 .Where(invoice => invoice.ShopId == shopId);
             if (!string.IsNullOrWhiteSpace(key))
             {
                 var field = typeof(Invoice).GetProperty(key);
                 if (field == null)
-                    return CommandResponse<PaginatedList<InvoiceDTO>>.Error("Key not existed. Is it a typo?", null);
+                    return CommandResponse<PaginatedList<InvoiceWithReportDTO>>.Error("Key not existed. Is it a typo?", null);
                 if (field.PropertyType == typeof(string)
                         || field.PropertyType.IsEnum
                         || field.PropertyType.IsNumberType()
-                        || field.PropertyType.FullName == "System.DateTime")
+                        || field.PropertyType.FullName == typeof(DateTime).FullName)
                 {
                     try
                     {
@@ -276,7 +275,7 @@ namespace DatabaseAccessor.Repositories
                                 .GetMethod("Parse", new[] { typeof(string) }).Invoke(null, new[] { value });
                             result = result.Where(key, Operator.Equal, numberValue, field.PropertyType);
                         }
-                        else if (field.PropertyType.FullName == "System.DateTime")
+                        else if (field.PropertyType.FullName == typeof(DateTime).FullName)
                         {
                             if (DateTimeExtension.TryParseExact(value, "dd/MM/yyyy", out DateTime dateTime))
                             {
@@ -293,7 +292,7 @@ namespace DatabaseAccessor.Repositories
                             }
                             else
                             {
-                                return CommandResponse<PaginatedList<InvoiceDTO>>
+                                return CommandResponse<PaginatedList<InvoiceWithReportDTO>>
                                     .Error("Provided datetime value is not supported", null);
                             }
                         }
@@ -309,19 +308,20 @@ namespace DatabaseAccessor.Repositories
                     }
                     catch (Exception e)
                     {
-                        return CommandResponse<PaginatedList<InvoiceDTO>>.Error(e.Message, e);
+                        return CommandResponse<PaginatedList<InvoiceWithReportDTO>>.Error(e.Message, e);
                     }
                 }
                 else
                 {
-                    return CommandResponse<PaginatedList<InvoiceDTO>>.Error(
+                    return CommandResponse<PaginatedList<InvoiceWithReportDTO>>.Error(
                         $"Provided type {field.PropertyType.FullName} is not supported", null);
                 }
             }
             var returnResult = await result
-                .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
+                .OrderByDescending(invoice => invoice.CreatedAt)
+                .Select(invoice => _mapper.MapToInvoiceWithReportDTO(invoice))
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
-            return CommandResponse<PaginatedList<InvoiceDTO>>.Success(returnResult);
+            return CommandResponse<PaginatedList<InvoiceWithReportDTO>>.Success(returnResult);
         }
 
         private IQueryable<InvoiceStatusChangedHistory> GetInvoicesInTime(int shopId, DateTime startDate, DateTime endDate)
@@ -332,31 +332,28 @@ namespace DatabaseAccessor.Repositories
                     .Where(history => history.ChangedDate.Date >= startDate && history.ChangedDate.Date <= endDate);
         }
 
-        public async Task<InvoiceDetailDTO> GetInvoiceDetailAsync(string invoiceCode)
+        public async Task<InvoiceWithItemDTO> GetInvoiceDetailAsync(string invoiceCode)
         {
             var result = await _dbContext.Invoices
                 .AsNoTracking()
-                .Include(e => e.Report)
                 .Include(e => e.Details)
                 .ThenInclude(e => e.Product)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(invoice => invoice.InvoiceCode == invoiceCode);
 
-            return _mapper.MapToInvoiceDetailDTO(result);
+            return _mapper.MapToInvoiceWithItemDTO(result);
         }
 
-        public async Task<InvoiceDetailDTO[]> GetInvoiceDetailByRefIdAsync(string refId)
+        public async Task<InvoiceWithItemDTO[]> GetInvoiceDetailByRefIdAsync(string refId)
         {
-            var invoices = await _dbContext.Invoices
+            return await _dbContext.Invoices
                 .AsNoTracking()
-                .Include(e => e.Report)
                 .Include(e => e.Details)
                 .ThenInclude(e => e.Product)
                 .AsSplitQuery()
                 .Where(invoice => invoice.RefId == refId)
-                .ToListAsync();
-
-            return invoices.Select(e => _mapper.MapToInvoiceDetailDTO(e)).ToArray();
+                .Select(invoice => _mapper.MapToInvoiceWithItemDTO(invoice))
+                .ToArrayAsync();
         }
 
         public async Task MakeAsPaidAsync(string refId)

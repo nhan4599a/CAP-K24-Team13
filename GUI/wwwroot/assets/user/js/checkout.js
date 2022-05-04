@@ -10,9 +10,11 @@
             return;
         }
         let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/user/checking-out.json');
-        animationLoader.setAnimationCompletedCallback(() => {
-            showCompletedModal();
-        });
+        if (model.paymentMethod == 'CoD') {
+            animationLoader.setAnimationCompletedCallback(() => {
+                showCompletedModal();
+            });
+        }
         animationLoader.showAnimation(10000);
         getUserId()
             .then(userId => {

@@ -2,7 +2,7 @@
 @{
     Layout = "/Areas/ShopOwner/Views/Shared/_Layout.cshtml";
 }
-@model InvoiceDetailDTO
+@model InvoiceWithItemDTO
 
 <div class="row">
     <div class="col-12">
@@ -23,14 +23,14 @@
                                 </colgroup>
                                 <thead>
                                     <tr>
-                                        <th scope="col">#Order Code</th>
+                                        <th scope="col">#Invoice Code</th>
                                         <th scope="col">#@Model.InvoiceCode</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <th scope="row">Customer Name</th>
-                                        <td>@Model.FullName</td>
+                                        <td>@Model.ReceiverName</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Phone Number</th>
@@ -78,7 +78,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">Total order value</th>
-                                        <td><strong>@Model.TotalPrice.ToString("N0")</strong></td>
+                                        <td><strong>@Model.Products.Sum(product => product.Price * product.Quantity).ToString("N0")</strong></td>
                                     </tr>
                                 </tbody>
                             </table>
