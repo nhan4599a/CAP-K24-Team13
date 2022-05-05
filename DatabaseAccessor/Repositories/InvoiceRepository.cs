@@ -55,6 +55,7 @@ namespace DatabaseAccessor.Repositories
                 .Where(item => item.ShopId == shopId && item.CreatedAt >= startDate.ToDateTime(TimeOnly.MinValue)
                     && item.CreatedAt <= endDate.ToDateTime(TimeOnly.MaxValue))
                 .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
+                .OrderByDescending(invoice => invoice.CreatedAt)
                 .ToListAsync();
         }
 

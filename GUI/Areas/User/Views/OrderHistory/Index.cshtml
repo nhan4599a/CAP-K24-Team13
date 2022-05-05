@@ -76,7 +76,7 @@
 							        <h2 class="card-title">
 							            <a role="button" data-toggle="collapse" href="#collapse-@group.Key" aria-expanded="true" aria-controls="collapse-@group.Key">
                                             <div class="row">
-                                                <div class="col-md-6">@group.Value[0].CreatedAt.ToString("D HH:mm tt")</div>
+                                                <div class="col-md-6">@group.Value[0].CreatedAt.ToString("dddd, dd, MMM, yyyy HH:mm tt")</div>
                                                 <p class="col-md-6" style="text-align: right; font-size: 20px;">
                                                     @group.Value.SelectMany(e => e.Products).Sum(e => e.Price * e.Quantity).ToString("N0")
                                                 </p>

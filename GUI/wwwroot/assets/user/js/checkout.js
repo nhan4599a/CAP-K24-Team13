@@ -73,7 +73,7 @@ function showCompletedModal() {
     });
     modal.on('hidden.bs.modal', () => {
         setTimeout(() => {
-            window.location.href = '/';
+            window.location.href = '/order-history';
         }, 500);
     });
 }
