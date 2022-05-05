@@ -55,7 +55,7 @@
         .owl-carousel .owl-item img {
             display: block;
             width: 100%;
-            height: 194px
+            height: auto
         }
 
     .owl-carousel .owl-nav.disabled,

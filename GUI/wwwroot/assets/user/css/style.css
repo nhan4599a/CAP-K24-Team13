@@ -5203,8 +5203,9 @@ p {
 	align-items: center
 }
 
-.header-14 .top-menu .menus>li+li {
-	margin-right: 4rem
+.header-14 .top-menu .menus > li {
+	margin-right: 4rem;
+	padding: 0.8rem
 }
 
 .header-14 .top-menu li+li {

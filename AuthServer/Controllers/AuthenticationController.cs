@@ -7,6 +7,7 @@ using DatabaseAccessor.Models;
 using IdentityServer4.Events;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using System;
@@ -22,16 +23,18 @@ namespace AuthServer.Controllers
         private readonly IIdentityServerInteractionService _interaction;
         private readonly MailHelper _mailer;
         private readonly IEventService _event;
+        private readonly IWebHostEnvironment _environment;
 
         private const string SignInParamsKey = "SIGN_IN_PARAMS_KEY";
 
         public AuthenticationController(IIdentityServerInteractionService interaction,
-            ApplicationSignInManager signInManager, MailHelper mailer, IEventService @event)
+            ApplicationSignInManager signInManager, MailHelper mailer, IEventService @event, IWebHostEnvironment environment)
         {
             _signInManager = signInManager;
             _interaction = interaction;
             _mailer = mailer;
             _event = @event;
+            _environment = environment;
         }
 
         [Route("/Auth/SignIn")]
@@ -240,12 +243,14 @@ namespace AuthServer.Controllers
             await _mailer.SendEmail(message);
         }
 
-        private static MailRequest GenerateEmailConfirmationMailAsync(string receiver, string token)
+        private MailRequest GenerateEmailConfirmationMailAsync(string receiver, string token)
         {
             var email = receiver.ToBase64();
-            var body = "Thanks for your registration," +
-                $" this is your email confirmation <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}"}\">link</a>" +
-                $" The link will be expired at {DateTime.UtcNow.AddHours(7).AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}";
+            //var body = 
+            //"Thanks for your registration," +
+            //$" this is your email confirmation <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}"}\">link</a>" +
+            //$" The link will be expired at {DateTime.UtcNow.AddHours(7).AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}";
+            var body = System.IO.File.ReadAllText($"{_environment.WebRootPath}html/confirm-email.html").Replace("{{confirm-link}}", $"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}") .Replace("{{expire-time}}", $"{DateTime.UtcNow.AddHours(7).AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}");
             return new MailRequest()
             {
                 Body = body,

@@ -753,6 +753,7 @@ function buildOrderItem(order) {
                         <h5>${order.customerName}</h5>
                         <input type="tel" name="phonenumber" placeholder="phonenumber" value="${order.phone}" disabled />
                         <input type="text" name="address" placeholder="address" value="${order.shippingAddress}" disabled />
+                        <input type="text" name"payment method" placeholder="payment method" value="${order.paymentMethod}" disable />
                     </div>
                     <button id="btn-order-details" type="button" class="btn btn-primary">
                         View
