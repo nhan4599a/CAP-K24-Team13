@@ -322,11 +322,11 @@
                         onInterfaceGot(responses[1]);
                         onProductGot(responses[2]);
                         animationLoader.hideAnimation();
+                    })
+                    .catch(e => {
+                        animationLoader.hideAnimation();
+                        toastr.error(e, 'Error');
                     });
-                    //.catch(e => {
-                    //    animationLoader.hideAnimation();
-                    //    toastr.error(e, 'Error');
-                    //});
                 });
         });
 

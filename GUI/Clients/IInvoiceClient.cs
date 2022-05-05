@@ -9,7 +9,7 @@ namespace GUI.Clients
     public interface IInvoiceClient
     {
         [Get("/invoices/user/{userId}")]
-        Task<ApiResponse<ApiResult<Dictionary<string, InvoiceItemDTO[]>>>> GetOrderHistoryOfUser([Authorize("Bearer")] string token, string userId);
+        Task<ApiResponse<ApiResult<Dictionary<string, InvoiceWithItemDTO[]>>>> GetOrderHistoryOfUser([Authorize("Bearer")] string token, string userId);
 
         [Get("/invoices/{invoiceCode}")]
         Task<ApiResponse<ApiResult<InvoiceWithItemDTO>>> GetInvoiceDetail([Authorize("Bearer")] string token, string invoiceCode);
