@@ -1,7 +1,8 @@
 ﻿@using GUI.Extensions
 @using System.Globalization
+@using Shared.DTOs
 @using Shared.Models
-@model List<Shared.DTOs.OrderItemDTO>
+@model Dictionary<string, InvoiceWithItemDTO[]>
 @section Styles {
 <style>
     .rating {
@@ -52,85 +53,100 @@
 <main class="main">
     <div class="page-header text-center" style="background-image: url('@Url.Content("~/assets/user/images/page-header-bg.jpg")')">
         <div class="container">
-            <h1 class="page-title">Purchased</h1>
+            <h1 class="page-title">My purchased<span>@User.GetUsername()</span></h1>
         </div>
     </div>
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/home">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page" href="/orderhistory">My purchase</li>
+                <li class="breadcrumb-item active" aria-current="page" href="/order-history">My purchase</li>
             </ol>
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
-    <div class="container" style="width: 90%">
-        <div class="row justify-content-md-center">
-            <div class="col-md-12">
-                <h2 class="title mb-3">
-                    <a href="#">
-                        <i class="fas fa-user-circle"></i>
-                        Account name
-                    </a>
-                </h2>
-            </div>
-            <div class="col-md-12">
-                <table class="table table-cart table-mobile" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <td id="product-col">Product</td>
-                            <td id="quantity-col" style="font-size: 20px;">Quantity</td>
-                            <td id="date-col" style="font-size: 20px;">Date</td>
-                            <td id="status-col" style="font-size: 20px;">Price</td>
-                            <td id="price-col" style="font-size: 20px;">Status</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
+    <div class="page-content">
+        <div class="container" style="width: 90%">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="accordion">
+                        @foreach (var group in Model)
                         {
-                            <tr class="mb-2" data-product="@item.ProductId" data-invoice="@item.InvoiceId">
-                                <td>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <img src="@Url.ProductImageUrl(item.Image)">
-                                        </div>
-                                        <div class="col-md-10">
-                                            <a href="/product/index/@item.ProductId">
-                                                <p>
-                                                    @item.ProductName
+                            <div class="card">
+						        <div class="card-header" id="heading-@group.Key">
+							        <h2 class="card-title">
+							            <a role="button" data-toggle="collapse" href="#collapse-@group.Key" aria-expanded="true" aria-controls="collapse-@group.Key">
+                                            <div class="row">
+                                                <div class="col-md-6">@group.Value[0].CreatedAt.ToString("dddd, dd, MMM, yyyy HH:mm tt")</div>
+                                                <p class="col-md-6" style="text-align: right; font-size: 20px;">
+                                                    @group.Value.SelectMany(e => e.Products).Sum(e => e.Price * e.Quantity).ToString("N0")
                                                 </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td id="quantity-col">
-                                    @item.Quantity
-                                </td>
-                                <td id="date-col">
-                                    @item.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
-                                </td>
-                                <td id="price-col">
-                                    @((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))
-                                </td>
-                                <td id="status-col">
-                                    @item.Status.GetDescription()
-                                </td>
-                                <td>
-                                    @if (item.CanBeRating)
-                                    {
-                                        <button class="btn btn-primary">Rate & comment</button>
-                                    }
-                                    else
-                                    {
-                                        <button class="btn btn-primary" disabled>Rate & comment</button>
-                                    }
-                                </td>
-                            </tr>
+                                            </div>
+							            </a>
+							        </h2>
+						        </div><!-- End .card-header -->
+						        <div id="collapse-@group.Key" class="collapsed" aria-labelledby="heading-@group.Key">
+							        <div class="card-body">
+                                        <table class="table table-cart table-mobile" style="width: 100%">
+                                            <thead>
+                                                <tr>
+                                                    <td id="product-col" style="text-align: left;width: 40%;">Product</td>
+                                                    <td id="price" style="width: 15%;">Price</td>
+                                                    <td id="quantity-col" style="width: 10%;">Quantity</td> 
+                                                    <td id="sub-total" style="width: 15%;">Sub Total</td>
+                                                    <td id="status-col" style="width: 20%;">Status</td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var product in group.Value.SelectMany(e => e.Products))
+                                                {
+                                                    <tr class="mb-2" data-product="@product.ProductId" data-invoice="@group.Value[0].InvoiceId">
+                                                        <td class="product-col">
+                                                            <div class="product" style="margin-left: 10px;">
+                                                                <figure class="product-media">
+                                                                    <a href="@Url.ProductImageUrl(product.Image)">
+                                                                        <img src="/product/index/@product.ProductId" alt="Product image">
+                                                                    </a>
+                                                                </figure>
+                                                                <h3 class="product-title">
+                                                                    <a href="/product/index/@product.ProductId">@product.ProductName</a>
+                                                                </h3><!-- End .product-title -->
+                                                            </div><!-- End .product -->
+                                                        </td>
+                                                        <td class="cost">@product.Price.ToString("N0")</td>
+                                                        <td id="quantity-col">
+                                                            @product.Quantity
+                                                        </td>
+                                                        <td id="sub-total">
+                                                            @((product.Price * product.Quantity).ToString("N0"))
+                                                        </td>
+                                                        <td id="status-col">
+                                                            @group.Value[0].Status.GetDescription()
+                                                        </td>
+                                                        <td>
+                                                            @if (product.CanBeRating)
+                                                            {
+                                                                <button class="btn btn-primary">Rate &amp; comment</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button class="btn btn-primary" disabled>Rate &amp; comment</button>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+							        </div><!-- End .card-body -->
+						        </div><!-- End .collapse -->
+					        </div><!-- End .card -->   
                         }
-                    </tbody>
-                </table>
-            </div><!-- End .col-md-12 -->
-        </div>
-    </div>
+
+				    </div><!-- End .accordion -->
+                </div><!-- End .col-md-12 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
     <div class="mb-4"></div><!-- End .mb-4 -->
 </main><!-- End .main -->
 <!-- rating / comments Modal -->

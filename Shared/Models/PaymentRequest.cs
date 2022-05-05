@@ -1,4 +1,4 @@
-﻿namespace GUI.Payments.Abstraction
+﻿namespace Shared.Models
 {
     public abstract class PaymentRequest
     {

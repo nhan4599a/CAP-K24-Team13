@@ -323,7 +323,7 @@
                         onProductGot(responses[2]);
                         animationLoader.hideAnimation();
                     })
-                    .catch((e) => {
+                    .catch(e => {
                         animationLoader.hideAnimation();
                         toastr.error(e, 'Error');
                     });

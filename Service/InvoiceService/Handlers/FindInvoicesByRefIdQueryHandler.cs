@@ -1,23 +1,25 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using OrderService.Commands;
+using InvoiceService.Commands;
 using Shared.DTOs;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OrderService.Handlers
+namespace InvoiceService.Handlers
 {
-    public class FindInvoiceByRefIdQueryHandler : IRequestHandler<FindInvoiceByRefIdQuery, InvoiceDetailDTO[]>, IDisposable
+    public class FindInvoicesByRefIdQueryHandler 
+        : IRequestHandler<FindInvoicesByRefIdQuery, InvoiceWithItemDTO[]>, IDisposable
     {
         private readonly IInvoiceRepository _repository;
 
-        public FindInvoiceByRefIdQueryHandler(IInvoiceRepository repository)
+        public FindInvoicesByRefIdQueryHandler(IInvoiceRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<InvoiceDetailDTO[]> Handle(FindInvoiceByRefIdQuery request, CancellationToken cancellationToken)
+        public async Task<InvoiceWithItemDTO[]> Handle(FindInvoicesByRefIdQuery request,
+            CancellationToken cancellationToken)
         {
             return await _repository.GetInvoiceDetailByRefIdAsync(request.RefId);
         }

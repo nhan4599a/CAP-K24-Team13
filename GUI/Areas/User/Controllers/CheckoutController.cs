@@ -4,17 +4,22 @@ using GUI.Areas.User.ViewModels;
 using GUI.Clients;
 using GUI.Payments.Factory;
 using GUI.Payments.Momo.Models;
+using GUI.Payments.Momo.Processor;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Shared;
+using Shared.Extensions;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -48,12 +53,13 @@ namespace GUI.Areas.User.Controllers
             if (method == PaymentMethod.CoD)
                 return StatusCode(StatusCodes.Status404NotFound);
             var accessToken = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
-            var invoice = await _invoiceClient.GetOrderDetailByRefId(accessToken, paymentRefId);
+            var invoice = await _invoiceClient.GetInvoiceDetailByRefId(accessToken, paymentRefId);
             if (!invoice.IsSuccessStatusCode || invoice.Content.ResponseCode != 200)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             if (method == PaymentMethod.MoMo)
             {
                 var paymentProcessor = _paymentProcessorFactory.Create(method);
+                var extraData = $"user={accessToken}";
                 var momoRequest = new MomoWalletCaptureRequest
                 {
                     AccessKey = _configuration["MOMO_ACCESS_KEY"],
@@ -64,13 +70,16 @@ namespace GUI.Areas.User.Controllers
                     ResponseLanguage = "en",
                     RedirectUrl = "https://cap-k24-team13.herokuapp.com/order-history",
                     IpnUrl = "https://cap-k24-team13.herokuapp.com/checkout/momo-payment-postback",
-                    Amount = (int)Math.Ceiling(invoice.Content.Data.Sum(e => e.TotalPrice))
+                    Amount = (int)Math.Ceiling(invoice.Content.Data.SelectMany(e => e.Products).Sum(e => e.Price * e.Quantity)),
+                    ExtraData = extraData
                 };
                 try
                 {
                     var momoResponse = (MomoWalletCaptureResponse)await paymentProcessor.ExecuteAsync(momoRequest);
+                    _logger.LogInformation("Request signature: " + momoRequest.Signature);
                     if (momoResponse.IsErrorResponse())
-                        throw new Exception("Validation failed");
+                        throw new Exception("Validation failed: " 
+                            + string.Join(",", momoResponse.SubErrors.Select(e => e.Field)));
                     return Redirect(momoResponse.PayUrl);
                 }
                 catch (Exception e)
@@ -85,9 +94,42 @@ namespace GUI.Areas.User.Controllers
         [Route("/checkout/momo-payment-postback")]
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult MomoPaymentPostback(MomoWalletIpnRequest request)
+        public async Task<IActionResult> MomoPaymentPostback()
         {
-            _logger.LogInformation("signature: " + request.Signature);
+            using var reader = new StreamReader(Request.Body, Encoding.UTF8);
+            var rawMessage = await reader.ReadToEndAsync();
+            var momoIpnRequest = JsonConvert.DeserializeObject<MomoWalletIpnRequest>(rawMessage);
+            momoIpnRequest.AccessKey = _configuration["MOMO_ACCESS_KEY"];
+            var momoProcessor = (MomoWalletProcessor)_paymentProcessorFactory.Create(PaymentMethod.MoMo);
+            if (momoProcessor.Security.ValidateIpnRequest(momoIpnRequest))
+            {
+                var accessToken = momoIpnRequest.ExtraData.Split("=")[1];
+                var data = await _invoiceClient.MakeAsPaid(accessToken, momoIpnRequest.OrderId, new MakeAsPaidRequestModel
+                {
+                    AccessToken = accessToken,
+                    WalletIpnRequest = rawMessage
+                });
+                if (!data.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Request failed, status code: " + (int)data.StatusCode);
+                }
+                if (data.Content != null)
+                {
+                    if (data.Content.ResponseCode != 200)
+                    {
+                        _logger.LogInformation("Request failed: " + data.Content.ErrorMessage);
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Request status: " + data.Content.ResponseCode);
+                    }
+                }
+                if (data.Content == null)
+                {
+                    _logger.LogError("Content is null");
+                }
+            }
+            _logger.LogError("Validate momo signature failed");
             return StatusCode(StatusCodes.Status204NoContent);
         }
 

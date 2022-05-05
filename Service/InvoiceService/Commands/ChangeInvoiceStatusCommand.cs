@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using Shared;
 using Shared.Models;
 
-namespace OrderService.Commands
+namespace InvoiceService.Commands
 {
-    public class ChangeOrderStatusCommand : IRequest<CommandResponse<bool>>
+    public class ChangeInvoiceStatusCommand : IRequest<CommandResponse<bool>>
     {
         public int InvoiceId { get; set; }
 

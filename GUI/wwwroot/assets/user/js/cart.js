@@ -5,7 +5,7 @@ $(document).ready(function () {
         let searchPageProductCartRootElement = $(this).parent().parent().parent();
         let imageUrl = searchPageProductCartRootElement.children('.product-media').find('a > img').attr('src');
         let name = searchPageProductCartRootElement.find('.product-body > .product-title > a').html();
-        let price = searchPageProductCartRootElement.find('.product-body > .product-price > span').html();
+        let price = searchPageProductCartRootElement.find('.product-body > .product-price > span.new-price').text();
         getUserId().then(userId => {
             addProductToCart(userId, productId, 1)
                 .then(() => {
@@ -14,7 +14,7 @@ $(document).ready(function () {
                         id: productId,
                         name: name,
                         imageUrl: imageUrl,
-                        price: price,
+                        price: unformatPrice(price),
                         quantity: 1
                     };
                     updateDropdownCart(product);
@@ -170,6 +170,7 @@ function updateDropdownCartTotal(deltaPrice) {
 }
 
 function buildSingleProductItem(product) {
+    console.log(product);
     return `<div class="product" data-product="${product.id}">
                 <div class="product-cart-details">
                     <h4 class="product-title">

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace GUI.Areas.User.Controllers
@@ -23,10 +24,16 @@ namespace GUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
+            Request.QueryString = new QueryString();
             var token = await HttpContext.GetTokenAsync(SystemConstant.Authentication.ACCESS_TOKEN_KEY);
-            var orderHistoryRespone = await _orderHistoryClient.GetOrderUserHistory(token, User.GetUserId().ToString());
+            var orderHistoryRespone = await _orderHistoryClient.GetOrderHistoryOfUser(token, User.GetUserId().ToString());
             if (!orderHistoryRespone.IsSuccessStatusCode)
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            {
+                if (orderHistoryRespone.StatusCode == HttpStatusCode.Unauthorized
+                    || orderHistoryRespone.StatusCode == HttpStatusCode.Forbidden)
+                    return Redirect("/Authentication/SignOut?redirectUrl=/order-history");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
             return View(orderHistoryRespone.Content.Data);
         }
     }

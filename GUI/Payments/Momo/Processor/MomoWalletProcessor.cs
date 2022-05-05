@@ -2,6 +2,7 @@
 using GUI.Payments.Momo.Cryptography;
 using GUI.Payments.Momo.Models;
 using Newtonsoft.Json;
+using Shared.Models;
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -21,6 +22,7 @@ namespace GUI.Payments.Momo.Processor
         {
             Security = security;
             Client = httpClient;
+            Client.DefaultRequestHeaders.Add("Accept", "application/json");
             Mode = mode;
         }
 
@@ -32,10 +34,12 @@ namespace GUI.Payments.Momo.Processor
         {
             if (request.GetType() != typeof(MomoWalletCaptureRequest))
                 throw new NotSupportedException();
-            var content = JsonContent.Create(request);
+            var momoRequest = request as MomoWalletCaptureRequest;
+            Security.SignRequest(momoRequest);
+            var content = JsonContent.Create(momoRequest);
             var endpoint = GetMomoWalletEndpoint(Mode);
             var response = await Client.PostAsync(endpoint, content);
-            if (response.Content == null || !response.IsSuccessStatusCode)
+            if (response.Content == null)
                 throw new Exception("Something went wrong!");
             var message = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<MomoWalletCaptureResponse>(message);

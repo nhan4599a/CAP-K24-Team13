@@ -744,16 +744,15 @@ function unformatPrice(formattedPrice) {
     return parseFloat(formattedPrice.replace(/,/g, ''));
 }
 
-function buildOrderItem(order) {
+function buildInvoiceItem(invoice) {
     return `<div class="board-item">
                 <div class="board-item-content">
                     <div id="order-id">
-                        <input type="hidden" value="${order.id}" />
-                        <h4>#${order.invoiceCode}</h4>
-                        <h5>${order.customerName}</h5>
-                        <input type="tel" name="phonenumber" placeholder="phonenumber" value="${order.phone}" disabled />
-                        <input type="text" name="address" placeholder="address" value="${order.shippingAddress}" disabled />
-                        <input type="text" name"payment method" placeholder="payment method" value="${order.paymentMethod}" disable />
+                        <input type="hidden" value="${invoice.invoiceId}" />
+                        <h4>#${invoice.invoiceCode}</h4>
+                        <h5>${invoice.receiverName}</h5>
+                        <input type="tel" name="phonenumber" placeholder="phonenumber" value="${invoice.phoneNumber}" disabled />
+                        <input type="text" name="address" placeholder="address" value="${invoice.shippingAddress}" disabled />
                     </div>
                     <button id="btn-order-details" type="button" class="btn btn-primary">
                         View

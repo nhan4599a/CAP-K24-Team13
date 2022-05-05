@@ -27,7 +27,7 @@
 function loadCustomers(keyword, pageNumber, pageSize) {
     let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/shop-owner/img/illustrations/loading.json');
     animationLoader.showAnimation(3500);
-    getCustomers(keyword, pageNumber, pageSize).then((paginatedData) => {
+    getCustomers(keyword, pageNumber, pageSize).then(paginatedData => {
         if (paginatedData.pageNumber > paginatedData.maxPageNumber) {
             moveToPage(keyword, 1, paginatedData.pageSize);
         }

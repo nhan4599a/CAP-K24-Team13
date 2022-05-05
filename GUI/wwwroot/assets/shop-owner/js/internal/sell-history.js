@@ -34,11 +34,14 @@ function loadInvoices(key, value, pageNumber, pageSize) {
     animationLoader.showAnimation(3500);
     getShopId().then(shopId => {
         findInvoices(shopId, key, value, pageNumber, pageSize).then(paginatedData => {
+            if (paginatedData.pageNumber > paginatedData.maxPageNumber) {
+                moveToPage(key, value, 1, paginatedData.pageSize);
+            }
             animationLoader.hideAnimation();
             onLoadInvoicesCompleted(paginatedData);
         }).catch(() => {
             animationLoader.hideAnimation();
-            toastr.error('Failed to load list of products', 'Error');
+            toastr.error('Failed to load list of invoices', 'Error');
         })
     });
 }

@@ -2,9 +2,9 @@
 using Shared.DTOs;
 using Shared.Models;
 
-namespace OrderService.Commands
+namespace InvoiceService.Commands
 {
-    public class FindInvoiceQuery : IRequest<CommandResponse<PaginatedList<InvoiceDTO>>>
+    public class FindInvoiceQuery : IRequest<CommandResponse<PaginatedList<InvoiceWithReportDTO>>>
     {
         public int ShopId { get; set; }
 

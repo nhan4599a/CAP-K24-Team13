@@ -15,7 +15,7 @@ namespace DatabaseAccessor.Configurations
             builder.Property(e => e.Quantity)
                 .HasDefaultValue(1);
 
-            builder.Property(e => e.IsCommented)
+            builder.Property(e => e.IsRated)
                 .HasDefaultValue(false);
 
             builder.HasCheckConstraint("CK_InvoiceDetail_Quantity", "[Quantity] >= 1")

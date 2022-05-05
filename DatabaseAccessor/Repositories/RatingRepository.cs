@@ -49,7 +49,7 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<bool>.Error("Invalid rating action", null);
             if (invoice.Invoice.Status != InvoiceStatus.Succeed)
                 return CommandResponse<bool>.Error("Invoice must be succeed to rating", null);
-            if (invoice.IsCommented)
+            if (invoice.IsRated)
                 return CommandResponse<bool>.Error("You are already rating this product", null);
             _dbContext.ProductComments.Add(new ProductComment
             {
@@ -58,7 +58,7 @@ namespace DatabaseAccessor.Repositories
                 Star = requestModel.Star,
                 Message = requestModel.Message
             });
-            invoice.IsCommented = true;
+            invoice.IsRated = true;
             await _dbContext.SaveChangesAsync();
             return CommandResponse<bool>.Success(true);
         }

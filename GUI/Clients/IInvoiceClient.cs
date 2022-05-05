@@ -8,13 +8,16 @@ namespace GUI.Clients
 {
     public interface IInvoiceClient
     {
-        [Get("/orders/user/{userId}")]
-        Task<ApiResponse<ApiResult<List<OrderItemDTO>>>> GetOrderUserHistory([Authorize("Bearer")] string token, string userId);
+        [Get("/invoices/user/{userId}")]
+        Task<ApiResponse<ApiResult<Dictionary<string, InvoiceWithItemDTO[]>>>> GetOrderHistoryOfUser([Authorize("Bearer")] string token, string userId);
 
-        [Get("/orders/{invoiceCode}")]
-        Task<ApiResponse<ApiResult<InvoiceDetailDTO>>> GetOrderDetail([Authorize("Bearer")] string token, string invoiceCode);
+        [Get("/invoices/{invoiceCode}")]
+        Task<ApiResponse<ApiResult<InvoiceWithItemDTO>>> GetInvoiceDetail([Authorize("Bearer")] string token, string invoiceCode);
 
-        [Get("/orders/ref/{refId}")]
-        Task<ApiResponse<ApiResult<InvoiceDetailDTO[]>>> GetOrderDetailByRefId([Authorize("Bearer")] string token, string refId);
+        [Get("/invoices/ref/{refId}")]
+        Task<ApiResponse<ApiResult<InvoiceWithItemDTO[]>>> GetInvoiceDetailByRefId([Authorize("Bearer")] string token, string refId);
+
+        [Post("/invoices/paid/{refId}")]
+        Task<ApiResponse<ApiResult>> MakeAsPaid([Authorize("Bearer")] string token, string refId, [Body] MakeAsPaidRequestModel requestModel);
     }
 }

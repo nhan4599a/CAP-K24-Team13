@@ -13,12 +13,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using OrderService.Commands;
-using OrderService.Validations;
+using InvoiceService.Commands;
+using InvoiceService.Validations;
 using System;
 
-namespace OrderService
+namespace InvoiceService
 {
     public class Startup
     {
@@ -32,6 +33,7 @@ namespace OrderService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
             services.AddControllers()
                 .AddFluentValidation<FindInvoiceQuery, FindInvoiceQueryValidator>();
             services.AddStackExchangeRedisCache(options =>

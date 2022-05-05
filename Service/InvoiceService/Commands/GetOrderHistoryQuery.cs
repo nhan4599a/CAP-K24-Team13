@@ -2,9 +2,9 @@
 using Shared.DTOs;
 using System.Collections.Generic;
 
-namespace OrderService.Commands
+namespace InvoiceService.Commands
 {
-    public class GetOrderHistoryByUserIdQuery : IRequest<List<OrderItemDTO>>
+    public class GetOrderHistoryQuery : IRequest<Dictionary<string, InvoiceWithItemDTO[]>>
     {
         public string? UserId { get; set; }  
     }

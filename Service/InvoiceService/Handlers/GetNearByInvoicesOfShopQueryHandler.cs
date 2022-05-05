@@ -1,24 +1,24 @@
 ﻿using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
-using OrderService.Commands;
+using InvoiceService.Commands;
 using Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OrderService.Handlers
+namespace InvoiceService.Handlers
 {
-    public class GetNearByOrdersOfShopQueryHandler : IRequestHandler<GetNearByOrdersOfShopQuery, List<OrderDTO>>, IDisposable
+    public class GetNearByInvoicesOfShopQueryHandler : IRequestHandler<GetNearByInvoicesOfShopQuery, List<InvoiceDTO>>, IDisposable
     {
         private readonly IInvoiceRepository _repository;
 
-        public GetNearByOrdersOfShopQueryHandler(IInvoiceRepository repository)
+        public GetNearByInvoicesOfShopQueryHandler(IInvoiceRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<List<OrderDTO>> Handle(GetNearByOrdersOfShopQuery request, CancellationToken cancellationToken)
+        public async Task<List<InvoiceDTO>> Handle(GetNearByInvoicesOfShopQuery request, CancellationToken cancellationToken)
         {
             var today = DateOnly.FromDateTime(DateTime.Now);
             return await _repository.GetOrdersOfShopWithInTimeAsync(request.ShopId, today.AddDays(-30), today);
