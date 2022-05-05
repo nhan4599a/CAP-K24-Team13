@@ -48,7 +48,7 @@ namespace OrderService.Controllers
             {
                 UserId = userId
             });
-            return ApiResult<InvoiceWithItemDTO[]>.CreateSucceedResult(result);
+            return ApiResult<Dictionary<string, InvoiceWithItemDTO[]>>.CreateSucceedResult(result);
         }
 
         [HttpGet("shop/{shopId}")]

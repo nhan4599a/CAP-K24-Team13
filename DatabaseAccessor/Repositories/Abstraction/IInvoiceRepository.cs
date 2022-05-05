@@ -8,7 +8,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface IInvoiceRepository : IDisposable
     {
-        Task<InvoiceWithItemDTO[]> GetOrderHistoryAsync(string userId);
+        Task<Dictionary<string, InvoiceWithItemDTO[]>> GetOrderHistoryAsync(string userId);
 
         Task<List<InvoiceDTO>> GetOrdersOfShopWithInTimeAsync(int shopId, DateOnly startDate, DateOnly endDate);
 

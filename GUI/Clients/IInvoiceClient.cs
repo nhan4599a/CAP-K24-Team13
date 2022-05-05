@@ -1,6 +1,7 @@
 ﻿using Refit;
 using Shared.DTOs;
 using Shared.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GUI.Clients
@@ -8,7 +9,7 @@ namespace GUI.Clients
     public interface IInvoiceClient
     {
         [Get("/invoices/user/{userId}")]
-        Task<ApiResponse<ApiResult<InvoiceWithItemDTO[]>>> GetOrderHistoryOfUser([Authorize("Bearer")] string token, string userId);
+        Task<ApiResponse<ApiResult<Dictionary<string, InvoiceItemDTO[]>>>> GetOrderHistoryOfUser([Authorize("Bearer")] string token, string userId);
 
         [Get("/invoices/{invoiceCode}")]
         Task<ApiResponse<ApiResult<InvoiceWithItemDTO>>> GetInvoiceDetail([Authorize("Bearer")] string token, string invoiceCode);

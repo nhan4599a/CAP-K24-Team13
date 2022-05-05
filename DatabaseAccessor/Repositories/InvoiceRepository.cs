@@ -26,20 +26,21 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper ?? Mapper.GetInstance();
         }
 
-        public async Task<InvoiceWithItemDTO[]> GetOrderHistoryAsync(string userId)
+        public async Task<Dictionary<string, InvoiceWithItemDTO[]>> GetOrderHistoryAsync(string userId)
         {
             var parsedUserId = Guid.Parse(userId);
-            return await _dbContext.Invoices
+            var queryResult = await _dbContext.Invoices
                 .AsNoTracking()
                 .Include(e => e.Details)
                 .ThenInclude(e => e.Product)
                 .AsSplitQuery()
                 .Where(item => item.UserId == parsedUserId)
                 .OrderByDescending(e => e.CreatedAt)
-                .GroupBy(e => e.RefId)
-                .SelectMany(e => e)
                 .Select(item => _mapper.MapToInvoiceWithItemDTO(item))
-                .ToArrayAsync();
+                .ToListAsync();
+
+            return queryResult.GroupBy(invoice => invoice.RefId)
+                .ToDictionary(group => group.Key, group => group.ToArray());
         }
 
         public async Task<List<InvoiceDTO>> GetOrdersOfShopWithInTimeAsync(int shopId, DateOnly startDate, DateOnly endDate)

@@ -2,7 +2,7 @@
 @using System.Globalization
 @using Shared.DTOs
 @using Shared.Models
-@model InvoiceWithItemDTO[]
+@model Dictionary<string, InvoiceWithItemDTO[]>
 @section Styles {
 <style>
     .rating {
@@ -129,22 +129,22 @@
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="accordion">
-                        @foreach (var invoice in Model)
+                        @foreach (var group in Model)
                         {
                             <div class="card">
-						        <div class="card-header" id="heading-@invoice.RefId">
+						        <div class="card-header" id="heading-@group.Key">
 							        <h2 class="card-title">
-							            <a role="button" data-toggle="collapse" href="#collapse-@invoice.RefId" aria-expanded="true" aria-controls="collapse-@invoice.RefId">
+							            <a role="button" data-toggle="collapse" href="#collapse-@group.Key" aria-expanded="true" aria-controls="collapse-@group.Key">
                                             <div class="row">
-                                                <div class="col-md-6">@invoice.CreatedAt.ToLongDateString()</div>
+                                                <div class="col-md-6">@group.Value[0].CreatedAt.ToLongDateString()</div>
                                                 <p class="col-md-6" style="text-align: right; font-size: 20px;">
-                                                    @invoice.Products.Sum(e => e.Price * e.Quantity).ToString("N0")
+                                                    @group.Value.SelectMany(e => e.Products).Sum(e => e.Price * e.Quantity).ToString("N0")
                                                 </p>
                                             </div>
 							            </a>
 							        </h2>
 						        </div><!-- End .card-header -->
-						        <div id="collapse-1" class="collapse show" aria-labelledby="heading-@invoice.RefId" data-parent="#accordion-1">
+						        <div id="collapse-@group.Key" class="collapse show" aria-labelledby="heading-@group.Key" data-parent="#accordion-1">
 							        <div class="card-body">
                                         <table class="table table-cart table-mobile" style="width: 100%">
                                             <thead>
@@ -158,9 +158,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var product in invoice.Products)
+                                                @foreach (var product in group.Value.SelectMany(e => e.Products))
                                                 {
-                                                    <tr class="mb-2" data-product="@product.ProductId" data-invoice="@invoice.InvoiceId">
+                                                    <tr class="mb-2" data-product="@product.ProductId" data-invoice="@group.Value[0].InvoiceId">
                                                         <td class="product-col">
                                                             <div class="product" style="margin-left: 10px;">
                                                                 <figure class="product-media">
@@ -181,7 +181,7 @@
                                                             @((product.Price * product.Quantity).ToString("N0"))
                                                         </td>
                                                         <td id="status-col">
-                                                            @invoice.Status.GetDescription()
+                                                            @group.Value[0].Status.GetDescription()
                                                         </td>
                                                         <td>
                                                             @if (product.CanBeRating)

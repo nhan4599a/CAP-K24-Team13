@@ -3,12 +3,14 @@ using InvoiceService.Commands;
 using MediatR;
 using Shared.DTOs;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace InvoiceService.Handlers
 {
-    public class GetOrderHistoryCommandHandler : IRequestHandler<GetOrderHistoryQuery, InvoiceWithItemDTO[]>, IDisposable
+    public class GetOrderHistoryCommandHandler 
+        : IRequestHandler<GetOrderHistoryQuery, Dictionary<string, InvoiceWithItemDTO[]>>, IDisposable
     {
         private readonly IInvoiceRepository _repository;
 
@@ -17,7 +19,8 @@ namespace InvoiceService.Handlers
             _repository = repository;
         }
 
-        public async Task<InvoiceWithItemDTO[]> Handle(GetOrderHistoryQuery request, CancellationToken cancellationToken)
+        public async Task<Dictionary<string, InvoiceWithItemDTO[]>> Handle(GetOrderHistoryQuery request,
+            CancellationToken cancellationToken)
         {
             return await _repository.GetOrderHistoryAsync(request.UserId);
         }
