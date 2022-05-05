@@ -105,7 +105,7 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.ProductName,
                         options => options.MapFrom(source => source.Product.ProductName))
                     .ForMember(target => target.CanBeRating,
-                        options => options.MapFrom(source => source.IsRated));
+                        options => options.MapFrom(source => !source.IsRated && source.Invoice.Status == InvoiceStatus.Succeed));
             });
             _mapper = config.CreateMapper();
         }

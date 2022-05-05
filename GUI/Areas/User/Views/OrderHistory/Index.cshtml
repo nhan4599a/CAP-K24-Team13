@@ -64,66 +64,6 @@
             </ol>
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
-    @*<div class="container" style="width: 90%">
-        <div class="row justify-content-md-center">
-            <div class="col-md-12">
-                <table class="table table-cart table-mobile" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <td id="product-col">Product</td>
-                            <td id="quantity-col" style="font-size: 20px;">Quantity</td>
-                            <td id="date-col" style="font-size: 20px;">Date</td>
-                            <td id="status-col" style="font-size: 20px;">Price</td>
-                            <td id="price-col" style="font-size: 20px;">Status</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr class="mb-2" data-product="@item.ProductId" data-invoice="@item.InvoiceId">
-                                <td>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <img src="@Url.ProductImageUrl(item.Image)">
-                                        </div>
-                                        <div class="col-md-10">
-                                            <a href="/product/index/@item.ProductId">
-                                                <p>
-                                                    @item.ProductName
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td id="quantity-col">
-                                    @item.Quantity
-                                </td>
-                                <td id="date-col">
-                                    @item.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")
-                                </td>
-                                <td id="price-col">
-                                    @((item.Price * item.Quantity).ToString("N0", CultureInfo.InvariantCulture))
-                                </td>
-                                <td id="status-col">
-                                    @item.Status.GetDescription()
-                                </td>
-                                <td>
-                                    @if (item.CanBeRating)
-                                    {
-                                        <button class="btn btn-primary">Rate & comment</button>
-                                    }
-                                    else
-                                    {
-                                        <button class="btn btn-primary" disabled>Rate & comment</button>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div><!-- End .col-md-12 -->
-        </div>
-    </div>*@
     <div class="page-content">
         <div class="container" style="width: 90%">
             <div class="row justify-content-center">
@@ -136,7 +76,7 @@
 							        <h2 class="card-title">
 							            <a role="button" data-toggle="collapse" href="#collapse-@group.Key" aria-expanded="true" aria-controls="collapse-@group.Key">
                                             <div class="row">
-                                                <div class="col-md-6">@group.Value[0].CreatedAt.ToLongDateString()</div>
+                                                <div class="col-md-6">@group.Value[0].CreatedAt.ToString("D HH:mm tt")</div>
                                                 <p class="col-md-6" style="text-align: right; font-size: 20px;">
                                                     @group.Value.SelectMany(e => e.Products).Sum(e => e.Price * e.Quantity).ToString("N0")
                                                 </p>
@@ -144,7 +84,7 @@
 							            </a>
 							        </h2>
 						        </div><!-- End .card-header -->
-						        <div id="collapse-@group.Key" class="collapse show" aria-labelledby="heading-@group.Key" data-parent="#accordion-1">
+						        <div id="collapse-@group.Key" class="collapsed" aria-labelledby="heading-@group.Key">
 							        <div class="card-body">
                                         <table class="table table-cart table-mobile" style="width: 100%">
                                             <thead>
@@ -201,61 +141,6 @@
 						        </div><!-- End .collapse -->
 					        </div><!-- End .card -->   
                         }
-
-					    @*<div class="card">
-						    <div class="card-header" id="heading-2">
-							    <h2 class="card-title">
-							        <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
-                                        Ngày giờ đặt hàng
-							        </a>
-							    </h2>
-						    </div><!-- End .card-header -->
-						    <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-1">
-							    <div class="card-body">
-                                    <table class="table table-cart table-mobile" style="width: 100%">
-                                        <thead>
-                                            <tr>
-                                                <td id="product-col" style="text-align: left;width: 40%;">Product</td>
-                                                <td id="cost" style="width: 15%;">Cost</td>
-                                                <td id="quantity-col" style="width: 10%;">Quantity</td> 
-                                                <td id="sub-total" style="width: 15%;">Sub Total</td>
-                                                <td id="status-col" style="width: 20%;">Status</td>
-                                                <td></td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr class="mb-2" data-product="d429e333-78b3-492f-65fb-08da28f6d900" data-invoice="51">
-                                                    <td class="product-col">
-                                                        <div class="product" style="margin-left: 10px;">
-                                                            <figure class="product-media">
-                                                                <a href="#">
-                                                                    <img src="#" alt="Product image">
-                                                                </a>
-                                                            </figure>
-                                                            <h3 class="product-title">
-                                                                <a href="#">Product name</a>
-                                                            </h3><!-- End .product-title -->
-                                                        </div><!-- End .product -->
-                                                    </td>
-                                                    <td class="cost">23,000,000</td>
-                                                    <td id="quantity-col">
-                                                        1
-                                                    </td>
-                                                    <td id="sub-total">
-                                                        23,000,000
-                                                    </td>
-                                                    <td id="status-col">
-                                                        New
-                                                    </td>
-                                                    <td>
-                                                            <button class="btn btn-primary">Rate &amp; comment</button>
-                                                    </td>
-                                                </tr>
-                                        </tbody>
-                                    </table>
-							    </div><!-- End .card-body -->
-						    </div><!-- End .collapse -->
-					    </div><!-- End .card -->*@
 
 				    </div><!-- End .accordion -->
                 </div><!-- End .col-md-12 -->
