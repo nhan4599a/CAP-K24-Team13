@@ -20,6 +20,10 @@ itemContainers.forEach(function (container) {
                 ];
             }
         },
+        dragStartPredicate: function (item, _) {
+            let isDragable = $(item._element).hasClass('unpaid');
+            return !isDragable;
+        }
     })
         .on('dragInit', function (item) {
             item.getElement().style.width = item.getWidth() + 'px';

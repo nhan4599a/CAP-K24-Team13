@@ -74,7 +74,7 @@
                             <div class="card">
 						        <div class="card-header" id="heading-@group.Key">
 							        <h2 class="card-title">
-							            <a role="button" data-toggle="collapse" href="#collapse-@group.Key" aria-expanded="true" aria-controls="collapse-@group.Key">
+							            <a role="button" data-toggle="collapse" href="#collapse-@group.Key" aria-expanded="true" aria-controls="collapse-@group.Key" class="collapsed">
                                             <div class="row">
                                                 <div class="col-md-6">@group.Value[0].CreatedAt.ToString("dddd, dd, MMM, yyyy HH:mm tt")</div>
                                                 <p class="col-md-6" style="text-align: right; font-size: 20px;">
@@ -84,12 +84,12 @@
 							            </a>
 							        </h2>
 						        </div><!-- End .card-header -->
-						        <div id="collapse-@group.Key" class="collapsed" aria-labelledby="heading-@group.Key">
+						        <div id="collapse-@group.Key" class="collapse" aria-labelledby="heading-@group.Key">
 							        <div class="card-body">
                                         <table class="table table-cart table-mobile" style="width: 100%">
                                             <thead>
                                                 <tr>
-                                                    <td id="product-col" style="text-align: left;width: 40%;">Product</td>
+                                                    <td id="product-col" style="text-align: left; width: 40%;">Product</td>
                                                     <td id="price" style="width: 15%;">Price</td>
                                                     <td id="quantity-col" style="width: 10%;">Quantity</td> 
                                                     <td id="sub-total" style="width: 15%;">Sub Total</td>
@@ -104,8 +104,8 @@
                                                         <td class="product-col">
                                                             <div class="product" style="margin-left: 10px;">
                                                                 <figure class="product-media">
-                                                                    <a href="@Url.ProductImageUrl(product.Image)">
-                                                                        <img src="/product/index/@product.ProductId" alt="Product image">
+                                                                    <a href="/product/index/@product.ProductId">
+                                                                        <img src="@Url.ProductImageUrl(product.Image)" alt="Product image">
                                                                     </a>
                                                                 </figure>
                                                                 <h3 class="product-title">

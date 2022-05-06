@@ -498,7 +498,7 @@ a {
         color: #c96
     }
 
-    .card-title a.collapsed:hover, .card-title a.collapsed:focus {
+    .card-title a.collapsed:hover {
         color: #c96
     }
 

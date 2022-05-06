@@ -745,7 +745,7 @@ function unformatPrice(formattedPrice) {
 }
 
 function buildInvoiceItem(invoice) {
-    return `<div class="board-item">
+    return `<div class="board-item ${invoice.isPaid ? '' : 'unpaid'}">
                 <div class="board-item-content">
                     <div id="order-id">
                         <input type="hidden" value="${invoice.invoiceId}" />
@@ -753,6 +753,7 @@ function buildInvoiceItem(invoice) {
                         <h5>${invoice.receiverName}</h5>
                         <input type="tel" name="phonenumber" placeholder="phonenumber" value="${invoice.phoneNumber}" disabled />
                         <input type="text" name="address" placeholder="address" value="${invoice.shippingAddress}" disabled />
+                        <h5>${invoice.paymentMethod}</h5>
                     </div>
                     <button id="btn-order-details" type="button" class="btn btn-primary">
                         View

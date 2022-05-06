@@ -24,5 +24,7 @@ namespace Shared.DTOs
         public InvoiceStatus Status { get; set; }
 
         public int ShopId { get; set; }
+
+        public bool IsPaid { get; set; }
     }
 }
