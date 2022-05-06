@@ -753,6 +753,7 @@ function buildInvoiceItem(invoice) {
                         <h5>${invoice.receiverName}</h5>
                         <input type="tel" name="phonenumber" placeholder="phonenumber" value="${invoice.phoneNumber}" disabled />
                         <input type="text" name="address" placeholder="address" value="${invoice.shippingAddress}" disabled />
+                        <input type="text" name"payment method" placeholder="payment method" value="${invoice.paymentMethod}" disable />
                     </div>
                     <button id="btn-order-details" type="button" class="btn btn-primary">
                         View
