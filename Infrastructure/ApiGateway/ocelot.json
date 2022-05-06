@@ -201,10 +201,10 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/invoices/paid/{refId}",
+      "DownstreamPathTemplate": "/api/invoices/post-payment/{refId}",
       "DownstreamScheme": "http",
       "ServiceName": "InvoiceService",
-      "UpstreamPathTemplate": "/invoices/paid/{refId}",
+      "UpstreamPathTemplate": "/invoices/post-payment/{refId}",
       "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
       "LoadBalancerOptions": {
         "Type": "LeastConnection"

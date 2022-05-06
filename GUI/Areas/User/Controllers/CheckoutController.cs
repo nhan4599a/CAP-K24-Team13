@@ -88,7 +88,7 @@ namespace GUI.Areas.User.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
             }
-            return View();
+            return View("VISA", invoice.Content.Data);
         }
 
         [Route("/checkout/momo-payment-postback")]
@@ -98,13 +98,14 @@ namespace GUI.Areas.User.Controllers
         {
             using var reader = new StreamReader(Request.Body, Encoding.UTF8);
             var rawMessage = await reader.ReadToEndAsync();
+            _logger.LogInformation("Momo ipn request raw message: " + rawMessage);
             var momoIpnRequest = JsonConvert.DeserializeObject<MomoWalletIpnRequest>(rawMessage);
             momoIpnRequest.AccessKey = _configuration["MOMO_ACCESS_KEY"];
             var momoProcessor = (MomoWalletProcessor)_paymentProcessorFactory.Create(PaymentMethod.MoMo);
             if (momoProcessor.Security.ValidateIpnRequest(momoIpnRequest))
             {
                 var accessToken = momoIpnRequest.ExtraData.Split("=")[1];
-                var data = await _invoiceClient.MakeAsPaid(accessToken, momoIpnRequest.OrderId, new MakeAsPaidRequestModel
+                var data = await _invoiceClient.AfterMomoPaymentProcessing(accessToken, momoIpnRequest.OrderId, new AfterPaymentProcessingRequest
                 {
                     AccessToken = accessToken,
                     WalletIpnRequest = rawMessage

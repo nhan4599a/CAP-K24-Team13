@@ -1,6 +1,6 @@
 ﻿namespace Shared.Models
 {
-    public class MakeAsPaidRequestModel
+    public class AfterPaymentProcessingRequest
     {
         public string AccessToken { get; set; }
 

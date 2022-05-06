@@ -117,8 +117,8 @@ namespace OrderService.Controllers
             return ApiResult<InvoiceWithItemDTO[]>.CreateSucceedResult(response);
         }
 
-        [HttpPost("paid/{refId}")]
-        public async Task<ApiResult> MakeAsPaid(string refId, MakeAsPaidRequestModel requestModel)
+        [HttpPost("post-payment/{refId}")]
+        public async Task<ApiResult> PostPaymentProcessing(string refId, AfterPaymentProcessingRequest requestModel)
         {
             byte[] keyBytes = Encoding.UTF8.GetBytes(_configuration["MOMO_SECRET_KEY"]);
             var accessToken = await HttpContext.GetTokenAsync(Shared.SystemConstant.Authentication.ACCESS_TOKEN_KEY);

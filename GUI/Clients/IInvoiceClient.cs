@@ -17,7 +17,7 @@ namespace GUI.Clients
         [Get("/invoices/ref/{refId}")]
         Task<ApiResponse<ApiResult<InvoiceWithItemDTO[]>>> GetInvoiceDetailByRefId([Authorize("Bearer")] string token, string refId);
 
-        [Post("/invoices/paid/{refId}")]
-        Task<ApiResponse<ApiResult>> MakeAsPaid([Authorize("Bearer")] string token, string refId, [Body] MakeAsPaidRequestModel requestModel);
+        [Post("/invoices/post-payment/{refId}")]
+        Task<ApiResponse<ApiResult>> AfterMomoPaymentProcessing([Authorize("Bearer")] string token, string refId, [Body] AfterPaymentProcessingRequest requestModel);
     }
 }
