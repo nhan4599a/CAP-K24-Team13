@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace InvoiceService.Handlers
 {
     public class GetInvoiceByInvoiceCodeQueryHandler
-        : IRequestHandler<GetInvoiceByInvoiceCodeQuery, InvoiceWithItemDTO>, IDisposable
+        : IRequestHandler<GetInvoiceByInvoiceCodeQuery, FullInvoiceDTO>, IDisposable
     {
         private readonly IInvoiceRepository _repository;
 
@@ -18,7 +18,7 @@ namespace InvoiceService.Handlers
             _repository = repository;
         }
 
-        public async Task<InvoiceWithItemDTO> Handle(GetInvoiceByInvoiceCodeQuery request, CancellationToken cancellationToken)
+        public async Task<FullInvoiceDTO> Handle(GetInvoiceByInvoiceCodeQuery request, CancellationToken cancellationToken)
         {
             return await _repository.GetInvoiceDetailAsync(request.InvoiceCode);
         }

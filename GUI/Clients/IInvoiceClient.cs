@@ -12,7 +12,7 @@ namespace GUI.Clients
         Task<ApiResponse<ApiResult<Dictionary<string, InvoiceWithItemDTO[]>>>> GetOrderHistoryOfUser([Authorize("Bearer")] string token, string userId);
 
         [Get("/invoices/{invoiceCode}")]
-        Task<ApiResponse<ApiResult<InvoiceWithItemDTO>>> GetInvoiceDetail([Authorize("Bearer")] string token, string invoiceCode);
+        Task<ApiResponse<ApiResult<FullInvoiceDTO>>> GetInvoiceDetail([Authorize("Bearer")] string token, string invoiceCode);
 
         [Get("/invoices/ref/{refId}")]
         Task<ApiResponse<ApiResult<InvoiceWithItemDTO[]>>> GetInvoiceDetailByRefId([Authorize("Bearer")] string token, string refId);

@@ -1,9 +1,16 @@
 ﻿@using Shared.DTOs
+@using Shared.Models
 @{
     Layout = "/Areas/ShopOwner/Views/Shared/_Layout.cshtml";
 }
-@model InvoiceWithItemDTO
-
+@model FullInvoiceDTO
+@section Styles {
+    <style>
+        .table tbody tr:last-child td {
+            border-bottom-width: 1px;
+        }
+    </style>
+}
 <div class="row">
     <div class="col-12">
         <div class="card my-4">
@@ -79,6 +86,15 @@
                                     <tr>
                                         <th scope="row">Total order value</th>
                                         <td><strong>@Model.Products.Sum(product => product.Price * product.Quantity).ToString("N0")</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">History of status change</th>
+                                        <td>
+                                            @foreach (var changeHistory in Model.StatusHistories)
+                                            {
+                                                @string.Format("{0} -- {1}", changeHistory.ChangedTime.ToString("HH:mm tt"), changeHistory.Status.GetDescription())
+                                            }
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -54,8 +54,8 @@ namespace DatabaseAccessor.Repositories
                 .AsNoTracking()
                 .Where(item => item.ShopId == shopId && item.CreatedAt >= startDate.ToDateTime(TimeOnly.MinValue)
                     && item.CreatedAt <= endDate.ToDateTime(TimeOnly.MaxValue))
-                .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
                 .OrderByDescending(invoice => invoice.CreatedAt)
+                .Select(invoice => _mapper.MapToInvoiceDTO(invoice))
                 .ToListAsync();
         }
 
@@ -334,16 +334,17 @@ namespace DatabaseAccessor.Repositories
                     .Where(history => history.ChangedDate.Date >= startDate && history.ChangedDate.Date <= endDate);
         }
 
-        public async Task<InvoiceWithItemDTO> GetInvoiceDetailAsync(string invoiceCode)
+        public async Task<FullInvoiceDTO> GetInvoiceDetailAsync(string invoiceCode)
         {
             var result = await _dbContext.Invoices
                 .AsNoTracking()
+                .Include(e => e.Report)
                 .Include(e => e.Details)
                 .ThenInclude(e => e.Product)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(invoice => invoice.InvoiceCode == invoiceCode);
 
-            return _mapper.MapToInvoiceWithItemDTO(result);
+            return _mapper.MapToFullInvoiceDTO(result);
         }
 
         public async Task<InvoiceWithItemDTO[]> GetInvoiceDetailByRefIdAsync(string refId)

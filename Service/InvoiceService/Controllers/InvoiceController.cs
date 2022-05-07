@@ -90,7 +90,7 @@ namespace OrderService.Controllers
         {
             var cachedResult = _cache.GetString(GetCacheKey(invoiceCode));
             if (cachedResult != null)
-                return ApiResult<InvoiceWithItemDTO>.CreateSucceedResult(SystemJson.JsonSerializer.Deserialize<InvoiceWithItemDTO>(cachedResult)!);
+                return ApiResult<FullInvoiceDTO>.CreateSucceedResult(SystemJson.JsonSerializer.Deserialize<FullInvoiceDTO>(cachedResult)!);
             var response = await _mediator.Send(new GetInvoiceByInvoiceCodeQuery
             {
                 InvoiceCode = invoiceCode
@@ -100,7 +100,7 @@ namespace OrderService.Controllers
             await _cache.SetStringAsync(GetCacheKey(invoiceCode), SystemJson.JsonSerializer.Serialize(response), cacheOptions);
             if (User.FindFirstValue("ShopId") != response.ShopId.ToString())
                 return ApiResult.CreateErrorResult(403, "User does not have permission to view order detail");
-            return ApiResult<InvoiceWithItemDTO>.CreateSucceedResult(response);
+            return ApiResult<FullInvoiceDTO>.CreateSucceedResult(response);
         }
         
         [HttpGet("ref/{refId}")]

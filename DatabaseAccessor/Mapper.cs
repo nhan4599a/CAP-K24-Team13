@@ -99,6 +99,12 @@ namespace DatabaseAccessor.Mapping
                     .ForMember(target => target.Products,
                         options => options.MapFrom(source => source.Details));
 
+                cfg.CreateMap<Invoice, FullInvoiceDTO>()
+                    .IncludeBase<Invoice, InvoiceWithItemDTO>()
+                    .IncludeBase<Invoice, InvoiceWithReportDTO>()
+                    .ForMember(target => target.StatusHistories,
+                        options => options.MapFrom(source => source.StatusChangedHistories));
+
                 cfg.CreateMap<InvoiceDetail, InvoiceItemDTO>()
                     .ForMember(target => target.Image,
                         options => options.MapFrom<SingleImageResolver>())
@@ -106,6 +112,12 @@ namespace DatabaseAccessor.Mapping
                         options => options.MapFrom(source => source.Product.ProductName))
                     .ForMember(target => target.CanBeRating,
                         options => options.MapFrom(source => !source.IsRated && source.Invoice.Status == InvoiceStatus.Succeed));
+
+                cfg.CreateMap<InvoiceStatusChangedHistory, InvoiceStatusChangedHistoryDTO>()
+                    .ForMember(target => target.ChangedTime,
+                        options => options.MapFrom(source => source.ChangedDate))
+                    .ForMember(target => target.Status,
+                        options => options.MapFrom(source => source.NewStatus));
             });
             _mapper = config.CreateMapper();
         }
@@ -137,5 +149,7 @@ namespace DatabaseAccessor.Mapping
         public InvoiceWithReportDTO MapToInvoiceWithReportDTO(Invoice invoice) => _mapper.Map<InvoiceWithReportDTO>(invoice);
 
         public InvoiceWithItemDTO MapToInvoiceWithItemDTO(Invoice invoice) => _mapper.Map<InvoiceWithItemDTO>(invoice);
+
+        public FullInvoiceDTO MapToFullInvoiceDTO(Invoice invoice) => _mapper.Map<FullInvoiceDTO>(invoice);
     }
 }

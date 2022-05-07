@@ -20,7 +20,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
         Task<CommandResponse<PaginatedList<InvoiceWithReportDTO>>> FindInvoicesAsync(int shopId, string key, string value,
             PaginationInfo paginationInfo);
 
-        Task<InvoiceWithItemDTO> GetInvoiceDetailAsync(string invoiceCode);
+        Task<FullInvoiceDTO> GetInvoiceDetailAsync(string invoiceCode);
 
         Task<InvoiceWithItemDTO[]> GetInvoiceDetailByRefIdAsync(string refId);
 
