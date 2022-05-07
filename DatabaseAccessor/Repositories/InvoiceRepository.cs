@@ -34,7 +34,7 @@ namespace DatabaseAccessor.Repositories
                 .Include(e => e.Details)
                 .ThenInclude(e => e.Product)
                 .AsSplitQuery()
-                .Where(item => item.UserId == parsedUserId)
+                .Where(item => item.UserId == parsedUserId && item.IsPaid)
                 .OrderByDescending(e => e.CreatedAt)
                 .Select(item => _mapper.MapToInvoiceWithItemDTO(item))
                 .ToListAsync();
@@ -338,7 +338,7 @@ namespace DatabaseAccessor.Repositories
         {
             var result = await _dbContext.Invoices
                 .AsNoTracking()
-                .Include(e => e.Report)
+                .Include(e => e.StatusChangedHistories)
                 .Include(e => e.Details)
                 .ThenInclude(e => e.Product)
                 .AsSplitQuery()
