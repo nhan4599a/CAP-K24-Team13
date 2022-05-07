@@ -26,6 +26,8 @@ namespace DatabaseAccessor.Repositories.Abstraction
 
         Task MakeAsPaidAsync(string refId);
 
+        Task RemoveInvoiceAsync(string refId);
+
         Task<StatisticResult> StatisticAsync(int shopId, StatisticStrategy strategy, StatisticDateRange range);
     }
 }

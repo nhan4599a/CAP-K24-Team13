@@ -368,6 +368,12 @@ namespace DatabaseAccessor.Repositories
                 }, new List<string> { "IsPaid" });
         }
 
+        public async Task RemoveInvoiceAsync(string refId)
+        {
+            await _dbContext.Invoices.Where(item => item.RefId == refId && !item.IsPaid)
+                .BatchDeleteAsync();
+        }
+
         public void Dispose()
         {
             _dbContext.Dispose();

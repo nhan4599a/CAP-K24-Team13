@@ -131,11 +131,15 @@ namespace OrderService.Controllers
             byte[] hashedBytes = hmacsha256.ComputeHash(messageBytes);
             var hashedMessage = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             if (hashedMessage != ipnRequest.Signature)
-                return ApiResult.CreateErrorResult(400, "Invalid momo ipn request");
-            var response = await _mediator.Send(new MakeAsPaidInvoiceCommand
+                return ApiResult.CreateErrorResult(400, "Invalid payment ipn request");
+            IRequest request = ipnRequest.ResultCode == 0 ? new MakeAsPaidInvoiceCommand
             {
                 RefId = refId
-            });
+            } : new RemoveInvoiceCommand
+            {
+                RefId = refId
+            };
+            var response = await _mediator.Send(request);
             return ApiResult.SucceedResult;
         }
 
