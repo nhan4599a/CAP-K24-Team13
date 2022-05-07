@@ -101,7 +101,6 @@ namespace DatabaseAccessor.Mapping
 
                 cfg.CreateMap<Invoice, FullInvoiceDTO>()
                     .IncludeBase<Invoice, InvoiceWithItemDTO>()
-                    .IncludeBase<Invoice, InvoiceWithReportDTO>()
                     .ForMember(target => target.StatusHistories,
                         options => options.MapFrom(source => source.StatusChangedHistories));
 
