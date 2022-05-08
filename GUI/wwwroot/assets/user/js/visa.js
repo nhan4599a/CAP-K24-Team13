@@ -17,7 +17,6 @@ new Vue({
             cardYear: "",
             cardCvv: "",
             minCardYear: new Date().getFullYear(),
-            amexCardMask: "#### ###### #####",
             otherCardMask: "#### #### #### ####",
             cardNumberTemp: "",
             isCardFlipped: false,
@@ -31,26 +30,10 @@ new Vue({
     },
     computed: {
         getCardType() {
-            let number = this.cardNumber;
-            let re = new RegExp("^4");
-            if (number.match(re) != null) return "visa";
-
-            re = new RegExp("^(34|37)");
-            if (number.match(re) != null) return "amex";
-
-            re = new RegExp("^5[1-5]");
-            if (number.match(re) != null) return "mastercard";
-
-            re = new RegExp("^6011");
-            if (number.match(re) != null) return "discover";
-
-            re = new RegExp('^9792')
-            if (number.match(re) != null) return 'troy'
-
             return "visa"; // default type
         },
         generateCardNumberMask() {
-            return this.getCardType === "amex" ? this.amexCardMask : this.otherCardMask;
+            return this.otherCardMask;
         },
         minCardMonth() {
             if (this.cardYear === this.minCardYear) return new Date().getMonth() + 1;
