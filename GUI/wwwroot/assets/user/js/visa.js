@@ -1,10 +1,7 @@
-﻿/*
-See on github: https://github.com/muhammederdem/credit-card-form
-*/
+﻿
 import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.esm.browser.js'
-/*
-See on github: https://github.com/muhammederdem/credit-card-form
-*/
+
+Vue.directive('mask', VueTheMask.mask);
 
 new Vue({
     el: "#app",
@@ -71,4 +68,13 @@ new Vue({
             vm.isInputFocused = false;
         }
     }
+});
+
+$('.card-form__button').click(function () {
+    let animationLoader = new AnimationLoader('#loading-container > #animation-container', '/assets/user/checking-out.json');
+    animationLoader.showAnimation();
+    setTimeout(() => {
+        animationLoader.hideAnimation();
+        window.location = '/order-history';
+    }, 2000);
 });

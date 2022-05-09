@@ -107,7 +107,7 @@ namespace DatabaseAccessor.Repositories
         {
             var invoice = await _dbContext.Invoices.FindAsync(invoiceId);
             if (invoice == null)
-                return CommandResponse<bool>.Error("Order not found", null);
+                return CommandResponse<bool>.Error("Invoice not found", null);
 
             if (await _dbContext.ShopStatus.AnyAsync(shop => shop.ShopId == invoice.ShopId && shop.IsDisabled))
                 return CommandResponse<bool>.Error("Shop is already disabled", null);
@@ -122,7 +122,7 @@ namespace DatabaseAccessor.Repositories
                     return CommandResponse<bool>.Error($"Cannot change status from {invoice.Status} to {newStatus}", null);
 
                 if (!invoice.IsPaid)
-                    return CommandResponse<bool>.Error("Invoice is paid by user", null);
+                    return CommandResponse<bool>.Error("Invoice is not paid by user", null);
             }
             else
             {
@@ -368,10 +368,13 @@ namespace DatabaseAccessor.Repositories
                 }, new List<string> { "IsPaid" });
         }
 
-        public async Task RemoveInvoiceAsync(string refId)
+        public async Task CancelInvoiceAsync(string refId)
         {
             await _dbContext.Invoices.Where(item => item.RefId == refId && !item.IsPaid)
-                .BatchDeleteAsync();
+                .BatchUpdateAsync(new Invoice
+                {
+                    Status = InvoiceStatus.Canceled
+                }, new List<string> { "Status" });
         }
 
         public void Dispose()

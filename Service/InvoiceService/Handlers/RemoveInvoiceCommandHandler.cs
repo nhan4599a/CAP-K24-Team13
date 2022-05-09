@@ -18,7 +18,7 @@ namespace InvoiceService.Handlers
 
         public async Task<Unit> Handle(RemoveInvoiceCommand request, CancellationToken cancellationToken)
         {
-            await _repository.RemoveInvoiceAsync(request.RefId);
+            await _repository.CancelInvoiceAsync(request.RefId);
             return Unit.Value;
         }
 

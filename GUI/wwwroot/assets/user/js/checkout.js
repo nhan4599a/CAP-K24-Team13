@@ -4,7 +4,6 @@
         e.preventDefault();
         e.stopPropagation();
         let model = buildRequestModel();
-        console.log(model.paymentMethod);
         if (!model.paymentMethod) {
             toastr.error('You must choose payment method', 'Error');
             return;
