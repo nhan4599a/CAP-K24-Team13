@@ -33,8 +33,8 @@ namespace DatabaseAccessor.Repositories
                 .Include(e => e.AffectedReports)
                 .Where(e => !customer || e.UserRoles.Any(userRole => userRole.Role.Name == SystemConstant.Roles.CUSTOMER))
                 .Where(e => string.IsNullOrWhiteSpace(keyword) || e.Email.Contains(keyword))
-                .AsSplitQuery()
                 .Select(e => _mapper.MapToUserDTO(e))
+                .AsSplitQuery()
                 .PaginateAsync(paginationInfo.PageNumber, paginationInfo.PageSize);
         }
 

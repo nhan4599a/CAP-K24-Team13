@@ -247,11 +247,10 @@ namespace AuthServer.Controllers
         private MailRequest GenerateEmailConfirmationMailAsync(string receiver, string token)
         {
             var email = receiver.ToBase64();
-            //var body = 
-            //"Thanks for your registration," +
-            //$" this is your email confirmation <a href=\"{$"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}"}\">link</a>" +
-            //$" The link will be expired at {DateTime.UtcNow.AddHours(7).AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}";
-            var body = System.IO.File.ReadAllText($"{_environment.WebRootPath}html/confirm-email.html").Replace("{{confirm-link}}", $"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}") .Replace("{{expire-time}}", $"{DateTime.UtcNow.AddHours(7).AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}");
+            var body = System.IO.File.ReadAllText(
+                $"{_environment.WebRootPath}/html/confirm-email.html")
+                .Replace("{{confirm-link}}", $"https://cap-k24-team13-auth.herokuapp.com/auth/confirmation/{email}?token={token.ToBase64()}")
+                .Replace("{{expire-time}}", $"{DateTime.UtcNow.AddHours(7).AddMinutes(30):dddd, MMMM d, yyyy; HH:mm:ss}");
             return new MailRequest()
             {
                 Body = body,
