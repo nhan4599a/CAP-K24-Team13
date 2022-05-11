@@ -85,7 +85,7 @@ namespace DatabaseAccessor.Repositories
                         ShopId = cartItem.ShopId,
                         PaymentMethod = paymentMethod,
                         RefId = refId,
-                        IsPaid = paymentMethod == PaymentMethod.CoD
+                        IsPaid = paymentMethod != PaymentMethod.MoMo
                     });
                 }
                 invoices[cartItem.ShopId].Details.Add(new InvoiceDetail

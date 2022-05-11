@@ -170,7 +170,6 @@ function updateDropdownCartTotal(deltaPrice) {
 }
 
 function buildSingleProductItem(product) {
-    console.log(product);
     return `<div class="product" data-product="${product.id}">
                 <div class="product-cart-details">
                     <h4 class="product-title">

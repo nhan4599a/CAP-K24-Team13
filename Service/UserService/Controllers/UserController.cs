@@ -1,3 +1,4 @@
+using DatabaseAccessor.Repositories.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +19,23 @@ namespace UserService.Controllers
     {
         private readonly IMediator _mediator;
 
-        public UserController(IMediator mediator)
+        private IUserRepository _repository;
+
+        public UserController(IMediator mediator, IUserRepository repository)
         {
             _mediator = mediator;
+            _repository = repository;
         }
 
         [AllowAnonymous]
         [HttpGet]
         public async Task<ApiResult> FindUsers([FromQuery] FindUsersQuery query)
         {
-            var result = await _mediator.Send(query);
+            var result = await _repository.FindUsersAsync(query.Keyword, new PaginationInfo
+            {
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            }, query.Customer);
             return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);
         }
 

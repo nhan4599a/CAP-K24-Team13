@@ -6,6 +6,7 @@
 
         public int PageSize { get; set; } = 5;
 
+
         public static readonly PaginationInfo Default = new();
     }
 }
