@@ -54,7 +54,8 @@ function onLoadProductsCompleted(paginatedData) {
     $('a[name=btn-edit]').click(function (e) {
         e.preventDefault();
         let index = parseInt($(this).parent().parent().children('td:nth-child(2)').text()) - 1;
-        let productInfoStr = JSON.stringify(products[index]);
+        let pageSize = getCurrentPageInfo().pageSize;
+        let productInfoStr = JSON.stringify(products[index % pageSize]);
         window.localStorage.setItem('editting-product', productInfoStr);
         window.location.href = "/shopowner/product/edit";
     });

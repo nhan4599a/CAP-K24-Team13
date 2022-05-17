@@ -4,9 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseAccessor.Configurations
 {
-    public class CartConfiguration : IEntityTypeConfiguration<Cart>
+    public class CartConfiguration : BaseEntityConfiguration<Cart>
     {
-        public void Configure(EntityTypeBuilder<Cart> builder)
+        private readonly bool _isForTestingPurpose;
+
+        public CartConfiguration(bool isForTestingPurpose = false)
+        {
+            _isForTestingPurpose = isForTestingPurpose;
+        }
+
+        public override bool IsForTestingPurpose => _isForTestingPurpose;
+
+        public override void Configure(EntityTypeBuilder<Cart> builder)
         {
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd()

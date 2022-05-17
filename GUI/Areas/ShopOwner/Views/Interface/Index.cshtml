@@ -332,8 +332,10 @@
 
         function onInformationGot(shopInformation) {
             if (shopInformation) {
-                if (!shopInformation.status)
-                    
+                if (!shopInformation.status) {
+                    toastr.error('shop is unavailable', 'Error');
+                    return;
+                }
                 $('#input-description').val(shopInformation.description);
                 $('#input-name').val(shopInformation.name);
                 $('#input-phone').val(shopInformation.phone);

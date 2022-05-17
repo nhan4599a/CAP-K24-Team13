@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Shared.Models;
 using Shared.RequestModels;
 using System;
@@ -19,7 +18,7 @@ namespace CheckoutService.Controllers
     {
         private readonly IMediator _mediator;
 
-        public CheckOutController(IMediator mediator, ILoggerFactory loggerFactory)
+        public CheckOutController(IMediator mediator)
         {
             _mediator = mediator;
         }

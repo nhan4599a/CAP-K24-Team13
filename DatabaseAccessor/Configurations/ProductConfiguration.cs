@@ -4,9 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseAccessor.Configurations
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<ShopProduct>
+    public class ProductConfiguration : BaseEntityConfiguration<ShopProduct>
     {
-        public void Configure(EntityTypeBuilder<ShopProduct> builder)
+        private readonly bool _isForTestingPurpose;
+
+        public ProductConfiguration(bool isForTestingPurpose = false)
+        {
+            _isForTestingPurpose = isForTestingPurpose;
+        }
+
+        public override bool IsForTestingPurpose => _isForTestingPurpose;
+
+        public override void Configure(EntityTypeBuilder<ShopProduct> builder)
         {
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd();
@@ -21,8 +30,11 @@ namespace DatabaseAccessor.Configurations
             builder.Property(e => e.IsDisabled)
                 .HasDefaultValue(false);
 
-            builder.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("getdate()");
+            if (!IsForTestingPurpose)
+            {
+                builder.Property(e => e.CreatedDate)
+                    .HasDefaultValueSql("getdate()");
+            }
 
             builder.Property(e => e.Discount)
                 .HasDefaultValue(0);

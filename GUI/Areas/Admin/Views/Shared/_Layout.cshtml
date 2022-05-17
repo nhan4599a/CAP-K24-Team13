@@ -198,13 +198,11 @@
     <script src="@Url.Content("~/assets/shop-owner/js/material-dashboard.min.js?v=3.0.0")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-        //if (window.location.pathname.includes('/product')) {
-        //    $('#search-field-section').remove();
-        //} else if (!window.location.pathname.includes('/order')) {
-        //    $('#search-field-section').remove();
-        //    $('#input-search').parent().remove();
-        //}
         toastr.options.closeButton = true;
+        $('.navbar-brand.m-0').click(e => {
+            e.preventDefault();
+            location.reload();
+        });
     </script>
     @RenderSection("Scripts", false)
 </body>

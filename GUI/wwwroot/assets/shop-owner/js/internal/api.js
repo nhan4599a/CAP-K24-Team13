@@ -40,6 +40,7 @@ axios.interceptors.response.use(axiosResp => {
     } else {
         return Promise.reject(error);
     }
+    return Promise.reject(message);
 });
 
 const productEndpoint = '/products';

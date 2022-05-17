@@ -108,7 +108,10 @@ function onLoadCustomersCompleted(paginatedData) {
 }
 
 function moveToPage(keyword, pageNumber, pageSize) {
-    window.location.href = `https://cap-k24-team13.herokuapp.com/admin/customer/index?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    let url = `https://cap-k24-team13.herokuapp.com/admin/customer/index?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    if (keyword)
+        url += `&keyword=${keyword}`;
+    window.location.href = url;
 }
 
 function getCurrentPageInfo() {

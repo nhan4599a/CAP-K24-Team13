@@ -5,9 +5,18 @@ using Shared.Models;
 
 namespace DatabaseAccessor.Configurations
 {
-    public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
+    public class InvoiceConfiguration : BaseEntityConfiguration<Invoice>
     {
-        public void Configure(EntityTypeBuilder<Invoice> builder)
+        private readonly bool _isForTestingPurpose;
+
+        public InvoiceConfiguration(bool isForTestingPurpose = false)
+        {
+            _isForTestingPurpose = isForTestingPurpose;
+        }
+
+        public override bool IsForTestingPurpose => _isForTestingPurpose;
+
+        public override void Configure(EntityTypeBuilder<Invoice> builder)
         {
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
@@ -25,8 +34,11 @@ namespace DatabaseAccessor.Configurations
                 .WithOne(e => e.Invoice)
                 .IsRequired();
 
-            builder.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("getdate()");
+            if (!IsForTestingPurpose)
+            {
+                builder.Property(e => e.CreatedAt)
+                    .HasDefaultValueSql("getdate()");
+            }
 
             builder.Property(e => e.Status)
                 .HasDefaultValue(InvoiceStatus.New);

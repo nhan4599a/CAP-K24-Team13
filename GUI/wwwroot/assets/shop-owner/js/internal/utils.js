@@ -211,7 +211,7 @@ function buildInvoiceTableRowHtml(invoice, index, pageNumber, pageSize) {
     let baseIndex = (pageNumber - 1) * pageSize;
     let statusList = ['New', 'Confirmed', 'Shipper Received', 'Succeed', 'Canceled'];
     return `<tr>
-                <td style="display: none">${invoice.id}</td>
+                <td style="display: none">${invoice.invoiceId}</td>
                 <td class="align-middle text-center" style="padding: 0;">${baseIndex + index + 1}</td>
                 <td class="align-middle text-center">
                     <span class="text-secondary text-xs font-weight-bold">${invoice.invoiceCode}</span>
@@ -745,15 +745,16 @@ function unformatPrice(formattedPrice) {
 }
 
 function buildInvoiceItem(invoice) {
+    let paymentMethods = ['CoD', 'MoMo', 'VISA'];
     return `<div class="board-item ${invoice.isPaid ? '' : 'unpaid'}">
-                <div class="board-item-content">
+                <div class="board-item-content ${invoice.isPaid ? '' : 'unpaid'}">
                     <div id="order-id">
                         <input type="hidden" value="${invoice.invoiceId}" />
                         <h4>#${invoice.invoiceCode}</h4>
                         <h5>${invoice.receiverName}</h5>
                         <input type="tel" name="phonenumber" placeholder="phonenumber" value="${invoice.phoneNumber}" disabled />
                         <input type="text" name="address" placeholder="address" value="${invoice.shippingAddress}" disabled />
-                        <h5>${invoice.paymentMethod}</h5>
+                        <h5>${paymentMethods[invoice.paymentMethod]}</h5>
                     </div>
                     <button id="btn-order-details" type="button" class="btn btn-primary">
                         View

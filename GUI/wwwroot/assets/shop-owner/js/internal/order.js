@@ -40,11 +40,7 @@
                 })
                 .catch(error => {
                     animationLoader.hideAnimation();
-                    if (error.response.status == 401 || error.response.status == 403) {
-                        toastr.error('Your token is expired, please re-login', 'Error');
-                    } else {
-                        toastr.error(error, 'Error');
-                    }
+                    toastr.error(error, 'Error');
                 });
         });
 });

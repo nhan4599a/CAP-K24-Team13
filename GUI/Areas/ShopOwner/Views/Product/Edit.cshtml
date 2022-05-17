@@ -40,7 +40,7 @@
             </div>
             <div class="form-group">
                 <button class="btn bg-gradient-primary-dark my-shadow text-white" id="btn-submit" type="submit">Update</button>
-                <a href="product" class="text-white btn btn-danger" style="float: right">Cancel</a>
+                <a href="#" class="text-white btn btn-danger" style="float: right">Cancel</a>
             </div>
         </div>
     </div>
@@ -61,6 +61,10 @@
         getAllCategories()
             .then(categories => {
                 onLoadedAllCategories(categories);
+                $('.btn-danger').click(function(e) {
+                    e.preventDefault();
+                    history.back();
+                });
                 animationLoader.hideAnimation();
             })
             .catch(error => {

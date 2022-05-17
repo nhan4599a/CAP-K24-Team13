@@ -201,6 +201,10 @@
             $('#search-field-section').remove();
         }
         toastr.options.closeButton = true;
+        $('.navbar-brand.m-0').click(e => {
+            e.preventDefault();
+            location.reload();
+        });
     </script>
     @RenderSection("Scripts", false)
 </body>

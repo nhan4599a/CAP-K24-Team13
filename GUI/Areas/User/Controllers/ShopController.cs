@@ -32,7 +32,7 @@ namespace GUI.Areas.User.Controllers
             var shopResponseTask = _shopClient.GetShop(id.Value);
             var bestSellerProductsResponse = await bestSellerProductsResponseTask;
             var shopResponse = await shopResponseTask;
-            if (!shopResponse.Content.ResultObj.IsAvailable)
+            if (shopResponse.Content.ResultObj == null || !shopResponse.Content.ResultObj.IsAvailable)
                 return StatusCode(StatusCodes.Status404NotFound);
             if (bestSellerProductsResponse.IsSuccessStatusCode && shopResponse.IsSuccessStatusCode)
             {
@@ -102,7 +102,7 @@ namespace GUI.Areas.User.Controllers
             var shopResponse = await shopResponseTask;
             if (!shopResponse.IsSuccessStatusCode)
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            if (!shopResponse.Content.ResultObj.IsAvailable)
+            if (shopResponse.Content.ResultObj == null || !shopResponse.Content.ResultObj.IsAvailable)
                 return StatusCode(StatusCodes.Status404NotFound);
             return View(new ShopCategoryViewModel
             {

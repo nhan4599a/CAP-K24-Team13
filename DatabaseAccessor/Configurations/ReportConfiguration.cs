@@ -4,9 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseAccessor.Configurations
 {
-    public class ReportConfiguration : IEntityTypeConfiguration<Report>
+    public class ReportConfiguration : BaseEntityConfiguration<Report>
     {
-        public void Configure(EntityTypeBuilder<Report> builder)
+        private readonly bool _isForTestingPurpose;
+
+        public ReportConfiguration(bool isForTestingPurpose = false)
+        {
+            _isForTestingPurpose = isForTestingPurpose;
+        }
+
+        public override bool IsForTestingPurpose => _isForTestingPurpose;
+
+        public override void Configure(EntityTypeBuilder<Report> builder)
         {
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
@@ -27,8 +36,11 @@ namespace DatabaseAccessor.Configurations
                 .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
 
-            builder.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("getdate()");
+            if (!IsForTestingPurpose)
+            {
+                builder.Property(e => e.CreatedAt)
+                    .HasDefaultValueSql("getdate()");
+            }
 
             builder.HasIndex(e => e.ReporterId);
             builder.HasIndex(e => new { e.AffectedUserId, e.CreatedAt });

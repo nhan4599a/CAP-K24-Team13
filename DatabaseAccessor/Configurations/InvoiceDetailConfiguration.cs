@@ -4,9 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseAccessor.Configurations
 {
-    public class InvoiceDetailConfiguration : IEntityTypeConfiguration<InvoiceDetail>
+    public class InvoiceDetailConfiguration : BaseEntityConfiguration<InvoiceDetail>
     {
-        public void Configure(EntityTypeBuilder<InvoiceDetail> builder)
+        private readonly bool _isForTestingPurpose;
+
+        public InvoiceDetailConfiguration(bool isForTestingPurpose = false)
+        {
+            _isForTestingPurpose = isForTestingPurpose;
+        }
+
+        public override bool IsForTestingPurpose => _isForTestingPurpose;
+
+        public override void Configure(EntityTypeBuilder<InvoiceDetail> builder)
         {
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd()

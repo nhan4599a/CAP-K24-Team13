@@ -86,13 +86,16 @@ namespace AuthServer.Controllers
             if (signInResult.IsLockedOut)
             {
                 if (user.Status == AccountStatus.Banned)
-                    ViewBag.BanMessage = user.BanReason;
+                {
+                    ModelState.AddModelError("SignIn-Error",
+                        $"Account is banned. It will be unban at {user.LockoutEnd!.Value.AddHours(7):dd/MM/yyyy HH:mm:ss}. Reason is {user.BanReason}");
+                }
+                else
+                {
+                    ModelState.AddModelError("SignIn-Error",
+                        $"you have entered the wrong password more than 5 times, please try again in 15 minutes");
+                }
                 return View();
-            }
-            if (user.Status == AccountStatus.Banned)
-            {
-                ModelState.AddModelError("SignIn-Error",
-                    $"Account is banned. It will be unban at {user.LockoutEnd!.Value.AddHours(7):dd/MM/yyyy HH:mm:ss}. Reason is {user.BanReason}");
             }
             if (signInResult.IsNotAllowed)
             {
@@ -164,7 +167,7 @@ namespace AuthServer.Controllers
             var user = await _signInManager.UserManager.FindByEmailAsync(StringExtension.FromBase64(email));
             if (user == null)
             {
-                ModelState.AddModelError("ConfirmEmail-Error",$"User not found");
+                ModelState.AddModelError("ConfirmEmail-Error", $"User not found");
                 return View();
             }
             var result = await _signInManager.UserManager.ConfirmEmailAsync(user, StringExtension.FromBase64(token));

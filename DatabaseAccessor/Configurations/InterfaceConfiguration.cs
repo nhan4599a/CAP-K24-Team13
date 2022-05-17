@@ -4,9 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseAccessor.Configurations
 {
-    public class InterfaceConfiguration : IEntityTypeConfiguration<ShopInterface>
+    public class InterfaceConfiguration : BaseEntityConfiguration<ShopInterface>
     {
-        public void Configure(EntityTypeBuilder<ShopInterface> builder)
+        private readonly bool _isForTestingPurpose;
+
+        public InterfaceConfiguration(bool isForTestingPurpose = false)
+        {
+            _isForTestingPurpose = isForTestingPurpose;
+        }
+
+        public override bool IsForTestingPurpose => _isForTestingPurpose;
+
+        public override void Configure(EntityTypeBuilder<ShopInterface> builder)
         {
             builder.Property(e => e.IsVisible)
                 .HasDefaultValue(true);

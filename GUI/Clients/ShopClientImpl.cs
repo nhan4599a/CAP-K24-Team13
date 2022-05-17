@@ -28,7 +28,7 @@ namespace GUI.Clients
             var externalShopResponse = await _externalShopClient.FindShops(keyword, pageNumber, pageSize);
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetShopInformation(externalShopResponse.Content.Items.Select(item => item.Id).ToArray());
+                var avatars = await GetShopInformation(externalShopResponse.Content.Items.Where(shop => shop.IsAvailable).Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Items.Count; i++)
@@ -47,7 +47,7 @@ namespace GUI.Clients
             var externalShopResponse = await _externalShopClient.GetAllShops();
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetShopInformation(externalShopResponse.Content.Select(item => item.Id).ToArray());
+                var avatars = await GetShopInformation(externalShopResponse.Content.Where(shop => shop.IsAvailable).Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Count; i++)
@@ -64,7 +64,8 @@ namespace GUI.Clients
         public async Task<ApiResponse<ExternalApiResult<ShopDTO>>> GetShop(int shopId)
         {
             var externalShopResponse = await _externalShopClient.GetShop(shopId);
-            if (externalShopResponse.IsSuccessStatusCode)
+            if (externalShopResponse.IsSuccessStatusCode 
+                && externalShopResponse.Content.IsSuccessed && externalShopResponse.Content.ResultObj.IsAvailable)
             {
                 var avatar = await GetShopInformation(new int[] { shopId });
                 if (avatar != null)
@@ -89,7 +90,7 @@ namespace GUI.Clients
 
             if (externalShopResponse.IsSuccessStatusCode)
             {
-                var avatars = await GetShopInformation(externalShopResponse.Content.Select(item => item.Id).ToArray());
+                var avatars = await GetShopInformation(externalShopResponse.Content.Where(shop => shop.IsAvailable).Select(item => item.Id).ToArray());
                 if (avatars != null)
                 {
                     for (int i = 0; i < externalShopResponse.Content.Count; i++)

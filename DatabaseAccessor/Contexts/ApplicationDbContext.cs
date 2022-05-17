@@ -84,17 +84,19 @@ namespace DatabaseAccessor.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            modelBuilder.ApplyConfiguration(new InterfaceConfiguration());
-            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
-            modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
-            modelBuilder.ApplyConfiguration(new CommentConfiguration());
+            var isForTestingPurpose = Database.IsSqlite();
+
+            modelBuilder.ApplyConfiguration(new UserConfiguration(isForTestingPurpose));
+            modelBuilder.ApplyConfiguration(new RoleConfiguration(isForTestingPurpose));
+            modelBuilder.ApplyConfiguration(new ProductConfiguration(isForTestingPurpose));
+            modelBuilder.ApplyConfiguration(new InterfaceConfiguration(isForTestingPurpose));
+            modelBuilder.ApplyConfiguration(new InvoiceConfiguration(isForTestingPurpose));
+            modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration(isForTestingPurpose));
+            modelBuilder.ApplyConfiguration(new CommentConfiguration(isForTestingPurpose));
             modelBuilder.ApplyConfiguration(new InvoiceStatusChangedHistoryConfiguration());
-            modelBuilder.ApplyConfiguration(new CartConfiguration());
-            modelBuilder.ApplyConfiguration(new CartDetailConfiguration());
-            modelBuilder.ApplyConfiguration(new ReportConfiguration());
+            modelBuilder.ApplyConfiguration(new CartConfiguration(isForTestingPurpose));
+            modelBuilder.ApplyConfiguration(new CartDetailConfiguration(isForTestingPurpose));
+            modelBuilder.ApplyConfiguration(new ReportConfiguration(isForTestingPurpose));
 
             modelBuilder.Entity<CategoryDTO>()
                 .HasNoKey();

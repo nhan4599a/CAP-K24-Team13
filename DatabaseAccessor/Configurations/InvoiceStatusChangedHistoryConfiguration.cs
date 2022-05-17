@@ -4,16 +4,28 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DatabaseAccessor.Configurations
 {
-    public class InvoiceStatusChangedHistoryConfiguration : IEntityTypeConfiguration<InvoiceStatusChangedHistory>
+    public class InvoiceStatusChangedHistoryConfiguration : BaseEntityConfiguration<InvoiceStatusChangedHistory>
     {
-        public void Configure(EntityTypeBuilder<InvoiceStatusChangedHistory> builder)
+        private readonly bool _isForTestingPurpose;
+
+        public InvoiceStatusChangedHistoryConfiguration(bool isForTestingPurpose = false)
+        {
+            _isForTestingPurpose = isForTestingPurpose;
+        }
+
+        public override bool IsForTestingPurpose => _isForTestingPurpose;
+
+        public override void Configure(EntityTypeBuilder<InvoiceStatusChangedHistory> builder)
         {
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasIdentityOptions(0, 1);
 
-            builder.Property(e => e.ChangedDate)
-                .HasDefaultValueSql("getdate()");
+            if (!IsForTestingPurpose)
+            {
+                builder.Property(e => e.ChangedDate)
+                    .HasDefaultValueSql("getdate()");
+            }
 
             builder.HasOne(e => e.Invoice)
                 .WithMany(e => e.StatusChangedHistories)
