@@ -141,11 +141,7 @@ namespace DatabaseAccessor.Mapping
 
         public ReportDTO MapToReportDTO(Report report) => _mapper.Map<ReportDTO>(report);
 
-        public UserDTO MapToUserDTO(User user)
-        {
-            System.IO.File.AppendAllLines(@"D:\test.txt", new string[] { user.UserRoles.Count.ToString() });
-            return _mapper.Map<UserDTO>(user);
-        }
+        public UserDTO MapToUserDTO(User user) => _mapper.Map<UserDTO>(user);
 
         public InvoiceDTO MapToInvoiceDTO(Invoice invoice) => _mapper.Map<InvoiceDTO>(invoice);
 

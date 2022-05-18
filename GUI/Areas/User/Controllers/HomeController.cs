@@ -15,7 +15,8 @@ namespace GUI.Areas.User.Controllers
     public class HomeController : BaseUserController
     {
         private readonly IProductClient _productClient;
-        private readonly IExternalShopClient _shopClient;
+        private readonly IExternalShopClient _externalShopClient;
+        private readonly IShopClient _shopClient;
         private readonly ICategoryClient _categoryClient;
 
         private readonly string[] HomePageCategoriesName =
@@ -82,18 +83,21 @@ namespace GUI.Areas.User.Controllers
             }
         };
 
-        public HomeController(IProductClient productClient, IExternalShopClient shopClient, ICategoryClient categoryClient)
+        public HomeController(IProductClient productClient,
+            IExternalShopClient externalShopClient, ICategoryClient categoryClient,
+            IShopClient shopClient)
         {
             _productClient = productClient;
-            _shopClient = shopClient;
+            _externalShopClient = externalShopClient;
             _categoryClient = categoryClient;
+            _shopClient = shopClient;
         }
 
         public async Task<IActionResult> Index()
         {
             var bestSellerProductsResponseTask = _productClient.GetBestSellerProducts(null);
             var topMostSaleOffProductsResponseTask = _productClient.GetMostSaleOffProducts();
-            var shopsResponseTask = _shopClient.GetAllShops();
+            var shopsResponseTask = _externalShopClient.GetAllShops();
             var newProductsResponseTask = _productClient.GetTopNewsProducts();
             var bestSellerProductsResponse = await bestSellerProductsResponseTask;
             var topMostSaleOffProductsResponse = await topMostSaleOffProductsResponseTask;
@@ -133,16 +137,17 @@ namespace GUI.Areas.User.Controllers
             });
         }
 
-        public async Task<IActionResult> Search(string cat, string keyword, int pageNumber, int pageSize = 5)
+        public async Task<IActionResult> Search(string cat, string keyword, int pageNumber)
         {
+            if (cat == null)
+                return Redirect("/");
             if (cat.ToLower() != "product" && cat.ToLower() != "shop")
                 return StatusCode(StatusCodes.Status404NotFound);
             ViewBag.Keyword = keyword;
-            ViewBag.PageSize = pageSize;
             ViewBag.Cat = cat;
             if (cat.ToLower() == "product")
             {
-                var productResponse = await _productClient.FindProducts(keyword, pageNumber, pageSize);
+                var productResponse = await _productClient.FindProducts(keyword, pageNumber, 5);
                 if (!productResponse.IsSuccessStatusCode)
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 return View(new SearchResultViewModel
@@ -159,7 +164,7 @@ namespace GUI.Areas.User.Controllers
                 return View(new SearchResultViewModel
                 {
                     Products = null,
-                    Shops = shopResponse.Content.Where(shop => shop.IsAvailable).Paginate(pageNumber, pageSize)
+                    Shops = shopResponse.Content.Where(shop => shop.IsAvailable).Paginate(pageNumber, 5)
                 });
             }
         }

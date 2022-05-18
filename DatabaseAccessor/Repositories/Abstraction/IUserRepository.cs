@@ -7,7 +7,7 @@ namespace DatabaseAccessor.Repositories.Abstraction
 {
     public interface IUserRepository : IDisposable
     {
-        Task<PaginatedList<UserDTO>> FindUsersAsync(string keyword, PaginationInfo paginationInfo, bool customer);
+        Task<PaginatedList<UserDTO>> FindUsersAsync(string keyword, PaginationInfo paginationInfo, string roleName);
 
         Task<UserDTO> GetUserByIdAsync(Guid userId);
 

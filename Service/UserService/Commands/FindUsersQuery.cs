@@ -12,6 +12,6 @@ namespace UserService.Commands
 
         public int PageSize { get; set; } = PaginationInfo.Default.PageSize;
 
-        public bool Customer { get; set; } = false;
+        public string? RoleName { get; set; }
     }
 }

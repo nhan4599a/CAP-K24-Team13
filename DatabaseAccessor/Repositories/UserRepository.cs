@@ -24,15 +24,29 @@ namespace DatabaseAccessor.Repositories
             _mapper = mapper;
         }
 
-        public async Task<PaginatedList<UserDTO>> FindUsersAsync(string keyword, PaginationInfo paginationInfo, bool customer)
+        public async Task<PaginatedList<UserDTO>> FindUsersAsync(string keyword,
+            PaginationInfo paginationInfo, string roleName = null)
         {
-            return await _dbContext.Users
-                .AsNoTracking()
+            var roles = typeof(SystemConstant.Roles).GetFields()
+                .Select(property => (string)property.GetValue(null))
+                .ToList();
+            if (!roles.Contains(roleName) && roleName != null)
+            {
+                throw new ArgumentException($"{roleName} is not available", nameof(roleName));
+            }
+            IQueryable<User> query = _dbContext.Users.AsNoTracking()
                 .Include(e => e.UserRoles)
                 .ThenInclude(e => e.Role)
-                .Include(e => e.AffectedReports)
-                .Where(e => !customer || e.UserRoles.Any(userRole => userRole.Role.Name == SystemConstant.Roles.CUSTOMER))
-                .Where(e => string.IsNullOrWhiteSpace(keyword) || e.Email.Contains(keyword))
+                .Include(e => e.AffectedReports);
+            if (roleName != null)
+                query = query.Where(e => e.UserRoles.Any(userRole => userRole.Role.Name == roleName));
+            else
+                query = query.Where(e =>
+                    e.UserRoles.Any(userRole => userRole.Role.Name != SystemConstant.Roles.ADMIN_TEAM_13 &&
+                        userRole.Role.Name != SystemConstant.Roles.ADMIN_TEAM_5));
+            if (keyword != null)
+                query = query.Where(e => e.Email.Contains(keyword));
+            return await query
                 .OrderBy(e => e.Status)
                 .Select(e => _mapper.MapToUserDTO(e))
                 .AsSplitQuery()

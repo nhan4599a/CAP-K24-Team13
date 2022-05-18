@@ -3,7 +3,6 @@
 @using System.Globalization
 @{
     var keyword = (string)ViewBag.Keyword;
-    var pageSize = (int)ViewBag.PageSize;
 }
 @section Styles {
 <style>
@@ -126,16 +125,16 @@
                 </div>
                 @if (ViewBag.Cat == "product")
                 {
-                    @Html.RenderPagination(Model.Products, keyword, pageSize,
-                        (keyword, pageNumber, pageSize) =>
-                            $"https://cap-k24-team13.herokuapp.com/home/search?cat=product&keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
+                    @Html.RenderPagination(Model.Products, keyword,
+                        (keyword, pageNumber, _) =>
+                            $"https://cap-k24-team13.herokuapp.com/home/search?cat=product&keyword={keyword}&pageNumber={pageNumber}"
                     )
                 }
                 else
                 {
-                    @Html.RenderPagination(Model.Shops, keyword, pageSize,
-                        (keyword, pageNumber, pageSize) =>
-                            $"https://cap-k24-team13.herokuapp.com/home/search?cat=shop&keyword={keyword}&pageNumber={pageNumber}&pageSize={pageSize}"
+                    @Html.RenderPagination(Model.Shops, keyword,
+                        (keyword, pageNumber, _) =>
+                            $"https://cap-k24-team13.herokuapp.com/home/search?cat=shop&keyword={keyword}&pageNumber={pageNumber}"
                     )
                 }
             </div>
@@ -143,3 +142,9 @@
     </div>
     <div class="mb-4"></div><!-- End .mb-4 -->
 </main><!-- End .main -->
+@section Scripts {
+    <script>
+        $('#cat > option[value=@ViewBag.Cat]').prop('selected', true);
+        $('#q').val('@ViewBag.Keyword');
+    </script>
+}

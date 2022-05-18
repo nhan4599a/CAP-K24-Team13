@@ -35,7 +35,7 @@ namespace UserService.Controllers
             {
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
-            }, query.Customer);
+            }, query.RoleName);
             return ApiResult<PaginatedList<UserDTO>>.CreateSucceedResult(result);
         }
 

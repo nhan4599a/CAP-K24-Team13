@@ -275,7 +275,7 @@ function getCustomers(keyword, pageNumber, pageSize) {
     let params = {
         pageNumber: pageNumber,
         pageSize: pageSize,
-        customer: true
+        roleName: 'Customer'
     };
     if (keyword)
         params.keyword = keyword;

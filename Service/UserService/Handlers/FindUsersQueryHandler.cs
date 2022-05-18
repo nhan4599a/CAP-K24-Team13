@@ -24,7 +24,7 @@ namespace UserService.Handlers
             {
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize
-            }, request.Customer);
+            }, request.RoleName);
         }
 
         public void Dispose()

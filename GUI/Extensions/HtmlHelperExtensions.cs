@@ -9,7 +9,7 @@ namespace GUI.Extensions
     public static class HtmlHelperExtensions
     {
         public static IHtmlContent RenderPagination<T>(this IHtmlHelper _, PaginatedList<T> paginatedList,
-            string keyword, int pageSize,
+            string keyword,
             Func<string, int, int, string> paginationLinkGenerator)
         {
             if (paginatedList == null)
@@ -31,7 +31,7 @@ namespace GUI.Extensions
             previousATag.AddCssClass("page-link");
             previousATag.Attributes.Add("tabindex", "-1");
             if (paginatedList.HasPreviousPage)
-                previousATag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, paginatedList.PageNumber - 1, pageSize));
+                previousATag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, paginatedList.PageNumber - 1, paginatedList.PageSize));
             previousATag.InnerHtml.Append("Previous");
 
             previousLiTag.InnerHtml.AppendHtml(previousATag);
@@ -46,7 +46,7 @@ namespace GUI.Extensions
                 aTag.AddCssClass("page-link");
                 aTag.InnerHtml.Append(i.ToString());
                 if (i != paginatedList.PageNumber)
-                    aTag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, i, pageSize));
+                    aTag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, i, paginatedList.PageSize));
                 liTag.InnerHtml.AppendHtml(aTag);
                 ulTag.InnerHtml.AppendHtml(liTag);
             }
@@ -58,7 +58,7 @@ namespace GUI.Extensions
             nextATag.AddCssClass("page-link");
             nextATag.Attributes.Add("tabindex", "-1");
             if (paginatedList.HasNextPage)
-                nextATag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, paginatedList.PageNumber + 1, pageSize));
+                nextATag.Attributes.Add("href", paginationLinkGenerator.Invoke(keyword, paginatedList.PageNumber + 1, paginatedList.PageSize));
             nextATag.InnerHtml.Append("Next");
 
             nextLiTag.InnerHtml.AppendHtml(nextATag);
