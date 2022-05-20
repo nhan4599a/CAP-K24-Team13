@@ -887,7 +887,7 @@
                                             {
                                                 <span class="product-label label-new">New</span>
                                             }
-                                            <a href="product.html">
+                                            <a href="/product/index/@product.Id">
                                                 <img src="@Url.ProductImageUrl(product.Images[0])" alt="@product.ProductName" class="product-image">
                                             </a>
 
@@ -1086,7 +1086,8 @@
                                             <div class="product-cat">
                                                 <a href="/home/categories?cat=@product.CategoryId">@product.CategoryName</a>
                                             </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="product.html">@product.ProductName</a></h3><!-- End .product-title -->
+                                            <h3 class="product-title">
+                                                <a href="/product/index/@product.Id">@product.ProductName</a></h3>
                                             <div class="product-price">
                                                 @if (product.Discount > 0)
                                                 {
