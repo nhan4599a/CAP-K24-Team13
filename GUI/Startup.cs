@@ -182,7 +182,7 @@ namespace GUI
 
         private void ConfigureHttpClient(HttpClient client)
         {
-            client.BaseAddress = new Uri("http://ec2-18-139-226-54.ap-southeast-1.compute.amazonaws.com:3000");
+            client.BaseAddress = new Uri("http://ec2-18-139-223-95.ap-southeast-1.compute.amazonaws.com:3000");
         }
     }
 }
