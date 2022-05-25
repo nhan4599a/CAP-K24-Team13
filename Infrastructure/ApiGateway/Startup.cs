@@ -22,6 +22,8 @@ namespace ApiGateway
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseHsts();
+            app.UseHttpsRedirection();
             ServiceDiscoveryExtensions.UseOcelot(app);
         }
     }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.Net;
 
 namespace ApiGateway
 {
@@ -15,6 +16,14 @@ namespace ApiGateway
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel(serverOptions =>
+                    {
+                        serverOptions.UseSystemd();
+                        serverOptions.Listen(IPAddress.Any, 3000, listenOptions =>
+                        {
+                            listenOptions.UseHttps("/home/ubuntu/certificate.pfx");
+                        });
+                    });
                 });
     }
 }

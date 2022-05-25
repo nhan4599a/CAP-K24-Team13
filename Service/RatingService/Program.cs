@@ -23,7 +23,7 @@ namespace OrderService
                         serverOptions.UseSystemd();
                         serverOptions.Listen(IPAddress.Any, 3003, listenOptions =>
                         {
-                            listenOptions.UseHttps("/home/ubuntu/certificate.crt");
+                            listenOptions.UseHttps("/home/ubuntu/certificate.pfx");
                         });
                     });
                 })

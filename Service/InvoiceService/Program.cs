@@ -22,7 +22,7 @@ namespace InvoiceService
                         serverOptions.UseSystemd();
                         serverOptions.Listen(IPAddress.Any, 3002, listenOptions =>
                         {
-                            listenOptions.UseHttps("/home/ubuntu/certificate.crt");
+                            listenOptions.UseHttps("/home/ubuntu/certificate.pfx");
                         });
                     });
                 })

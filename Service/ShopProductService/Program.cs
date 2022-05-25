@@ -22,7 +22,7 @@ namespace ShopProductService
                         serverOptions.UseSystemd();
                         serverOptions.Listen(IPAddress.Any, 3005, listenOptions =>
                         {
-                            listenOptions.UseHttps("/home/ubuntu/certificate.crt");
+                            listenOptions.UseHttps("/home/ubuntu/certificate.pfx");
                         });
                     });
                 })
