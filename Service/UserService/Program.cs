@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace UserService
 {
@@ -16,6 +17,14 @@ namespace UserService
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel(serverOptions =>
+                    {
+                        serverOptions.UseSystemd();
+                        serverOptions.Listen(IPAddress.Any, 3008, listenOptions =>
+                        {
+                            listenOptions.UseHttps("/home/ubuntu/certificate.crt");
+                        });
+                    });
                 })
                 .ConfigureLogging(builder =>
                 {
