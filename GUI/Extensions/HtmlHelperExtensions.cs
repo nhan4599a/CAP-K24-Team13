@@ -72,12 +72,12 @@ namespace GUI.Extensions
 
         public static string ProductImageUrl(this IUrlHelper _, string imageUrl)
         {
-            return $"http://ec2-18-139-223-95.ap-southeast-1.compute.amazonaws.com:3000/products/images/{imageUrl}";
+            return $"https://ec2-18-139-223-95.ap-southeast-1.compute.amazonaws.com:3000/products/images/{imageUrl}";
         }
 
         public static string ShopImageUrl(this IUrlHelper _, string imageUrl)
         {
-            return $"http://ec2-18-139-223-95.ap-southeast-1.compute.amazonaws.com:3000/interfaces/images/{imageUrl}";
+            return $"https://ec2-18-139-223-95.ap-southeast-1.compute.amazonaws.com:3000/interfaces/images/{imageUrl}";
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿axios.defaults.timeout = 20000;
-axios.defaults.baseURL = 'http://ec2-18-139-223-95.ap-southeast-1.compute.amazonaws.com:3000';
+axios.defaults.baseURL = 'https://ec2-18-139-223-95.ap-southeast-1.compute.amazonaws.com:3000';
 
 axios.interceptors.request.use(async config => {
     if (config.url.startsWith('/products', '/categories') && config.method == 'get')
