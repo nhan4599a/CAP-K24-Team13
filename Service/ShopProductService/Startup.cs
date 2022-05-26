@@ -83,6 +83,7 @@ namespace ShopProductService
         {
             app.UseHsts();
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseCors("Default");
             app.UseRouting();
             app.UseAuthentication();
