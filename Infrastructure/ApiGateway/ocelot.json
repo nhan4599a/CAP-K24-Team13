@@ -341,7 +341,7 @@
   ],
   "GlobalConfiguration": {
     "ServiceDiscoveryProvider": {
-      "Host": "ec2-18-139-223-95.ap-southeast-1.compute.amazonaws.com",
+      "Host": "ec2-13-215-160-187.ap-southeast-1.compute.amazonaws.com",
       "Port": 8500,
       "Type": "Consul"
     }
