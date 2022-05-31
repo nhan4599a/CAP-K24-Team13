@@ -63,7 +63,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(200, result.ResponseCode);
-            //Assert.NotEqual(Guid.Empty, result.Data);
             Assert.Empty(result.ErrorMessage);
         }
 
@@ -109,7 +108,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(500, result.ResponseCode);
-            //Assert.Equal(Guid.Empty, result.Data);
             Assert.Equal("Action failed", result.ErrorMessage);
         }
 
@@ -157,8 +155,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(200, result.ResponseCode);
-            //Assert.NotNull(result.Data);
-            //Assert.Equal(emptyProductDTO, result.Data);
             Assert.Empty(result.ErrorMessage);
         }
 
@@ -206,8 +202,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(500, result.ResponseCode);
-            //Assert.Null(result.Data);
-            //Assert.NotEqual(emptyProductDTO, result.Data);
             Assert.NotEmpty(result.ErrorMessage);
             Assert.Equal("Action failed", result.ErrorMessage);
         }
@@ -227,7 +221,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(200, result.ResponseCode);
-            //Assert.True(result.Data);
             Assert.Empty(result.ErrorMessage);
         }
 
@@ -246,7 +239,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(200, result.ResponseCode);
-            //Assert.False(result.Data);
             Assert.Empty(result.ErrorMessage);
         }
 
@@ -265,7 +257,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(500, result.ResponseCode);
-            //Assert.False(result.Data);
             Assert.Equal("Action failed", result.ErrorMessage);
         }
 
@@ -284,7 +275,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(500, result.ResponseCode);
-            //Assert.False(result.Data);
             Assert.Equal("Action failed", result.ErrorMessage);
         }
 
@@ -305,11 +295,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(200, result.ResponseCode);
-            //Assert.NotNull(result.Data);
-            //Assert.Equal(1, result.Data.PageNumber);
-            //Assert.Equal(1, result.Data.MaxPageNumber);
-            //Assert.False(result.Data.HasNextPage);
-            //Assert.False(result.Data.HasPreviousPage);
         }
 
         [TestCasePriority(10)]
@@ -329,11 +314,6 @@ namespace TestShopProductService
 
             Assert.NotNull(result);
             Assert.Equal(200, result.ResponseCode);
-            //Assert.NotNull(result.Data);
-            //Assert.Equal(1, result.Data.PageNumber);
-            //Assert.Equal(1, result.Data.MaxPageNumber);
-            //Assert.False(result.Data.HasNextPage);
-            //Assert.False(result.Data.HasPreviousPage);
         }
 
         [TestCasePriority(11)]
@@ -375,7 +355,6 @@ namespace TestShopProductService
             Assert.Equal(404, result.ResponseCode);
             Assert.NotEmpty(result.ErrorMessage);
             Assert.Equal("Product is not found", result.ErrorMessage);
-            //Assert.Null(result.Data);
         }
 
         [TestCasePriority(13)]
@@ -433,6 +412,216 @@ namespace TestShopProductService
             var temp = result as StatusCodeResult;
 
             Assert.Equal(StatusCodes.Status404NotFound, temp?.StatusCode);
+        }
+
+        [TestCasePriority(15)]
+        [Fact]
+        public async void TestGetProductsOfShop()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var paginatedList = new PaginatedList<ProductDTO>(1, 10, 1, new List<ProductDTO>());
+
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductsByShopIdQuery>(), CancellationToken.None))
+                .ReturnsAsync(paginatedList);
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetProductsOfShop(0, new SearchRequestModel());
+
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<PaginatedList<ProductDTO>>>(result);
+        }
+
+        [TestCasePriority(16)]
+        [Fact]
+        public async void TestGetProductsOfShopAndKeyword()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var paginatedList = new PaginatedList<ProductDTO>(1, 10, 1, new List<ProductDTO>());
+
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductsByShopIdAndKeywordQuery>(), CancellationToken.None))
+                .ReturnsAsync(paginatedList);
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetProductsOfShop(0, new SearchRequestModel
+            {
+                Keyword = "abc"
+            });
+
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<PaginatedList<ProductDTO>>>(result);
+        }
+
+        [TestCasePriority(17)]
+        [Fact]
+        public async void TestGetMinimalSingleProductSuccess()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductByIdQuery>(), CancellationToken.None))
+                .ReturnsAsync(new MinimalProductDTO());
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetMinimalSingleProduct(Guid.NewGuid().ToString());
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<MinimalProductDTO>>(result);
+        }
+
+        [TestCasePriority(18)]
+        [Fact]
+        public async void TestGetMinimalSingleProductFailed()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductByIdQuery>(), CancellationToken.None))
+                .ReturnsAsync((MinimalProductDTO?)null);
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetMinimalSingleProduct(Guid.NewGuid().ToString());
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult>(result);
+            Assert.Equal(404, result.ResponseCode);
+            Assert.Equal("Product is not found", result.ErrorMessage);
+        }
+
+        [TestCasePriority(19)]
+        [Fact]
+        public async void TestGetRelatedProductSuccess()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindRelatedProductsQuery>(), CancellationToken.None))
+                .ReturnsAsync(CommandResponse<List<ProductDTO>>.Success(new List<ProductDTO>()));
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetRelatedProducts(Guid.NewGuid().ToString());
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<List<ProductDTO>>>(result);
+        }
+
+        [TestCasePriority(20)]
+        [Fact]
+        public async void TestGetRelatedProductFailed()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindRelatedProductsQuery>(), CancellationToken.None))
+                .ReturnsAsync(CommandResponse<List<ProductDTO>>.Error("", null));
+            
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetRelatedProducts(Guid.NewGuid().ToString());
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult>(result);
+            Assert.Equal(404, result.ResponseCode);
+        }
+
+        [TestCasePriority(21)]
+        [Fact]
+        public async void TestImportProductSuccess()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<ImportProductCommand>(), CancellationToken.None))
+                .ReturnsAsync(CommandResponse<int>.Success(1));
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.ImportProduct(Guid.NewGuid().ToString(), 1);
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<int>>(result);
+        }
+
+        [TestCasePriority(22)]
+        [Fact]
+        public async void TestImportProductFailed()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<ImportProductCommand>(), CancellationToken.None))
+                .ReturnsAsync(CommandResponse<int>.Error("", null));
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.ImportProduct(Guid.NewGuid().ToString(), 1);
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult>(result);
+            Assert.Equal(500, result.ResponseCode);
+        }
+
+        [TestCasePriority(23)]
+        [Fact]
+        public async void TestGetBestSellerProducts()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindBestSellerProductsQuery>(), CancellationToken.None))
+                .ReturnsAsync(new List<MinimalProductDTO>());
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetBestSellerProducts(1);
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<List<MinimalProductDTO>>>(result);
+        }
+
+        [TestCasePriority(24)]
+        [Fact]
+        public async void TestGetProductOfCategory()
+        {
+            var paginatedList = new PaginatedList<ProductDTO>(1, 10, 1, new List<ProductDTO>());
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductsByCategoryIdQuery>(), CancellationToken.None))
+                .ReturnsAsync(paginatedList);
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetProductsOfCategory(new List<int> { 1 }, new SearchRequestModel(), OrderByDirection.Unspecified);
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<PaginatedList<ProductDTO>>>(result);
+        }
+
+        [TestCasePriority(25)]
+        [Fact]
+        public async void TestGetProductsOfShopInCategory()
+        {
+            var paginatedList = new PaginatedList<ProductDTO>(1, 10, 1, new List<ProductDTO>());
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<FindProductsOfShopInCategoryQuery>(), CancellationToken.None))
+                .ReturnsAsync(paginatedList);
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetProductsOfShopInCategory(0, new List<int> { 1 }, new SearchRequestModel(), OrderByDirection.Unspecified);
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<PaginatedList<ProductDTO>>>(result);
+        }
+
+        [TestCasePriority(26)]
+        [Fact]
+        public async void TestGetTopMostSaleOffProducts()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<GetMostSaleOffProductsQuery>(), CancellationToken.None))
+                .ReturnsAsync(new List<MinimalProductDTO>());
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetTopMostSaleOffProducts();
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<List<MinimalProductDTO>>>(result);
+        }
+
+        [TestCasePriority(27)]
+        [Fact]
+        public async void TestGetTopMostNewProducts()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            mediatorMock
+                .Setup(e => e.Send(It.IsAny<GetTopNewProductsQuery>(), CancellationToken.None))
+                .ReturnsAsync(new List<ProductDTO>());
+
+            var controller = new ProductController(mediatorMock.Object, null);
+            var result = await controller.GetTopNewProducts();
+            Assert.NotNull(result);
+            Assert.IsType<ApiResult<List<ProductDTO>>>(result);
         }
     }
 }

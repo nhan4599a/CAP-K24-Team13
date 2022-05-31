@@ -13,6 +13,7 @@ namespace Shared.Models
 
         public StatisticDateRange(StatisticStrategy strategy, string start, string end)
         {
+            Strategy = strategy;
             if (strategy == StatisticStrategy.ByDay)
             {
                 if (DateTimeExtension.TryParseExact(start, "dd/MM/yyyy", out DateTime startDate) &&

@@ -14,7 +14,7 @@ namespace ShopProductService.Controllers
     {
         private readonly IMediator _mediator;
         
-        public CategoryController(IMediator mediator, IFileStorable fileStore)
+        public CategoryController(IMediator mediator)
         {
             _mediator = mediator;
         }

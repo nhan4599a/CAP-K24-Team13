@@ -79,7 +79,7 @@ namespace Shared.Validations
 
         public void Add(FileValidationRule rule)
         {
-            if (_rules.Contains(rule))
+            if (Contains(rule))
                 throw new InvalidOperationException($"{rule.RuleName} rule is already exsited");
             _rules.Add(rule);
         }
@@ -104,7 +104,7 @@ namespace Shared.Validations
             _rules.Remove(rule);
         }
 
-        public bool Contains(FileValidationRule item) => _rules.Contains(item);
+        public bool Contains(FileValidationRule item) => this.Contains(item.RuleName);
 
         public bool IsProperSubsetOf(IEnumerable<FileValidationRule> other) => _rules.IsProperSubsetOf(other);
 
