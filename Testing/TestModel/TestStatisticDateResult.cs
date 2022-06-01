@@ -12,13 +12,13 @@ namespace TestModel
             Assert.Equal(result.Result.Date, DateTime.Now.Date);
             Assert.Equal(StatisticStrategy.ByDay, result.Strategy);
 
-            Assert.Equal("31/05/2022", result.ToString());
+            Assert.Equal("01/06/2022", result.ToString());
 
             result = new StatisticDateResult(StatisticStrategy.ByMonth, DateTime.Now);
             Assert.Equal(result.Result.Date, DateTime.Now.Date);
             Assert.Equal(StatisticStrategy.ByMonth, result.Strategy);
 
-            Assert.Equal("05/2022", result.ToString());
+            Assert.Equal("06/2022", result.ToString());
 
             result = new StatisticDateResult(StatisticStrategy.ByQuarter, new DateTime(2022, 4, 20));
             Assert.Equal(result.Result.Date, new DateTime(2022, 4, 20).Date);
