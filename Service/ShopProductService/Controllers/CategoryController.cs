@@ -1,4 +1,3 @@
-using AspNetCoreSharedComponent.FileValidations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;

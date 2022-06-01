@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Product
 {
-    public class GetMostSaleOffProductsQueryHandler : IRequestHandler<GetMostSaleOffProductsQuery, List<MinimalProductDTO>>, IDisposable
+    public class GetMostSaleOffProductsQueryHandler 
+        : IRequestHandler<GetMostSaleOffProductsQuery, List<MinimalProductDTO>>, IDisposable
     {
         private readonly IProductRepository _repository;
 

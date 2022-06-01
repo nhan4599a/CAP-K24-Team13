@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace ShopProductService.Handlers.Product
 {
-    public class ImportProductCommandHandler : IRequestHandler<ImportProductCommand, CommandResponse<int>>, IDisposable
+    public class ImportProductCommandHandler
+        : IRequestHandler<ImportProductCommand, CommandResponse<int>>, IDisposable
     {
         private readonly IProductRepository _repository;
 
