@@ -11,7 +11,7 @@ namespace DatabaseSharing
                 .UseSqlite(@"Data Source=UnitTest.db").Options)
         { }
 
-        public static readonly List<ShopProduct> listProducts = new()
+        public static readonly List<ShopProduct> ListProducts = new()
         {
             new ShopProduct
             {
@@ -23,7 +23,8 @@ namespace DatabaseSharing
                 Quantity = 15,
                 Price = 200000,
                 Discount = 50,
-                ShopId = 1
+                ShopId = 1,
+                IsVisible = true
             },
             new ShopProduct
             {
@@ -122,7 +123,7 @@ namespace DatabaseSharing
                 .HasData(shops);
 
             modelBuilder.Entity<ShopProduct>()
-                .HasData(listProducts);
+                .HasData(ListProducts);
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

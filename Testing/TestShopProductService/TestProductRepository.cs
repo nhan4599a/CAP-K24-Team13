@@ -78,7 +78,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestEditProductSuccess()
         {
-            var product = FakeApplicationDbContext.listProducts.First();
+            var product = FakeApplicationDbContext.ListProducts.First();
             var requestModel = new EditProductRequestModel
             {
                 ProductName = product.ProductName,
@@ -135,7 +135,7 @@ namespace TestShopProductService
                 Price = 24000
             };
 
-            var result = await _repository.EditProductAsync(FakeApplicationDbContext.listProducts.Last().Id, requestModel);
+            var result = await _repository.EditProductAsync(FakeApplicationDbContext.ListProducts.Last().Id, requestModel);
 
             Assert.NotNull(result);
             Assert.False(result.IsSuccess);
@@ -149,7 +149,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestDeactivateProductSuccess()
         {
-            var product = FakeApplicationDbContext.listProducts.First();
+            var product = FakeApplicationDbContext.ListProducts.First();
 
             var result = await _repository.ActivateProductAsync(product.Id, false);
 
@@ -164,7 +164,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestActivateProductSuccess()
         {
-            var product = FakeApplicationDbContext.listProducts.Last();
+            var product = FakeApplicationDbContext.ListProducts.Last();
 
             var result = await _repository.ActivateProductAsync(product.Id, true);
 
@@ -205,7 +205,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestDeactivateProductFailedBecauseProductIsDeactivated()
         {
-            var product = FakeApplicationDbContext.listProducts.Last();
+            var product = FakeApplicationDbContext.ListProducts.Last();
 
             var result = await _repository.ActivateProductAsync(product.Id, false);
 
@@ -220,7 +220,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestActivateProductFailedBecauseProductIsActivated()
         {
-            var product = FakeApplicationDbContext.listProducts.First();
+            var product = FakeApplicationDbContext.ListProducts.First();
 
             var result = await _repository.ActivateProductAsync(product.Id, true);
 
@@ -235,7 +235,7 @@ namespace TestShopProductService
         [Fact]
         public async void TestGetProduct()
         {
-            var product = FakeApplicationDbContext.listProducts.First();
+            var product = FakeApplicationDbContext.ListProducts.First();
 
             var result = await _repository.GetProductAsync(product.Id);
 
@@ -271,6 +271,51 @@ namespace TestShopProductService
             Assert.NotNull(products);
             Assert.Equal(1, products.PageNumber);
             Assert.Equal(10, products.PageSize);
+        }
+
+        [TestCasePriority(15)]
+        [Fact]
+        public async void TestGetMinimalProductSucceed()
+        {
+            var products = await _repository.GetMinimalProductAsync(FakeApplicationDbContext.ListProducts[0].Id);
+            Assert.NotNull(products);
+        }
+
+        [TestCasePriority(16)]
+        [Fact]
+        public async void TestGetMinimalProductFailed()
+        {
+            var products = await _repository.GetMinimalProductAsync(Guid.Empty);
+            Assert.Null(products);
+        }
+
+        [TestCasePriority(17)]
+        [Fact]
+        public async void TestGetAllProduct()
+        {
+            var products = await _repository.GetAllProductAsync(PaginationInfo.Default);
+            Assert.NotNull(products);
+        }
+
+        [TestCasePriority(18)]
+        [Fact]
+        public async void TestImportProductQuantity()
+        {
+            var newQuantityResponse = await 
+                _repository.ImportProductQuantityAsync(FakeApplicationDbContext.ListProducts[0].Id, 10);
+            Assert.NotNull(newQuantityResponse);
+            Assert.True(newQuantityResponse.IsSuccess);
+            Assert.Equal(FakeApplicationDbContext.ListProducts[0].Quantity + 10, newQuantityResponse.Response);
+        }
+
+        [TestCasePriority(19)]
+        [Fact]
+        public async void TestGetRelatedProducts()
+        {
+            var response = await
+                _repository.GetRelatedProductsAsync(FakeApplicationDbContext.ListProducts[0].Id);
+            Assert.NotNull(response);
+            Assert.True(response.IsSuccess);
         }
     }
 }

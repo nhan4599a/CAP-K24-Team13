@@ -71,5 +71,37 @@ namespace TestModel
             var nullResult = ruleSet[FileValidationRuleName.ImageExtension];
             Assert.Null(nullResult);
         }
+
+        [Fact]
+        public void TestDefaultValidationRules()
+        {
+            var defaultRules = FileValidationRuleSet.DefaultValidationRules;
+            Assert.NotNull(defaultRules);
+            Assert.Equal(5, defaultRules.Count);
+            Assert.False(defaultRules.IsEmpty);
+
+            var singleDefaultRules = FileValidationRuleSet.DefaultSingleValidationRules;
+            Assert.NotNull(singleDefaultRules);
+            Assert.Equal(2, singleDefaultRules.Count);
+            Assert.False(defaultRules.IsEmpty);
+        }
+
+        [Fact]
+        public void TestChangeFileValidationRuleSet()
+        {
+            var ruleSet = new FileValidationRuleSet
+            {
+                new FileValidationRule
+                {
+                    RuleName = FileValidationRuleName.MinFileCount,
+                    Value = 3
+                }
+            };
+            Assert.Equal(3, ruleSet[FileValidationRuleName.MinFileCount].Value);
+            ruleSet.Change(FileValidationRuleName.MinFileCount, 2);
+            Assert.Equal(2, ruleSet[FileValidationRuleName.MinFileCount].Value);
+
+            Assert.Throws<InvalidOperationException>(() => ruleSet.Change(FileValidationRuleName.ImageExtension, 0));
+        }
     }
 }

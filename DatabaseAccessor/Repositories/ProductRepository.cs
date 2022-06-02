@@ -127,7 +127,7 @@ namespace DatabaseAccessor.Repositories
                 return CommandResponse<int>.Error("Product is not found", null);
             if (product.IsDisabled)
                 return CommandResponse<int>.Error("Product is disabled", null);
-            if (product.IsVisible)
+            if (!product.IsVisible)
                 return CommandResponse<int>.Error("Shop is already disabled!", null);
             if (quantity <= 0)
                 return CommandResponse<int>.Error("Quantity must greater than 0", null);

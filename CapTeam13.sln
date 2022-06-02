@@ -45,7 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceHealthChecker", "Inf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoiceService", "Service\InvoiceService\InvoiceService.csproj", "{A6EF8AC3-B9D5-4A38-879D-A05E9EC1829B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestModel", "Testing\TestModel\TestModel.csproj", "{77416E06-27F5-455A-94D9-725DA29E0E1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestModel", "Testing\TestModel\TestModel.csproj", "{77416E06-27F5-455A-94D9-725DA29E0E1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestShopInterfaceService", "Testing\TestShopInterfaceService\TestShopInterfaceService.csproj", "{2FFEF0EE-F36E-4B06-8FAC-14EBE228FD58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,10 @@ Global
 		{77416E06-27F5-455A-94D9-725DA29E0E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77416E06-27F5-455A-94D9-725DA29E0E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77416E06-27F5-455A-94D9-725DA29E0E1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FFEF0EE-F36E-4B06-8FAC-14EBE228FD58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FFEF0EE-F36E-4B06-8FAC-14EBE228FD58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FFEF0EE-F36E-4B06-8FAC-14EBE228FD58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FFEF0EE-F36E-4B06-8FAC-14EBE228FD58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +154,7 @@ Global
 		{C8E464E4-A291-4C4A-A540-E0691BE650BC} = {B46F9037-B028-4BF7-BFCE-542C52EDFC04}
 		{A6EF8AC3-B9D5-4A38-879D-A05E9EC1829B} = {BBFFD67C-E2CD-490A-9615-B21B89E554C3}
 		{77416E06-27F5-455A-94D9-725DA29E0E1B} = {8F12D60E-AB93-411C-941C-1B1DDA3CFE49}
+		{2FFEF0EE-F36E-4B06-8FAC-14EBE228FD58} = {8F12D60E-AB93-411C-941C-1B1DDA3CFE49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {761D88FF-62D4-4400-84EB-BE7B12959CC4}

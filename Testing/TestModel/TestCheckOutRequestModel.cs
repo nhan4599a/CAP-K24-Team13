@@ -1,4 +1,5 @@
-﻿using Shared.RequestModels;
+﻿using Shared.Models;
+using Shared.RequestModels;
 using Xunit;
 
 namespace TestModel
@@ -15,7 +16,8 @@ namespace TestModel
                 ShippingName = "abc",
                 ShippingPhone = "abc",
                 ShippingAddress = "abc",
-                OrderNotes = "abc"
+                OrderNotes = "abc",
+                PaymentMethod = PaymentMethod.CoD
             };
             Assert.Equal("abc", model.UserId);
             Assert.Equal("abc", model.ProductIds);
@@ -23,7 +25,7 @@ namespace TestModel
             Assert.Equal("abc", model.ShippingPhone);
             Assert.Equal("abc", model.ShippingAddress);
             Assert.Equal("abc", model.OrderNotes);
-
+            Assert.Equal(PaymentMethod.CoD, model.PaymentMethod);
         }
     }
 }

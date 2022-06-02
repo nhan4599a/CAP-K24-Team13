@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace ShopInterfaceService.Handlers
 {
-    public class GetShopAvatarQueryHandler : IRequestHandler<GetShopAvatarQuery, Dictionary<int, string>>, IDisposable
+    public class GetShopAvatarQueryHandler 
+        : IRequestHandler<GetShopAvatarQuery, Dictionary<int, string>>, IDisposable
     {
         private readonly IShopInterfaceRepository _repository;
 
