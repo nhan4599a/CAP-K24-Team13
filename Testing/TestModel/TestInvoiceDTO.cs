@@ -1,4 +1,5 @@
 ﻿using Shared.DTOs;
+using Shared.Models;
 using Xunit;
 
 namespace TestModel
@@ -8,6 +9,7 @@ namespace TestModel
         [Fact]
         public void Test()
         {
+            var dateTime = DateTime.Now;
             var model = new InvoiceDTO
             {
                 InvoiceId = 123,
@@ -17,7 +19,10 @@ namespace TestModel
                 PhoneNumber = "abc",
                 ShippingAddress = "abc",
                 ShopId = 123,
-                IsPaid = true
+                IsPaid = true,
+                CreatedAt = dateTime,
+                PaymentMethod = PaymentMethod.MoMo,
+                Status = InvoiceStatus.New
             };
             Assert.True(model.IsPaid);
             Assert.Equal(123, model.InvoiceId);
@@ -27,7 +32,9 @@ namespace TestModel
             Assert.Equal("abc", model.PhoneNumber);
             Assert.Equal("abc", model.ShippingAddress);
             Assert.Equal(123, model.ShopId);
-
+            Assert.Equal(dateTime, model.CreatedAt);
+            Assert.Equal(PaymentMethod.MoMo, model.PaymentMethod);
+            Assert.Equal(InvoiceStatus.New, model.Status);
         }
     }
 }

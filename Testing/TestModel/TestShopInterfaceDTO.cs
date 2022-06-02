@@ -11,10 +11,12 @@ namespace TestModel
             var model = new ShopInterfaceDTO
             {
                 ShopId = 123,
-                Avatar = "abc"
+                Avatar = "abc",
+                Images = new string[] { "1.png", "2.png" }
             };
             Assert.Equal(123, model.ShopId);
             Assert.Equal("abc", model.Avatar);
+            Assert.NotEmpty(model.Images);
         }
     }
 }

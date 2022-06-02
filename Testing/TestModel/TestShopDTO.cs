@@ -20,7 +20,8 @@ namespace TestModel
                 Description = "abc",
                 Avatar = "abc",
                 Floor = "abc",
-                Position = "abc"
+                Position = "abc",
+                Images = new string[] { "1.png", "2.png" }
             };
             Assert.Equal(123, model.Id);
             Assert.Equal("abc", model.ShopName);
@@ -33,7 +34,7 @@ namespace TestModel
             Assert.Equal("abc", model.Floor);
             Assert.Equal("abc", model.Position);
             Assert.True(model.IsAvailable);
-
+            Assert.NotEmpty(model.Images);
         }
     }
 }

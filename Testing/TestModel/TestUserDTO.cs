@@ -1,7 +1,6 @@
 ﻿using Shared.DTOs;
 using Xunit;
 
-
 namespace TestModel
 {
     public class TestUserDTO
@@ -20,7 +19,8 @@ namespace TestModel
                 IsLockedOut = true,
                 IsAvailable = true,
                 FullName = "abc",
-                Role = "abc"
+                Role = "abc",
+                ReportCount = 1
             };
             Assert.True(model.IsAvailable);
             Assert.True(model.IsAvailable);
@@ -32,7 +32,7 @@ namespace TestModel
             Assert.Equal("abc", model.BirthDay);
             Assert.Equal("abc", model.FullName);
             Assert.Equal("abc", model.Role);
-
+            Assert.Equal((uint)1, model.ReportCount);
         }
     }
 }
