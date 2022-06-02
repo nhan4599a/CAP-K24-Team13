@@ -329,7 +329,7 @@ namespace TestShopProductService
             var mockProductRepository = new Mock<IProductRepository>();
             mockProductRepository
                 .Setup(e => e.GetTopMostSaleOffProductsAsync())
-                .ReturnsAsync(new List<MinimalProductDTO>()));
+                .ReturnsAsync(new List<MinimalProductDTO>());
 
             using var handler = new GetMostSaleOffProductsQueryHandler(mockProductRepository.Object);
 

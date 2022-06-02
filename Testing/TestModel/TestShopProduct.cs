@@ -28,10 +28,10 @@ namespace TestModel
             Assert.Equal(123, model.Quantity);
             Assert.Equal(123, model.Price);
             Assert.Equal(123, model.Discount);
-            Assert.Equal(false, model.IsDisabled);
+            Assert.False(model.IsDisabled);
             Assert.Equal(123, model.CategoryId);
             Assert.Equal(123, model.ShopId);
-            Assert.Equal(true, model.IsVisible);
+            Assert.True(model.IsVisible);
             Assert.Equal("abc", model.Category);
 
         }

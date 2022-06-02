@@ -27,7 +27,6 @@ namespace TestModel
             Assert.Equal("abc", model.Message);
             Assert.Equal(123, model.ResultCode);
             Assert.Equal("abc", model.PayUrl);
-
         }
     }
 }

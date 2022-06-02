@@ -24,9 +24,6 @@ namespace TestModel
                 ResponseTime = 1,
                 ExtraData = "abc",
                 Signature = "abc"
-
-
-
             };
             Assert.Equal("abc", model.AccessKey);
             Assert.Equal(20000, model.Amount);
@@ -41,7 +38,6 @@ namespace TestModel
             Assert.Equal(1, model.ResponseTime);
             Assert.Equal("abc", model.ExtraData);
             Assert.Equal("abc", model.Signature);
-
         }
     }
 }

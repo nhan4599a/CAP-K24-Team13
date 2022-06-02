@@ -33,7 +33,6 @@ namespace TestModel
             Assert.Equal("abc", model.OrderInfo);
             Assert.Equal("abc", model.ExtraData);
             Assert.Equal("abc", model.Signature);
-
         }
     }
 }

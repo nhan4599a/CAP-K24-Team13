@@ -145,11 +145,6 @@ namespace GUI
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto
             });
-            app.Use(async (context, next) =>
-            {
-                context.Request.Scheme = "https";
-                await next();
-            });
             app.UseHsts();
             app.UseStaticFiles();
 

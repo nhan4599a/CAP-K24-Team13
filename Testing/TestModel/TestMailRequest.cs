@@ -18,8 +18,7 @@ namespace TestModel
             Assert.Equal("abc", model.Receiver);
             Assert.Equal("abc", model.Subject);
             Assert.Equal("abc", model.Body);
-            Assert.Equal(true, model.IsHtmlMessage);
-
+            Assert.True(model.IsHtmlMessage);
         }
     }
 }

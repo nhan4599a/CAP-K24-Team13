@@ -21,6 +21,10 @@ namespace ShopProductService.Handlers.Cart
         public async Task<List<CartItemDTO>> Handle(GetCartItemsQuery request, CancellationToken cancellationToken)
         {
             var canParse = Guid.TryParse(request.UserId, out Guid parsedResult);
+            if (!canParse)
+            {
+                throw new InvalidOperationException("UserId is invalid");
+            }
             return await _cartRepository.GetCartAsync(parsedResult);
         }
 

@@ -14,8 +14,7 @@ namespace TestModel
                 IsDisabled = true
             };
             Assert.Equal(123, model.ShopId);
-            Assert.Equal(true, model.IsDisabled);
-
+            Assert.True(model.IsDisabled);
         }
     }
 }

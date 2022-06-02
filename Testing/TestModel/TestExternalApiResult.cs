@@ -14,7 +14,7 @@ namespace TestModel
                 Message = "abc",
                 ResultObj = "abc"
             };
-            Assert.Equal(true, model.IsSuccessed);
+            Assert.True(model.IsSuccessed);
             Assert.Equal("abc", model.Message);
             Assert.Equal("abc", model.ResultObj);
         }

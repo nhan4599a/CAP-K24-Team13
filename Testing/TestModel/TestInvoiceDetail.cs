@@ -1,7 +1,6 @@
 ﻿using DatabaseAccessor.Models;
 using Xunit;
 
-
 namespace TestModel
 {
     public class TestInvoiceDetail
@@ -21,7 +20,7 @@ namespace TestModel
             Assert.Equal(123, model.InvoiceId);
             Assert.Equal(123, model.Quantity);
             Assert.Equal(123, model.Price);
-            Assert.Equal(true, model.IsRated);
+            Assert.True(model.IsRated);
         }
     }
 }

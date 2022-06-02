@@ -31,7 +31,7 @@ namespace TestModel
             Assert.Equal(123, model.ShopId);
             Assert.Equal(Shared.Models.InvoiceStatus.New, model.Status);
             Assert.Equal(Shared.Models.PaymentMethod.VISA, model.PaymentMethod);
-            Assert.Equal(true, model.IsPaid);
+            Assert.True(model.IsPaid);
             Assert.Equal("abc", model.RefId);
 
 

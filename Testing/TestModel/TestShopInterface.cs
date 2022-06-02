@@ -17,8 +17,7 @@ namespace TestModel
             Assert.Equal(123, model.ShopId);
             Assert.Equal("abc", model.Avatar);
             Assert.Equal("abc", model.Images);
-            Assert.Equal(true, model.IsVisible);
-
+            Assert.True(model.IsVisible);
         }
     }
 }

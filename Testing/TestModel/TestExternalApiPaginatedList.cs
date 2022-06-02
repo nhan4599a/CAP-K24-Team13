@@ -1,4 +1,5 @@
 ﻿using GUI.Models;
+using Shared.Models;
 using Xunit;
 
 namespace TestModel
@@ -10,16 +11,27 @@ namespace TestModel
         {
             var model = new ExternalApiPaginatedList<string> 
             {
-                PageIndex = 123,
-                PageSize = 123,
-                TotalRecords = 123,
-                PageCount = 123
+                PageIndex = 1,
+                PageSize = 10,
+                TotalRecords = 3,
+                PageCount = 1,
+                Items = new List<string>
+                {
+                    "item 1", "item 2", "item 3"
+                }
             };
-            Assert.Equal(123, model.PageIndex);
-            Assert.Equal(123, model.PageSize);
-            Assert.Equal(123, model.TotalRecords);
-            Assert.Equal(123, model.PageCount);
+            Assert.Equal(1, model.PageIndex);
+            Assert.Equal(10, model.PageSize);
+            Assert.Equal(3, model.TotalRecords);
+            Assert.Equal(1, model.PageCount);
+            Assert.Equal(3, model.Items.Count);
 
+            var internalPaginatedList = model.ToInternal();
+
+            Assert.NotNull(internalPaginatedList);
+
+            Assert.Equal(1, internalPaginatedList.PageNumber);
+            Assert.Equal(10, internalPaginatedList.PageSize);
         }
     }
 }
