@@ -3,11 +3,11 @@ using System;
 
 namespace Shared.Exceptions
 {
-    public class ImageValidationException : Exception
+    public class FileValidationException : Exception
     {
         public FileValidationResult ValidationResult { get; set; }
 
-        public ImageValidationException(FileValidationResult validationResult)
+        public FileValidationException(FileValidationResult validationResult)
         {
             if (!validationResult.IsViolatedResult)
                 throw new ArgumentException("ValidationResult is succeed");

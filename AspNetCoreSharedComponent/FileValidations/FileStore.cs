@@ -38,7 +38,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             {
                 var validationResult = files.Validate(rules);
                 if (validationResult.IsViolatedResult)
-                    throw new ImageValidationException(validationResult);
+                    throw new FileValidationException(validationResult);
             }
             CreateDirectory();
             List<string> savedFileNames = new(5);
@@ -58,7 +58,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             {
                 var validationResult = files.Validate(rules);
                 if (validationResult.IsViolatedResult)
-                    throw new ImageValidationException(validationResult);
+                    throw new FileValidationException(validationResult);
             }
             CreateDirectory();
             var imageFilesName = files.Select(x => x.FileName).ToList();
@@ -90,7 +90,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             {
                 var validationResult = file.Validate(rules);
                 if (validationResult.IsViolatedResult)
-                    throw new ImageValidationException(validationResult);
+                    throw new FileValidationException(validationResult);
             }
             CreateDirectory();
             return await SaveFileAsync(file, null);
@@ -107,7 +107,7 @@ namespace AspNetCoreSharedComponent.FileValidations
             {
                 var validationResult = file.Validate(rules);
                 if (validationResult.IsViolatedResult)
-                    throw new ImageValidationException(validationResult);
+                    throw new FileValidationException(validationResult);
             }
             CreateDirectory();
             return await SaveFileAsync(file, oldFileName);

@@ -41,7 +41,7 @@ namespace ShopProductService.Controllers
             {
                 requestModel.ImagePaths = await _fileStore.SaveFilesAsync(Request.Form.Files);
             }
-            catch (ImageValidationException ex)
+            catch (FileValidationException ex)
             {
                 return ApiResult.CreateErrorResult(400, ex.Message);
             }
@@ -63,7 +63,7 @@ namespace ShopProductService.Controllers
             {
                 requestModel.ImagePaths = await _fileStore.EditFilesAsync(requestModel.ImagePaths, Request.Form.Files);
             }
-            catch (ImageValidationException ex)
+            catch (FileValidationException ex)
             {
                 return ApiResult.CreateErrorResult(400, ex.Message);
             }

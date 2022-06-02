@@ -44,7 +44,7 @@ namespace ShopInterfaceService.Controllers
                         rules: FileValidationRuleSet.DefaultSingleValidationRules);
                 requestModel.ShopImages = await _fileStore.SaveFilesAsync(Request.Form.Files.Skip(1), rules: rules);
             }
-            catch (ImageValidationException ex)
+            catch (FileValidationException ex)
             {
                 return ApiResult.CreateErrorResult(400, ex.Message);
             }
@@ -70,7 +70,7 @@ namespace ShopInterfaceService.Controllers
                 requestModel.ShopImages = await _fileStore.EditFilesAsync(requestModel.ShopImages, Request.Form.Files.Skip(1),
                     rules: rules);
             }
-            catch (ImageValidationException ex)
+            catch (FileValidationException ex)
             {
                 return ApiResult.CreateErrorResult(400, ex.Message);
             }
